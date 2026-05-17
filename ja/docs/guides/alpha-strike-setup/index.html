@@ -1159,6 +1159,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#7-3-crypto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-3. 暗号資産（CRYPTO）戦略を流す場合
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3252,6 +3263,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#7-3-crypto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-3. 暗号資産（CRYPTO）戦略を流す場合
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3888,29 +3910,50 @@
 <p><strong><code>Crossing Up</code> ではダメな理由</strong>: BTC は常に 1 より上なので「上方クロス」イベントが発生しません。<code>Greater Than</code> は常時 true 評価なので確実に発火します。</p>
 </blockquote>
 <p>JSON の <code>ticker:"US.AAPL"</code> は <strong>発火銘柄（BTC）と独立</strong> に moomoo へ送られます。</p>
+<h3 id="7-3-crypto">7-3. 暗号資産（CRYPTO）戦略を流す場合<a class="headerlink" href="#7-3-crypto" title="Permanent link">&para;</a></h3>
+<p>moomoo は米国株・香港株と並んで暗号資産（BTC / ETH / XRP 等）も発注先として提供しています。alpha-strike は <code>asset_class="CRYPTO"</code> を受理し、内部で <code>OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)</code> で発注します。</p>
+<p>JSON 例（BTC を 0.01 単位で SIMULATE 買い）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CRYPTO&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CC.BTC&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;btc_ema_sma_trail40_v1&quot;</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p><strong>前提</strong>:
+- moomoo crypto は 24/7 取引（市場クローズの概念なし）
+- 米国居住者制限あり（FinCEN MSB 経由）。<code>run_mode=paper</code> でも broker 側の crypto アカウント有効化が必要
+- 銘柄コードは <code>CC.BTC</code> / <code>CC.ETH</code> / <code>CC.XRP</code> 等（<code>CC.</code> プレフィックス + 大文字シンボル）</p>
+<p>ペイロード仕様の詳細は <a href="../tradingview-alpha-strike/#3-1b-moomoo-crypto-btc-eth-xrp">TradingView × alpha-strike Integration §3-1b</a> を参照。</p>
+</blockquote>
 <hr />
 <h2 id="8-e2e">8. E2E 動作確認<a class="headerlink" href="#8-e2e" title="Permanent link">&para;</a></h2>
 <h3 id="8-1">8-1. 全段の疎通チェック<a class="headerlink" href="#8-1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Mac から外部疎通（401 = passphrase 検証層まで到達）</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://strike.yourdomain.com/webhook<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;WRONG&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
-<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="c1"># → HTTP 401 (WAF rule が一時 OFF の場合)</span>
-<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># → HTTP 403 (WAF rule が ON で自宅 IP は遮断される場合 = 正常)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Mac から外部疎通（401 = passphrase 検証層まで到達）</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://strike.yourdomain.com/webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;WRONG&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># → HTTP 401 (WAF rule が一時 OFF の場合)</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># → HTTP 403 (WAF rule が ON で自宅 IP は遮断される場合 = 正常)</span>
 </code></pre></div>
 <h3 id="8-2-simulate">8-2. SIMULATE 着弾の確認<a class="headerlink" href="#8-2-simulate" title="Permanent link">&para;</a></h3>
 <p>TradingView alert が発火したら、VM 側で：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>ssh<span class="w"> </span>oracle-strike
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>alpha-strike<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Webhook受信|注文成功|34\.212\.75\.30|52\.32\.178\.7&quot;</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="c1"># → Webhook受信ログ + 注文成功ログ + TradingView IP が記録されていれば成功</span>
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="nb">cd</span><span class="w"> </span>~/dev/alpha-strike
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>.venv/bin/python<span class="w"> </span>scripts/show_simulate_status.py
-<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="c1"># → pending_orders に発注内容が表示される</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>ssh<span class="w"> </span>oracle-strike
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>alpha-strike<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Webhook受信|注文成功|34\.212\.75\.30|52\.32\.178\.7&quot;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1"># → Webhook受信ログ + 注文成功ログ + TradingView IP が記録されていれば成功</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="nb">cd</span><span class="w"> </span>~/dev/alpha-strike
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>.venv/bin/python<span class="w"> </span>scripts/show_simulate_status.py
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="c1"># → pending_orders に発注内容が表示される</span>
 </code></pre></div>
 <h3 id="8-3">8-3. テスト発注の取消<a class="headerlink" href="#8-3" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>.venv/bin/python<span class="w"> </span>scripts/cleanup_simulate_orders.py
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="c1"># → pending_orders=0 に戻る</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>.venv/bin/python<span class="w"> </span>scripts/cleanup_simulate_orders.py
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># → pending_orders=0 に戻る</span>
 </code></pre></div>
 <hr />
 <h2 id="9">9. シークレット管理<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
@@ -3942,8 +3985,8 @@
 <p><strong>ハマりポイント</strong>: 1Password と TradingView だけ更新し VM <code>.env</code> を忘れると <code>401 Unauthorized</code> で alert が届きません。<code>.env</code> は systemd 起動時にしか読まれないので <code>restart</code> も必須です。</p>
 </blockquote>
 <h3 id="9-2-1password-cli">9-2. 1Password CLI でのシークレット取得<a class="headerlink" href="#9-2-1password-cli" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Mac から（OP_SERVICE_ACCOUNT_TOKEN または op signin 済み前提）</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>op<span class="w"> </span>item<span class="w"> </span>get<span class="w"> </span><span class="s2">&quot;alpha-strike&quot;</span><span class="w"> </span>--vault<span class="w"> </span>AlphaTrade<span class="w"> </span>--fields<span class="w"> </span>WEBHOOK_PASSPHRASE<span class="w"> </span>--reveal
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Mac から（OP_SERVICE_ACCOUNT_TOKEN または op signin 済み前提）</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>op<span class="w"> </span>item<span class="w"> </span>get<span class="w"> </span><span class="s2">&quot;alpha-strike&quot;</span><span class="w"> </span>--vault<span class="w"> </span>AlphaTrade<span class="w"> </span>--fields<span class="w"> </span>WEBHOOK_PASSPHRASE<span class="w"> </span>--reveal
 </code></pre></div>
 <hr />
 <h2 id="10">10. 運用ルール<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>

@@ -412,6 +412,32 @@ crontab -e
 
 JSON の `ticker:"US.AAPL"` は **発火銘柄（BTC）と独立** に moomoo へ送られます。
 
+### 7-3. 暗号資産（CRYPTO）戦略を流す場合
+
+moomoo は米国株・香港株と並んで暗号資産（BTC / ETH / XRP 等）も発注先として提供しています。alpha-strike は `asset_class="CRYPTO"` を受理し、内部で `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)` で発注します。
+
+JSON 例（BTC を 0.01 単位で SIMULATE 買い）：
+
+```json
+{
+  "passphrase": "<WEBHOOK_PASSPHRASE>",
+  "broker": "moomoo",
+  "asset_class": "CRYPTO",
+  "action": "buy",
+  "ticker": "CC.BTC",
+  "quantity": 0.01,
+  "run_mode": "paper",
+  "strategy_id": "btc_ema_sma_trail40_v1"
+}
+```
+
+> **前提**:
+> - moomoo crypto は 24/7 取引（市場クローズの概念なし）
+> - 米国居住者制限あり（FinCEN MSB 経由）。`run_mode=paper` でも broker 側の crypto アカウント有効化が必要
+> - 銘柄コードは `CC.BTC` / `CC.ETH` / `CC.XRP` 等（`CC.` プレフィックス + 大文字シンボル）
+>
+> ペイロード仕様の詳細は [TradingView × alpha-strike Integration §3-1b](./tradingview-alpha-strike.md#3-1b-moomoo-crypto-btc-eth-xrp) を参照。
+
 ---
 
 ## 8. E2E 動作確認

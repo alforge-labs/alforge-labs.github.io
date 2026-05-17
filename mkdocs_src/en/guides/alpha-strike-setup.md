@@ -403,6 +403,32 @@ Use a 24/7 crypto chart with an always-true condition to fire within seconds:
 
 The `ticker:"US.AAPL"` in the JSON is **independent** of the chart symbol that fires the alert.
 
+### 7-3. Running CRYPTO strategies
+
+In addition to US / HK equities, moomoo offers crypto (BTC / ETH / XRP, etc.) as a destination. alpha-strike accepts `asset_class="CRYPTO"` and routes through `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)` internally.
+
+Sample JSON (paper-buy 0.01 BTC):
+
+```json
+{
+  "passphrase": "<WEBHOOK_PASSPHRASE>",
+  "broker": "moomoo",
+  "asset_class": "CRYPTO",
+  "action": "buy",
+  "ticker": "CC.BTC",
+  "quantity": 0.01,
+  "run_mode": "paper",
+  "strategy_id": "btc_ema_sma_trail40_v1"
+}
+```
+
+> **Notes**:
+> - moomoo crypto trades 24/7 (no market close)
+> - US-residency restriction applies (FinCEN MSB). Even `run_mode=paper` requires the broker-side crypto account to be enabled
+> - Symbols are `CC.BTC` / `CC.ETH` / `CC.XRP` etc. (`CC.` prefix + uppercase symbol)
+>
+> See [TradingView × alpha-strike Integration §3-1b](./tradingview-alpha-strike.md#3-1b-moomoo-crypto-btc-eth-xrp) for the full payload specification.
+
 ---
 
 ## 8. End-to-end Verification
