@@ -63,6 +63,7 @@ nav:
       - 実行結果と成果物サンプル: guides/output-examples.md
       - TradingView への Pine Script 反映: guides/tradingview-pine-integration.md
       - TradingView と alpha-strike の連携: guides/tradingview-alpha-strike.md
+      - alpha-strike セットアップガイド: guides/alpha-strike-setup.md
       - AI 駆動の戦略探索ワークフロー: guides/ai-exploration-workflow.md
       - 目的別ユースケース:
           - 概要: usecases/index.md
