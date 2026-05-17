@@ -18,7 +18,7 @@
         <link rel="prev" href="../tradingview-pine-integration/">
       
       
-        <link rel="next" href="../ai-exploration-workflow/">
+        <link rel="next" href="../alpha-strike-setup/">
       
       
         
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tradingview-alpha-strike-integration" class="md-skip">
+        <a href="#tradingview-alpha-strike-integration-payload-spec" class="md-skip">
           Skip to content
         </a>
       
@@ -749,10 +749,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-configure-environment-variables" class="md-nav__link">
+  <a href="#1-webhook-endpoint" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Configure environment variables
+        1. Webhook endpoint
       
     </span>
   </a>
@@ -760,10 +760,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-webhook-url" class="md-nav__link">
+  <a href="#2-creating-the-tradingview-alert" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Webhook URL
+        2. Creating the TradingView alert
       
     </span>
   </a>
@@ -771,10 +771,110 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-payload-format" class="md-nav__link">
+  <a href="#3-payload-json" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Payload format
+        3. Payload JSON
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Payload JSON">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-1-moomoo-simulate-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-1. moomoo SIMULATE / REAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2-oanda-practice-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-2. OANDA PRACTICE / LIVE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-3-field-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-3. Field reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-4-ticker-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-4. Ticker formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3-4. Ticker formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moomoo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        moomoo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oanda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OANDA
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-5-dynamic-fields-tradingview-placeholders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-5. Dynamic fields (TradingView placeholders)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-building-full-json-in-pine-v6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Building full JSON in Pine v6
       
     </span>
   </a>
@@ -782,10 +882,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-ticker-to-oanda-instrument-mapping" class="md-nav__link">
+  <a href="#5-response" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Ticker to OANDA instrument mapping
+        5. Response
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Response">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-1-success-200" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-1. Success (200)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-auth-failure-401" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-2. Auth failure (401)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-error-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Error reference
       
     </span>
   </a>
@@ -793,10 +932,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-verify-connectivity" class="md-nav__link">
+  <a href="#7-local-development-testing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Verify connectivity
+        7. Local development testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related documents
       
     </span>
   </a>
@@ -807,6 +957,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alpha-strike-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    alpha-strike Setup Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -863,10 +1041,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="">
             
   
   
@@ -884,8 +1062,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_6">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2337,10 +2515,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-configure-environment-variables" class="md-nav__link">
+  <a href="#1-webhook-endpoint" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Configure environment variables
+        1. Webhook endpoint
       
     </span>
   </a>
@@ -2348,10 +2526,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-webhook-url" class="md-nav__link">
+  <a href="#2-creating-the-tradingview-alert" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Webhook URL
+        2. Creating the TradingView alert
       
     </span>
   </a>
@@ -2359,10 +2537,110 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-payload-format" class="md-nav__link">
+  <a href="#3-payload-json" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Payload format
+        3. Payload JSON
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Payload JSON">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3-1-moomoo-simulate-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-1. moomoo SIMULATE / REAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-2-oanda-practice-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-2. OANDA PRACTICE / LIVE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-3-field-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-3. Field reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-4-ticker-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-4. Ticker formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3-4. Ticker formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moomoo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        moomoo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oanda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OANDA
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-5-dynamic-fields-tradingview-placeholders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-5. Dynamic fields (TradingView placeholders)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-building-full-json-in-pine-v6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Building full JSON in Pine v6
       
     </span>
   </a>
@@ -2370,10 +2648,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-ticker-to-oanda-instrument-mapping" class="md-nav__link">
+  <a href="#5-response" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Ticker to OANDA instrument mapping
+        5. Response
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Response">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-1-success-200" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-1. Success (200)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-auth-failure-401" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-2. Auth failure (401)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-error-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Error reference
       
     </span>
   </a>
@@ -2381,10 +2698,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-verify-connectivity" class="md-nav__link">
+  <a href="#7-local-development-testing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Verify connectivity
+        7. Local development testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related documents
       
     </span>
   </a>
@@ -2408,44 +2736,90 @@
 
 
 
-<h1 id="tradingview-alpha-strike-integration">TradingView × alpha-strike Integration<a class="headerlink" href="#tradingview-alpha-strike-integration" title="Permanent link">&para;</a></h1>
-<p>alpha-strike receives TradingView webhook alerts and forwards orders to OANDA or moomoo brokers.</p>
-<h2 id="1-configure-environment-variables">1. Configure environment variables<a class="headerlink" href="#1-configure-environment-variables" title="Permanent link">&para;</a></h2>
-<p>Create <code>alpha-strike/.env</code> with the following:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Required</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">WEBHOOK_PASSPHRASE</span><span class="o">=</span>your-secret-passphrase
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># OANDA</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nv">OANDA_API_KEY</span><span class="o">=</span>your-personal-access-token
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nv">OANDA_ACCOUNT_ID</span><span class="o">=</span>your-account-id
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nv">OANDA_ENV</span><span class="o">=</span>PRACTICE<span class="w">    </span><span class="c1"># or LIVE</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># moomoo</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nv">MOOMOO_HOST</span><span class="o">=</span><span class="m">127</span>.0.0.1
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nv">MOOMOO_PORT</span><span class="o">=</span><span class="m">11111</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nv">MOOMOO_TRD_ENV</span><span class="o">=</span>SIMULATE<span class="w">   </span><span class="c1"># or REAL</span>
-</code></pre></div>
-<h2 id="2-webhook-url">2. Webhook URL<a class="headerlink" href="#2-webhook-url" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Webhook endpoint</p>
-<p>Set the TradingView alert Webhook URL to:
-<code>http://&lt;your-server&gt;:8080/webhook</code></p>
+<h1 id="tradingview-alpha-strike-integration-payload-spec">TradingView × alpha-strike Integration (payload spec)<a class="headerlink" href="#tradingview-alpha-strike-integration-payload-spec" title="Permanent link">&para;</a></h1>
+<p>alpha-strike receives TradingView webhook alerts and forwards orders to moomoo / OANDA. This page focuses on <strong>payload JSON specification</strong> and <strong>TradingView-side alert configuration</strong>.</p>
+<blockquote>
+<p>For infrastructure setup (VM / Cloudflare Tunnel / WAF / OpenD / systemd), see the dedicated <a href="../alpha-strike-setup/">alpha-strike Setup Guide (Paper Trading Production)</a>.</p>
+</blockquote>
+<hr />
+<h2 id="1-webhook-endpoint">1. Webhook endpoint<a class="headerlink" href="#1-webhook-endpoint" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Production value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URL</td>
+<td><code>https://strike.yourdomain.com/webhook</code> (Cloudflare Tunnel, replace with your domain)</td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td><strong>Required</strong> — TradingView only accepts HTTPS. Cloudflare Tunnel provides the certificate.</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td><code>passphrase</code> field in the request body must match <code>WEBHOOK_PASSPHRASE</code> in <code>.env</code></td>
+</tr>
+<tr>
+<td>Rate limit</td>
+<td><code>10 req/min/IP</code> (<code>slowapi</code>)</td>
+</tr>
+<tr>
+<td>Recommended defense</td>
+<td>Cloudflare WAF Custom Rule allowing only TradingView's 4 official IPs (see <a href="../alpha-strike-setup/#4-cloudflare-waf-custom-rule-tradingview-ip-allowlist">Setup Guide §4</a>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-creating-the-tradingview-alert">2. Creating the TradingView alert<a class="headerlink" href="#2-creating-the-tradingview-alert" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open the target chart and click the bell icon → <strong>Create Alert</strong></li>
+<li><strong>Condition</strong>: pick your strategy / indicator firing condition</li>
+<li><strong>Notifications</strong> tab:</li>
+<li>✅ <strong>Webhook URL</strong> with <code>https://strike.yourdomain.com/webhook</code></li>
+<li><strong>Message</strong> field: paste the JSON below</li>
+<li><strong>Create</strong></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">TradingView plan requirement</p>
+<p>Webhook URL is available on <strong>Essential plan or above</strong> (up to 20 alerts). Free / Basic does not support webhooks.</p>
 </div>
-<h2 id="3-payload-format">3. Payload format<a class="headerlink" href="#3-payload-format" title="Permanent link">&para;</a></h2>
-<p>Use the following JSON in the TradingView alert message:</p>
+<hr />
+<h2 id="3-payload-json">3. Payload JSON<a class="headerlink" href="#3-payload-json" title="Permanent link">&para;</a></h2>
+<h3 id="3-1-moomoo-simulate-real">3-1. moomoo SIMULATE / REAL<a class="headerlink" href="#3-1-moomoo-simulate-real" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.AAPL&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demo_buy_v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="nt">&quot;alert_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{{strategy.order.alert_message}}&quot;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="3-2-oanda-practice-live">3-2. OANDA PRACTICE / LIVE<a class="headerlink" href="#3-2-oanda-practice-live" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-secret-passphrase&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;oanda&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FX&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDJPY&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fx_demo_v1&quot;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
 </code></pre></div>
+<h3 id="3-3-field-reference">3-3. Field reference<a class="headerlink" href="#3-3-field-reference" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Field</th>
+<th>Required</th>
 <th>Description</th>
 <th>Example</th>
 </tr>
@@ -2453,78 +2827,308 @@
 <tbody>
 <tr>
 <td><code>passphrase</code></td>
-<td><strong>Required</strong> — Must match <code>WEBHOOK_PASSPHRASE</code> in <code>.env</code></td>
-<td><code>"my-secret"</code></td>
+<td>✅</td>
+<td>Must exactly match <code>.env</code> <code>WEBHOOK_PASSPHRASE</code></td>
+<td><code>"32-char random"</code></td>
 </tr>
 <tr>
 <td><code>broker</code></td>
-<td><strong>Required</strong> — Target broker</td>
-<td><code>"oanda"</code> / <code>"moomoo"</code></td>
+<td>✅</td>
+<td>Target broker</td>
+<td><code>"moomoo"</code> / <code>"oanda"</code></td>
 </tr>
 <tr>
 <td><code>asset_class</code></td>
-<td><strong>Required</strong> — Asset class</td>
-<td><code>"FX"</code> / <code>"COMMODITY"</code> / <code>"US"</code> / <code>"INDEX"</code></td>
+<td>✅</td>
+<td>Asset class</td>
+<td><code>"FX"</code> / <code>"COMMODITY"</code> / <code>"US"</code> / <code>"HK"</code> / <code>"INDEX"</code></td>
 </tr>
 <tr>
 <td><code>action</code></td>
-<td><strong>Required</strong> — Order direction</td>
+<td>✅</td>
+<td>Order direction (lowercase)</td>
 <td><code>"buy"</code> / <code>"sell"</code></td>
 </tr>
 <tr>
 <td><code>ticker</code></td>
-<td><strong>Required</strong> — Symbol (TradingView notation)</td>
-<td><code>"USDJPY"</code> / <code>"XAUUSD"</code></td>
+<td>✅</td>
+<td>Symbol (pattern <code>^[A-Z0-9_.]{1,20}$</code>)</td>
+<td>moomoo: <code>"US.AAPL"</code> / OANDA: <code>"USDJPY"</code></td>
 </tr>
 <tr>
 <td><code>quantity</code></td>
-<td><strong>Required</strong> — Order size (positive number)</td>
-<td><code>1000</code> / <code>0.1</code></td>
+<td>✅</td>
+<td>Positive number</td>
+<td><code>10</code> / <code>1000</code></td>
+</tr>
+<tr>
+<td><code>run_mode</code></td>
+<td>—</td>
+<td><code>"paper"</code> / <code>"live"</code> (default <code>"live"</code>)</td>
+<td><code>"paper"</code></td>
+</tr>
+<tr>
+<td><code>strategy_id</code></td>
+<td>—</td>
+<td>alpha-forge strategy_id</td>
+<td><code>"cl_hmm_bb_rsi_v1"</code></td>
+</tr>
+<tr>
+<td><code>strategy_version</code></td>
+<td>—</td>
+<td>Strategy version</td>
+<td><code>"1.2.0"</code></td>
+</tr>
+<tr>
+<td><code>snapshot_id</code></td>
+<td>—</td>
+<td>alpha-forge journal snapshot_id</td>
+<td><code>"snap_20260517170105122499"</code></td>
+</tr>
+<tr>
+<td><code>signal_id</code></td>
+<td>—</td>
+<td>Unique signal ID (auto-generated if unset)</td>
+<td><code>"sig_xxx"</code></td>
+</tr>
+<tr>
+<td><code>timeframe</code></td>
+<td>—</td>
+<td>Bar interval</td>
+<td><code>"1m"</code> / <code>"5m"</code> / <code>"1h"</code></td>
+</tr>
+<tr>
+<td><code>alert_timestamp</code></td>
+<td>—</td>
+<td>Signal time (ISO 8601)</td>
+<td><code>"2026-05-17T08:45:10Z"</code></td>
+</tr>
+<tr>
+<td><code>alert_name</code></td>
+<td>—</td>
+<td>TradingView alert name</td>
+<td><code>"BTC breakout"</code></td>
+</tr>
+<tr>
+<td><code>order_comment</code></td>
+<td>—</td>
+<td>Free-form memo</td>
+<td><code>"manual override"</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="4-ticker-to-oanda-instrument-mapping">4. Ticker to OANDA instrument mapping<a class="headerlink" href="#4-ticker-to-oanda-instrument-mapping" title="Permanent link">&para;</a></h2>
+<h3 id="3-4-ticker-formats">3-4. Ticker formats<a class="headerlink" href="#3-4-ticker-formats" title="Permanent link">&para;</a></h3>
+<h4 id="moomoo">moomoo<a class="headerlink" href="#moomoo" title="Permanent link">&para;</a></h4>
+<p>Use <code>MARKET.CODE</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Market</th>
+<th>Format</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>US stocks</td>
+<td><code>US.&lt;TICKER&gt;</code></td>
+<td><code>US.AAPL</code></td>
+</tr>
+<tr>
+<td>HK stocks</td>
+<td><code>HK.&lt;CODE&gt;</code></td>
+<td><code>HK.00700</code></td>
+</tr>
+<tr>
+<td>China A-shares</td>
+<td><code>SH.&lt;CODE&gt;</code> / <code>SZ.&lt;CODE&gt;</code></td>
+<td><code>SH.600000</code></td>
+</tr>
+</tbody>
+</table>
+<p>TradingView's <code>{{ticker}}</code> placeholder gives the symbol without market prefix, so Pine code should add it: <code>"US." + syminfo.ticker</code>.</p>
+<h4 id="oanda">OANDA<a class="headerlink" href="#oanda" title="Permanent link">&para;</a></h4>
+<p>Automatic conversion based on <code>asset_class</code>:</p>
 <table>
 <thead>
 <tr>
 <th>asset_class</th>
-<th>ticker</th>
+<th>TradingView</th>
 <th>OANDA instrument</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>FX</td>
-<td>USDJPY</td>
-<td>USD_JPY</td>
+<td><code>FX</code> / <code>COMMODITY</code></td>
+<td><code>USDJPY</code></td>
+<td><code>USD_JPY</code></td>
 </tr>
 <tr>
-<td>COMMODITY</td>
-<td>XAUUSD</td>
-<td>XAU_USD</td>
-</tr>
-<tr>
-<td>INDEX</td>
-<td>NAS100</td>
-<td>NAS100_USD</td>
-</tr>
-<tr>
-<td>US</td>
-<td>AAPL</td>
-<td>AAPL_USD</td>
+<td><code>US</code> / <code>INDEX</code></td>
+<td><code>AAPL</code></td>
+<td><code>AAPL_USD</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="5-verify-connectivity">5. Verify connectivity<a class="headerlink" href="#5-verify-connectivity" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Health check</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>http://localhost:8080/health
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Test order (use PRACTICE / SIMULATE environment)</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/webhook<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;your-secret&quot;,&quot;broker&quot;:&quot;oanda&quot;,&quot;asset_class&quot;:&quot;FX&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;USDJPY&quot;,&quot;quantity&quot;:1000}&#39;</span>
+<p>Use <code>asset_class:"RAW"</code> to pass an instrument through unchanged.</p>
+<h3 id="3-5-dynamic-fields-tradingview-placeholders">3-5. Dynamic fields (TradingView placeholders)<a class="headerlink" href="#3-5-dynamic-fields-tradingview-placeholders" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Placeholder</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{ticker}}</code></td>
+<td>Symbol (e.g., <code>AAPL</code>)</td>
+</tr>
+<tr>
+<td><code>{{strategy.order.action}}</code></td>
+<td><code>buy</code> / <code>sell</code></td>
+</tr>
+<tr>
+<td><code>{{strategy.order.contracts}}</code></td>
+<td>Order quantity</td>
+</tr>
+<tr>
+<td><code>{{strategy.position_size}}</code></td>
+<td>Current position size</td>
+</tr>
+<tr>
+<td><code>{{strategy.order.alert_message}}</code></td>
+<td>String passed to Pine <code>alert()</code></td>
+</tr>
+<tr>
+<td><code>{{time}}</code></td>
+<td>UTC ISO timestamp of fire</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Build the full JSON in Pine</p>
+<p>For numeric fields like <code>quantity</code>, the placeholder output can break the JSON structure and cause 422 errors. Construct the full JSON in your Pine script and pass it to <code>alert()</code> directly (next section).</p>
+</div>
+<hr />
+<h2 id="4-building-full-json-in-pine-v6">4. Building full JSON in Pine v6<a class="headerlink" href="#4-building-full-json-in-pine-v6" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>//@version=6
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>strategy(&quot;alpha-strike webhook demo&quot;, overlay=true)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>passphrase   = &quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>broker       = &quot;moomoo&quot;
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>asset_class  = &quot;US&quot;
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>strategy_id  = &quot;demo_buy_v1&quot;
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>run_mode     = &quot;paper&quot;
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>rsi_val = ta.rsi(close, 14)
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>long_signal  = ta.crossover(rsi_val,  30)
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>short_signal = ta.crossunder(rsi_val, 70)
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>make_payload(string action, int qty) =&gt;
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    ticker_full = (asset_class == &quot;US&quot; or asset_class == &quot;HK&quot;)
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>                   ? asset_class + &quot;.&quot; + syminfo.ticker
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>                   : syminfo.ticker
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    &#39;{&quot;passphrase&quot;:&quot;&#39; + passphrase + &#39;&quot;,&#39; +
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    &#39;&quot;broker&quot;:&quot;&#39; + broker + &#39;&quot;,&#39; +
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    &#39;&quot;asset_class&quot;:&quot;&#39; + asset_class + &#39;&quot;,&#39; +
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    &#39;&quot;action&quot;:&quot;&#39; + action + &#39;&quot;,&#39; +
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    &#39;&quot;ticker&quot;:&quot;&#39; + ticker_full + &#39;&quot;,&#39; +
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    &#39;&quot;quantity&quot;:&#39; + str.tostring(qty) + &#39;,&#39; +
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    &#39;&quot;strategy_id&quot;:&quot;&#39; + strategy_id + &#39;&quot;,&#39; +
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    &#39;&quot;run_mode&quot;:&quot;&#39; + run_mode + &#39;&quot;}&#39;
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>if long_signal
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    strategy.entry(&quot;LONG&quot;, strategy.long, qty = 10)
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    alert(make_payload(&quot;buy&quot;, 10), alert.freq_once_per_bar_close)
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>if short_signal
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>    strategy.close(&quot;LONG&quot;)
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    alert(make_payload(&quot;sell&quot;, 10), alert.freq_once_per_bar_close)
 </code></pre></div>
+<p>Firing <code>alert()</code> from inside the strategy lets you leave the TradingView Message field empty and ship the JSON straight from Pine. <code>alert.freq_once_per_bar_close</code> fires only on bar close, avoiding repaint / duplicate orders.</p>
+<hr />
+<h2 id="5-response">5. Response<a class="headerlink" href="#5-response" title="Permanent link">&para;</a></h2>
+<h3 id="5-1-success-200">5-1. Success (200)<a class="headerlink" href="#5-1-success-200" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.AAPL&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{&#39;order_id&#39;: &#39;356604&#39;, &#39;ret_code&#39;: 0, &#39;filled_qty&#39;: 0.0, &#39;filled_price&#39;: 0.0}&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sig_20260517170105122499&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ord_20260517170105123793&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">&quot;broker_order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;356604&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">&quot;event_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evt_20260517170105232506&quot;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="5-2-auth-failure-401">5-2. Auth failure (401)<a class="headerlink" href="#5-2-auth-failure-401" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unauthorized&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<hr />
+<h2 id="6-error-reference">6. Error reference<a class="headerlink" href="#6-error-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>401 Unauthorized</td>
+<td><code>passphrase</code> mismatch</td>
+<td>Re-check <code>.env</code> <code>WEBHOOK_PASSPHRASE</code> vs the TradingView Message field</td>
+</tr>
+<tr>
+<td>422 Unprocessable Entity</td>
+<td>JSON / field validation failed</td>
+<td><code>broker</code> <code>action</code> <code>run_mode</code> lowercase, <code>ticker</code> matches <code>^[A-Z0-9_.]{1,20}$</code>, <code>quantity</code> positive</td>
+</tr>
+<tr>
+<td>429 Too Many Requests</td>
+<td>rate limit (10/min/IP)</td>
+<td>Reduce alert frequency</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>broker credentials missing</td>
+<td><code>journalctl -u alpha-strike</code> for details</td>
+</tr>
+<tr>
+<td>502 Bad Gateway</td>
+<td>broker API failure</td>
+<td><code>moomoo</code>: OpenD status / <code>oanda</code>: API key validity</td>
+</tr>
+<tr>
+<td>403 Forbidden (Cloudflare)</td>
+<td>Blocked by WAF</td>
+<td>Check the source IP is one of TradingView's 4 official IPs</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-local-development-testing">7. Local development testing<a class="headerlink" href="#7-local-development-testing" title="Permanent link">&para;</a></h2>
+<p>Before VM deployment, you can run alpha-strike locally:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># In the alpha-strike repo</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>webhook_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reload
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># In another terminal</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>curl<span class="w"> </span>http://localhost:8080/health
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;test&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
+</code></pre></div>
+<p>To expose the local server to TradingView, use Cloudflare Tunnel (<code>cloudflared tunnel --url http://localhost:8080</code>) or <code>ngrok</code>.</p>
+<hr />
+<h2 id="related-documents">Related documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../alpha-strike-setup/">alpha-strike Setup Guide (Paper Trading Production)</a> — VM / Cloudflare / WAF / OpenD / systemd full procedure</li>
+<li><a href="../tradingview-pine-integration/">Bringing Pine Scripts into TradingView</a> — applying alpha-forge Pine output in TradingView</li>
+<li><a href="../end-to-end-workflow/">End-to-end Strategy Development Workflow</a> — the full development loop</li>
+</ul>
 
 
 
@@ -2577,13 +3181,13 @@
         
         
           
-          <a href="../ai-exploration-workflow/" class="md-footer__link md-footer__link--next" aria-label="Next: AI-Driven Strategy Exploration Workflow">
+          <a href="../alpha-strike-setup/" class="md-footer__link md-footer__link--next" aria-label="Next: alpha-strike Setup Guide">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                AI-Driven Strategy Exploration Workflow
+                alpha-strike Setup Guide
               </div>
             </div>
             <div class="md-footer__button md-icon">

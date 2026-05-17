@@ -63,6 +63,7 @@ nav:
       - Output Examples: guides/output-examples.md
       - Bringing Pine Scripts into TradingView: guides/tradingview-pine-integration.md
       - TradingView × alpha-strike Integration: guides/tradingview-alpha-strike.md
+      - alpha-strike Setup Guide: guides/alpha-strike-setup.md
       - AI-Driven Strategy Exploration Workflow: guides/ai-exploration-workflow.md
       - Use Cases by Goal:
           - Overview: usecases/index.md
