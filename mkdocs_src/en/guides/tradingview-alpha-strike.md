@@ -50,6 +50,27 @@ alpha-strike receives TradingView webhook alerts and forwards orders to moomoo /
 }
 ```
 
+### 3-1b. moomoo CRYPTO (BTC / ETH / XRP)
+
+```json
+{
+  "passphrase": "<WEBHOOK_PASSPHRASE>",
+  "broker": "moomoo",
+  "asset_class": "CRYPTO",
+  "action": "buy",
+  "ticker": "CC.BTC",
+  "quantity": 0.01,
+  "run_mode": "paper",
+  "strategy_id": "btc_ema_sma_trail40_v1"
+}
+```
+
+> **Notes on moomoo crypto**:
+> - 24/7 trading with unlimited T+0; SIMULATE fills work around the clock
+> - US-residency restriction applies (FinCEN MSB). Even `run_mode=paper` requires the broker-side crypto account to be enabled
+> - Internally uses `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO, security_firm=SecurityFirm.NONE)`
+> - Symbols are `CC.BTC` / `CC.ETH` / `CC.XRP` etc. (uppercase symbol with `CC.` prefix)
+
 ### 3-2. OANDA PRACTICE / LIVE
 
 ```json
@@ -71,7 +92,7 @@ alpha-strike receives TradingView webhook alerts and forwards orders to moomoo /
 |---|---|---|---|
 | `passphrase` | ✅ | Must exactly match `.env` `WEBHOOK_PASSPHRASE` | `"32-char random"` |
 | `broker` | ✅ | Target broker | `"moomoo"` / `"oanda"` |
-| `asset_class` | ✅ | Asset class | `"FX"` / `"COMMODITY"` / `"US"` / `"HK"` / `"INDEX"` |
+| `asset_class` | ✅ | Asset class | `"FX"` / `"COMMODITY"` / `"US"` / `"HK"` / `"INDEX"` / `"CRYPTO"` |
 | `action` | ✅ | Order direction (lowercase) | `"buy"` / `"sell"` |
 | `ticker` | ✅ | Symbol (pattern `^[A-Z0-9_.]{1,20}$`) | moomoo: `"US.AAPL"` / OANDA: `"USDJPY"` |
 | `quantity` | ✅ | Positive number | `10` / `1000` |
@@ -96,6 +117,7 @@ Use `MARKET.CODE`:
 | US stocks | `US.<TICKER>` | `US.AAPL` |
 | HK stocks | `HK.<CODE>` | `HK.00700` |
 | China A-shares | `SH.<CODE>` / `SZ.<CODE>` | `SH.600000` |
+| Crypto | `CC.<SYMBOL>` | `CC.BTC` / `CC.ETH` / `CC.XRP` |
 
 TradingView's `{{ticker}}` placeholder gives the symbol without market prefix, so Pine code should add it: `"US." + syminfo.ticker`.
 
@@ -142,10 +164,18 @@ rsi_val = ta.rsi(close, 14)
 long_signal  = ta.crossover(rsi_val,  30)
 short_signal = ta.crossunder(rsi_val, 70)
 
-make_payload(string action, int qty) =>
-    ticker_full = (asset_class == "US" or asset_class == "HK")
-                   ? asset_class + "." + syminfo.ticker
-                   : syminfo.ticker
+// Apply the moomoo market prefix when asset_class is US / HK / CRYPTO
+//   US     → "US.AAPL"
+//   HK     → "HK.00700"
+//   CRYPTO → "CC.BTC"
+get_market_prefix(string ac) =>
+    ac == "US"     ? "US." :
+    ac == "HK"     ? "HK." :
+    ac == "CRYPTO" ? "CC." :
+                     ""
+
+make_payload(string action, float qty) =>
+    ticker_full = get_market_prefix(asset_class) + syminfo.ticker
     '{"passphrase":"' + passphrase + '",' +
     '"broker":"' + broker + '",' +
     '"asset_class":"' + asset_class + '",' +

@@ -1159,6 +1159,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#7-3-running-crypto-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-3. Running CRYPTO strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3224,6 +3235,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#7-3-running-crypto-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-3. Running CRYPTO strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3818,26 +3840,47 @@
 <p><strong>Why not <code>Crossing Up 1</code>?</strong> BTC is always above 1, so there is no "crossing" event to trigger on. <code>Greater Than 1</code> evaluates true on every bar close, guaranteeing a fire.</p>
 </blockquote>
 <p>The <code>ticker:"US.AAPL"</code> in the JSON is <strong>independent</strong> of the chart symbol that fires the alert.</p>
+<h3 id="7-3-running-crypto-strategies">7-3. Running CRYPTO strategies<a class="headerlink" href="#7-3-running-crypto-strategies" title="Permanent link">&para;</a></h3>
+<p>In addition to US / HK equities, moomoo offers crypto (BTC / ETH / XRP, etc.) as a destination. alpha-strike accepts <code>asset_class="CRYPTO"</code> and routes through <code>OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)</code> internally.</p>
+<p>Sample JSON (paper-buy 0.01 BTC):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CRYPTO&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CC.BTC&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;btc_ema_sma_trail40_v1&quot;</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Notes</strong>:
+- moomoo crypto trades 24/7 (no market close)
+- US-residency restriction applies (FinCEN MSB). Even <code>run_mode=paper</code> requires the broker-side crypto account to be enabled
+- Symbols are <code>CC.BTC</code> / <code>CC.ETH</code> / <code>CC.XRP</code> etc. (<code>CC.</code> prefix + uppercase symbol)</p>
+<p>See <a href="../tradingview-alpha-strike/#3-1b-moomoo-crypto-btc-eth-xrp">TradingView × alpha-strike Integration §3-1b</a> for the full payload specification.</p>
+</blockquote>
 <hr />
 <h2 id="8-end-to-end-verification">8. End-to-end Verification<a class="headerlink" href="#8-end-to-end-verification" title="Permanent link">&para;</a></h2>
 <h3 id="8-1-external-reachability">8-1. External reachability<a class="headerlink" href="#8-1-external-reachability" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># From Mac (expect 401 if WAF is off, 403 if WAF is on)</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://strike.yourdomain.com/webhook<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;WRONG&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># From Mac (expect 401 if WAF is off, 403 if WAF is on)</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://strike.yourdomain.com/webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;WRONG&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
 </code></pre></div>
 <h3 id="8-2-simulate-order-arrival">8-2. SIMULATE order arrival<a class="headerlink" href="#8-2-simulate-order-arrival" title="Permanent link">&para;</a></h3>
 <p>After the TradingView alert fires:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>ssh<span class="w"> </span>oracle-strike
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>alpha-strike<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Webhook受信|order|34\.212\.75\.30|52\.32\.178\.7&quot;</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="nb">cd</span><span class="w"> </span>~/dev/alpha-strike
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>.venv/bin/python<span class="w"> </span>scripts/show_simulate_status.py
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># → pending_orders should list the test order</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>ssh<span class="w"> </span>oracle-strike
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>alpha-strike<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Webhook受信|order|34\.212\.75\.30|52\.32\.178\.7&quot;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="nb">cd</span><span class="w"> </span>~/dev/alpha-strike
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>.venv/bin/python<span class="w"> </span>scripts/show_simulate_status.py
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># → pending_orders should list the test order</span>
 </code></pre></div>
 <h3 id="8-3-cancel-the-test-order">8-3. Cancel the test order<a class="headerlink" href="#8-3-cancel-the-test-order" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>.venv/bin/python<span class="w"> </span>scripts/cleanup_simulate_orders.py
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="c1"># → pending_orders=0</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>.venv/bin/python<span class="w"> </span>scripts/cleanup_simulate_orders.py
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># → pending_orders=0</span>
 </code></pre></div>
 <hr />
 <h2 id="9-secret-rotation">9. Secret Rotation<a class="headerlink" href="#9-secret-rotation" title="Permanent link">&para;</a></h2>

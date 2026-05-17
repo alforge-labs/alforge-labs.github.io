@@ -50,6 +50,27 @@ alpha-strike は TradingView のアラートを Webhook で受け取り、moomoo
 }
 ```
 
+### 3-1b. moomoo CRYPTO (BTC / ETH / XRP)
+
+```json
+{
+  "passphrase": "<WEBHOOK_PASSPHRASE>",
+  "broker": "moomoo",
+  "asset_class": "CRYPTO",
+  "action": "buy",
+  "ticker": "CC.BTC",
+  "quantity": 0.01,
+  "run_mode": "paper",
+  "strategy_id": "btc_ema_sma_trail40_v1"
+}
+```
+
+> **moomoo crypto の前提**:
+> - 24/7 取引・unlimited T+0、SIMULATE 口座でも 24h 約定確認可能
+> - 米国居住者制限あり（FinCEN MSB 経由）。`run_mode=paper` でも broker 側のアカウント有効化が前提
+> - SDK 内部では `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO, security_firm=SecurityFirm.NONE)` を使用
+> - 銘柄コードは `CC.BTC` / `CC.ETH` / `CC.XRP` 等（`CC.` プレフィックス + 大文字シンボル）
+
 ### 3-2. OANDA PRACTICE / LIVE
 
 ```json
@@ -71,7 +92,7 @@ alpha-strike は TradingView のアラートを Webhook で受け取り、moomoo
 |---|---|---|---|
 | `passphrase` | ✅ | `.env` の `WEBHOOK_PASSPHRASE` と完全一致 | `"32文字のランダム文字列"` |
 | `broker` | ✅ | 発注先 | `"moomoo"` / `"oanda"` |
-| `asset_class` | ✅ | アセットクラス | `"FX"` / `"COMMODITY"` / `"US"` / `"HK"` / `"INDEX"` |
+| `asset_class` | ✅ | アセットクラス | `"FX"` / `"COMMODITY"` / `"US"` / `"HK"` / `"INDEX"` / `"CRYPTO"` |
 | `action` | ✅ | 注文方向 | `"buy"` / `"sell"`（小文字） |
 | `ticker` | ✅ | 銘柄コード（パターン `^[A-Z0-9_.]{1,20}$`） | moomoo: `"US.AAPL"` / OANDA: `"USDJPY"` |
 | `quantity` | ✅ | 注文数量（正数） | `10` / `1000` |
@@ -96,6 +117,7 @@ alpha-strike は TradingView のアラートを Webhook で受け取り、moomoo
 | 米国株 | `US.<TICKER>` | `US.AAPL` |
 | 香港株 | `HK.<CODE>` | `HK.00700` |
 | 中国 A 株 | `SH.<CODE>` / `SZ.<CODE>` | `SH.600000` |
+| 暗号資産 | `CC.<SYMBOL>` | `CC.BTC` / `CC.ETH` / `CC.XRP` |
 
 TradingView の `{{ticker}}` は市場プレフィックスなしの形式なので、Pine 側で `"US." + syminfo.ticker` のように加工するのが確実です（[セットアップガイド §7](./alpha-strike-setup.md#7-tradingview-アラート設定) 参照）。
 
@@ -145,10 +167,18 @@ long_signal  = ta.crossover(rsi_val,  30)
 short_signal = ta.crossunder(rsi_val, 70)
 
 // === JSON 生成ヘルパー ===
-make_payload(string action, int qty) =>
-    ticker_full = (asset_class == "US" or asset_class == "HK")
-                   ? asset_class + "." + syminfo.ticker
-                   : syminfo.ticker
+// asset_class が US / HK / CRYPTO のときは moomoo フォーマットの prefix を付ける
+//   US     → "US.AAPL"
+//   HK     → "HK.00700"
+//   CRYPTO → "CC.BTC"
+get_market_prefix(string ac) =>
+    ac == "US"     ? "US." :
+    ac == "HK"     ? "HK." :
+    ac == "CRYPTO" ? "CC." :
+                     ""
+
+make_payload(string action, float qty) =>
+    ticker_full = get_market_prefix(asset_class) + syminfo.ticker
     '{"passphrase":"' + passphrase + '",' +
     '"broker":"' + broker + '",' +
     '"asset_class":"' + asset_class + '",' +
