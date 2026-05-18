@@ -1099,6 +1099,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cost-presets-cost_preset-issue-785" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost presets (cost_preset, issue #785)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-goal-timeframe-backtest_period-issue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3169,6 +3180,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cost-presets-cost_preset-issue-785" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost presets (cost_preset, issue #785)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-goal-timeframe-backtest_period-issue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4140,37 +4162,166 @@
 <p>Real-broker cost examples: <strong>moomoo US Stock ≈ 0.49%</strong> (≈ 0.5% of trade value), <strong>Binance Spot taker = 0.10%</strong>, <strong>IBKR US Stock = 0.005 USD/share</strong> (% varies by symbol).</p>
 <p>If your broker differs significantly from the preset, either edit the <code>backtest</code> section in <code>forge.yaml</code>, or pass <code>--commission-pct</code> / <code>--slippage-pct</code> during scaffold so the value is baked into the strategy JSON.</p>
 </blockquote>
+<h3 id="cost-presets-cost_preset-issue-785">Cost presets (cost_preset, issue #785)<a class="headerlink" href="#cost-presets-cost_preset-issue-785" title="Permanent link">&para;</a></h3>
+<p>Built-in: 11 broker / exchange cost presets. Either set <code>forge.yaml.backtest.cost_preset</code> for a default, or pass <code>--cost-preset</code> from the CLI for ad-hoc switching.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># List built-in presets (with source URLs)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>cost-presets
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># As JSON</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>cost-presets<span class="w"> </span>--json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>commission_pct</th>
+<th>slippage_pct</th>
+<th>Other</th>
+<th>Intent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>moomoo-us-stock</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>—</td>
+<td>moomoo paper/live US stocks, commission-free</td>
+</tr>
+<tr>
+<td><code>moomoo-crypto-spot</code></td>
+<td>0.49%</td>
+<td>0.05%</td>
+<td>—</td>
+<td>moomoo crypto live (US, live only)</td>
+</tr>
+<tr>
+<td><code>moomoo-hk-stock</code></td>
+<td>0.03%</td>
+<td>0.02%</td>
+<td>—</td>
+<td>moomoo paper/live HK stocks</td>
+</tr>
+<tr>
+<td><code>binance-spot-vip0</code></td>
+<td>0.10%</td>
+<td>0.02%</td>
+<td>maker/taker both 0.10%</td>
+<td>Binance Spot regular</td>
+</tr>
+<tr>
+<td><code>binance-spot-vip5</code></td>
+<td>0.057%</td>
+<td>0.02%</td>
+<td>maker 0.013% / taker 0.057%</td>
+<td>Binance VIP 5</td>
+</tr>
+<tr>
+<td><code>kraken-spot</code></td>
+<td>0.26%</td>
+<td>0.03%</td>
+<td>maker 0.16% / taker 0.26%</td>
+<td>Kraken Pro tier 0</td>
+</tr>
+<tr>
+<td><code>coinbase-advanced</code></td>
+<td>0.40%</td>
+<td>0.03%</td>
+<td>maker 0.25% / taker 0.40%</td>
+<td>Coinbase Advanced Trade</td>
+</tr>
+<tr>
+<td><code>oanda-fx-major</code></td>
+<td>0.0%</td>
+<td>0.0%</td>
+<td>spread 0.015%</td>
+<td>OANDA FX majors</td>
+</tr>
+<tr>
+<td><code>oanda-fx-minor</code></td>
+<td>0.0%</td>
+<td>0.0%</td>
+<td>spread 0.030%</td>
+<td>OANDA FX minors</td>
+</tr>
+<tr>
+<td><code>ibkr-us-stock-fixed</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>$0.005/share (min $1)</td>
+<td>IBKR Fixed Pricing</td>
+</tr>
+<tr>
+<td><code>ibkr-us-stock-tiered</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>$0.0035/share (min $0.35)</td>
+<td>IBKR Tiered Pricing</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>PR1 (#785) scope</strong>: only <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> flow into the backtest engine. <code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#792 / #793 / #794).</p>
+</blockquote>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Set a default preset in forge.yaml</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">backtest</span><span class="p">:</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">cost_preset</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;moomoo-crypto-spot&quot;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="c1"># commission_pct: 0.20   # ← explicit value overrides the preset</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Bake the preset into the strategy JSON at scaffold time</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span>BTC-USD<span class="w"> </span>--indicators<span class="w"> </span>EMA,SMA<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--type<span class="w"> </span>trend-following<span class="w"> </span>--strategy-id<span class="w"> </span>btc_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span>--cost-preset<span class="w"> </span>moomoo-crypto-spot<span class="w"> </span>--save
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># Re-evaluate an existing strategy under a different broker (strategy JSON unchanged)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>BTC-USD<span class="w"> </span>--strategy<span class="w"> </span>btc_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">  </span>--cost-preset<span class="w"> </span>binance-spot-vip0<span class="w"> </span>--json
+</code></pre></div>
+<p>When scaffold is invoked with <code>--cost-preset</code>, the preset name is recorded in <code>risk_management.cost_preset_used</code> of the strategy JSON, making it <strong>traceable later which cost model the strategy was designed against</strong>.</p>
+<p><strong>User-defined presets</strong> can also be added in <code>forge.yaml</code> (same-name built-ins are overridden):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># forge.yaml</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nt">backtest</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">cost_preset</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-bitflyer&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nt">cost_presets</span><span class="p">:</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="nt">my-bitflyer</span><span class="p">:</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">    </span><span class="nt">commission_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.15</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">    </span><span class="nt">slippage_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.03</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bitFlyer</span><span class="nv"> </span><span class="s">Lightning</span><span class="nv"> </span><span class="s">(Japan</span><span class="nv"> </span><span class="s">residents)&quot;</span>
+</code></pre></div>
+<p><strong>Priority</strong> (high → low): explicit <code>--commission-pct</code> etc. &gt; strategy JSON <code>risk_management.commission_pct</code> &gt; <code>forge.yaml.backtest.commission_pct</code> (explicit) &gt; <code>cost_presets[forge.yaml.backtest.cost_preset]</code> &gt; built-in default</p>
 <h3 id="per-goal-timeframe-backtest_period-issue-463">Per-goal timeframe / backtest_period (issue #463)<a class="headerlink" href="#per-goal-timeframe-backtest_period-issue-463" title="Permanent link">&para;</a></h3>
 <p>To support shorter timeframes (e.g. 1h), <code>exploration.timeframe</code> and <code>exploration.backtest_period</code> can be specified as goal-level defaults in <code>goals.yaml</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Example: oanda_gold/goals.yaml (high-frequency FX setup)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">timeframe</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1h&quot;</span><span class="w">           </span><span class="c1"># strategy timeframe produced by scaffold (default: &quot;1d&quot;)</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2y&quot;</span><span class="w">     </span><span class="c1"># data fetch period for explore run (default: &quot;5y&quot;)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Example: oanda_gold/goals.yaml (high-frequency FX setup)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">timeframe</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1h&quot;</span><span class="w">           </span><span class="c1"># strategy timeframe produced by scaffold (default: &quot;1d&quot;)</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2y&quot;</span><span class="w">     </span><span class="c1"># data fetch period for explore run (default: &quot;5y&quot;)</span>
 </code></pre></div>
 <p>These values flow into the <code>timeframe</code> of strategies generated by <code>alpha-forge strategy scaffold --goal &lt;name&gt;</code> and the data fetch period used by <code>alpha-forge explore run --goal &lt;name&gt;</code>. Use <code>--timeframe</code> to override per invocation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--indicators<span class="w"> </span>BB,RSI<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>--type<span class="w"> </span>mean-reversion<span class="w"> </span>--strategy-id<span class="w"> </span>usdjpy_bb_rsi_1h_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>--timeframe<span class="w"> </span>1h<span class="w"> </span>--save
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--indicators<span class="w"> </span>BB,RSI<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>--type<span class="w"> </span>mean-reversion<span class="w"> </span>--strategy-id<span class="w"> </span>usdjpy_bb_rsi_1h_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>--timeframe<span class="w"> </span>1h<span class="w"> </span>--save
 </code></pre></div>
 <p><strong>Priority</strong>: explicit <code>--timeframe</code> &gt; <code>goals.yaml.exploration.timeframe</code> &gt; default <code>"1d"</code></p>
 <p><strong>yfinance constraint</strong>: The yfinance provider hits Yahoo Finance's 730-day cap, so <strong>1h × 5y is not retrievable</strong> (measured: 1h × 2y yields ~12,000 bars). When using 1h, shorten to <code>backtest_period: "2y"</code> or switch to an alternative provider such as Dukascopy or OANDA.</p>
 <h3 id="per-goal-backtest_period-and-data_provider_override-long-term-data-issue-674">Per-goal backtest_period and data_provider_override (long-term data / issue #674)<a class="headerlink" href="#per-goal-backtest_period-and-data_provider_override-long-term-data-issue-674" title="Permanent link">&para;</a></h3>
 <p>Many low-frequency strategies (HMM-based trend-following, etc.) cannot satisfy <code>wft.min_oos_trades_per_window</code> with only 5 years of data (issue #670). Long-term data exploration helps. Real-world testing confirmed that <strong>yfinance can retrieve 20y × 1d (~5030 bars) without issues</strong> (the "yfinance ~5y limit" really applies only to the 730-day cap on the 1h timeframe; 1d / 1w / 1mo retrieve 20y+ fine).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Example: long-term-stocks/goals.yaml (shipped template)</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;20y&quot;</span><span class="w">        </span><span class="c1"># 20-year data (yfinance 1d works)</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">assets</span><span class="p">:</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SPY</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NVDA</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AAPL</span>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MSFT</span>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GOOGL</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Example: long-term-stocks/goals.yaml (shipped template)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;20y&quot;</span><span class="w">        </span><span class="c1"># 20-year data (yfinance 1d works)</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">assets</span><span class="p">:</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SPY</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NVDA</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AAPL</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MSFT</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GOOGL</span>
 </code></pre></div>
 <p>Manually pre-cache the long-term data before starting <code>/explore-strategies</code> (avoids rate limits during unattended runs):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">for</span><span class="w"> </span>sym<span class="w"> </span><span class="k">in</span><span class="w"> </span>SPY<span class="w"> </span>QQQ<span class="w"> </span>NVDA<span class="w"> </span>AAPL<span class="w"> </span>MSFT<span class="w"> </span>GOOGL<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span><span class="nv">$sym</span><span class="w"> </span>--provider<span class="w"> </span>yfinance<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">done</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">for</span><span class="w"> </span>sym<span class="w"> </span><span class="k">in</span><span class="w"> </span>SPY<span class="w"> </span>QQQ<span class="w"> </span>NVDA<span class="w"> </span>AAPL<span class="w"> </span>MSFT<span class="w"> </span>GOOGL<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span><span class="nv">$sym</span><span class="w"> </span>--provider<span class="w"> </span>yfinance<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="k">done</span>
 </code></pre></div>
 <p><strong>Empirical result (NVDA EMA+MACD+SuperTrend, 20y)</strong>:</p>
 <table>
@@ -4218,10 +4369,10 @@
 <p>→ <strong>4 of 5 windows met <code>min_oos_trades_per_window=3</code></strong>. With 20-year data, the per-window trade count constraint that was structurally infeasible for the default goal (5y) becomes realistic.</p>
 <h4 id="data_provider_override-per-goal-provider-override">data_provider_override (per-goal provider override)<a class="headerlink" href="#data_provider_override-per-goal-provider-override" title="Permanent link">&para;</a></h4>
 <p><code>exploration.data_provider_override.{stock|fx}</code> in <code>goals.yaml</code> overrides <code>forge.yaml</code>'s <code>stock_provider</code> / <code>fx_provider</code> on a per-goal basis. Useful when one goal needs to switch to <code>oanda</code> or <code>dukascopy</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">data_provider_override</span><span class="p">:</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="nt">stock</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">     </span><span class="c1"># e.g. switch to TradingView MCP for short-term chart use cases</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="nt">fx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oanda</span><span class="w">         </span><span class="c1"># e.g. only switch FX to OANDA</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">data_provider_override</span><span class="p">:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="nt">stock</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">     </span><span class="c1"># e.g. switch to TradingView MCP for short-term chart use cases</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="nt">fx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oanda</span><span class="w">         </span><span class="c1"># e.g. only switch FX to OANDA</span>
 </code></pre></div>
 <blockquote>
 <p>⚠️ <strong>TV MCP cannot be used for long-term fetches</strong> (issue #683)<br />
@@ -4236,11 +4387,11 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 </ul>
 <h3 id="early-cutoff-via-pre_filter-min_trades-issue-429">Early cutoff via pre_filter min_trades (issue #429)<a class="headerlink" href="#early-cutoff-via-pre_filter-min_trades-issue-429" title="Permanent link">&para;</a></h3>
 <p>Adding <code>min_trades</code> to the <code>pre_filter</code> section of <code>goals.yaml</code> makes <code>alpha-forge explore run</code> abort strategies whose backtest trade count is below the threshold immediately after the backtest, skipping the Optuna optimization (tens of seconds to minutes) and WFT to save compute resources.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">15&quot;</span><span class="w">          </span><span class="c1"># issue #429: roughly half of target_metrics.min_trades is recommended</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">15&quot;</span><span class="w">          </span><span class="c1"># issue #429: roughly half of target_metrics.min_trades is recommended</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
 </code></pre></div>
 <p><strong>Behavior</strong>:</p>
 <ul>
@@ -4251,24 +4402,24 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 </ul>
 <h3 id="pre_filternear_pass-rescue-zone-issue-452-456">pre_filter.near_pass rescue zone (issue #452 / #456)<a class="headerlink" href="#pre_filternear_pass-rescue-zone-issue-452-456" title="Permanent link">&para;</a></h3>
 <p>Mechanism that lets "almost-passing" strategies proceed to the optimizer. Configure under <code>pre_filter.near_pass</code> in <code>goals.yaml</code>; eligibility is decided in 3 stages.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">30%&quot;</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">near_pass</span><span class="p">:</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="c1"># Stage 1: factors (independent coefficient evaluation / issue #452)</span>
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
-<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1</span>
-<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="nt">min_trades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
-<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
-<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="c1"># Stage 2: cross_compensation (issue #456)</span>
-<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">    </span><span class="nt">cross_compensation</span><span class="p">:</span>
-<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">      </span><span class="nt">max_drawdown_floor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w">     </span><span class="c1"># MDD &lt;= 30% × 0.1 = 3% triggers sharpe relaxation</span>
-<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">      </span><span class="nt">sharpe_relax_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7</span><span class="w">    </span><span class="c1"># sharpe acceptable down to 1.0 × 0.7 = 0.7</span>
-<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">      </span><span class="c1"># optional: min_trades_floor: 5.0  # trades &gt;= 30 × 5 = 150 also triggers</span>
-<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>
-<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">    </span><span class="c1"># Stage 3: composite (issue #456)</span>
-<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">    </span><span class="nt">composite</span><span class="p">:</span>
-<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">      </span><span class="nt">calmar_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w">           </span><span class="c1"># CAGR/MDD &gt;= 5.0 rescues sharpe shortfall</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">30%&quot;</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="nt">near_pass</span><span class="p">:</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="c1"># Stage 1: factors (independent coefficient evaluation / issue #452)</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">    </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">    </span><span class="nt">min_trades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="w">    </span><span class="c1"># Stage 2: cross_compensation (issue #456)</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="w">    </span><span class="nt">cross_compensation</span><span class="p">:</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a><span class="w">      </span><span class="nt">max_drawdown_floor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w">     </span><span class="c1"># MDD &lt;= 30% × 0.1 = 3% triggers sharpe relaxation</span>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="w">      </span><span class="nt">sharpe_relax_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7</span><span class="w">    </span><span class="c1"># sharpe acceptable down to 1.0 × 0.7 = 0.7</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a><span class="w">      </span><span class="c1"># optional: min_trades_floor: 5.0  # trades &gt;= 30 × 5 = 150 also triggers</span>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a><span class="w">    </span><span class="c1"># Stage 3: composite (issue #456)</span>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a><span class="w">    </span><span class="nt">composite</span><span class="p">:</span>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a><span class="w">      </span><span class="nt">calmar_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w">           </span><span class="c1"># CAGR/MDD &gt;= 5.0 rescues sharpe shortfall</span>
 </code></pre></div>
 <p><strong>Order</strong>: factors → cross_compensation → composite. The first stage that returns eligible runs the optimizer. <code>cross_compensation</code> and <code>composite</code> only apply when <strong>sharpe is the only failed criterion</strong> (multi-metric failures are not rescued).</p>
 <p><code>pre_filter_diagnostics.near_pass</code> records <code>eligible_via</code> (<code>factors</code>/<code>cross_compensation</code>/<code>composite</code>/<code>null</code>) and <code>compensation_evidence</code> (rescue rationale) for observability.</p>
@@ -4280,8 +4431,8 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <h3 id="pre_filtermonthly_volume_usd-evaluation-issue-459">pre_filter.monthly_volume_usd evaluation (issue #459)<a class="headerlink" href="#pre_filtermonthly_volume_usd-evaluation-issue-459" title="Permanent link">&para;</a></h3>
 <p><code>monthly_volume_usd</code> (monthly USD turnover) is computed by <code>MetricsCalculator._calc_monthly_volume_usd</code>. Setting <code>pre_filter.monthly_volume_usd &gt;= N</code> in <code>goals.yaml</code> actively evaluates the value at pre_filter time, and shortfall strategies have <code>monthly_volume_usd</code> added to <code>failed_criteria</code>.</p>
 <p>Useful for enforcing OANDA Gold status (monthly turnover ≥ 500,000 USD):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
 </code></pre></div>
 <p>When unset or <code>&gt;= 0</code>, evaluation is skipped (backwards compatible).</p>
 <h3 id="target_metrics-arbitrary-metric-evaluation-issue-458">target_metrics arbitrary-metric evaluation (issue #458)<a class="headerlink" href="#target_metrics-arbitrary-metric-evaluation-issue-458" title="Permanent link">&para;</a></h3>
@@ -4353,12 +4504,12 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 </tbody>
 </table>
 <p>Example targeting "almost surely positive every month":</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">positive_months_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.9&quot;</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="nt">worst_month_pnl_pct</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">-1.5&quot;</span>
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span><span class="nt">consecutive_negative_months</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">2&quot;</span>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">5%&quot;</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">  </span><span class="nt">profit_factor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.3&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="nt">positive_months_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.9&quot;</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span><span class="nt">worst_month_pnl_pct</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">-1.5&quot;</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">  </span><span class="nt">consecutive_negative_months</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">2&quot;</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">5%&quot;</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">  </span><span class="nt">profit_factor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.3&quot;</span>
 </code></pre></div>
 <p>Unsupported metric names or operators are skipped with a warning (the strategy is not marked failed because of them).</p>
 <h3 id="auto-relaxation-of-failed-variants-issue-428">Auto-relaxation of failed variants (issue #428)<a class="headerlink" href="#auto-relaxation-of-failed-variants-issue-428" title="Permanent link">&para;</a></h3>
@@ -4388,9 +4539,9 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 </tbody>
 </table>
 <p>Example CLI output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>❌ SPY / spy_atr_ema_macd_v1 — failed (wft_insufficient_oos_data)
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>  ✓ Sharpe=1.17; quality is acceptable. Auto-generated relaxed variant spy_atr_ema_macd_v2 (rsi_th.max=80→90)
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>  ✓ Registered in recommendations.yaml as rank: 1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>❌ SPY / spy_atr_ema_macd_v1 — failed (wft_insufficient_oos_data)
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>  ✓ Sharpe=1.17; quality is acceptable. Auto-generated relaxed variant spy_atr_ema_macd_v2 (rsi_th.max=80→90)
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>  ✓ Registered in recommendations.yaml as rank: 1
 </code></pre></div>
 <p><code>alpha-forge explore result show &lt;name&gt; --json</code> exposes an <code>auto_relax</code> field. <code>skipped_reason="duplicate_id"</code> means the variant already exists; <code>"no_relaxable_params"</code> means no parameter in <code>param_ranges</code> matched the relaxation rules. Disable the feature with <code>alpha-forge explore run --no-auto-relax</code>.</p>
 <h3 id="health-check-gate-auto-escalation-on-consecutive-failures">Health-check gate (auto-escalation on consecutive failures)<a class="headerlink" href="#health-check-gate-auto-escalation-on-consecutive-failures" title="Permanent link">&para;</a></h3>
@@ -4407,7 +4558,7 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <hr />
 <h2 id="step-2-analyze">Step 2: Analysis &amp; narrowing down (<code>/analyze-exploration</code>)<a class="headerlink" href="#step-2-analyze" title="Permanent link">&para;</a></h2>
 <p><strong>Purpose</strong>: Aggregate all past exploration logs and <strong>scientifically recommend</strong> the next set of combinations to try.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>&gt; /analyze-exploration
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>&gt; /analyze-exploration
 </code></pre></div>
 <h3 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4425,20 +4576,20 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <li><strong>Write top-5 candidates to <code>recommendations.yaml</code></strong> (read by the next <code>/explore-strategies</code>)</li>
 </ol>
 <h3 id="sample-output-recommendationsyaml">Sample output (recommendations.yaml)<a class="headerlink" href="#sample-output-recommendationsyaml" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">candidates</span><span class="p">:</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">asset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">indicators</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">HMM</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">BBANDS</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">RSI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">MACD</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">score</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.5</span>
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HMM</span><span class="nv"> </span><span class="s">×</span><span class="nv"> </span><span class="s">BBANDS</span><span class="nv"> </span><span class="s">shows</span><span class="nv"> </span><span class="s">high</span><span class="nv"> </span><span class="s">avg</span><span class="nv"> </span><span class="s">Sharpe;</span><span class="nv"> </span><span class="s">QQQ</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">few</span><span class="nv"> </span><span class="s">trials;</span><span class="nv"> </span><span class="s">MACD</span><span class="nv"> </span><span class="s">adds</span><span class="nv"> </span><span class="s">novelty.&quot;</span>
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="nt">basis_sharpe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.32</span>
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="nt">basis_maxdd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18.4</span>
-<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="nt">variant_of</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multi_asset_hmm_bb_rsi_v1_qqq</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nt">candidates</span><span class="p">:</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="nt">asset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="nt">indicators</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">HMM</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">BBANDS</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">RSI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">MACD</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="nt">score</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.5</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HMM</span><span class="nv"> </span><span class="s">×</span><span class="nv"> </span><span class="s">BBANDS</span><span class="nv"> </span><span class="s">shows</span><span class="nv"> </span><span class="s">high</span><span class="nv"> </span><span class="s">avg</span><span class="nv"> </span><span class="s">Sharpe;</span><span class="nv"> </span><span class="s">QQQ</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">few</span><span class="nv"> </span><span class="s">trials;</span><span class="nv"> </span><span class="s">MACD</span><span class="nv"> </span><span class="s">adds</span><span class="nv"> </span><span class="s">novelty.&quot;</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="nt">basis_sharpe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.32</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">    </span><span class="nt">basis_maxdd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18.4</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">    </span><span class="nt">variant_of</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multi_asset_hmm_bb_rsi_v1_qqq</span>
 </code></pre></div>
 <hr />
 <h2 id="step-3-grid-tune">Step 3: Precision tuning (<code>/grid-tune</code>)<a class="headerlink" href="#step-3-grid-tune" title="Permanent link">&para;</a></h2>
 <p><strong>Purpose</strong>: For a strategy that passed Step 1, <strong>expand <code>optimizer_config.param_ranges</code> into a Cartesian grid</strong> and run an exhaustive search; on pass, save automatically as <code>&lt;name&gt;_optimized</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>&gt; /grid-tune &lt;strategy_name&gt; &lt;SYMBOL&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>&gt; /grid-tune &lt;strategy_name&gt; &lt;SYMBOL&gt;
 </code></pre></div>
 <h3 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4464,7 +4615,7 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <hr />
 <h2 id="step-4-tune-live-strategies">Step 4: Live monitoring (<code>/tune-live-strategies</code>)<a class="headerlink" href="#step-4-tune-live-strategies" title="Permanent link">&para;</a></h2>
 <p><strong>Purpose</strong>: For strategies running live, detect drift between live performance and backtest, and <strong>automatically re-tune</strong> the affected strategies.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>&gt; /tune-live-strategies
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>&gt; /tune-live-strategies
 </code></pre></div>
 <h3 id="steps_1">Steps<a class="headerlink" href="#steps_1" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4480,26 +4631,26 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <p>A weekly cron or manual periodic run is sufficient. If drift persists for N consecutive weeks, consider rethinking the strategy (replace indicators, switch scenario).</p>
 <hr />
 <h2 id="key-files">Key files<a class="headerlink" href="#key-files" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-strategies/data/explorer/
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>├── goals/
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>│   ├── default/                       # Default goal (used when --goal is omitted)
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>│   │   ├── goals.yaml                 # Target metrics and exploration scope
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>│   │   ├── explored_log.md            # Idempotent checkpoint for this goal
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>│   │   └── reports/
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>│   │       ├── YYYY-MM-DD.md          # /explore-strategies daily report
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>│   │       └── tuning-YYYY-MM-DD.md   # /tune-live-strategies report
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>│   ├── stocks/                        # US stocks / ETF goal
-<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>│   │   ├── goals.yaml
-<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>│   │   ├── explored_log.md
-<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>│   │   └── reports/
-<a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a>│   ├── commodities/                   # Commodities goal
-<a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a>│   │   └── ...
-<a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a>│   └── crypto/                        # Crypto goal
-<a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a>│       └── ...
-<a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a>├── exploration.db                     # Shared backtest result cache (all goals)
-<a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a>├── recommendations.yaml               # Next-candidate output from /analyze-exploration
-<a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a>└── analysis/
-<a id="__codelineno-27-20" name="__codelineno-27-20" href="#__codelineno-27-20"></a>    └── YYYY-MM-DD_HH-MM.md           # /analyze-exploration output
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>alpha-strategies/data/explorer/
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>├── goals/
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>│   ├── default/                       # Default goal (used when --goal is omitted)
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>│   │   ├── goals.yaml                 # Target metrics and exploration scope
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>│   │   ├── explored_log.md            # Idempotent checkpoint for this goal
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>│   │   └── reports/
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>│   │       ├── YYYY-MM-DD.md          # /explore-strategies daily report
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>│   │       └── tuning-YYYY-MM-DD.md   # /tune-live-strategies report
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>│   ├── stocks/                        # US stocks / ETF goal
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>│   │   ├── goals.yaml
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a>│   │   ├── explored_log.md
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>│   │   └── reports/
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>│   ├── commodities/                   # Commodities goal
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>│   │   └── ...
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a>│   └── crypto/                        # Crypto goal
+<a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a>│       └── ...
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a>├── exploration.db                     # Shared backtest result cache (all goals)
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a>├── recommendations.yaml               # Next-candidate output from /analyze-exploration
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a>└── analysis/
+<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a>    └── YYYY-MM-DD_HH-MM.md           # /analyze-exploration output
 </code></pre></div>
 <p><strong><code>goals/&lt;goal_name&gt;/goals.yaml</code></strong>: Defines target Sharpe, MaxDD, the set of symbols and indicator candidates, and <code>strategies_per_run</code> for each goal. Pass <code>--goal &lt;name&gt;</code> to <code>/explore-strategies</code> to select a goal; defaults to <code>goals/default/</code>.</p>
 <p><strong><code>goals/&lt;goal_name&gt;/explored_log.md</code></strong>: Checkpoint recording every combination tried within a goal. As long as this file exists, the same combination will never be re-explored for that goal.</p>
@@ -4518,46 +4669,46 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <hr />
 <h2 id="end-to-end-example-explore-optimize-validate-live">End-to-end example (explore → optimize → validate → live)<a class="headerlink" href="#end-to-end-example-explore-optimize-validate-live" title="Permanent link">&para;</a></h2>
 <p>A worked example: validating and adopting "Add MACD to QQQ HMM × BB × RSI".</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># 1. Record the idea (optional; can be linked later)</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>alpha-forge<span class="w"> </span>idea<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;Add MACD to QQQ HMM×BB×RSI&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">  </span>--type<span class="w"> </span>improvement<span class="w"> </span>--tag<span class="w"> </span>hmm<span class="w"> </span>--tag<span class="w"> </span>qqq
-<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
-<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="c1"># 2. Try one cycle with /explore-strategies (inside Claude Code)</span>
-<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>&gt;<span class="w"> </span>/explore-strategies
-<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="c1"># → Auto-generates strategy JSON; runs validate, signal-count, backtest</span>
-<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="c1"># → Sharpe=0.95 fails the pre-filter (requires Sharpe ≥ 1.0)</span>
-<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>
-<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="c1"># 3. Try a derivative (ask the agent to tweak parameters)</span>
-<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>&gt;<span class="w"> </span>Reduce<span class="w"> </span>HMM<span class="w"> </span>n_components<span class="w"> </span>to<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>strategy<span class="w"> </span>above<span class="w"> </span>and<span class="w"> </span>retry
-<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="c1"># → Agent generates the revised JSON, re-registers, and backtests (Sharpe=1.18 passes pre-filter)</span>
-<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="c1"># → Auto-runs optimize run + walk-forward</span>
-<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="c1"># → WFT mean Sharpe=1.32 passes</span>
-<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>
-<a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a><span class="c1"># 4. Run /grid-tune for exhaustive optimization</span>
-<a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a>&gt;<span class="w"> </span>/grid-tune<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq<span class="w"> </span>QQQ
-<a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a><span class="c1"># → Grid Top-1 → apply → WFT validation reaches 1.45</span>
-<a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a><span class="c1"># → Records pass via alpha-forge journal verdict</span>
-<a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a>
-<a id="__codelineno-28-21" name="__codelineno-28-21" href="#__codelineno-28-21"></a><span class="c1"># 5. Sensitivity / overfitting check</span>
-<a id="__codelineno-28-22" name="__codelineno-28-22" href="#__codelineno-28-22"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>sensitivity<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-28-23" name="__codelineno-28-23" href="#__codelineno-28-23"></a><span class="w">  </span>/path/to/data/results/optimize_multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized_20260415_103021.json
-<a id="__codelineno-28-24" name="__codelineno-28-24" href="#__codelineno-28-24"></a><span class="c1"># → overall_robustness_score=0.82 (passes)</span>
-<a id="__codelineno-28-25" name="__codelineno-28-25" href="#__codelineno-28-25"></a>
-<a id="__codelineno-28-26" name="__codelineno-28-26" href="#__codelineno-28-26"></a><span class="c1"># 6. Final approval in journal</span>
-<a id="__codelineno-28-27" name="__codelineno-28-27" href="#__codelineno-28-27"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>verdict<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>&lt;run_id&gt;<span class="w"> </span>pass
-<a id="__codelineno-28-28" name="__codelineno-28-28" href="#__codelineno-28-28"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>note<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span><span class="s2">&quot;OOS pass + sensitivity 0.82. Live candidate.&quot;</span>
-<a id="__codelineno-28-29" name="__codelineno-28-29" href="#__codelineno-28-29"></a>
-<a id="__codelineno-28-30" name="__codelineno-28-30" href="#__codelineno-28-30"></a><span class="c1"># 7. Generate Pine Script for TradingView</span>
-<a id="__codelineno-28-31" name="__codelineno-28-31" href="#__codelineno-28-31"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>--with-training-data
-<a id="__codelineno-28-32" name="__codelineno-28-32" href="#__codelineno-28-32"></a>
-<a id="__codelineno-28-33" name="__codelineno-28-33" href="#__codelineno-28-33"></a><span class="c1"># 8. Begin live operation (deploy execution engine to VPS — out of scope here)</span>
-<a id="__codelineno-28-34" name="__codelineno-28-34" href="#__codelineno-28-34"></a>
-<a id="__codelineno-28-35" name="__codelineno-28-35" href="#__codelineno-28-35"></a><span class="c1"># 9. After a week, compare live vs backtest</span>
-<a id="__codelineno-28-36" name="__codelineno-28-36" href="#__codelineno-28-36"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
-<a id="__codelineno-28-37" name="__codelineno-28-37" href="#__codelineno-28-37"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
-<a id="__codelineno-28-38" name="__codelineno-28-38" href="#__codelineno-28-38"></a>
-<a id="__codelineno-28-39" name="__codelineno-28-39" href="#__codelineno-28-39"></a><span class="c1"># 10. If drift is large, run /tune-live-strategies for auto re-tuning</span>
-<a id="__codelineno-28-40" name="__codelineno-28-40" href="#__codelineno-28-40"></a>&gt;<span class="w"> </span>/tune-live-strategies
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># 1. Record the idea (optional; can be linked later)</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>alpha-forge<span class="w"> </span>idea<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;Add MACD to QQQ HMM×BB×RSI&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span>--type<span class="w"> </span>improvement<span class="w"> </span>--tag<span class="w"> </span>hmm<span class="w"> </span>--tag<span class="w"> </span>qqq
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="c1"># 2. Try one cycle with /explore-strategies (inside Claude Code)</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>&gt;<span class="w"> </span>/explore-strategies
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="c1"># → Auto-generates strategy JSON; runs validate, signal-count, backtest</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="c1"># → Sharpe=0.95 fails the pre-filter (requires Sharpe ≥ 1.0)</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="c1"># 3. Try a derivative (ask the agent to tweak parameters)</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a>&gt;<span class="w"> </span>Reduce<span class="w"> </span>HMM<span class="w"> </span>n_components<span class="w"> </span>to<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>strategy<span class="w"> </span>above<span class="w"> </span>and<span class="w"> </span>retry
+<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a><span class="c1"># → Agent generates the revised JSON, re-registers, and backtests (Sharpe=1.18 passes pre-filter)</span>
+<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a><span class="c1"># → Auto-runs optimize run + walk-forward</span>
+<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="c1"># → WFT mean Sharpe=1.32 passes</span>
+<a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a>
+<a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a><span class="c1"># 4. Run /grid-tune for exhaustive optimization</span>
+<a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a>&gt;<span class="w"> </span>/grid-tune<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq<span class="w"> </span>QQQ
+<a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a><span class="c1"># → Grid Top-1 → apply → WFT validation reaches 1.45</span>
+<a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a><span class="c1"># → Records pass via alpha-forge journal verdict</span>
+<a id="__codelineno-32-20" name="__codelineno-32-20" href="#__codelineno-32-20"></a>
+<a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a><span class="c1"># 5. Sensitivity / overfitting check</span>
+<a id="__codelineno-32-22" name="__codelineno-32-22" href="#__codelineno-32-22"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>sensitivity<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-23" name="__codelineno-32-23" href="#__codelineno-32-23"></a><span class="w">  </span>/path/to/data/results/optimize_multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized_20260415_103021.json
+<a id="__codelineno-32-24" name="__codelineno-32-24" href="#__codelineno-32-24"></a><span class="c1"># → overall_robustness_score=0.82 (passes)</span>
+<a id="__codelineno-32-25" name="__codelineno-32-25" href="#__codelineno-32-25"></a>
+<a id="__codelineno-32-26" name="__codelineno-32-26" href="#__codelineno-32-26"></a><span class="c1"># 6. Final approval in journal</span>
+<a id="__codelineno-32-27" name="__codelineno-32-27" href="#__codelineno-32-27"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>verdict<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>&lt;run_id&gt;<span class="w"> </span>pass
+<a id="__codelineno-32-28" name="__codelineno-32-28" href="#__codelineno-32-28"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>note<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span><span class="s2">&quot;OOS pass + sensitivity 0.82. Live candidate.&quot;</span>
+<a id="__codelineno-32-29" name="__codelineno-32-29" href="#__codelineno-32-29"></a>
+<a id="__codelineno-32-30" name="__codelineno-32-30" href="#__codelineno-32-30"></a><span class="c1"># 7. Generate Pine Script for TradingView</span>
+<a id="__codelineno-32-31" name="__codelineno-32-31" href="#__codelineno-32-31"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>--with-training-data
+<a id="__codelineno-32-32" name="__codelineno-32-32" href="#__codelineno-32-32"></a>
+<a id="__codelineno-32-33" name="__codelineno-32-33" href="#__codelineno-32-33"></a><span class="c1"># 8. Begin live operation (deploy execution engine to VPS — out of scope here)</span>
+<a id="__codelineno-32-34" name="__codelineno-32-34" href="#__codelineno-32-34"></a>
+<a id="__codelineno-32-35" name="__codelineno-32-35" href="#__codelineno-32-35"></a><span class="c1"># 9. After a week, compare live vs backtest</span>
+<a id="__codelineno-32-36" name="__codelineno-32-36" href="#__codelineno-32-36"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
+<a id="__codelineno-32-37" name="__codelineno-32-37" href="#__codelineno-32-37"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
+<a id="__codelineno-32-38" name="__codelineno-32-38" href="#__codelineno-32-38"></a>
+<a id="__codelineno-32-39" name="__codelineno-32-39" href="#__codelineno-32-39"></a><span class="c1"># 10. If drift is large, run /tune-live-strategies for auto re-tuning</span>
+<a id="__codelineno-32-40" name="__codelineno-32-40" href="#__codelineno-32-40"></a>&gt;<span class="w"> </span>/tune-live-strategies
 </code></pre></div>
 <p>In this entire flow, <strong>humans only judge in 3 places</strong>:</p>
 <ol>

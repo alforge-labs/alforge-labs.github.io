@@ -1099,6 +1099,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cost_presetissue-785" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        コストプリセット（cost_preset、issue #785）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#timeframe-backtest_periodissue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3169,6 +3180,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cost_presetissue-785" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        コストプリセット（cost_preset、issue #785）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#timeframe-backtest_periodissue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4138,37 +4160,166 @@
 <p>実 broker のコスト例: <strong>moomoo US Stock ≈ 0.49%</strong>（取引額の 0.5% 程度）、<strong>Binance Spot taker = 0.10%</strong>、<strong>IBKR US Stock = 0.005 USD/share</strong>（% 換算は銘柄依存）。</p>
 <p>実 broker と既定値が大きく乖離する場合は <code>forge.yaml</code> の <code>backtest</code> セクションを書き換えるか、scaffold 時に <code>--commission-pct</code> / <code>--slippage-pct</code> を明示して戦略 JSON に焼き込んでください。</p>
 </blockquote>
+<h3 id="cost_presetissue-785">コストプリセット（cost_preset、issue #785）<a class="headerlink" href="#cost_presetissue-785" title="Permanent link">&para;</a></h3>
+<p>ビルトインで 11 個の broker / 取引所コストプリセットを提供しています。<code>forge.yaml.backtest.cost_preset</code> で既定値を選ぶか、CLI から <code>--cost-preset</code> でその場切替できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># ビルトイン一覧を見る（出典 URL 付き）</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>cost-presets
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># JSON で</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>cost-presets<span class="w"> </span>--json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>プリセット</th>
+<th>commission_pct</th>
+<th>slippage_pct</th>
+<th>その他</th>
+<th>想定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>moomoo-us-stock</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>—</td>
+<td>moomoo paper/live 米国株、commission-free</td>
+</tr>
+<tr>
+<td><code>moomoo-crypto-spot</code></td>
+<td>0.49%</td>
+<td>0.05%</td>
+<td>—</td>
+<td>moomoo crypto live（US、live only）</td>
+</tr>
+<tr>
+<td><code>moomoo-hk-stock</code></td>
+<td>0.03%</td>
+<td>0.02%</td>
+<td>—</td>
+<td>moomoo paper/live 香港株</td>
+</tr>
+<tr>
+<td><code>binance-spot-vip0</code></td>
+<td>0.10%</td>
+<td>0.02%</td>
+<td>maker/taker 共 0.10%</td>
+<td>Binance Spot 一般</td>
+</tr>
+<tr>
+<td><code>binance-spot-vip5</code></td>
+<td>0.057%</td>
+<td>0.02%</td>
+<td>maker 0.013% / taker 0.057%</td>
+<td>Binance VIP 5</td>
+</tr>
+<tr>
+<td><code>kraken-spot</code></td>
+<td>0.26%</td>
+<td>0.03%</td>
+<td>maker 0.16% / taker 0.26%</td>
+<td>Kraken Pro tier 0</td>
+</tr>
+<tr>
+<td><code>coinbase-advanced</code></td>
+<td>0.40%</td>
+<td>0.03%</td>
+<td>maker 0.25% / taker 0.40%</td>
+<td>Coinbase Advanced Trade</td>
+</tr>
+<tr>
+<td><code>oanda-fx-major</code></td>
+<td>0.0%</td>
+<td>0.0%</td>
+<td>spread 0.015%</td>
+<td>OANDA FX メジャー</td>
+</tr>
+<tr>
+<td><code>oanda-fx-minor</code></td>
+<td>0.0%</td>
+<td>0.0%</td>
+<td>spread 0.030%</td>
+<td>OANDA FX マイナー</td>
+</tr>
+<tr>
+<td><code>ibkr-us-stock-fixed</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>$0.005/share (min $1)</td>
+<td>IBKR Fixed Pricing</td>
+</tr>
+<tr>
+<td><code>ibkr-us-stock-tiered</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>$0.0035/share (min $0.35)</td>
+<td>IBKR Tiered Pricing</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>PR1 (#785) スコープ注意</strong>: 現在 backtest engine が反映するのは <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> のみ。<code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> は戦略 JSON に記録されるが engine 反映は後続 issue で対応予定（Refs alpha-forge#792 / #793 / #794）。</p>
+</blockquote>
+<p><strong>使い方</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># forge.yaml で既定プリセットを設定</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">backtest</span><span class="p">:</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">cost_preset</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;moomoo-crypto-spot&quot;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="c1"># commission_pct: 0.20   # ← 明示すれば preset を上書き</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># scaffold 時に preset を焼き込み（戦略 JSON に commission/slippage/cost_preset_used が書かれる）</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span>BTC-USD<span class="w"> </span>--indicators<span class="w"> </span>EMA,SMA<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--type<span class="w"> </span>trend-following<span class="w"> </span>--strategy-id<span class="w"> </span>btc_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span>--cost-preset<span class="w"> </span>moomoo-crypto-spot<span class="w"> </span>--save
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># 既存戦略を別 broker でクイック再評価（戦略 JSON は変更されない、in-memory 上書き）</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>BTC-USD<span class="w"> </span>--strategy<span class="w"> </span>btc_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">  </span>--cost-preset<span class="w"> </span>binance-spot-vip0<span class="w"> </span>--json
+</code></pre></div>
+<p>scaffold で <code>--cost-preset</code> を渡すと、戦略 JSON の <code>risk_management.cost_preset_used</code> に preset 名が記録され、<strong>後からどのコストモデルで設計された戦略かが追跡可能</strong>になります。</p>
+<p><strong>ユーザー定義 preset</strong> も <code>forge.yaml</code> で追加できます（同名ビルトインは上書き）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># forge.yaml</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nt">backtest</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">cost_preset</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-bitflyer&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nt">cost_presets</span><span class="p">:</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="nt">my-bitflyer</span><span class="p">:</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">    </span><span class="nt">commission_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.15</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">    </span><span class="nt">slippage_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.03</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bitFlyer</span><span class="nv"> </span><span class="s">Lightning（日本居住者向け）&quot;</span>
+</code></pre></div>
+<p><strong>優先順位</strong>（高 → 低）: CLI <code>--commission-pct</code> 等の明示値 &gt; 戦略 JSON の <code>risk_management.commission_pct</code> &gt; <code>forge.yaml.backtest.commission_pct</code> 明示 &gt; <code>cost_presets[forge.yaml.backtest.cost_preset]</code> &gt; built-in default</p>
 <h3 id="timeframe-backtest_periodissue-463">ゴール別 timeframe / backtest_period（issue #463）<a class="headerlink" href="#timeframe-backtest_periodissue-463" title="Permanent link">&para;</a></h3>
 <p>短い時間足（1h 等）対応のため、<code>goals.yaml</code> の <code>exploration.timeframe</code> と <code>exploration.backtest_period</code> でゴール別デフォルトを指定できます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 例: oanda_gold/goals.yaml（高頻度 FX 戦略想定）</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">timeframe</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1h&quot;</span><span class="w">           </span><span class="c1"># scaffold が生成する戦略の timeframe（既定: &quot;1d&quot;）</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2y&quot;</span><span class="w">     </span><span class="c1"># explore run のデータ取得 period（既定: &quot;5y&quot;）</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 例: oanda_gold/goals.yaml（高頻度 FX 戦略想定）</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">timeframe</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1h&quot;</span><span class="w">           </span><span class="c1"># scaffold が生成する戦略の timeframe（既定: &quot;1d&quot;）</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2y&quot;</span><span class="w">     </span><span class="c1"># explore run のデータ取得 period（既定: &quot;5y&quot;）</span>
 </code></pre></div>
 <p><code>alpha-forge strategy scaffold --goal &lt;name&gt;</code> で生成される戦略の <code>timeframe</code> と、<code>alpha-forge explore run --goal &lt;name&gt;</code> のデータ取得 period に反映されます。CLI で個別指定したい場合は <code>--timeframe</code> を使えます：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--indicators<span class="w"> </span>BB,RSI<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>--type<span class="w"> </span>mean-reversion<span class="w"> </span>--strategy-id<span class="w"> </span>usdjpy_bb_rsi_1h_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>--timeframe<span class="w"> </span>1h<span class="w"> </span>--save
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--indicators<span class="w"> </span>BB,RSI<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>--type<span class="w"> </span>mean-reversion<span class="w"> </span>--strategy-id<span class="w"> </span>usdjpy_bb_rsi_1h_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>--timeframe<span class="w"> </span>1h<span class="w"> </span>--save
 </code></pre></div>
 <p><strong>優先順位</strong>: 明示 <code>--timeframe</code> &gt; <code>goals.yaml.exploration.timeframe</code> &gt; 既存デフォルト <code>"1d"</code></p>
 <p><strong>yfinance の制約</strong>: yfinance プロバイダーは Yahoo Finance API の 730 日制限により、<strong>1h × 5y は取得不可</strong>です（実測: 1h × 2y は約 12,000 bars）。1h を使う場合は <code>backtest_period: "2y"</code> のように短縮するか、Dukascopy / OANDA 等の別プロバイダーを使用してください。</p>
 <h3 id="backtest_period-data_provider_override-issue-674">ゴール別 backtest_period と data_provider_override（長期データ用 / issue #674）<a class="headerlink" href="#backtest_period-data_provider_override-issue-674" title="Permanent link">&para;</a></h3>
 <p>WFT の <code>min_oos_trades_per_window</code> を満たすには 5 年では不足する低頻度戦略（HMM トレンドフォロー等）が多く（issue #670）、長期データでの探索が有効です。実機検証の結果、<strong>yfinance で 20y × 1d を 5030 行取得できる</strong>ことを確認しています（「yfinance ~5y 制約」は 1h timeframe の 730 日上限の話で、1d/1w/1mo では 20y 以上問題なく取得できます）。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># 例: long-term-stocks/goals.yaml（実装済みテンプレート）</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;20y&quot;</span><span class="w">        </span><span class="c1"># 20 年データ（yfinance 1d で取得可能）</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">assets</span><span class="p">:</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SPY</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NVDA</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AAPL</span>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MSFT</span>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GOOGL</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># 例: long-term-stocks/goals.yaml（実装済みテンプレート）</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">backtest_period</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;20y&quot;</span><span class="w">        </span><span class="c1"># 20 年データ（yfinance 1d で取得可能）</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">assets</span><span class="p">:</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SPY</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NVDA</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AAPL</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MSFT</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GOOGL</span>
 </code></pre></div>
 <p><code>/explore-strategies</code> ループ開始前に手動で長期キャッシュを作成しておくのが安全です（無人ラン中の rate limit を避けるため）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">for</span><span class="w"> </span>sym<span class="w"> </span><span class="k">in</span><span class="w"> </span>SPY<span class="w"> </span>QQQ<span class="w"> </span>NVDA<span class="w"> </span>AAPL<span class="w"> </span>MSFT<span class="w"> </span>GOOGL<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span><span class="nv">$sym</span><span class="w"> </span>--provider<span class="w"> </span>yfinance<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">done</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">for</span><span class="w"> </span>sym<span class="w"> </span><span class="k">in</span><span class="w"> </span>SPY<span class="w"> </span>QQQ<span class="w"> </span>NVDA<span class="w"> </span>AAPL<span class="w"> </span>MSFT<span class="w"> </span>GOOGL<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span><span class="nv">$sym</span><span class="w"> </span>--provider<span class="w"> </span>yfinance<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="k">done</span>
 </code></pre></div>
 <p><strong>実証結果（NVDA EMA+MACD+SuperTrend, 20y）</strong>:</p>
 <table>
@@ -4216,10 +4367,10 @@
 <p>→ <strong>5 ウィンドウ中 4 で min_oos_trades_per_window=3 を達成</strong>。default goal (5y) では構造的に不可能だったウィンドウあたり trades 確保が、20y データで現実的に可能になりました。</p>
 <h4 id="data_provider_overridegoal">data_provider_override（goal 単位のプロバイダー上書き）<a class="headerlink" href="#data_provider_overridegoal" title="Permanent link">&para;</a></h4>
 <p><code>goals.yaml</code> の <code>exploration.data_provider_override.{stock|fx}</code> で <code>forge.yaml</code> の <code>stock_provider</code> / <code>fx_provider</code> をゴール単位で上書きできます。例えば特定 goal だけ <code>oanda</code> や <code>dukascopy</code> に切り替えたい場合に便利です：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">data_provider_override</span><span class="p">:</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="nt">stock</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">     </span><span class="c1"># 例: 短期チャート系の用途で TradingView MCP に切替</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="nt">fx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oanda</span><span class="w">         </span><span class="c1"># 例: FX のみ OANDA に切替</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">data_provider_override</span><span class="p">:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="nt">stock</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">     </span><span class="c1"># 例: 短期チャート系の用途で TradingView MCP に切替</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="nt">fx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oanda</span><span class="w">         </span><span class="c1"># 例: FX のみ OANDA に切替</span>
 </code></pre></div>
 <blockquote>
 <p>⚠️ <strong>TV MCP は長期 fetch には使用不可</strong>（issue #683）<br />
@@ -4234,11 +4385,11 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 </ul>
 <h3 id="pre_filter-min_trades-issue-429">pre_filter min_trades による早期足切り（issue #429）<a class="headerlink" href="#pre_filter-min_trades-issue-429" title="Permanent link">&para;</a></h3>
 <p><code>goals.yaml</code> の <code>pre_filter</code> に <code>min_trades</code> を設定すると、バックテスト直後に取引数が閾値未満の戦略は即座に <code>pre_filter_failed</code> で打ち切られ、Optuna 最適化（数十秒〜数分）と WFT の実行をスキップして計算リソースを節約します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">15&quot;</span><span class="w">          </span><span class="c1"># issue #429: 推奨は target_metrics.min_trades の半分程度</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">        </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">          </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">15&quot;</span><span class="w">          </span><span class="c1"># issue #429: 推奨は target_metrics.min_trades の半分程度</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
 </code></pre></div>
 <p><strong>動作</strong>:</p>
 <ul>
@@ -4249,24 +4400,24 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 </ul>
 <h3 id="pre_filternear_pass-issue-452-456">pre_filter.near_pass 救済ゾーン（issue #452 / #456）<a class="headerlink" href="#pre_filternear_pass-issue-452-456" title="Permanent link">&para;</a></h3>
 <p>「あと一歩で pre_filter 通過」の戦略を optimizer に進めるための救済機構。<code>goals.yaml</code> の <code>pre_filter.near_pass</code> セクションで設定し、3 段階評価で eligibility を判定します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">30%&quot;</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">near_pass</span><span class="p">:</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="c1"># 段階 1: factors（独立係数評価 / issue #452）</span>
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
-<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1</span>
-<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="nt">min_trades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
-<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
-<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="c1"># 段階 2: cross_compensation（クロス補完救済 / issue #456）</span>
-<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">    </span><span class="nt">cross_compensation</span><span class="p">:</span>
-<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">      </span><span class="nt">max_drawdown_floor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w">     </span><span class="c1"># MDD &lt;= 30% × 0.1 = 3% なら sharpe 緩和発動</span>
-<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">      </span><span class="nt">sharpe_relax_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7</span><span class="w">    </span><span class="c1"># sharpe を 1.0 × 0.7 = 0.7 まで許容</span>
-<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">      </span><span class="c1"># 任意: min_trades_floor: 5.0  # trades &gt;= 30 × 5 = 150 でも発動</span>
-<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>
-<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">    </span><span class="c1"># 段階 3: composite（複合スコア救済 / issue #456）</span>
-<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">    </span><span class="nt">composite</span><span class="p">:</span>
-<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">      </span><span class="nt">calmar_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w">           </span><span class="c1"># CAGR/MDD &gt;= 5.0 なら sharpe 不足を救済</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">30%&quot;</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="nt">near_pass</span><span class="p">:</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="c1"># 段階 1: factors（独立係数評価 / issue #452）</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">    </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">    </span><span class="nt">min_trades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="w">    </span><span class="c1"># 段階 2: cross_compensation（クロス補完救済 / issue #456）</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="w">    </span><span class="nt">cross_compensation</span><span class="p">:</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a><span class="w">      </span><span class="nt">max_drawdown_floor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w">     </span><span class="c1"># MDD &lt;= 30% × 0.1 = 3% なら sharpe 緩和発動</span>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="w">      </span><span class="nt">sharpe_relax_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7</span><span class="w">    </span><span class="c1"># sharpe を 1.0 × 0.7 = 0.7 まで許容</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a><span class="w">      </span><span class="c1"># 任意: min_trades_floor: 5.0  # trades &gt;= 30 × 5 = 150 でも発動</span>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a><span class="w">    </span><span class="c1"># 段階 3: composite（複合スコア救済 / issue #456）</span>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a><span class="w">    </span><span class="nt">composite</span><span class="p">:</span>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a><span class="w">      </span><span class="nt">calmar_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w">           </span><span class="c1"># CAGR/MDD &gt;= 5.0 なら sharpe 不足を救済</span>
 </code></pre></div>
 <p><strong>判定順</strong>: factors → cross_compensation → composite。いずれかで eligible になれば救済され optimizer が走ります。<code>cross_compensation</code> と <code>composite</code> は <strong>sharpe 単独不足のみ</strong>に適用（複数 metric 同時不足は救済対象外）。</p>
 <p>DB の <code>pre_filter_diagnostics.near_pass</code> に <code>eligible_via</code>（<code>factors</code>/<code>cross_compensation</code>/<code>composite</code>/<code>null</code>）と <code>compensation_evidence</code>（救済根拠）が記録され、観測可能です。</p>
@@ -4278,8 +4429,8 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <h3 id="pre_filtermonthly_volume_usd-issue-459">pre_filter.monthly_volume_usd の判定（issue #459）<a class="headerlink" href="#pre_filtermonthly_volume_usd-issue-459" title="Permanent link">&para;</a></h3>
 <p><code>monthly_volume_usd</code> は <code>MetricsCalculator._calc_monthly_volume_usd</code> で月平均取引量（USD 換算）として計算済みです。<code>pre_filter.monthly_volume_usd &gt;= N</code> を <code>goals.yaml</code> に設定すると pre_filter で実評価され、未達の戦略は <code>failed_criteria</code> に <code>monthly_volume_usd</code> が追加されます。</p>
 <p>OANDA Gold ステータスの維持ライン（月間取引量 50万 USD）の強制に使えます：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">pre_filter</span><span class="p">:</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">monthly_volume_usd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">500000&quot;</span>
 </code></pre></div>
 <p>未指定または <code>&gt;= 0</code> のときは従来通り評価 skip（後方互換）。</p>
 <h3 id="target_metrics-metric-issue-458">target_metrics 任意 metric 評価（issue #458）<a class="headerlink" href="#target_metrics-metric-issue-458" title="Permanent link">&para;</a></h3>
@@ -4351,12 +4502,12 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 </tbody>
 </table>
 <p>「ほぼ確実に毎月プラス」を表現する例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">positive_months_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.9&quot;</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="nt">worst_month_pnl_pct</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">-1.5&quot;</span>
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span><span class="nt">consecutive_negative_months</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">2&quot;</span>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">5%&quot;</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">  </span><span class="nt">profit_factor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.3&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="nt">positive_months_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.9&quot;</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span><span class="nt">worst_month_pnl_pct</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">-1.5&quot;</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">  </span><span class="nt">consecutive_negative_months</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">2&quot;</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">5%&quot;</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">  </span><span class="nt">profit_factor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.3&quot;</span>
 </code></pre></div>
 <p>未対応の metric 名や未サポート operator は warning + skip（戦略は失格扱いにしない）。</p>
 <h3 id="issue-428">自動緩和バリアント生成（issue #428）<a class="headerlink" href="#issue-428" title="Permanent link">&para;</a></h3>
@@ -4386,9 +4537,9 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 </tbody>
 </table>
 <p>CLI 出力例:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>❌ SPY / spy_atr_ema_macd_v1 — 不合格 (wft_insufficient_oos_data)
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>  ✓ Sharpe=1.17 で品質は良好。緩和バリアント spy_atr_ema_macd_v2 を自動生成しました（rsi_th.max=80→90）
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>  ✓ recommendations.yaml に rank: 1 として登録
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>❌ SPY / spy_atr_ema_macd_v1 — 不合格 (wft_insufficient_oos_data)
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>  ✓ Sharpe=1.17 で品質は良好。緩和バリアント spy_atr_ema_macd_v2 を自動生成しました（rsi_th.max=80→90）
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>  ✓ recommendations.yaml に rank: 1 として登録
 </code></pre></div>
 <p><code>alpha-forge explore result show &lt;name&gt; --json</code> の <code>auto_relax</code> フィールドで結果を確認できます。<code>skipped_reason="duplicate_id"</code> は既に同名のバリアントが存在することを、<code>"no_relaxable_params"</code> は緩和対象パラメータが見つからなかったことを示します。<code>alpha-forge explore run --no-auto-relax</code> で機能を無効化できます。</p>
 <h3 id="_8">ヘルスチェックゲート（連続失敗の自動エスカレーション）<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
@@ -4405,7 +4556,7 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <hr />
 <h2 id="step-2-analyze">Step 2: 分析・絞り込み（<code>/analyze-exploration</code>）<a class="headerlink" href="#step-2-analyze" title="Permanent link">&para;</a></h2>
 <p><strong>目的</strong>: 過去のすべての探索ログを集計・分析し、次に試すべき組み合わせを <strong>科学的に推薦</strong> する。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>&gt; /analyze-exploration
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>&gt; /analyze-exploration
 </code></pre></div>
 <h3 id="_9">処理内容<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4423,20 +4574,20 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <li><strong><code>recommendations.yaml</code> に上位 5 件を出力</strong>（次の <code>/explore-strategies</code> が参照）</li>
 </ol>
 <h3 id="recommendationsyaml">出力例（recommendations.yaml）<a class="headerlink" href="#recommendationsyaml" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">candidates</span><span class="p">:</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">asset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">indicators</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">HMM</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">BBANDS</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">RSI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">MACD</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">score</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.5</span>
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HMM</span><span class="nv"> </span><span class="s">×</span><span class="nv"> </span><span class="s">BBANDS</span><span class="nv"> </span><span class="s">の平均</span><span class="nv"> </span><span class="s">Sharpe</span><span class="nv"> </span><span class="s">が高く、QQQ</span><span class="nv"> </span><span class="s">は試行少。MACD</span><span class="nv"> </span><span class="s">追加で新規性</span><span class="nv"> </span><span class="s">+&quot;</span>
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="nt">basis_sharpe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.32</span>
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="nt">basis_maxdd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18.4</span>
-<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="nt">variant_of</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multi_asset_hmm_bb_rsi_v1_qqq</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nt">candidates</span><span class="p">:</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="nt">asset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QQQ</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="nt">indicators</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">HMM</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">BBANDS</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">RSI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">MACD</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="nt">score</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.5</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">    </span><span class="nt">rationale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HMM</span><span class="nv"> </span><span class="s">×</span><span class="nv"> </span><span class="s">BBANDS</span><span class="nv"> </span><span class="s">の平均</span><span class="nv"> </span><span class="s">Sharpe</span><span class="nv"> </span><span class="s">が高く、QQQ</span><span class="nv"> </span><span class="s">は試行少。MACD</span><span class="nv"> </span><span class="s">追加で新規性</span><span class="nv"> </span><span class="s">+&quot;</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="nt">basis_sharpe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.32</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">    </span><span class="nt">basis_maxdd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18.4</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">    </span><span class="nt">variant_of</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multi_asset_hmm_bb_rsi_v1_qqq</span>
 </code></pre></div>
 <hr />
 <h2 id="step-3-grid-tune">Step 3: 精密チューニング（<code>/grid-tune</code>）<a class="headerlink" href="#step-3-grid-tune" title="Permanent link">&para;</a></h2>
 <p><strong>目的</strong>: Step 1 で合格した戦略について、<code>optimizer_config.param_ranges</code> を <strong>Cartesian Grid に展開して網羅探索</strong>、合格すれば自動で <code>&lt;name&gt;_optimized</code> として保存。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>&gt; /grid-tune &lt;strategy_name&gt; &lt;SYMBOL&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>&gt; /grid-tune &lt;strategy_name&gt; &lt;SYMBOL&gt;
 </code></pre></div>
 <h3 id="_10">実行ステップ<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4462,7 +4613,7 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <hr />
 <h2 id="step-4-tune-live-strategies">Step 4: 実運用監視（<code>/tune-live-strategies</code>）<a class="headerlink" href="#step-4-tune-live-strategies" title="Permanent link">&para;</a></h2>
 <p><strong>目的</strong>: 実運用中の戦略について、ライブ成績がバックテストから乖離しているものを検出し、<strong>自動的に再最適化</strong> する。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>&gt; /tune-live-strategies
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>&gt; /tune-live-strategies
 </code></pre></div>
 <h3 id="_11">実行ステップ<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <ol>
@@ -4478,26 +4629,26 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <p>週次の定期実行か、乖離が気になったときの手動実行で十分です。乖離が連続 N 週続く場合は戦略の根本見直し（指標差し替え、別シナリオへの転換）を検討してください。</p>
 <hr />
 <h2 id="_12">キーファイルの役割<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-strategies/data/explorer/
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>├── goals/
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>│   ├── default/                       # デフォルトゴール（--goal 省略時に使用）
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>│   │   ├── goals.yaml                 # 目標指標と探索範囲を定義
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>│   │   ├── explored_log.md            # このゴールの冪等チェックポイント
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>│   │   └── reports/
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>│   │       ├── YYYY-MM-DD.md          # /explore-strategies の日次レポート
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>│   │       └── tuning-YYYY-MM-DD.md   # /tune-live-strategies のレポート
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>│   ├── stocks/                        # 米国株・ETF ゴール
-<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>│   │   ├── goals.yaml
-<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>│   │   ├── explored_log.md
-<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>│   │   └── reports/
-<a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a>│   ├── commodities/                   # コモディティゴール
-<a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a>│   │   └── ...
-<a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a>│   └── crypto/                        # 暗号資産ゴール
-<a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a>│       └── ...
-<a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a>├── exploration.db                     # 全ゴール共有のバックテスト結果キャッシュ
-<a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a>├── recommendations.yaml               # /analyze-exploration が出力する次回推奨候補
-<a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a>└── analysis/
-<a id="__codelineno-27-20" name="__codelineno-27-20" href="#__codelineno-27-20"></a>    └── YYYY-MM-DD_HH-MM.md           # /analyze-exploration の出力
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>alpha-strategies/data/explorer/
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>├── goals/
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>│   ├── default/                       # デフォルトゴール（--goal 省略時に使用）
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>│   │   ├── goals.yaml                 # 目標指標と探索範囲を定義
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>│   │   ├── explored_log.md            # このゴールの冪等チェックポイント
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>│   │   └── reports/
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>│   │       ├── YYYY-MM-DD.md          # /explore-strategies の日次レポート
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>│   │       └── tuning-YYYY-MM-DD.md   # /tune-live-strategies のレポート
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>│   ├── stocks/                        # 米国株・ETF ゴール
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>│   │   ├── goals.yaml
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a>│   │   ├── explored_log.md
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>│   │   └── reports/
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>│   ├── commodities/                   # コモディティゴール
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>│   │   └── ...
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a>│   └── crypto/                        # 暗号資産ゴール
+<a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a>│       └── ...
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a>├── exploration.db                     # 全ゴール共有のバックテスト結果キャッシュ
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a>├── recommendations.yaml               # /analyze-exploration が出力する次回推奨候補
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a>└── analysis/
+<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a>    └── YYYY-MM-DD_HH-MM.md           # /analyze-exploration の出力
 </code></pre></div>
 <p><strong><code>goals/&lt;goal_name&gt;/goals.yaml</code></strong>: 目標 Sharpe・MaxDD・探索対象の銘柄・指標セット・<code>strategies_per_run</code> などをゴールごとに定義します。<code>/explore-strategies --goal &lt;name&gt;</code> でゴールを指定し、省略時は <code>goals/default/</code> を使用します。</p>
 <p><strong><code>goals/&lt;goal_name&gt;/explored_log.md</code></strong>: ゴール内で試行済みの組み合わせを記録するチェックポイント。このファイルが存在する限り、同じゴール内で同じ組み合わせが重複探索されることはありません。</p>
@@ -4516,46 +4667,46 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <hr />
 <h2 id="_13">ワンサイクル実例（探索 → 最適化 → 検証 → 運用）<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
 <p>「QQQ で HMM × BB × RSI に MACD を加えるアイデア」を検証 → 採用するまでの実例です。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># 1. アイデアを記録（任意、後でリンク可能）</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>alpha-forge<span class="w"> </span>idea<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;QQQ HMM×BB×RSI に MACD を追加&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">  </span>--type<span class="w"> </span>improvement<span class="w"> </span>--tag<span class="w"> </span>hmm<span class="w"> </span>--tag<span class="w"> </span>qqq
-<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
-<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="c1"># 2. /explore-strategies で 1 サイクル試す（Claude Code 内）</span>
-<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>&gt;<span class="w"> </span>/explore-strategies
-<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="c1"># → 戦略 JSON 自動生成、validate、signal-count、backtest を実施</span>
-<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="c1"># → Sharpe=0.95 で pre-filter 落ち（Sharpe ≥ 1.0 が条件）</span>
-<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>
-<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="c1"># 3. 派生版で再挑戦（パラメータを変えてみる、AI に依頼）</span>
-<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>&gt;<span class="w"> </span>上記戦略の<span class="w"> </span>HMM<span class="w"> </span>の<span class="w"> </span>n_components<span class="w"> </span>を<span class="w"> </span><span class="m">2</span><span class="w"> </span>に減らして再試行して
-<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="c1"># → AI が修正版 JSON を生成・登録 → backtest（Sharpe=1.18 で pre-filter 通過）</span>
-<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="c1"># → 自動で optimize run + walk-forward 実行</span>
-<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="c1"># → WFT 平均 Sharpe=1.32 で合格</span>
-<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>
-<a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a><span class="c1"># 4. /grid-tune で網羅最適化</span>
-<a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a>&gt;<span class="w"> </span>/grid-tune<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq<span class="w"> </span>QQQ
-<a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a><span class="c1"># → Grid Top-1 → apply → WFT 検証で 1.45 達成</span>
-<a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a><span class="c1"># → alpha-forge journal verdict pass で記録</span>
-<a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a>
-<a id="__codelineno-28-21" name="__codelineno-28-21" href="#__codelineno-28-21"></a><span class="c1"># 5. 過学習ロバスト性チェック</span>
-<a id="__codelineno-28-22" name="__codelineno-28-22" href="#__codelineno-28-22"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>sensitivity<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-28-23" name="__codelineno-28-23" href="#__codelineno-28-23"></a><span class="w">  </span>/path/to/data/results/optimize_multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized_20260415_103021.json
-<a id="__codelineno-28-24" name="__codelineno-28-24" href="#__codelineno-28-24"></a><span class="c1"># → overall_robustness_score=0.82（合格）</span>
-<a id="__codelineno-28-25" name="__codelineno-28-25" href="#__codelineno-28-25"></a>
-<a id="__codelineno-28-26" name="__codelineno-28-26" href="#__codelineno-28-26"></a><span class="c1"># 6. ジャーナルに最終承認を記録</span>
-<a id="__codelineno-28-27" name="__codelineno-28-27" href="#__codelineno-28-27"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>verdict<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>&lt;run_id&gt;<span class="w"> </span>pass
-<a id="__codelineno-28-28" name="__codelineno-28-28" href="#__codelineno-28-28"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>note<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span><span class="s2">&quot;OOS pass + sensitivity 0.82。本番投入候補。&quot;</span>
-<a id="__codelineno-28-29" name="__codelineno-28-29" href="#__codelineno-28-29"></a>
-<a id="__codelineno-28-30" name="__codelineno-28-30" href="#__codelineno-28-30"></a><span class="c1"># 7. TradingView 用 Pine Script を生成</span>
-<a id="__codelineno-28-31" name="__codelineno-28-31" href="#__codelineno-28-31"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>--with-training-data
-<a id="__codelineno-28-32" name="__codelineno-28-32" href="#__codelineno-28-32"></a>
-<a id="__codelineno-28-33" name="__codelineno-28-33" href="#__codelineno-28-33"></a><span class="c1"># 8. ライブ運用開始（VPS に発注エンジンを配置、本ドキュメント範囲外）</span>
-<a id="__codelineno-28-34" name="__codelineno-28-34" href="#__codelineno-28-34"></a>
-<a id="__codelineno-28-35" name="__codelineno-28-35" href="#__codelineno-28-35"></a><span class="c1"># 9. 1 週間後、ライブ成績を比較</span>
-<a id="__codelineno-28-36" name="__codelineno-28-36" href="#__codelineno-28-36"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
-<a id="__codelineno-28-37" name="__codelineno-28-37" href="#__codelineno-28-37"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
-<a id="__codelineno-28-38" name="__codelineno-28-38" href="#__codelineno-28-38"></a>
-<a id="__codelineno-28-39" name="__codelineno-28-39" href="#__codelineno-28-39"></a><span class="c1"># 10. 乖離が大きければ /tune-live-strategies で自動再チューニング</span>
-<a id="__codelineno-28-40" name="__codelineno-28-40" href="#__codelineno-28-40"></a>&gt;<span class="w"> </span>/tune-live-strategies
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># 1. アイデアを記録（任意、後でリンク可能）</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>alpha-forge<span class="w"> </span>idea<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;QQQ HMM×BB×RSI に MACD を追加&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span>--type<span class="w"> </span>improvement<span class="w"> </span>--tag<span class="w"> </span>hmm<span class="w"> </span>--tag<span class="w"> </span>qqq
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="c1"># 2. /explore-strategies で 1 サイクル試す（Claude Code 内）</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>&gt;<span class="w"> </span>/explore-strategies
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="c1"># → 戦略 JSON 自動生成、validate、signal-count、backtest を実施</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="c1"># → Sharpe=0.95 で pre-filter 落ち（Sharpe ≥ 1.0 が条件）</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="c1"># 3. 派生版で再挑戦（パラメータを変えてみる、AI に依頼）</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a>&gt;<span class="w"> </span>上記戦略の<span class="w"> </span>HMM<span class="w"> </span>の<span class="w"> </span>n_components<span class="w"> </span>を<span class="w"> </span><span class="m">2</span><span class="w"> </span>に減らして再試行して
+<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a><span class="c1"># → AI が修正版 JSON を生成・登録 → backtest（Sharpe=1.18 で pre-filter 通過）</span>
+<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a><span class="c1"># → 自動で optimize run + walk-forward 実行</span>
+<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="c1"># → WFT 平均 Sharpe=1.32 で合格</span>
+<a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a>
+<a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a><span class="c1"># 4. /grid-tune で網羅最適化</span>
+<a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a>&gt;<span class="w"> </span>/grid-tune<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq<span class="w"> </span>QQQ
+<a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a><span class="c1"># → Grid Top-1 → apply → WFT 検証で 1.45 達成</span>
+<a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a><span class="c1"># → alpha-forge journal verdict pass で記録</span>
+<a id="__codelineno-32-20" name="__codelineno-32-20" href="#__codelineno-32-20"></a>
+<a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a><span class="c1"># 5. 過学習ロバスト性チェック</span>
+<a id="__codelineno-32-22" name="__codelineno-32-22" href="#__codelineno-32-22"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>sensitivity<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-32-23" name="__codelineno-32-23" href="#__codelineno-32-23"></a><span class="w">  </span>/path/to/data/results/optimize_multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized_20260415_103021.json
+<a id="__codelineno-32-24" name="__codelineno-32-24" href="#__codelineno-32-24"></a><span class="c1"># → overall_robustness_score=0.82（合格）</span>
+<a id="__codelineno-32-25" name="__codelineno-32-25" href="#__codelineno-32-25"></a>
+<a id="__codelineno-32-26" name="__codelineno-32-26" href="#__codelineno-32-26"></a><span class="c1"># 6. ジャーナルに最終承認を記録</span>
+<a id="__codelineno-32-27" name="__codelineno-32-27" href="#__codelineno-32-27"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>verdict<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>&lt;run_id&gt;<span class="w"> </span>pass
+<a id="__codelineno-32-28" name="__codelineno-32-28" href="#__codelineno-32-28"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>note<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span><span class="s2">&quot;OOS pass + sensitivity 0.82。本番投入候補。&quot;</span>
+<a id="__codelineno-32-29" name="__codelineno-32-29" href="#__codelineno-32-29"></a>
+<a id="__codelineno-32-30" name="__codelineno-32-30" href="#__codelineno-32-30"></a><span class="c1"># 7. TradingView 用 Pine Script を生成</span>
+<a id="__codelineno-32-31" name="__codelineno-32-31" href="#__codelineno-32-31"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized<span class="w"> </span>--with-training-data
+<a id="__codelineno-32-32" name="__codelineno-32-32" href="#__codelineno-32-32"></a>
+<a id="__codelineno-32-33" name="__codelineno-32-33" href="#__codelineno-32-33"></a><span class="c1"># 8. ライブ運用開始（VPS に発注エンジンを配置、本ドキュメント範囲外）</span>
+<a id="__codelineno-32-34" name="__codelineno-32-34" href="#__codelineno-32-34"></a>
+<a id="__codelineno-32-35" name="__codelineno-32-35" href="#__codelineno-32-35"></a><span class="c1"># 9. 1 週間後、ライブ成績を比較</span>
+<a id="__codelineno-32-36" name="__codelineno-32-36" href="#__codelineno-32-36"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
+<a id="__codelineno-32-37" name="__codelineno-32-37" href="#__codelineno-32-37"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
+<a id="__codelineno-32-38" name="__codelineno-32-38" href="#__codelineno-32-38"></a>
+<a id="__codelineno-32-39" name="__codelineno-32-39" href="#__codelineno-32-39"></a><span class="c1"># 10. 乖離が大きければ /tune-live-strategies で自動再チューニング</span>
+<a id="__codelineno-32-40" name="__codelineno-32-40" href="#__codelineno-32-40"></a>&gt;<span class="w"> </span>/tune-live-strategies
 </code></pre></div>
 <p>このフロー全体のうち、<strong>人間が判断するのは 3 箇所だけ</strong> です：</p>
 <ol>
