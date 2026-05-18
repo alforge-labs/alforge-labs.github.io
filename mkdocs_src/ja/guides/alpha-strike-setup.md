@@ -287,19 +287,32 @@ sudo systemctl status moomoo-opend
 
 ## 6. alpha-strike デプロイ
 
-### 6-1. ソース取得 + 依存解決
+### 6-1. PyPI からインストール
+
+alpha-strike は PyPI で配布されています ([pypi.org/project/alpha-strike/](https://pypi.org/project/alpha-strike/))。`uv` で隔離環境にインストールして `alpha-strike` CLI を使う形が推奨です。
 
 ```bash
 ssh oracle-strike
-git clone https://github.com/your-org/alpha-strike.git ~/dev/alpha-strike
-cd ~/dev/alpha-strike
-uv sync
+sudo apt install -y python3.12 python3.12-venv  # 未導入なら
+
+# /opt 配下に専用 venv を作る
+sudo mkdir -p /opt/alpha-strike
+sudo chown ubuntu:ubuntu /opt/alpha-strike
+cd /opt/alpha-strike
+
+uv venv --python 3.12
+uv pip install alpha-strike
+
+# 動作確認
+.venv/bin/alpha-strike --version
+# → alpha-strike 0.3.0 以降
 ```
 
 ### 6-2. `.env` 作成
 
 ```bash
-sudo tee ~/dev/alpha-strike/.env > /dev/null <<'EOF'
+sudo mkdir -p /etc/alpha-strike
+sudo tee /etc/alpha-strike/.env > /dev/null <<'EOF'
 # 必須
 WEBHOOK_PASSPHRASE=<32文字以上のランダム文字列>
 
@@ -314,7 +327,7 @@ MOOMOO_TRADE_ENV=SIMULATE
 # OANDA_ACCOUNT_ID=<your-account-id>
 # OANDA_ENV=PRACTICE
 EOF
-chmod 600 ~/dev/alpha-strike/.env
+sudo chmod 600 /etc/alpha-strike/.env
 ```
 
 `WEBHOOK_PASSPHRASE` は 1Password にも保管しておきます（後で TradingView の Message JSON に貼り付ける）。
@@ -331,9 +344,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/dev/alpha-strike
-EnvironmentFile=/home/ubuntu/dev/alpha-strike/.env
-ExecStart=/home/ubuntu/dev/alpha-strike/.venv/bin/python main.py
+WorkingDirectory=/opt/alpha-strike
+EnvironmentFile=/etc/alpha-strike/.env
+ExecStart=/opt/alpha-strike/.venv/bin/alpha-strike --host 0.0.0.0 --port 8080
 Restart=always
 RestartSec=5
 OOMScoreAdjust=-500
@@ -356,12 +369,18 @@ curl http://127.0.0.1:8080/health
 
 ### 6-5. メモリ・サービス監視 cron
 
-[alpha-strike リポジトリの `scripts/check_memory.sh`](https://github.com/your-org/alpha-strike/blob/main/scripts/check_memory.sh) を crontab に登録：
+[alpha-strike リポジトリの `scripts/check_memory.sh`](https://github.com/alforge-labs/alpha-strike/blob/main/scripts/check_memory.sh) をローカル取得して crontab に登録：
 
 ```bash
+# スクリプトを取得（PyPI 経由インストールには含まれない、リポジトリから直接）
+sudo curl -fsSL \
+  https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/check_memory.sh \
+  -o /usr/local/bin/check_alpha_strike_memory.sh
+sudo chmod +x /usr/local/bin/check_alpha_strike_memory.sh
+
 crontab -e
 # 以下を追記
-*/5 * * * * /home/ubuntu/dev/alpha-strike/scripts/check_memory.sh
+*/5 * * * * /usr/local/bin/check_alpha_strike_memory.sh
 ```
 
 `~/.ntfy.env` に `NTFY_TOPIC=...` を設定しておくと、メモリ 85% / swap 1GB 等の閾値超過で [ntfy.sh](https://ntfy.sh) 経由で iPhone に通知が飛びます。
@@ -462,15 +481,19 @@ ssh oracle-strike
 sudo journalctl -u alpha-strike -n 50 --no-pager | grep -E "Webhook受信|注文成功|34\.212\.75\.30|52\.32\.178\.7"
 # → Webhook受信ログ + 注文成功ログ + TradingView IP が記録されていれば成功
 
-cd ~/dev/alpha-strike
-.venv/bin/python scripts/show_simulate_status.py
+# 口座状態確認スクリプトを取得して実行
+curl -fsSL https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/show_simulate_status.py \
+  -o /tmp/show_simulate_status.py
+/opt/alpha-strike/.venv/bin/python /tmp/show_simulate_status.py
 # → pending_orders に発注内容が表示される
 ```
 
 ### 8-3. テスト発注の取消
 
 ```bash
-.venv/bin/python scripts/cleanup_simulate_orders.py
+curl -fsSL https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/cleanup_simulate_orders.py \
+  -o /tmp/cleanup_simulate_orders.py
+/opt/alpha-strike/.venv/bin/python /tmp/cleanup_simulate_orders.py
 # → pending_orders=0 に戻る
 ```
 
@@ -485,7 +508,7 @@ passphrase を変更する際は **3 箇所すべて同期** が必要：
 | 場所 | 更新方法 |
 |---|---|
 | **1Password** | 該当アイテムの `WEBHOOK_PASSPHRASE` フィールドを更新 |
-| **VM `.env`** | `ssh oracle-strike` → `sudo sed -i "s\|^WEBHOOK_PASSPHRASE=.*\|WEBHOOK_PASSPHRASE=<新値>\|" ~/dev/alpha-strike/.env` → `sudo systemctl restart alpha-strike` |
+| **VM `.env`** | `ssh oracle-strike` → `sudo sed -i "s\|^WEBHOOK_PASSPHRASE=.*\|WEBHOOK_PASSPHRASE=<新値>\|" /etc/alpha-strike/.env` → `sudo systemctl restart alpha-strike` |
 | **TradingView Message JSON** | 該当 alert を Edit → Message 欄の `passphrase` を新値に → Save → Restart |
 
 > **ハマりポイント**: 1Password と TradingView だけ更新し VM `.env` を忘れると `401 Unauthorized` で alert が届きません。`.env` は systemd 起動時にしか読まれないので `restart` も必須です。

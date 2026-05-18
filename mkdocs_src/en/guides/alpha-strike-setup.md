@@ -280,19 +280,32 @@ sudo systemctl enable --now moomoo-opend
 
 ## 6. alpha-strike Deployment
 
-### 6-1. Clone and install
+### 6-1. Install from PyPI
+
+alpha-strike is distributed on PyPI ([pypi.org/project/alpha-strike/](https://pypi.org/project/alpha-strike/)). Install into an isolated venv and use the `alpha-strike` CLI.
 
 ```bash
 ssh oracle-strike
-git clone https://github.com/your-org/alpha-strike.git ~/dev/alpha-strike
-cd ~/dev/alpha-strike
-uv sync
+sudo apt install -y python3.12 python3.12-venv  # if not installed yet
+
+# Create a dedicated venv under /opt
+sudo mkdir -p /opt/alpha-strike
+sudo chown ubuntu:ubuntu /opt/alpha-strike
+cd /opt/alpha-strike
+
+uv venv --python 3.12
+uv pip install alpha-strike
+
+# Verify
+.venv/bin/alpha-strike --version
+# → alpha-strike 0.3.0 or later
 ```
 
 ### 6-2. Create `.env`
 
 ```bash
-tee ~/dev/alpha-strike/.env > /dev/null <<'EOF'
+sudo mkdir -p /etc/alpha-strike
+sudo tee /etc/alpha-strike/.env > /dev/null <<'EOF'
 # Required
 WEBHOOK_PASSPHRASE=<random string, 32+ chars>
 
@@ -307,7 +320,7 @@ MOOMOO_TRADE_ENV=SIMULATE
 # OANDA_ACCOUNT_ID=<your-account-id>
 # OANDA_ENV=PRACTICE
 EOF
-chmod 600 ~/dev/alpha-strike/.env
+sudo chmod 600 /etc/alpha-strike/.env
 ```
 
 Also store the `WEBHOOK_PASSPHRASE` in 1Password — you will paste the same value into TradingView's alert Message JSON later.
@@ -324,9 +337,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/dev/alpha-strike
-EnvironmentFile=/home/ubuntu/dev/alpha-strike/.env
-ExecStart=/home/ubuntu/dev/alpha-strike/.venv/bin/python main.py
+WorkingDirectory=/opt/alpha-strike
+EnvironmentFile=/etc/alpha-strike/.env
+ExecStart=/opt/alpha-strike/.venv/bin/alpha-strike --host 0.0.0.0 --port 8080
 Restart=always
 RestartSec=5
 OOMScoreAdjust=-500
@@ -348,12 +361,17 @@ curl http://127.0.0.1:8080/health
 
 ### 6-5. Memory / service monitoring
 
-Add `scripts/check_memory.sh` (in the alpha-strike repo) to cron:
+Fetch `scripts/check_memory.sh` from the [alpha-strike repository](https://github.com/alforge-labs/alpha-strike/blob/main/scripts/check_memory.sh) (not part of the PyPI distribution) and register it in cron:
 
 ```bash
+sudo curl -fsSL \
+  https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/check_memory.sh \
+  -o /usr/local/bin/check_alpha_strike_memory.sh
+sudo chmod +x /usr/local/bin/check_alpha_strike_memory.sh
+
 crontab -e
 # Append:
-*/5 * * * * /home/ubuntu/dev/alpha-strike/scripts/check_memory.sh
+*/5 * * * * /usr/local/bin/check_alpha_strike_memory.sh
 ```
 
 Configure `~/.ntfy.env` with `NTFY_TOPIC=...` to receive iPhone push notifications when memory exceeds thresholds (85% / 95%) via [ntfy.sh](https://ntfy.sh).
@@ -450,15 +468,19 @@ After the TradingView alert fires:
 ssh oracle-strike
 sudo journalctl -u alpha-strike -n 50 --no-pager | grep -E "Webhook受信|order|34\.212\.75\.30|52\.32\.178\.7"
 
-cd ~/dev/alpha-strike
-.venv/bin/python scripts/show_simulate_status.py
+# Fetch the helper scripts (not part of the PyPI distribution)
+curl -fsSL https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/show_simulate_status.py \
+  -o /tmp/show_simulate_status.py
+/opt/alpha-strike/.venv/bin/python /tmp/show_simulate_status.py
 # → pending_orders should list the test order
 ```
 
 ### 8-3. Cancel the test order
 
 ```bash
-.venv/bin/python scripts/cleanup_simulate_orders.py
+curl -fsSL https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/cleanup_simulate_orders.py \
+  -o /tmp/cleanup_simulate_orders.py
+/opt/alpha-strike/.venv/bin/python /tmp/cleanup_simulate_orders.py
 # → pending_orders=0
 ```
 
@@ -471,7 +493,7 @@ When rotating `WEBHOOK_PASSPHRASE`, **all three locations must be synced**:
 | Location | How |
 |---|---|
 | **1Password** | Update the field in the `alpha-strike` item |
-| **VM `.env`** | `ssh oracle-strike` → `sudo sed -i "s\|^WEBHOOK_PASSPHRASE=.*\|WEBHOOK_PASSPHRASE=<new>\|" ~/dev/alpha-strike/.env` → `sudo systemctl restart alpha-strike` |
+| **VM `.env`** | `ssh oracle-strike` → `sudo sed -i "s\|^WEBHOOK_PASSPHRASE=.*\|WEBHOOK_PASSPHRASE=<new>\|" /etc/alpha-strike/.env` → `sudo systemctl restart alpha-strike` |
 | **TradingView Message JSON** | Edit the alert → update `passphrase` → Save → Restart |
 
 > **Common pitfall**: forgetting to update the VM `.env` will produce `401 Unauthorized` on every alert. `.env` is read only at systemd start, so `restart` is required.
