@@ -4261,10 +4261,10 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Engine integration scope (as of 2026-05)</strong>: the backtest engine honors these fields:
+<p><strong>Engine integration scope (as of 2026-05, cost preset series complete)</strong>: the backtest engine honors these fields:
 - <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> — both from the strategy JSON and <code>forge.yaml</code> (strategy JSON &gt; <code>forge.yaml</code>, alpha-forge#785 PR1 + alpha-forge#792 PR2)
 - <code>maker_pct</code> / <code>taker_pct</code> — strategies with <code>entry_limit_pct</code> use <strong>(entry=maker + exit=taker) / 2</strong> as effective commission; market-only strategies use <strong>taker</strong> (alpha-forge#793 PR3). An explicit <code>rm.commission_pct</code> still wins (backward-compatible). Rebates (<code>maker_pct &lt; 0</code>, e.g. Binance VIP5) are added in as-is
-- <code>fixed_per_share</code> / <code>fixed_per_share_min</code> — recorded in the strategy JSON for auditability, but engine integration is deferred to a follow-up issue (Refs alpha-forge#794)</p>
+- <code>fixed_per_share</code> / <code>fixed_per_share_min</code> — IBKR-style per-share commissions are <strong>approximated as equivalent pct using <code>mean(close)</code></strong> and added to <code>effective_fees</code> (alpha-forge#794 PR4). <code>fixed_per_share_min</code> is passed to vectorbt's <code>fixed_fees</code> (per-trade min fee) and takes precedence over <code>forge.yaml.backtest.min_commission</code>. The <code>mean(close)</code> approximation introduces error for wide-price-range symbols (strict per-trade shares computation is not supported due to vectorbt's single-fees constraint)</p>
 </blockquote>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Set a default preset in forge.yaml</span>
