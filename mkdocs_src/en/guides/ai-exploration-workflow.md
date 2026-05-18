@@ -490,7 +490,7 @@ alpha-forge strategy cost-presets --json
 | `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
 | `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
 
-> **PR1 (#785) scope**: only `commission_pct` / `slippage_pct` / `spread_pct` flow into the backtest engine. `maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#792 / #793 / #794).
+> **Engine integration scope (as of 2026-05)**: the backtest engine honors `commission_pct` / `slippage_pct` / `spread_pct` from **both the strategy JSON and `forge.yaml`** (strategy JSON > `forge.yaml`, alpha-forge#785 PR1 + alpha-forge#792 PR2). `maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#793 / #794).
 
 **Usage**:
 

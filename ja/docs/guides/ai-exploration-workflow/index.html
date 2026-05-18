@@ -4259,7 +4259,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>PR1 (#785) スコープ注意</strong>: 現在 backtest engine が反映するのは <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> のみ。<code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> は戦略 JSON に記録されるが engine 反映は後続 issue で対応予定（Refs alpha-forge#792 / #793 / #794）。</p>
+<p><strong>engine 反映スコープ (2026-05 時点)</strong>: backtest engine は <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> を <strong>戦略 JSON / <code>forge.yaml</code> 両方</strong>から尊重します（戦略 JSON &gt; <code>forge.yaml</code> の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）。<code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> は戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#793 / #794）。</p>
 </blockquote>
 <p><strong>使い方</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># forge.yaml で既定プリセットを設定</span>

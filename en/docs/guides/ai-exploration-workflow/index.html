@@ -4261,7 +4261,7 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>PR1 (#785) scope</strong>: only <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> flow into the backtest engine. <code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#792 / #793 / #794).</p>
+<p><strong>Engine integration scope (as of 2026-05)</strong>: the backtest engine honors <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> from <strong>both the strategy JSON and <code>forge.yaml</code></strong> (strategy JSON &gt; <code>forge.yaml</code>, alpha-forge#785 PR1 + alpha-forge#792 PR2). <code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#793 / #794).</p>
 </blockquote>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Set a default preset in forge.yaml</span>
