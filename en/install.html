@@ -143,7 +143,7 @@ forge backtest run SPY --strategy sma_crossover_v1</code></pre>
 
       <h2 class="section-heading">Visualize Results — alpha-visualizer (optional)</h2>
       <p>
-        <strong>alpha-visualizer</strong> is an OSS Python package (PyPI, MIT-licensed) that renders the backtest results
+        <strong>alpha-visualizer</strong> is an OSS Python package (PyPI, Apache-2.0-licensed) that renders the backtest results
         produced by <code>forge</code> in your browser. It runs standalone — no dependency on <code>forge</code> itself — so you can add it any time.
       </p>
       <pre><code># uv (recommended)
@@ -155,6 +155,29 @@ pip install alpha-visualizer</code></pre>
         See the <a href="/en/docs/alpha-visualizer/installation/">alpha-visualizer installation guide</a> for full usage and configuration.
         PyPI: <a href="https://pypi.org/project/alpha-visualizer/" target="_blank" rel="noopener">pypi.org/project/alpha-visualizer</a> /
         GitHub: <a href="https://github.com/alforge-labs/alpha-visualizer" target="_blank" rel="noopener">alforge-labs/alpha-visualizer</a>
+      </p>
+
+      <h2 class="section-heading">Automated Order Bridge — alpha-strike (optional)</h2>
+      <p>
+        <strong>alpha-strike</strong> is a self-hosted webhook bridge that receives TradingView alerts and routes orders to
+        <strong>moomoo</strong> (US / HK stocks, crypto) and <strong>OANDA</strong> (FX / CFD), available as an OSS Python package
+        (PyPI, Apache-2.0-licensed). The repo ships a reference architecture for running on Oracle Cloud Always Free + Cloudflare Tunnel + WAF at zero monthly cost.
+      </p>
+      <pre><code># uv (recommended)
+uv tool install alpha-strike
+
+# pipx for a global CLI
+pipx install alpha-strike
+
+# pip
+pip install alpha-strike
+
+# Run
+WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
+      <p style="font-size: 0.9rem; color: var(--text2);">
+        See the <a href="/en/docs/guides/alpha-strike-setup/">alpha-strike setup guide</a> for the full VM provisioning, Cloudflare Tunnel, WAF and systemd procedure.
+        PyPI: <a href="https://pypi.org/project/alpha-strike/" target="_blank" rel="noopener">pypi.org/project/alpha-strike</a> /
+        GitHub: <a href="https://github.com/alforge-labs/alpha-strike" target="_blank" rel="noopener">alforge-labs/alpha-strike</a>
       </p>
 
       <h2 class="section-heading">Troubleshooting</h2>
