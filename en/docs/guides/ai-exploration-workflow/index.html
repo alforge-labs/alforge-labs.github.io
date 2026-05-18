@@ -4213,7 +4213,7 @@
 <td><code>binance-spot-vip5</code></td>
 <td>0.057%</td>
 <td>0.02%</td>
-<td>maker 0.013% / taker 0.057%</td>
+<td>maker <strong>-0.013%</strong> (rebate) / taker 0.057%</td>
 <td>Binance VIP 5</td>
 </tr>
 <tr>
@@ -4261,7 +4261,10 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>Engine integration scope (as of 2026-05)</strong>: the backtest engine honors <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> from <strong>both the strategy JSON and <code>forge.yaml</code></strong> (strategy JSON &gt; <code>forge.yaml</code>, alpha-forge#785 PR1 + alpha-forge#792 PR2). <code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#793 / #794).</p>
+<p><strong>Engine integration scope (as of 2026-05)</strong>: the backtest engine honors these fields:
+- <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> — both from the strategy JSON and <code>forge.yaml</code> (strategy JSON &gt; <code>forge.yaml</code>, alpha-forge#785 PR1 + alpha-forge#792 PR2)
+- <code>maker_pct</code> / <code>taker_pct</code> — strategies with <code>entry_limit_pct</code> use <strong>(entry=maker + exit=taker) / 2</strong> as effective commission; market-only strategies use <strong>taker</strong> (alpha-forge#793 PR3). An explicit <code>rm.commission_pct</code> still wins (backward-compatible). Rebates (<code>maker_pct &lt; 0</code>, e.g. Binance VIP5) are added in as-is
+- <code>fixed_per_share</code> / <code>fixed_per_share_min</code> — recorded in the strategy JSON for auditability, but engine integration is deferred to a follow-up issue (Refs alpha-forge#794)</p>
 </blockquote>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Set a default preset in forge.yaml</span>

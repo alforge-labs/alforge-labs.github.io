@@ -4211,7 +4211,7 @@
 <td><code>binance-spot-vip5</code></td>
 <td>0.057%</td>
 <td>0.02%</td>
-<td>maker 0.013% / taker 0.057%</td>
+<td>maker <strong>-0.013%</strong> (rebate) / taker 0.057%</td>
 <td>Binance VIP 5</td>
 </tr>
 <tr>
@@ -4259,7 +4259,10 @@
 </tbody>
 </table>
 <blockquote>
-<p><strong>engine 反映スコープ (2026-05 時点)</strong>: backtest engine は <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> を <strong>戦略 JSON / <code>forge.yaml</code> 両方</strong>から尊重します（戦略 JSON &gt; <code>forge.yaml</code> の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）。<code>maker_pct</code> / <code>taker_pct</code> / <code>fixed_per_share</code> / <code>fixed_per_share_min</code> は戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#793 / #794）。</p>
+<p><strong>engine 反映スコープ (2026-05 時点)</strong>: backtest engine は以下のフィールドを反映します。
+- <code>commission_pct</code> / <code>slippage_pct</code> / <code>spread_pct</code> — 戦略 JSON / <code>forge.yaml</code> 両方から尊重（戦略 JSON &gt; <code>forge.yaml</code> の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）
+- <code>maker_pct</code> / <code>taker_pct</code> — <code>entry_limit_pct</code> が設定された戦略は <strong>entry=maker / exit=taker の平均</strong> が effective commission に、成行のみの戦略は <strong>taker</strong> が使われる（alpha-forge#793 PR3）。<code>rm.commission_pct</code> 明示時はそちらが優先される（既存挙動互換）。Binance VIP5 等の rebate (<code>maker_pct &lt; 0</code>) もそのまま加算
+- <code>fixed_per_share</code> / <code>fixed_per_share_min</code> — 戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#794）</p>
 </blockquote>
 <p><strong>使い方</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># forge.yaml で既定プリセットを設定</span>

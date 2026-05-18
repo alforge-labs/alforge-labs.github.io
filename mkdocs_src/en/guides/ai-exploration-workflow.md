@@ -482,7 +482,7 @@ alpha-forge strategy cost-presets --json
 | `moomoo-crypto-spot` | 0.49% | 0.05% | — | moomoo crypto live (US, live only) |
 | `moomoo-hk-stock` | 0.03% | 0.02% | — | moomoo paper/live HK stocks |
 | `binance-spot-vip0` | 0.10% | 0.02% | maker/taker both 0.10% | Binance Spot regular |
-| `binance-spot-vip5` | 0.057% | 0.02% | maker 0.013% / taker 0.057% | Binance VIP 5 |
+| `binance-spot-vip5` | 0.057% | 0.02% | maker **-0.013%** (rebate) / taker 0.057% | Binance VIP 5 |
 | `kraken-spot` | 0.26% | 0.03% | maker 0.16% / taker 0.26% | Kraken Pro tier 0 |
 | `coinbase-advanced` | 0.40% | 0.03% | maker 0.25% / taker 0.40% | Coinbase Advanced Trade |
 | `oanda-fx-major` | 0.0% | 0.0% | spread 0.015% | OANDA FX majors |
@@ -490,7 +490,10 @@ alpha-forge strategy cost-presets --json
 | `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
 | `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
 
-> **Engine integration scope (as of 2026-05)**: the backtest engine honors `commission_pct` / `slippage_pct` / `spread_pct` from **both the strategy JSON and `forge.yaml`** (strategy JSON > `forge.yaml`, alpha-forge#785 PR1 + alpha-forge#792 PR2). `maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#793 / #794).
+> **Engine integration scope (as of 2026-05)**: the backtest engine honors these fields:
+> - `commission_pct` / `slippage_pct` / `spread_pct` — both from the strategy JSON and `forge.yaml` (strategy JSON > `forge.yaml`, alpha-forge#785 PR1 + alpha-forge#792 PR2)
+> - `maker_pct` / `taker_pct` — strategies with `entry_limit_pct` use **(entry=maker + exit=taker) / 2** as effective commission; market-only strategies use **taker** (alpha-forge#793 PR3). An explicit `rm.commission_pct` still wins (backward-compatible). Rebates (`maker_pct < 0`, e.g. Binance VIP5) are added in as-is
+> - `fixed_per_share` / `fixed_per_share_min` — recorded in the strategy JSON for auditability, but engine integration is deferred to a follow-up issue (Refs alpha-forge#794)
 
 **Usage**:
 

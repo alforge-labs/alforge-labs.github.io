@@ -480,7 +480,7 @@ alpha-forge strategy cost-presets --json
 | `moomoo-crypto-spot` | 0.49% | 0.05% | — | moomoo crypto live（US、live only） |
 | `moomoo-hk-stock` | 0.03% | 0.02% | — | moomoo paper/live 香港株 |
 | `binance-spot-vip0` | 0.10% | 0.02% | maker/taker 共 0.10% | Binance Spot 一般 |
-| `binance-spot-vip5` | 0.057% | 0.02% | maker 0.013% / taker 0.057% | Binance VIP 5 |
+| `binance-spot-vip5` | 0.057% | 0.02% | maker **-0.013%** (rebate) / taker 0.057% | Binance VIP 5 |
 | `kraken-spot` | 0.26% | 0.03% | maker 0.16% / taker 0.26% | Kraken Pro tier 0 |
 | `coinbase-advanced` | 0.40% | 0.03% | maker 0.25% / taker 0.40% | Coinbase Advanced Trade |
 | `oanda-fx-major` | 0.0% | 0.0% | spread 0.015% | OANDA FX メジャー |
@@ -488,7 +488,10 @@ alpha-forge strategy cost-presets --json
 | `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
 | `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
 
-> **engine 反映スコープ (2026-05 時点)**: backtest engine は `commission_pct` / `slippage_pct` / `spread_pct` を **戦略 JSON / `forge.yaml` 両方**から尊重します（戦略 JSON > `forge.yaml` の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）。`maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` は戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#793 / #794）。
+> **engine 反映スコープ (2026-05 時点)**: backtest engine は以下のフィールドを反映します。
+> - `commission_pct` / `slippage_pct` / `spread_pct` — 戦略 JSON / `forge.yaml` 両方から尊重（戦略 JSON > `forge.yaml` の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）
+> - `maker_pct` / `taker_pct` — `entry_limit_pct` が設定された戦略は **entry=maker / exit=taker の平均** が effective commission に、成行のみの戦略は **taker** が使われる（alpha-forge#793 PR3）。`rm.commission_pct` 明示時はそちらが優先される（既存挙動互換）。Binance VIP5 等の rebate (`maker_pct < 0`) もそのまま加算
+> - `fixed_per_share` / `fixed_per_share_min` — 戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#794）
 
 **使い方**:
 
