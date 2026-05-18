@@ -145,7 +145,7 @@ forge backtest run SPY --strategy sma_crossover_v1</code></pre>
       <h2 class="section-heading">結果を可視化する — alpha-visualizer（任意）</h2>
       <p>
         <strong>alpha-visualizer</strong> は forge が出力するバックテスト結果を Web ブラウザで可視化する
-        OSS パッケージです（PyPI 配布・MIT ライセンス）。forge 本体に依存せず単体動作するため、必要に応じて後から追加できます。
+        OSS パッケージです（PyPI 配布・Apache-2.0 ライセンス）。forge 本体に依存せず単体動作するため、必要に応じて後から追加できます。
       </p>
       <pre><code># uv（推奨）
 uv tool install alpha-visualizer
@@ -157,6 +157,30 @@ pip install alpha-visualizer</code></pre>
         <a href="/ja/docs/alpha-visualizer/installation/">alpha-visualizer インストールガイド</a>
         を参照してください。PyPI: <a href="https://pypi.org/project/alpha-visualizer/" target="_blank" rel="noopener">pypi.org/project/alpha-visualizer</a> /
         GitHub: <a href="https://github.com/alforge-labs/alpha-visualizer" target="_blank" rel="noopener">alforge-labs/alpha-visualizer</a>
+      </p>
+
+      <h2 class="section-heading">自動発注ブリッジ — alpha-strike（任意）</h2>
+      <p>
+        <strong>alpha-strike</strong> は TradingView アラートを Webhook で受け取り、<strong>moomoo 証券</strong>（米国株 / 香港株 / 暗号資産）と
+        <strong>OANDA 証券</strong>（FX / CFD）へ自動発注するセルフホスト型ブリッジです（PyPI 配布・Apache-2.0 ライセンス）。
+        Oracle Cloud Always Free + Cloudflare Tunnel + WAF のリファレンス構成で月額 0 円で本格運用できます。
+      </p>
+      <pre><code># uv（推奨）
+uv tool install alpha-strike
+
+# pipx でグローバル CLI として
+pipx install alpha-strike
+
+# pip
+pip install alpha-strike
+
+# 起動
+WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
+      <p style="font-size: 0.9rem; color: var(--text2);">
+        VM プロビジョニング・Cloudflare Tunnel・WAF・systemd の完全手順は
+        <a href="/ja/docs/guides/alpha-strike-setup/">alpha-strike セットアップガイド</a>
+        を参照してください。PyPI: <a href="https://pypi.org/project/alpha-strike/" target="_blank" rel="noopener">pypi.org/project/alpha-strike</a> /
+        GitHub: <a href="https://github.com/alforge-labs/alpha-strike" target="_blank" rel="noopener">alforge-labs/alpha-strike</a>
       </p>
 
       <h2 class="section-heading">トラブルシューティング</h2>
