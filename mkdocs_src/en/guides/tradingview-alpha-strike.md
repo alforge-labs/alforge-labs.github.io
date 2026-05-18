@@ -198,6 +198,59 @@ Firing `alert()` from inside the strategy lets you leave the TradingView Message
 
 ---
 
+## 4-bis. Idempotency (automatic duplicate rejection)
+
+TradingView webhooks can arrive **multiple times for the same signal** due to network retries, alert re-evaluation, or manual Restart spamming. alpha-strike v0.5.0+ uses **`signal_id` as an idempotency key**: if the same `signal_id` arrives again within the TTL window, the request is **not routed to the broker** and a 200 is returned (we deliberately avoid 409 to stop TradingView's auto-retry).
+
+### Behavior
+
+| Condition | Response |
+|---|---|
+| `signal_id` set, first arrival | Normal order flow |
+| `signal_id` set, repeated within TTL | Broker call skipped, 200 `{"status":"success", "message":"duplicate signal_id — already processed"}` |
+| `signal_id` set, repeated after TTL | Normal order flow (history was evicted) |
+| `signal_id` omitted | Idempotency check skipped (legacy compatibility, broker is called every time) |
+
+### Environment variable
+
+| Variable | Default | Description |
+|---|---|---|
+| `IDEMPOTENCY_TTL_SECONDS` | `600` | Retention window in seconds. Covers TradingView's maximum auto-retry interval. In-memory only; cleared on process restart. |
+
+### Recommended Pine v6 pattern
+
+Combine `bar_open_time + strategy_id + timeframe` so that **multiple fires within the same bar are always rejected by idempotency**:
+
+```pinescript
+//@version=6
+strategy("idempotent demo", overlay=true)
+
+strategy_id = "demo_buy_v1"
+passphrase  = "<WEBHOOK_PASSPHRASE>"
+
+make_signal_id() =>
+    // <strategy_id>_<timeframe>_<bar_open_time>
+    strategy_id + "_" + timeframe.period + "_" + str.format_time(time, "yyyy-MM-dd_HH-mm")
+
+make_payload(string action, float qty) =>
+    sig = make_signal_id()
+    '{"passphrase":"' + passphrase + '",' +
+    '"broker":"moomoo",' +
+    '"asset_class":"US",' +
+    '"action":"' + action + '",' +
+    '"ticker":"US." + syminfo.ticker + '",' +
+    '"quantity":' + str.tostring(qty) + ',' +
+    '"signal_id":"' + sig + '",' +
+    '"strategy_id":"' + strategy_id + '",' +
+    '"run_mode":"paper"}'
+```
+
+> **Effect**: with `signal_id` formatted as `<strategy_id>_<timeframe>_<bar_open_time>`, even if `alert.freq_once_per_bar_close` somehow fires multiple times within the same bar, alpha-strike will treat the duplicates as 200 + duplicate and block any double broker orders.
+>
+> **Backward compatibility**: existing payloads without `signal_id` keep working unchanged. Strongly recommended to add `signal_id` to reduce duplicate-order risk.
+
+---
+
 ## 5. Response
 
 ### 5-1. Success (200)
