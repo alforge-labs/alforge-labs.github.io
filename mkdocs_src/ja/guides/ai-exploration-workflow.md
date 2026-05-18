@@ -462,6 +462,72 @@ alpha-forge strategy scaffold ... \
 >
 > 実 broker と既定値が大きく乖離する場合は `forge.yaml` の `backtest` セクションを書き換えるか、scaffold 時に `--commission-pct` / `--slippage-pct` を明示して戦略 JSON に焼き込んでください。
 
+### コストプリセット（cost_preset、issue #785）
+
+ビルトインで 11 個の broker / 取引所コストプリセットを提供しています。`forge.yaml.backtest.cost_preset` で既定値を選ぶか、CLI から `--cost-preset` でその場切替できます。
+
+```bash
+# ビルトイン一覧を見る（出典 URL 付き）
+alpha-forge strategy cost-presets
+
+# JSON で
+alpha-forge strategy cost-presets --json
+```
+
+| プリセット | commission_pct | slippage_pct | その他 | 想定 |
+|---|---|---|---|---|
+| `moomoo-us-stock` | 0.0% | 0.01% | — | moomoo paper/live 米国株、commission-free |
+| `moomoo-crypto-spot` | 0.49% | 0.05% | — | moomoo crypto live（US、live only） |
+| `moomoo-hk-stock` | 0.03% | 0.02% | — | moomoo paper/live 香港株 |
+| `binance-spot-vip0` | 0.10% | 0.02% | maker/taker 共 0.10% | Binance Spot 一般 |
+| `binance-spot-vip5` | 0.057% | 0.02% | maker 0.013% / taker 0.057% | Binance VIP 5 |
+| `kraken-spot` | 0.26% | 0.03% | maker 0.16% / taker 0.26% | Kraken Pro tier 0 |
+| `coinbase-advanced` | 0.40% | 0.03% | maker 0.25% / taker 0.40% | Coinbase Advanced Trade |
+| `oanda-fx-major` | 0.0% | 0.0% | spread 0.015% | OANDA FX メジャー |
+| `oanda-fx-minor` | 0.0% | 0.0% | spread 0.030% | OANDA FX マイナー |
+| `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
+| `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
+
+> **PR1 (#785) スコープ注意**: 現在 backtest engine が反映するのは `commission_pct` / `slippage_pct` / `spread_pct` のみ。`maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` は戦略 JSON に記録されるが engine 反映は後続 issue で対応予定（Refs alpha-forge#792 / #793 / #794）。
+
+**使い方**:
+
+```yaml
+# forge.yaml で既定プリセットを設定
+backtest:
+  cost_preset: "moomoo-crypto-spot"
+  # commission_pct: 0.20   # ← 明示すれば preset を上書き
+```
+
+```bash
+# scaffold 時に preset を焼き込み（戦略 JSON に commission/slippage/cost_preset_used が書かれる）
+alpha-forge strategy scaffold --symbol BTC-USD --indicators EMA,SMA \
+  --type trend-following --strategy-id btc_v1 \
+  --cost-preset moomoo-crypto-spot --save
+
+# 既存戦略を別 broker でクイック再評価（戦略 JSON は変更されない、in-memory 上書き）
+alpha-forge backtest run BTC-USD --strategy btc_v1 \
+  --cost-preset binance-spot-vip0 --json
+```
+
+scaffold で `--cost-preset` を渡すと、戦略 JSON の `risk_management.cost_preset_used` に preset 名が記録され、**後からどのコストモデルで設計された戦略かが追跡可能**になります。
+
+**ユーザー定義 preset** も `forge.yaml` で追加できます（同名ビルトインは上書き）：
+
+```yaml
+# forge.yaml
+backtest:
+  cost_preset: "my-bitflyer"
+
+cost_presets:
+  my-bitflyer:
+    commission_pct: 0.15
+    slippage_pct: 0.03
+    description: "bitFlyer Lightning（日本居住者向け）"
+```
+
+**優先順位**（高 → 低）: CLI `--commission-pct` 等の明示値 > 戦略 JSON の `risk_management.commission_pct` > `forge.yaml.backtest.commission_pct` 明示 > `cost_presets[forge.yaml.backtest.cost_preset]` > built-in default
+
 ### ゴール別 timeframe / backtest_period（issue #463）
 
 短い時間足（1h 等）対応のため、`goals.yaml` の `exploration.timeframe` と `exploration.backtest_period` でゴール別デフォルトを指定できます。

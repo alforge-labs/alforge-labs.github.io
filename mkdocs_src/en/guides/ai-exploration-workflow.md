@@ -464,6 +464,72 @@ Strategies with `commission_pct` / `slippage_pct` set to `null` inherit `forge.y
 >
 > If your broker differs significantly from the preset, either edit the `backtest` section in `forge.yaml`, or pass `--commission-pct` / `--slippage-pct` during scaffold so the value is baked into the strategy JSON.
 
+### Cost presets (cost_preset, issue #785)
+
+Built-in: 11 broker / exchange cost presets. Either set `forge.yaml.backtest.cost_preset` for a default, or pass `--cost-preset` from the CLI for ad-hoc switching.
+
+```bash
+# List built-in presets (with source URLs)
+alpha-forge strategy cost-presets
+
+# As JSON
+alpha-forge strategy cost-presets --json
+```
+
+| Preset | commission_pct | slippage_pct | Other | Intent |
+|---|---|---|---|---|
+| `moomoo-us-stock` | 0.0% | 0.01% | — | moomoo paper/live US stocks, commission-free |
+| `moomoo-crypto-spot` | 0.49% | 0.05% | — | moomoo crypto live (US, live only) |
+| `moomoo-hk-stock` | 0.03% | 0.02% | — | moomoo paper/live HK stocks |
+| `binance-spot-vip0` | 0.10% | 0.02% | maker/taker both 0.10% | Binance Spot regular |
+| `binance-spot-vip5` | 0.057% | 0.02% | maker 0.013% / taker 0.057% | Binance VIP 5 |
+| `kraken-spot` | 0.26% | 0.03% | maker 0.16% / taker 0.26% | Kraken Pro tier 0 |
+| `coinbase-advanced` | 0.40% | 0.03% | maker 0.25% / taker 0.40% | Coinbase Advanced Trade |
+| `oanda-fx-major` | 0.0% | 0.0% | spread 0.015% | OANDA FX majors |
+| `oanda-fx-minor` | 0.0% | 0.0% | spread 0.030% | OANDA FX minors |
+| `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
+| `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
+
+> **PR1 (#785) scope**: only `commission_pct` / `slippage_pct` / `spread_pct` flow into the backtest engine. `maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` are recorded in the strategy JSON for auditability, but engine integration is deferred to follow-up issues (Refs alpha-forge#792 / #793 / #794).
+
+**Usage**:
+
+```yaml
+# Set a default preset in forge.yaml
+backtest:
+  cost_preset: "moomoo-crypto-spot"
+  # commission_pct: 0.20   # ← explicit value overrides the preset
+```
+
+```bash
+# Bake the preset into the strategy JSON at scaffold time
+alpha-forge strategy scaffold --symbol BTC-USD --indicators EMA,SMA \
+  --type trend-following --strategy-id btc_v1 \
+  --cost-preset moomoo-crypto-spot --save
+
+# Re-evaluate an existing strategy under a different broker (strategy JSON unchanged)
+alpha-forge backtest run BTC-USD --strategy btc_v1 \
+  --cost-preset binance-spot-vip0 --json
+```
+
+When scaffold is invoked with `--cost-preset`, the preset name is recorded in `risk_management.cost_preset_used` of the strategy JSON, making it **traceable later which cost model the strategy was designed against**.
+
+**User-defined presets** can also be added in `forge.yaml` (same-name built-ins are overridden):
+
+```yaml
+# forge.yaml
+backtest:
+  cost_preset: "my-bitflyer"
+
+cost_presets:
+  my-bitflyer:
+    commission_pct: 0.15
+    slippage_pct: 0.03
+    description: "bitFlyer Lightning (Japan residents)"
+```
+
+**Priority** (high → low): explicit `--commission-pct` etc. > strategy JSON `risk_management.commission_pct` > `forge.yaml.backtest.commission_pct` (explicit) > `cost_presets[forge.yaml.backtest.cost_preset]` > built-in default
+
 ### Per-goal timeframe / backtest_period (issue #463)
 
 To support shorter timeframes (e.g. 1h), `exploration.timeframe` and `exploration.backtest_period` can be specified as goal-level defaults in `goals.yaml`.
