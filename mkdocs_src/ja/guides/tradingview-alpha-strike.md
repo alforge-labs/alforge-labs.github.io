@@ -202,6 +202,59 @@ if short_signal
 
 ---
 
+## 4-bis. Idempotency（重複発注の自動拒否）
+
+TradingView Webhook は **ネットワーク再送・alert 再評価・Restart 連打** などで同一シグナルが複数回到達することがあります。alpha-strike v0.5.0+ は **`signal_id` を idempotency key として使い**、TTL 内に同じ `signal_id` が再到達した場合は broker に流さず 200 を返します（TradingView 側の自動リトライを止めるため、409 にはしない）。
+
+### 動作仕様
+
+| 条件 | 動作 |
+|---|---|
+| `signal_id` 指定あり + 初回到達 | 通常の発注フローを実行 |
+| `signal_id` 指定あり + TTL 内に再到達 | broker 呼び出しスキップ、200 `{"status":"success", "message":"duplicate signal_id — already processed"}` |
+| `signal_id` 指定あり + TTL 経過後の再到達 | 通常の発注フローを実行（履歴 evict 済み） |
+| `signal_id` 未指定 | idempotency 検証スキップ（後方互換、毎回 broker に流れる） |
+
+### 環境変数
+
+| 変数 | 既定 | 説明 |
+|---|---|---|
+| `IDEMPOTENCY_TTL_SECONDS` | `600` | 重複拒否対象とする保持期間（秒）。TradingView 自動リトライ最長間隔をカバー。プロセス内 in-memory のため restart 時は破棄 |
+
+### Pine v6 推奨パターン
+
+bar 確定時刻 + strategy_id + timeframe で **同一バー内の再発火を必ず idempotency で弾ける** 形にします：
+
+```pinescript
+//@version=6
+strategy("idempotent demo", overlay=true)
+
+strategy_id = "demo_buy_v1"
+passphrase  = "<WEBHOOK_PASSPHRASE>"
+
+make_signal_id() =>
+    // <strategy_id>_<timeframe>_<bar_open_time> 形式で一意性を担保
+    strategy_id + "_" + timeframe.period + "_" + str.format_time(time, "yyyy-MM-dd_HH-mm")
+
+make_payload(string action, float qty) =>
+    sig = make_signal_id()
+    '{"passphrase":"' + passphrase + '",' +
+    '"broker":"moomoo",' +
+    '"asset_class":"US",' +
+    '"action":"' + action + '",' +
+    '"ticker":"US." + syminfo.ticker + '",' +
+    '"quantity":' + str.tostring(qty) + ',' +
+    '"signal_id":"' + sig + '",' +
+    '"strategy_id":"' + strategy_id + '",' +
+    '"run_mode":"paper"}'
+```
+
+> **同一バー内再発火の防止効果**: `signal_id` を `<strategy_id>_<timeframe>_<bar_open_time>` 形式で組み立てれば、`alert.freq_once_per_bar_close` を使っていても何らかの理由で同一バー内に複数回 `alert()` が走った場合に **alpha-strike 側で必ず 200 + duplicate 扱い** となり broker への二重発注を防げます。
+>
+> **後方互換**: 既存の payload（`signal_id` 未指定）は従来通り動作。重複発注リスクを低減したい場合は明示的に `signal_id` を含めることを強く推奨。
+
+---
+
 ## 5. レスポンス例
 
 ### 5-1. 成功（200 OK）

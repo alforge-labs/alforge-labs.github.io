@@ -893,6 +893,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#4-bis-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-bis. Idempotency（重複発注の自動拒否）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4-bis. Idempotency（重複発注の自動拒否）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        動作仕様
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境変数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pine-v6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pine v6 推奨パターン
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -954,7 +1004,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         関連ドキュメント
@@ -2670,6 +2720,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#4-bis-idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-bis. Idempotency（重複発注の自動拒否）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4-bis. Idempotency（重複発注の自動拒否）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        動作仕様
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境変数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pine-v6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pine v6 推奨パターン
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2731,7 +2831,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         関連ドキュメント
@@ -3113,21 +3213,96 @@
 </code></pre></div>
 <p><code>alert()</code> をストラテジー本体で発火させると、<strong>TradingView アラートの Message 欄を空にしたまま</strong> Pine で組み立てた JSON がそのまま Webhook に送られます。<code>alert.freq_once_per_bar_close</code> で足確定時のみ発火し、リペイント・重複発注を抑制できます。</p>
 <hr />
+<h2 id="4-bis-idempotency">4-bis. Idempotency（重複発注の自動拒否）<a class="headerlink" href="#4-bis-idempotency" title="Permanent link">&para;</a></h2>
+<p>TradingView Webhook は <strong>ネットワーク再送・alert 再評価・Restart 連打</strong> などで同一シグナルが複数回到達することがあります。alpha-strike v0.5.0+ は <strong><code>signal_id</code> を idempotency key として使い</strong>、TTL 内に同じ <code>signal_id</code> が再到達した場合は broker に流さず 200 を返します（TradingView 側の自動リトライを止めるため、409 にはしない）。</p>
+<h3 id="_1">動作仕様<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>signal_id</code> 指定あり + 初回到達</td>
+<td>通常の発注フローを実行</td>
+</tr>
+<tr>
+<td><code>signal_id</code> 指定あり + TTL 内に再到達</td>
+<td>broker 呼び出しスキップ、200 <code>{"status":"success", "message":"duplicate signal_id — already processed"}</code></td>
+</tr>
+<tr>
+<td><code>signal_id</code> 指定あり + TTL 経過後の再到達</td>
+<td>通常の発注フローを実行（履歴 evict 済み）</td>
+</tr>
+<tr>
+<td><code>signal_id</code> 未指定</td>
+<td>idempotency 検証スキップ（後方互換、毎回 broker に流れる）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">環境変数<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>変数</th>
+<th>既定</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IDEMPOTENCY_TTL_SECONDS</code></td>
+<td><code>600</code></td>
+<td>重複拒否対象とする保持期間（秒）。TradingView 自動リトライ最長間隔をカバー。プロセス内 in-memory のため restart 時は破棄</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pine-v6">Pine v6 推奨パターン<a class="headerlink" href="#pine-v6" title="Permanent link">&para;</a></h3>
+<p>bar 確定時刻 + strategy_id + timeframe で <strong>同一バー内の再発火を必ず idempotency で弾ける</strong> 形にします：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>//@version=6
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>strategy(&quot;idempotent demo&quot;, overlay=true)
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>strategy_id = &quot;demo_buy_v1&quot;
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>passphrase  = &quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>make_signal_id() =&gt;
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    // &lt;strategy_id&gt;_&lt;timeframe&gt;_&lt;bar_open_time&gt; 形式で一意性を担保
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    strategy_id + &quot;_&quot; + timeframe.period + &quot;_&quot; + str.format_time(time, &quot;yyyy-MM-dd_HH-mm&quot;)
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>make_payload(string action, float qty) =&gt;
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    sig = make_signal_id()
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    &#39;{&quot;passphrase&quot;:&quot;&#39; + passphrase + &#39;&quot;,&#39; +
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    &#39;&quot;broker&quot;:&quot;moomoo&quot;,&#39; +
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    &#39;&quot;asset_class&quot;:&quot;US&quot;,&#39; +
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    &#39;&quot;action&quot;:&quot;&#39; + action + &#39;&quot;,&#39; +
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    &#39;&quot;ticker&quot;:&quot;US.&quot; + syminfo.ticker + &#39;&quot;,&#39; +
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    &#39;&quot;quantity&quot;:&#39; + str.tostring(qty) + &#39;,&#39; +
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    &#39;&quot;signal_id&quot;:&quot;&#39; + sig + &#39;&quot;,&#39; +
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    &#39;&quot;strategy_id&quot;:&quot;&#39; + strategy_id + &#39;&quot;,&#39; +
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    &#39;&quot;run_mode&quot;:&quot;paper&quot;}&#39;
+</code></pre></div>
+<blockquote>
+<p><strong>同一バー内再発火の防止効果</strong>: <code>signal_id</code> を <code>&lt;strategy_id&gt;_&lt;timeframe&gt;_&lt;bar_open_time&gt;</code> 形式で組み立てれば、<code>alert.freq_once_per_bar_close</code> を使っていても何らかの理由で同一バー内に複数回 <code>alert()</code> が走った場合に <strong>alpha-strike 側で必ず 200 + duplicate 扱い</strong> となり broker への二重発注を防げます。</p>
+<p><strong>後方互換</strong>: 既存の payload（<code>signal_id</code> 未指定）は従来通り動作。重複発注リスクを低減したい場合は明示的に <code>signal_id</code> を含めることを強く推奨。</p>
+</blockquote>
+<hr />
 <h2 id="5">5. レスポンス例<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <h3 id="5-1-200-ok">5-1. 成功（200 OK）<a class="headerlink" href="#5-1-200-ok" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.AAPL&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{&#39;order_id&#39;: &#39;356604&#39;, &#39;ret_code&#39;: 0, &#39;filled_qty&#39;: 0.0, &#39;filled_price&#39;: 0.0}&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sig_20260517170105122499&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ord_20260517170105123793&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">&quot;broker_order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;356604&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">&quot;event_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evt_20260517170105232506&quot;</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.AAPL&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{&#39;order_id&#39;: &#39;356604&#39;, &#39;ret_code&#39;: 0, &#39;filled_qty&#39;: 0.0, &#39;filled_price&#39;: 0.0}&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sig_20260517170105122499&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ord_20260517170105123793&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">&quot;broker_order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;356604&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&quot;event_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evt_20260517170105232506&quot;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="5-2-401">5-2. 認証失敗（401）<a class="headerlink" href="#5-2-401" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unauthorized&quot;</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unauthorized&quot;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
 <h2 id="6">6. エラー一覧<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
@@ -3180,20 +3355,20 @@
 <hr />
 <h2 id="7">7. ローカル開発時のテスト<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
 <p>VM デプロイ前にローカル PC で alpha-strike を起動して動作確認する場合：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># alpha-strike リポジトリで</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>webhook_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reload
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># 別ターミナルから</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>curl<span class="w"> </span>http://localhost:8080/health
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/webhook<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;test&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># alpha-strike リポジトリで</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>webhook_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reload
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># 別ターミナルから</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>curl<span class="w"> </span>http://localhost:8080/health
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;test&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
 </code></pre></div>
 <p>TradingView から外部 URL に到達させたい場合は本番デプロイ（Cloudflare Tunnel）を使うのが最も確実です。ローカル PC を直接公開したい場合は <code>ngrok</code> や <code>cloudflared tunnel --url http://localhost:8080</code> で一時的なトンネルを張れます。</p>
 <hr />
-<h2 id="_1">関連ドキュメント<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_3">関連ドキュメント<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../alpha-strike-setup/">alpha-strike セットアップガイド（ペーパートレード本格運用）</a> — VM・Cloudflare・WAF・OpenD・systemd の完全手順</li>
 <li><a href="../tradingview-pine-integration/">TradingView への Pine Script 反映</a> — alpha-forge 出力の Pine スクリプトを TradingView に貼る方法</li>
