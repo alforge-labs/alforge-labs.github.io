@@ -488,10 +488,10 @@ alpha-forge strategy cost-presets --json
 | `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
 | `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
 
-> **engine 反映スコープ (2026-05 時点)**: backtest engine は以下のフィールドを反映します。
+> **engine 反映スコープ (2026-05 時点、cost preset シリーズ完了)**: backtest engine は以下のフィールドを反映します。
 > - `commission_pct` / `slippage_pct` / `spread_pct` — 戦略 JSON / `forge.yaml` 両方から尊重（戦略 JSON > `forge.yaml` の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）
 > - `maker_pct` / `taker_pct` — `entry_limit_pct` が設定された戦略は **entry=maker / exit=taker の平均** が effective commission に、成行のみの戦略は **taker** が使われる（alpha-forge#793 PR3）。`rm.commission_pct` 明示時はそちらが優先される（既存挙動互換）。Binance VIP5 等の rebate (`maker_pct < 0`) もそのまま加算
-> - `fixed_per_share` / `fixed_per_share_min` — 戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#794）
+> - `fixed_per_share` / `fixed_per_share_min` — IBKR の shares ベース手数料を **`mean(close)` ベースで equivalent pct に近似**して `effective_fees` に加算（alpha-forge#794 PR4）。`fixed_per_share_min` は vectorbt の `fixed_fees`（per-trade 最低手数料）として渡され、`forge.yaml.backtest.min_commission` より優先される。`mean(close)` 近似のため、価格レンジが広い銘柄では誤差あり（厳密な per-trade shares 計算は vectorbt の単一 fees 制約のため未対応）
 
 **使い方**:
 

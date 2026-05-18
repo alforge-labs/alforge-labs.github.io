@@ -490,10 +490,10 @@ alpha-forge strategy cost-presets --json
 | `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
 | `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
 
-> **Engine integration scope (as of 2026-05)**: the backtest engine honors these fields:
+> **Engine integration scope (as of 2026-05, cost preset series complete)**: the backtest engine honors these fields:
 > - `commission_pct` / `slippage_pct` / `spread_pct` — both from the strategy JSON and `forge.yaml` (strategy JSON > `forge.yaml`, alpha-forge#785 PR1 + alpha-forge#792 PR2)
 > - `maker_pct` / `taker_pct` — strategies with `entry_limit_pct` use **(entry=maker + exit=taker) / 2** as effective commission; market-only strategies use **taker** (alpha-forge#793 PR3). An explicit `rm.commission_pct` still wins (backward-compatible). Rebates (`maker_pct < 0`, e.g. Binance VIP5) are added in as-is
-> - `fixed_per_share` / `fixed_per_share_min` — recorded in the strategy JSON for auditability, but engine integration is deferred to a follow-up issue (Refs alpha-forge#794)
+> - `fixed_per_share` / `fixed_per_share_min` — IBKR-style per-share commissions are **approximated as equivalent pct using `mean(close)`** and added to `effective_fees` (alpha-forge#794 PR4). `fixed_per_share_min` is passed to vectorbt's `fixed_fees` (per-trade min fee) and takes precedence over `forge.yaml.backtest.min_commission`. The `mean(close)` approximation introduces error for wide-price-range symbols (strict per-trade shares computation is not supported due to vectorbt's single-fees constraint)
 
 **Usage**:
 
