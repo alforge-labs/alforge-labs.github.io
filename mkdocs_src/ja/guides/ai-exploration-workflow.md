@@ -488,7 +488,7 @@ alpha-forge strategy cost-presets --json
 | `ibkr-us-stock-fixed` | 0.0% | 0.01% | $0.005/share (min $1) | IBKR Fixed Pricing |
 | `ibkr-us-stock-tiered` | 0.0% | 0.01% | $0.0035/share (min $0.35) | IBKR Tiered Pricing |
 
-> **PR1 (#785) スコープ注意**: 現在 backtest engine が反映するのは `commission_pct` / `slippage_pct` / `spread_pct` のみ。`maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` は戦略 JSON に記録されるが engine 反映は後続 issue で対応予定（Refs alpha-forge#792 / #793 / #794）。
+> **engine 反映スコープ (2026-05 時点)**: backtest engine は `commission_pct` / `slippage_pct` / `spread_pct` を **戦略 JSON / `forge.yaml` 両方**から尊重します（戦略 JSON > `forge.yaml` の優先順位、alpha-forge#785 PR1 + alpha-forge#792 PR2）。`maker_pct` / `taker_pct` / `fixed_per_share` / `fixed_per_share_min` は戦略 JSON に監査記録されますが engine 反映は後続 issue で対応予定（Refs alpha-forge#793 / #794）。
 
 **使い方**:
 
