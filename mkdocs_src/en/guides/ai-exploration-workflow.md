@@ -691,7 +691,7 @@ The `target_metrics` section of `goals.yaml` accepts the following arbitrary met
 | `max_drawdown` | Max drawdown (%) | backtest |
 | `cagr` | Annual return (%) | backtest |
 | `win_rate_pct` | Trade win rate (%) | backtest |
-| `profit_factor` | Profit / loss | backtest |
+| `profit_factor` | Profit / loss (`null` when all trades are winners — issue #791) | backtest |
 | `min_trades` | Lower bound on trade count | backtest |
 | `calmar_ratio` | CAGR / MDD | backtest |
 | `positive_months_ratio` | Fraction of profitable months (0–1) | backtest |

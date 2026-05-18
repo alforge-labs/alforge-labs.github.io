@@ -138,6 +138,9 @@ signal_quality_score = sample_size_score + win_rate_score + profit_factor_score
 | `0.40 – 0.69` | Caution. Further validation (WFT / cross-symbol) recommended | "0.4–0.7: caution, more validation suggested" |
 | `< 0.40` | Low reliability, treat as reference only | "<0.4: low reliability, treat as reference only" |
 
+!!! warning "Detecting all-winning-trades backtest artifacts (issue #791)"
+    When `profit_factor` is returned as `null` and `StrategyDiagnostics` emits an `ALL_WINNING_TRADES` warning, you are looking at an **all-winning-trades backtest artifact**. Likely causes include a too-loose trailing stop, exit conditions that almost never fire right after entry, or entry evaluation that has degenerated into a state-based predicate firing every bar. Cross-validate with another engine such as the TradingView Strategy Tester. `null` is treated as "unmeasurable" by `signal_quality_score`, `anomaly_score`, `check_criteria.pf`, and `target_metrics.profit_factor`, all of which fall back to the safe side (score = 0, criterion fails).
+
 #### Why a minimum of 30 trades
 
 - Rough threshold for statistical significance: **n ≥ 30** (where the Central Limit Theorem starts to apply)

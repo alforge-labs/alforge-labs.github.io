@@ -4177,6 +4177,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">全勝 backtest artifact の検知（issue #791）</p>
+<p><code>profit_factor</code> が <code>null</code> で返り <code>StrategyDiagnostics</code> が <code>ALL_WINNING_TRADES</code> 警告を出す場合、<strong>全 trade が利益となる backtest artifact</strong> が発生しています。trailing_stop が緩い・exit 条件がエントリ直後にほぼ発火しない・entry 評価が状態ベースで連続エントリしている等が原因の可能性が高いため、TradingView Strategy Tester など別エンジンで結果が再現するか確認してください。<code>null</code> は <code>signal_quality_score</code> / <code>anomaly_score</code> / <code>check_criteria.pf</code> / <code>target_metrics.profit_factor</code> のいずれでも安全側（スコア 0・不合格）に扱われます。</p>
+</div>
 <h4 id="30">最低取引数 30 件の根拠<a class="headerlink" href="#30" title="Permanent link">&para;</a></h4>
 <ul>
 <li>統計的有意性の目安は <strong>n ≥ 30</strong>（中心極限定理が成立し始める閾値）</li>

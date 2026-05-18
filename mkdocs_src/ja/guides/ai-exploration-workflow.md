@@ -689,7 +689,7 @@ pre_filter:
 | `max_drawdown` | 最大ドローダウン (%) | backtest |
 | `cagr` | 年率リターン (%) | backtest |
 | `win_rate_pct` | 取引勝率 (%) | backtest |
-| `profit_factor` | 利益÷損失 | backtest |
+| `profit_factor` | 利益÷損失（全勝で損失合計=0 のときは `null`、issue #791） | backtest |
 | `min_trades` | 取引数下限 | backtest |
 | `calmar_ratio` | CAGR / MDD | backtest |
 | `positive_months_ratio` | 月別勝率（0〜1） | backtest |

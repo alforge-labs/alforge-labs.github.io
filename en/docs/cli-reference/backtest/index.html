@@ -4177,6 +4177,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">Detecting all-winning-trades backtest artifacts (issue #791)</p>
+<p>When <code>profit_factor</code> is returned as <code>null</code> and <code>StrategyDiagnostics</code> emits an <code>ALL_WINNING_TRADES</code> warning, you are looking at an <strong>all-winning-trades backtest artifact</strong>. Likely causes include a too-loose trailing stop, exit conditions that almost never fire right after entry, or entry evaluation that has degenerated into a state-based predicate firing every bar. Cross-validate with another engine such as the TradingView Strategy Tester. <code>null</code> is treated as "unmeasurable" by <code>signal_quality_score</code>, <code>anomaly_score</code>, <code>check_criteria.pf</code>, and <code>target_metrics.profit_factor</code>, all of which fall back to the safe side (score = 0, criterion fails).</p>
+</div>
 <h4 id="why-a-minimum-of-30-trades">Why a minimum of 30 trades<a class="headerlink" href="#why-a-minimum-of-30-trades" title="Permanent link">&para;</a></h4>
 <ul>
 <li>Rough threshold for statistical significance: <strong>n ≥ 30</strong> (where the Central Limit Theorem starts to apply)</li>

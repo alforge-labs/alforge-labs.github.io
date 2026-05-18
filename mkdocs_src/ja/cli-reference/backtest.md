@@ -138,6 +138,9 @@ signal_quality_score = sample_size_score + win_rate_score + profit_factor_score
 | `0.40 – 0.69` | 要注意。追加検証（WFT / クロスシンボル）推奨 | 「0.4–0.7 は要注意・追加検証推奨」 |
 | `< 0.40` | 信頼度が低く参考値扱い | 「<0.4 は信頼度が低く参考値扱い」 |
 
+!!! warning "全勝 backtest artifact の検知（issue #791）"
+    `profit_factor` が `null` で返り `StrategyDiagnostics` が `ALL_WINNING_TRADES` 警告を出す場合、**全 trade が利益となる backtest artifact** が発生しています。trailing_stop が緩い・exit 条件がエントリ直後にほぼ発火しない・entry 評価が状態ベースで連続エントリしている等が原因の可能性が高いため、TradingView Strategy Tester など別エンジンで結果が再現するか確認してください。`null` は `signal_quality_score` / `anomaly_score` / `check_criteria.pf` / `target_metrics.profit_factor` のいずれでも安全側（スコア 0・不合格）に扱われます。
+
 #### 最低取引数 30 件の根拠
 
 - 統計的有意性の目安は **n ≥ 30**（中心極限定理が成立し始める閾値）
