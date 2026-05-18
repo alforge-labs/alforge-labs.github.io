@@ -234,6 +234,7 @@ if short_signal
 | 401 Unauthorized | `passphrase` 不一致 | `.env` の `WEBHOOK_PASSPHRASE` と TradingView Message 欄を再確認 |
 | 422 Unprocessable Entity | JSON パース失敗 / フィールド検証失敗 | `broker` `action` `run_mode` は小文字、`ticker` は `^[A-Z0-9_.]{1,20}$`、`quantity` は正数 |
 | 429 Too Many Requests | rate limit (10/min/IP) 超過 | アラート頻度を抑える |
+| **503 Service Unavailable** | **Kill switch (maintenance mode) が ON** | `/etc/alpha-strike/MAINTENANCE` が存在、または `MAINTENANCE_MODE=1` が設定されている。`sudo rm /etc/alpha-strike/MAINTENANCE` で解除（[セットアップガイド §10-3](./alpha-strike-setup.md#10-3-インシデント対応) 参照） |
 | 500 Internal Server Error | broker 認証情報未設定 | `journalctl -u alpha-strike` でエラー詳細を確認 |
 | 502 Bad Gateway | broker API 呼び出し失敗 | `moomoo`: OpenD 起動状態 / `oanda`: API key の有効性 |
 | 403 Forbidden（Cloudflare） | WAF Custom Rule で遮断 | 送信元 IP が TradingView 公式 4 件のいずれかか確認 |

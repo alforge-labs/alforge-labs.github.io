@@ -540,9 +540,33 @@ op item get "alpha-strike" --vault AlphaTrade --fields WEBHOOK_PASSPHRASE --reve
 
 | 症状 | 一次対応 |
 |---|---|
+| **異常発注の検知（最緊急）** | **kill switch**: `echo "理由" \| sudo tee /etc/alpha-strike/MAINTENANCE` で即時 503 化（restart 不要）→ `cleanup_simulate_orders.py` で取消 → 原因究明後に `sudo rm /etc/alpha-strike/MAINTENANCE` で復旧 |
 | Webhook 502 連発 | `systemctl status alpha-strike moomoo-opend` → 必要なら `systemctl restart alpha-strike` |
 | OpenD 接続切れ | `systemctl restart moomoo-opend` → デバイストークン期限切れなら Mac で再認証 → rsync |
-| 異常発注の検知 | TradingView アラートを **Pause** → `cleanup_simulate_orders.py` で取消 → 原因調査 |
+
+#### Kill switch（受付停止モード）の詳細
+
+異常発注を検知した際の **第一手**。サービスを止めずに `/webhook` のみ即時 503 を返す状態にできる（alpha-strike v0.4.0+）。TradingView 側も 5xx 連続で alert を自動 disable してくれる。
+
+| 起動方法 | 切替 | 用途 |
+|---|---|---|
+| ファイルフラグ `/etc/alpha-strike/MAINTENANCE` | restart 不要・即時 | **緊急時の主要手段**。ファイル内容が 503 detail に含まれる |
+| 環境変数 `MAINTENANCE_MODE=1` | `.env` + restart | 計画停止用、systemd 起動時から固定したい場合 |
+
+```bash
+# 停止
+echo "ticker AAPL runaway: investigating" | sudo tee /etc/alpha-strike/MAINTENANCE
+
+# 確認（自宅 IP からの POST が 503 になる、WAF rule を一時 OFF にして検証）
+curl -i https://strike.yourdomain.com/webhook \
+  -X POST -H "Content-Type: application/json" -d '{"passphrase":"x"}'
+# → 503 maintenance: ticker AAPL runaway: investigating
+
+# 解除
+sudo rm /etc/alpha-strike/MAINTENANCE
+```
+
+> **注**: maintenance mode 中も `/health` は 200 を返す（外部ヘルスチェック / Cloudflare Tunnel 維持のため）。`passphrase` 検証より **前** に kill switch が判定されるので、maintenance 中の不正 passphrase 試行はログに残らない。
 
 ### 10-4. 中止判断
 

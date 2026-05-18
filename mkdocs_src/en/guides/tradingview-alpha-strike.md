@@ -230,6 +230,7 @@ Firing `alert()` from inside the strategy lets you leave the TradingView Message
 | 401 Unauthorized | `passphrase` mismatch | Re-check `.env` `WEBHOOK_PASSPHRASE` vs the TradingView Message field |
 | 422 Unprocessable Entity | JSON / field validation failed | `broker` `action` `run_mode` lowercase, `ticker` matches `^[A-Z0-9_.]{1,20}$`, `quantity` positive |
 | 429 Too Many Requests | rate limit (10/min/IP) | Reduce alert frequency |
+| **503 Service Unavailable** | **Kill switch (maintenance mode) is ON** | `/etc/alpha-strike/MAINTENANCE` exists, or `MAINTENANCE_MODE=1` is set. Run `sudo rm /etc/alpha-strike/MAINTENANCE` to deactivate (see [setup guide §10-3](./alpha-strike-setup.md#10-3-incident-response)). |
 | 500 Internal Server Error | broker credentials missing | `journalctl -u alpha-strike` for details |
 | 502 Bad Gateway | broker API failure | `moomoo`: OpenD status / `oanda`: API key validity |
 | 403 Forbidden (Cloudflare) | Blocked by WAF | Check the source IP is one of TradingView's 4 official IPs |
