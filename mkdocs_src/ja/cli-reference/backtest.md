@@ -54,6 +54,32 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--pf-min` | float | `1.3` | PF 最低基準 |
 | `--min-trades` | int | - | 最低取引数。閾値未満で終了コード 1 |
 | `--regime` | フラグ | false | レジーム別統計をコンソールに表示 |
+| `--trades-csv` | path | - | trade 一覧 CSV を指定パスに書き出す（issue #800、[詳細](#trades-csv-export)） |
+| `--debug` | フラグ | false | `alpha_forge.*` ロガーを DEBUG レベルに上げる（issue #800） |
+
+### `--trades-csv` で trade 一覧 CSV をエクスポート {#trades-csv-export}
+
+`backtest run --trades-csv <path>` を指定すると、各 trade の詳細を CSV で書き出します。TradingView Strategy Tester など別エンジンとの突合や、`profit_factor` artifact（issue #791）のような数値乖離を実機で点検する用途に使います。
+
+```bash
+alpha-forge backtest run AAPL --strategy sma_crossover_v1 --trades-csv trades.csv
+```
+
+| カラム | 意味 |
+|-------|------|
+| `trade_idx` | 0-origin の trade 番号 |
+| `entry_bar_idx` / `exit_bar_idx` | エントリ / エグジットの bar index |
+| `entry_time` / `exit_time` | 日付（`1d` timeframe なら `YYYY-MM-DD`） |
+| `entry_price` / `exit_price` | 約定価格 |
+| `direction` | `long` / `short` |
+| `pnl_pct` / `pnl_abs` | リターン (%) / 絶対 PnL |
+| `bars_held` | 保有バー数 |
+| `sl_price` / `tp_price` | エントリ時点の SL / TP 価格（未設定なら空） |
+| `mae_pct` / `mfe_pct` | 最大不利変動 / 最大有利変動 (%) |
+| `entry_reason` | 戦略 entry conditions の 1 行サマリ（Phase 1 は全 trade 共通） |
+| `exit_reason` | `strategy_exit` placeholder（Phase 2 で SL/TP/trailing 区別予定） |
+
+trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `uniq` / `diff` 等のパイプラインが空 stdout で落ちることはありません。`--debug` を併用すると、シグナル評価・mask 適用・metrics 計算の DEBUG ログが stderr に流れます（`alpha_forge.*` 配下の logger のみ昇格）。
 
 ### ベンチマーク選択ロジック（F-304） {#benchmark-selection}
 

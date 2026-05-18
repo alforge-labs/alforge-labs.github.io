@@ -1736,6 +1736,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#trades-csv-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --trades-csv で trade 一覧 CSV をエクスポート
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#benchmark-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3128,6 +3139,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#trades-csv-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --trades-csv で trade 一覧 CSV をエクスポート
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#benchmark-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4044,8 +4066,79 @@
 <td>false</td>
 <td>レジーム別統計をコンソールに表示</td>
 </tr>
+<tr>
+<td><code>--trades-csv</code></td>
+<td>path</td>
+<td>-</td>
+<td>trade 一覧 CSV を指定パスに書き出す（issue #800、<a href="#trades-csv-export">詳細</a>）</td>
+</tr>
+<tr>
+<td><code>--debug</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td><code>alpha_forge.*</code> ロガーを DEBUG レベルに上げる（issue #800）</td>
+</tr>
 </tbody>
 </table>
+<h3 id="trades-csv-export"><code>--trades-csv</code> で trade 一覧 CSV をエクスポート<a class="headerlink" href="#trades-csv-export" title="Permanent link">&para;</a></h3>
+<p><code>backtest run --trades-csv &lt;path&gt;</code> を指定すると、各 trade の詳細を CSV で書き出します。TradingView Strategy Tester など別エンジンとの突合や、<code>profit_factor</code> artifact（issue #791）のような数値乖離を実機で点検する用途に使います。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>AAPL<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--trades-csv<span class="w"> </span>trades.csv
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>カラム</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trade_idx</code></td>
+<td>0-origin の trade 番号</td>
+</tr>
+<tr>
+<td><code>entry_bar_idx</code> / <code>exit_bar_idx</code></td>
+<td>エントリ / エグジットの bar index</td>
+</tr>
+<tr>
+<td><code>entry_time</code> / <code>exit_time</code></td>
+<td>日付（<code>1d</code> timeframe なら <code>YYYY-MM-DD</code>）</td>
+</tr>
+<tr>
+<td><code>entry_price</code> / <code>exit_price</code></td>
+<td>約定価格</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>long</code> / <code>short</code></td>
+</tr>
+<tr>
+<td><code>pnl_pct</code> / <code>pnl_abs</code></td>
+<td>リターン (%) / 絶対 PnL</td>
+</tr>
+<tr>
+<td><code>bars_held</code></td>
+<td>保有バー数</td>
+</tr>
+<tr>
+<td><code>sl_price</code> / <code>tp_price</code></td>
+<td>エントリ時点の SL / TP 価格（未設定なら空）</td>
+</tr>
+<tr>
+<td><code>mae_pct</code> / <code>mfe_pct</code></td>
+<td>最大不利変動 / 最大有利変動 (%)</td>
+</tr>
+<tr>
+<td><code>entry_reason</code></td>
+<td>戦略 entry conditions の 1 行サマリ（Phase 1 は全 trade 共通）</td>
+</tr>
+<tr>
+<td><code>exit_reason</code></td>
+<td><code>strategy_exit</code> placeholder（Phase 2 で SL/TP/trailing 区別予定）</td>
+</tr>
+</tbody>
+</table>
+<p>trade が 0 件でもヘッダ行だけは書き出されるため、<code>sort</code> / <code>uniq</code> / <code>diff</code> 等のパイプラインが空 stdout で落ちることはありません。<code>--debug</code> を併用すると、シグナル評価・mask 適用・metrics 計算の DEBUG ログが stderr に流れます（<code>alpha_forge.*</code> 配下の logger のみ昇格）。</p>
 <h3 id="benchmark-selection">ベンチマーク選択ロジック（F-304）<a class="headerlink" href="#benchmark-selection" title="Permanent link">&para;</a></h3>
 <p><code>--benchmark</code> を省略したときの解決順序：</p>
 <ol>
@@ -4126,30 +4219,30 @@
 <p><img alt="バックテスト 6 フェーズパイプライン" src="../../assets/illustrations/backtest/backtest-pipeline-6phases.png" /></p>
 <p>プログレスバーは <strong>stderr</strong> に描画されるため、<code>--json</code> を併用しても stdout は純粋な JSON のみが出力されます（<code>--json</code> 指定時かつ stderr が TTY のときは進捗バーを stderr に出します）。stderr が非 TTY（CI、パイプ、ファイルへリダイレクト）の場合は自動で抑制されます。これにより <code>/explore-strategies</code> などのエージェント経由の <code>--json</code> 実行でも、対話端末では進捗が可視化されつつ、CI ではログが汚染されません。</p>
 <h3 id="_4">出力例（テキスト）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>バックテストを実行中: SPY x sma_crossover_v1
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>✅ バックテスト完了  信号品質スコア: 0.78/1.0
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>総リターン: +52.30%  CAGR: 5.40%
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>MDD: -16.80%  期間: 187日  回復: 92日
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>取引数: 14  平均保有: 28.5日(28bar)  最大: 65.0日(65bar)  連勝: 4  連敗: 3
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>勝率CI(90%): 35.2% - 64.8%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>バックテストを実行中: SPY x sma_crossover_v1
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>✅ バックテスト完了  信号品質スコア: 0.78/1.0
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>総リターン: +52.30%  CAGR: 5.40%
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>MDD: -16.80%  期間: 187日  回復: 92日
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>取引数: 14  平均保有: 28.5日(28bar)  最大: 65.0日(65bar)  連勝: 4  連敗: 3
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>勝率CI(90%): 35.2% - 64.8%
 </code></pre></div>
 <p>スコアや取引数が条件を満たさない場合は警告と docs URL 1 行誘導が付きます（F-302）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>⚠️  バックテスト完了  信号品質スコア: 0.43/1.0 （0.4–0.7 は要注意・追加検証推奨）
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>⚠️  警告: 取引数が不足しています (trades=27, 最低30推奨)
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    → 取引数 30 件未満は統計的に偶然の影響を受けやすく、最適化や WFT で
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>      pre_filter 落ちする可能性があります。データ期間を広げる
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>      (`--start` で過去にさかのぼる) ことを推奨します。
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>⚠️  バックテスト完了  信号品質スコア: 0.43/1.0 （0.4–0.7 は要注意・追加検証推奨）
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>⚠️  警告: 取引数が不足しています (trades=27, 最低30推奨)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    → 取引数 30 件未満は統計的に偶然の影響を受けやすく、最適化や WFT で
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>      pre_filter 落ちする可能性があります。データ期間を広げる
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>      (`--start` で過去にさかのぼる) ことを推奨します。
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
 </code></pre></div>
 <h3 id="signal-quality-score">信号品質スコアと最低取引数（F-302）<a class="headerlink" href="#signal-quality-score" title="Permanent link">&para;</a></h3>
 <h4 id="signal_quality_score-0010">信号品質スコア（<code>signal_quality_score</code>, 0.0–1.0）<a class="headerlink" href="#signal_quality_score-0010" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">sample_size_score</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_trades</span> <span class="o">/</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.4</span>   <span class="c1"># 40%</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">win_rate_score</span>      <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">win_rate_pct</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span>  <span class="c1"># 30%</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">profit_factor_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">profit_factor</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="c1"># 30%</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">signal_quality_score</span> <span class="o">=</span> <span class="n">sample_size_score</span> <span class="o">+</span> <span class="n">win_rate_score</span> <span class="o">+</span> <span class="n">profit_factor_score</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">sample_size_score</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_trades</span> <span class="o">/</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.4</span>   <span class="c1"># 40%</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">win_rate_score</span>      <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">win_rate_pct</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span>  <span class="c1"># 30%</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">profit_factor_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">profit_factor</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="c1"># 30%</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">signal_quality_score</span> <span class="o">=</span> <span class="n">sample_size_score</span> <span class="o">+</span> <span class="n">win_rate_score</span> <span class="o">+</span> <span class="n">profit_factor_score</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4193,18 +4286,18 @@
 <li>バックテスト単体の実行は止まらないが、結果の信頼性は低いので <strong>データ期間を広げる</strong>（<code>--start</code> を過去側に伸ばす）か、シグナル発生頻度の高い指標構成に見直すのが基本対応</li>
 </ul>
 <h3 id="-json">出力例（<code>--json</code>）<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;total_return_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">52.30</span><span class="p">,</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;cagr_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.40</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;sharpe_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.92</span><span class="p">,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-16.80</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">&quot;win_rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">50.0</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&quot;profit_factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.74</span><span class="p">,</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">&quot;total_trades&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sharpe_min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_dd_max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;total_return_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">52.30</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;cagr_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.40</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;sharpe_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.92</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-16.80</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">&quot;win_rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">50.0</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">&quot;profit_factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.74</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">&quot;total_trades&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sharpe_min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_dd_max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="_6">主なエラー<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -4242,7 +4335,7 @@
 <h2 id="alpha-forge-backtest-batch">alpha-forge backtest batch<a class="headerlink" href="#alpha-forge-backtest-batch" title="Permanent link">&para;</a></h2>
 <p>複数の戦略 JSON を並列にバックテストする。フィルタ条件（Sharpe / MaxDD）を満たした戦略を「合格」として表示。</p>
 <h3 id="_7">構文<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>batch<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">(</span>--strategy-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span>...<span class="w"> </span><span class="p">|</span><span class="w"> </span>--strategy-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>batch<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">(</span>--strategy-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span>...<span class="w"> </span><span class="p">|</span><span class="w"> </span>--strategy-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_8">引数とオプション<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <table>
@@ -4306,15 +4399,15 @@
 </tbody>
 </table>
 <h3 id="_9">出力例<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>バッチバックテスト開始: SPY × 5戦略 (workers=3)
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%  CAGR=8.2%  trades=18
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  ❌ spy_rsi_v1: Sharpe=0.61  MaxDD=-22.1%  CAGR=4.1%  trades=24
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%  CAGR=7.0%  trades=15
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  🔴 spy_broken_v1: ERROR - 戦略 JSON 読み込み失敗
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>合格戦略: 2/4件
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>バッチバックテスト開始: SPY × 5戦略 (workers=3)
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%  CAGR=8.2%  trades=18
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  ❌ spy_rsi_v1: Sharpe=0.61  MaxDD=-22.1%  CAGR=4.1%  trades=24
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%  CAGR=7.0%  trades=15
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  🔴 spy_broken_v1: ERROR - 戦略 JSON 読み込み失敗
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>合格戦略: 2/4件
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%
 </code></pre></div>
 <h3 id="_10">主なエラー<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <table>
@@ -4342,7 +4435,7 @@
 <h2 id="alpha-forge-backtest-diagnose">alpha-forge backtest diagnose<a class="headerlink" href="#alpha-forge-backtest-diagnose" title="Permanent link">&para;</a></h2>
 <p>戦略のパフォーマンス問題（過学習・低取引数・極端な勝敗バランス等）を自動診断する。</p>
 <h3 id="_11">構文<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>diagnose<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>diagnose<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_12">引数とオプション<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
 <table>
@@ -4399,7 +4492,7 @@
 <h2 id="alpha-forge-backtest-list">alpha-forge backtest list<a class="headerlink" href="#alpha-forge-backtest-list" title="Permanent link">&para;</a></h2>
 <p>保存済みのバックテスト結果（DB）を一覧表示する。</p>
 <h3 id="_14">構文<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_15">オプション<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
 <table>
@@ -4451,12 +4544,12 @@
 </tbody>
 </table>
 <h3 id="_16">出力例<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>バックテスト結果 (5件)
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>run_id                               strategy_id                   symbol         Return  Sharpe      MDD  取引数
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>──────────────────────────────────────────────────────────────────────────────────────────────────────────────
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>spy_sma_v1_20260415_103021           spy_sma_v1                    SPY            +52.3%    0.92   -16.8%      14
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>spy_macd_v1_20260414_181522          spy_macd_v1                   SPY            +38.1%    1.18   -15.6%      12
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>バックテスト結果 (5件)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>run_id                               strategy_id                   symbol         Return  Sharpe      MDD  取引数
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>spy_sma_v1_20260415_103021           spy_sma_v1                    SPY            +52.3%    0.92   -16.8%      14
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>spy_macd_v1_20260414_181522          spy_macd_v1                   SPY            +38.1%    1.18   -15.6%      12
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>...
 </code></pre></div>
 <h3 id="_17">主なメッセージ<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
 <table>
@@ -4477,7 +4570,7 @@
 <h2 id="alpha-forge-backtest-report">alpha-forge backtest report<a class="headerlink" href="#alpha-forge-backtest-report" title="Permanent link">&para;</a></h2>
 <p>保存済みのバックテスト結果を詳細表示する。</p>
 <h3 id="_18">構文<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>report<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>report<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_19">引数とオプション<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
 <table>
@@ -4512,12 +4605,12 @@
 </table>
 <p><code>run_id</code> として直接ヒットしない場合、<code>strategy_id</code> の最新ランへフォールバックします。</p>
 <h3 id="_20">出力例<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>=== spy_sma_v1 / SPY (2026-04-15T10:30:21) ===
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>総リターン: 52.30%  CAGR: 5.40%
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>MDD: -16.80%  PF: 1.74  Win%: 50.0%
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>取引数: 14  平均保有: 28.5日(28bar)  最大: 65.0日(65bar)
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>トレードログ: 14件 (--json で全体を確認可能)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>=== spy_sma_v1 / SPY (2026-04-15T10:30:21) ===
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>総リターン: 52.30%  CAGR: 5.40%
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>MDD: -16.80%  PF: 1.74  Win%: 50.0%
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>取引数: 14  平均保有: 28.5日(28bar)  最大: 65.0日(65bar)
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>トレードログ: 14件 (--json で全体を確認可能)
 </code></pre></div>
 <h3 id="_21">主なエラー<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
 <table>
@@ -4540,7 +4633,7 @@
 <h2 id="alpha-forge-backtest-migrate">alpha-forge backtest migrate<a class="headerlink" href="#alpha-forge-backtest-migrate" title="Permanent link">&para;</a></h2>
 <p>既存の <code>*_report.json</code> ファイルを DB にインポートする。</p>
 <h3 id="_22">構文<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>migrate<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>migrate<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
 </code></pre></div>
 <h3 id="_23">オプション<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h3>
 <table>
@@ -4569,11 +4662,11 @@
 </table>
 <p><code>run_id</code> は <code>migrated_&lt;file_stem&gt;</code> 形式で生成されます。</p>
 <h3 id="_24">出力例<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>  ✅ migrated_spy_sma_v1
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  ♻️  migrated_spy_macd_v1 (上書き)
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>  スキップ (重複): migrated_spy_rsi_v1
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>完了: 2 件インポート、1 件スキップ
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>  ✅ migrated_spy_sma_v1
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  ♻️  migrated_spy_macd_v1 (上書き)
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  スキップ (重複): migrated_spy_rsi_v1
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>完了: 2 件インポート、1 件スキップ
 </code></pre></div>
 <h3 id="_25">主なメッセージ<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h3>
 <table>
@@ -4598,7 +4691,7 @@
 <h2 id="alpha-forge-backtest-compare">alpha-forge backtest compare<a class="headerlink" href="#alpha-forge-backtest-compare" title="Permanent link">&para;</a></h2>
 <p>複数戦略を同一シンボル・同一期間で比較する。</p>
 <h3 id="_26">構文<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY1&gt;<span class="w"> </span><span class="o">[</span>STRATEGY2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY1&gt;<span class="w"> </span><span class="o">[</span>STRATEGY2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_27">引数とオプション<a class="headerlink" href="#_27" title="Permanent link">&para;</a></h3>
 <table>
@@ -4650,12 +4743,12 @@
 </tbody>
 </table>
 <h3 id="_28">出力例（テキスト表）<a class="headerlink" href="#_28" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>=== 戦略比較: SPY (2020-01-01 〜 現在) (3 戦略) ===
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>戦略             Return    CAGR  Sharpe     MDD   Win%      PF  取引数
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>spy_sma_v1     +52.3%   5.40    0.92  -16.8%   50%   1.74      14
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>spy_macd_v1    +38.1%   4.20    1.18  -15.6%   58%   1.92      12
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>=== 戦略比較: SPY (2020-01-01 〜 現在) (3 戦略) ===
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>戦略             Return    CAGR  Sharpe     MDD   Win%      PF  取引数
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>spy_sma_v1     +52.3%   5.40    0.92  -16.8%   50%   1.74      14
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>spy_macd_v1    +38.1%   4.20    1.18  -15.6%   58%   1.92      12
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
 </code></pre></div>
 <h3 id="_29">主なエラー<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h3>
 <table>
@@ -4683,7 +4776,7 @@
 <h2 id="alpha-forge-backtest-portfolio">alpha-forge backtest portfolio<a class="headerlink" href="#alpha-forge-backtest-portfolio" title="Permanent link">&para;</a></h2>
 <p>複数銘柄のポートフォリオバックテストを実行する。</p>
 <h3 id="_30">構文<a class="headerlink" href="#_30" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>portfolio<span class="w"> </span>&lt;SYM1&gt;<span class="w"> </span><span class="o">[</span>SYM2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>portfolio<span class="w"> </span>&lt;SYM1&gt;<span class="w"> </span><span class="o">[</span>SYM2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_31">引数とオプション<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
 <table>
@@ -4735,21 +4828,21 @@
 </tbody>
 </table>
 <h3 id="_32">出力例<a class="headerlink" href="#_32" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>ポートフォリオバックテストを実行中: [&#39;AAPL&#39;, &#39;MSFT&#39;, &#39;GOOGL&#39;] (equal 配分)
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>=== ポートフォリオ結果: tech_basket_v1 (equal) ===
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>銘柄: AAPL, MSFT, GOOGL
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>配分: AAPL=33.3%, MSFT=33.3%, GOOGL=33.3%
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>総リターン: 78.40%  CAGR: 12.30%
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>SR: 1.45  Sortino: 1.85  Calmar: 0.62
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>MDD: -19.80%  CVaR(95%): -3.20%
-<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>分散効果比率: 1.085
-<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
-<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>銘柄         ウェイト    Return     SR      MDD
-<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>──────────────────────────────────────────────────
-<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>AAPL          33.3%   +85.2%   1.52  -22.1%
-<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>MSFT          33.3%   +72.0%   1.41  -18.4%
-<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>GOOGL         33.3%   +78.0%   1.38  -19.5%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ポートフォリオバックテストを実行中: [&#39;AAPL&#39;, &#39;MSFT&#39;, &#39;GOOGL&#39;] (equal 配分)
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>=== ポートフォリオ結果: tech_basket_v1 (equal) ===
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>銘柄: AAPL, MSFT, GOOGL
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>配分: AAPL=33.3%, MSFT=33.3%, GOOGL=33.3%
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>総リターン: 78.40%  CAGR: 12.30%
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>SR: 1.45  Sortino: 1.85  Calmar: 0.62
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>MDD: -19.80%  CVaR(95%): -3.20%
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>分散効果比率: 1.085
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>銘柄         ウェイト    Return     SR      MDD
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>──────────────────────────────────────────────────
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>AAPL          33.3%   +85.2%   1.52  -22.1%
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>MSFT          33.3%   +72.0%   1.41  -18.4%
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>GOOGL         33.3%   +78.0%   1.38  -19.5%
 </code></pre></div>
 <h3 id="_33">主なエラー<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h3>
 <table>
@@ -4782,7 +4875,7 @@
 <h2 id="alpha-forge-backtest-chart">alpha-forge backtest chart<a class="headerlink" href="#alpha-forge-backtest-chart" title="Permanent link">&para;</a></h2>
 <p>ダッシュボード上のチャート URL を表示し、必要なら開く。</p>
 <h3 id="_34">構文<a class="headerlink" href="#_34" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span><span class="o">[</span>RESULT_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--open<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>...<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span><span class="o">[</span>RESULT_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--open<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>...<span class="o">]</span>
 </code></pre></div>
 <h3 id="_35">引数とオプション<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
 <table>
@@ -4816,19 +4909,19 @@
 </tbody>
 </table>
 <h3 id="_36">出力例<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>   http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>   http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
 </code></pre></div>
 <p>複数戦略比較時:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
 </code></pre></div>
 <p>このコマンド自体は URL を表示するだけです。チャート閲覧には <code>vis serve</code>（<a href="https://github.com/ysakae/alpha-visualizer">alpha-visualizer</a>）を起動する必要があります。</p>
 <hr />
 <h2 id="alpha-forge-backtest-signal-count">alpha-forge backtest signal-count<a class="headerlink" href="#alpha-forge-backtest-signal-count" title="Permanent link">&para;</a></h2>
 <p>vectorbt をスキップし、エントリー条件のシグナル発生件数だけを高速で集計する。条件式の妥当性確認用。</p>
 <h3 id="_37">構文<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>signal-count<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--period<span class="w"> </span>5y<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>signal-count<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--period<span class="w"> </span>5y<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_38">引数とオプション<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h3>
 <table>
@@ -4868,17 +4961,17 @@
 </tbody>
 </table>
 <h3 id="_39">出力例<a class="headerlink" href="#_39" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>シグナル件数チェック: spy_sma_v1 × SPY (5y)
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>総バー数: 1258 日
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>エントリー条件 (long AND):
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>  sma_fast &gt; sma_slow              :   687 日 ( 54.6%)
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>  ──────────────────────────────────
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>  全条件 AND                       :   687 日 ( 54.6%)
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>
-<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>レジーム別シグナル件数:
-<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>  state=0    :   312 日 ( 24.8%)
-<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>  state=1    :   375 日 ( 29.8%)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>シグナル件数チェック: spy_sma_v1 × SPY (5y)
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>総バー数: 1258 日
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>エントリー条件 (long AND):
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>  sma_fast &gt; sma_slow              :   687 日 ( 54.6%)
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>  ──────────────────────────────────
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>  全条件 AND                       :   687 日 ( 54.6%)
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>レジーム別シグナル件数:
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>  state=0    :   312 日 ( 24.8%)
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>  state=1    :   375 日 ( 29.8%)
 </code></pre></div>
 <p>シグナルが 0 件の場合 <code>⚠️  シグナルが発生していません</code> の警告が表示されます。</p>
 <div class="admonition note">
@@ -4911,7 +5004,7 @@
 <h2 id="alpha-forge-backtest-monte-carlo">alpha-forge backtest monte-carlo<a class="headerlink" href="#alpha-forge-backtest-monte-carlo" title="Permanent link">&para;</a></h2>
 <p>既存のバックテスト結果のトレード履歴をリサンプリングし、モンテカルロシミュレーションで破産確率や最悪ケースを評価する。</p>
 <h3 id="_41">構文<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>monte-carlo<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>--simulations<span class="w"> </span><span class="m">1000</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>monte-carlo<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>--simulations<span class="w"> </span><span class="m">1000</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_42">引数とオプション<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h3>
 <table>
@@ -4945,16 +5038,16 @@
 </tbody>
 </table>
 <h3 id="_43">出力例<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>モンテカルロシミュレーションを実行中: spy_sma_v1_20260415_103021 (1000回試行)
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>✅ シミュレーション完了
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>初期資産: 10000
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>平均最終資産: 14820
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>中央最終資産: 14250
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>最悪最終資産: 7340
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>最高最終資産: 23150
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>平均最大MDD: 18.40%
-<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>95%最大MDD:  31.20%
-<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>破産確率:    0.40%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>モンテカルロシミュレーションを実行中: spy_sma_v1_20260415_103021 (1000回試行)
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>✅ シミュレーション完了
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>初期資産: 10000
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>平均最終資産: 14820
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>中央最終資産: 14250
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>最悪最終資産: 7340
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>最高最終資産: 23150
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>平均最大MDD: 18.40%
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>95%最大MDD:  31.20%
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>破産確率:    0.40%
 </code></pre></div>
 <h3 id="_44">主なエラー<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
 <table>
