@@ -54,6 +54,32 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--pf-min` | float | `1.3` | Minimum profit factor |
 | `--min-trades` | int | - | Minimum trade count; exits with code 1 if below |
 | `--regime` | flag | false | Display per-regime statistics on the console |
+| `--trades-csv` | path | - | Write a per-trade CSV to the given path (issue #800, [details](#trades-csv-export)) |
+| `--debug` | flag | false | Raise the `alpha_forge.*` loggers to DEBUG (issue #800) |
+
+### Export per-trade CSV with `--trades-csv` {#trades-csv-export}
+
+`backtest run --trades-csv <path>` writes a one-row-per-trade CSV. Use it to cross-check against another engine (e.g. TradingView Strategy Tester) or to investigate divergences like the `profit_factor` artifact in issue #791.
+
+```bash
+alpha-forge backtest run AAPL --strategy sma_crossover_v1 --trades-csv trades.csv
+```
+
+| Column | Meaning |
+|--------|---------|
+| `trade_idx` | 0-origin trade index |
+| `entry_bar_idx` / `exit_bar_idx` | Entry / exit bar index |
+| `entry_time` / `exit_time` | Date (`YYYY-MM-DD` for `1d` timeframes) |
+| `entry_price` / `exit_price` | Fill price |
+| `direction` | `long` / `short` |
+| `pnl_pct` / `pnl_abs` | Return (%) / absolute PnL |
+| `bars_held` | Holding period in bars |
+| `sl_price` / `tp_price` | SL / TP price at entry (empty when unset) |
+| `mae_pct` / `mfe_pct` | Maximum adverse / favorable excursion (%) |
+| `entry_reason` | One-line summary of strategy entry conditions (shared across trades in Phase 1) |
+| `exit_reason` | `strategy_exit` placeholder (Phase 2 will distinguish SL/TP/trailing) |
+
+Even with zero trades, the header row is still written so that `sort` / `uniq` / `diff` pipelines do not break on empty stdout. Use `--debug` in combination to also stream signal-evaluation / mask / metrics DEBUG logs to stderr (only `alpha_forge.*` loggers are raised).
 
 ### Benchmark selection logic (F-304) {#benchmark-selection}
 
@@ -137,6 +163,9 @@ signal_quality_score = sample_size_score + win_rate_score + profit_factor_score
 | `≥ 0.70` | Reliable | "≥0.7 is reliable" |
 | `0.40 – 0.69` | Caution. Further validation (WFT / cross-symbol) recommended | "0.4–0.7: caution, more validation suggested" |
 | `< 0.40` | Low reliability, treat as reference only | "<0.4: low reliability, treat as reference only" |
+
+!!! warning "Detecting all-winning-trades backtest artifacts (issue #791)"
+    When `profit_factor` is returned as `null` and `StrategyDiagnostics` emits an `ALL_WINNING_TRADES` warning, you are looking at an **all-winning-trades backtest artifact**. Likely causes include a too-loose trailing stop, exit conditions that almost never fire right after entry, or entry evaluation that has degenerated into a state-based predicate firing every bar. Cross-validate with another engine such as the TradingView Strategy Tester. `null` is treated as "unmeasurable" by `signal_quality_score`, `anomaly_score`, `check_criteria.pf`, and `target_metrics.profit_factor`, all of which fall back to the safe side (score = 0, criterion fails).
 
 #### Why a minimum of 30 trades
 
