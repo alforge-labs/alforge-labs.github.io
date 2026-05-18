@@ -3145,6 +3145,11 @@
 <td>Reduce alert frequency</td>
 </tr>
 <tr>
+<td><strong>503 Service Unavailable</strong></td>
+<td><strong>Kill switch (maintenance mode) is ON</strong></td>
+<td><code>/etc/alpha-strike/MAINTENANCE</code> exists, or <code>MAINTENANCE_MODE=1</code> is set. Run <code>sudo rm /etc/alpha-strike/MAINTENANCE</code> to deactivate (see <a href="../alpha-strike-setup/#10-3-incident-response">setup guide §10-3</a>).</td>
+</tr>
+<tr>
 <td>500 Internal Server Error</td>
 <td>broker credentials missing</td>
 <td><code>journalctl -u alpha-strike</code> for details</td>

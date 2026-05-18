@@ -3156,6 +3156,11 @@
 <td>アラート頻度を抑える</td>
 </tr>
 <tr>
+<td><strong>503 Service Unavailable</strong></td>
+<td><strong>Kill switch (maintenance mode) が ON</strong></td>
+<td><code>/etc/alpha-strike/MAINTENANCE</code> が存在、または <code>MAINTENANCE_MODE=1</code> が設定されている。<code>sudo rm /etc/alpha-strike/MAINTENANCE</code> で解除（<a href="../alpha-strike-setup/#10-3-インシデント対応">セットアップガイド §10-3</a> 参照）</td>
+</tr>
+<tr>
 <td>500 Internal Server Error</td>
 <td>broker 認証情報未設定</td>
 <td><code>journalctl -u alpha-strike</code> でエラー詳細を確認</td>

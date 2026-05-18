@@ -517,9 +517,33 @@ When rotating `WEBHOOK_PASSPHRASE`, **all three locations must be synced**:
 
 | Symptom | First action |
 |---|---|
+| **Unexpected order pattern (highest urgency)** | **kill switch**: `echo "reason" \| sudo tee /etc/alpha-strike/MAINTENANCE` to return 503 instantly (no restart) → `cleanup_simulate_orders.py` → investigate → `sudo rm /etc/alpha-strike/MAINTENANCE` to restore |
 | Webhook 502 floods | `systemctl status alpha-strike moomoo-opend` → `systemctl restart alpha-strike` |
 | OpenD disconnect | `systemctl restart moomoo-opend` → if device token expired, re-auth on Mac and rsync |
-| Unexpected order pattern | Pause TradingView alert → `cleanup_simulate_orders.py` → root cause |
+
+#### Kill switch (maintenance mode) details
+
+The **first action** when an incident is detected. The service stays up but `/webhook` returns 503 instantly (alpha-strike v0.4.0+). TradingView will also auto-disable the alert after consecutive 5xx responses.
+
+| Method | Switching | Use case |
+|---|---|---|
+| File flag `/etc/alpha-strike/MAINTENANCE` | No restart, instant | **Primary tool for emergencies**. The file body is echoed in the 503 detail. |
+| Env var `MAINTENANCE_MODE=1` | `.env` + restart | Planned stops, locked-in via systemd `Environment=` |
+
+```bash
+# Activate
+echo "ticker AAPL runaway: investigating" | sudo tee /etc/alpha-strike/MAINTENANCE
+
+# Verify (temporarily disable the WAF rule to test from your home IP)
+curl -i https://strike.yourdomain.com/webhook \
+  -X POST -H "Content-Type: application/json" -d '{"passphrase":"x"}'
+# → 503 maintenance: ticker AAPL runaway: investigating
+
+# Deactivate
+sudo rm /etc/alpha-strike/MAINTENANCE
+```
+
+> **Note**: `/health` still returns 200 during maintenance (so external health checks / the Cloudflare Tunnel stay alive). The kill switch is checked **before** the passphrase, so failed passphrase attempts during maintenance are not logged.
 
 ### 10-4. Abort criteria
 
