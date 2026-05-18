@@ -427,6 +427,43 @@ alpha-forge strategy scaffold ... \
 - `commodities`: 5-10x leverage for futures
 - `default`/`stocks`: no leverage / 10-15% sizing (existing defaults)
 
+### scaffold default field reference (issue #784)
+
+Defaults, units, and intent of the `risk_management` section emitted by `alpha-forge strategy scaffold`. Fields not specified via CLI flags or `scaffold_defaults` are written with the values below (including `null`).
+
+| Field | scaffold default | Unit | Notes |
+|---|---|---|---|
+| `position_size_pct` | type-specific: mean-reversion=**15.0** / trend-following=**10.0** | % of equity | Fraction of equity per position (used in `fixed` mode) |
+| `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` |
+| `risk_per_trade_pct` | 1.0 | % of equity / trade | Only used in `risk_based` mode (size = `risk_per_trade_pct ÷ stop_loss_pct`) |
+| `max_positions` | 1 | count | Max concurrent open positions |
+| `leverage` | 1.0 | multiplier | 0=no position, 1=unleveraged, >1=leveraged |
+| `stop_loss_pct` | `null` | % from entry price | `null`=no SL |
+| `take_profit_pct` | `null` | % from entry price | `null`=no TP |
+| `trailing_stop_pct` | `null` | % drawdown from peak close (issue #765) | `null`=no trailing |
+| `commission_pct` | `null` | % per side, absolute | `null` **inherits `forge.yaml` `backtest.commission_pct`** (issue #766) |
+| `slippage_pct` | `null` | % per side, absolute | Same — inherits `backtest.slippage_pct` |
+| `partial_fill_pct` | `null` | % | `null`=100% fill (market order) |
+| `entry_limit_pct` | `null` | % offset from prior close | `null`=market order |
+
+> All `%` values are **absolute percentages** (not bps). For example, `commission_pct: 0.10` means **0.10%** (= 10 bps).
+
+#### Broker preset backtest defaults in forge.yaml
+
+Strategies with `commission_pct` / `slippage_pct` set to `null` inherit `forge.yaml` `backtest.commission_pct` / `slippage_pct`. The broker presets selectable from `alpha-forge init` (`src/alpha_forge/resources/config/*.yaml`) ship the following defaults:
+
+| Preset | `backtest.commission_pct` | `backtest.slippage_pct` | Intent |
+|---|---|---|---|
+| `crypto.yaml` | 0.10% | 0.05% | Crypto exchange taker fees |
+| `stocks.yaml` | 0.0% | 0.01% | US-stock CFDs / zero-commission brokers |
+| `commodities.yaml` | 0.0% | 0.02% | Commodity-futures CFDs |
+| `fx.yaml` | 0.0% | 0.005% | FX CFD majors |
+| `default.yaml` | 0.0% | 0.01% | Generic CFD default |
+
+> Real-broker cost examples: **moomoo US Stock ≈ 0.49%** (≈ 0.5% of trade value), **Binance Spot taker = 0.10%**, **IBKR US Stock = 0.005 USD/share** (% varies by symbol).
+>
+> If your broker differs significantly from the preset, either edit the `backtest` section in `forge.yaml`, or pass `--commission-pct` / `--slippage-pct` during scaffold so the value is baked into the strategy JSON.
+
 ### Per-goal timeframe / backtest_period (issue #463)
 
 To support shorter timeframes (e.g. 1h), `exploration.timeframe` and `exploration.backtest_period` can be specified as goal-level defaults in `goals.yaml`.

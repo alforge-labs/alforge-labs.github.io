@@ -1071,6 +1071,34 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#scaffold-default-issue-784" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scaffold default のフィールド対応表（issue #784）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="scaffold default のフィールド対応表（issue #784）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forgeyaml-broker-preset-backtest-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        forge.yaml の broker preset 別 backtest defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#timeframe-backtest_periodissue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3113,6 +3141,34 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#scaffold-default-issue-784" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scaffold default のフィールド対応表（issue #784）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="scaffold default のフィールド対応表（issue #784）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forgeyaml-broker-preset-backtest-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        forge.yaml の broker preset 別 backtest defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#timeframe-backtest_periodissue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3945,6 +4001,143 @@
 <li><code>commodities</code>: 先物のレバ 5〜10 倍</li>
 <li><code>default</code>/<code>stocks</code>: ノーレバ・10〜15% サイジング（既存デフォルトのまま）</li>
 </ul>
+<h3 id="scaffold-default-issue-784">scaffold default のフィールド対応表（issue #784）<a class="headerlink" href="#scaffold-default-issue-784" title="Permanent link">&para;</a></h3>
+<p><code>alpha-forge strategy scaffold</code> が出力する戦略 JSON の <code>risk_management</code> セクションの既定値・単位・想定です。CLI フラグや <code>scaffold_defaults</code> で明示しなかったフィールドは下記の値（<code>null</code> 含む）で書き出されます。</p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>scaffold default</th>
+<th>単位</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position_size_pct</code></td>
+<td>type 別: mean-reversion=<strong>15.0</strong> / trend-following=<strong>10.0</strong></td>
+<td>% of equity</td>
+<td>1 ポジションが equity に占める比率（<code>fixed</code> モード時に使用）</td>
+</tr>
+<tr>
+<td><code>position_sizing_method</code></td>
+<td><code>"fixed"</code></td>
+<td>—</td>
+<td><code>fixed</code> / <code>risk_based</code> / <code>signal_strength</code></td>
+</tr>
+<tr>
+<td><code>risk_per_trade_pct</code></td>
+<td>1.0</td>
+<td>% of equity / trade</td>
+<td><code>risk_based</code> モード時のみ使用（<code>risk_per_trade_pct ÷ stop_loss_pct</code> でサイズ算出）</td>
+</tr>
+<tr>
+<td><code>max_positions</code></td>
+<td>1</td>
+<td>件</td>
+<td>同時保有可能なポジション数</td>
+</tr>
+<tr>
+<td><code>leverage</code></td>
+<td>1.0</td>
+<td>倍</td>
+<td>0=ノーポジ、1=等倍、&gt;1=レバレッジ</td>
+</tr>
+<tr>
+<td><code>stop_loss_pct</code></td>
+<td><code>null</code></td>
+<td>%（エントリー価格基準）</td>
+<td><code>null</code>=SL なし</td>
+</tr>
+<tr>
+<td><code>take_profit_pct</code></td>
+<td><code>null</code></td>
+<td>%（エントリー価格基準）</td>
+<td><code>null</code>=TP なし</td>
+</tr>
+<tr>
+<td><code>trailing_stop_pct</code></td>
+<td><code>null</code></td>
+<td>%（ピーク close からの引き下げ幅、issue #765）</td>
+<td><code>null</code>=trailing なし</td>
+</tr>
+<tr>
+<td><code>commission_pct</code></td>
+<td><code>null</code></td>
+<td>%（片道、絶対表記）</td>
+<td><code>null</code> なら <strong><code>forge.yaml</code> の <code>backtest.commission_pct</code> を継承</strong>（issue #766）</td>
+</tr>
+<tr>
+<td><code>slippage_pct</code></td>
+<td><code>null</code></td>
+<td>%（片道、絶対表記）</td>
+<td>同上、<code>backtest.slippage_pct</code> を継承</td>
+</tr>
+<tr>
+<td><code>partial_fill_pct</code></td>
+<td><code>null</code></td>
+<td>%</td>
+<td><code>null</code>=100% 約定（成行）</td>
+</tr>
+<tr>
+<td><code>entry_limit_pct</code></td>
+<td><code>null</code></td>
+<td>%（前バー終値からの指値オフセット）</td>
+<td><code>null</code>=成行</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>いずれの <code>%</code> も <strong>絶対パーセント表記</strong>（bps ではなく）。例: <code>commission_pct: 0.10</code> は <strong>0.10%</strong>（= 10bps）。</p>
+</blockquote>
+<h4 id="forgeyaml-broker-preset-backtest-defaults">forge.yaml の broker preset 別 backtest defaults<a class="headerlink" href="#forgeyaml-broker-preset-backtest-defaults" title="Permanent link">&para;</a></h4>
+<p><code>commission_pct</code> / <code>slippage_pct</code> が <code>null</code> の戦略は <code>forge.yaml</code> の <code>backtest.commission_pct</code> / <code>slippage_pct</code> を継承します。<code>alpha-forge init</code> で選択できる broker preset（<code>src/alpha_forge/resources/config/*.yaml</code>）の既定値:</p>
+<table>
+<thead>
+<tr>
+<th>preset</th>
+<th><code>backtest.commission_pct</code></th>
+<th><code>backtest.slippage_pct</code></th>
+<th>想定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>crypto.yaml</code></td>
+<td>0.10%</td>
+<td>0.05%</td>
+<td>暗号通貨取引所 taker 想定</td>
+</tr>
+<tr>
+<td><code>stocks.yaml</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>US 株 CFD / 手数料ゼロブローカー</td>
+</tr>
+<tr>
+<td><code>commodities.yaml</code></td>
+<td>0.0%</td>
+<td>0.02%</td>
+<td>商品先物 CFD</td>
+</tr>
+<tr>
+<td><code>fx.yaml</code></td>
+<td>0.0%</td>
+<td>0.005%</td>
+<td>FX CFD メジャーペア</td>
+</tr>
+<tr>
+<td><code>default.yaml</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>CFD 汎用既定</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>実 broker のコスト例: <strong>moomoo US Stock ≈ 0.49%</strong>（取引額の 0.5% 程度）、<strong>Binance Spot taker = 0.10%</strong>、<strong>IBKR US Stock = 0.005 USD/share</strong>（% 換算は銘柄依存）。</p>
+<p>実 broker と既定値が大きく乖離する場合は <code>forge.yaml</code> の <code>backtest</code> セクションを書き換えるか、scaffold 時に <code>--commission-pct</code> / <code>--slippage-pct</code> を明示して戦略 JSON に焼き込んでください。</p>
+</blockquote>
 <h3 id="timeframe-backtest_periodissue-463">ゴール別 timeframe / backtest_period（issue #463）<a class="headerlink" href="#timeframe-backtest_periodissue-463" title="Permanent link">&para;</a></h3>
 <p>短い時間足（1h 等）対応のため、<code>goals.yaml</code> の <code>exploration.timeframe</code> と <code>exploration.backtest_period</code> でゴール別デフォルトを指定できます。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 例: oanda_gold/goals.yaml（高頻度 FX 戦略想定）</span>
