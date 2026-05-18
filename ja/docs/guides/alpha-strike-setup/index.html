@@ -1066,10 +1066,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#6-1" class="md-nav__link">
+  <a href="#6-1-pypi" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6-1. ソース取得 + 依存解決
+        6-1. PyPI からインストール
       
     </span>
   </a>
@@ -3170,10 +3170,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#6-1" class="md-nav__link">
+  <a href="#6-1-pypi" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6-1. ソース取得 + 依存解決
+        6-1. PyPI からインストール
       
     </span>
   </a>
@@ -3786,29 +3786,41 @@
 </blockquote>
 <hr />
 <h2 id="6-alpha-strike">6. alpha-strike デプロイ<a class="headerlink" href="#6-alpha-strike" title="Permanent link">&para;</a></h2>
-<h3 id="6-1">6-1. ソース取得 + 依存解決<a class="headerlink" href="#6-1" title="Permanent link">&para;</a></h3>
+<h3 id="6-1-pypi">6-1. PyPI からインストール<a class="headerlink" href="#6-1-pypi" title="Permanent link">&para;</a></h3>
+<p>alpha-strike は PyPI で配布されています (<a href="https://pypi.org/project/alpha-strike/">pypi.org/project/alpha-strike/</a>)。<code>uv</code> で隔離環境にインストールして <code>alpha-strike</code> CLI を使う形が推奨です。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>ssh<span class="w"> </span>oracle-strike
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/your-org/alpha-strike.git<span class="w"> </span>~/dev/alpha-strike
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nb">cd</span><span class="w"> </span>~/dev/alpha-strike
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>uv<span class="w"> </span>sync
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3.12<span class="w"> </span>python3.12-venv<span class="w">  </span><span class="c1"># 未導入なら</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># /opt 配下に専用 venv を作る</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/opt/alpha-strike
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>sudo<span class="w"> </span>chown<span class="w"> </span>ubuntu:ubuntu<span class="w"> </span>/opt/alpha-strike
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nb">cd</span><span class="w"> </span>/opt/alpha-strike
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>alpha-strike
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="c1"># 動作確認</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>.venv/bin/alpha-strike<span class="w"> </span>--version
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="c1"># → alpha-strike 0.3.0 以降</span>
 </code></pre></div>
 <h3 id="6-2-env">6-2. <code>.env</code> 作成<a class="headerlink" href="#6-2-env" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>tee<span class="w"> </span>~/dev/alpha-strike/.env<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="s"># 必須</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="s">WEBHOOK_PASSPHRASE=&lt;32文字以上のランダム文字列&gt;</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="s"># moomoo 設定</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="s">MOOMOO_HOST=127.0.0.1</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="s">MOOMOO_PORT=11111</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="s">MOOMOO_TRADE_PWD_MD5=&lt;§5-2 で生成した 32 桁 hex&gt;</span>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="s">MOOMOO_TRADE_ENV=SIMULATE</span>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="s"># OANDA を使う場合のみ</span>
-<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="s"># OANDA_ENV=PRACTICE</span>
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="s">EOF</span>
-<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/dev/alpha-strike/.env
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/alpha-strike
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/alpha-strike/.env<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="s"># 必須</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="s">WEBHOOK_PASSPHRASE=&lt;32文字以上のランダム文字列&gt;</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="s"># moomoo 設定</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="s">MOOMOO_HOST=127.0.0.1</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="s">MOOMOO_PORT=11111</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="s">MOOMOO_TRADE_PWD_MD5=&lt;§5-2 で生成した 32 桁 hex&gt;</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="s">MOOMOO_TRADE_ENV=SIMULATE</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="s"># OANDA を使う場合のみ</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="s"># OANDA_ENV=PRACTICE</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="s">EOF</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
 </code></pre></div>
 <p><code>WEBHOOK_PASSPHRASE</code> は 1Password にも保管しておきます（後で TradingView の Message JSON に貼り付ける）。</p>
 <h3 id="6-3-systemd">6-3. systemd ユニット<a class="headerlink" href="#6-3-systemd" title="Permanent link">&para;</a></h3>
@@ -3821,9 +3833,9 @@
 <a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="s">[Service]</span>
 <a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="s">Type=simple</span>
 <a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="s">User=ubuntu</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="s">WorkingDirectory=/home/ubuntu/dev/alpha-strike</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="s">EnvironmentFile=/home/ubuntu/dev/alpha-strike/.env</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="s">ExecStart=/home/ubuntu/dev/alpha-strike/.venv/bin/python main.py</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="s">WorkingDirectory=/opt/alpha-strike</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="s">EnvironmentFile=/etc/alpha-strike/.env</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="s">ExecStart=/opt/alpha-strike/.venv/bin/alpha-strike --host 0.0.0.0 --port 8080</span>
 <a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="s">Restart=always</span>
 <a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="s">RestartSec=5</span>
 <a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="s">OOMScoreAdjust=-500</span>
@@ -3841,10 +3853,16 @@
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
 </code></pre></div>
 <h3 id="6-5-cron">6-5. メモリ・サービス監視 cron<a class="headerlink" href="#6-5-cron" title="Permanent link">&para;</a></h3>
-<p><a href="https://github.com/your-org/alpha-strike/blob/main/scripts/check_memory.sh">alpha-strike リポジトリの <code>scripts/check_memory.sh</code></a> を crontab に登録：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>crontab<span class="w"> </span>-e
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="c1"># 以下を追記</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>*/5<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/home/ubuntu/dev/alpha-strike/scripts/check_memory.sh
+<p><a href="https://github.com/alforge-labs/alpha-strike/blob/main/scripts/check_memory.sh">alpha-strike リポジトリの <code>scripts/check_memory.sh</code></a> をローカル取得して crontab に登録：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># スクリプトを取得（PyPI 経由インストールには含まれない、リポジトリから直接）</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>sudo<span class="w"> </span>curl<span class="w"> </span>-fsSL<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/check_memory.sh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span>-o<span class="w"> </span>/usr/local/bin/check_alpha_strike_memory.sh
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/local/bin/check_alpha_strike_memory.sh
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>crontab<span class="w"> </span>-e
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="c1"># 以下を追記</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>*/5<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/usr/local/bin/check_alpha_strike_memory.sh
 </code></pre></div>
 <p><code>~/.ntfy.env</code> に <code>NTFY_TOPIC=...</code> を設定しておくと、メモリ 85% / swap 1GB 等の閾値超過で <a href="https://ntfy.sh">ntfy.sh</a> 経由で iPhone に通知が飛びます。</p>
 <hr />
@@ -3947,13 +3965,17 @@
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>alpha-strike<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Webhook受信|注文成功|34\.212\.75\.30|52\.32\.178\.7&quot;</span>
 <a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1"># → Webhook受信ログ + 注文成功ログ + TradingView IP が記録されていれば成功</span>
 <a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="nb">cd</span><span class="w"> </span>~/dev/alpha-strike
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>.venv/bin/python<span class="w"> </span>scripts/show_simulate_status.py
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="c1"># → pending_orders に発注内容が表示される</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="c1"># 口座状態確認スクリプトを取得して実行</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/show_simulate_status.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">  </span>-o<span class="w"> </span>/tmp/show_simulate_status.py
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>/opt/alpha-strike/.venv/bin/python<span class="w"> </span>/tmp/show_simulate_status.py
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="c1"># → pending_orders に発注内容が表示される</span>
 </code></pre></div>
 <h3 id="8-3">8-3. テスト発注の取消<a class="headerlink" href="#8-3" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>.venv/bin/python<span class="w"> </span>scripts/cleanup_simulate_orders.py
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># → pending_orders=0 に戻る</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/alforge-labs/alpha-strike/main/scripts/cleanup_simulate_orders.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span>-o<span class="w"> </span>/tmp/cleanup_simulate_orders.py
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>/opt/alpha-strike/.venv/bin/python<span class="w"> </span>/tmp/cleanup_simulate_orders.py
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># → pending_orders=0 に戻る</span>
 </code></pre></div>
 <hr />
 <h2 id="9">9. シークレット管理<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
@@ -3973,7 +3995,7 @@
 </tr>
 <tr>
 <td><strong>VM <code>.env</code></strong></td>
-<td><code>ssh oracle-strike</code> → <code>sudo sed -i "s\|^WEBHOOK_PASSPHRASE=.*\|WEBHOOK_PASSPHRASE=&lt;新値&gt;\|" ~/dev/alpha-strike/.env</code> → <code>sudo systemctl restart alpha-strike</code></td>
+<td><code>ssh oracle-strike</code> → <code>sudo sed -i "s\|^WEBHOOK_PASSPHRASE=.*\|WEBHOOK_PASSPHRASE=&lt;新値&gt;\|" /etc/alpha-strike/.env</code> → <code>sudo systemctl restart alpha-strike</code></td>
 </tr>
 <tr>
 <td><strong>TradingView Message JSON</strong></td>
