@@ -425,6 +425,43 @@ alpha-forge strategy scaffold ... \
 - `commodities`: 先物のレバ 5〜10 倍
 - `default`/`stocks`: ノーレバ・10〜15% サイジング（既存デフォルトのまま）
 
+### scaffold default のフィールド対応表（issue #784）
+
+`alpha-forge strategy scaffold` が出力する戦略 JSON の `risk_management` セクションの既定値・単位・想定です。CLI フラグや `scaffold_defaults` で明示しなかったフィールドは下記の値（`null` 含む）で書き出されます。
+
+| フィールド | scaffold default | 単位 | 説明 |
+|---|---|---|---|
+| `position_size_pct` | type 別: mean-reversion=**15.0** / trend-following=**10.0** | % of equity | 1 ポジションが equity に占める比率（`fixed` モード時に使用） |
+| `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` |
+| `risk_per_trade_pct` | 1.0 | % of equity / trade | `risk_based` モード時のみ使用（`risk_per_trade_pct ÷ stop_loss_pct` でサイズ算出） |
+| `max_positions` | 1 | 件 | 同時保有可能なポジション数 |
+| `leverage` | 1.0 | 倍 | 0=ノーポジ、1=等倍、>1=レバレッジ |
+| `stop_loss_pct` | `null` | %（エントリー価格基準） | `null`=SL なし |
+| `take_profit_pct` | `null` | %（エントリー価格基準） | `null`=TP なし |
+| `trailing_stop_pct` | `null` | %（ピーク close からの引き下げ幅、issue #765） | `null`=trailing なし |
+| `commission_pct` | `null` | %（片道、絶対表記） | `null` なら **`forge.yaml` の `backtest.commission_pct` を継承**（issue #766） |
+| `slippage_pct` | `null` | %（片道、絶対表記） | 同上、`backtest.slippage_pct` を継承 |
+| `partial_fill_pct` | `null` | % | `null`=100% 約定（成行） |
+| `entry_limit_pct` | `null` | %（前バー終値からの指値オフセット） | `null`=成行 |
+
+> いずれの `%` も **絶対パーセント表記**（bps ではなく）。例: `commission_pct: 0.10` は **0.10%**（= 10bps）。
+
+#### forge.yaml の broker preset 別 backtest defaults
+
+`commission_pct` / `slippage_pct` が `null` の戦略は `forge.yaml` の `backtest.commission_pct` / `slippage_pct` を継承します。`alpha-forge init` で選択できる broker preset（`src/alpha_forge/resources/config/*.yaml`）の既定値:
+
+| preset | `backtest.commission_pct` | `backtest.slippage_pct` | 想定 |
+|---|---|---|---|
+| `crypto.yaml` | 0.10% | 0.05% | 暗号通貨取引所 taker 想定 |
+| `stocks.yaml` | 0.0% | 0.01% | US 株 CFD / 手数料ゼロブローカー |
+| `commodities.yaml` | 0.0% | 0.02% | 商品先物 CFD |
+| `fx.yaml` | 0.0% | 0.005% | FX CFD メジャーペア |
+| `default.yaml` | 0.0% | 0.01% | CFD 汎用既定 |
+
+> 実 broker のコスト例: **moomoo US Stock ≈ 0.49%**（取引額の 0.5% 程度）、**Binance Spot taker = 0.10%**、**IBKR US Stock = 0.005 USD/share**（% 換算は銘柄依存）。
+>
+> 実 broker と既定値が大きく乖離する場合は `forge.yaml` の `backtest` セクションを書き換えるか、scaffold 時に `--commission-pct` / `--slippage-pct` を明示して戦略 JSON に焼き込んでください。
+
 ### ゴール別 timeframe / backtest_period（issue #463）
 
 短い時間足（1h 等）対応のため、`goals.yaml` の `exploration.timeframe` と `exploration.backtest_period` でゴール別デフォルトを指定できます。

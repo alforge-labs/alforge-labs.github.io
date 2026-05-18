@@ -1071,6 +1071,34 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#scaffold-default-field-reference-issue-784" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scaffold default field reference (issue #784)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="scaffold default field reference (issue #784)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#broker-preset-backtest-defaults-in-forgeyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broker preset backtest defaults in forge.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-goal-timeframe-backtest_period-issue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3113,6 +3141,34 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#scaffold-default-field-reference-issue-784" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scaffold default field reference (issue #784)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="scaffold default field reference (issue #784)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#broker-preset-backtest-defaults-in-forgeyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broker preset backtest defaults in forge.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#per-goal-timeframe-backtest_period-issue-463" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3947,6 +4003,143 @@
 <li><code>commodities</code>: 5-10x leverage for futures</li>
 <li><code>default</code>/<code>stocks</code>: no leverage / 10-15% sizing (existing defaults)</li>
 </ul>
+<h3 id="scaffold-default-field-reference-issue-784">scaffold default field reference (issue #784)<a class="headerlink" href="#scaffold-default-field-reference-issue-784" title="Permanent link">&para;</a></h3>
+<p>Defaults, units, and intent of the <code>risk_management</code> section emitted by <code>alpha-forge strategy scaffold</code>. Fields not specified via CLI flags or <code>scaffold_defaults</code> are written with the values below (including <code>null</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>scaffold default</th>
+<th>Unit</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>position_size_pct</code></td>
+<td>type-specific: mean-reversion=<strong>15.0</strong> / trend-following=<strong>10.0</strong></td>
+<td>% of equity</td>
+<td>Fraction of equity per position (used in <code>fixed</code> mode)</td>
+</tr>
+<tr>
+<td><code>position_sizing_method</code></td>
+<td><code>"fixed"</code></td>
+<td>—</td>
+<td><code>fixed</code> / <code>risk_based</code> / <code>signal_strength</code></td>
+</tr>
+<tr>
+<td><code>risk_per_trade_pct</code></td>
+<td>1.0</td>
+<td>% of equity / trade</td>
+<td>Only used in <code>risk_based</code> mode (size = <code>risk_per_trade_pct ÷ stop_loss_pct</code>)</td>
+</tr>
+<tr>
+<td><code>max_positions</code></td>
+<td>1</td>
+<td>count</td>
+<td>Max concurrent open positions</td>
+</tr>
+<tr>
+<td><code>leverage</code></td>
+<td>1.0</td>
+<td>multiplier</td>
+<td>0=no position, 1=unleveraged, &gt;1=leveraged</td>
+</tr>
+<tr>
+<td><code>stop_loss_pct</code></td>
+<td><code>null</code></td>
+<td>% from entry price</td>
+<td><code>null</code>=no SL</td>
+</tr>
+<tr>
+<td><code>take_profit_pct</code></td>
+<td><code>null</code></td>
+<td>% from entry price</td>
+<td><code>null</code>=no TP</td>
+</tr>
+<tr>
+<td><code>trailing_stop_pct</code></td>
+<td><code>null</code></td>
+<td>% drawdown from peak close (issue #765)</td>
+<td><code>null</code>=no trailing</td>
+</tr>
+<tr>
+<td><code>commission_pct</code></td>
+<td><code>null</code></td>
+<td>% per side, absolute</td>
+<td><code>null</code> <strong>inherits <code>forge.yaml</code> <code>backtest.commission_pct</code></strong> (issue #766)</td>
+</tr>
+<tr>
+<td><code>slippage_pct</code></td>
+<td><code>null</code></td>
+<td>% per side, absolute</td>
+<td>Same — inherits <code>backtest.slippage_pct</code></td>
+</tr>
+<tr>
+<td><code>partial_fill_pct</code></td>
+<td><code>null</code></td>
+<td>%</td>
+<td><code>null</code>=100% fill (market order)</td>
+</tr>
+<tr>
+<td><code>entry_limit_pct</code></td>
+<td><code>null</code></td>
+<td>% offset from prior close</td>
+<td><code>null</code>=market order</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>All <code>%</code> values are <strong>absolute percentages</strong> (not bps). For example, <code>commission_pct: 0.10</code> means <strong>0.10%</strong> (= 10 bps).</p>
+</blockquote>
+<h4 id="broker-preset-backtest-defaults-in-forgeyaml">Broker preset backtest defaults in forge.yaml<a class="headerlink" href="#broker-preset-backtest-defaults-in-forgeyaml" title="Permanent link">&para;</a></h4>
+<p>Strategies with <code>commission_pct</code> / <code>slippage_pct</code> set to <code>null</code> inherit <code>forge.yaml</code> <code>backtest.commission_pct</code> / <code>slippage_pct</code>. The broker presets selectable from <code>alpha-forge init</code> (<code>src/alpha_forge/resources/config/*.yaml</code>) ship the following defaults:</p>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th><code>backtest.commission_pct</code></th>
+<th><code>backtest.slippage_pct</code></th>
+<th>Intent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>crypto.yaml</code></td>
+<td>0.10%</td>
+<td>0.05%</td>
+<td>Crypto exchange taker fees</td>
+</tr>
+<tr>
+<td><code>stocks.yaml</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>US-stock CFDs / zero-commission brokers</td>
+</tr>
+<tr>
+<td><code>commodities.yaml</code></td>
+<td>0.0%</td>
+<td>0.02%</td>
+<td>Commodity-futures CFDs</td>
+</tr>
+<tr>
+<td><code>fx.yaml</code></td>
+<td>0.0%</td>
+<td>0.005%</td>
+<td>FX CFD majors</td>
+</tr>
+<tr>
+<td><code>default.yaml</code></td>
+<td>0.0%</td>
+<td>0.01%</td>
+<td>Generic CFD default</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Real-broker cost examples: <strong>moomoo US Stock ≈ 0.49%</strong> (≈ 0.5% of trade value), <strong>Binance Spot taker = 0.10%</strong>, <strong>IBKR US Stock = 0.005 USD/share</strong> (% varies by symbol).</p>
+<p>If your broker differs significantly from the preset, either edit the <code>backtest</code> section in <code>forge.yaml</code>, or pass <code>--commission-pct</code> / <code>--slippage-pct</code> during scaffold so the value is baked into the strategy JSON.</p>
+</blockquote>
 <h3 id="per-goal-timeframe-backtest_period-issue-463">Per-goal timeframe / backtest_period (issue #463)<a class="headerlink" href="#per-goal-timeframe-backtest_period-issue-463" title="Permanent link">&para;</a></h3>
 <p>To support shorter timeframes (e.g. 1h), <code>exploration.timeframe</code> and <code>exploration.backtest_period</code> can be specified as goal-level defaults in <code>goals.yaml</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Example: oanda_gold/goals.yaml (high-frequency FX setup)</span>
