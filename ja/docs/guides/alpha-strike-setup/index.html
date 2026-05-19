@@ -3964,7 +3964,19 @@
 <p>JSON の <code>ticker:"US.AAPL"</code> は <strong>発火銘柄（BTC）と独立</strong> に moomoo へ送られます。</p>
 <h3 id="7-3-crypto">7-3. 暗号資産（CRYPTO）戦略を流す場合<a class="headerlink" href="#7-3-crypto" title="Permanent link">&para;</a></h3>
 <p>moomoo は米国株・香港株と並んで暗号資産（BTC / ETH / XRP 等）も発注先として提供しています。alpha-strike は <code>asset_class="CRYPTO"</code> を受理し、内部で <code>OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)</code> で発注します。</p>
-<p>JSON 例（BTC を 0.01 単位で SIMULATE 買い）：</p>
+<div class="admonition warning">
+<p class="admonition-title">moomoo crypto は live (REAL) only — SIMULATE 不可</p>
+<p>moomoo の crypto trading API は live 環境専用で、<code>MOOMOO_TRD_ENV=SIMULATE</code> で
+crypto order を送ると moomoo SDK が <code>the type of environment param is wrong</code> を返す。
+alpha-strike は OpenD 接続前に <code>ValueError</code> で早期拒否する。</p>
+<p><strong>ペーパー検証したい場合は</strong>：</p>
+<ul>
+<li><strong>BTC ETF (<code>US.IBIT</code> / <code>US.FBTC</code> / <code>US.BITO</code>) を <code>asset_class=US</code> で発注</strong>（推奨）</li>
+<li><code>MOOMOO_TRD_ENV=REAL</code> で少額（0.001 BTC ≈ $80）から開始</li>
+<li>TradingView Paper Trading 内蔵を使う（alpha-strike バイパス）</li>
+</ul>
+</div>
+<p>JSON 例（BTC を 0.01 単位で REAL 買い、<code>MOOMOO_TRD_ENV=REAL</code> 前提）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
@@ -3972,14 +3984,14 @@
 <a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CC.BTC&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
-<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;live&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;btc_ema_sma_trail40_v1&quot;</span>
 <a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="p">}</span>
 </code></pre></div>
 <blockquote>
 <p><strong>前提</strong>:
 - moomoo crypto は 24/7 取引（市場クローズの概念なし）
-- 米国居住者制限あり（FinCEN MSB 経由）。<code>run_mode=paper</code> でも broker 側の crypto アカウント有効化が必要
+- 米国居住者制限あり（FinCEN MSB 経由）。broker 側の crypto アカウント有効化が必要
 - 銘柄コードは <code>CC.BTC</code> / <code>CC.ETH</code> / <code>CC.XRP</code> 等（<code>CC.</code> プレフィックス + 大文字シンボル）</p>
 <p>ペイロード仕様の詳細は <a href="../tradingview-alpha-strike/#3-1b-moomoo-crypto-btc-eth-xrp">TradingView × alpha-strike Integration §3-1b</a> を参照。</p>
 </blockquote>

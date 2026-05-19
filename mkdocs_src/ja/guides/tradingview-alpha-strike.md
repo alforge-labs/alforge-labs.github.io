@@ -66,10 +66,28 @@ alpha-strike は TradingView のアラートを Webhook で受け取り、moomoo
 ```
 
 > **moomoo crypto の前提**:
-> - 24/7 取引・unlimited T+0、SIMULATE 口座でも 24h 約定確認可能
-> - 米国居住者制限あり（FinCEN MSB 経由）。`run_mode=paper` でも broker 側のアカウント有効化が前提
+> - 24/7 取引・unlimited T+0
+> - 米国居住者制限あり（FinCEN MSB 経由）。broker 側のアカウント有効化が前提
 > - SDK 内部では `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO, security_firm=SecurityFirm.NONE)` を使用
 > - 銘柄コードは `CC.BTC` / `CC.ETH` / `CC.XRP` 等（`CC.` プレフィックス + 大文字シンボル）
+
+!!! warning "moomoo crypto は live (REAL) only — SIMULATE 不可"
+    moomoo の crypto trading API は live 環境専用で、`MOOMOO_TRD_ENV=SIMULATE` で
+    crypto order を送ると moomoo SDK が `the type of environment param is wrong` を返す。
+
+    alpha-strike は OpenD 接続前にこの組み合わせを検出し、以下の `ValueError` で早期拒否する:
+
+    ```
+    moomoo crypto は SIMULATE 環境を受け付けません（live only）。
+    paper 運用したい場合は BTC ETF (US.IBIT / US.FBTC / US.BITO 等) を
+    asset_class=US で発注するか、MOOMOO_TRD_ENV=REAL で実 money 運用してください。
+    ```
+
+    ペーパー検証したい場合は以下のいずれか:
+
+    - **BTC ETF (`US.IBIT` / `US.FBTC` / `US.BITO`) を `asset_class=US` で発注**（推奨）
+    - `MOOMOO_TRD_ENV=REAL` で少額（0.001 BTC ≈ $80）から開始
+    - alpha-strike を経由せず TradingView Paper Trading 内蔵を使う
 
 ### 3-2. OANDA PRACTICE / LIVE
 

@@ -425,7 +425,19 @@ The `ticker:"US.AAPL"` in the JSON is **independent** of the chart symbol that f
 
 In addition to US / HK equities, moomoo offers crypto (BTC / ETH / XRP, etc.) as a destination. alpha-strike accepts `asset_class="CRYPTO"` and routes through `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)` internally.
 
-Sample JSON (paper-buy 0.01 BTC):
+!!! warning "moomoo crypto is live (REAL) only — SIMULATE is rejected"
+    moomoo's crypto trading API is live-environment only. Sending a crypto order
+    with `MOOMOO_TRD_ENV=SIMULATE` makes the moomoo SDK return
+    `the type of environment param is wrong`. alpha-strike detects this
+    combination **before connecting to OpenD** and raises `ValueError`.
+
+    **For paper validation, choose one of**:
+
+    - **Order a BTC ETF (`US.IBIT` / `US.FBTC` / `US.BITO`) with `asset_class=US`** (recommended)
+    - Start with a small REAL position (`MOOMOO_TRD_ENV=REAL`, e.g. 0.001 BTC ≈ $80)
+    - Use TradingView's built-in Paper Trading (bypass alpha-strike)
+
+Sample JSON (REAL-buy 0.01 BTC, requires `MOOMOO_TRD_ENV=REAL`):
 
 ```json
 {
@@ -435,14 +447,14 @@ Sample JSON (paper-buy 0.01 BTC):
   "action": "buy",
   "ticker": "CC.BTC",
   "quantity": 0.01,
-  "run_mode": "paper",
+  "run_mode": "live",
   "strategy_id": "btc_ema_sma_trail40_v1"
 }
 ```
 
 > **Notes**:
 > - moomoo crypto trades 24/7 (no market close)
-> - US-residency restriction applies (FinCEN MSB). Even `run_mode=paper` requires the broker-side crypto account to be enabled
+> - US-residency restriction applies (FinCEN MSB). The broker-side crypto account must be enabled
 > - Symbols are `CC.BTC` / `CC.ETH` / `CC.XRP` etc. (`CC.` prefix + uppercase symbol)
 >
 > See [TradingView × alpha-strike Integration §3-1b](./tradingview-alpha-strike.md#3-1b-moomoo-crypto-btc-eth-xrp) for the full payload specification.

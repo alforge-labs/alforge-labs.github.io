@@ -66,10 +66,30 @@ alpha-strike receives TradingView webhook alerts and forwards orders to moomoo /
 ```
 
 > **Notes on moomoo crypto**:
-> - 24/7 trading with unlimited T+0; SIMULATE fills work around the clock
-> - US-residency restriction applies (FinCEN MSB). Even `run_mode=paper` requires the broker-side crypto account to be enabled
+> - 24/7 trading with unlimited T+0
+> - US-residency restriction applies (FinCEN MSB). The broker-side crypto account must be enabled
 > - Internally uses `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO, security_firm=SecurityFirm.NONE)`
 > - Symbols are `CC.BTC` / `CC.ETH` / `CC.XRP` etc. (uppercase symbol with `CC.` prefix)
+
+!!! warning "moomoo crypto is live (REAL) only — SIMULATE is rejected"
+    moomoo's crypto trading API is live-environment only. Sending a crypto order
+    with `MOOMOO_TRD_ENV=SIMULATE` makes the moomoo SDK return
+    `the type of environment param is wrong`.
+
+    alpha-strike detects this combination **before connecting to OpenD** and
+    raises a `ValueError` with this message:
+
+    ```
+    moomoo crypto は SIMULATE 環境を受け付けません（live only）。
+    paper 運用したい場合は BTC ETF (US.IBIT / US.FBTC / US.BITO 等) を
+    asset_class=US で発注するか、MOOMOO_TRD_ENV=REAL で実 money 運用してください。
+    ```
+
+    For paper validation, choose one of:
+
+    - **Order a BTC ETF (`US.IBIT` / `US.FBTC` / `US.BITO`) with `asset_class=US`** (recommended)
+    - Start with a small REAL position (`MOOMOO_TRD_ENV=REAL`, e.g. 0.001 BTC ≈ $80)
+    - Use TradingView's built-in Paper Trading (bypass alpha-strike)
 
 ### 3-2. OANDA PRACTICE / LIVE
 
