@@ -787,6 +787,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#47-intra-bar-fill-semantics-differ-between-alpha-forge-and-tv-for-sltp-strategies-issue-827" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Intra-bar fill semantics differ between alpha-forge and TV for SL/TP strategies (issue #827)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2514,6 +2525,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#47-intra-bar-fill-semantics-differ-between-alpha-forge-and-tv-for-sltp-strategies-issue-827" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Intra-bar fill semantics differ between alpha-forge and TV for SL/TP strategies (issue #827)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2674,6 +2696,75 @@
 </tbody>
 </table>
 <p><strong>Design</strong>: exits intentionally lack the guard so that any position open at the end of the period exits naturally via the normal exit logic.</p>
+<hr />
+<h2 id="47-intra-bar-fill-semantics-differ-between-alpha-forge-and-tv-for-sltp-strategies-issue-827">4.7 Intra-bar fill semantics differ between alpha-forge and TV for SL/TP strategies (issue #827)<a class="headerlink" href="#47-intra-bar-fill-semantics-differ-between-alpha-forge-and-tv-for-sltp-strategies-issue-827" title="Permanent link">&para;</a></h2>
+<p>For strategies that use <code>risk_management.stop_loss_pct</code> / <code>take_profit_pct</code>, <strong>alpha-forge and TV interpret the trade count differently</strong>. This is a backtest engine semantics difference that users need to be aware of:</p>
+<ul>
+<li><strong>alpha-forge (vectorbt)</strong> fills SL/TP at the <strong>next bar's close</strong></li>
+<li><strong>TV's</strong> <code>strategy.exit(stop=..., limit=...)</code> is evaluated <strong>every bar</strong> and fills <strong>intra-bar</strong> whenever the high/low touches the threshold</li>
+</ul>
+<p>The same Pine script tends to record <strong>substantially more trades on TV</strong> than in alpha-forge.</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th style="text-align: center;">SL/TP</th>
+<th style="text-align: right;">alpha-forge</th>
+<th style="text-align: right;">TV</th>
+<th style="text-align: right;">Diff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sma_crossover_v1</td>
+<td style="text-align: center;">none</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;"><strong>0% (exact match)</strong></td>
+</tr>
+<tr>
+<td>bollinger_mr_v1</td>
+<td style="text-align: center;">yes (2%/4%)</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">86%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Metric reliability</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: center;">intra-bar fill influence</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>win_rate_pct</code></td>
+<td style="text-align: center;">low</td>
+<td><strong>high reliability</strong></td>
+</tr>
+<tr>
+<td><code>profit_factor</code></td>
+<td style="text-align: center;">low</td>
+<td><strong>high reliability</strong></td>
+</tr>
+<tr>
+<td><code>total_trades</code></td>
+<td style="text-align: center;">high</td>
+<td>take with caution</td>
+</tr>
+<tr>
+<td><code>total_return_pct</code></td>
+<td style="text-align: center;">high</td>
+<td>take with caution</td>
+</tr>
+</tbody>
+</table>
+<p>bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.23pp gap, indicating <strong>identical signal quality</strong>. The 1.86x trade-count gap is purely an artifact of how entry-exit pairs are counted.</p>
+<p>A dedicated tolerance profile mechanism for SL/TP strategies is being tracked in alpha-forge issue #828.</p>
 <hr />
 <h2 id="5-verifying-the-pine-script-through-an-mcp-server-issue-523">5. Verifying the Pine Script through an MCP server (issue #523)<a class="headerlink" href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
 <p><code>alpha-forge pine verify</code> ships the generated Pine Script to <strong>TradingView Desktop via a third-party MCP server</strong> for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.</p>
