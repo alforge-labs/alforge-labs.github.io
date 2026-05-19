@@ -2823,7 +2823,7 @@
 <td><code>default</code></td>
 <td style="text-align: right;">±20%</td>
 <td style="text-align: right;">±5pp</td>
-<td style="text-align: right;">±15%</td>
+<td style="text-align: right;">±15pp</td>
 <td style="text-align: right;">±0.30</td>
 <td>event-based (SL/TP 無し) 戦略</td>
 </tr>
@@ -2831,7 +2831,7 @@
 <td><code>sl_tp</code></td>
 <td style="text-align: right;">±100%</td>
 <td style="text-align: right;">±5pp</td>
-<td style="text-align: right;">±50%</td>
+<td style="text-align: right;">±20pp</td>
 <td style="text-align: right;">±0.50</td>
 <td>SL/TP / trailing 戦略 (intra-bar fill 差を吸収)</td>
 </tr>
@@ -2845,6 +2845,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">total_return の単位 (alpha-forge #828 follow-up)</p>
+<p><code>total_return_pct</code> は当初 <strong>相対 % 差</strong> で判定していましたが、<code>alpha=-4.22 / tv=2.15</code> のような <strong>sign 反転 + 小さい分母</strong> で相対差が暴騰する問題が判明し、<strong>絶対 pp 差</strong>に変更されました（PR #834）。これにより bollinger_mr_v1 (alpha 69 vs TV 128 trades) が 4/4 PASS で overall_pass=True になります。</p>
+</div>
 <p><code>auto</code> の判定は <code>risk_management.stop_loss_pct</code> / <code>take_profit_pct</code> / <code>trailing_stop_pct</code> のいずれかが設定されていれば <code>sl_tp</code> profile、無しなら <code>default</code> profile。明示指定 (<code>--tolerance-profile sl_tp</code> 等) と個別フラグ (<code>--total-trades-rel-pct 200.0</code> 等) で override も可能です。</p>
 <hr />
 <h2 id="5-pine-script-mcp-server-issue-523">5. Pine Script を MCP server で検証する（issue #523）<a class="headerlink" href="#5-pine-script-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
