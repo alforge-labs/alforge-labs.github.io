@@ -116,9 +116,12 @@ uv run python scripts/tv_cross_validate.py check \
 
 | profile | total_trades | win_rate | total_return | profit_factor | Use case |
 |---------|---:|---:|---:|---:|---|
-| `default` | ±20% | ±5pp | ±15% | ±0.30 | event-based strategies (no SL/TP) |
-| `sl_tp` | ±100% | ±5pp | ±50% | ±0.50 | SL/TP / trailing strategies (absorbs intra-bar fill diff) |
+| `default` | ±20% | ±5pp | ±15pp | ±0.30 | event-based strategies (no SL/TP) |
+| `sl_tp` | ±100% | ±5pp | ±20pp | ±0.50 | SL/TP / trailing strategies (absorbs intra-bar fill diff) |
 | `auto` (default) | — | — | — | — | inferred from the strategy JSON |
+
+!!! note "Unit of total_return tolerance (alpha-forge #828 follow-up)"
+    `total_return_pct` was originally judged by **relative % diff**, but sign-flip cases like `alpha=-4.22 / tv=2.15` blow up the relative percent due to a small denominator. PR #834 switched it to **absolute pp diff**, so bollinger_mr_v1 (alpha 69 vs TV 128 trades) now reaches 4/4 PASS with overall_pass=True.
 
 `auto` selects `sl_tp` if any of `risk_management.stop_loss_pct` / `take_profit_pct` / `trailing_stop_pct` is set; otherwise `default`. You can force a profile with `--tolerance-profile {default,sl_tp}` or override individual fields with `--total-trades-rel-pct 200.0` etc.
 

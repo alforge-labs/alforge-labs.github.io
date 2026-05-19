@@ -2823,7 +2823,7 @@
 <td><code>default</code></td>
 <td style="text-align: right;">±20%</td>
 <td style="text-align: right;">±5pp</td>
-<td style="text-align: right;">±15%</td>
+<td style="text-align: right;">±15pp</td>
 <td style="text-align: right;">±0.30</td>
 <td>event-based strategies (no SL/TP)</td>
 </tr>
@@ -2831,7 +2831,7 @@
 <td><code>sl_tp</code></td>
 <td style="text-align: right;">±100%</td>
 <td style="text-align: right;">±5pp</td>
-<td style="text-align: right;">±50%</td>
+<td style="text-align: right;">±20pp</td>
 <td style="text-align: right;">±0.50</td>
 <td>SL/TP / trailing strategies (absorbs intra-bar fill diff)</td>
 </tr>
@@ -2845,6 +2845,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Unit of total_return tolerance (alpha-forge #828 follow-up)</p>
+<p><code>total_return_pct</code> was originally judged by <strong>relative % diff</strong>, but sign-flip cases like <code>alpha=-4.22 / tv=2.15</code> blow up the relative percent due to a small denominator. PR #834 switched it to <strong>absolute pp diff</strong>, so bollinger_mr_v1 (alpha 69 vs TV 128 trades) now reaches 4/4 PASS with overall_pass=True.</p>
+</div>
 <p><code>auto</code> selects <code>sl_tp</code> if any of <code>risk_management.stop_loss_pct</code> / <code>take_profit_pct</code> / <code>trailing_stop_pct</code> is set; otherwise <code>default</code>. You can force a profile with <code>--tolerance-profile {default,sl_tp}</code> or override individual fields with <code>--total-trades-rel-pct 200.0</code> etc.</p>
 <hr />
 <h2 id="5-verifying-the-pine-script-through-an-mcp-server-issue-523">5. Verifying the Pine Script through an MCP server (issue #523)<a class="headerlink" href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" title="Permanent link">&para;</a></h2>

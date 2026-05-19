@@ -116,9 +116,12 @@ uv run python scripts/tv_cross_validate.py check \
 
 | profile | total_trades | win_rate | total_return | profit_factor | 用途 |
 |---------|---:|---:|---:|---:|---|
-| `default` | ±20% | ±5pp | ±15% | ±0.30 | event-based (SL/TP 無し) 戦略 |
-| `sl_tp` | ±100% | ±5pp | ±50% | ±0.50 | SL/TP / trailing 戦略 (intra-bar fill 差を吸収) |
+| `default` | ±20% | ±5pp | ±15pp | ±0.30 | event-based (SL/TP 無し) 戦略 |
+| `sl_tp` | ±100% | ±5pp | ±20pp | ±0.50 | SL/TP / trailing 戦略 (intra-bar fill 差を吸収) |
 | `auto` (既定) | — | — | — | — | 戦略 JSON から判定 |
+
+!!! note "total_return の単位 (alpha-forge #828 follow-up)"
+    `total_return_pct` は当初 **相対 % 差** で判定していましたが、`alpha=-4.22 / tv=2.15` のような **sign 反転 + 小さい分母** で相対差が暴騰する問題が判明し、**絶対 pp 差**に変更されました（PR #834）。これにより bollinger_mr_v1 (alpha 69 vs TV 128 trades) が 4/4 PASS で overall_pass=True になります。
 
 `auto` の判定は `risk_management.stop_loss_pct` / `take_profit_pct` / `trailing_stop_pct` のいずれかが設定されていれば `sl_tp` profile、無しなら `default` profile。明示指定 (`--tolerance-profile sl_tp` 等) と個別フラグ (`--total-trades-rel-pct 200.0` 等) で override も可能です。
 
