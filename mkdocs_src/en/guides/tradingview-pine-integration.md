@@ -76,6 +76,35 @@ Real-world verification (TradingView Essential plan, SPY 2022-01-01 to 2024-12-3
 
 ---
 
+## 4.7 Intra-bar fill semantics differ between alpha-forge and TV for SL/TP strategies (issue #827)
+
+For strategies that use `risk_management.stop_loss_pct` / `take_profit_pct`, **alpha-forge and TV interpret the trade count differently**. This is a backtest engine semantics difference that users need to be aware of:
+
+- **alpha-forge (vectorbt)** fills SL/TP at the **next bar's close**
+- **TV's** `strategy.exit(stop=..., limit=...)` is evaluated **every bar** and fills **intra-bar** whenever the high/low touches the threshold
+
+The same Pine script tends to record **substantially more trades on TV** than in alpha-forge.
+
+| Strategy | SL/TP | alpha-forge | TV | Diff |
+|----------|:-----:|---:|---:|---:|
+| sma_crossover_v1 | none | 17 | 17 | **0% (exact match)** |
+| bollinger_mr_v1 | yes (2%/4%) | 69 | 128 | 86% |
+
+**Metric reliability**:
+
+| Metric | intra-bar fill influence | Interpretation |
+|--------|:-----:|------|
+| `win_rate_pct` | low | **high reliability** |
+| `profit_factor` | low | **high reliability** |
+| `total_trades` | high | take with caution |
+| `total_return_pct` | high | take with caution |
+
+bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.23pp gap, indicating **identical signal quality**. The 1.86x trade-count gap is purely an artifact of how entry-exit pairs are counted.
+
+A dedicated tolerance profile mechanism for SL/TP strategies is being tracked in alpha-forge issue #828.
+
+---
+
 ## 5. Verifying the Pine Script through an MCP server (issue #523)
 
 `alpha-forge pine verify` ships the generated Pine Script to **TradingView Desktop via a third-party MCP server** for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.

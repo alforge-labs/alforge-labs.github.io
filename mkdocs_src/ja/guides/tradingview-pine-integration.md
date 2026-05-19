@@ -76,6 +76,35 @@ alpha-forge pine generate --strategy sma_crossover_v1_optimized \
 
 ---
 
+## 4.7 SL/TP 戦略の intra-bar fill 差（issue #827）
+
+`risk_management.stop_loss_pct` / `take_profit_pct` を持つ戦略では、**alpha-forge と TV で trade 数の解釈が異なります**。これは backtest engine の仕様差で、利用者として事前に知っておく必要がある制約です。
+
+- **alpha-forge (vectorbt)** は SL/TP を **次バー close fill** で約定
+- **TV** の `strategy.exit(stop=..., limit=...)` は **毎バー intra-bar fill** で約定（high/low が水準に触れた瞬間に同バー内で約定）
+
+同じ Pine スクリプトでも TV の trade 数が alpha-forge より大幅に増える傾向があります。
+
+| 戦略 | SL/TP | alpha-forge | TV | 差 |
+|------|:-----:|---:|---:|---:|
+| sma_crossover_v1 | なし | 17 | 17 | **0% (完全一致)** |
+| bollinger_mr_v1 | あり (2%/4%) | 69 | 128 | 86% |
+
+**比較指標の信頼度**:
+
+| 指標 | intra-bar fill 影響 | 解釈 |
+|------|:-----:|------|
+| `win_rate_pct` | 低 | **高信頼** |
+| `profit_factor` | 低 | **高信頼** |
+| `total_trades` | 高 | 要注意 |
+| `total_return_pct` | 高 | 要注意 |
+
+bollinger_mr_v1 の win_rate は 41.18% (alpha) vs 41.41% (TV) と 0.23pp 差で **signal 品質は同一**、trade 数だけがペアの数え方差で 1.86x ズレることが確認できます。
+
+SL/TP 戦略向けの専用 tolerance プロファイル機構は alpha-forge issue #828 で検討中です。
+
+---
+
 ## 5. Pine Script を MCP server で検証する（issue #523）
 
 `alpha-forge pine verify` を使うと、生成した Pine Script を **TradingView Desktop + サードパーティ MCP server** に投げて検証できます。コンパイル可否だけでなく、Strategy Tester のメトリクスや個別トレードを alpha-forge のバックテストと比較し、Pine 変換の正確性を機械的に確認できます。
