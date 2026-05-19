@@ -101,7 +101,26 @@ alpha-forge pine generate --strategy sma_crossover_v1_optimized \
 
 bollinger_mr_v1 の win_rate は 41.18% (alpha) vs 41.41% (TV) と 0.23pp 差で **signal 品質は同一**、trade 数だけがペアの数え方差で 1.86x ズレることが確認できます。
 
-SL/TP 戦略向けの専用 tolerance プロファイル機構は alpha-forge issue #828 で検討中です。
+### 自動切替: `--tolerance-profile auto` (alpha-forge issue #828)
+
+SL/TP 戦略を cross-validation する際は、`scripts/tv_cross_validate.py check` の `--tolerance-profile auto`（既定）で許容差分プロファイルが自動切替されます。
+
+```bash
+alpha-forge ディレクトリで実行
+uv run python scripts/tv_cross_validate.py check \
+  --strategy bollinger_mr_v1 --symbol SPY \
+  --golden tests/fixtures/tv_golden/bollinger_mr_v1__SPY__1d.json
+# auto (既定): 戦略 JSON の risk_management から SL/TP / trailing 有無を判定
+#   → sl_tp profile が自動で適用される
+```
+
+| profile | total_trades | win_rate | total_return | profit_factor | 用途 |
+|---------|---:|---:|---:|---:|---|
+| `default` | ±20% | ±5pp | ±15% | ±0.30 | event-based (SL/TP 無し) 戦略 |
+| `sl_tp` | ±100% | ±5pp | ±50% | ±0.50 | SL/TP / trailing 戦略 (intra-bar fill 差を吸収) |
+| `auto` (既定) | — | — | — | — | 戦略 JSON から判定 |
+
+`auto` の判定は `risk_management.stop_loss_pct` / `take_profit_pct` / `trailing_stop_pct` のいずれかが設定されていれば `sl_tp` profile、無しなら `default` profile。明示指定 (`--tolerance-profile sl_tp` 等) と個別フラグ (`--total-trades-rel-pct 200.0` 等) で override も可能です。
 
 ---
 

@@ -101,7 +101,26 @@ The same Pine script tends to record **substantially more trades on TV** than in
 
 bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.23pp gap, indicating **identical signal quality**. The 1.86x trade-count gap is purely an artifact of how entry-exit pairs are counted.
 
-A dedicated tolerance profile mechanism for SL/TP strategies is being tracked in alpha-forge issue #828.
+### Automatic profile selection: `--tolerance-profile auto` (alpha-forge issue #828)
+
+When cross-validating SL/TP strategies, `scripts/tv_cross_validate.py check` automatically switches the tolerance profile via `--tolerance-profile auto` (the default).
+
+```bash
+# Run from the alpha-forge directory
+uv run python scripts/tv_cross_validate.py check \
+  --strategy bollinger_mr_v1 --symbol SPY \
+  --golden tests/fixtures/tv_golden/bollinger_mr_v1__SPY__1d.json
+# auto (default): inspects risk_management on the strategy JSON
+#   → applies the sl_tp profile automatically
+```
+
+| profile | total_trades | win_rate | total_return | profit_factor | Use case |
+|---------|---:|---:|---:|---:|---|
+| `default` | ±20% | ±5pp | ±15% | ±0.30 | event-based strategies (no SL/TP) |
+| `sl_tp` | ±100% | ±5pp | ±50% | ±0.50 | SL/TP / trailing strategies (absorbs intra-bar fill diff) |
+| `auto` (default) | — | — | — | — | inferred from the strategy JSON |
+
+`auto` selects `sl_tp` if any of `risk_management.stop_loss_pct` / `take_profit_pct` / `trailing_stop_pct` is set; otherwise `default`. You can force a profile with `--tolerance-profile {default,sl_tp}` or override individual fields with `--total-trades-rel-pct 200.0` etc.
 
 ---
 

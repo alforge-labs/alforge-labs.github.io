@@ -795,6 +795,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4.7 Intra-bar fill semantics differ between alpha-forge and TV for SL/TP strategies (issue #827)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-profile-selection-tolerance-profile-auto-alpha-forge-issue-828" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic profile selection: --tolerance-profile auto (alpha-forge issue #828)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2533,6 +2550,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4.7 Intra-bar fill semantics differ between alpha-forge and TV for SL/TP strategies (issue #827)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-profile-selection-tolerance-profile-auto-alpha-forge-issue-828" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic profile selection: --tolerance-profile auto (alpha-forge issue #828)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2764,7 +2798,54 @@
 </tbody>
 </table>
 <p>bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.23pp gap, indicating <strong>identical signal quality</strong>. The 1.86x trade-count gap is purely an artifact of how entry-exit pairs are counted.</p>
-<p>A dedicated tolerance profile mechanism for SL/TP strategies is being tracked in alpha-forge issue #828.</p>
+<h3 id="automatic-profile-selection-tolerance-profile-auto-alpha-forge-issue-828">Automatic profile selection: <code>--tolerance-profile auto</code> (alpha-forge issue #828)<a class="headerlink" href="#automatic-profile-selection-tolerance-profile-auto-alpha-forge-issue-828" title="Permanent link">&para;</a></h3>
+<p>When cross-validating SL/TP strategies, <code>scripts/tv_cross_validate.py check</code> automatically switches the tolerance profile via <code>--tolerance-profile auto</code> (the default).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Run from the alpha-forge directory</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/tv_cross_validate.py<span class="w"> </span>check<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--strategy<span class="w"> </span>bollinger_mr_v1<span class="w"> </span>--symbol<span class="w"> </span>SPY<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--golden<span class="w"> </span>tests/fixtures/tv_golden/bollinger_mr_v1__SPY__1d.json
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># auto (default): inspects risk_management on the strategy JSON</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">#   → applies the sl_tp profile automatically</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>profile</th>
+<th style="text-align: right;">total_trades</th>
+<th style="text-align: right;">win_rate</th>
+<th style="text-align: right;">total_return</th>
+<th style="text-align: right;">profit_factor</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td style="text-align: right;">±20%</td>
+<td style="text-align: right;">±5pp</td>
+<td style="text-align: right;">±15%</td>
+<td style="text-align: right;">±0.30</td>
+<td>event-based strategies (no SL/TP)</td>
+</tr>
+<tr>
+<td><code>sl_tp</code></td>
+<td style="text-align: right;">±100%</td>
+<td style="text-align: right;">±5pp</td>
+<td style="text-align: right;">±50%</td>
+<td style="text-align: right;">±0.50</td>
+<td>SL/TP / trailing strategies (absorbs intra-bar fill diff)</td>
+</tr>
+<tr>
+<td><code>auto</code> (default)</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td>inferred from the strategy JSON</td>
+</tr>
+</tbody>
+</table>
+<p><code>auto</code> selects <code>sl_tp</code> if any of <code>risk_management.stop_loss_pct</code> / <code>take_profit_pct</code> / <code>trailing_stop_pct</code> is set; otherwise <code>default</code>. You can force a profile with <code>--tolerance-profile {default,sl_tp}</code> or override individual fields with <code>--total-trades-rel-pct 200.0</code> etc.</p>
 <hr />
 <h2 id="5-verifying-the-pine-script-through-an-mcp-server-issue-523">5. Verifying the Pine Script through an MCP server (issue #523)<a class="headerlink" href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
 <p><code>alpha-forge pine verify</code> ships the generated Pine Script to <strong>TradingView Desktop via a third-party MCP server</strong> for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.</p>
@@ -2776,13 +2857,13 @@
 <li><code>oviniciusramosp/tradingview-mcp</code> (vinicius fork) — strong on Strategy Tester aggregates; <strong>recommended for <code>metrics</code> / <code>signal</code> modes</strong></li>
 <li>Configure the endpoint and flavor in <code>forge.yaml</code>:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">tv_mcp</span><span class="p">:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">pine_verify</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vinicius</span><span class="w">     </span><span class="c1"># use vinicius for metrics/signal</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">tv_mcp</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">pine_verify</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vinicius</span><span class="w">     </span><span class="c1"># use vinicius for metrics/signal</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div>
 <h3 id="52-verify-modes">5.2 verify modes<a class="headerlink" href="#52-verify-modes" title="Permanent link">&para;</a></h3>
 <table>
@@ -2817,31 +2898,31 @@
 </tbody>
 </table>
 <h3 id="53-workflow">5.3 Workflow<a class="headerlink" href="#53-workflow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 1. Compile-only verification (fastest)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># 2. Strategy Tester metrics comparison (vinicius recommended)</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1"># 3. Per-trade time matching (±60s tolerance, 95% match required)</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span>--check-mode<span class="w"> </span>signal<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span>--match-tolerance-seconds<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span>--min-match-rate<span class="w"> </span><span class="m">0</span>.95
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 1. Compile-only verification (fastest)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># 2. Strategy Tester metrics comparison (vinicius recommended)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1"># 3. Per-trade time matching (±60s tolerance, 95% match required)</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">  </span>--check-mode<span class="w"> </span>signal<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">  </span>--match-tolerance-seconds<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">  </span>--min-match-rate<span class="w"> </span><span class="m">0</span>.95
 </code></pre></div>
 <h3 id="54-avoiding-period-mismatches">5.4 Avoiding period mismatches<a class="headerlink" href="#54-avoiding-period-mismatches" title="Permanent link">&para;</a></h3>
 <p>A large <code>total_trades</code> gap in <code>metrics</code> mode is usually a data-period mismatch (yfinance's ~5y vs TradingView's decades). To bring alpha-forge's history closer to TradingView's, switch the data fetch to the TradingView MCP provider:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
 </code></pre></div>
 <p>See the <a href="../../cli-reference/data/#tradingview-mcp-provider-tv_mcp-issue-576"><code>alpha-forge data</code> command reference</a> for details.</p>
 <h3 id="55-report-output">5.5 Report output<a class="headerlink" href="#55-report-output" title="Permanent link">&para;</a></h3>
