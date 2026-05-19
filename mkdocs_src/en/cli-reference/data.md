@@ -220,6 +220,17 @@ No stored data found.
 - **Prerequisites**: launch TradingView Desktop with `--remote-debugging-port=9222`, then start `tradesdontlie/tradingview-mcp` or `oviniciusramosp/tradingview-mcp` (the vinicius fork) in a separate process.
 - **Range sliding**: a single MCP request returns at most 500 bars; alpha-forge transparently slides the visible range and concatenates chunks (cap: `data.providers.tv_mcp.max_chunks`). `--period max` works.
 - **Flavor**: `data_get_ohlcv` works on both flavors. For OHLCV-only use, the default `tradesdontlie` is sufficient.
+
+!!! warning "TV preload constraint for long-range fetches (issue #683)"
+    Both MCP forks implement `data_get_ohlcv(count=N)` as **the last N bars currently loaded in TradingView's bars cache**. Calling `chart_set_visible_range` only zooms — it does **not** expand the cache. So `--period 20y` cannot reach further back than whatever TradingView has preloaded (usually the most recent 1–2 years).
+
+    `_fetch_with_sliding_window` logs each chunk's `requested range / bar count / first & last bar time` at INFO level, and bails early once the latest bar timestamp has failed to advance for 3 consecutive chunks (no-progress streak). On bail, alpha-forge emits a `tv_mcp fetch truncated: TV chart preload covers only YYYY-MM-DD..YYYY-MM-DD (requested YYYY-MM-DD..YYYY-MM-DD)` WARNING.
+
+    **For long-range history, use a different provider**:
+
+    - Stocks / ETFs: `--provider yfinance` (up to ~30y by default)
+    - FX deep history: `--provider dukascopy` (decades)
+    - If you must use `tv_mcp` for deep history, manually scroll the TradingView Desktop chart back to your target years first so the bars cache grows; the MCP can then read whatever has been preloaded. A persistent fix requires a new MCP tool that triggers historical loading on the chart.
 - **`forge.yaml` example**:
 
 ```yaml

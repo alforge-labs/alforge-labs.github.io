@@ -3520,6 +3520,19 @@
 <li><strong>Prerequisites</strong>: launch TradingView Desktop with <code>--remote-debugging-port=9222</code>, then start <code>tradesdontlie/tradingview-mcp</code> or <code>oviniciusramosp/tradingview-mcp</code> (the vinicius fork) in a separate process.</li>
 <li><strong>Range sliding</strong>: a single MCP request returns at most 500 bars; alpha-forge transparently slides the visible range and concatenates chunks (cap: <code>data.providers.tv_mcp.max_chunks</code>). <code>--period max</code> works.</li>
 <li><strong>Flavor</strong>: <code>data_get_ohlcv</code> works on both flavors. For OHLCV-only use, the default <code>tradesdontlie</code> is sufficient.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">TV preload constraint for long-range fetches (issue #683)</p>
+<p>Both MCP forks implement <code>data_get_ohlcv(count=N)</code> as <strong>the last N bars currently loaded in TradingView's bars cache</strong>. Calling <code>chart_set_visible_range</code> only zooms — it does <strong>not</strong> expand the cache. So <code>--period 20y</code> cannot reach further back than whatever TradingView has preloaded (usually the most recent 1–2 years).</p>
+<p><code>_fetch_with_sliding_window</code> logs each chunk's <code>requested range / bar count / first &amp; last bar time</code> at INFO level, and bails early once the latest bar timestamp has failed to advance for 3 consecutive chunks (no-progress streak). On bail, alpha-forge emits a <code>tv_mcp fetch truncated: TV chart preload covers only YYYY-MM-DD..YYYY-MM-DD (requested YYYY-MM-DD..YYYY-MM-DD)</code> WARNING.</p>
+<p><strong>For long-range history, use a different provider</strong>:</p>
+<ul>
+<li>Stocks / ETFs: <code>--provider yfinance</code> (up to ~30y by default)</li>
+<li>FX deep history: <code>--provider dukascopy</code> (decades)</li>
+<li>If you must use <code>tv_mcp</code> for deep history, manually scroll the TradingView Desktop chart back to your target years first so the bars cache grows; the MCP can then read whatever has been preloaded. A persistent fix requires a new MCP tool that triggers historical loading on the chart.</li>
+</ul>
+</div>
+<ul>
 <li><strong><code>forge.yaml</code> example</strong>:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">data</span><span class="p">:</span>

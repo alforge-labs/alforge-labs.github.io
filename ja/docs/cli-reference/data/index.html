@@ -3520,6 +3520,19 @@
 <li><strong>前提</strong>: TradingView Desktop を <code>--remote-debugging-port=9222</code> で起動し、<code>tradesdontlie/tradingview-mcp</code> または <code>oviniciusramosp/tradingview-mcp</code>（vinicius fork）を別プロセスで起動しておく</li>
 <li><strong>範囲スライド</strong>: 1 リクエスト 500 bars 上限を内部で自動分割し、<code>--period max</code> でも複数チャンクを連結する（上限は <code>data.providers.tv_mcp.max_chunks</code>）</li>
 <li><strong>flavor</strong>: <code>data_get_ohlcv</code> は両系共通で動作。OHLCV のみ用途なら既定の <code>tradesdontlie</code> で十分</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">長期 fetch の TV 側 preload 制約（issue #683）</p>
+<p>両 MCP fork 共通で <code>data_get_ohlcv(count=N)</code> は <strong>TV チャートにロード済みの bars cache の最新 N 件</strong>だけを返します。<code>chart_set_visible_range</code> は zoom 操作のみで cache を拡張しないため、<code>--period 20y</code> のような長期指定でも、TV が現在 preload している期間（多くの場合直近 1〜2 年）を超えて遡れません。</p>
+<p><code>_fetch_with_sliding_window</code> は各 chunk で <code>requested range / bars 数 / first・last bar time</code> を INFO ログに出力し、最新 bar timestamp が 3 chunk 連続で前進しないと no-progress streak を検出して早期に bail します。bail 時には <code>tv_mcp fetch truncated: TV chart preload covers only YYYY-MM-DD..YYYY-MM-DD (requested YYYY-MM-DD..YYYY-MM-DD)</code> という WARNING を出力します。</p>
+<p><strong>長期データが必要な場合</strong>は次のいずれかを選択してください：</p>
+<ul>
+<li>株 / ETF: <code>--provider yfinance</code>（既定の最大約 30 年）</li>
+<li>FX 超長期: <code>--provider dukascopy</code>（数十年）</li>
+<li>tv_mcp で深い履歴を取りたい場合は、事前に TradingView Desktop でチャートを目的の年代まで手動スクロールして bars cache を拡張しておくと、その範囲は MCP 経由で取得できるようになる（持続的な解決は MCP server 側の新 tool が必要）</li>
+</ul>
+</div>
+<ul>
 <li><strong>設定例</strong>（<code>forge.yaml</code>）:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">data</span><span class="p">:</span>
