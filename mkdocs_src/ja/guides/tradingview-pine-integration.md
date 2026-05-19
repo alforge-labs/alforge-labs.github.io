@@ -54,6 +54,28 @@ alpha-forge pine generate --strategy sma_crossover_v1_optimized --no-validate
 
 ---
 
+## 4.6 Pine 出力に期間フィルタを焼き込む（issue #823）
+
+`--backtest-period 'YYYY-MM-DD:YYYY-MM-DD'` を指定すると、Pine 出力の冒頭に `in_backtest_period = time >= timestamp("from") and time <= timestamp("to")` 変数を宣言し、すべての entry condition に `and in_backtest_period` を AND します（exit には付与しない）。
+
+```bash
+alpha-forge pine generate --strategy sma_crossover_v1_optimized \
+  --backtest-period 2022-01-01:2024-12-31
+```
+
+**用途**: TradingView の Strategy Tester は **Date Range UI が有料プラン（Premium 以上）依存**で、Essential プランでは Custom date range の自動変更が動かないケースがあります。Pine 側に期間ガードを焼き込めばこの問題を完全に回避でき、`scripts/tv_cross_validate.py update --from/--to` 経由でも自動的にこの方式が使われます。
+
+実機検証 (TradingView Essential プラン、SPY 2022-01-01～2024-12-31):
+
+| 戦略 | alpha-forge trades | TV trades (修正前) | TV trades (本機能適用後) |
+|---|---:|---:|---:|
+| sma_crossover_v1 | 17 | 207 | **17 (完全一致)** |
+| bollinger_mr_v1 | 69 | 1317 | 128 (90% 縮減) |
+
+**設計**: exit にはガードを入れないため、period 終了時に open している position は通常 exit ロジックでクローズします。
+
+---
+
 ## 5. Pine Script を MCP server で検証する（issue #523）
 
 `alpha-forge pine verify` を使うと、生成した Pine Script を **TradingView Desktop + サードパーティ MCP server** に投げて検証できます。コンパイル可否だけでなく、Strategy Tester のメトリクスや個別トレードを alpha-forge のバックテストと比較し、Pine 変換の正確性を機械的に確認できます。
