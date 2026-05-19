@@ -765,6 +765,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#45-pine-v6-issue-786" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Pine v6 出力の自動検証（issue #786）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5-pine-script-mcp-server-issue-523" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2470,6 +2481,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#45-pine-v6-issue-786" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Pine v6 出力の自動検証（issue #786）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5-pine-script-mcp-server-issue-523" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2583,6 +2605,21 @@
 <p>Webhook 受信側の設定は <a href="../tradingview-alpha-strike/">TradingView と alpha-strike の連携</a> を参照してください。</p>
 </div>
 <hr />
+<h2 id="45-pine-v6-issue-786">4.5 Pine v6 出力の自動検証（issue #786）<a class="headerlink" href="#45-pine-v6-issue-786" title="Permanent link">&para;</a></h2>
+<p><code>alpha-forge pine generate</code> / <code>pine preview</code> は、出力した Pine スクリプトに対して内部の <strong>Pine v6 シグネチャ DB</strong> と照合する post-generate validator を自動で走らせます。Pine v6 で廃止された引数（例: <code>strategy.exit(trail_percent=...)</code> / <code>strategy.entry(allow_short=...)</code>）や typo を検出し、TradingView Pine Editor に貼り付ける前に CLI 段階で停止します。</p>
+<ul>
+<li><strong>エラー</strong>（exit code <code>2</code>）: 廃止引数 / 未知引数を検出した場合。問題箇所が行番号付きで stderr に表示されます。</li>
+<li><strong>警告のみ</strong>: DB 未登録の v6 関数を検出した場合は warning にとどまり、コマンドは正常終了します（false positive 抑止のため）。</li>
+<li>緊急バイパスが必要な場合は <code>--no-validate</code> フラグでスキップ可能ですが、TradingView 上で syntax error になる可能性が高いため、原則として戦略 JSON や生成器側の修正を優先してください。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 通常の生成（validator 自動実行）</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1_optimized
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 緊急時のバイパス</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1_optimized<span class="w"> </span>--no-validate
+</code></pre></div>
+<p>シグネチャ DB (<code>alpha_forge/pinescript/v6_signatures.yaml</code>) は <code>strategy.*</code> / <code>ta.*</code> / <code>input.*</code> / <code>request.security</code> の主要 API をカバーしています。Pine v6 の API 変更や生成器の新規対応に応じて更新されます。</p>
+<hr />
 <h2 id="5-pine-script-mcp-server-issue-523">5. Pine Script を MCP server で検証する（issue #523）<a class="headerlink" href="#5-pine-script-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
 <p><code>alpha-forge pine verify</code> を使うと、生成した Pine Script を <strong>TradingView Desktop + サードパーティ MCP server</strong> に投げて検証できます。コンパイル可否だけでなく、Strategy Tester のメトリクスや個別トレードを alpha-forge のバックテストと比較し、Pine 変換の正確性を機械的に確認できます。</p>
 <h3 id="51">5.1 前提セットアップ<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
@@ -2593,13 +2630,13 @@
 <li><code>oviniciusramosp/tradingview-mcp</code>（vinicius fork）— Strategy Tester 集計に強い。<code>metrics</code> / <code>signal</code> モードでは <strong>こちら推奨</strong></li>
 <li><code>forge.yaml</code> でエンドポイントと flavor を設定：</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">tv_mcp</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">pine_verify</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vinicius</span><span class="w">     </span><span class="c1"># metrics/signal を使うなら vinicius</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">tv_mcp</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">pine_verify</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vinicius</span><span class="w">     </span><span class="c1"># metrics/signal を使うなら vinicius</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div>
 <h3 id="52-verify">5.2 verify モード一覧<a class="headerlink" href="#52-verify" title="Permanent link">&para;</a></h3>
 <table>
@@ -2634,31 +2671,31 @@
 </tbody>
 </table>
 <h3 id="53">5.3 ワークフロー<a class="headerlink" href="#53" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 1. コンパイル可否のみ確認（最速）</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># 2. Strategy Tester メトリクス比較（vinicius 推奨）</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># 3. トレード単位で時刻一致を見る（誤差±60 秒、95% 一致を要求）</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span>--check-mode<span class="w"> </span>signal<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span>--match-tolerance-seconds<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span>--min-match-rate<span class="w"> </span><span class="m">0</span>.95
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 1. コンパイル可否のみ確認（最速）</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># 2. Strategy Tester メトリクス比較（vinicius 推奨）</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># 3. トレード単位で時刻一致を見る（誤差±60 秒、95% 一致を要求）</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span>--check-mode<span class="w"> </span>signal<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span>--match-tolerance-seconds<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">  </span>--min-match-rate<span class="w"> </span><span class="m">0</span>.95
 </code></pre></div>
 <h3 id="54">5.4 期間ミスマッチを避けるヒント<a class="headerlink" href="#54" title="Permanent link">&para;</a></h3>
 <p><code>metrics</code> モードで <code>total_trades</code> の差が大きいときは、データ期間のミスマッチ（yfinance ~5 年 vs TradingView 数十年）が原因のことが多いです。長期バックテストを TV 側に揃えたい場合は、データ取得を TradingView MCP に切り替えてください：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
 </code></pre></div>
 <p>詳細は <a href="../../cli-reference/data/#tradingview-mcp-tv_mcpissue-576"><code>alpha-forge data</code> コマンドリファレンス</a> を参照してください。</p>
 <h3 id="55">5.5 出力レポート<a class="headerlink" href="#55" title="Permanent link">&para;</a></h3>

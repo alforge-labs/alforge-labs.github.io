@@ -34,6 +34,26 @@ alertcondition(longSignal, title="Long Entry", message="long")
 
 ---
 
+## 4.5 Post-generate Pine v6 validation (issue #786)
+
+`alpha-forge pine generate` / `pine preview` automatically run a post-generate validator against an internal **Pine v6 signature database**. The validator detects arguments that were removed in Pine v6 (e.g. `strategy.exit(trail_percent=...)`, `strategy.entry(allow_short=...)`) and typos, and stops the command at the CLI stage **before** the script is pasted into TradingView Pine Editor.
+
+- **Error** (exit code `2`): deprecated or unknown arguments are detected. Offending line numbers are printed to stderr.
+- **Warning only**: the function is not yet registered in the signature DB. The command still succeeds (to avoid false positives).
+- Use `--no-validate` to bypass the validator in emergencies, but fixing the underlying strategy JSON or generator output is strongly preferred — Pine v6 syntax errors will block the script in TradingView anyway.
+
+```bash
+# Normal generation (validator runs automatically)
+alpha-forge pine generate --strategy sma_crossover_v1_optimized
+
+# Emergency bypass
+alpha-forge pine generate --strategy sma_crossover_v1_optimized --no-validate
+```
+
+The signature DB (`alpha_forge/pinescript/v6_signatures.yaml`) covers the main APIs under `strategy.*` / `ta.*` / `input.*` / `request.security`. It is updated whenever Pine v6 changes or the generator emits new APIs.
+
+---
+
 ## 5. Verifying the Pine Script through an MCP server (issue #523)
 
 `alpha-forge pine verify` ships the generated Pine Script to **TradingView Desktop via a third-party MCP server** for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.

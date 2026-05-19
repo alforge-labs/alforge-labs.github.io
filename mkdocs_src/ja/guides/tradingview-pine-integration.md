@@ -34,6 +34,26 @@ alertcondition(longSignal, title="Long Entry", message="long")
 
 ---
 
+## 4.5 Pine v6 出力の自動検証（issue #786）
+
+`alpha-forge pine generate` / `pine preview` は、出力した Pine スクリプトに対して内部の **Pine v6 シグネチャ DB** と照合する post-generate validator を自動で走らせます。Pine v6 で廃止された引数（例: `strategy.exit(trail_percent=...)` / `strategy.entry(allow_short=...)`）や typo を検出し、TradingView Pine Editor に貼り付ける前に CLI 段階で停止します。
+
+- **エラー**（exit code `2`）: 廃止引数 / 未知引数を検出した場合。問題箇所が行番号付きで stderr に表示されます。
+- **警告のみ**: DB 未登録の v6 関数を検出した場合は warning にとどまり、コマンドは正常終了します（false positive 抑止のため）。
+- 緊急バイパスが必要な場合は `--no-validate` フラグでスキップ可能ですが、TradingView 上で syntax error になる可能性が高いため、原則として戦略 JSON や生成器側の修正を優先してください。
+
+```bash
+# 通常の生成（validator 自動実行）
+alpha-forge pine generate --strategy sma_crossover_v1_optimized
+
+# 緊急時のバイパス
+alpha-forge pine generate --strategy sma_crossover_v1_optimized --no-validate
+```
+
+シグネチャ DB (`alpha_forge/pinescript/v6_signatures.yaml`) は `strategy.*` / `ta.*` / `input.*` / `request.security` の主要 API をカバーしています。Pine v6 の API 変更や生成器の新規対応に応じて更新されます。
+
+---
+
 ## 5. Pine Script を MCP server で検証する（issue #523）
 
 `alpha-forge pine verify` を使うと、生成した Pine Script を **TradingView Desktop + サードパーティ MCP server** に投げて検証できます。コンパイル可否だけでなく、Strategy Tester のメトリクスや個別トレードを alpha-forge のバックテストと比較し、Pine 変換の正確性を機械的に確認できます。

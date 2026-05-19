@@ -765,6 +765,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#45-post-generate-pine-v6-validation-issue-786" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Post-generate Pine v6 validation (issue #786)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2470,6 +2481,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#45-post-generate-pine-v6-validation-issue-786" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Post-generate Pine v6 validation (issue #786)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2583,6 +2605,21 @@
 <p>Configure the webhook receiver in <a href="../tradingview-alpha-strike/">TradingView × alpha-strike Integration</a>.</p>
 </div>
 <hr />
+<h2 id="45-post-generate-pine-v6-validation-issue-786">4.5 Post-generate Pine v6 validation (issue #786)<a class="headerlink" href="#45-post-generate-pine-v6-validation-issue-786" title="Permanent link">&para;</a></h2>
+<p><code>alpha-forge pine generate</code> / <code>pine preview</code> automatically run a post-generate validator against an internal <strong>Pine v6 signature database</strong>. The validator detects arguments that were removed in Pine v6 (e.g. <code>strategy.exit(trail_percent=...)</code>, <code>strategy.entry(allow_short=...)</code>) and typos, and stops the command at the CLI stage <strong>before</strong> the script is pasted into TradingView Pine Editor.</p>
+<ul>
+<li><strong>Error</strong> (exit code <code>2</code>): deprecated or unknown arguments are detected. Offending line numbers are printed to stderr.</li>
+<li><strong>Warning only</strong>: the function is not yet registered in the signature DB. The command still succeeds (to avoid false positives).</li>
+<li>Use <code>--no-validate</code> to bypass the validator in emergencies, but fixing the underlying strategy JSON or generator output is strongly preferred — Pine v6 syntax errors will block the script in TradingView anyway.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Normal generation (validator runs automatically)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1_optimized
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Emergency bypass</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1_optimized<span class="w"> </span>--no-validate
+</code></pre></div>
+<p>The signature DB (<code>alpha_forge/pinescript/v6_signatures.yaml</code>) covers the main APIs under <code>strategy.*</code> / <code>ta.*</code> / <code>input.*</code> / <code>request.security</code>. It is updated whenever Pine v6 changes or the generator emits new APIs.</p>
+<hr />
 <h2 id="5-verifying-the-pine-script-through-an-mcp-server-issue-523">5. Verifying the Pine Script through an MCP server (issue #523)<a class="headerlink" href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
 <p><code>alpha-forge pine verify</code> ships the generated Pine Script to <strong>TradingView Desktop via a third-party MCP server</strong> for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.</p>
 <h3 id="51-prerequisites">5.1 Prerequisites<a class="headerlink" href="#51-prerequisites" title="Permanent link">&para;</a></h3>
@@ -2593,13 +2630,13 @@
 <li><code>oviniciusramosp/tradingview-mcp</code> (vinicius fork) — strong on Strategy Tester aggregates; <strong>recommended for <code>metrics</code> / <code>signal</code> modes</strong></li>
 <li>Configure the endpoint and flavor in <code>forge.yaml</code>:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">tv_mcp</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">pine_verify</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vinicius</span><span class="w">     </span><span class="c1"># use vinicius for metrics/signal</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">tv_mcp</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">pine_verify</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vinicius</span><span class="w">     </span><span class="c1"># use vinicius for metrics/signal</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div>
 <h3 id="52-verify-modes">5.2 verify modes<a class="headerlink" href="#52-verify-modes" title="Permanent link">&para;</a></h3>
 <table>
@@ -2634,31 +2671,31 @@
 </tbody>
 </table>
 <h3 id="53-workflow">5.3 Workflow<a class="headerlink" href="#53-workflow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 1. Compile-only verification (fastest)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># 2. Strategy Tester metrics comparison (vinicius recommended)</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># 3. Per-trade time matching (±60s tolerance, 95% match required)</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span>--check-mode<span class="w"> </span>signal<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span>--match-tolerance-seconds<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span>--min-match-rate<span class="w"> </span><span class="m">0</span>.95
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 1. Compile-only verification (fastest)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># 2. Strategy Tester metrics comparison (vinicius recommended)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># 3. Per-trade time matching (±60s tolerance, 95% match required)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>spy_sma_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span>--check-mode<span class="w"> </span>signal<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span>--symbol<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span>--auto-backtest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span>--match-tolerance-seconds<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">  </span>--min-match-rate<span class="w"> </span><span class="m">0</span>.95
 </code></pre></div>
 <h3 id="54-avoiding-period-mismatches">5.4 Avoiding period mismatches<a class="headerlink" href="#54-avoiding-period-mismatches" title="Permanent link">&para;</a></h3>
 <p>A large <code>total_trades</code> gap in <code>metrics</code> mode is usually a data-period mismatch (yfinance's ~5y vs TradingView's decades). To bring alpha-forge's history closer to TradingView's, switch the data fetch to the TradingView MCP provider:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
 </code></pre></div>
 <p>See the <a href="../../cli-reference/data/#tradingview-mcp-provider-tv_mcp-issue-576"><code>alpha-forge data</code> command reference</a> for details.</p>
 <h3 id="55-report-output">5.5 Report output<a class="headerlink" href="#55-report-output" title="Permanent link">&para;</a></h3>
