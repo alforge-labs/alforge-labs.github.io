@@ -220,6 +220,17 @@ alpha-forge data update
 - **前提**: TradingView Desktop を `--remote-debugging-port=9222` で起動し、`tradesdontlie/tradingview-mcp` または `oviniciusramosp/tradingview-mcp`（vinicius fork）を別プロセスで起動しておく
 - **範囲スライド**: 1 リクエスト 500 bars 上限を内部で自動分割し、`--period max` でも複数チャンクを連結する（上限は `data.providers.tv_mcp.max_chunks`）
 - **flavor**: `data_get_ohlcv` は両系共通で動作。OHLCV のみ用途なら既定の `tradesdontlie` で十分
+
+!!! warning "長期 fetch の TV 側 preload 制約（issue #683）"
+    両 MCP fork 共通で `data_get_ohlcv(count=N)` は **TV チャートにロード済みの bars cache の最新 N 件**だけを返します。`chart_set_visible_range` は zoom 操作のみで cache を拡張しないため、`--period 20y` のような長期指定でも、TV が現在 preload している期間（多くの場合直近 1〜2 年）を超えて遡れません。
+
+    `_fetch_with_sliding_window` は各 chunk で `requested range / bars 数 / first・last bar time` を INFO ログに出力し、最新 bar timestamp が 3 chunk 連続で前進しないと no-progress streak を検出して早期に bail します。bail 時には `tv_mcp fetch truncated: TV chart preload covers only YYYY-MM-DD..YYYY-MM-DD (requested YYYY-MM-DD..YYYY-MM-DD)` という WARNING を出力します。
+
+    **長期データが必要な場合**は次のいずれかを選択してください：
+
+    - 株 / ETF: `--provider yfinance`（既定の最大約 30 年）
+    - FX 超長期: `--provider dukascopy`（数十年）
+    - tv_mcp で深い履歴を取りたい場合は、事前に TradingView Desktop でチャートを目的の年代まで手動スクロールして bars cache を拡張しておくと、その範囲は MCP 経由で取得できるようになる（持続的な解決は MCP server 側の新 tool が必要）
 - **設定例**（`forge.yaml`）:
 
 ```yaml
