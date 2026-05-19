@@ -54,6 +54,28 @@ The signature DB (`alpha_forge/pinescript/v6_signatures.yaml`) covers the main A
 
 ---
 
+## 4.6 Bake a backtest period filter into the Pine output (issue #823)
+
+Passing `--backtest-period 'YYYY-MM-DD:YYYY-MM-DD'` declares an `in_backtest_period = time >= timestamp("from") and time <= timestamp("to")` variable at the top of the Pine output and ANDs `and in_backtest_period` onto every entry condition (exits are left untouched).
+
+```bash
+alpha-forge pine generate --strategy sma_crossover_v1_optimized \
+  --backtest-period 2022-01-01:2024-12-31
+```
+
+**Why**: TradingView's Strategy Tester Date Range UI is **gated by paid plan tier (Premium and above)**; on the Essential tier the Custom date range UI silently fails. Baking the time guard into the Pine itself bypasses this entirely, and `scripts/tv_cross_validate.py update --from/--to` now uses this path automatically.
+
+Real-world verification (TradingView Essential plan, SPY 2022-01-01 to 2024-12-31):
+
+| Strategy | alpha-forge trades | TV trades (before) | TV trades (after) |
+|---|---:|---:|---:|
+| sma_crossover_v1 | 17 | 207 | **17 (exact match)** |
+| bollinger_mr_v1 | 69 | 1317 | 128 (90% reduction) |
+
+**Design**: exits intentionally lack the guard so that any position open at the end of the period exits naturally via the normal exit logic.
+
+---
+
 ## 5. Verifying the Pine Script through an MCP server (issue #523)
 
 `alpha-forge pine verify` ships the generated Pine Script to **TradingView Desktop via a third-party MCP server** for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.
