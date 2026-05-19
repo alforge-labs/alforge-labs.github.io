@@ -2938,22 +2938,40 @@
 </code></pre></div>
 <blockquote>
 <p><strong>Notes on moomoo crypto</strong>:
-- 24/7 trading with unlimited T+0; SIMULATE fills work around the clock
-- US-residency restriction applies (FinCEN MSB). Even <code>run_mode=paper</code> requires the broker-side crypto account to be enabled
+- 24/7 trading with unlimited T+0
+- US-residency restriction applies (FinCEN MSB). The broker-side crypto account must be enabled
 - Internally uses <code>OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO, security_firm=SecurityFirm.NONE)</code>
 - Symbols are <code>CC.BTC</code> / <code>CC.ETH</code> / <code>CC.XRP</code> etc. (uppercase symbol with <code>CC.</code> prefix)</p>
 </blockquote>
+<div class="admonition warning">
+<p class="admonition-title">moomoo crypto is live (REAL) only — SIMULATE is rejected</p>
+<p>moomoo's crypto trading API is live-environment only. Sending a crypto order
+with <code>MOOMOO_TRD_ENV=SIMULATE</code> makes the moomoo SDK return
+<code>the type of environment param is wrong</code>.</p>
+<p>alpha-strike detects this combination <strong>before connecting to OpenD</strong> and
+raises a <code>ValueError</code> with this message:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>moomoo crypto は SIMULATE 環境を受け付けません（live only）。
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>paper 運用したい場合は BTC ETF (US.IBIT / US.FBTC / US.BITO 等) を
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>asset_class=US で発注するか、MOOMOO_TRD_ENV=REAL で実 money 運用してください。
+</code></pre></div>
+<p>For paper validation, choose one of:</p>
+<ul>
+<li><strong>Order a BTC ETF (<code>US.IBIT</code> / <code>US.FBTC</code> / <code>US.BITO</code>) with <code>asset_class=US</code></strong> (recommended)</li>
+<li>Start with a small REAL position (<code>MOOMOO_TRD_ENV=REAL</code>, e.g. 0.001 BTC ≈ $80)</li>
+<li>Use TradingView's built-in Paper Trading (bypass alpha-strike)</li>
+</ul>
+</div>
 <h3 id="3-2-oanda-practice-live">3-2. OANDA PRACTICE / LIVE<a class="headerlink" href="#3-2-oanda-practice-live" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;oanda&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FX&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDJPY&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fx_demo_v1&quot;</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;oanda&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FX&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDJPY&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fx_demo_v1&quot;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="3-3-field-reference">3-3. Field reference<a class="headerlink" href="#3-3-field-reference" title="Permanent link">&para;</a></h3>
 <table>
@@ -3158,47 +3176,47 @@
 </div>
 <hr />
 <h2 id="4-building-full-json-in-pine-v6">4. Building full JSON in Pine v6<a class="headerlink" href="#4-building-full-json-in-pine-v6" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>//@version=6
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>strategy(&quot;alpha-strike webhook demo&quot;, overlay=true)
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>passphrase   = &quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>broker       = &quot;moomoo&quot;
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>asset_class  = &quot;US&quot;
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>strategy_id  = &quot;demo_buy_v1&quot;
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>run_mode     = &quot;paper&quot;
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>rsi_val = ta.rsi(close, 14)
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>long_signal  = ta.crossover(rsi_val,  30)
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>short_signal = ta.crossunder(rsi_val, 70)
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>// Apply the moomoo market prefix when asset_class is US / HK / CRYPTO
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>//   US     → &quot;US.AAPL&quot;
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>//   HK     → &quot;HK.00700&quot;
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>//   CRYPTO → &quot;CC.BTC&quot;
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>get_market_prefix(string ac) =&gt;
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    ac == &quot;US&quot;     ? &quot;US.&quot; :
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    ac == &quot;HK&quot;     ? &quot;HK.&quot; :
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    ac == &quot;CRYPTO&quot; ? &quot;CC.&quot; :
-<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>                     &quot;&quot;
-<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
-<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>make_payload(string action, float qty) =&gt;
-<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    ticker_full = get_market_prefix(asset_class) + syminfo.ticker
-<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>    &#39;{&quot;passphrase&quot;:&quot;&#39; + passphrase + &#39;&quot;,&#39; +
-<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>    &#39;&quot;broker&quot;:&quot;&#39; + broker + &#39;&quot;,&#39; +
-<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>    &#39;&quot;asset_class&quot;:&quot;&#39; + asset_class + &#39;&quot;,&#39; +
-<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>    &#39;&quot;action&quot;:&quot;&#39; + action + &#39;&quot;,&#39; +
-<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    &#39;&quot;ticker&quot;:&quot;&#39; + ticker_full + &#39;&quot;,&#39; +
-<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>    &#39;&quot;quantity&quot;:&#39; + str.tostring(qty) + &#39;,&#39; +
-<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>    &#39;&quot;strategy_id&quot;:&quot;&#39; + strategy_id + &#39;&quot;,&#39; +
-<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>    &#39;&quot;run_mode&quot;:&quot;&#39; + run_mode + &#39;&quot;}&#39;
-<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>
-<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>if long_signal
-<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>    strategy.entry(&quot;LONG&quot;, strategy.long, qty = 10)
-<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>    alert(make_payload(&quot;buy&quot;, 10), alert.freq_once_per_bar_close)
-<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>
-<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a>if short_signal
-<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a>    strategy.close(&quot;LONG&quot;)
-<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>    alert(make_payload(&quot;sell&quot;, 10), alert.freq_once_per_bar_close)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>//@version=6
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>strategy(&quot;alpha-strike webhook demo&quot;, overlay=true)
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>passphrase   = &quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>broker       = &quot;moomoo&quot;
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>asset_class  = &quot;US&quot;
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>strategy_id  = &quot;demo_buy_v1&quot;
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>run_mode     = &quot;paper&quot;
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>rsi_val = ta.rsi(close, 14)
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>long_signal  = ta.crossover(rsi_val,  30)
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>short_signal = ta.crossunder(rsi_val, 70)
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>// Apply the moomoo market prefix when asset_class is US / HK / CRYPTO
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>//   US     → &quot;US.AAPL&quot;
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>//   HK     → &quot;HK.00700&quot;
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>//   CRYPTO → &quot;CC.BTC&quot;
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>get_market_prefix(string ac) =&gt;
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    ac == &quot;US&quot;     ? &quot;US.&quot; :
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    ac == &quot;HK&quot;     ? &quot;HK.&quot; :
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    ac == &quot;CRYPTO&quot; ? &quot;CC.&quot; :
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>                     &quot;&quot;
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>make_payload(string action, float qty) =&gt;
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>    ticker_full = get_market_prefix(asset_class) + syminfo.ticker
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>    &#39;{&quot;passphrase&quot;:&quot;&#39; + passphrase + &#39;&quot;,&#39; +
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>    &#39;&quot;broker&quot;:&quot;&#39; + broker + &#39;&quot;,&#39; +
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>    &#39;&quot;asset_class&quot;:&quot;&#39; + asset_class + &#39;&quot;,&#39; +
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>    &#39;&quot;action&quot;:&quot;&#39; + action + &#39;&quot;,&#39; +
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>    &#39;&quot;ticker&quot;:&quot;&#39; + ticker_full + &#39;&quot;,&#39; +
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>    &#39;&quot;quantity&quot;:&#39; + str.tostring(qty) + &#39;,&#39; +
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>    &#39;&quot;strategy_id&quot;:&quot;&#39; + strategy_id + &#39;&quot;,&#39; +
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>    &#39;&quot;run_mode&quot;:&quot;&#39; + run_mode + &#39;&quot;}&#39;
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>if long_signal
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>    strategy.entry(&quot;LONG&quot;, strategy.long, qty = 10)
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>    alert(make_payload(&quot;buy&quot;, 10), alert.freq_once_per_bar_close)
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a>
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a>if short_signal
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a>    strategy.close(&quot;LONG&quot;)
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a>    alert(make_payload(&quot;sell&quot;, 10), alert.freq_once_per_bar_close)
 </code></pre></div>
 <p>Firing <code>alert()</code> from inside the strategy lets you leave the TradingView Message field empty and ship the JSON straight from Pine. <code>alert.freq_once_per_bar_close</code> fires only on bar close, avoiding repaint / duplicate orders.</p>
 <hr />
@@ -3250,27 +3268,27 @@
 </table>
 <h3 id="recommended-pine-v6-pattern">Recommended Pine v6 pattern<a class="headerlink" href="#recommended-pine-v6-pattern" title="Permanent link">&para;</a></h3>
 <p>Combine <code>bar_open_time + strategy_id + timeframe</code> so that <strong>multiple fires within the same bar are always rejected by idempotency</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>//@version=6
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>strategy(&quot;idempotent demo&quot;, overlay=true)
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>strategy_id = &quot;demo_buy_v1&quot;
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>passphrase  = &quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>make_signal_id() =&gt;
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    // &lt;strategy_id&gt;_&lt;timeframe&gt;_&lt;bar_open_time&gt;
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    strategy_id + &quot;_&quot; + timeframe.period + &quot;_&quot; + str.format_time(time, &quot;yyyy-MM-dd_HH-mm&quot;)
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>make_payload(string action, float qty) =&gt;
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    sig = make_signal_id()
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    &#39;{&quot;passphrase&quot;:&quot;&#39; + passphrase + &#39;&quot;,&#39; +
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    &#39;&quot;broker&quot;:&quot;moomoo&quot;,&#39; +
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    &#39;&quot;asset_class&quot;:&quot;US&quot;,&#39; +
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    &#39;&quot;action&quot;:&quot;&#39; + action + &#39;&quot;,&#39; +
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    &#39;&quot;ticker&quot;:&quot;US.&quot; + syminfo.ticker + &#39;&quot;,&#39; +
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    &#39;&quot;quantity&quot;:&#39; + str.tostring(qty) + &#39;,&#39; +
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    &#39;&quot;signal_id&quot;:&quot;&#39; + sig + &#39;&quot;,&#39; +
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    &#39;&quot;strategy_id&quot;:&quot;&#39; + strategy_id + &#39;&quot;,&#39; +
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    &#39;&quot;run_mode&quot;:&quot;paper&quot;}&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>//@version=6
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>strategy(&quot;idempotent demo&quot;, overlay=true)
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>strategy_id = &quot;demo_buy_v1&quot;
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>passphrase  = &quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>make_signal_id() =&gt;
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    // &lt;strategy_id&gt;_&lt;timeframe&gt;_&lt;bar_open_time&gt;
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    strategy_id + &quot;_&quot; + timeframe.period + &quot;_&quot; + str.format_time(time, &quot;yyyy-MM-dd_HH-mm&quot;)
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>make_payload(string action, float qty) =&gt;
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    sig = make_signal_id()
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    &#39;{&quot;passphrase&quot;:&quot;&#39; + passphrase + &#39;&quot;,&#39; +
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    &#39;&quot;broker&quot;:&quot;moomoo&quot;,&#39; +
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    &#39;&quot;asset_class&quot;:&quot;US&quot;,&#39; +
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    &#39;&quot;action&quot;:&quot;&#39; + action + &#39;&quot;,&#39; +
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    &#39;&quot;ticker&quot;:&quot;US.&quot; + syminfo.ticker + &#39;&quot;,&#39; +
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    &#39;&quot;quantity&quot;:&#39; + str.tostring(qty) + &#39;,&#39; +
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    &#39;&quot;signal_id&quot;:&quot;&#39; + sig + &#39;&quot;,&#39; +
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    &#39;&quot;strategy_id&quot;:&quot;&#39; + strategy_id + &#39;&quot;,&#39; +
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>    &#39;&quot;run_mode&quot;:&quot;paper&quot;}&#39;
 </code></pre></div>
 <blockquote>
 <p><strong>Effect</strong>: with <code>signal_id</code> formatted as <code>&lt;strategy_id&gt;_&lt;timeframe&gt;_&lt;bar_open_time&gt;</code>, even if <code>alert.freq_once_per_bar_close</code> somehow fires multiple times within the same bar, alpha-strike will treat the duplicates as 200 + duplicate and block any double broker orders.</p>
@@ -3279,19 +3297,19 @@
 <hr />
 <h2 id="5-response">5. Response<a class="headerlink" href="#5-response" title="Permanent link">&para;</a></h2>
 <h3 id="5-1-success-200">5-1. Success (200)<a class="headerlink" href="#5-1-success-200" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.AAPL&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{&#39;order_id&#39;: &#39;356604&#39;, &#39;ret_code&#39;: 0, &#39;filled_qty&#39;: 0.0, &#39;filled_price&#39;: 0.0}&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sig_20260517170105122499&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ord_20260517170105123793&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">&quot;broker_order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;356604&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&quot;event_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evt_20260517170105232506&quot;</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.AAPL&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{&#39;order_id&#39;: &#39;356604&#39;, &#39;ret_code&#39;: 0, &#39;filled_qty&#39;: 0.0, &#39;filled_price&#39;: 0.0}&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sig_20260517170105122499&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ord_20260517170105123793&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="nt">&quot;broker_order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;356604&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="nt">&quot;event_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evt_20260517170105232506&quot;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="5-2-auth-failure-401">5-2. Auth failure (401)<a class="headerlink" href="#5-2-auth-failure-401" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unauthorized&quot;</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unauthorized&quot;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
 <h2 id="6-error-reference">6. Error reference<a class="headerlink" href="#6-error-reference" title="Permanent link">&para;</a></h2>
@@ -3344,16 +3362,16 @@
 <hr />
 <h2 id="7-local-development-testing">7. Local development testing<a class="headerlink" href="#7-local-development-testing" title="Permanent link">&para;</a></h2>
 <p>Before VM deployment, you can run alpha-strike locally:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># In the alpha-strike repo</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>webhook_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reload
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># In another terminal</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>curl<span class="w"> </span>http://localhost:8080/health
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/webhook<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;test&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># In the alpha-strike repo</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>webhook_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>--reload
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># In another terminal</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>curl<span class="w"> </span>http://localhost:8080/health
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># → {&quot;status&quot;:&quot;ok&quot;}</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;test&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
 </code></pre></div>
 <p>To expose the local server to TradingView, use Cloudflare Tunnel (<code>cloudflared tunnel --url http://localhost:8080</code>) or <code>ngrok</code>.</p>
 <hr />

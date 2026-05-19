@@ -435,7 +435,18 @@ JSON の `ticker:"US.AAPL"` は **発火銘柄（BTC）と独立** に moomoo �
 
 moomoo は米国株・香港株と並んで暗号資産（BTC / ETH / XRP 等）も発注先として提供しています。alpha-strike は `asset_class="CRYPTO"` を受理し、内部で `OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)` で発注します。
 
-JSON 例（BTC を 0.01 単位で SIMULATE 買い）：
+!!! warning "moomoo crypto は live (REAL) only — SIMULATE 不可"
+    moomoo の crypto trading API は live 環境専用で、`MOOMOO_TRD_ENV=SIMULATE` で
+    crypto order を送ると moomoo SDK が `the type of environment param is wrong` を返す。
+    alpha-strike は OpenD 接続前に `ValueError` で早期拒否する。
+
+    **ペーパー検証したい場合は**：
+
+    - **BTC ETF (`US.IBIT` / `US.FBTC` / `US.BITO`) を `asset_class=US` で発注**（推奨）
+    - `MOOMOO_TRD_ENV=REAL` で少額（0.001 BTC ≈ $80）から開始
+    - TradingView Paper Trading 内蔵を使う（alpha-strike バイパス）
+
+JSON 例（BTC を 0.01 単位で REAL 買い、`MOOMOO_TRD_ENV=REAL` 前提）：
 
 ```json
 {
@@ -445,14 +456,14 @@ JSON 例（BTC を 0.01 単位で SIMULATE 買い）：
   "action": "buy",
   "ticker": "CC.BTC",
   "quantity": 0.01,
-  "run_mode": "paper",
+  "run_mode": "live",
   "strategy_id": "btc_ema_sma_trail40_v1"
 }
 ```
 
 > **前提**:
 > - moomoo crypto は 24/7 取引（市場クローズの概念なし）
-> - 米国居住者制限あり（FinCEN MSB 経由）。`run_mode=paper` でも broker 側の crypto アカウント有効化が必要
+> - 米国居住者制限あり（FinCEN MSB 経由）。broker 側の crypto アカウント有効化が必要
 > - 銘柄コードは `CC.BTC` / `CC.ETH` / `CC.XRP` 等（`CC.` プレフィックス + 大文字シンボル）
 >
 > ペイロード仕様の詳細は [TradingView × alpha-strike Integration §3-1b](./tradingview-alpha-strike.md#3-1b-moomoo-crypto-btc-eth-xrp) を参照。

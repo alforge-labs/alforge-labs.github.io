@@ -3893,7 +3893,20 @@
 <p>The <code>ticker:"US.AAPL"</code> in the JSON is <strong>independent</strong> of the chart symbol that fires the alert.</p>
 <h3 id="7-3-running-crypto-strategies">7-3. Running CRYPTO strategies<a class="headerlink" href="#7-3-running-crypto-strategies" title="Permanent link">&para;</a></h3>
 <p>In addition to US / HK equities, moomoo offers crypto (BTC / ETH / XRP, etc.) as a destination. alpha-strike accepts <code>asset_class="CRYPTO"</code> and routes through <code>OpenSecTradeContext(filter_trdmarket=TrdMarket.CRYPTO)</code> internally.</p>
-<p>Sample JSON (paper-buy 0.01 BTC):</p>
+<div class="admonition warning">
+<p class="admonition-title">moomoo crypto is live (REAL) only — SIMULATE is rejected</p>
+<p>moomoo's crypto trading API is live-environment only. Sending a crypto order
+with <code>MOOMOO_TRD_ENV=SIMULATE</code> makes the moomoo SDK return
+<code>the type of environment param is wrong</code>. alpha-strike detects this
+combination <strong>before connecting to OpenD</strong> and raises <code>ValueError</code>.</p>
+<p><strong>For paper validation, choose one of</strong>:</p>
+<ul>
+<li><strong>Order a BTC ETF (<code>US.IBIT</code> / <code>US.FBTC</code> / <code>US.BITO</code>) with <code>asset_class=US</code></strong> (recommended)</li>
+<li>Start with a small REAL position (<code>MOOMOO_TRD_ENV=REAL</code>, e.g. 0.001 BTC ≈ $80)</li>
+<li>Use TradingView's built-in Paper Trading (bypass alpha-strike)</li>
+</ul>
+</div>
+<p>Sample JSON (REAL-buy 0.01 BTC, requires <code>MOOMOO_TRD_ENV=REAL</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;WEBHOOK_PASSPHRASE&gt;&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
@@ -3901,14 +3914,14 @@
 <a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CC.BTC&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
-<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;live&quot;</span><span class="p">,</span>
 <a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;btc_ema_sma_trail40_v1&quot;</span>
 <a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="p">}</span>
 </code></pre></div>
 <blockquote>
 <p><strong>Notes</strong>:
 - moomoo crypto trades 24/7 (no market close)
-- US-residency restriction applies (FinCEN MSB). Even <code>run_mode=paper</code> requires the broker-side crypto account to be enabled
+- US-residency restriction applies (FinCEN MSB). The broker-side crypto account must be enabled
 - Symbols are <code>CC.BTC</code> / <code>CC.ETH</code> / <code>CC.XRP</code> etc. (<code>CC.</code> prefix + uppercase symbol)</p>
 <p>See <a href="../tradingview-alpha-strike/#3-1b-moomoo-crypto-btc-eth-xrp">TradingView × alpha-strike Integration §3-1b</a> for the full payload specification.</p>
 </blockquote>
