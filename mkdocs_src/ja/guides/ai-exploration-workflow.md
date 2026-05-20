@@ -701,7 +701,9 @@ pre_filter:
 | `win_rate_pct` | 取引勝率 (%) | backtest |
 | `profit_factor` | 利益÷損失（全勝で損失合計=0 のときは `null`、issue #791） | backtest |
 | `min_trades` | 取引数下限 | backtest |
-| `calmar_ratio` | CAGR / MDD | backtest |
+| `calmar_ratio` | CAGR / MDD（推奨、issue #845） | backtest |
+| `cagr_at_target_dd` | レバレッジ調整後 CAGR (%、issue #673) | backtest（派生） |
+| `implied_leverage_to_target_dd` | 参照 MaxDD まで線形スケールするレバレッジ倍率 | backtest（派生） |
 | `positive_months_ratio` | 月別勝率（0〜1） | backtest |
 | `worst_month_pnl_pct` | 最悪月の P&L (%) | backtest |
 | `best_month_pnl_pct` | 最高月の P&L (%) | backtest |
@@ -719,6 +721,33 @@ target_metrics:
 ```
 
 未対応の metric 名や未サポート operator は warning + skip（戦略は失格扱いにしない）。
+
+#### 低 vol 戦略向けのリスク調整後リターン基準（issue #673 / #845 推奨）
+
+素の `cagr >= 20%` だけだと「Sharpe 1.4 / MaxDD 0.5% / CAGR 0.6%」のような**低ボラティリティ・低リターンだが質の高い戦略**が全部捨てられてしまいます。実機運用ではレバレッジで CAGR を引き上げる前提のため、リスク調整後の指標で判定したほうがより多くの良質候補を救済できます。
+
+**案 A) `calmar_ratio` で判定（推奨）** — `derived_metrics_config:` 不要で最もシンプル:
+
+```yaml
+target_metrics:
+  sharpe_ratio:  ">= 1.5"
+  calmar_ratio:  ">= 0.8"     # CAGR/MDD ≥ 0.8 (= MaxDD 25% で CAGR 20% と等価)
+  max_drawdown:  "<= 25%"
+  min_trades:    ">= 30"
+```
+
+**案 B) `cagr_at_target_dd` で判定** — レバレッジ調整後の絶対リターン値で判定したい場合:
+
+```yaml
+target_metrics:
+  sharpe_ratio:       ">= 1.5"
+  cagr_at_target_dd:  ">= 20%"  # target_metrics.max_drawdown まで線形スケールした CAGR
+  max_drawdown:       "<= 25%"
+  min_trades:         ">= 30"
+# derived_metrics_config: は不要（reference_max_dd_pct は max_drawdown から auto-detect）
+```
+
+`cagr_at_target_dd` の **参照 MaxDD は target_metrics.max_drawdown から auto-detect** されます（issue #845）。明示指定したい場合は `derived_metrics_config.reference_max_dd_pct` で override してください。レバレッジ調整は線形仮定（funding cost / borrow / slippage 無視）で評価されます。
 
 ### 自動緩和バリアント生成（issue #428）
 
