@@ -3934,6 +3934,17 @@
 <li>ATR は全タイプで自動追加（<code>--no-atr</code> フラグで無効化可能）</li>
 </ul>
 <p>戦略タイプと互換性のない指標を要求すると ValueError で明示的にエラーを返します（silently 削除されません）。詳細は <a href="https://github.com/ysakae/alpha-forge/issues/427">alpha-forge issue #427</a> を参照。</p>
+<div class="admonition warning">
+<p class="admonition-title">mean-reversion + 単一 EMA/SMA + FX/commodity は signal-starve 注意（issue #830）</p>
+<p><code>--type mean-reversion</code> + 単一の EMA または SMA トレンドフィルタ + FX (<code>USDJPY=X</code> 等) / commodity (<code>GC=F</code> / <code>CL=F</code> 等) の組み合わせは、<strong>BB の ±1.5σ ブレイク (entry) と長期 EMA/SMA 上抜け (filter) の合致イベントが構造的にほぼ発生せず</strong>、5y バックテスト全期間で <strong>no_signals (0 trades)</strong> となるケースが多発しています。</p>
+<p>scaffold 時に stderr に WARNING + 代替案を出力します（生成自体は成功する非ブロッキング設計）。実機検証で初めて pre_filter pass した対照群 <code>BB+MACD+RSI</code> のように、以下のいずれかをお試しください：</p>
+<ul>
+<li><strong><code>EMA</code> / <code>SMA</code> フィルタを外す</strong>（BB+RSI のみ、または BB+MACD+RSI）</li>
+<li><strong><code>MACD</code> をトレンドフィルタとして使う</strong>（USDJPY で初の pre_filter pass、Sharpe=1.00 を達成）</li>
+<li><strong>2 つ以上のトレンドフィルタを併用</strong>（例: <code>EMA,SUPERTREND</code> → OR 集約で柔軟になる）</li>
+<li><strong><code>trend-following</code> 型に切り替える</strong></li>
+</ul>
+</div>
 <h3 id="long-short-issue-469">long / short 両方向の自動生成（issue #469）<a class="headerlink" href="#long-short-issue-469" title="Permanent link">&para;</a></h3>
 <p>scaffold は <strong>long と short の両方</strong> の <code>entry_conditions</code> / <code>exit_conditions</code> を生成します。FX 等の対称市場では取引機会が 2 倍になり、長下げ局面でも収益機会を取り込めます。</p>
 <table>

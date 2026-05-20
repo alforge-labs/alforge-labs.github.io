@@ -345,6 +345,16 @@ MCP server が起動していない・`tv_mcp.pine_verify.enabled: false` の go
 
 戦略タイプと互換性のない指標を要求すると ValueError で明示的にエラーを返します（silently 削除されません）。詳細は [alpha-forge issue #427](https://github.com/ysakae/alpha-forge/issues/427) を参照。
 
+!!! warning "mean-reversion + 単一 EMA/SMA + FX/commodity は signal-starve 注意（issue #830）"
+    `--type mean-reversion` + 単一の EMA または SMA トレンドフィルタ + FX (`USDJPY=X` 等) / commodity (`GC=F` / `CL=F` 等) の組み合わせは、**BB の ±1.5σ ブレイク (entry) と長期 EMA/SMA 上抜け (filter) の合致イベントが構造的にほぼ発生せず**、5y バックテスト全期間で **no_signals (0 trades)** となるケースが多発しています。
+
+    scaffold 時に stderr に WARNING + 代替案を出力します（生成自体は成功する非ブロッキング設計）。実機検証で初めて pre_filter pass した対照群 `BB+MACD+RSI` のように、以下のいずれかをお試しください：
+
+    - **`EMA` / `SMA` フィルタを外す**（BB+RSI のみ、または BB+MACD+RSI）
+    - **`MACD` をトレンドフィルタとして使う**（USDJPY で初の pre_filter pass、Sharpe=1.00 を達成）
+    - **2 つ以上のトレンドフィルタを併用**（例: `EMA,SUPERTREND` → OR 集約で柔軟になる）
+    - **`trend-following` 型に切り替える**
+
 ### long / short 両方向の自動生成（issue #469）
 
 scaffold は **long と short の両方** の `entry_conditions` / `exit_conditions` を生成します。FX 等の対称市場では取引機会が 2 倍になり、長下げ局面でも収益機会を取り込めます。
