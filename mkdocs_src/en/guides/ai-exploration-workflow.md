@@ -347,6 +347,16 @@ Use `--runs 0` to loop until a rate limit is hit or all combinations are exhaust
 
 Requesting an indicator that is incompatible with the chosen strategy type raises an explicit `ValueError`; indicators are never silently dropped. See [alpha-forge issue #427](https://github.com/ysakae/alpha-forge/issues/427) for details.
 
+!!! warning "mean-reversion + single EMA/SMA + FX/commodity is signal-starve prone (issue #830)"
+    Combining `--type mean-reversion` with a single EMA **or** SMA trend filter on FX (`USDJPY=X`, etc.) / commodity (`GC=F` / `CL=F`, etc.) symbols structurally produces **almost no overlap between the BB ±1.5σ break (entry) and the close > long-EMA/SMA filter** — many runs return **`no_signals` (0 trades)** across a full 5y backtest.
+
+    scaffold emits a stderr WARNING with suggested alternatives (non-blocking — generation still succeeds). The empirically validated control case `BB+MACD+RSI` was the first combination to pass `pre_filter` on USDJPY (Sharpe=1.00). Recommended alternatives:
+
+    - **Drop the `EMA` / `SMA` filter** (use `BB+RSI` or `BB+MACD+RSI`)
+    - **Swap in `MACD` as the trend filter** (validated as the first `pre_filter`-passing FX combination)
+    - **Add a second trend filter** (e.g. `EMA,SUPERTREND` so they OR-aggregate)
+    - **Switch to `--type trend-following`**
+
 ### Both long and short entries (issue #469)
 
 scaffold now generates **both long and short** `entry_conditions` / `exit_conditions`. In symmetric markets such as FX this doubles the opportunity surface and lets the strategy capture profit on the down leg as well.
