@@ -703,7 +703,9 @@ The `target_metrics` section of `goals.yaml` accepts the following arbitrary met
 | `win_rate_pct` | Trade win rate (%) | backtest |
 | `profit_factor` | Profit / loss (`null` when all trades are winners — issue #791) | backtest |
 | `min_trades` | Lower bound on trade count | backtest |
-| `calmar_ratio` | CAGR / MDD | backtest |
+| `calmar_ratio` | CAGR / MDD (recommended, issue #845) | backtest |
+| `cagr_at_target_dd` | Leverage-adjusted CAGR (%, issue #673) | backtest (derived) |
+| `implied_leverage_to_target_dd` | Leverage multiplier to scale linearly to the reference MaxDD | backtest (derived) |
 | `positive_months_ratio` | Fraction of profitable months (0–1) | backtest |
 | `worst_month_pnl_pct` | Worst-month P&L (%) | backtest |
 | `best_month_pnl_pct` | Best-month P&L (%) | backtest |
@@ -721,6 +723,33 @@ target_metrics:
 ```
 
 Unsupported metric names or operators are skipped with a warning (the strategy is not marked failed because of them).
+
+#### Risk-adjusted-return criteria for low-vol strategies (issue #673 / #845, recommended)
+
+`cagr >= 20%` alone discards otherwise excellent **low-volatility / low-return** strategies (e.g. Sharpe 1.4 / MaxDD 0.5% / CAGR 0.6%). Since real-world deployments lever up to lift CAGR, evaluating with risk-adjusted criteria salvages more high-quality candidates.
+
+**Option A) `calmar_ratio` — simplest, no `derived_metrics_config:` needed:**
+
+```yaml
+target_metrics:
+  sharpe_ratio:  ">= 1.5"
+  calmar_ratio:  ">= 0.8"     # CAGR/MDD ≥ 0.8 (≡ CAGR 20% at MaxDD 25%)
+  max_drawdown:  "<= 25%"
+  min_trades:    ">= 30"
+```
+
+**Option B) `cagr_at_target_dd` — when you want the absolute return target after leverage:**
+
+```yaml
+target_metrics:
+  sharpe_ratio:       ">= 1.5"
+  cagr_at_target_dd:  ">= 20%"  # CAGR scaled linearly to target_metrics.max_drawdown
+  max_drawdown:       "<= 25%"
+  min_trades:         ">= 30"
+# derived_metrics_config: not required (reference_max_dd_pct auto-detected from max_drawdown)
+```
+
+The **reference MaxDD for `cagr_at_target_dd` is auto-detected from `target_metrics.max_drawdown`** (issue #845). Override with `derived_metrics_config.reference_max_dd_pct` if needed. Leverage adjustment uses a linear assumption (ignores funding cost / borrow / slippage).
 
 ### Auto-relaxation of failed variants (issue #428)
 
