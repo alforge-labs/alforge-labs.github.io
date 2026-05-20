@@ -329,3 +329,36 @@ FORGE_CONFIG=forge.yaml alpha-forge explore health \
 ```
 
 ---
+
+## alpha-forge explore recommend show
+
+`recommendations.yaml`（auto-relax / analyze-exploration が生成する次の探索候補）を表示します。
+
+```bash
+alpha-forge explore recommend show [--recs <path>] [--json] [--validated-only]
+```
+
+| オプション | 説明 | デフォルト |
+|-----------|------|-----------|
+| `--recs <path>` | `recommendations.yaml` のパス | `data/explorer/recommendations.yaml` |
+| `--json` | JSON で出力 | off |
+| `--validated-only` | **consumable な `strategy_id` が DB に存在する候補のみ表示**（agent 消費向け厳格モード、issue #831） | off |
+
+### Agent 消費時の注意（issue #831）
+
+各候補には `strategy_id`（consumable な実体）と `variant_of`（派生元の参照）の 2 フィールドが含まれます。`explore run` や `backtest run` に渡すべきは **`strategy_id`** で、`variant_of` を渡すと DB / template に未登録のことが多く `ValueError: 未知のテンプレート名です` で停止します。
+
+表示例（issue #831 修正後）:
+
+```text
+推薦候補 (auto-relax / 2026-05-19T13:10:59+00:00)
+  #1 NVDA ATR+EMA+SUPERTREND (score=1.083) [strategy_id: nvda_ema_supertrend_v2_optimized] [variant of nvda_ema_supertrend_v2 (missing)]
+     auto-relax variant
+```
+
+- `[strategy_id: ...]` が agent / ユーザーが実際に渡すべき ID
+- `[variant of <id> (missing)]` の `(missing)` マーカーは派生元が DB 不在のときに付く（参考情報、実行には使わない）
+- `strategy_id=None かつ variant_of が DB 不在` の候補は自動的にファイルから削除される
+- `--validated-only` 指定時は `strategy_id` が DB に存在する候補のみ表示するため、agent は安全にそのまま `--strategy` へ転記可能
+
+---

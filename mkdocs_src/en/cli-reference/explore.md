@@ -326,3 +326,36 @@ FORGE_CONFIG=forge.yaml alpha-forge explore health \
 ```
 
 ---
+
+## alpha-forge explore recommend show
+
+Displays the next exploration candidates from `recommendations.yaml` (produced by auto-relax / analyze-exploration).
+
+```bash
+alpha-forge explore recommend show [--recs <path>] [--json] [--validated-only]
+```
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--recs <path>` | Path to `recommendations.yaml` | `data/explorer/recommendations.yaml` |
+| `--json` | Emit JSON | off |
+| `--validated-only` | **Strict mode: only show candidates whose consumable `strategy_id` exists in the DB** (intended for agent consumption, issue #831) | off |
+
+### Agent consumption notes (issue #831)
+
+Each candidate carries two fields: `strategy_id` (the consumable identifier) and `variant_of` (a reference to the base strategy it was derived from). When passing a candidate to `explore run` / `backtest run`, **always use `strategy_id`**. Using `variant_of` often fails with `ValueError: Unknown template name` because the base is no longer registered in the DB / template registry.
+
+Example output (post issue #831):
+
+```text
+Recommendations (auto-relax / 2026-05-19T13:10:59+00:00)
+  #1 NVDA ATR+EMA+SUPERTREND (score=1.083) [strategy_id: nvda_ema_supertrend_v2_optimized] [variant of nvda_ema_supertrend_v2 (missing)]
+     auto-relax variant
+```
+
+- `[strategy_id: ...]` is what agents / users should pass to `--strategy`.
+- `[variant of <id> (missing)]` — the `(missing)` marker indicates the base is no longer in the DB (informational only — do not consume it).
+- Candidates with `strategy_id=None` AND a DB-missing `variant_of` are automatically removed from the file.
+- With `--validated-only`, only candidates whose `strategy_id` exists in the DB are shown, so agents can safely forward the value to `--strategy`.
+
+---

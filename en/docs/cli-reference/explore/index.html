@@ -1924,6 +1924,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-explore-recommend-show" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge explore recommend show
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge explore recommend show">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agent-consumption-notes-issue-831" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent consumption notes (issue #831)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2673,6 +2701,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-explore-recommend-show" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge explore recommend show
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge explore recommend show">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agent-consumption-notes-issue-831" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent consumption notes (issue #831)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3224,6 +3280,50 @@ exploration agents can decide programmatically which criterion failed and by how
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span>--goal<span class="w"> </span>default<span class="w"> </span>--last<span class="w"> </span><span class="m">5</span><span class="w"> </span>--strict<span class="w"> </span>--json
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># exit code 1 → surface recommended_actions to a human and break the loop</span>
 </code></pre></div>
+<hr />
+<h2 id="alpha-forge-explore-recommend-show">alpha-forge explore recommend show<a class="headerlink" href="#alpha-forge-explore-recommend-show" title="Permanent link">&para;</a></h2>
+<p>Displays the next exploration candidates from <code>recommendations.yaml</code> (produced by auto-relax / analyze-exploration).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>explore<span class="w"> </span>recommend<span class="w"> </span>show<span class="w"> </span><span class="o">[</span>--recs<span class="w"> </span>&lt;path&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span><span class="w"> </span><span class="o">[</span>--validated-only<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--recs &lt;path&gt;</code></td>
+<td>Path to <code>recommendations.yaml</code></td>
+<td><code>data/explorer/recommendations.yaml</code></td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>Emit JSON</td>
+<td>off</td>
+</tr>
+<tr>
+<td><code>--validated-only</code></td>
+<td><strong>Strict mode: only show candidates whose consumable <code>strategy_id</code> exists in the DB</strong> (intended for agent consumption, issue #831)</td>
+<td>off</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-consumption-notes-issue-831">Agent consumption notes (issue #831)<a class="headerlink" href="#agent-consumption-notes-issue-831" title="Permanent link">&para;</a></h3>
+<p>Each candidate carries two fields: <code>strategy_id</code> (the consumable identifier) and <code>variant_of</code> (a reference to the base strategy it was derived from). When passing a candidate to <code>explore run</code> / <code>backtest run</code>, <strong>always use <code>strategy_id</code></strong>. Using <code>variant_of</code> often fails with <code>ValueError: Unknown template name</code> because the base is no longer registered in the DB / template registry.</p>
+<p>Example output (post issue #831):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Recommendations (auto-relax / 2026-05-19T13:10:59+00:00)
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  #1 NVDA ATR+EMA+SUPERTREND (score=1.083) [strategy_id: nvda_ema_supertrend_v2_optimized] [variant of nvda_ema_supertrend_v2 (missing)]
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>     auto-relax variant
+</code></pre></div>
+<ul>
+<li><code>[strategy_id: ...]</code> is what agents / users should pass to <code>--strategy</code>.</li>
+<li><code>[variant of &lt;id&gt; (missing)]</code> — the <code>(missing)</code> marker indicates the base is no longer in the DB (informational only — do not consume it).</li>
+<li>Candidates with <code>strategy_id=None</code> AND a DB-missing <code>variant_of</code> are automatically removed from the file.</li>
+<li>With <code>--validated-only</code>, only candidates whose <code>strategy_id</code> exists in the DB are shown, so agents can safely forward the value to <code>--strategy</code>.</li>
+</ul>
 <hr />
 
 
