@@ -1924,6 +1924,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-explore-recommend-show" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge explore recommend show
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge explore recommend show">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agent-issue-831" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent 消費時の注意（issue #831）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2673,6 +2701,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-explore-recommend-show" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge explore recommend show
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge explore recommend show">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agent-issue-831" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent 消費時の注意（issue #831）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3227,6 +3283,50 @@
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span>--goal<span class="w"> </span>default<span class="w"> </span>--last<span class="w"> </span><span class="m">5</span><span class="w"> </span>--strict<span class="w"> </span>--json
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># exit code 1 → recommended_actions を提示してループ停止</span>
 </code></pre></div>
+<hr />
+<h2 id="alpha-forge-explore-recommend-show">alpha-forge explore recommend show<a class="headerlink" href="#alpha-forge-explore-recommend-show" title="Permanent link">&para;</a></h2>
+<p><code>recommendations.yaml</code>（auto-relax / analyze-exploration が生成する次の探索候補）を表示します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>explore<span class="w"> </span>recommend<span class="w"> </span>show<span class="w"> </span><span class="o">[</span>--recs<span class="w"> </span>&lt;path&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span><span class="w"> </span><span class="o">[</span>--validated-only<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>オプション</th>
+<th>説明</th>
+<th>デフォルト</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--recs &lt;path&gt;</code></td>
+<td><code>recommendations.yaml</code> のパス</td>
+<td><code>data/explorer/recommendations.yaml</code></td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>JSON で出力</td>
+<td>off</td>
+</tr>
+<tr>
+<td><code>--validated-only</code></td>
+<td><strong>consumable な <code>strategy_id</code> が DB に存在する候補のみ表示</strong>（agent 消費向け厳格モード、issue #831）</td>
+<td>off</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-issue-831">Agent 消費時の注意（issue #831）<a class="headerlink" href="#agent-issue-831" title="Permanent link">&para;</a></h3>
+<p>各候補には <code>strategy_id</code>（consumable な実体）と <code>variant_of</code>（派生元の参照）の 2 フィールドが含まれます。<code>explore run</code> や <code>backtest run</code> に渡すべきは <strong><code>strategy_id</code></strong> で、<code>variant_of</code> を渡すと DB / template に未登録のことが多く <code>ValueError: 未知のテンプレート名です</code> で停止します。</p>
+<p>表示例（issue #831 修正後）:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>推薦候補 (auto-relax / 2026-05-19T13:10:59+00:00)
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  #1 NVDA ATR+EMA+SUPERTREND (score=1.083) [strategy_id: nvda_ema_supertrend_v2_optimized] [variant of nvda_ema_supertrend_v2 (missing)]
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>     auto-relax variant
+</code></pre></div>
+<ul>
+<li><code>[strategy_id: ...]</code> が agent / ユーザーが実際に渡すべき ID</li>
+<li><code>[variant of &lt;id&gt; (missing)]</code> の <code>(missing)</code> マーカーは派生元が DB 不在のときに付く（参考情報、実行には使わない）</li>
+<li><code>strategy_id=None かつ variant_of が DB 不在</code> の候補は自動的にファイルから削除される</li>
+<li><code>--validated-only</code> 指定時は <code>strategy_id</code> が DB に存在する候補のみ表示するため、agent は安全にそのまま <code>--strategy</code> へ転記可能</li>
+</ul>
 <hr />
 
 
