@@ -751,6 +751,37 @@ target_metrics:
 
 The **reference MaxDD for `cagr_at_target_dd` is auto-detected from `target_metrics.max_drawdown`** (issue #845). Override with `derived_metrics_config.reference_max_dd_pct` if needed. Leverage adjustment uses a linear assumption (ignores funding cost / borrow / slippage).
 
+**Option C) `cagr_at_target_dd_realistic` — when you want the absolute return target after funding / borrow / slippage costs (issue #850):**
+
+```yaml
+target_metrics:
+  sharpe_ratio:                ">= 1.5"
+  cagr_at_target_dd_realistic: ">= 20%"   # after funding / borrow / slippage drag
+  max_drawdown:                "<= 25%"
+  min_trades:                  ">= 30"
+derived_metrics_config:
+  reference_max_dd_pct: 25.0
+  funding_cost_pct_per_year: 3.0      # margin borrow rate, e.g. SBI 2.0 / IBKR 3.0
+  borrow_fee_pct_per_year: 0.0        # FX short borrow rate (0 disables)
+  slippage_amplification_factor: 1.0  # 1.0 keeps slippage linear; >1.0 adds drag per leverage unit
+```
+
+Computation (% units):
+
+```
+funding_drag    = max(0, implied_leverage - 1) * funding_cost_pct_per_year
+borrow_drag     = (short_exposure_pct / 100) * borrow_fee_pct_per_year
+slippage_drag   = annualized_slippage_pct
+                  * (slippage_amplification_factor - 1) * implied_leverage
+cagr_at_target_dd_realistic
+                = cagr_at_target_dd - funding_drag - borrow_drag - slippage_drag
+```
+
+- **Only `funding_cost_pct_per_year` is active today.** When `implied_leverage > 1`, the formula subtracts `(implied_leverage - 1) × rate%` from CAGR. With `implied_leverage <= 1` the drag is 0 (no borrowing).
+- **`borrow_fee_pct_per_year` and `slippage_amplification_factor` are forward-compatible hooks.** Because `MetricsCalculator` does not yet emit `short_exposure_pct` / `annualized_slippage_pct`, those drag terms evaluate to 0. They will take effect once those backtest fields are added; you can safely declare the config keys now.
+
+`compute_derived_metrics` records two machine-readable fields in `bt_metrics`: `derived_metrics_assumption` (`"linear_no_cost"` or `"with_costs"`) and `derived_metrics_costs_applied` (list of applied cost names). `alpha-forge explore result show <id>` prints a footnote listing which cost terms are applied.
+
 ### Auto-relaxation of failed variants (issue #428)
 
 `alpha-forge explore run` automatically generates a relaxed v(N+1) variant JSON for any strategy that **passed pre_filter but failed WFT** (`status="wft_failed"`), and registers it as rank: 1 in `recommendations.yaml`. The agent no longer needs to craft v(N+1) variants by hand.
