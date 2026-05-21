@@ -749,6 +749,37 @@ target_metrics:
 
 `cagr_at_target_dd` の **参照 MaxDD は target_metrics.max_drawdown から auto-detect** されます（issue #845）。明示指定したい場合は `derived_metrics_config.reference_max_dd_pct` で override してください。レバレッジ調整は線形仮定（funding cost / borrow / slippage 無視）で評価されます。
 
+**案 C) `cagr_at_target_dd_realistic` で判定（issue #850）** — 実機運用接続を想定し、margin 借入金利等のコストを控除した CAGR で判定したい場合:
+
+```yaml
+target_metrics:
+  sharpe_ratio:                ">= 1.5"
+  cagr_at_target_dd_realistic: ">= 20%"   # funding/borrow/slippage 控除後
+  max_drawdown:                "<= 25%"
+  min_trades:                  ">= 30"
+derived_metrics_config:
+  reference_max_dd_pct: 25.0
+  funding_cost_pct_per_year: 3.0      # margin 借入金利 年率 %（例: SBI 2.0 / IBKR 3.0）
+  borrow_fee_pct_per_year: 0.0        # FX ショート等 borrow 金利。0 で無効
+  slippage_amplification_factor: 1.0  # 1.0 = slippage 線形。>1.0 で leverage 倍に応じた追加 drag
+```
+
+計算ロジック（% 単位）:
+
+```
+funding_drag    = max(0, implied_leverage - 1) * funding_cost_pct_per_year
+borrow_drag     = (short_exposure_pct / 100) * borrow_fee_pct_per_year
+slippage_drag   = annualized_slippage_pct
+                  * (slippage_amplification_factor - 1) * implied_leverage
+cagr_at_target_dd_realistic
+                = cagr_at_target_dd - funding_drag - borrow_drag - slippage_drag
+```
+
+- **`funding_cost_pct_per_year` のみ即時実効**: `implied_leverage > 1` のとき `(implied_leverage - 1) × 年利%` を CAGR から減算。`implied_leverage <= 1` のときは drag=0（借入なし）。
+- **`borrow_fee_pct_per_year` / `slippage_amplification_factor` は将来拡張用フック**: 現状 `MetricsCalculator` が `short_exposure_pct` / `annualized_slippage_pct` を出していないため drag=0 となります。FX ショート対応や slippage モデル拡張で値が反映される予定。設定値だけ先に書いておいても害はありません。
+
+`compute_derived_metrics` は `bt_metrics` に `derived_metrics_assumption`（`"linear_no_cost"` または `"with_costs"`）と `derived_metrics_costs_applied`（適用済みコスト名リスト）を機械可読フラグとして付与します。`alpha-forge explore result show <id>` の脚注にも適用済みコスト項が表示されます。
+
 ### 自動緩和バリアント生成（issue #428）
 
 `alpha-forge explore run` は、pre_filter は通過したが WFT で不合格となった戦略（`status="wft_failed"`）に対して、**緩和バリアント JSON v(N+1) を自動生成**し `recommendations.yaml` の rank: 1 に登録します。エージェントが手動で v(N+1) を作る必要はありません。
