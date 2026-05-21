@@ -3216,11 +3216,12 @@
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="nt">&quot;escalation&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="nt">&quot;warning&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">  </span><span class="nt">&quot;escalation_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;scaffold_degradation&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="nt">&quot;recommended_actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">    </span><span class="s2">&quot;直近 5 件の合格率が 0% です。goals.yaml の pre_filter 閾値・対象銘柄・候補指標が現実的か再点検してください。&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="s2">&quot;直近すべての試行で scaffold が指標を変換しています。`alpha_forge.strategy.scaffold` の指標フィルタを点検してください（参考: alpha-forge issue #399, #400）。&quot;</span>
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="p">}</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="nt">&quot;major_indicator_concentration&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;EMA&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;SUPERTREND&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;BB&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">},</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">  </span><span class="nt">&quot;recommended_actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="s2">&quot;直近 5 件の合格率が 0% です。goals.yaml の pre_filter 閾値・対象銘柄・候補指標が現実的か再点検してください。&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span><span class="s2">&quot;直近すべての試行で scaffold が指標を変換しています。`alpha_forge.strategy.scaffold` の指標フィルタを点検してください（参考: alpha-forge issue #399, #400）。&quot;</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3261,6 +3262,10 @@
 <tr>
 <td><code>escalation_type</code></td>
 <td>原因種別（issue #436 / #467）。<code>"scaffold_degradation"</code>（escalation） / <code>"agent_selection_bias"</code>（warning） / <code>null</code></td>
+</tr>
+<tr>
+<td><code>major_indicator_concentration</code></td>
+<td>直近 N 件 scaffold trial の <strong>indicator レベル濃度</strong>（issue #858）。<code>{"EMA": 0.8, "SUPERTREND": 0.4, ...}</code> のように <strong>指標 → 含有比率（0〜1）</strong>。<code>dominant_combo</code> は完全一致 combo で集計するため <code>ATR+EMA+SUPERTREND</code> と <code>ATR+EMA+HMM+SMA</code> を別 combo 扱いするのに対し、本フィールドは indicator レベルで集計するため <code>EMA</code> 等の支配的指標を検出可能。<code>ATR</code> は scaffold 自動追加のため集計対象外</td>
 </tr>
 <tr>
 <td><code>recommended_actions</code></td>

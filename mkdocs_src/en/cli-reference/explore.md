@@ -288,6 +288,7 @@ alpha-forge explore health --goal <GOAL> [--last N] [--strict] [--json] [--db <P
   "escalation": true,
   "warning": false,
   "escalation_type": "scaffold_degradation",
+  "major_indicator_concentration": {"EMA": 0.8, "SUPERTREND": 0.4, "BB": 0.2},
   "recommended_actions": [
     "Pass rate over the last 5 trials is 0%. Check pre_filter thresholds, target symbols, and candidate indicators in goals.yaml.",
     "All recent trials had their indicators transformed by the scaffold. Inspect the indicator filters in `alpha_forge.strategy.scaffold` (see alpha-forge issues #399 and #400)."
@@ -305,6 +306,7 @@ alpha-forge explore health --goal <GOAL> [--last N] [--strict] [--json] [--db <P
 | `escalation` | `true` when `pass_rate==0` AND scaffold-related root cause (`scaffold_transformation_rate>=0.5` or mid-range). Hard-stop signal (issue #467) |
 | `warning` | `true` when `pass_rate==0` AND `same_combo_streak==last_n` AND `scaffold_transformation_rate<=0.1` (only `agent_selection_bias`). Loop continues (exit 0) and the agent is expected to switch to a different indicator combo on the next run (issue #467) |
 | `escalation_type` | Cause classification (issues #436 / #467): `"scaffold_degradation"` (escalation) / `"agent_selection_bias"` (warning) / `null` |
+| `major_indicator_concentration` | **Indicator-level concentration** over the recent N scaffold trials (issue #858). Maps `{indicator: containment_ratio (0–1)}` — `dominant_combo` aggregates full-string combos, so `ATR+EMA+SUPERTREND` and `ATR+EMA+HMM+SMA` are distinct, but this field aggregates per indicator and exposes dominant indicators like `EMA`. `ATR` is excluded (auto-added by scaffold) |
 | `recommended_actions` | Human-facing remediation hints derived from the detected pattern |
 
 ### Escalation rules

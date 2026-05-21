@@ -773,6 +773,9 @@ The `target_metrics` section of `goals.yaml` accepts the following arbitrary met
 | `worst_month_pnl_pct` | Worst-month P&L (%) | backtest |
 | `best_month_pnl_pct` | Best-month P&L (%) | backtest |
 | `consecutive_negative_months` | Max consecutive negative months | backtest |
+| `worst_oos_sharpe` | Minimum OOS Sharpe across WFT valid windows (issue #859) | backtest (WFT injected) |
+| `wft_sharpe_std` | Population stdev (pstdev) of OOS Sharpe across WFT valid windows (issue #859) | backtest (WFT injected) |
+| `positive_oos_windows_ratio` | Fraction of WFT valid windows with OOS Sharpe > 0 (0–1, issue #859) | backtest (WFT injected) |
 
 Example targeting "almost surely positive every month":
 
@@ -844,6 +847,28 @@ cagr_at_target_dd_realistic
 - **`borrow_fee_pct_per_year` and `slippage_amplification_factor` are forward-compatible hooks.** Because `MetricsCalculator` does not yet emit `short_exposure_pct` / `annualized_slippage_pct`, those drag terms evaluate to 0. They will take effect once those backtest fields are added; you can safely declare the config keys now.
 
 `compute_derived_metrics` records two machine-readable fields in `bt_metrics`: `derived_metrics_assumption` (`"linear_no_cost"` or `"with_costs"`) and `derived_metrics_costs_applied` (list of applied cost names). `alpha-forge explore result show <id>` prints a footnote listing which cost terms are applied.
+
+### WFT dispersion target_metrics (issue #859)
+
+The WFT mean Sharpe (the value used by `target_metrics.sharpe_ratio`) is a plain mean across valid windows and therefore **cannot detect pathological patterns where a single peak window inflates the average**. For example the `QQQ EMA+MACD+SUPERTREND v2/v3` runs from 2026-05-21 had `windows=(-1.24, -1.98, -0.98, -0.94, +2.54)` with mean `-0.32` — looks almost passable, yet four of five windows are deeply negative and the auto-relax v(N+1) chain stalls at `degraded_chain`.
+
+`runner.run()` injects the following three dispersion metrics into `bt_metrics` once WFT completes so `target_metrics` can threshold them individually.
+
+| Metric | Meaning | `None` when |
+|--------|---------|-------------|
+| `worst_oos_sharpe` | **Minimum** OOS Sharpe across valid windows | no valid windows |
+| `wft_sharpe_std` | **Population stdev** (pstdev) of OOS Sharpe across valid windows | no valid windows |
+| `positive_oos_windows_ratio` | Fraction of valid windows with OOS Sharpe **> 0** (0–1) | no valid windows |
+
+```yaml
+target_metrics:
+  sharpe_ratio:                 ">= 1.5"
+  worst_oos_sharpe:             ">= -0.5"   # even the worst window stays above -0.5
+  wft_sharpe_std:               "<= 1.2"    # keep dispersion within 1.2
+  positive_oos_windows_ratio:   ">= 0.6"    # at least 60% of windows positive
+```
+
+The QQQ example would now fail individually on each of `worst_oos_sharpe=-1.98 < -0.5`, `wft_sharpe_std≈1.85 > 1.2`, `positive_oos_windows_ratio=0.2 < 0.6`. The same values are also surfaced in `wft_diagnostics.summary` as `worst_oos_metric` / `oos_metric_std` / `positive_oos_windows_ratio` (the bt_metrics keys exposed to `target_metrics` use the `sharpe`-explicit names `worst_oos_sharpe` / `wft_sharpe_std`).
 
 ### Auto-relaxation of failed variants (issue #428)
 

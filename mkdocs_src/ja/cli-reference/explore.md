@@ -290,6 +290,7 @@ alpha-forge explore health --goal <GOAL> [--last N] [--strict] [--json] [--db <P
   "escalation": true,
   "warning": false,
   "escalation_type": "scaffold_degradation",
+  "major_indicator_concentration": {"EMA": 0.8, "SUPERTREND": 0.4, "BB": 0.2},
   "recommended_actions": [
     "直近 5 件の合格率が 0% です。goals.yaml の pre_filter 閾値・対象銘柄・候補指標が現実的か再点検してください。",
     "直近すべての試行で scaffold が指標を変換しています。`alpha_forge.strategy.scaffold` の指標フィルタを点検してください（参考: alpha-forge issue #399, #400）。"
@@ -307,6 +308,7 @@ alpha-forge explore health --goal <GOAL> [--last N] [--strict] [--json] [--db <P
 | `escalation` | `pass_rate==0` かつ scaffold バグ起因（`scaffold_transformation_rate>=0.5` もしくは中間域）のとき `true`。loop 即停止対象（issue #467） |
 | `warning` | `pass_rate==0` かつ `same_combo_streak==last_n` で `scaffold_transformation_rate<=0.1` のとき `true`。`agent_selection_bias` のみ。loop は続行可能（exit 0）で、エージェントは次のランで他指標を選んで自動解消する（issue #467） |
 | `escalation_type` | 原因種別（issue #436 / #467）。`"scaffold_degradation"`（escalation） / `"agent_selection_bias"`（warning） / `null` |
+| `major_indicator_concentration` | 直近 N 件 scaffold trial の **indicator レベル濃度**（issue #858）。`{"EMA": 0.8, "SUPERTREND": 0.4, ...}` のように **指標 → 含有比率（0〜1）**。`dominant_combo` は完全一致 combo で集計するため `ATR+EMA+SUPERTREND` と `ATR+EMA+HMM+SMA` を別 combo 扱いするのに対し、本フィールドは indicator レベルで集計するため `EMA` 等の支配的指標を検出可能。`ATR` は scaffold 自動追加のため集計対象外 |
 | `recommended_actions` | 検出された問題に対する人間向けの推奨アクション |
 
 ### エスカレーション判定

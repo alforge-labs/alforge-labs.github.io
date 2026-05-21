@@ -3214,11 +3214,12 @@ exploration agents can decide programmatically which criterion failed and by how
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="nt">&quot;escalation&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="nt">&quot;warning&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">  </span><span class="nt">&quot;escalation_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;scaffold_degradation&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="nt">&quot;recommended_actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">    </span><span class="s2">&quot;Pass rate over the last 5 trials is 0%. Check pre_filter thresholds, target symbols, and candidate indicators in goals.yaml.&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="s2">&quot;All recent trials had their indicators transformed by the scaffold. Inspect the indicator filters in `alpha_forge.strategy.scaffold` (see alpha-forge issues #399 and #400).&quot;</span>
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="p">}</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">  </span><span class="nt">&quot;major_indicator_concentration&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;EMA&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;SUPERTREND&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;BB&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">},</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">  </span><span class="nt">&quot;recommended_actions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="s2">&quot;Pass rate over the last 5 trials is 0%. Check pre_filter thresholds, target symbols, and candidate indicators in goals.yaml.&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span><span class="s2">&quot;All recent trials had their indicators transformed by the scaffold. Inspect the indicator filters in `alpha_forge.strategy.scaffold` (see alpha-forge issues #399 and #400).&quot;</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3259,6 +3260,10 @@ exploration agents can decide programmatically which criterion failed and by how
 <tr>
 <td><code>escalation_type</code></td>
 <td>Cause classification (issues #436 / #467): <code>"scaffold_degradation"</code> (escalation) / <code>"agent_selection_bias"</code> (warning) / <code>null</code></td>
+</tr>
+<tr>
+<td><code>major_indicator_concentration</code></td>
+<td><strong>Indicator-level concentration</strong> over the recent N scaffold trials (issue #858). Maps <code>{indicator: containment_ratio (0–1)}</code> — <code>dominant_combo</code> aggregates full-string combos, so <code>ATR+EMA+SUPERTREND</code> and <code>ATR+EMA+HMM+SMA</code> are distinct, but this field aggregates per indicator and exposes dominant indicators like <code>EMA</code>. <code>ATR</code> is excluded (auto-added by scaffold)</td>
 </tr>
 <tr>
 <td><code>recommended_actions</code></td>
