@@ -771,6 +771,9 @@ pre_filter:
 | `worst_month_pnl_pct` | 最悪月の P&L (%) | backtest |
 | `best_month_pnl_pct` | 最高月の P&L (%) | backtest |
 | `consecutive_negative_months` | 連続マイナス月の最大長 | backtest |
+| `worst_oos_sharpe` | WFT valid window の最悪 OOS Sharpe（issue #859）| backtest（WFT 注入） |
+| `wft_sharpe_std` | WFT valid window の OOS Sharpe 母標準偏差 pstdev（issue #859）| backtest（WFT 注入） |
+| `positive_oos_windows_ratio` | WFT valid window のうち OOS Sharpe > 0 の比率（0〜1、issue #859）| backtest（WFT 注入） |
 
 「ほぼ確実に毎月プラス」を表現する例：
 
@@ -842,6 +845,28 @@ cagr_at_target_dd_realistic
 - **`borrow_fee_pct_per_year` / `slippage_amplification_factor` は将来拡張用フック**: 現状 `MetricsCalculator` が `short_exposure_pct` / `annualized_slippage_pct` を出していないため drag=0 となります。FX ショート対応や slippage モデル拡張で値が反映される予定。設定値だけ先に書いておいても害はありません。
 
 `compute_derived_metrics` は `bt_metrics` に `derived_metrics_assumption`（`"linear_no_cost"` または `"with_costs"`）と `derived_metrics_costs_applied`（適用済みコスト名リスト）を機械可読フラグとして付与します。`alpha-forge explore result show <id>` の脚注にも適用済みコスト項が表示されます。
+
+### WFT 散らばり系 target_metrics（issue #859）
+
+WFT 5 窓の単純平均 Sharpe（`target_metrics.sharpe_ratio` 評価値）は **外れ値依存で嵩上げされる病的パターン** を検出できません。例えば 2026-05-21 観察の `QQQ EMA+MACD+SUPERTREND v2/v3` の `windows=(-1.24, -1.98, -0.98, -0.94, +2.54)` は単純平均 `-0.32` ですが、4 窓が深いマイナスで 1 窓だけ +2.54 のピークで嵩上げされている u-shape パターンで、auto-relax v(N+1) を生成しても `degraded_chain` で停止しがちです。
+
+`runner.run()` は WFT 完了直後に以下 3 つの散らばり系メトリクスを `bt_metrics` に注入するため、`target_metrics` で個別に閾値判定できます。
+
+| metric 名 | 意味 | None になる条件 |
+|----------|------|----------------|
+| `worst_oos_sharpe` | valid windows の OOS Sharpe の **最小値** | 有効 window 0 件 |
+| `wft_sharpe_std` | valid windows の OOS Sharpe の **母標準偏差** (pstdev) | 有効 window 0 件 |
+| `positive_oos_windows_ratio` | valid windows のうち OOS Sharpe **> 0** の比率（0〜1）| 有効 window 0 件 |
+
+```yaml
+target_metrics:
+  sharpe_ratio:                 ">= 1.5"
+  worst_oos_sharpe:             ">= -0.5"   # 最悪窓でも -0.5 以上
+  wft_sharpe_std:               "<= 1.2"    # 散らばり 1.2 以内
+  positive_oos_windows_ratio:   ">= 0.6"    # 過半数の窓でプラス
+```
+
+上記 QQQ v2/v3 観察例なら `worst_oos_sharpe=-1.98 < -0.5` / `wft_sharpe_std≈1.85 > 1.2` / `positive_oos_windows_ratio=0.2 < 0.6` のいずれでも個別に fail させられます。`wft_diagnostics.summary` には同等の値が `worst_oos_metric` / `oos_metric_std` / `positive_oos_windows_ratio` として記録されます（target_metrics の bt_metrics 注入はキー名が `worst_oos_sharpe` / `wft_sharpe_std` で sharpe を明示）。
 
 ### 自動緩和バリアント生成（issue #428）
 
