@@ -357,6 +357,46 @@ Requesting an indicator that is incompatible with the chosen strategy type raise
     - **Add a second trend filter** (e.g. `EMA,SUPERTREND` so they OR-aggregate)
     - **Switch to `--type trend-following`**
 
+!!! warning "Recurring HMM non-convergence on a symbol triggers a scaffold WARNING (issue #852)"
+    `alpha-forge strategy scaffold` queries `exploration.db` and, when the same symbol × HMM combination produced `skip_reason="hmm_not_converged"` in **at least the configured ratio (default 0.6) of the last N trials (default 5)**, prints a WARNING + remediation list to stderr. The aggregation normalizes `=F` / `=X` suffixes so e.g. `EURUSD=X` warnings include `EURUSD` history.
+
+    ```
+    ⚠️  warning: HMM compatibility risk detected
+      symbol=EURUSD + HMM failed with hmm_not_converged in 4 of the last 5 trials (issue #843).
+      Alternatives:
+      - Increase HMM params.n_iter to 500 or more in the strategy JSON
+      - Switch HMM features to ["return", "bb_width"] or ["return", "atr_ratio"]
+      - Try a non-HMM regime indicator (BB band width / ATR ratio / ADX)
+      - Try the same combination on a different symbol; drop HMM for this symbol
+    ```
+
+    The thresholds can be overridden in `goals.yaml` (defaults are usually sufficient):
+
+    ```yaml
+    scaffold:
+      hmm_compatibility:
+        lookback_n: 10        # default 5
+        threshold_ratio: 0.8  # default 0.6
+    ```
+
+### HMM strict mode and n_iter override (issue #852)
+
+The `exploration.hmm` section in `goals.yaml` controls HMM-specific behavior:
+
+```yaml
+exploration:
+  hmm:
+    allow_non_converged: false   # default true; false promotes partial non-convergence to a hard failure
+    n_iter: 500                  # default 200 - sets the n_iter baked into HMM strategies that scaffold generates
+```
+
+| `allow_non_converged` | All fits non-converged | Partial (some non-converged) | All converged |
+|--|--|--|--|
+| `true` (default, issue #843) | Promote to `skip_reason="hmm_not_converged"` | Keep existing skip_reason | Keep existing skip_reason |
+| `false` (strict, issue #852) | Promote to `skip_reason="hmm_not_converged"` | **Promote to `skip_reason="hmm_not_converged"`** | Keep existing skip_reason |
+
+`exploration.hmm.n_iter` is written into `indicators[HMM].params.n_iter` whenever `alpha-forge strategy scaffold --goal <name>` is invoked. An explicit n_iter inside the strategy JSON still wins.
+
 ### Both long and short entries (issue #469)
 
 scaffold now generates **both long and short** `entry_conditions` / `exit_conditions`. In symmetric markets such as FX this doubles the opportunity surface and lets the strategy capture profit on the down leg as well.
