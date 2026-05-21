@@ -355,6 +355,46 @@ MCP server が起動していない・`tv_mcp.pine_verify.enabled: false` の go
     - **2 つ以上のトレンドフィルタを併用**（例: `EMA,SUPERTREND` → OR 集約で柔軟になる）
     - **`trend-following` 型に切り替える**
 
+!!! warning "同 symbol × HMM が連続非収束なら scaffold で WARNING（issue #852）"
+    `alpha-forge strategy scaffold` は `exploration.db` を引いて、**同 symbol × HMM 構成の過去 N 件（既定 5）のうち `skip_reason="hmm_not_converged"` 比率が閾値（既定 0.6）以上**なら、stderr に WARNING + 代替案を出力します（生成自体は成功する非ブロッキング設計）。集計対象 symbol は `=F` / `=X` サフィックス正規化後で同視されます。
+
+    ```
+    ⚠️  warning: HMM 相性リスクを検出しました
+      symbol=EURUSD + HMM は過去 5 件中 4 件が hmm_not_converged で失敗しています (issue #843)。
+      代替案:
+      - 戦略 JSON の HMM params で n_iter を 500 以上に増やす
+      - HMM の features を ["return", "bb_width"] や ["return", "atr_ratio"] 等に変更
+      - HMM 以外のレジーム指標 (BB band width / ATR ratio / ADX 等) を試す
+      - 別の symbol で同一構成を試行し、本 symbol では HMM を外す
+    ```
+
+    閾値は `goals.yaml` で override 可能（既定値で十分なケースが多い）：
+
+    ```yaml
+    scaffold:
+      hmm_compatibility:
+        lookback_n: 10        # 既定 5
+        threshold_ratio: 0.8  # 既定 0.6
+    ```
+
+### HMM 厳格モードと n_iter 上書き（issue #852）
+
+`goals.yaml` の `exploration.hmm` セクションで HMM 関連の挙動を制御できます。
+
+```yaml
+exploration:
+  hmm:
+    allow_non_converged: false   # 既定 true。false で部分非収束も fail に格上げ
+    n_iter: 500                  # scaffold が生成する HMM 戦略の n_iter 既定値（既定 200）
+```
+
+| `allow_non_converged` | 全 fit 非収束 | 部分非収束 | 全収束 |
+|--|--|--|--|
+| `true`（既定、issue #843 互換） | `skip_reason="hmm_not_converged"` | 既存 skip_reason 維持 | 既存 skip_reason 維持 |
+| `false`（issue #852 厳格） | `skip_reason="hmm_not_converged"` | **`skip_reason="hmm_not_converged"` に格上げ** | 既存 skip_reason 維持 |
+
+`exploration.hmm.n_iter` は `alpha-forge strategy scaffold --goal <name>` で `indicators[HMM].params.n_iter` に反映されます。戦略 JSON で明示的に n_iter が指定済みならそちらが優先されます。
+
 ### long / short 両方向の自動生成（issue #469）
 
 scaffold は **long と short の両方** の `entry_conditions` / `exit_conditions` を生成します。FX 等の対称市場では取引機会が 2 倍になり、長下げ局面でも収益機会を取り込めます。
