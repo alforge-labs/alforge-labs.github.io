@@ -355,6 +355,29 @@ MCP server が起動していない・`tv_mcp.pine_verify.enabled: false` の go
     - **2 つ以上のトレンドフィルタを併用**（例: `EMA,SUPERTREND` → OR 集約で柔軟になる）
     - **`trend-following` 型に切り替える**
 
+!!! warning "STOCH 二重オシレータ AND 集約は signal-starve 注意（issue #857）"
+    `alpha-forge strategy scaffold` 実行時、以下の組み合わせは観察データ（2026-05-21）で **取引数が 4 件・0 件まで激減**するパターンが多発したため、stderr に WARNING + 代替案を出力します（非ブロッキング、生成は成功）。
+
+    | パターン | 条件 | 観察例 |
+    |---|---|---|
+    | A: 二重オシレータ AND (mean-reversion) | `STOCH + RSI + mean-reversion` | GC=F `BB+RSI+STOCH` → trades 67, Sharpe -1.42 |
+    | B: 二重オシレータ AND (trend-following) | `STOCH + RSI + trend-following` | CL=F `EMA+RSI+STOCH` → trades 4 |
+    | C: SMA トレンドフィルタ + STOCH | `STOCH + SMA + mean-reversion` | USDJPY=X `BB+SMA+STOCH` → trades 0 (no_signals) |
+
+    ```
+    ⚠️  warning: STOCH 二重オシレータ signal-starve リスクを検出しました
+      strategy_type=mean-reversion で RSI と STOCH を同時に使う構成は、両オシレータの
+      oversold/overbought（mean-reversion）または過熱感フィルタ（trend-following）が
+      AND 集約されるため、エントリー機会が構造的に激減します (issue #857)。
+      代替案:
+      - RSI または STOCH のどちらか一方を外す（単一オシレータに統一）
+      - STOCH を外して BB+RSI 等の従来 mean-reversion / trend-following にする
+      - RSI と STOCH の判定条件を OR 集約する（scaffold ロジック改修が必要）
+      - 代わりに MACD ヒストグラムをモメンタムフィルタとして使う
+    ```
+
+    **対象外**: `STOCH 単独`（`BB+STOCH` / `EMA+STOCH`）、`STOCH+ADX`（NVDA `EMA+STOCH+ADX` で trades 1071 と取引数自体は出ており Sharpe 不足という別問題）、`STOCH+MACD`。
+
 !!! warning "同 symbol × HMM が連続非収束なら scaffold で WARNING（issue #852）"
     `alpha-forge strategy scaffold` は `exploration.db` を引いて、**同 symbol × HMM 構成の過去 N 件（既定 5）のうち `skip_reason="hmm_not_converged"` 比率が閾値（既定 0.6）以上**なら、stderr に WARNING + 代替案を出力します（生成自体は成功する非ブロッキング設計）。集計対象 symbol は `=F` / `=X` サフィックス正規化後で同視されます。
 

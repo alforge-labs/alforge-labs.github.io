@@ -357,6 +357,29 @@ Requesting an indicator that is incompatible with the chosen strategy type raise
     - **Add a second trend filter** (e.g. `EMA,SUPERTREND` so they OR-aggregate)
     - **Switch to `--type trend-following`**
 
+!!! warning "STOCH double-oscillator AND-aggregation is signal-starve prone (issue #857)"
+    `alpha-forge strategy scaffold` prints a stderr WARNING + remediation list (non-blocking) for the following combinations. They were observed to **produce drastically low or zero trade counts** in the 2026-05-21 exploration sweep.
+
+    | Pattern | Condition | Observed example |
+    |---|---|---|
+    | A: Double-oscillator AND (mean-reversion) | `STOCH + RSI + mean-reversion` | GC=F `BB+RSI+STOCH` → trades 67, Sharpe -1.42 |
+    | B: Double-oscillator AND (trend-following) | `STOCH + RSI + trend-following` | CL=F `EMA+RSI+STOCH` → trades 4 |
+    | C: SMA trend filter + STOCH | `STOCH + SMA + mean-reversion` | USDJPY=X `BB+SMA+STOCH` → trades 0 (no_signals) |
+
+    ```
+    ⚠️  warning: STOCH double-oscillator signal-starve risk detected
+      Using RSI and STOCH simultaneously in strategy_type=mean-reversion AND-aggregates both
+      oversold/overbought (mean-reversion) or overheat filters (trend-following), structurally
+      collapsing entry opportunities (issue #857).
+      Alternatives:
+      - Drop either RSI or STOCH (single-oscillator strategy)
+      - Drop STOCH and use the classical BB+RSI mean-reversion / EMA+RSI trend-following
+      - OR-aggregate the RSI and STOCH conditions (requires scaffold logic change)
+      - Use MACD histogram as the momentum filter instead
+    ```
+
+    **Not covered**: `STOCH alone` (`BB+STOCH` / `EMA+STOCH`), `STOCH+ADX` (NVDA `EMA+STOCH+ADX` produced trades 1071 — different problem than signal-starve, just a Sharpe shortfall), `STOCH+MACD`.
+
 !!! warning "Recurring HMM non-convergence on a symbol triggers a scaffold WARNING (issue #852)"
     `alpha-forge strategy scaffold` queries `exploration.db` and, when the same symbol × HMM combination produced `skip_reason="hmm_not_converged"` in **at least the configured ratio (default 0.6) of the last N trials (default 5)**, prints a WARNING + remediation list to stderr. The aggregation normalizes `=F` / `=X` suffixes so e.g. `EURUSD=X` warnings include `EURUSD` history.
 
