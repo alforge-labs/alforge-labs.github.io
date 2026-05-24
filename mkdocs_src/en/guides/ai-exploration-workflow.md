@@ -760,13 +760,14 @@ The `target_metrics` section of `goals.yaml` accepts the following arbitrary met
 
 | Metric | Meaning | Source |
 |--------|---------|--------|
-| `sharpe_ratio` | Sharpe ratio | **WFT average** (existing behavior) |
+| `sharpe_ratio` | Sharpe ratio | **WFT average** when `exploration.optimization_metric` is the default `sharpe_ratio`. Issue #912: automatically falls back to backtest evaluation when switched to another metric. |
 | `max_drawdown` | Max drawdown (%) | backtest |
-| `cagr` | Annual return (%) | backtest |
+| `cagr` | Annual return (%) | backtest (becomes **WFT average** only when `optimization_metric: cagr_pct`) |
 | `win_rate_pct` | Trade win rate (%) | backtest |
 | `profit_factor` | Profit / loss (`null` when all trades are winners — issue #791) | backtest |
 | `min_trades` | Lower bound on trade count | backtest |
-| `calmar_ratio` | CAGR / MDD (recommended, issue #845) | backtest |
+| `calmar_ratio` | CAGR / MDD (recommended, issue #845) | backtest (becomes **WFT average** only when `optimization_metric: calmar_ratio`, issue #912) |
+| `sortino_ratio` | Downside-only risk-adjusted return (issue #912) | backtest (becomes **WFT average** only when `optimization_metric: sortino_ratio`) |
 | `cagr_at_target_dd` | Leverage-adjusted CAGR (%, issue #673) | backtest (derived) |
 | `implied_leverage_to_target_dd` | Leverage multiplier to scale linearly to the reference MaxDD | backtest (derived) |
 | `positive_months_ratio` | Fraction of profitable months (0–1) | backtest |

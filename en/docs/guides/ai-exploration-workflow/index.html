@@ -4632,7 +4632,7 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <tr>
 <td><code>sharpe_ratio</code></td>
 <td>Sharpe ratio</td>
-<td><strong>WFT average</strong> (existing behavior)</td>
+<td><strong>WFT average</strong> when <code>exploration.optimization_metric</code> is the default <code>sharpe_ratio</code>. Issue #912: automatically falls back to backtest evaluation when switched to another metric.</td>
 </tr>
 <tr>
 <td><code>max_drawdown</code></td>
@@ -4642,7 +4642,7 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <tr>
 <td><code>cagr</code></td>
 <td>Annual return (%)</td>
-<td>backtest</td>
+<td>backtest (becomes <strong>WFT average</strong> only when <code>optimization_metric: cagr_pct</code>)</td>
 </tr>
 <tr>
 <td><code>win_rate_pct</code></td>
@@ -4662,7 +4662,12 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <tr>
 <td><code>calmar_ratio</code></td>
 <td>CAGR / MDD (recommended, issue #845)</td>
-<td>backtest</td>
+<td>backtest (becomes <strong>WFT average</strong> only when <code>optimization_metric: calmar_ratio</code>, issue #912)</td>
+</tr>
+<tr>
+<td><code>sortino_ratio</code></td>
+<td>Downside-only risk-adjusted return (issue #912)</td>
+<td>backtest (becomes <strong>WFT average</strong> only when <code>optimization_metric: sortino_ratio</code>)</td>
 </tr>
 <tr>
 <td><code>cagr_at_target_dd</code></td>

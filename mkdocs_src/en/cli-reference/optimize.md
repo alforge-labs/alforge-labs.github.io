@@ -37,7 +37,7 @@ alpha-forge optimize run <SYMBOL> --strategy <ID> [OPTIONS]
 |------|------|---------|-------------|
 | `SYMBOL` | argument (required) | - | Symbol |
 | `--strategy` | required | - | Strategy name |
-| `--metric` | option | `sharpe_ratio` | Metric to optimize |
+| `--metric` | option | `sharpe_ratio` | Metric to optimize. When run via `alpha-forge explore`, this comes from `exploration.optimization_metric` in `goals.yaml` (issue #912; `sharpe_ratio` / `calmar_ratio` / `cagr_pct` / `sortino_ratio`). |
 | `--json` | flag | false | Output results as JSON |
 | `--save` | flag | false | Save results to a file |
 | `--min-trades` | int | - | Override minimum trades constraint (priority over `optimizer_config` / config) |
