@@ -37,7 +37,7 @@ alpha-forge optimize run <SYMBOL> --strategy <ID> [OPTIONS]
 |------|------|----------|------|
 | `SYMBOL` | 引数（必須） | - | 銘柄シンボル |
 | `--strategy` | 必須 | - | 戦略名 |
-| `--metric` | オプション | `sharpe_ratio` | 最適化対象の指標 |
+| `--metric` | オプション | `sharpe_ratio` | 最適化対象の指標。`alpha-forge explore` 経由では `goals.yaml` の `exploration.optimization_metric` から読まれます（issue #912、`sharpe_ratio` / `calmar_ratio` / `cagr_pct` / `sortino_ratio`） |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
 | `--save` | フラグ | false | 結果をファイルに保存 |
 | `--min-trades` | int | - | 最低取引数制約を上書き（`optimizer_config` / 設定より優先） |

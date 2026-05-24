@@ -4630,7 +4630,7 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <tr>
 <td><code>sharpe_ratio</code></td>
 <td>Sharpe 比</td>
-<td><strong>WFT 平均</strong>（既存仕様）</td>
+<td><strong>WFT 平均</strong>（<code>exploration.optimization_metric</code> が既定の <code>sharpe_ratio</code> のとき。issue #912 で他指標に切替時は backtest 評価へ自動降格）</td>
 </tr>
 <tr>
 <td><code>max_drawdown</code></td>
@@ -4640,7 +4640,7 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <tr>
 <td><code>cagr</code></td>
 <td>年率リターン (%)</td>
-<td>backtest</td>
+<td>backtest（<code>optimization_metric: cagr_pct</code> 時のみ <strong>WFT 平均</strong>）</td>
 </tr>
 <tr>
 <td><code>win_rate_pct</code></td>
@@ -4660,7 +4660,12 @@ TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode m
 <tr>
 <td><code>calmar_ratio</code></td>
 <td>CAGR / MDD（推奨、issue #845）</td>
-<td>backtest</td>
+<td>backtest（<code>optimization_metric: calmar_ratio</code> 時のみ <strong>WFT 平均</strong>、issue #912）</td>
+</tr>
+<tr>
+<td><code>sortino_ratio</code></td>
+<td>下方リスク調整リターン（issue #912）</td>
+<td>backtest（<code>optimization_metric: sortino_ratio</code> 時のみ <strong>WFT 平均</strong>）</td>
 </tr>
 <tr>
 <td><code>cagr_at_target_dd</code></td>

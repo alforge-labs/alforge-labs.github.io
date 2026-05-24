@@ -758,13 +758,14 @@ pre_filter:
 
 | metric 名 | 意味 | 評価ソース |
 |----------|------|-----------|
-| `sharpe_ratio` | Sharpe 比 | **WFT 平均**（既存仕様） |
+| `sharpe_ratio` | Sharpe 比 | **WFT 平均**（`exploration.optimization_metric` が既定の `sharpe_ratio` のとき。issue #912 で他指標に切替時は backtest 評価へ自動降格） |
 | `max_drawdown` | 最大ドローダウン (%) | backtest |
-| `cagr` | 年率リターン (%) | backtest |
+| `cagr` | 年率リターン (%) | backtest（`optimization_metric: cagr_pct` 時のみ **WFT 平均**） |
 | `win_rate_pct` | 取引勝率 (%) | backtest |
 | `profit_factor` | 利益÷損失（全勝で損失合計=0 のときは `null`、issue #791） | backtest |
 | `min_trades` | 取引数下限 | backtest |
-| `calmar_ratio` | CAGR / MDD（推奨、issue #845） | backtest |
+| `calmar_ratio` | CAGR / MDD（推奨、issue #845） | backtest（`optimization_metric: calmar_ratio` 時のみ **WFT 平均**、issue #912） |
+| `sortino_ratio` | 下方リスク調整リターン（issue #912） | backtest（`optimization_metric: sortino_ratio` 時のみ **WFT 平均**） |
 | `cagr_at_target_dd` | レバレッジ調整後 CAGR (%、issue #673) | backtest（派生） |
 | `implied_leverage_to_target_dd` | 参照 MaxDD まで線形スケールするレバレッジ倍率 | backtest（派生） |
 | `positive_months_ratio` | 月別勝率（0〜1） | backtest |
