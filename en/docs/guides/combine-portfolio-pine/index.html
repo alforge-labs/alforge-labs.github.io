@@ -851,6 +851,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="hybrid-strategy mode (issue #985)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-verify-the-strategy-tester-result-issue-986" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-verify the Strategy Tester result (issue #986)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2567,6 +2584,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="hybrid-strategy mode (issue #985)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-verify-the-strategy-tester-result-issue-986" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-verify the Strategy Tester result (issue #986)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2852,6 +2886,40 @@ not included in the Strategy Tester metrics. Keep
 <a href="#symbolic-verify">symbolic verify</a> or alpha-forge backtest combine as
 the source of truth for portfolio metrics; use hybrid-strategy as an
 aid to eyeball / sanity-check the main symbol's behaviour on TradingView.</p>
+</div>
+<h3 id="auto-verify-the-strategy-tester-result-issue-986">Auto-verify the Strategy Tester result (issue <a href="https://github.com/ysakae/alpha-forge/issues/986">#986</a>)<a class="headerlink" href="#auto-verify-the-strategy-tester-result-issue-986" title="Permanent link">&para;</a></h3>
+<p>After applying the hybrid-strategy Pine to the main symbol's chart and running
+the Strategy Tester, use <code>forge pine verify --verify-mode
+tradingview-strategy-tester</code> to automatically compare the <strong>main symbol
+component's Sharpe / Max Drawdown</strong> against alpha-forge backtest combine's
+same-symbol component. The Strategy Tester aggregates are fetched via the MCP
+server (vinicius / tradesdontlie).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--combine-mode<span class="w"> </span>hybrid-strategy<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--main-strategy<span class="w"> </span>tqqq_phase2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span>--verify-mode<span class="w"> </span>tradingview-strategy-tester<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span>--symbol<span class="w"> </span>TQQQ<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span>--mcp-server-flavor<span class="w"> </span>vinicius
+</code></pre></div>
+<p>How it works:</p>
+<ul>
+<li>alpha-forge backtests the main strategy standalone, then blends its equity to
+  the weight allocation (<code>(1-w) + w·ratio</code>, equivalent to the Pine
+  <code>default_qty_value = weight × 100</code>) to build the reference metrics. This keeps
+  Sharpe / Max Drawdown consistent with the Strategy Tester (percent_of_equity
+  sizing).</li>
+<li>TradingView side fetches the Strategy Tester aggregates on the main symbol's
+  chart via MCP.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Only the main component is comparable</p>
+<p>Portfolio-level Sharpe cannot be derived from the Strategy Tester (single
+symbol only). The TradingView Strategy Tester also does not expose Calmar
+directly, so PASS/FAIL is gated on <strong>Sharpe + Max Drawdown</strong> and the
+reference-side Calmar is shown for information only. Use
+<a href="#symbolic-verify">symbolic verify</a> for portfolio-level validation.</p>
 </div>
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <ul>

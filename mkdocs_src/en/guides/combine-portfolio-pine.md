@@ -212,6 +212,43 @@ Behaviour:
     the source of truth for portfolio metrics; use hybrid-strategy as an
     aid to eyeball / sanity-check the main symbol's behaviour on TradingView.
 
+### Auto-verify the Strategy Tester result (issue [#986](https://github.com/ysakae/alpha-forge/issues/986))
+
+After applying the hybrid-strategy Pine to the main symbol's chart and running
+the Strategy Tester, use `forge pine verify --verify-mode
+tradingview-strategy-tester` to automatically compare the **main symbol
+component's Sharpe / Max Drawdown** against alpha-forge backtest combine's
+same-symbol component. The Strategy Tester aggregates are fetched via the MCP
+server (vinicius / tradesdontlie).
+
+```bash
+forge pine verify \
+  --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
+  --combine-mode hybrid-strategy \
+  --main-strategy tqqq_phase2 \
+  --check-mode metrics \
+  --verify-mode tradingview-strategy-tester \
+  --symbol TQQQ --interval D \
+  --mcp-server-flavor vinicius
+```
+
+How it works:
+
+- alpha-forge backtests the main strategy standalone, then blends its equity to
+  the weight allocation (`(1-w) + w·ratio`, equivalent to the Pine
+  `default_qty_value = weight × 100`) to build the reference metrics. This keeps
+  Sharpe / Max Drawdown consistent with the Strategy Tester (percent_of_equity
+  sizing).
+- TradingView side fetches the Strategy Tester aggregates on the main symbol's
+  chart via MCP.
+
+!!! warning "Only the main component is comparable"
+    Portfolio-level Sharpe cannot be derived from the Strategy Tester (single
+    symbol only). The TradingView Strategy Tester also does not expose Calmar
+    directly, so PASS/FAIL is gated on **Sharpe + Max Drawdown** and the
+    reference-side Calmar is shown for information only. Use
+    [symbolic verify](#symbolic-verify) for portfolio-level validation.
+
 ## Known limitations
 
 - **No Strategy Tester in indicator mode**: the default combine Pine is an
