@@ -62,6 +62,7 @@ nav:
       - End-to-End Strategy Development Workflow: guides/end-to-end-workflow.md
       - Output Examples: guides/output-examples.md
       - Bringing Pine Scripts into TradingView: guides/tradingview-pine-integration.md
+      - Combine Portfolio Pine — Multi-Strategy: guides/combine-portfolio-pine.md
       - TradingView × alpha-strike Integration: guides/tradingview-alpha-strike.md
       - alpha-strike Setup Guide: guides/alpha-strike-setup.md
       - AI-Driven Strategy Exploration Workflow: guides/ai-exploration-workflow.md
