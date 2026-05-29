@@ -207,6 +207,39 @@ forge pine generate \
     正とし、hybrid-strategy はメイン銘柄の挙動を TradingView 上で目視・検証する
     補助手段として使ってください。
 
+### Strategy Tester 結果の自動 verify (issue [#986](https://github.com/ysakae/alpha-forge/issues/986))
+
+hybrid-strategy Pine をメイン銘柄のチャートに適用して Strategy Tester を回したあと、
+`forge pine verify --verify-mode tradingview-strategy-tester` で **メイン symbol
+component の Sharpe / Max Drawdown** を alpha-forge backtest combine の同 symbol
+component と自動比較できます。MCP server (vinicius / tradesdontlie) 経由で
+Strategy Tester の集計を取得します。
+
+```bash
+forge pine verify \
+  --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
+  --combine-mode hybrid-strategy \
+  --main-strategy tqqq_phase2 \
+  --check-mode metrics \
+  --verify-mode tradingview-strategy-tester \
+  --symbol TQQQ --interval D \
+  --mcp-server-flavor vinicius
+```
+
+仕組み:
+
+- alpha-forge 側はメイン戦略を単体 backtest し、その equity を weight 配分に
+  ブレンド (`(1-w) + w·ratio` = Pine の `default_qty_value = weight × 100` と等価)
+  して参照 metrics を作ります。これにより Sharpe / Max Drawdown が Strategy Tester
+  (percent_of_equity 配分) と整合します。
+- TradingView 側はメイン symbol チャート上の Strategy Tester 集計を MCP で取得します。
+
+!!! warning "比較できるのはメイン component のみ"
+    portfolio 全体の Sharpe は Strategy Tester (1 symbol のみ) では算出できません。
+    また TradingView Strategy Tester は Calmar を直接返さないため、PASS/FAIL 判定は
+    **Sharpe + Max Drawdown** で行い、参照側の Calmar は情報として表示します。
+    portfolio 全体の検証は [symbolic verify](#symbolic-verify) を併用してください。
+
 ## 既知の制約
 
 - **indicator モードでは Strategy Tester が動かない**: 既定の combine Pine は
