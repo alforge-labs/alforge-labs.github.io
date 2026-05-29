@@ -12,13 +12,13 @@
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/ja/docs/legal/trust-safety-limits/">
+        <link rel="canonical" href="https://alforgelabs.com/ja/docs/guides/combine-portfolio-pine/">
       
       
-        <link rel="prev" href="../../cli-reference/self/">
+        <link rel="prev" href="../tradingview-pine-integration/">
       
       
-        <link rel="next" href="../disclaimers/">
+        <link rel="next" href="../tradingview-alpha-strike/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>信頼・安全・制限 - AlphaForge ドキュメント</title>
+        <title>Combine Portfolio Pine — 複数戦略統合 - AlphaForge ドキュメント</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#combine-portfolio-pine-1-pine" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              信頼・安全・制限
+              Combine Portfolio Pine — 複数戦略統合
             
           </span>
         </div>
@@ -268,11 +268,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../guides/end-to-end-workflow/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../end-to-end-workflow/" class="md-tabs__link">
           
   
   
@@ -348,13 +350,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../legal/trust-safety-limits/" class="md-tabs__link">
           
   
   
@@ -513,7 +513,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/trial-limits/" class="md-nav__link">
+      <a href="../trial-limits/" class="md-nav__link">
         
   
   
@@ -545,26 +545,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -582,7 +587,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -600,7 +605,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/end-to-end-workflow/" class="md-nav__link">
+      <a href="../end-to-end-workflow/" class="md-nav__link">
         
   
   
@@ -628,7 +633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/output-examples/" class="md-nav__link">
+      <a href="../output-examples/" class="md-nav__link">
         
   
   
@@ -656,7 +661,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/tradingview-pine-integration/" class="md-nav__link">
+      <a href="../tradingview-pine-integration/" class="md-nav__link">
         
   
   
@@ -681,10 +686,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../guides/combine-portfolio-pine/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combine Portfolio Pine — 複数戦略統合
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -700,6 +732,142 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜ Indicator なのか
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        クイックスタート
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="クイックスタート">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-combine-pine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. combine Pine を生成する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-tradingview-pine-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. TradingView Pine Editor に貼り付ける
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. アラートを設定する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook payload の構造
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hmm-forward-algorithm-issue-974" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HMM Forward Algorithm の完全再現 (issue #974)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#symbolic-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        symbolic verify (issue #975)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        既知の制約
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連ドキュメント
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -712,7 +880,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/tradingview-alpha-strike/" class="md-nav__link">
+      <a href="../tradingview-alpha-strike/" class="md-nav__link">
         
   
   
@@ -740,7 +908,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/alpha-strike-setup/" class="md-nav__link">
+      <a href="../alpha-strike-setup/" class="md-nav__link">
         
   
   
@@ -768,7 +936,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/ai-exploration-workflow/" class="md-nav__link">
+      <a href="../ai-exploration-workflow/" class="md-nav__link">
         
   
   
@@ -802,17 +970,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
-          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="">
             
   
   
@@ -2089,31 +2260,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -2131,7 +2297,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2146,37 +2312,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    信頼・安全・制限
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../legal/trust-safety-limits/" class="md-nav__link">
         
   
   
@@ -2192,92 +2331,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目次">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目次
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ローカル実行とデータの扱い
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        認証で送信される情報
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        投資助言ではありません
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        バックテストの限界
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        プラン制限
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        関連ページ
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2290,7 +2343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../disclaimers/" class="md-nav__link">
+      <a href="../../legal/disclaimers/" class="md-nav__link">
         
   
   
@@ -2318,7 +2371,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../eula/" class="md-nav__link">
+      <a href="../../legal/eula/" class="md-nav__link">
         
   
   
@@ -2346,7 +2399,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../privacy/" class="md-nav__link">
+      <a href="../../legal/privacy/" class="md-nav__link">
         
   
   
@@ -2401,10 +2454,104 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜ Indicator なのか
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        クイックスタート
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="クイックスタート">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-combine-pine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. combine Pine を生成する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-tradingview-pine-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. TradingView Pine Editor に貼り付ける
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. アラートを設定する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhook-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook payload の構造
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hmm-forward-algorithm-issue-974" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HMM Forward Algorithm の完全再現 (issue #974)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#symbolic-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        symbolic verify (issue #975)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ローカル実行とデータの扱い
+        既知の制約
       
     </span>
   </a>
@@ -2415,51 +2562,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        認証で送信される情報
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        投資助言ではありません
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        バックテストの限界
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        プラン制限
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        関連ページ
+        関連ドキュメント
       
     </span>
   </a>
@@ -2483,36 +2586,211 @@
 
 
 
-<h1 id="_1">信頼・安全・制限<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>AlphaForge を購入・登録・利用する前に確認してほしい要点をまとめます。法的な正本は <a href="../disclaimers/">免責事項</a>、<a href="../privacy/">プライバシーポリシー</a>、<a href="../eula/">EULA</a> です。このページは、それらを読みやすく整理した購入前確認用のガイドです。</p>
-<h2 id="_2">ローカル実行とデータの扱い<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>AlphaForge CLI はローカル実行を前提にしたソフトウェアです。バックテスト設定、最適化パラメータ、戦略データ、取引履歴、ポジション情報、ローカルファイル、操作ログは、通常 Alforge Labs のサーバーへ送信されません。</p>
-<p>ただし、外部データプロバイダーやブローカー API をユーザー自身が設定して使う場合、その通信は各プロバイダーとの間で発生します。API キーや証券会社の認証情報の管理はユーザー自身の責任です。</p>
-<h2 id="_3">認証で送信される情報<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>認証時には、Whop の OAuth 2.0 PKCE フローに必要な情報だけが外部認証サービスへ送信されます。具体的には、<code>alpha-forge system auth login</code> の実行時に認可コード・PKCE パラメータが送信され、戻り値として OAuth トークンと Whop ユーザー ID・メンバーシップ状態が取得されます。</p>
-<p>バックテスト設定、API キー、取引履歴、戦略データは認証のために送信されません。詳細は <a href="../privacy/">プライバシーポリシー</a> を参照してください。</p>
-<h2 id="_4">投資助言ではありません<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>AlphaForge は、戦略研究・バックテスト・最適化を支援する開発者向けソフトウェアです。金融助言、売買シグナル、運用受託、証券仲介サービスではありません。</p>
-<p>バックテスト、最適化、シミュレーション結果は過去データまたは仮想条件に基づくものであり、将来の成果を保証しません。売買判断、銘柄選択、パラメータ設定、ポジションサイズ、執行方法はすべてユーザー自身の責任で決定してください。</p>
-<h2 id="_5">バックテストの限界<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>バックテストでは、実市場のすべての条件を完全には再現できません。特に以下の要素は、実運用の結果に大きく影響します。</p>
+<h1 id="combine-portfolio-pine-1-pine">Combine Portfolio Pine — 複数戦略を 1 つの Pine で運用する<a class="headerlink" href="#combine-portfolio-pine-1-pine" title="Permanent link">&para;</a></h1>
+<p><code>alpha-forge pine generate --combine-strategies</code> で、複数の buy-hold-overlay
+戦略を 1 つの Pine v6 Indicator として束ねて TradingView 上で動かせます。
+各戦略の発注は <code>alert()</code> 経由で alpha-strike Webhook に送信され、moomoo /
+OANDA で自動約定します。</p>
+<h2 id="indicator">なぜ Indicator なのか<a class="headerlink" href="#indicator" title="Permanent link">&para;</a></h2>
+<p>Pine v6 の <code>strategy()</code> は <strong>1 銘柄前提</strong> で、複数 ticker を扱えません。
+combine portfolio Pine は次の方針で複数銘柄を 1 つの Pine にまとめます:</p>
 <ul>
-<li>スリッページ、手数料、スプレッド</li>
-<li>約定遅延、流動性、部分約定</li>
-<li>データ品質、欠損、タイムゾーン差</li>
-<li>過剰最適化、カーブフィッティング</li>
-<li>税務、規制、証拠金、強制決済</li>
+<li>各サブ戦略の価格は <code>request.security()</code> で別 ticker を取得</li>
+<li>各サブ戦略の <code>target_qty</code> を bar close ごとに計算</li>
+<li>数量変化または rebalance トリガーで <code>alert()</code> を発火</li>
+<li>受信側 (alpha-strike) で webhook v2 payload を解析し、moomoo / OANDA に
+  発注する</li>
 </ul>
-<p>検証結果をそのまま実運用の期待値として扱わず、ウォークフォワード分析、コスト設定、外部期間検証、少額検証などを組み合わせてください。</p>
-<h2 id="_6">プラン制限<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>AlphaForge は <strong>Trial プラン</strong>（Whop 未登録、無料、期限なし）と <strong>有料プラン</strong>（Whop で購入する <strong>Lifetime / Annual / Monthly</strong> のいずれか）の 2 ティアで動作します。Trial プランでは、データ取得・評価の日付が <strong>2023-12-31</strong> までに制限され、最適化 trial 数は <strong>50 trials</strong> までに制限され、Pine Script エクスポートはハードブロックされます。</p>
-<p>有料プランは Lifetime（買い切り）/ Annual（年額サブスク）/ Monthly（月額サブスク）の 3 種類から選べ、いずれを購入しても解放範囲は同一で、最新データ・無制限 trial・Pine Script エクスポートをすべて利用できます。詳細な対象コマンド、JSON 出力、開発時の確認方法は <a href="../../guides/trial-limits/">Trial 制限</a> を参照してください。</p>
-<h2 id="_7">関連ページ<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>そのため combine Pine 単独では TradingView Strategy Tester は動きません
+(Indicator なので Strategy Tester がアタッチしない仕様)。代わりに
+<a href="#symbolic-verify">symbolic verify</a> でロジック整合性を保証します。</p>
+<h2 id="_1">クイックスタート<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="1-combine-pine">1. combine Pine を生成する<a class="headerlink" href="#1-combine-pine" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--combine-allocation<span class="w"> </span>equal<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--rebalance-freq<span class="w"> </span>monthly<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--rebalance-threshold<span class="w"> </span><span class="m">0</span>.05<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--portfolio-id<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>--with-webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span>--webhook-broker<span class="w"> </span>moomoo<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span>--webhook-run-mode<span class="w"> </span>paper
+</code></pre></div>
+<p>オプション:</p>
+<table>
+<thead>
+<tr>
+<th>オプション</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--combine-strategies sid1,sid2,...</code></td>
+<td>combine 対象戦略 ID (2 件以上、カンマ区切り)</td>
+</tr>
+<tr>
+<td><code>--allocation equal\|custom</code></td>
+<td>均等配分または <code>--weights</code> 指定の任意配分</td>
+</tr>
+<tr>
+<td><code>--weights tqqq=0.5,gld=0.3,tlt=0.2</code></td>
+<td>custom 時の重み (合計 1.0 ± 0.01)</td>
+</tr>
+<tr>
+<td><code>--rebalance-freq weekly\|monthly\|quarterly\|yearly\|none</code></td>
+<td>定期 rebalance 頻度</td>
+</tr>
+<tr>
+<td><code>--rebalance-threshold 0.05</code></td>
+<td>weight 乖離 ±5% でリバランス発火</td>
+</tr>
+<tr>
+<td><code>--allow-non-buy-hold</code></td>
+<td>mean-reversion / trend-following 戦略を combine に許可 (Phase 2 experimental)</td>
+</tr>
+<tr>
+<td><code>--with-training-data</code></td>
+<td>HMM 戦略を含む場合に学習データを並列フェッチして Forward Algorithm を Pine に埋め込む (issue <a href="https://github.com/ysakae/alpha-forge/issues/974">#974</a>)</td>
+</tr>
+<tr>
+<td><code>--portfolio-id &lt;id&gt;</code></td>
+<td>生成 Pine の indicator 名 + webhook payload に書き込む portfolio_id</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-tradingview-pine-editor">2. TradingView Pine Editor に貼り付ける<a class="headerlink" href="#2-tradingview-pine-editor" title="Permanent link">&para;</a></h3>
+<p><code>output/pinescript/&lt;portfolio_id&gt;.pine</code> をそのまま Pine Editor に貼り付け、
+「スクリプトを追加」をクリックします。</p>
+<h3 id="3">3. アラートを設定する<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>設定値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>条件</strong></td>
+<td>追加した <code>&lt;portfolio_id&gt;</code> インジケータ → <code>Any alert() function call</code></td>
+</tr>
+<tr>
+<td><strong>頻度</strong></td>
+<td><code>Once Per Bar Close</code> (Pine 側で <code>alert.freq_once_per_bar_close</code> を指定済)</td>
+</tr>
+<tr>
+<td><strong>Webhook URL</strong></td>
+<td><code>https://strike.alforgelabs.com/webhook</code> (環境ごとに置換)</td>
+</tr>
+<tr>
+<td><strong>メッセージ</strong></td>
+<td><strong>空欄のまま</strong> — Pine 内の <code>make_payload()</code> がそのまま発信される</td>
+</tr>
+</tbody>
+</table>
+<p>設定保存後、最初の日足クローズで初回 3 銘柄エントリーが発火します。</p>
+<h2 id="webhook-payload">Webhook payload の構造<a class="headerlink" href="#webhook-payload" title="Permanent link">&para;</a></h2>
+<p><code>make_payload()</code> は alpha-strike webhook v2 payload を 1 行で出力します:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;passphrase&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;i_passphrase 入力値&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;broker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;moomoo&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;asset_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.TQQQ&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">33</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat_qqq_hedged_v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;sub_strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tqqq_phase2&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;portfolio_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat_qqq_hedged_v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20260529-135959&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="nt">&quot;timeframe&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1D&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span>
+</code></pre></div>
+<p><code>run_mode</code> は <code>paper</code> か <code>live</code> の二択で、TradingView 上の入力で切替可能。
+ペーパー検証中は必ず <code>paper</code> を指定して moomoo SIMULATE 環境に流すこと。</p>
+<h2 id="hmm-forward-algorithm-issue-974">HMM Forward Algorithm の完全再現 (issue <a href="https://github.com/ysakae/alpha-forge/issues/974">#974</a>)<a class="headerlink" href="#hmm-forward-algorithm-issue-974" title="Permanent link">&para;</a></h2>
+<p>combine 内に HMM レジーム戦略を含める場合は <code>--with-training-data</code> を付与
+すると、各 HMM 戦略の学習データを並列フェッチして transition matrix /
+means / variances を Pine に焼き込み、Forward Algorithm を Pine 内で
+逐次計算します。</p>
 <ul>
-<li><a href="../disclaimers/">免責事項</a></li>
-<li><a href="../privacy/">プライバシーポリシー</a></li>
-<li><a href="../eula/">EULA</a></li>
-<li><a href="../../guides/trial-limits/">Trial 制限</a></li>
+<li>並列フェッチ: <code>concurrent.futures.ThreadPoolExecutor</code> で I/O 並列化</li>
+<li>複数 HMM の識別子は prefix で完全分離 (<code>s0_hmm_transmat</code>,
+  <code>s1_hmm_transmat</code>, <code>s0_f_hmm_step</code>, <code>s1_f_hmm_step</code> 等)</li>
+<li>training data 未提供時は volatility regime proxy (<code>ta.stdev</code>) に
+  フォールバック (後方互換)</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>qqq_hmm_v1,tqqq_v1,gld_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--allocation<span class="w"> </span>equal<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--with-training-data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--portfolio-id<span class="w"> </span>combine_hmm_v1
+</code></pre></div>
+<h2 id="symbolic-verify">symbolic verify (issue <a href="https://github.com/ysakae/alpha-forge/issues/975">#975</a>)<a class="headerlink" href="#symbolic-verify" title="Permanent link">&para;</a></h2>
+<p><code>forge pine verify --combine-strategies</code> で、生成 Pine と alpha-forge
+backtest combine が <strong>同じ意図で動く</strong> ことを TradingView を介さず
+symbolic に検証できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--combine-allocation<span class="w"> </span>equal<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--combine-rebalance-freq<span class="w"> </span>monthly<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--combine-rebalance-threshold<span class="w"> </span><span class="m">0</span>.05<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>--combine-portfolio-id<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>--check-mode<span class="w"> </span>metrics
+</code></pre></div>
+<p>出力例:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a># Combine Portfolio Verify — beat_qqq_hedged_v1
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>**Status**: ✅ PASSED (0 violation(s) / 12 checks)
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>## Metrics
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>| Metric            | Value     |
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>|-------------------|-----------|
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>| total_return_pct  | 915.5400  |
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>| cagr_pct          | 15.3000   |
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>| sharpe_ratio      | 1.0401    |
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>| max_drawdown_pct  | 23.3200   |
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>| volatility_pct    | 14.7700   |
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>## Integrity Checks (抜粋)
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>| Key                                     | Expected | Observed | OK |
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>|-----------------------------------------|----------|----------|----|
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>| pine_syntax                             | 0 errors | 0 errors | ✅ |
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>| weight:tqqq_phase2                      | 0.333333 | 0.3333   | ✅ |
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>| hedge_exposure:tqqq_phase2              | 0.4      | 0.4      | ✅ |
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>| rebalance_freq                          | monthly  | monthly  | ✅ |
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>| rebalance_threshold                     | 0.05     | 0.05     | ✅ |
+</code></pre></div>
+<p>整合性チェックの対象:</p>
+<ul>
+<li><code>pine_syntax</code> — Pine v6 構文 verify (PineV6Validator)</li>
+<li><code>weight:&lt;sid&gt;</code> — Pine 内 <code>s{i}_weight</code> と backtest combine の <code>weight_map[sid]</code></li>
+<li><code>base_exposure:&lt;sid&gt;</code> — 通常時 exposure</li>
+<li><code>hedge_exposure:&lt;sid&gt;</code> — hedge state の <code>target_exposure_pct</code></li>
+<li><code>rebalance_freq</code> — <code>ta.change(month)</code> 等と CLI 指定の対応</li>
+<li><code>rebalance_threshold</code> — <code>i_rebalance_threshold</code> 入力値</li>
+</ul>
+<p><code>--check-mode compile_only</code> を指定すると Pine v6 構文 verify のみ実行
+(backtest 不要)。</p>
+<h2 id="_2">既知の制約<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Strategy Tester は動かない</strong>: combine Pine は Indicator のため、
+  TradingView 内で Sharpe / CAGR / MDD を直接取得できません。
+  metrics は symbolic verify か alpha-forge backtest combine から取得します。</li>
+<li><strong><code>Once Per Bar Close</code> 必須</strong>: intrabar 発火を避けるため Pine 側で
+  <code>alert.freq_once_per_bar_close</code> を強制しています。TradingView アラート
+  設定でも同じ頻度を選択してください。</li>
+<li><strong>発火日の制約</strong>: 戦略 alert はそれぞれの bar close 後に発火するため、
+  初回エントリーは「アラート保存後の最初の日足クローズ」になります。</li>
+</ul>
+<h2 id="_3">関連ドキュメント<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../tradingview-pine-integration/">TradingView への Pine Script 反映</a> — 単体戦略の場合</li>
+<li><a href="../tradingview-alpha-strike/">TradingView と alpha-strike の連携</a> — Webhook 受信側</li>
+<li><a href="../alpha-strike-setup/">alpha-strike セットアップガイド</a> — Webhook サーバー構築</li>
 </ul>
 
 
@@ -2549,7 +2827,7 @@
       <nav class="md-footer__inner md-grid" aria-label="フッター" >
         
           
-          <a href="../../cli-reference/self/" class="md-footer__link md-footer__link--prev" aria-label="前: self">
+          <a href="../tradingview-pine-integration/" class="md-footer__link md-footer__link--prev" aria-label="前: TradingView への Pine Script 反映">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2559,20 +2837,20 @@
                 前
               </span>
               <div class="md-ellipsis">
-                self
+                TradingView への Pine Script 反映
               </div>
             </div>
           </a>
         
         
           
-          <a href="../disclaimers/" class="md-footer__link md-footer__link--next" aria-label="次: 免責事項">
+          <a href="../tradingview-alpha-strike/" class="md-footer__link md-footer__link--next" aria-label="次: TradingView と alpha-strike の連携">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 次
               </span>
               <div class="md-ellipsis">
-                免責事項
+                TradingView と alpha-strike の連携
               </div>
             </div>
             <div class="md-footer__button md-icon">

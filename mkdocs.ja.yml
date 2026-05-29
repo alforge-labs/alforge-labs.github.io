@@ -62,6 +62,7 @@ nav:
       - エンドツーエンド戦略開発ワークフロー: guides/end-to-end-workflow.md
       - 実行結果と成果物サンプル: guides/output-examples.md
       - TradingView への Pine Script 反映: guides/tradingview-pine-integration.md
+      - Combine Portfolio Pine — 複数戦略統合: guides/combine-portfolio-pine.md
       - TradingView と alpha-strike の連携: guides/tradingview-alpha-strike.md
       - alpha-strike セットアップガイド: guides/alpha-strike-setup.md
       - AI 駆動の戦略探索ワークフロー: guides/ai-exploration-workflow.md
