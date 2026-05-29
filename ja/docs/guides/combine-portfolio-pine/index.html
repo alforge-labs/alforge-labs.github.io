@@ -843,6 +843,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hybrid-strategy-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hybrid-strategy モード (issue #985)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2548,6 +2559,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hybrid-strategy-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hybrid-strategy モード (issue #985)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2775,11 +2797,64 @@ symbolic に検証できます。</p>
 </ul>
 <p><code>--check-mode compile_only</code> を指定すると Pine v6 構文 verify のみ実行
 (backtest 不要)。</p>
+<h2 id="hybrid-strategy-mode">hybrid-strategy モード (issue <a href="https://github.com/ysakae/alpha-forge/issues/985">#985</a>)<a class="headerlink" href="#hybrid-strategy-mode" title="Permanent link">&para;</a></h2>
+<p>既定の <code>indicator</code> モードは前述のとおり単一 Pine v6 Indicator を出力し、
+Strategy Tester がアタッチしません。<strong>メイン 1 銘柄だけでも TradingView の
+Strategy Tester で部分 metrics を取りたい</strong> 場合は <code>--combine-mode
+hybrid-strategy</code> を使います。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--combine-mode<span class="w"> </span>hybrid-strategy<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--main-strategy<span class="w"> </span>tqqq_phase2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>--portfolio-id<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>--with-webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>--webhook-broker<span class="w"> </span>moomoo
+</code></pre></div>
+<p>動作:</p>
+<ul>
+<li><code>--main-strategy</code> で指定したメイン戦略を <strong>chart-native の <code>strategy()</code></strong> として
+  出力します (<code>default_qty_value = weight × 100</code>、<code>strategy.entry</code> / <code>strategy.close</code>
+  で position を管理)。メイン銘柄のチャートに適用すると Strategy Tester が
+  Sharpe / CAGR / MDD などを計算します。</li>
+<li>残りのサブ戦略は従来どおり <code>request.security()</code> + <code>alert()</code> 経由で
+  alpha-strike に発注します (indicator モードと同じロジック)。</li>
+<li>メイン戦略は <strong>buy-hold-overlay 限定</strong> です (mean-reversion /
+  trend-following の <code>strategy()</code> 化は未対応)。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>オプション</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--combine-mode indicator\|hybrid-strategy</code></td>
+<td>出力モード。<code>indicator</code> 既定 (後方互換)</td>
+</tr>
+<tr>
+<td><code>--main-strategy &lt;sid&gt;</code></td>
+<td>hybrid-strategy 時に <code>strategy()</code> 化するメイン戦略 ID (combine 対象に含まれる buy-hold-overlay)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">metrics はあくまで近似</p>
+<p>メイン戦略の <code>strategy.entry</code> / <code>strategy.close</code> は AlphaForge backtest
+combine (vectorbt) と厳密一致しない近似値です。サブ戦略は Strategy Tester の
+metrics には含まれません。厳密な portfolio metrics は引き続き
+<a href="#symbolic-verify">symbolic verify</a> または alpha-forge backtest combine を
+正とし、hybrid-strategy はメイン銘柄の挙動を TradingView 上で目視・検証する
+補助手段として使ってください。</p>
+</div>
 <h2 id="_2">既知の制約<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Strategy Tester は動かない</strong>: combine Pine は Indicator のため、
-  TradingView 内で Sharpe / CAGR / MDD を直接取得できません。
-  metrics は symbolic verify か alpha-forge backtest combine から取得します。</li>
+<li><strong>indicator モードでは Strategy Tester が動かない</strong>: 既定の combine Pine は
+  Indicator のため、TradingView 内で Sharpe / CAGR / MDD を直接取得できません。
+  metrics は symbolic verify か alpha-forge backtest combine から取得するか、
+  メイン銘柄のみ <a href="#hybrid-strategy-mode">hybrid-strategy モード</a> で
+  部分 metrics を取得します。</li>
 <li><strong><code>Once Per Bar Close</code> 必須</strong>: intrabar 発火を避けるため Pine 側で
   <code>alert.freq_once_per_bar_close</code> を強制しています。TradingView アラート
   設定でも同じ頻度を選択してください。</li>

@@ -166,11 +166,54 @@ forge pine verify \
 `--check-mode compile_only` を指定すると Pine v6 構文 verify のみ実行
 (backtest 不要)。
 
+## hybrid-strategy モード (issue [#985](https://github.com/ysakae/alpha-forge/issues/985)) {#hybrid-strategy-mode}
+
+既定の `indicator` モードは前述のとおり単一 Pine v6 Indicator を出力し、
+Strategy Tester がアタッチしません。**メイン 1 銘柄だけでも TradingView の
+Strategy Tester で部分 metrics を取りたい** 場合は `--combine-mode
+hybrid-strategy` を使います。
+
+```bash
+forge pine generate \
+  --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
+  --combine-mode hybrid-strategy \
+  --main-strategy tqqq_phase2 \
+  --portfolio-id beat_qqq_hedged_v1 \
+  --with-webhook \
+  --webhook-broker moomoo
+```
+
+動作:
+
+- `--main-strategy` で指定したメイン戦略を **chart-native の `strategy()`** として
+  出力します (`default_qty_value = weight × 100`、`strategy.entry` / `strategy.close`
+  で position を管理)。メイン銘柄のチャートに適用すると Strategy Tester が
+  Sharpe / CAGR / MDD などを計算します。
+- 残りのサブ戦略は従来どおり `request.security()` + `alert()` 経由で
+  alpha-strike に発注します (indicator モードと同じロジック)。
+- メイン戦略は **buy-hold-overlay 限定** です (mean-reversion /
+  trend-following の `strategy()` 化は未対応)。
+
+| オプション | 意味 |
+|-----------|------|
+| `--combine-mode indicator\|hybrid-strategy` | 出力モード。`indicator` 既定 (後方互換) |
+| `--main-strategy <sid>` | hybrid-strategy 時に `strategy()` 化するメイン戦略 ID (combine 対象に含まれる buy-hold-overlay) |
+
+!!! note "metrics はあくまで近似"
+    メイン戦略の `strategy.entry` / `strategy.close` は AlphaForge backtest
+    combine (vectorbt) と厳密一致しない近似値です。サブ戦略は Strategy Tester の
+    metrics には含まれません。厳密な portfolio metrics は引き続き
+    [symbolic verify](#symbolic-verify) または alpha-forge backtest combine を
+    正とし、hybrid-strategy はメイン銘柄の挙動を TradingView 上で目視・検証する
+    補助手段として使ってください。
+
 ## 既知の制約
 
-- **Strategy Tester は動かない**: combine Pine は Indicator のため、
-  TradingView 内で Sharpe / CAGR / MDD を直接取得できません。
-  metrics は symbolic verify か alpha-forge backtest combine から取得します。
+- **indicator モードでは Strategy Tester が動かない**: 既定の combine Pine は
+  Indicator のため、TradingView 内で Sharpe / CAGR / MDD を直接取得できません。
+  metrics は symbolic verify か alpha-forge backtest combine から取得するか、
+  メイン銘柄のみ [hybrid-strategy モード](#hybrid-strategy-mode) で
+  部分 metrics を取得します。
 - **`Once Per Bar Close` 必須**: intrabar 発火を避けるため Pine 側で
   `alert.freq_once_per_bar_close` を強制しています。TradingView アラート
   設定でも同じ頻度を選択してください。
