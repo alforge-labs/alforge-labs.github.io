@@ -843,6 +843,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hybrid-strategy-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hybrid-strategy mode (issue #985)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#known-limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2548,6 +2559,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hybrid-strategy-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        hybrid-strategy mode (issue #985)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#known-limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2779,11 +2801,65 @@ talking to TradingView at all.</p>
 </ul>
 <p>Pass <code>--check-mode compile_only</code> for syntax verify only (no backtest
 required).</p>
+<h2 id="hybrid-strategy-mode">hybrid-strategy mode (issue <a href="https://github.com/ysakae/alpha-forge/issues/985">#985</a>)<a class="headerlink" href="#hybrid-strategy-mode" title="Permanent link">&para;</a></h2>
+<p>The default <code>indicator</code> mode emits a single Pine v6 Indicator and the
+Strategy Tester will not attach. When you want <strong>partial metrics for at
+least the main symbol</strong> from the TradingView Strategy Tester, use
+<code>--combine-mode hybrid-strategy</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--combine-mode<span class="w"> </span>hybrid-strategy<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--main-strategy<span class="w"> </span>tqqq_phase2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>--portfolio-id<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>--with-webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>--webhook-broker<span class="w"> </span>moomoo
+</code></pre></div>
+<p>Behaviour:</p>
+<ul>
+<li>The strategy passed to <code>--main-strategy</code> is emitted as a
+  <strong>chart-native <code>strategy()</code></strong> (<code>default_qty_value = weight × 100</code>,
+  position managed via <code>strategy.entry</code> / <code>strategy.close</code>). Apply it to
+  the main symbol's chart and the Strategy Tester computes Sharpe / CAGR /
+  MDD and so on.</li>
+<li>The remaining sub-strategies still trade through <code>request.security()</code> +
+  <code>alert()</code> to alpha-strike (identical to indicator mode).</li>
+<li>The main strategy must be <strong>buy-hold-overlay</strong> (emitting mean-reversion /
+  trend-following as <code>strategy()</code> is not supported).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--combine-mode indicator\|hybrid-strategy</code></td>
+<td>Output mode. <code>indicator</code> is the default (backward compatible)</td>
+</tr>
+<tr>
+<td><code>--main-strategy &lt;sid&gt;</code></td>
+<td>Main strategy ID emitted as <code>strategy()</code> in hybrid mode (a buy-hold-overlay included in the combine)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Metrics are an approximation</p>
+<p>The main strategy's <code>strategy.entry</code> / <code>strategy.close</code> does not match
+AlphaForge backtest combine (vectorbt) exactly, and sub-strategies are
+not included in the Strategy Tester metrics. Keep
+<a href="#symbolic-verify">symbolic verify</a> or alpha-forge backtest combine as
+the source of truth for portfolio metrics; use hybrid-strategy as an
+aid to eyeball / sanity-check the main symbol's behaviour on TradingView.</p>
+</div>
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>No Strategy Tester</strong>: combine Pine is an Indicator, so TradingView
-  cannot show Sharpe / CAGR / MDD natively. Use symbolic verify or
-  alpha-forge backtest combine for portfolio-level metrics.</li>
+<li><strong>No Strategy Tester in indicator mode</strong>: the default combine Pine is an
+  Indicator, so TradingView cannot show Sharpe / CAGR / MDD natively. Use
+  symbolic verify or alpha-forge backtest combine for portfolio-level
+  metrics, or <a href="#hybrid-strategy-mode">hybrid-strategy mode</a> for partial
+  metrics on the main symbol.</li>
 <li><strong>Once Per Bar Close enforced</strong>: Pine sets
   <code>alert.freq_once_per_bar_close</code> to suppress intrabar firing — please
   pick the same frequency in the alert dialog.</li>

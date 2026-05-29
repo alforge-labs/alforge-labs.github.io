@@ -170,11 +170,55 @@ Integrity checks cover:
 Pass `--check-mode compile_only` for syntax verify only (no backtest
 required).
 
+## hybrid-strategy mode (issue [#985](https://github.com/ysakae/alpha-forge/issues/985)) {#hybrid-strategy-mode}
+
+The default `indicator` mode emits a single Pine v6 Indicator and the
+Strategy Tester will not attach. When you want **partial metrics for at
+least the main symbol** from the TradingView Strategy Tester, use
+`--combine-mode hybrid-strategy`.
+
+```bash
+forge pine generate \
+  --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
+  --combine-mode hybrid-strategy \
+  --main-strategy tqqq_phase2 \
+  --portfolio-id beat_qqq_hedged_v1 \
+  --with-webhook \
+  --webhook-broker moomoo
+```
+
+Behaviour:
+
+- The strategy passed to `--main-strategy` is emitted as a
+  **chart-native `strategy()`** (`default_qty_value = weight × 100`,
+  position managed via `strategy.entry` / `strategy.close`). Apply it to
+  the main symbol's chart and the Strategy Tester computes Sharpe / CAGR /
+  MDD and so on.
+- The remaining sub-strategies still trade through `request.security()` +
+  `alert()` to alpha-strike (identical to indicator mode).
+- The main strategy must be **buy-hold-overlay** (emitting mean-reversion /
+  trend-following as `strategy()` is not supported).
+
+| Option | Meaning |
+|--------|---------|
+| `--combine-mode indicator\|hybrid-strategy` | Output mode. `indicator` is the default (backward compatible) |
+| `--main-strategy <sid>` | Main strategy ID emitted as `strategy()` in hybrid mode (a buy-hold-overlay included in the combine) |
+
+!!! note "Metrics are an approximation"
+    The main strategy's `strategy.entry` / `strategy.close` does not match
+    AlphaForge backtest combine (vectorbt) exactly, and sub-strategies are
+    not included in the Strategy Tester metrics. Keep
+    [symbolic verify](#symbolic-verify) or alpha-forge backtest combine as
+    the source of truth for portfolio metrics; use hybrid-strategy as an
+    aid to eyeball / sanity-check the main symbol's behaviour on TradingView.
+
 ## Known limitations
 
-- **No Strategy Tester**: combine Pine is an Indicator, so TradingView
-  cannot show Sharpe / CAGR / MDD natively. Use symbolic verify or
-  alpha-forge backtest combine for portfolio-level metrics.
+- **No Strategy Tester in indicator mode**: the default combine Pine is an
+  Indicator, so TradingView cannot show Sharpe / CAGR / MDD natively. Use
+  symbolic verify or alpha-forge backtest combine for portfolio-level
+  metrics, or [hybrid-strategy mode](#hybrid-strategy-mode) for partial
+  metrics on the main symbol.
 - **Once Per Bar Close enforced**: Pine sets
   `alert.freq_once_per_bar_close` to suppress intrabar firing — please
   pick the same frequency in the alert dialog.
