@@ -103,6 +103,7 @@ nav:
           - system: cli-reference/system.md
       - Meta commands:
           - self: cli-reference/self.md
+  - Changelog: changelog.md
   - Legal & Disclaimers:
       - Trust, Safety, and Limits: legal/trust-safety-limits.md
       - Disclaimers: legal/disclaimers.md
