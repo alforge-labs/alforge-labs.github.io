@@ -103,6 +103,7 @@ nav:
           - system: cli-reference/system.md
       - メタコマンド:
           - self: cli-reference/self.md
+  - 変更履歴: changelog.md
   - 利用規約と免責:
       - 信頼・安全・制限: legal/trust-safety-limits.md
       - 免責事項: legal/disclaimers.md
