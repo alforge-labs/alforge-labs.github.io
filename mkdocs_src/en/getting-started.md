@@ -79,7 +79,12 @@ alpha-forge system init
 !!! info "`alpha-forge system init` is required"
     Without `forge.yaml`, the strategy DB location, data store, and result output paths are unresolved, so the next `alpha-forge backtest run` will fail with `FileNotFoundError`. The default invocation (no `--force`) is sufficient for quickstart.
 
-Save the following as `sma_cross.json`.
+!!! note "A one-time EULA acceptance prompt `[y/n]` appears on first run"
+    The first time you run a main command (such as `alpha-forge system init` above), a summary of the End-User License Agreement (EULA) is shown along with a `[y/n]` acceptance prompt. **Enter `y`** and your acceptance is recorded under `~/.config/forge/`, so it won't appear again.
+
+    In **non-interactive environments** (CI, pipes, agents) you can't type `y`, so the command stops with `Aborted!`. In that case, set the environment variable `FORGE_ACCEPT_EULA=1` (`true` / `yes` / `on` also work) to auto-accept the EULA on first run and continue (available in a recent version onward).
+
+Save the following as `sma_cross.json` (the `_qs` suffix in `strategy_id` just marks it as the quickstart strategy — feel free to use any ID).
 
 ```json
 {
@@ -497,6 +502,7 @@ The six metrics you'll look at first. For the full metric list, see the [CLI Ref
 | Symptom | Cause & Fix |
 |---------|-------------|
 | `command not found: forge` / `command not found: alpha-forge` | Open a new terminal or run `source ~/.bashrc` / `source ~/.zshrc`. If that doesn't help, confirm the binary exists with `ls ~/.local/bin/alpha-forge` and that `echo $PATH` includes `~/.local/bin`. |
+| First command shows a `[y/n]` prompt / `Aborted!` in non-interactive runs | A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter `y`. In non-interactive environments (CI, pipes, agents), set `FORGE_ACCEPT_EULA=1` to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under `~/.config/forge/` and won't appear again. |
 | `Strategy 'sma_cross_qs' not found` / `戦略 'sma_cross_qs' が見つかりません` | Run `alpha-forge strategy save sma_cross.json` first to register the strategy in the DB. Or pass the JSON directly via `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...`. |
 | `FileNotFoundError: data not found: SPY (1d)` / `No data found for SPY` | Auto-fetch only works when `forge.yaml` exists. Run `alpha-forge system init` (Step 2) first, or fetch manually with `alpha-forge data fetch SPY --period 5y` and retry. |
 | `Failed to fetch data: symbol=USDJPY` (404) | yfinance requires fixed suffixes per asset class: FX `USDJPY=X` / `EURUSD=X` / `GBPJPY=X`, futures `CL=F`, crypto `BTC-USD`. Quote symbols containing `=` (e.g., `'USDJPY=X'`). |
