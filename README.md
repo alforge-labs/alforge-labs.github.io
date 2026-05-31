@@ -1,6 +1,15 @@
 # alforge-labs.github.io
 
+[![Downloads (total)](https://img.shields.io/github/downloads/alforge-labs/alforge-labs.github.io/total?logo=github&label=downloads)](https://github.com/alforge-labs/alforge-labs.github.io/releases)
+[![Downloads (trend)](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Falforge-labs%2Falforge-labs.github.io%2Fdownload-stats%2Fdownload-badge.json)](https://github.com/alforge-labs/alforge-labs.github.io/blob/download-stats/download-stats.jsonl)
+
 Alforge Labs のランディングページ（静的サイト）。
+
+> 左バッジは GitHub Releases アセットの累計 DL 数（shields.io 組み込み・リアルタイム）。
+> 右バッジは `Release Download Stats` ワークフロー（毎日 03:00 UTC）が
+> `download-stats` ブランチに蓄積する時系列から算出した「累計（直近7日差分）」。
+> 右バッジは初回ワークフロー実行後に表示されます。時系列の生データは
+> [`download-stats` ブランチの `download-stats.jsonl`](https://github.com/alforge-labs/alforge-labs.github.io/blob/download-stats/download-stats.jsonl) を参照。
 
 ## 概要
 

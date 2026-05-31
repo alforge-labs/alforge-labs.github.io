@@ -1,0 +1,61 @@
+name: Release Download Stats
+
+# GitHub Releases のアセット DL 数を毎日スナップショットして時系列を蓄積する。
+# Pages は main ブランチ直配信のため、データは専用ブランチ `download-stats` に
+# push してサイトの再デプロイを発生させない（main を汚さない）。
+
+on:
+  schedule:
+    - cron: '0 3 * * *'   # 毎日 03:00 UTC（12:00 JST）
+  workflow_dispatch:        # 手動実行も可能
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-download-stats
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main (収集スクリプト取得用)
+        uses: actions/checkout@v4
+
+      - name: Prepare download-stats branch working copy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$remote" download-stats >/dev/null 2>&1; then
+            git clone --depth 50 --branch download-stats "$remote" stats-data
+          else
+            # 初回: orphan ブランチを作成（履歴・サイトファイルを持たない）
+            git clone --depth 1 "$remote" stats-data
+            cd stats-data
+            git checkout --orphan download-stats
+            git rm -rf . >/dev/null 2>&1 || true
+            cd ..
+          fi
+
+      - name: Collect snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATS_REPO: ${{ github.repository }}
+        run: bash .github/scripts/collect_download_stats.sh stats-data
+
+      - name: Commit & push to download-stats
+        run: |
+          set -euo pipefail
+          cd stats-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add download-stats.jsonl download-badge.json
+          if git diff --cached --quiet; then
+            echo "変更なし（スキップ）"
+            exit 0
+          fi
+          git commit -m "chore(stats): download snapshot $(date -u +%FT%TZ)"
+          git push origin HEAD:download-stats
