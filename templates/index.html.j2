@@ -431,6 +431,38 @@
     .badge-dev { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,166,35,0.25); }
     .badge-released { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-glow); font-weight: 600; }
 
+    /* Issue #101: 現在のステータス（今すぐ使える / ベータ / 予定）サマリー */
+    .availability { padding: 6rem 0; border-bottom: 1px solid var(--border); }
+    .availability-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem; margin-top: 2.5rem;
+    }
+    .availability-col {
+      border: 1px solid var(--border); border-radius: var(--r);
+      padding: 1.6rem 1.4rem; background: var(--card);
+      border-top: 3px solid var(--border);
+    }
+    .availability-col.avail-now     { border-top-color: var(--accent); }
+    .availability-col.avail-beta    { border-top-color: var(--blue); }
+    .availability-col.avail-planned { border-top-color: var(--amber); }
+    .availability-col-head { display: flex; flex-direction: column; gap: 0.5rem; }
+    .availability-status {
+      align-self: flex-start;
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.22rem 0.6rem; border-radius: 100px;
+    }
+    .avail-now     .availability-status { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-glow); }
+    .avail-beta    .availability-status { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-glow); }
+    .avail-planned .availability-status { background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(245,166,35,0.25); }
+    .availability-col-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .availability-list { list-style: none; margin: 1.2rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+    .availability-item { display: flex; gap: 0.55rem; align-items: flex-start; font-size: 0.86rem; line-height: 1.5; color: var(--text2); }
+    .availability-mark { flex-shrink: 0; font-weight: 700; }
+    .avail-now     .availability-mark { color: var(--accent); }
+    .avail-beta    .availability-mark { color: var(--blue); }
+    .avail-planned .availability-mark { color: var(--amber); }
+
     .card-icon {
       width: 36px; height: 36px; border-radius: var(--r);
       background: var(--bg2); border: 1px solid var(--border);
@@ -959,6 +991,7 @@
     @media (max-width: 768px) {
       .products-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
+      .availability-grid { grid-template-columns: 1fr; }
       .trust-safety { padding: 4.5rem 0; }
       .trust-safety-grid { grid-template-columns: 1fr; }
       .trust-safety-card { min-height: auto; }

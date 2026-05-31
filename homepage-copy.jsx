@@ -16,7 +16,7 @@ window.COPY = {
   ja: {
     nav: { products: 'プロダクト', pricing: '料金', install: 'インストール', tutorial: 'チュートリアル', faq: 'FAQ', docs: 'ドキュメント', follow: 'フォロー' },
     hero: {
-      tag: '開発進行中',
+      tag: 'ベータ提供中',
       h1a: 'ノイズから、',
       h1b: 'シグナルへ。',
       desc: 'バックテスト・ベイズ最適化・ウォークフォワード検証をひとつの CLI で完結。先物・株式・FX を問わず、統計的に再現可能な投資戦略を体系的に開発・証明する。',
@@ -30,7 +30,7 @@ window.COPY = {
       primaryCta: '2 ステップで始める',
       secondaryCta: '料金比較を見る',
       updateCta: '更新情報をXで追う',
-      availability: 'Lifetime プランの販売開始は今夏予定です。Trial プランは現時点でもインストール直後から動作確認できます。',
+      availability: '有料プラン（Lifetime / Annual / Monthly）は現在購入可能です。Trial プランはインストール直後から無料で試せます。',
       outExamplesCta: '出力サンプルを見る',
       steps: [
         { num: '01', title: 'CLI をインストール', desc: 'macOS / Linux / Windows 向けの CLI を 1 コマンドで導入します。Whop 登録は不要です。' },
@@ -47,6 +47,48 @@ window.COPY = {
       { val: 'Sharpe 2倍超', accent: true, lbl: 'vs SPY・QQQ Buy & Hold（5年検証）' },
       { val: '2026夏', accent: false, lbl: '正式リリース目標' },
     ],
+    availability: {
+      label: '現在のステータス',
+      title: '今すぐ使えるもの・\nこれから提供するもの',
+      subtitle: '購入や利用の前に、いま使える範囲と今後の予定をひと目で確認できます。下のプラン・ロードマップの記載と一致しています。',
+      columns: [
+        {
+          tone: 'now',
+          status: '今すぐ使える',
+          mark: '✓',
+          title: '本日から利用可能',
+          items: [
+            'Trial プラン（無料・Whop 登録不要・期限なし）',
+            '有料プラン（Lifetime / Annual / Monthly）を購入可能',
+            'alpha-visualizer（OSS・PyPI 公開）',
+            'バックテスト・ベイズ最適化・ウォークフォワード検証・Pine Script v6 生成',
+          ],
+        },
+        {
+          tone: 'beta',
+          status: 'ベータ提供中',
+          mark: '◐',
+          title: '利用可能・改善継続中',
+          items: [
+            'alpha-forge コア（Beta 版・購入して利用可能、v1.0 へ向け改善中）',
+            'alpha-strike 自動執行サーバー（早期開発 / Dev）',
+            'Claude / Codex 連携スキル（/explore-strategies など）',
+          ],
+        },
+        {
+          tone: 'planned',
+          status: '正式版で予定',
+          mark: '○',
+          title: '2026 年夏予定',
+          items: [
+            'v1.0 正式リリース（全プロダクト）',
+            'MCP サーバ PyPI 公開（Claude Code / Codex / Cursor 連携）',
+            'FRED / ALFRED マクロデータ provider',
+            'サポート・コミュニティ体制の整備',
+          ],
+        },
+      ],
+    },
     pricing: {
       label: '料金',
       title: '使い方に合わせて\n選べるプラン',
@@ -74,14 +116,14 @@ window.COPY = {
           featured: true,
           price: '$299',
           period: '買い切り',
-          desc: '販売開始から2週間限定・先着50名様への早割価格。通常 $799 が $299。v1.x 系の全アップデート対象。',
+          desc: '先着50名様への早割価格。通常 $799 が $299。早割の $299 クーポンは X（@alforge_bot）をフォローのうえ DM で配布します。常に最新バージョンを利用可能。',
           features: [
             'macOS / Linux / Windows 対応',
             'シミュレーション（回数無制限）',
             'ベイズ最適化（Optuna）',
             'ウォークフォワード分析',
             'Pine Script v6 自動生成',
-            'v1.x の全アップデート対象（v2 は50%アップグレード）',
+            '常に最新バージョンを利用可能（v2 以降のメジャーアップグレードも追加料金なし）',
             '個人利用の範囲で複数端末対応',
           ],
           url: 'https://whop.com/alforge-labs/alphaforge/'
@@ -124,8 +166,7 @@ window.COPY = {
         },
       ],
       buyNow: '今すぐ購入',
-      comingSummer: '今夏販売開始予定',
-      note: 'ローンチ記念の早割 Lifetime $299 は先着50名・販売開始から2週間限定。早割枠が埋まるか期間が終了すると Lifetime は通常価格 $799 になります（合計100席上限）。Lifetime は v1.x 系の全アップデート対象、v2 リリース時は50%アップグレード料金で移行可能です。Annual / Monthly は通常価格のサブスクリプションで、常に最新バージョンを利用できます。購入後は forge system auth login を実行して Whop OAuth 認証で有効化します。',
+      note: 'ローンチ記念の早割 Lifetime $299 は先着50名限定。早割の $299 クーポンは X（@alforge_bot）をフォローのうえ DM で配布します。早割枠が埋まると Lifetime は通常価格 $799 になります（合計100席上限）。Lifetime は常に最新バージョンを利用可能で、v2 以降のメジャーアップグレードも追加料金はかかりません。Annual / Monthly は通常価格のサブスクリプションで、常に最新バージョンを利用できます。購入後は forge system auth login を実行して Whop OAuth 認証で有効化します。',
       comparison: {
         label: 'プラン比較',
         colTrial: 'Trial（Whop 登録不要）',
@@ -137,8 +178,8 @@ window.COPY = {
           { feature: 'ベイズ最適化（Optuna）',           trial: 'limit', trialNote: '最大 50 回 / 実行',   lifetime: 'ok', lifetimeNote: '✓ 回数無制限' },
           { feature: '最新ヒストリカルデータ取得',        trial: 'no',    lifetime: 'ok' },
           { feature: 'Pine Script v6 自動生成',          trial: 'no',    lifetime: 'ok' },
-          { feature: 'メジャーバージョンアップデート',    trial: 'ok',    lifetime: 'limit', lifetimeNote: 'v1.x 系のみ。v2 は50%アップグレード料金' },
-          { feature: '複数端末での利用',                  trial: 'limit', trialNote: '1 端末のみ', lifetime: 'ok', lifetimeNote: '✓ 個人利用の範囲で複数端末' },
+          { feature: 'メジャーバージョンアップデート',    trial: 'ok',    lifetime: 'ok', lifetimeNote: '✓ 常に最新バージョン' },
+          { feature: '複数端末での利用',                  trial: 'ok',    lifetime: 'ok', lifetimeNote: '✓ 個人利用の範囲で複数端末' },
         ],
       },
     },
@@ -268,7 +309,7 @@ window.COPY = {
         { q: '過学習（オーバーフィット）対策はどうしていますか？', a: 'Optuna TPE によるベイズ最適化とウォークフォワード分析（WFT）を標準搭載しています。`forge optimize run --split` で IS（学習期間）/ OOS（検証期間）のスコア差を一発で計測でき、過剰最適化の検出に使えます。' },
         { q: 'TradingView は必須ですか？', a: 'alpha-forge 単体での戦略開発・バックテスト・最適化・Pine Script 生成には TradingView は不要です。生成した Pine Script v6 を TradingView でアラート・自動売買に流したい場合や、alpha-strike による自動執行を組む場合のみ TradingView アカウントが必要になります。' },
         { q: 'AI エージェントと組み合わせて使えますか？', a: 'Claude Code / Codex 用のスキル（`/explore-strategies` など）を同梱しています。夜間に未試行の指標 × 銘柄を自律探索するループや、戦略 JSON の自動生成・チューニングといったワークフローを CLI から直接呼び出せます。' },
-        { q: '複数 PC で使えますか？／アップデートは？', a: 'Lifetime プランは個人利用の範囲で複数端末対応です（honor system、詳細は EULA を参照）。アップデートは v1.x の全バージョンが対象で、将来のメジャーアップグレード v2 への移行は 50% 割引でご案内予定です。' },
+        { q: '複数 PC で使えますか？／アップデートは？', a: 'Trial・有料プランとも、個人利用の範囲で複数端末に対応します（honor system、詳細は EULA を参照）。Lifetime は常に最新バージョンを利用でき、v2 以降のメジャーアップグレードも追加料金はかかりません。' },
       ],
     },
     systemFlow: {
@@ -441,7 +482,7 @@ window.COPY = {
   en: {
     nav: { products: 'Products', pricing: 'Pricing', install: 'Install', tutorial: 'Tutorial', faq: 'FAQ', docs: 'Docs', follow: 'Follow' },
     hero: {
-      tag: 'In Development',
+      tag: 'In Beta',
       h1a: 'From Noise',
       h1b: 'to Signal.',
       desc: 'Backtest, Bayesian optimization, and walk-forward validation — unified in a single CLI. Systematically develop and validate investment strategies with reproducible statistical edge across futures, equities, and FX.',
@@ -455,7 +496,7 @@ window.COPY = {
       primaryCta: 'Start in 2 steps',
       secondaryCta: 'Compare plans',
       updateCta: 'Follow updates on X',
-      availability: 'Lifetime plan sales are scheduled for this summer. The Trial plan is usable today right after install.',
+      availability: 'Paid plans (Lifetime / Annual / Monthly) are available to purchase now. The Trial plan is free to try right after install.',
       outExamplesCta: 'See output samples',
       steps: [
         { num: '01', title: 'Install the CLI', desc: 'Install the CLI with a single command on macOS, Linux, or Windows. No Whop registration required.' },
@@ -472,6 +513,48 @@ window.COPY = {
       { val: '2× Sharpe', accent: true, lbl: 'vs SPY · QQQ Buy & Hold (5yr backtest)' },
       { val: 'Summer 2026', accent: false, lbl: 'Target Release' },
     ],
+    availability: {
+      label: 'Current Status',
+      title: 'What you can use today\nand what is coming next',
+      subtitle: 'Before you buy or install, see at a glance what is available now and what is planned. This matches the plans and roadmap below.',
+      columns: [
+        {
+          tone: 'now',
+          status: 'Available now',
+          mark: '✓',
+          title: 'Usable today',
+          items: [
+            'Trial plan (free · no Whop registration · no expiry)',
+            'Paid plans (Lifetime / Annual / Monthly) — purchasable',
+            'alpha-visualizer (open source · on PyPI)',
+            'Backtest · Bayesian optimization · walk-forward validation · Pine Script v6 export',
+          ],
+        },
+        {
+          tone: 'beta',
+          status: 'In beta',
+          mark: '◐',
+          title: 'Usable · actively improving',
+          items: [
+            'alpha-forge core (Beta — purchasable & usable, evolving toward v1.0)',
+            'alpha-strike execution server (early development / Dev)',
+            'Claude / Codex agent skills (/explore-strategies, etc.)',
+          ],
+        },
+        {
+          tone: 'planned',
+          status: 'Planned for v1.0',
+          mark: '○',
+          title: 'Targeting summer 2026',
+          items: [
+            'v1.0 official release (all products)',
+            'MCP server on PyPI (Claude Code / Codex / Cursor)',
+            'FRED / ALFRED macro data provider',
+            'Support & community infrastructure',
+          ],
+        },
+      ],
+    },
     pricing: {
       label: 'Pricing',
       title: 'Pick the plan\nthat fits how you use it.',
@@ -499,14 +582,14 @@ window.COPY = {
           featured: true,
           price: '$299',
           period: 'one-time',
-          desc: 'Launch promo for the first 2 weeks · first 50 buyers only. Regular Lifetime is $799. Covers all v1.x major version updates.',
+          desc: 'Early-bird pricing for the first 50 buyers. Regular Lifetime is $799. The $299 early-bird coupon is distributed by DM — follow @alforge_bot on X. Always on the latest version.',
           features: [
             'macOS / Linux / Windows',
             'Unlimited simulations',
             'Bayesian optimization (Optuna)',
             'Walk-forward analysis',
             'Pine Script v6 auto-generation',
-            'All v1.x updates included (v2 = 50% upgrade fee)',
+            'Always on the latest version (major upgrades like v2 at no extra cost)',
             'Personal use across multiple devices',
           ],
           url: 'https://whop.com/alforge-labs/alphaforge/'
@@ -549,8 +632,7 @@ window.COPY = {
         },
       ],
       buyNow: 'Get Access',
-      comingSummer: 'Coming This Summer',
-      note: 'Early Bird Lifetime ($299) is limited to the first 50 buyers within the 2 weeks after launch. Once seats are sold or the window closes, Lifetime returns to $799 (capped at 100 total seats). Lifetime covers all v1.x updates; v2 will be available at a 50% upgrade fee. Annual and Monthly are standard-priced subscriptions that always run on the latest version. After purchase, run `forge system auth login` and complete the Whop OAuth flow in your browser to activate.',
+      note: 'Early Bird Lifetime ($299) is limited to the first 50 buyers. The $299 early-bird coupon is distributed by DM — follow @alforge_bot on X. Once the early-bird seats are taken, Lifetime returns to $799 (capped at 100 total seats). Lifetime always runs on the latest version, with no extra fee for major upgrades like v2. Annual and Monthly are standard-priced subscriptions that always run on the latest version. After purchase, run `forge system auth login` and complete the Whop OAuth flow in your browser to activate.',
       comparison: {
         label: 'Plan Comparison',
         colTrial: 'Trial (no Whop registration)',
@@ -562,8 +644,8 @@ window.COPY = {
           { feature: 'Bayesian optimization (Optuna)',   trial: 'limit', trialNote: 'Up to 50 trials per run',   lifetime: 'ok', lifetimeNote: '✓ Unlimited' },
           { feature: 'Latest historical data download',  trial: 'no',    lifetime: 'ok' },
           { feature: 'Pine Script v6 auto-generation',   trial: 'no',    lifetime: 'ok' },
-          { feature: 'Major version updates',             trial: 'ok',    lifetime: 'limit', lifetimeNote: 'v1.x only. v2 = 50% upgrade fee' },
-          { feature: 'Multi-device use',                  trial: 'limit', trialNote: '1 device only', lifetime: 'ok', lifetimeNote: '✓ Personal use across devices' },
+          { feature: 'Major version updates',             trial: 'ok',    lifetime: 'ok', lifetimeNote: '✓ Always latest' },
+          { feature: 'Multi-device use',                  trial: 'ok',    lifetime: 'ok', lifetimeNote: '✓ Personal use across devices' },
         ],
       },
     },
@@ -657,7 +739,7 @@ window.COPY = {
         { q: 'How does AlphaForge avoid overfitting?', a: 'Optuna TPE Bayesian optimization and Walk-Forward Test (WFT) are standard. Run `forge optimize run --split` to get in-sample and out-of-sample scores in one command — the gap between them is the primary overfitting signal.' },
         { q: 'Do I need TradingView?', a: 'No, not for strategy authoring, backtesting, optimization, or Pine Script generation — alpha-forge runs standalone. You only need TradingView if you want to deploy the generated Pine Script v6 for alerts/automation on TradingView, or if you wire alpha-strike for automated execution.' },
         { q: 'Can I use it with AI coding agents?', a: 'Yes. Skills for Claude Code and Codex (e.g., `/explore-strategies`) are bundled, so you can run overnight autonomous loops that explore untried indicator × symbol combinations or auto-generate and tune strategy JSON from the CLI.' },
-        { q: 'Can I use it on multiple machines? What about updates?', a: 'The Lifetime plan covers personal use on multiple devices on an honor-system basis (see the EULA for details). All v1.x updates are included; a future v2 major release will be offered to Lifetime owners at 50% off.' },
+        { q: 'Can I use it on multiple machines? What about updates?', a: 'Both Trial and paid plans cover personal use on multiple devices on an honor-system basis (see the EULA for details). Lifetime always runs on the latest version, with no extra fee for major upgrades like v2.' },
       ],
     },
     systemFlow: {
