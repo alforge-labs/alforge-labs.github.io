@@ -106,7 +106,7 @@ alpha-forge data alt fetch FRED_RELEASE_DATES --start 2000-01-01 --end 2024-12-3
 事前に `alpha-forge data alt fetch FRED_RELEASE_DATES` が必要です。
 
 !!! note "look-ahead ではない / FOMC について"
-    リリース**日時はスケジュール情報**（事前に分かる）であり、公表される**数値そのものは使わない**ため look-ahead bias には当たりません。FOMC は単一の FRED データ系列に対応しないため、同梱プロバイダーでは CPI・NFP のみ提供します。
+    リリース**日時はスケジュール情報**（事前に分かる）であり、公表される**数値そのものは使わない**ため look-ahead bias には当たりません。CPI・NFP は FRED 系列の初回公表日から導出、**FOMC は同梱の静的スケジュール**（Fed 公表の確定日程）から提供されます。FOMC スケジュールは年次更新が必要です。
 
 !!! tip "VIX ゲートだけなら FRED 不要"
     「VIX < 20 でのみエントリー」のような単純なゲートは、外部シンボル（`symbol: "^VIX"`、yfinance）だけで完結します。FRED は金利・実質金利・CPI など、yfinance に無いマクロ系列で威力を発揮します。

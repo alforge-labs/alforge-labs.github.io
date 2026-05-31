@@ -2664,7 +2664,7 @@
 <p>Requires <code>alpha-forge data alt fetch FRED_RELEASE_DATES</code> beforehand.</p>
 <div class="admonition note">
 <p class="admonition-title">Not look-ahead / about FOMC</p>
-<p>Release <strong>dates are schedule information</strong> (known in advance), and the <strong>published values themselves are not used</strong>, so this is not look-ahead bias. FOMC does not map to a single FRED data series, so the bundled provider supplies CPI and NFP only.</p>
+<p>Release <strong>dates are schedule information</strong> (known in advance), and the <strong>published values themselves are not used</strong>, so this is not look-ahead bias. CPI and NFP are derived from FRED series first-release dates; <strong>FOMC comes from a bundled static schedule</strong> (the Fed's published calendar). The FOMC schedule needs annual updates.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">A VIX gate needs no FRED</p>
