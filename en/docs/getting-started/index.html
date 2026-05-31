@@ -2970,7 +2970,12 @@
 <p class="admonition-title"><code>alpha-forge system init</code> is required</p>
 <p>Without <code>forge.yaml</code>, the strategy DB location, data store, and result output paths are unresolved, so the next <code>alpha-forge backtest run</code> will fail with <code>FileNotFoundError</code>. The default invocation (no <code>--force</code>) is sufficient for quickstart.</p>
 </div>
-<p>Save the following as <code>sma_cross.json</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">A one-time EULA acceptance prompt <code>[y/n]</code> appears on first run</p>
+<p>The first time you run a main command (such as <code>alpha-forge system init</code> above), a summary of the End-User License Agreement (EULA) is shown along with a <code>[y/n]</code> acceptance prompt. <strong>Enter <code>y</code></strong> and your acceptance is recorded under <code>~/.config/forge/</code>, so it won't appear again.</p>
+<p>In <strong>non-interactive environments</strong> (CI, pipes, agents) you can't type <code>y</code>, so the command stops with <code>Aborted!</code>. In that case, set the environment variable <code>FORGE_ACCEPT_EULA=1</code> (<code>true</code> / <code>yes</code> / <code>on</code> also work) to auto-accept the EULA on first run and continue (available in a recent version onward).</p>
+</div>
+<p>Save the following as <code>sma_cross.json</code> (the <code>_qs</code> suffix in <code>strategy_id</code> just marks it as the quickstart strategy — feel free to use any ID).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_cross_qs&quot;</span><span class="p">,</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA Crossover Quickstart&quot;</span><span class="p">,</span>
@@ -3445,6 +3450,10 @@ by hand.</p>
 <tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
 <td>Open a new terminal or run <code>source ~/.bashrc</code> / <code>source ~/.zshrc</code>. If that doesn't help, confirm the binary exists with <code>ls ~/.local/bin/alpha-forge</code> and that <code>echo $PATH</code> includes <code>~/.local/bin</code>.</td>
+</tr>
+<tr>
+<td>First command shows a <code>[y/n]</code> prompt / <code>Aborted!</code> in non-interactive runs</td>
+<td>A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter <code>y</code>. In non-interactive environments (CI, pipes, agents), set <code>FORGE_ACCEPT_EULA=1</code> to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under <code>~/.config/forge/</code> and won't appear again.</td>
 </tr>
 <tr>
 <td><code>Strategy 'sma_cross_qs' not found</code> / <code>戦略 'sma_cross_qs' が見つかりません</code></td>

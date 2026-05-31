@@ -79,7 +79,12 @@ alpha-forge system init
 !!! info "`alpha-forge system init` を必ず実行してください"
     `forge.yaml` が無いと戦略の DB 登録先・データ保存先・結果ファイル出力先が確定せず、後段の `alpha-forge backtest run` が `FileNotFoundError` で失敗します。クイックスタートでは `--force` 不要。
 
-`sma_cross.json` という名前で以下を保存します。
+!!! note "初回のみ EULA 同意プロンプト `[y/n]` が表示されます"
+    最初に主要コマンド（上記 `alpha-forge system init` など）を実行すると、初回だけエンドユーザー使用許諾契約（EULA）の要約が表示され、`[y/n]` の同意プロンプトが出ます。**`y` を入力**すると同意状態が `~/.config/forge/` に記録され、次回以降は表示されません。
+
+    CI・パイプ・エージェントなどの**非対話環境**では `y` を入力できず `Aborted!` で停止します。その場合は環境変数 `FORGE_ACCEPT_EULA=1`（`true` / `yes` / `on` も可）を設定すると、初回 EULA に自動同意して続行できます（対応バージョン以降）。
+
+`sma_cross.json` という名前で以下を保存します（`strategy_id` の `_qs` 接尾辞は quickstart の目印で、任意の ID に変更して構いません）。
 
 ```json
 {
@@ -493,6 +498,7 @@ alpha-forge pine generate --strategy sma_cross_qs
 | エラーメッセージ / 症状 | 原因と対処 |
 |------------------------|-----------|
 | `command not found: forge` / `command not found: alpha-forge` | 新しいターミナルを開くか、`source ~/.bashrc` / `source ~/.zshrc` を実行してください。それでも出る場合は `ls ~/.local/bin/alpha-forge` でバイナリの存在を確認し、`echo $PATH` に `~/.local/bin` が含まれているか確認してください。 |
+| 初回コマンドで `[y/n]` プロンプトが出る / 非対話実行で `Aborted!` | 初回のみ EULA 同意プロンプトが表示されます。対話端末では `y` を入力してください。CI・パイプ・エージェントなどの非対話環境では環境変数 `FORGE_ACCEPT_EULA=1` を設定すると初回 EULA に自動同意して続行できます（対応バージョン以降）。同意状態は `~/.config/forge/` に記録され次回以降は出ません。 |
 | `戦略 'sma_cross_qs' が見つかりません` / `Strategy not found` | `alpha-forge strategy save sma_cross.json` を先に実行して戦略 DB に登録してください。または `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...` のように `--strategy-file` で JSON を直接指定できます。 |
 | `FileNotFoundError: データが見つかりません: SPY (1d)` / `No data found for SPY` | `alpha-forge system init` を実行していない / `forge.yaml` が無いと自動取得が動きません。ステップ 2 の `alpha-forge system init` を先に実行するか、`alpha-forge data fetch SPY --period 5y` を手動で先に実行してください。 |
 | `データが取得できませんでした: symbol=USDJPY` 等 FX で 404 | yfinance では FX シンボルに `=X` サフィックスが必須です（例: `USDJPY=X`, `EURUSD=X`, `GBPJPY=X`）。先物は `CL=F` のような `=F`、暗号資産は `BTC-USD` のような形式です。 |

@@ -2970,7 +2970,12 @@
 <p class="admonition-title"><code>alpha-forge system init</code> を必ず実行してください</p>
 <p><code>forge.yaml</code> が無いと戦略の DB 登録先・データ保存先・結果ファイル出力先が確定せず、後段の <code>alpha-forge backtest run</code> が <code>FileNotFoundError</code> で失敗します。クイックスタートでは <code>--force</code> 不要。</p>
 </div>
-<p><code>sma_cross.json</code> という名前で以下を保存します。</p>
+<div class="admonition note">
+<p class="admonition-title">初回のみ EULA 同意プロンプト <code>[y/n]</code> が表示されます</p>
+<p>最初に主要コマンド（上記 <code>alpha-forge system init</code> など）を実行すると、初回だけエンドユーザー使用許諾契約（EULA）の要約が表示され、<code>[y/n]</code> の同意プロンプトが出ます。<strong><code>y</code> を入力</strong>すると同意状態が <code>~/.config/forge/</code> に記録され、次回以降は表示されません。</p>
+<p>CI・パイプ・エージェントなどの<strong>非対話環境</strong>では <code>y</code> を入力できず <code>Aborted!</code> で停止します。その場合は環境変数 <code>FORGE_ACCEPT_EULA=1</code>（<code>true</code> / <code>yes</code> / <code>on</code> も可）を設定すると、初回 EULA に自動同意して続行できます（対応バージョン以降）。</p>
+</div>
+<p><code>sma_cross.json</code> という名前で以下を保存します（<code>strategy_id</code> の <code>_qs</code> 接尾辞は quickstart の目印で、任意の ID に変更して構いません）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_cross_qs&quot;</span><span class="p">,</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA Crossover Quickstart&quot;</span><span class="p">,</span>
@@ -3441,6 +3446,10 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
 <td>新しいターミナルを開くか、<code>source ~/.bashrc</code> / <code>source ~/.zshrc</code> を実行してください。それでも出る場合は <code>ls ~/.local/bin/alpha-forge</code> でバイナリの存在を確認し、<code>echo $PATH</code> に <code>~/.local/bin</code> が含まれているか確認してください。</td>
+</tr>
+<tr>
+<td>初回コマンドで <code>[y/n]</code> プロンプトが出る / 非対話実行で <code>Aborted!</code></td>
+<td>初回のみ EULA 同意プロンプトが表示されます。対話端末では <code>y</code> を入力してください。CI・パイプ・エージェントなどの非対話環境では環境変数 <code>FORGE_ACCEPT_EULA=1</code> を設定すると初回 EULA に自動同意して続行できます（対応バージョン以降）。同意状態は <code>~/.config/forge/</code> に記録され次回以降は出ません。</td>
 </tr>
 <tr>
 <td><code>戦略 'sma_cross_qs' が見つかりません</code> / <code>Strategy not found</code></td>
