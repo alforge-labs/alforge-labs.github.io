@@ -16,7 +16,7 @@ window.COPY = {
   ja: {
     nav: { products: 'プロダクト', pricing: '料金', install: 'インストール', tutorial: 'チュートリアル', faq: 'FAQ', docs: 'ドキュメント', follow: 'フォロー' },
     hero: {
-      tag: '開発進行中',
+      tag: 'ベータ提供中',
       h1a: 'ノイズから、',
       h1b: 'シグナルへ。',
       desc: 'バックテスト・ベイズ最適化・ウォークフォワード検証をひとつの CLI で完結。先物・株式・FX を問わず、統計的に再現可能な投資戦略を体系的に開発・証明する。',
@@ -30,7 +30,7 @@ window.COPY = {
       primaryCta: '2 ステップで始める',
       secondaryCta: '料金比較を見る',
       updateCta: '更新情報をXで追う',
-      availability: 'Lifetime プランの販売開始は今夏予定です。Trial プランは現時点でもインストール直後から動作確認できます。',
+      availability: '有料プラン（Lifetime / Annual / Monthly）は現在購入可能です。Trial プランはインストール直後から無料で試せます。',
       outExamplesCta: '出力サンプルを見る',
       steps: [
         { num: '01', title: 'CLI をインストール', desc: 'macOS / Linux / Windows 向けの CLI を 1 コマンドで導入します。Whop 登録は不要です。' },
@@ -47,6 +47,48 @@ window.COPY = {
       { val: 'Sharpe 2倍超', accent: true, lbl: 'vs SPY・QQQ Buy & Hold（5年検証）' },
       { val: '2026夏', accent: false, lbl: '正式リリース目標' },
     ],
+    availability: {
+      label: '現在のステータス',
+      title: '今すぐ使えるもの・\nこれから提供するもの',
+      subtitle: '購入や利用の前に、いま使える範囲と今後の予定をひと目で確認できます。下のプラン・ロードマップの記載と一致しています。',
+      columns: [
+        {
+          tone: 'now',
+          status: '今すぐ使える',
+          mark: '✓',
+          title: '本日から利用可能',
+          items: [
+            'Trial プラン（無料・Whop 登録不要・期限なし）',
+            '有料プラン（Lifetime / Annual / Monthly）を購入可能',
+            'alpha-visualizer（OSS・PyPI 公開）',
+            'バックテスト・ベイズ最適化・ウォークフォワード検証・Pine Script v6 生成',
+          ],
+        },
+        {
+          tone: 'beta',
+          status: 'ベータ提供中',
+          mark: '◐',
+          title: '利用可能・改善継続中',
+          items: [
+            'alpha-forge コア（Beta 版・購入して利用可能、v1.0 へ向け改善中）',
+            'alpha-strike 自動執行サーバー（早期開発 / Dev）',
+            'Claude / Codex 連携スキル（/explore-strategies など）',
+          ],
+        },
+        {
+          tone: 'planned',
+          status: '正式版で予定',
+          mark: '○',
+          title: '2026 年夏予定',
+          items: [
+            'v1.0 正式リリース（全プロダクト）',
+            'MCP サーバ PyPI 公開（Claude Code / Codex / Cursor 連携）',
+            'FRED / ALFRED マクロデータ provider',
+            'サポート・コミュニティ体制の整備',
+          ],
+        },
+      ],
+    },
     pricing: {
       label: '料金',
       title: '使い方に合わせて\n選べるプラン',
@@ -124,7 +166,6 @@ window.COPY = {
         },
       ],
       buyNow: '今すぐ購入',
-      comingSummer: '今夏販売開始予定',
       note: 'ローンチ記念の早割 Lifetime $299 は先着50名・販売開始から2週間限定。早割枠が埋まるか期間が終了すると Lifetime は通常価格 $799 になります（合計100席上限）。Lifetime は v1.x 系の全アップデート対象、v2 リリース時は50%アップグレード料金で移行可能です。Annual / Monthly は通常価格のサブスクリプションで、常に最新バージョンを利用できます。購入後は forge system auth login を実行して Whop OAuth 認証で有効化します。',
       comparison: {
         label: 'プラン比較',
@@ -441,7 +482,7 @@ window.COPY = {
   en: {
     nav: { products: 'Products', pricing: 'Pricing', install: 'Install', tutorial: 'Tutorial', faq: 'FAQ', docs: 'Docs', follow: 'Follow' },
     hero: {
-      tag: 'In Development',
+      tag: 'In Beta',
       h1a: 'From Noise',
       h1b: 'to Signal.',
       desc: 'Backtest, Bayesian optimization, and walk-forward validation — unified in a single CLI. Systematically develop and validate investment strategies with reproducible statistical edge across futures, equities, and FX.',
@@ -455,7 +496,7 @@ window.COPY = {
       primaryCta: 'Start in 2 steps',
       secondaryCta: 'Compare plans',
       updateCta: 'Follow updates on X',
-      availability: 'Lifetime plan sales are scheduled for this summer. The Trial plan is usable today right after install.',
+      availability: 'Paid plans (Lifetime / Annual / Monthly) are available to purchase now. The Trial plan is free to try right after install.',
       outExamplesCta: 'See output samples',
       steps: [
         { num: '01', title: 'Install the CLI', desc: 'Install the CLI with a single command on macOS, Linux, or Windows. No Whop registration required.' },
@@ -472,6 +513,48 @@ window.COPY = {
       { val: '2× Sharpe', accent: true, lbl: 'vs SPY · QQQ Buy & Hold (5yr backtest)' },
       { val: 'Summer 2026', accent: false, lbl: 'Target Release' },
     ],
+    availability: {
+      label: 'Current Status',
+      title: 'What you can use today\nand what is coming next',
+      subtitle: 'Before you buy or install, see at a glance what is available now and what is planned. This matches the plans and roadmap below.',
+      columns: [
+        {
+          tone: 'now',
+          status: 'Available now',
+          mark: '✓',
+          title: 'Usable today',
+          items: [
+            'Trial plan (free · no Whop registration · no expiry)',
+            'Paid plans (Lifetime / Annual / Monthly) — purchasable',
+            'alpha-visualizer (open source · on PyPI)',
+            'Backtest · Bayesian optimization · walk-forward validation · Pine Script v6 export',
+          ],
+        },
+        {
+          tone: 'beta',
+          status: 'In beta',
+          mark: '◐',
+          title: 'Usable · actively improving',
+          items: [
+            'alpha-forge core (Beta — purchasable & usable, evolving toward v1.0)',
+            'alpha-strike execution server (early development / Dev)',
+            'Claude / Codex agent skills (/explore-strategies, etc.)',
+          ],
+        },
+        {
+          tone: 'planned',
+          status: 'Planned for v1.0',
+          mark: '○',
+          title: 'Targeting summer 2026',
+          items: [
+            'v1.0 official release (all products)',
+            'MCP server on PyPI (Claude Code / Codex / Cursor)',
+            'FRED / ALFRED macro data provider',
+            'Support & community infrastructure',
+          ],
+        },
+      ],
+    },
     pricing: {
       label: 'Pricing',
       title: 'Pick the plan\nthat fits how you use it.',
@@ -549,7 +632,6 @@ window.COPY = {
         },
       ],
       buyNow: 'Get Access',
-      comingSummer: 'Coming This Summer',
       note: 'Early Bird Lifetime ($299) is limited to the first 50 buyers within the 2 weeks after launch. Once seats are sold or the window closes, Lifetime returns to $799 (capped at 100 total seats). Lifetime covers all v1.x updates; v2 will be available at a 50% upgrade fee. Annual and Monthly are standard-priced subscriptions that always run on the latest version. After purchase, run `forge system auth login` and complete the Whop OAuth flow in your browser to activate.',
       comparison: {
         label: 'Plan Comparison',

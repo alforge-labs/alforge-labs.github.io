@@ -61,6 +61,40 @@ function Hero({ t, lang }) {
   );
 }
 
+/* ── AVAILABILITY SUMMARY (Issue #101) ── */
+function AvailabilitySummary({ t }) {
+  const c = t.availability;
+  if (!c) return null;
+  const toneClass = { now: 'avail-now', beta: 'avail-beta', planned: 'avail-planned' };
+  return (
+    <section className="availability reveal" id="availability">
+      <div className="container">
+        <div className="sec-label">{c.label}</div>
+        <h2 className="sec-title" style={{ whiteSpace: 'pre-line' }}>{c.title}</h2>
+        <p style={{ marginTop: '0.6rem', color: 'var(--text2)', fontSize: '0.92rem' }}>{c.subtitle}</p>
+        <div className="availability-grid">
+          {c.columns.map((col, i) => (
+            <div key={i} className={`availability-col ${toneClass[col.tone]}`}>
+              <div className="availability-col-head">
+                <span className="availability-status">{col.status}</span>
+                <h3 className="availability-col-title">{col.title}</h3>
+              </div>
+              <ul className="availability-list">
+                {col.items.map((it, j) => (
+                  <li key={j} className="availability-item">
+                    <span className="availability-mark">{col.mark}</span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── FREE START ── */
 function TrialStart({ t, lang }) {
   const c = t.trialStart;
@@ -405,10 +439,9 @@ function Pricing({ t, lang }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={plan.featured ? 'btn-primary' : 'btn-secondary'}
-                style={{ justifyContent: 'center', marginTop: 'auto', flexDirection: 'column', gap: '2px' }}
+                style={{ justifyContent: 'center', marginTop: 'auto' }}
               >
-                <s>{c.buyNow}</s>
-                <span style={{ fontSize: '0.85em', fontWeight: 400 }}>{c.comingSummer}</span>
+                {c.buyNow}
               </a>
             </div>
           ))}
@@ -556,4 +589,4 @@ function SystemFlow({ t, dark, lang }) {
 }
 
 /* ── EXPORT ── */
-Object.assign(window, { NavBar, Hero, TrialStart, Products, useChartColors, EquityChartSVG, BenchmarkTable, PerformanceChart, TrialBanner, ComparisonTable, Pricing, UseCases, PersonaUseCases, SystemFlow, LongTermValue, TrustSafety });
+Object.assign(window, { NavBar, Hero, AvailabilitySummary, TrialStart, Products, useChartColors, EquityChartSVG, BenchmarkTable, PerformanceChart, TrialBanner, ComparisonTable, Pricing, UseCases, PersonaUseCases, SystemFlow, LongTermValue, TrustSafety });
