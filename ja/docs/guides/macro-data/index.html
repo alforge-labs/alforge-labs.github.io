@@ -1,24 +1,24 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="ja" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="AlphaForge CLI official documentation — installation, commands, strategy templates, and AI agent integration.">
+        <meta name="description" content="AlphaForge CLI 公式ドキュメント — インストール、コマンド、戦略テンプレート、AI エージェント連携。">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/en/docs/legal/eula/">
+        <link rel="canonical" href="https://alforgelabs.com/ja/docs/guides/macro-data/">
       
       
-        <link rel="prev" href="../disclaimers/">
+        <link rel="prev" href="../ai-exploration-workflow/">
       
       
-        <link rel="next" href="../privacy/">
+        <link rel="next" href="../../usecases/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>EULA - AlphaForge Documentation</title>
+        <title>FRED マクロデータ活用ガイド - AlphaForge ドキュメント</title>
       
     
     
@@ -84,8 +84,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#alphaforge-end-user-license-agreement-eula" class="md-skip">
-          Skip to content
+        <a href="#fred-vixcpi" class="md-skip">
+          コンテンツにスキップ
         </a>
       
     </div>
@@ -97,8 +97,8 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="https://alforgelabs.com/en/index.html" title="AlphaForge Documentation" class="md-header__button md-logo" aria-label="AlphaForge Documentation" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="https://alforgelabs.com/ja/index.html" title="AlphaForge ドキュメント" class="md-header__button md-logo" aria-label="AlphaForge ドキュメント" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,13 +112,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AlphaForge Documentation
+            AlphaForge ドキュメント
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              EULA
+              FRED マクロデータ活用ガイド
             
           </span>
         </div>
@@ -144,7 +144,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="言語切り替え">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -178,16 +178,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="検索">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -200,7 +200,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            検索を初期化
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -221,7 +221,7 @@
         
           
             
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -237,7 +237,7 @@
   
     
   
-  Home
+  ホーム
 
       </a>
     </li>
@@ -256,7 +256,7 @@
           
   
   
-  Getting Started
+  はじめに
 
         </a>
       </li>
@@ -268,15 +268,17 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../guides/end-to-end-workflow/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../end-to-end-workflow/" class="md-tabs__link">
           
   
   
-  Guides
+  ガイド
 
         </a>
       </li>
@@ -296,7 +298,7 @@
           
   
   
-  Strategy Catalog
+  戦略カタログ
 
         </a>
       </li>
@@ -316,7 +318,7 @@
           
   
   
-  Visualization
+  データ可視化
 
         </a>
       </li>
@@ -336,7 +338,7 @@
           
   
   
-  CLI Reference
+  CLI リファレンス
 
         </a>
       </li>
@@ -356,7 +358,7 @@
   
     
   
-  Changelog
+  変更履歴
 
       </a>
     </li>
@@ -367,17 +369,15 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../trust-safety-limits/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../legal/trust-safety-limits/" class="md-tabs__link">
           
   
   
-  Legal & Disclaimers
+  利用規約と免責
 
         </a>
       </li>
@@ -405,15 +405,15 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://alforgelabs.com/en/index.html" title="AlphaForge Documentation" class="md-nav__button md-logo" aria-label="AlphaForge Documentation" data-md-component="logo">
+    <a href="https://alforgelabs.com/ja/index.html" title="AlphaForge ドキュメント" class="md-nav__button md-logo" aria-label="AlphaForge ドキュメント" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    AlphaForge Documentation
+    AlphaForge ドキュメント
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -432,7 +432,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    ホーム
   
 
     
@@ -475,7 +475,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    はじめに
   
 
     
@@ -491,7 +491,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Getting Started
+    はじめに
   
 
           </label>
@@ -511,7 +511,7 @@
   <span class="md-ellipsis">
     
   
-    Quickstart & Detailed Installation
+    クイックスタートと詳細インストール
   
 
     
@@ -532,14 +532,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/trial-limits/" class="md-nav__link">
+      <a href="../trial-limits/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Trial Limits
+    Trial 制限
   
 
     
@@ -564,33 +564,38 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Guides
+    ガイド
   
 
     
@@ -601,12 +606,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Guides
+    ガイド
   
 
           </label>
@@ -619,14 +624,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/end-to-end-workflow/" class="md-nav__link">
+      <a href="../end-to-end-workflow/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    End-to-End Strategy Development Workflow
+    エンドツーエンド戦略開発ワークフロー
   
 
     
@@ -647,14 +652,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/output-examples/" class="md-nav__link">
+      <a href="../output-examples/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Output Examples
+    実行結果と成果物サンプル
   
 
     
@@ -675,14 +680,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/tradingview-pine-integration/" class="md-nav__link">
+      <a href="../tradingview-pine-integration/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Bringing Pine Scripts into TradingView
+    TradingView への Pine Script 反映
   
 
     
@@ -703,14 +708,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/combine-portfolio-pine/" class="md-nav__link">
+      <a href="../combine-portfolio-pine/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Combine Portfolio Pine — Multi-Strategy
+    Combine Portfolio Pine — 複数戦略統合
   
 
     
@@ -731,14 +736,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/tradingview-alpha-strike/" class="md-nav__link">
+      <a href="../tradingview-alpha-strike/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    TradingView × alpha-strike Integration
+    TradingView と alpha-strike の連携
   
 
     
@@ -759,14 +764,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/alpha-strike-setup/" class="md-nav__link">
+      <a href="../alpha-strike-setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    alpha-strike Setup Guide
+    alpha-strike セットアップガイド
   
 
     
@@ -787,14 +792,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guides/ai-exploration-workflow/" class="md-nav__link">
+      <a href="../ai-exploration-workflow/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    AI-Driven Strategy Exploration Workflow
+    AI 駆動の戦略探索ワークフロー
   
 
     
@@ -812,17 +817,44 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../guides/macro-data/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FRED マクロデータ活用ガイド
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    FRED Macro Data Guide
+    FRED マクロデータ活用ガイド
   
 
     
@@ -831,6 +863,103 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜマクロデータか
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. API キーの設定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-vintage-look-ahead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. データ取得（vintage / look-ahead 厳密）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-altdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 戦略でマクロ系列を使う（ALTDATA）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-regime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. マクロ regime 分析
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ml-external_series-macro_v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ML 特徴量（EXTERNAL_SERIES / macro_v1）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. イベントブラックアウト
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -849,24 +978,27 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_9" >
         
           
-          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Use Cases by Goal
+    目的別ユースケース
   
 
     
@@ -882,7 +1014,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Use Cases by Goal
+    目的別ユースケース
   
 
           </label>
@@ -902,7 +1034,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -930,7 +1062,7 @@
   <span class="md-ellipsis">
     
   
-    TradingView Users
+    TradingViewユーザー
   
 
     
@@ -958,7 +1090,7 @@
   <span class="md-ellipsis">
     
   
-    Python Developers
+    Python開発者
   
 
     
@@ -986,7 +1118,7 @@
   <span class="md-ellipsis">
     
   
-    Quants & Researchers
+    クオンツ・研究者
   
 
     
@@ -1014,7 +1146,7 @@
   <span class="md-ellipsis">
     
   
-    Automated Trading
+    自動売買検討者
   
 
     
@@ -1042,7 +1174,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent Users
+    AIエージェント利用者
   
 
     
@@ -1070,7 +1202,7 @@
   <span class="md-ellipsis">
     
   
-    Discretionary → Systematic
+    裁量トレーダーのシステム化
   
 
     
@@ -1098,7 +1230,7 @@
   <span class="md-ellipsis">
     
   
-    Comparison with Other Tools
+    他ツールとの比較
   
 
     
@@ -1157,7 +1289,7 @@
   <span class="md-ellipsis">
     
   
-    Strategy Catalog
+    戦略カタログ
   
 
     
@@ -1173,7 +1305,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Strategy Catalog
+    戦略カタログ
   
 
           </label>
@@ -1193,7 +1325,7 @@
   <span class="md-ellipsis">
     
   
-    Strategy Templates
+    戦略テンプレート
   
 
     
@@ -1221,7 +1353,7 @@
   <span class="md-ellipsis">
     
   
-    Strategy Gallery
+    戦略実例ギャラリー
   
 
     
@@ -1272,7 +1404,7 @@
   <span class="md-ellipsis">
     
   
-    Visualization
+    データ可視化
   
 
     
@@ -1288,7 +1420,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Visualization
+    データ可視化
   
 
           </label>
@@ -1308,7 +1440,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -1336,7 +1468,7 @@
   <span class="md-ellipsis">
     
   
-    Installation
+    インストール
   
 
     
@@ -1364,7 +1496,7 @@
   <span class="md-ellipsis">
     
   
-    Features
+    機能詳細
   
 
     
@@ -1392,7 +1524,7 @@
   <span class="md-ellipsis">
     
   
-    Configuration
+    設定
   
 
     
@@ -1464,7 +1596,7 @@
   <span class="md-ellipsis">
     
   
-    Release Notes
+    リリースノート
   
 
     
@@ -1480,7 +1612,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Release Notes
+    リリースノート
   
 
           </label>
@@ -1559,7 +1691,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI リファレンス
   
 
     
@@ -1575,7 +1707,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    CLI Reference
+    CLI リファレンス
   
 
           </label>
@@ -1595,7 +1727,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -1639,7 +1771,7 @@
   <span class="md-ellipsis">
     
   
-    Core commands
+    コアコマンド
   
 
     
@@ -1655,7 +1787,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Core commands
+    コアコマンド
   
 
           </label>
@@ -1951,7 +2083,7 @@
   <span class="md-ellipsis">
     
   
-    Auxiliary commands
+    補助コマンド
   
 
     
@@ -1967,7 +2099,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Auxiliary commands
+    補助コマンド
   
 
           </label>
@@ -2067,7 +2199,7 @@
   <span class="md-ellipsis">
     
   
-    Meta commands
+    メタコマンド
   
 
     
@@ -2083,7 +2215,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Meta commands
+    メタコマンド
   
 
           </label>
@@ -2146,7 +2278,7 @@
   <span class="md-ellipsis">
     
   
-    Changelog
+    変更履歴
   
 
     
@@ -2163,38 +2295,33 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Legal & Disclaimers
+    利用規約と免責
   
 
     
@@ -2205,12 +2332,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Legal & Disclaimers
+    利用規約と免責
   
 
           </label>
@@ -2223,14 +2350,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../trust-safety-limits/" class="md-nav__link">
+      <a href="../../legal/trust-safety-limits/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Trust, Safety, and Limits
+    信頼・安全・制限
   
 
     
@@ -2251,14 +2378,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../disclaimers/" class="md-nav__link">
+      <a href="../../legal/disclaimers/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Disclaimers
+    免責事項
   
 
     
@@ -2267,202 +2394,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    EULA
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    EULA
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-definitions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Definitions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-license-grant" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. License Grant
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-restrictions-strictly-enforced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Restrictions (Strictly Enforced)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-ownership-and-intellectual-property" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Ownership and Intellectual Property
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-disclaimer-of-financial-liability-critical" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Disclaimer of Financial Liability (CRITICAL)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-disclaimer-of-warranties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Disclaimer of Warranties
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-limitation-of-liability" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Limitation of Liability
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-indemnification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Indemnification
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-term-and-termination" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. Term and Termination
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-governing-law-and-dispute-resolution" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Governing Law and Dispute Resolution
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#11-general-provisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        11. General Provisions
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2475,14 +2406,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../privacy/" class="md-nav__link">
+      <a href="../../legal/eula/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Privacy Policy
+    EULA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../legal/privacy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    プライバシーポリシー
   
 
     
@@ -2516,7 +2475,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="目次">
   
   
   
@@ -2525,15 +2484,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      目次
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-definitions" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Definitions
+        なぜマクロデータか
       
     </span>
   </a>
@@ -2541,10 +2500,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-license-grant" class="md-nav__link">
+  <a href="#1-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. License Grant
+        1. API キーの設定
       
     </span>
   </a>
@@ -2552,10 +2511,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-restrictions-strictly-enforced" class="md-nav__link">
+  <a href="#2-vintage-look-ahead" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Restrictions (Strictly Enforced)
+        2. データ取得（vintage / look-ahead 厳密）
       
     </span>
   </a>
@@ -2563,10 +2522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-ownership-and-intellectual-property" class="md-nav__link">
+  <a href="#3-altdata" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Ownership and Intellectual Property
+        3. 戦略でマクロ系列を使う（ALTDATA）
       
     </span>
   </a>
@@ -2574,10 +2533,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-disclaimer-of-financial-liability-critical" class="md-nav__link">
+  <a href="#4-regime" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Disclaimer of Financial Liability (CRITICAL)
+        4. マクロ regime 分析
       
     </span>
   </a>
@@ -2585,10 +2544,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-disclaimer-of-warranties" class="md-nav__link">
+  <a href="#5-ml-external_series-macro_v1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Disclaimer of Warranties
+        5. ML 特徴量（EXTERNAL_SERIES / macro_v1）
       
     </span>
   </a>
@@ -2596,54 +2555,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-limitation-of-liability" class="md-nav__link">
+  <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Limitation of Liability
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#8-indemnification" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Indemnification
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#9-term-and-termination" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. Term and Termination
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#10-governing-law-and-dispute-resolution" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        10. Governing Law and Dispute Resolution
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#11-general-provisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        11. General Provisions
+        6. イベントブラックアウト
       
     </span>
   </a>
@@ -2667,81 +2582,94 @@
 
 
 
-<h1 id="alphaforge-end-user-license-agreement-eula">AlphaForge End-User License Agreement (EULA)<a class="headerlink" href="#alphaforge-end-user-license-agreement-eula" title="Permanent link">&para;</a></h1>
-<p><strong>Effective Date:</strong> 2026-05-10
-<strong>Version:</strong> 1.1</p>
+<h1 id="fred-vixcpi">FRED マクロデータ活用ガイド（金利・VIX・CPI）<a class="headerlink" href="#fred-vixcpi" title="Permanent link">&para;</a></h1>
+<p><a href="https://fred.stlouisfed.org/">FRED</a>（Federal Reserve Economic Data）のマクロ経済系列を AlphaForge に取り込み、<strong>レジーム判定・ML 特徴量・イベントブラックアウト</strong>に活用するガイドです。</p>
 <div class="admonition info">
-<p class="admonition-title">Source of Truth</p>
-<p>This page is a direct copy of <a href="https://github.com/alforge-labs/alforge-labs.github.io/blob/main/EULA.md"><code>EULA.md</code></a> at the root of the repository. The repository copy is the source of truth — if there is any discrepancy, the repository version prevails.</p>
+<p class="admonition-title">前提</p>
+<ul>
+<li><strong>対象読者</strong>: 価格指標ベースの戦略を一通り作れる中級者。マクロ regime / クロスアセット情報で期待値・Sharpe を底上げしたい方。</li>
+<li><strong>前提</strong>: AlphaForge バイナリ版、または <code>alpha-trade</code> モノレポ開発環境。</li>
+<li><strong>look-ahead 厳密</strong>: すべて vintage（公表日ベース）で処理され、改定値の先取りは起きません。</li>
+</ul>
 </div>
-<p>IMPORTANT — READ CAREFULLY: This End-User License Agreement ("Agreement") is a legal contract between you ("Licensee" or "You") and the AlphaForge developer ("Licensor", "We", or "Us") governing your use of the AlphaForge software, including its command-line interface, libraries, generated artifacts, documentation, and any updates or accompanying materials (collectively, the "Software").</p>
-<p>BY INSTALLING, COPYING, ACCESSING, OR OTHERWISE USING THE SOFTWARE — OR BY SELECTING "I AGREE" IN ANY ACCEPTANCE PROMPT — YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT, UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS. IF YOU DO NOT AGREE, DO NOT INSTALL OR USE THE SOFTWARE.</p>
-<hr />
-<h2 id="1-definitions">1. Definitions<a class="headerlink" href="#1-definitions" title="Permanent link">&para;</a></h2>
-<p>1.1 <strong>"Software"</strong> means the AlphaForge program in object-code form, all associated executables, scripts, configuration files, templates, generated outputs, and any documentation supplied with it.</p>
-<p>1.2 <strong>"Authorized User"</strong> means an individual who has obtained the Software through a legitimate channel and holds a valid, current subscription or license entitlement.</p>
-<p>1.3 <strong>"Confidential Information"</strong> means non-public information contained in or revealed by the Software, including its internal algorithms, data structures, parameter sets, and source-level behavior.</p>
-<hr />
-<h2 id="2-license-grant">2. License Grant<a class="headerlink" href="#2-license-grant" title="Permanent link">&para;</a></h2>
-<p>Subject to Your continuous compliance with this Agreement and payment of all applicable fees, Licensor grants You a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to install and use the Software in object-code form solely for Your own internal research, development, and personal trading workflows.</p>
-<p>This license is granted on a per-Authorized-User basis. The same Authorized User may install and use the Software on multiple personal devices that they personally own and operate (such as a desktop and a laptop), provided the use remains within the personal-use scope of that single individual. Sharing a single license across multiple individuals, multi-user use, service-bureau, hosted, or time-sharing use is not permitted without a separate written agreement. Licensor reserves the right to introduce technical activation limits (such as device-count enforcement) in future versions of the Software.</p>
-<hr />
-<h2 id="3-restrictions-strictly-enforced">3. Restrictions (Strictly Enforced)<a class="headerlink" href="#3-restrictions-strictly-enforced" title="Permanent link">&para;</a></h2>
-<p>You shall <strong>NOT</strong>, and shall not permit any third party to, directly or indirectly:</p>
-<p>3.1 <strong>No Reverse Engineering.</strong> Reverse engineer, decompile, disassemble, deobfuscate, or otherwise attempt to derive, reconstruct, or discover the source code, underlying algorithms, internal data formats, or non-public APIs of the Software, in whole or in part, by any means whatsoever, including but not limited to static analysis, dynamic instrumentation, debugging, memory inspection, network-traffic inspection, or AI-assisted reconstruction. This restriction applies to the maximum extent permitted by applicable law and survives termination of this Agreement.</p>
-<p>3.2 <strong>No Modification of Binaries.</strong> Modify, adapt, translate, patch, or create derivative works based on the Software's binaries, license-check mechanisms, telemetry, or activation routines.</p>
-<p>3.3 <strong>No Redistribution.</strong> Sell, resell, rent, lease, lend, sublicense, distribute, publish, transmit, host, or otherwise make the Software (or any portion of it) available to any third party.</p>
-<p>3.4 <strong>No Circumvention.</strong> Bypass, disable, tamper with, or interfere with any license verification, authentication, fingerprinting, usage tracking, or copy-protection feature of the Software.</p>
-<p>3.5 <strong>No Removal of Notices.</strong> Remove, alter, obscure, or fail to reproduce any copyright, trademark, license, or attribution notice contained in or on the Software.</p>
-<p>3.6 <strong>No Competitive Use.</strong> Use the Software, its outputs, or any information observed through its use to develop, train, or improve a product that competes with the Software.</p>
-<p>3.7 <strong>No Unlawful Use.</strong> Use the Software in violation of any applicable law, regulation, or third-party right, including securities laws, exchange rules, or market-abuse regulations.</p>
-<p>Any violation of this Section 3 constitutes a material breach and entitles Licensor to immediate termination, injunctive relief, and recovery of all damages permitted by law.</p>
-<hr />
-<h2 id="4-ownership-and-intellectual-property">4. Ownership and Intellectual Property<a class="headerlink" href="#4-ownership-and-intellectual-property" title="Permanent link">&para;</a></h2>
-<p>The Software is licensed, <strong>not sold</strong>. Licensor and its suppliers retain all right, title, and interest — including all intellectual property rights — in and to the Software, all copies, derivatives, and related Confidential Information. No rights are granted to You other than those expressly stated in this Agreement.</p>
-<p>You shall not contest, or assist any third party in contesting, the validity or ownership of Licensor's intellectual property rights.</p>
-<hr />
-<h2 id="5-disclaimer-of-financial-liability-critical">5. Disclaimer of Financial Liability (CRITICAL)<a class="headerlink" href="#5-disclaimer-of-financial-liability-critical" title="Permanent link">&para;</a></h2>
-<p><strong>THE SOFTWARE IS A TECHNICAL TOOL FOR STRATEGY RESEARCH AND BACKTESTING. IT IS NOT, AND MUST NOT BE TREATED AS, FINANCIAL, INVESTMENT, ACCOUNTING, LEGAL, TAX, OR REGULATORY ADVICE.</strong></p>
-<p>5.1 <strong>No Advisory Relationship.</strong> Licensor is not a registered investment adviser, broker-dealer, futures commission merchant, commodity trading advisor, or fiduciary of any kind. Use of the Software does not establish any advisory, brokerage, or fiduciary relationship between You and Licensor.</p>
-<p>5.2 <strong>No Guarantee of Performance.</strong> Backtest results, optimization outputs, simulated metrics, and any data produced by the Software are illustrative only. <strong>PAST OR SIMULATED PERFORMANCE IS NOT INDICATIVE OF, AND DOES NOT GUARANTEE, FUTURE RESULTS.</strong> Live markets involve slippage, latency, liquidity, regulatory, and behavioral factors that the Software does not and cannot fully model.</p>
-<p>5.3 <strong>Sole Responsibility for Trading Decisions.</strong> Every trading, investment, allocation, hedging, or risk-management decision You make in connection with the Software — including the choice of strategies, parameters, instruments, position sizes, and execution venues — is made solely by You, at Your sole discretion, and at Your sole risk.</p>
-<p>5.4 <strong>No Liability for Investment Losses.</strong> <strong>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR SHALL HAVE NO LIABILITY WHATSOEVER FOR ANY TRADING LOSSES, MISSED OPPORTUNITIES, MARGIN CALLS, LIQUIDATIONS, TAX CONSEQUENCES, OR OTHER FINANCIAL DAMAGES — DIRECT OR INDIRECT — ARISING OUT OF OR RELATED TO YOUR USE OF, OR INABILITY TO USE, THE SOFTWARE OR ANY OUTPUT IT PRODUCES, EVEN IF SUCH LOSSES RESULT FROM ERRORS, BUGS, INACCURACIES, MISCONFIGURATIONS, OR DEFECTS IN THE SOFTWARE.</strong></p>
-<p>5.5 <strong>Risk Acknowledgment.</strong> Trading and investing in financial instruments involves substantial risk, including the possible loss of principal and amounts greater than principal (e.g., when trading on margin or with derivatives). Only risk capital You can afford to lose should be deployed. You are encouraged to consult a qualified, independent professional before acting on any output of the Software.</p>
-<hr />
-<h2 id="6-disclaimer-of-warranties">6. Disclaimer of Warranties<a class="headerlink" href="#6-disclaimer-of-warranties" title="Permanent link">&para;</a></h2>
-<p>THE SOFTWARE IS PROVIDED <strong>"AS IS"</strong> AND <strong>"AS AVAILABLE,"</strong> WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING ANY WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, ACCURACY, RELIABILITY, COMPLETENESS, AVAILABILITY, OR QUIET ENJOYMENT. NO ADVICE OR INFORMATION OBTAINED FROM LICENSOR OR THROUGH THE SOFTWARE SHALL CREATE ANY WARRANTY NOT EXPRESSLY STATED HERE.</p>
-<hr />
-<h2 id="7-limitation-of-liability">7. Limitation of Liability<a class="headerlink" href="#7-limitation-of-liability" title="Permanent link">&para;</a></h2>
-<p>7.1 <strong>Exclusion of Damages.</strong> TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR USE — ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE SOFTWARE — REGARDLESS OF THE THEORY OF LIABILITY (CONTRACT, TORT, STATUTE, OR OTHERWISE) AND EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
-<p>7.2 <strong>Aggregate Cap.</strong> LICENSOR'S TOTAL CUMULATIVE LIABILITY UNDER OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE GREATER OF (A) THE FEES ACTUALLY PAID BY YOU TO LICENSOR FOR THE SOFTWARE DURING THE TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO THE CLAIM, OR (B) ONE HUNDRED U.S. DOLLARS (USD 100).</p>
-<p>7.3 <strong>Essential Basis.</strong> The disclaimers, exclusions, and limitations in Sections 5, 6, and 7 form an essential basis of this Agreement; absent them, the economic terms of this Agreement would be materially different.</p>
-<hr />
-<h2 id="8-indemnification">8. Indemnification<a class="headerlink" href="#8-indemnification" title="Permanent link">&para;</a></h2>
-<p>You shall defend, indemnify, and hold harmless Licensor and its officers, employees, and agents from and against any and all claims, losses, damages, liabilities, costs, and expenses (including reasonable attorneys' fees) arising out of or related to (i) Your use of the Software, (ii) Your breach of this Agreement, or (iii) Your violation of any law or third-party right.</p>
-<hr />
-<h2 id="9-term-and-termination">9. Term and Termination<a class="headerlink" href="#9-term-and-termination" title="Permanent link">&para;</a></h2>
-<p>9.1 <strong>Term.</strong> This Agreement is effective upon Your acceptance and continues until terminated.</p>
-<p>9.2 <strong>Termination by You.</strong> You may terminate this Agreement at any time by uninstalling and destroying all copies of the Software in Your possession or control.</p>
-<p>9.3 <strong>Termination by Licensor.</strong> Licensor may terminate or suspend this Agreement immediately upon any breach by You, including any violation of Section 3 (Restrictions).</p>
-<p>9.4 <strong>Effect of Termination.</strong> Upon termination, all rights granted to You under this Agreement cease immediately. You must promptly uninstall, destroy, and certify destruction of all copies of the Software. Sections 3, 4, 5, 6, 7, 8, 10, and 11 survive termination.</p>
-<hr />
-<h2 id="10-governing-law-and-dispute-resolution">10. Governing Law and Dispute Resolution<a class="headerlink" href="#10-governing-law-and-dispute-resolution" title="Permanent link">&para;</a></h2>
-<p>This Agreement is governed by and construed in accordance with the laws of Japan, without regard to its conflict-of-laws principles. The United Nations Convention on Contracts for the International Sale of Goods does not apply.</p>
-<p>Any dispute arising out of or relating to this Agreement shall be brought exclusively in the courts of Tokyo, Japan, and the parties consent to the personal jurisdiction of such courts. Notwithstanding the foregoing, Licensor may seek injunctive or equitable relief in any court of competent jurisdiction to protect its intellectual property.</p>
-<hr />
-<h2 id="11-general-provisions">11. General Provisions<a class="headerlink" href="#11-general-provisions" title="Permanent link">&para;</a></h2>
-<p>11.1 <strong>Entire Agreement.</strong> This Agreement constitutes the entire agreement between the parties regarding its subject matter and supersedes all prior or contemporaneous understandings, whether written or oral.</p>
-<p>11.2 <strong>Severability.</strong> If any provision is held unenforceable, the remaining provisions shall continue in full force and effect, and the unenforceable provision shall be modified to the minimum extent necessary to make it enforceable.</p>
-<p>11.3 <strong>No Waiver.</strong> Failure or delay in enforcing any provision is not a waiver of future enforcement of that or any other provision.</p>
-<p>11.4 <strong>Assignment.</strong> You may not assign or transfer this Agreement, in whole or in part, without Licensor's prior written consent. Licensor may assign this Agreement freely. Any unauthorized assignment is void.</p>
-<p>11.5 <strong>Force Majeure.</strong> Licensor shall not be liable for any delay or failure caused by events beyond its reasonable control.</p>
-<p>11.6 <strong>Updates.</strong> Licensor may update this Agreement from time to time. Continued use of the Software after notice of an update constitutes acceptance of the updated terms. The acceptance prompt may re-display when the Agreement version changes.</p>
-<p>11.7 <strong>Notices.</strong> Notices to Licensor shall be sent to the contact address published in the Software's documentation or release notes.</p>
-<hr />
-<p><strong>BY ACCEPTING THIS AGREEMENT, YOU EXPRESSLY ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD SECTIONS 3 (RESTRICTIONS), 5 (DISCLAIMER OF FINANCIAL LIABILITY), 6 (DISCLAIMER OF WARRANTIES), AND 7 (LIMITATION OF LIABILITY), AND THAT YOU AGREE TO BE BOUND BY THEM.</strong></p>
-<hr />
-<!-- Synced from: `EULA.md` at the repository root (Version 1.0, Effective Date: 2026-04-29). The repository copy is canonical. -->
+<h2 id="_1">なぜマクロデータか<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>価格指標だけの戦略は「相場の地合い（regime）」を捉えにくく、<strong>不利な局面でも機械的にエントリー</strong>しがちです。イールドカーブ・VIX・実質金利などのマクロ系列を併用すると、</p>
+<ul>
+<li>yield curve（10年−3ヶ月）が陰転 → トレンドフォローを停止／縮小</li>
+<li>VIX 高位 → 株式ロングを停止</li>
+<li>実質金利・DXY を ML 特徴量に投入してエントリー確率分類器を補強</li>
+<li>FOMC/NFP/CPI 発表前後はエントリーを停止（ブラックアウト）</li>
+</ul>
+<p>といった「<strong>不利な局面でのトレード停止</strong>」「<strong>ML 特徴量の補強</strong>」が可能になります（勝率より期待値・Sharpe の改善が主目的）。</p>
+<h2 id="1-api">1. API キーの設定<a class="headerlink" href="#1-api" title="Permanent link">&para;</a></h2>
+<p>FRED の無料 API キーを <a href="https://fred.stlouisfed.org/docs/api/api_key.html">API key ページ</a> で取得し、環境変数に設定します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FRED_API_KEY</span><span class="o">=</span><span class="s2">&quot;your_fred_api_key&quot;</span>
+</code></pre></div>
+<p><code>forge.yaml</code> の <code>data.providers.fred.api_key</code> でも設定できます。</p>
+<h2 id="2-vintage-look-ahead">2. データ取得（vintage / look-ahead 厳密）<a class="headerlink" href="#2-vintage-look-ahead" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># マクロ系列（全改定履歴を公表日 realtime_start で保存）</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>FRED:T10Y3M<span class="w"> </span>--start<span class="w"> </span><span class="m">2000</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2024</span>-12-31<span class="w">   </span><span class="c1"># 10年-3ヶ月スプレッド</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>FRED:VIXCLS<span class="w"> </span>--start<span class="w"> </span><span class="m">2000</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2024</span>-12-31<span class="w">   </span><span class="c1"># VIX</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># イベント公表日カレンダー（CPI / NFP の初回公表日）</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>FRED_RELEASE_DATES<span class="w"> </span>--start<span class="w"> </span><span class="m">2000</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2024</span>-12-31
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">vintage（改定）の扱い</p>
+<p>各観測値の全改定を、その値が公表された日（<code>realtime_start</code>）で保持します。バックテストではバー時刻 <code>t</code> に対し <code>realtime_start &lt;= t</code> を満たす <strong>最新の公表値のみ</strong> 参照され、<code>t</code> より後に公表された改定値は先取りされません。これが「マクロデータでのバックテストは未来を覗いてしまう」典型的な罠を構造的に防ぎます。</p>
+</div>
+<h2 id="3-altdata">3. 戦略でマクロ系列を使う（ALTDATA）<a class="headerlink" href="#3-altdata" title="Permanent link">&para;</a></h2>
+<p><code>ALTDATA</code> 指標で <code>source_key="FRED:&lt;series_id&gt;"</code> を参照します。例: イールドカーブ陰転（<code>&lt; 0</code>）局面ではエントリーを停止する。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">&quot;indicators&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yc&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ALTDATA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;source_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FRED:T10Y3M&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;column&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;value&quot;</span><span class="p">}},</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yc_regime&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REGIME_RULE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">&quot;states&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;left&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yc&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;right&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">}},</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;left&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yc&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;right&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">}}</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="p">],</span><span class="w"> </span><span class="nt">&quot;default_label&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}}</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">],</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nt">&quot;regime_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">&quot;indicator_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yc_regime&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">&quot;default_action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">&quot;states&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;1&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;entry_conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;long&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="cm">/* 通常のロング条件 */</span><span class="w"> </span><span class="p">]}}}}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="4-regime">4. マクロ regime 分析<a class="headerlink" href="#4-regime" title="Permanent link">&para;</a></h2>
+<p>メトリクスをマクロレジーム別に分解できます（<code>backtest_config.regime_analysis</code> の <code>method="macro"</code>、しきい値 + 持続 N 日）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">&quot;regime_analysis&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;macro&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;macro_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;series_column&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yield_curve_10y_3m&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;threshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;persist_n&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;label_on&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;label_off&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">&quot;label_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;risk_off&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;risk_on&quot;</span><span class="p">}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>利用可能な論理列名: <code>yield_curve_10y_3m</code> / <code>yield_curve_10y_2y</code> / <code>vix_close</code> / <code>dxy_broad</code> / <code>real_rate_10y</code> / <code>fed_funds</code> / <code>unemployment</code> / <code>cpi_index</code>。</p>
+<h2 id="5-ml-external_series-macro_v1">5. ML 特徴量（EXTERNAL_SERIES / macro_v1）<a class="headerlink" href="#5-ml-external_series-macro_v1" title="Permanent link">&para;</a></h2>
+<p><code>ML_SIGNAL_WFT</code> の <code>features</code> に <code>EXTERNAL_SERIES</code> を指定すると、マクロ列を ML 特徴量に投入できます。組み込みセット <code>macro_v1</code> も利用できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">&quot;features&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EXTERNAL_SERIES&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;column&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;yield_curve_10y_3m&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;transform&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;level&quot;</span><span class="p">},</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EXTERNAL_SERIES&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;column&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vix_close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;transform&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;window&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">},</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LAG&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;periods&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]}</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">]</span>
+</code></pre></div>
+<p><code>transform</code> は <code>level</code> / <code>diff</code> / <code>pct_change</code> / <code>zscore</code>（いずれも過去窓のみで未来参照なし）。ウォークフォワード（WFT）では先頭 <code>train_ratio</code> のみで学習し、学習区間の予測は除外されるため leak が混入しません。</p>
+<h2 id="6">6. イベントブラックアウト<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>マクロ統計の公表前後 N 時間はエントリーを停止できます（日足/4h 以上が対象）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">&quot;risk_management&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;event_blackout&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CPI&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;NFP&quot;</span><span class="p">],</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;event_blackout_hours_before&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;event_blackout_hours_after&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>事前に <code>alpha-forge data alt fetch FRED_RELEASE_DATES</code> が必要です。</p>
+<div class="admonition note">
+<p class="admonition-title">look-ahead ではない / FOMC について</p>
+<p>リリース<strong>日時はスケジュール情報</strong>（事前に分かる）であり、公表される<strong>数値そのものは使わない</strong>ため look-ahead bias には当たりません。FOMC は単一の FRED データ系列に対応しないため、同梱プロバイダーでは CPI・NFP のみ提供します。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">VIX ゲートだけなら FRED 不要</p>
+<p>「VIX &lt; 20 でのみエントリー」のような単純なゲートは、外部シンボル（<code>symbol: "^VIX"</code>、yfinance）だけで完結します。FRED は金利・実質金利・CPI など、yfinance に無いマクロ系列で威力を発揮します。</p>
+</div>
 
 
 
@@ -2765,7 +2693,7 @@
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Back to top
+  ページトップへ戻る
 </button>
         
       </main>
@@ -2774,33 +2702,33 @@
   
     
       
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      <nav class="md-footer__inner md-grid" aria-label="フッター" >
         
           
-          <a href="../disclaimers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Disclaimers">
+          <a href="../ai-exploration-workflow/" class="md-footer__link md-footer__link--prev" aria-label="前: AI 駆動の戦略探索ワークフロー">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Previous
+                前
               </span>
               <div class="md-ellipsis">
-                Disclaimers
+                AI 駆動の戦略探索ワークフロー
               </div>
             </div>
           </a>
         
         
           
-          <a href="../privacy/" class="md-footer__link md-footer__link--next" aria-label="Next: Privacy Policy">
+          <a href="../../usecases/" class="md-footer__link md-footer__link--next" aria-label="次: 概要">
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Next
+                次
               </span>
               <div class="md-ellipsis">
-                Privacy Policy
+                概要
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -2837,7 +2765,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

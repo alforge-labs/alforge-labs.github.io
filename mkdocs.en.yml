@@ -66,6 +66,7 @@ nav:
       - TradingView × alpha-strike Integration: guides/tradingview-alpha-strike.md
       - alpha-strike Setup Guide: guides/alpha-strike-setup.md
       - AI-Driven Strategy Exploration Workflow: guides/ai-exploration-workflow.md
+      - FRED Macro Data Guide: guides/macro-data.md
       - Use Cases by Goal:
           - Overview: usecases/index.md
           - TradingView Users: usecases/tradingview.md
