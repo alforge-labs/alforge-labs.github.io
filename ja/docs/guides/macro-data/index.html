@@ -2664,7 +2664,7 @@
 <p>事前に <code>alpha-forge data alt fetch FRED_RELEASE_DATES</code> が必要です。</p>
 <div class="admonition note">
 <p class="admonition-title">look-ahead ではない / FOMC について</p>
-<p>リリース<strong>日時はスケジュール情報</strong>（事前に分かる）であり、公表される<strong>数値そのものは使わない</strong>ため look-ahead bias には当たりません。FOMC は単一の FRED データ系列に対応しないため、同梱プロバイダーでは CPI・NFP のみ提供します。</p>
+<p>リリース<strong>日時はスケジュール情報</strong>（事前に分かる）であり、公表される<strong>数値そのものは使わない</strong>ため look-ahead bias には当たりません。CPI・NFP は FRED 系列の初回公表日から導出、<strong>FOMC は同梱の静的スケジュール</strong>（Fed 公表の確定日程）から提供されます。FOMC スケジュールは年次更新が必要です。</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">VIX ゲートだけなら FRED 不要</p>

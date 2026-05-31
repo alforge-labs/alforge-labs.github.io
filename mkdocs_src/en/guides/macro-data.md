@@ -106,7 +106,7 @@ Halt entries N hours around macro releases (daily/4h+ timeframes only).
 Requires `alpha-forge data alt fetch FRED_RELEASE_DATES` beforehand.
 
 !!! note "Not look-ahead / about FOMC"
-    Release **dates are schedule information** (known in advance), and the **published values themselves are not used**, so this is not look-ahead bias. FOMC does not map to a single FRED data series, so the bundled provider supplies CPI and NFP only.
+    Release **dates are schedule information** (known in advance), and the **published values themselves are not used**, so this is not look-ahead bias. CPI and NFP are derived from FRED series first-release dates; **FOMC comes from a bundled static schedule** (the Fed's published calendar). The FOMC schedule needs annual updates.
 
 !!! tip "A VIX gate needs no FRED"
     A simple gate like "enter only when VIX < 20" is fully achievable with an external symbol (`symbol: "^VIX"`, yfinance). FRED shines for series not on yfinance — rates, real rates, CPI, etc.
