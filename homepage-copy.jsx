@@ -295,7 +295,7 @@ window.COPY = {
           status: 'active',
           badgeLabel: '進行中',
           title: '正式リリース・商用化',
-          items: ['全プロダクト正式リリース（v1.0）', 'MCP サーバ PyPI 公開（Claude Code / Codex / Cursor 連携）', 'WFO 二段ランキング・Experiment 宣言型 API', 'FRED/ALFRED マクロデータ provider', 'サポート・コミュニティ体制整備'],
+          items: ['全プロダクト正式リリース（v1.0）', 'MCP サーバ PyPI 公開（Claude Code / Codex / Cursor 連携）', 'FRED/ALFRED マクロデータ provider', 'サポート・コミュニティ体制整備'],
         },
       ],
     },
@@ -726,7 +726,7 @@ window.COPY = {
         { period: 'Late March 2026', status: 'done', badgeLabel: 'Done', title: 'Live Execution Integration', items: ['alpha-strike Webhook server', 'OANDA & moomoo API execution', 'Execution & response event analysis pipeline'] },
         { period: 'April 2026', status: 'done', badgeLabel: 'Done', title: 'Productization', items: ['License management, binary distribution & CI/CD pipeline', 'Official site launch', 'Claude-driven autonomous parameter search'] },
         { period: 'May 2026', status: 'done', badgeLabel: 'Done', title: 'Beta Release', items: ['alpha-forge v0.4.0 release (macOS / Windows / Linux binaries)', 'alpha-visualizer v0.2.0 published (OSS, TradingView Lightweight Charts)', 'Trial plan launched', 'Documentation polish'] },
-        { period: 'Summer 2026', status: 'active', badgeLabel: 'Active', title: 'Public Launch & Commercialization', items: ['Full v1.0 product release', 'MCP server published on PyPI (Claude Code / Codex / Cursor integration)', 'Two-stage WFO ranking & declarative Experiment API', 'FRED/ALFRED macro data provider', 'Support & community setup'] },
+        { period: 'Summer 2026', status: 'active', badgeLabel: 'Active', title: 'Public Launch & Commercialization', items: ['Full v1.0 product release', 'MCP server published on PyPI (Claude Code / Codex / Cursor integration)', 'FRED/ALFRED macro data provider', 'Support & community setup'] },
       ],
     },
     faq: {
