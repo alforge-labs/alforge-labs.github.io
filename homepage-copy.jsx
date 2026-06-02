@@ -82,7 +82,7 @@ window.COPY = {
           title: '2026 年夏予定',
           items: [
             'v1.0 正式リリース（全プロダクト）',
-            'MCP サーバ PyPI 公開（Claude Code / Codex / Cursor 連携）',
+            'MCP サーバ正式版（alpha 版は uvx alpha-forge-mcp で公開中）',
             'FRED / ALFRED マクロデータ provider',
             'サポート・コミュニティ体制の整備',
           ],
@@ -548,7 +548,7 @@ window.COPY = {
           title: 'Targeting summer 2026',
           items: [
             'v1.0 official release (all products)',
-            'MCP server on PyPI (Claude Code / Codex / Cursor)',
+            'MCP server GA (alpha already live: uvx alpha-forge-mcp)',
             'FRED / ALFRED macro data provider',
             'Support & community infrastructure',
           ],
