@@ -15,8 +15,7 @@ AlphaForge is designed so that **all operations complete via CLI/JSON/YAML**, ma
 
 | Command | Role |
 |---------|------|
-| `/explore-strategies` | Autonomous exploration of one untried indicator × symbol combination |
-| `/explore-strategies-loop` | Continuous exploration until rate limit |
+| `/explore-strategies` | Autonomous exploration of untried indicator × symbol combinations (`--runs N` to run N times, `--runs 0` for an unbounded loop until the rate limit or until candidates are exhausted) |
 | `/analyze-exploration` | Aggregate all exploration logs and output next recommended candidates |
 | `/grid-tune` | Exhaustive grid tuning of existing strategy + WFT validation |
 | `/tune-live-strategies` | Drift analysis and re-tuning of live strategies |

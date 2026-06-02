@@ -3405,6 +3405,12 @@
 <td>-</td>
 <td><code>--provider tv_mcp</code> 用 MCP server 系統（<code>tradesdontlie</code> / <code>vinicius</code>）。CLI 指定が <code>forge.yaml</code> より優先</td>
 </tr>
+<tr>
+<td><code>--with-dividends</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>OHLCV と同時に配当履歴も取得して保存する（#958 Phase 2）。高配当 ETF の真の total return 評価に必要</td>
+</tr>
 </tbody>
 </table>
 <p><code>SYMBOL</code> も <code>--watchlist</code> も指定しないとエラーになります。<code>--provider tv_mcp</code> を指定しても <code>endpoint</code> が解決できない場合はエラーで停止します。</p>
@@ -3658,7 +3664,7 @@
 <p><strong>長期データが必要な場合</strong>は次のいずれかを選択してください：</p>
 <ul>
 <li>株 / ETF: <code>--provider yfinance</code>（既定の最大約 30 年）</li>
-<li>FX 超長期: <code>--provider dukascopy</code>（数十年）</li>
+<li>FX 超長期: <code>forge.yaml</code> の <code>data.providers.fx_provider: dukascopy</code>（または <code>fx_provider: auto</code> + <code>auto_routing</code> で FX を <code>dukascopy</code> にルーティング）を設定して取得する（数十年）。<code>--provider</code> CLI フラグは <code>yfinance</code> / <code>moomoo</code> / <code>tv_mcp</code> のみ受理するため <code>--provider dukascopy</code> は使えない点に注意</li>
 <li>tv_mcp で深い履歴を取りたい場合は、事前に TradingView Desktop でチャートを目的の年代まで手動スクロールして bars cache を拡張しておくと、その範囲は MCP 経由で取得できるようになる（持続的な解決は MCP server 側の新 tool が必要）</li>
 </ul>
 </div>

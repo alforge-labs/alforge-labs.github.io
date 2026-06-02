@@ -3860,7 +3860,8 @@
 <h2 id="alpha-forge-journal-report">alpha-forge journal report<a class="headerlink" href="#alpha-forge-journal-report" title="Permanent link">&para;</a></h2>
 <p>Render the strategy's full history (snapshots, runs, tags, notes, verdicts) as a <strong>Markdown report</strong> (issue #523 Phase 1.5d-γ). With <code>--with-chart</code>, append a TradingView chart PNG fetched from a TV MCP server at the bottom.</p>
 <h3 id="synopsis_7">Synopsis<a class="headerlink" href="#synopsis_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>report<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-chart<span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>--interval<span class="w"> </span>&lt;TF&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>report<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>report<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span>--output<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span>--with-chart<span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>--interval<span class="w"> </span>&lt;TF&gt;
 </code></pre></div>
 <h3 id="arguments-and-options_7">Arguments and options<a class="headerlink" href="#arguments-and-options_7" title="Permanent link">&para;</a></h3>
 <table>
@@ -3889,7 +3890,7 @@
 <td><code>--with-chart</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Append a TradingView chart PNG at the end of the report</td>
+<td>Append a TradingView chart PNG at the end of the report. Also requires <code>--output</code> (the chart PNG is written next to the Markdown file) and <code>--symbol</code>/<code>--interval</code></td>
 </tr>
 <tr>
 <td><code>--symbol</code></td>
@@ -3944,6 +3945,11 @@
 <td><code>--with-chart requires --symbol / --interval.</code></td>
 <td>Missing chart args</td>
 <td>Add <code>--symbol</code> and <code>--interval</code></td>
+</tr>
+<tr>
+<td><code>--with-chart requires --output (chart PNG is written next to the Markdown file).</code></td>
+<td><code>--with-chart</code> given without <code>--output</code> (cannot combine with stdout output)</td>
+<td>Add <code>--output &lt;FILE&gt;</code></td>
 </tr>
 </tbody>
 </table>

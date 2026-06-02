@@ -18,16 +18,15 @@ For quantitative analysts and researchers who prioritize statistical rigor and w
 # 1. Declare hypothesis in JSON
 alpha-forge strategy create regime_test --template hmm_bb_rsi
 
-# 2. Grid search over multiple parameters
-alpha-forge optimize grid QQQ --strategy regime_test \
-  --param rsi_period 10 14 20 \
-  --param bb_period 15 20 25
+# 2. Grid search over the parameters declared in the strategy JSON
+# (the grid is defined by optimizer_config.param_ranges in regime_test's JSON)
+alpha-forge optimize grid QQQ --strategy regime_test --top-k 10
 
 # 3. Walk-forward validation (5 folds)
-alpha-forge optimize walk-forward QQQ --strategy regime_test --folds 5
+alpha-forge optimize walk-forward QQQ --strategy regime_test --windows 5
 
 # 4. Save experiment to journal
-alpha-forge journal record regime_test --note "HMM period sensitivity analysis"
+alpha-forge journal note regime_test "HMM period sensitivity analysis"
 ```
 
 ## Evaluating Overfitting Risk

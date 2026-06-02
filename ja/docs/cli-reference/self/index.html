@@ -2584,6 +2584,8 @@
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.4.0<span class="w"> </span><span class="c1"># 任意バージョンへピン留め</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w"> </span>--dry-run<span class="w">       </span><span class="c1"># DL・検証・展開のみ実行（差し替えなし）</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w"> </span>--print-target<span class="w">  </span><span class="c1"># 検出したインストールレイアウトを表示（トラブル時に共有）</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w"> </span>--force<span class="w">         </span><span class="c1"># 既に最新でも再ダウンロードする</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w"> </span>--no-smoke-test<span class="w"> </span><span class="c1"># 差し替え後の起動確認をスキップ（CI 等で時間を惜しむ場合）</span>
 </code></pre></div>
 <h3 id="_1">動作する条件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <p><code>install.sh</code> でインストールされた <strong>forge.dist ディレクトリ + symlink 形式</strong>（典型: <code>~/.local/share/alpha-forge/forge.dist/</code> + <code>~/.local/bin/forge</code>）で動作します。</p>

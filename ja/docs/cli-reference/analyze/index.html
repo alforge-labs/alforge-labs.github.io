@@ -2775,7 +2775,7 @@
 <h1 id="alpha-forge-analyze">alpha-forge analyze<a class="headerlink" href="#alpha-forge-analyze" title="Permanent link">&para;</a></h1>
 <p>戦略分析の補助ツール群。テクニカル指標カタログ（<code>indicator</code>）、ML データセット・モデル学習・WFT 検証（<code>ml</code>）、ペアトレード用コインテグレーション検定（<code>pairs</code>）の 3 サブグループを含みます。</p>
 <h2 id="alpha-forge-analyze-indicator">alpha-forge analyze indicator<a class="headerlink" href="#alpha-forge-analyze-indicator" title="Permanent link">&para;</a></h2>
-<p><code>alpha-forge</code> がサポートするテクニカル指標 30+ のカタログ・詳細を参照します。</p>
+<p><code>alpha-forge</code> がサポートするテクニカル指標 50+ のカタログ・詳細を参照します。</p>
 <h2 id="alpha-forge-analyze-indicator-list">alpha-forge analyze indicator list<a class="headerlink" href="#alpha-forge-analyze-indicator-list" title="Permanent link">&para;</a></h2>
 <p>対応指標の一覧を表示します。<code>FILTER_NAME</code> 指定で部分一致絞り込み（大文字小文字を区別しない）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>FILTER_NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--detail<span class="o">]</span>
@@ -2805,16 +2805,18 @@
 </tbody>
 </table>
 <p>サンプル出力：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>利用可能なインジケーター一覧（35件）:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>利用可能なインジケーター一覧（52件）:
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  [トレンド]      SMA  EMA  WMA  HMA  TEMA  MACD  ADX  SUPERTREND
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  [モメンタム]    RSI  STOCH  CCI  WILLR  ROC
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  [ボラティリティ] ATR  BBANDS  KELTNER
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  [出来高]        OBV  VWAP  CMF
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  [レジーム]      HMM
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  [その他]        EXPR  ALTDATA
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>詳細: alpha-forge analyze indicator show &lt;TYPE&gt;
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  [オシレーター]  CCI  MFI  MOM  ROC  RSI  STOCH  TRIX  WILLR
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  [ボラティリティ]  ATR  BBANDS  KC
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  [出来高]  CMF  OBV  VWAP
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  [高度な機能]  ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>詳細: alpha-forge analyze indicator show &lt;TYPE&gt;
 </code></pre></div>
 <h2 id="alpha-forge-analyze-indicator-show">alpha-forge analyze indicator show<a class="headerlink" href="#alpha-forge-analyze-indicator-show" title="Permanent link">&para;</a></h2>
 <p>指定指標の詳細（説明・パラメータ・出力・使用例）を表示します。</p>

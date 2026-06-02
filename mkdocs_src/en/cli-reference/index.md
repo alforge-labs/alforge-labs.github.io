@@ -12,11 +12,11 @@ Implementation-derived catalog extracted from the Click decorators in `alpha-for
 
 | Group | Kind | Subcommands | Description | Details |
 |---|---|---|---|---|
-| **strategy** | Core | `list` `create` `save` `show` `migrate` `delete` `purge` `validate` `signals` `scaffold` | Create, register, and manage strategy JSON | [strategy →](strategy.md) |
-| **backtest** | Core | `run` `batch` `diagnose` `list` `report` `migrate` `compare` `portfolio` `chart` `monte-carlo` `signal-count` | Run backtests and analyze results | [backtest →](backtest.md) |
+| **strategy** | Core | `list` `create` `save` `show` `migrate` `delete` `purge` `validate` `signals` `scaffold` `cost-presets` | Create, register, and manage strategy JSON | [strategy →](strategy.md) |
+| **backtest** | Core | `run` `batch` `combine` `diagnose` `list` `report` `migrate` `compare` `portfolio` `chart` `monte-carlo` `signal-count` | Run backtests and analyze results | [backtest →](backtest.md) |
 | **optimize** | Core | `run` `cross-symbol` `portfolio` `multi-portfolio` `walk-forward` `apply` `sensitivity` `history` `grid` | Parameter optimization (Bayesian, grid, walk-forward) | [optimize →](optimize.md) |
-| **explore** | Core | `run` `import` `log` `status` `health` `diagnose` `recommend show` `coverage {update,build,show}` `result show` | Autonomous exploration loop (backtest → optimize → WFT) | [explore →](explore.md) |
-| **live** | Core | `list` `events` `convert-check` `import-events` `trades` `summary` `compare` `doctor` `sync-events` | Live trading analysis and operational records | [live →](live.md) |
+| **explore** | Core | `run` `import` `log` `status` `health` `diagnose` `recommend {show,prune}` `coverage {update,build,show}` `result show` | Autonomous exploration loop (backtest → optimize → WFT) | [explore →](explore.md) |
+| **live** | Core | `list` `events` `convert-check` `import-events` `trades` `summary` `compare` `doctor` `sync-events` `replay` | Live trading analysis and operational records | [live →](live.md) |
 | **pine** | Core | `generate` `preview` `verify` `import` | Convert between strategy JSON and TradingView Pine Script (`verify` validates syntax via TradingView MCP) | [pine →](pine.md) |
 | **journal** | Core | `list` `show` `runs` `compare` `tag` `note` `report` `verdict` | Track run history, tags, verdicts, and Markdown reports | [journal →](journal.md) |
 | **idea** | Core | `add` `list` `show` `status` `link` `tag` `note` `search` | Manage and search investment ideas | [idea →](idea.md) |

@@ -5,11 +5,11 @@
 | サブコマンド | 説明 |
 |-------------|------|
 | `run` | バックテスト→最適化→WFT→DB登録を一気通貫実行（**メインコマンド**） |
-| `index` | `explored_log.md` から `exploration_index.yaml` を生成 |
 | `import` | 既存 Markdown ログを探索 DB へ投入 |
 | `log` | 探索試行を DB に手動記録 |
 | `status` | ゴールに対する網羅状況マップを表示 |
 | `result` | 探索 DB に保存された最新試行の詳細を表示 |
+| `diagnose` | WFT 不合格戦略のデータ期間延長シナリオを線形外挿で試算（issue #685） |
 | `health` | 直近 N 件の試行から連続失敗・scaffold 固定化を検出（無人運転の品質ゲート） |
 | `recommend` | 次の探索候補を `recommendations.yaml` へ出力 |
 | `coverage` | パラメータカバレッジ（YAML）の更新・参照 |

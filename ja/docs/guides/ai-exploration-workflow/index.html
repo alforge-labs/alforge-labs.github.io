@@ -4688,7 +4688,7 @@
 <blockquote>
 <p>⚠️ <strong>TV MCP は長期 fetch には使用不可</strong>（issue #683）<br />
 tradesdontlie / vinicius 系の MCP server の <code>chart_scroll_to_date</code> が <code>"evaluate is not defined"</code> エラーで動作せず、TV Desktop に過去データをロードできません。<code>data_get_ohlcv</code> は現在チャートに表示されている bars のみ返すため、<code>alpha-forge data fetch &lt;SYM&gt; --provider tv_mcp --period 20y</code> を呼んでも最新 ~14 ヶ月分しか取れません。長期データは <strong>yfinance を推奨</strong>します。<br />
-TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode metrics</code>) や チャート PNG 取得 (<code>alpha-forge tv chart</code>) には有用です。</p>
+TV MCP は引き続き Pine 検証 (<code>alpha-forge pine verify --check-mode metrics</code>) や チャート PNG 取得 (<code>alpha-forge data tv-mcp chart</code>) には有用です。</p>
 </blockquote>
 <h4 id="explore-strategies-tv-mcp"><code>/explore-strategies</code> の TV MCP 事前確認<a class="headerlink" href="#explore-strategies-tv-mcp" title="Permanent link">&para;</a></h4>
 <p><code>exploration.data_provider_override.{stock|fx}: tv_mcp</code> が設定された goal でループを開始すると、スキル冒頭で <code>alpha-forge data tv-mcp check --json</code> が自動実行されます：</p>

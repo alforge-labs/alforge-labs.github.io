@@ -72,7 +72,7 @@ alpha-forge data fetch QQQ --period 5y
 alpha-forge backtest run QQQ --strategy my_playbook --json
 
 # 4. Capture the baseline for emotional-bias comparison
-alpha-forge journal record my_playbook --note "Baseline vs. discretionary record"
+alpha-forge journal note my_playbook "Baseline vs. discretionary record"
 ```
 
 ## Related Docs

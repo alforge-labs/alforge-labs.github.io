@@ -11,12 +11,14 @@ Create, register, validate, and manage strategy JSON definitions. Covers scaffol
 |---------|-------------|
 | [`alpha-forge strategy list`](#alpha-forge-strategy-list) | List all registered strategies |
 | [`alpha-forge strategy create`](#alpha-forge-strategy-create) | Create a JSON file from a built-in template |
+| [`alpha-forge strategy scaffold`](#alpha-forge-strategy-scaffold) | Scaffold a strategy from a symbol, indicators, and a strategy type |
 | [`alpha-forge strategy save`](#alpha-forge-strategy-save) | Register a custom strategy from a JSON file |
 | [`alpha-forge strategy show`](#alpha-forge-strategy-show) | Display the definition (JSON) of a registered strategy |
 | [`alpha-forge strategy migrate`](#alpha-forge-strategy-migrate) | Import existing JSON files into the DB |
 | [`alpha-forge strategy delete`](#alpha-forge-strategy-delete) | Delete a registered strategy from the DB |
 | [`alpha-forge strategy purge`](#alpha-forge-strategy-purge) | Purge the strategy JSON, related results, and DB entry in a single command |
 | [`alpha-forge strategy validate`](#alpha-forge-strategy-validate) | Validate strategy logical consistency |
+| [`alpha-forge strategy cost-presets`](#alpha-forge-strategy-cost-presets) | List built-in cost presets |
 | [`alpha-forge strategy signals`](#alpha-forge-strategy-signals) | Count entry signals for a strategy |
 
 ---
@@ -28,12 +30,14 @@ List all registered strategies. When `config.strategies.use_db` is true, reads f
 ### Synopsis
 
 ```bash
-alpha-forge strategy list
+alpha-forge strategy list [--json]
 ```
 
 ### Arguments and options
 
-None.
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Output as JSON (machine-readable, for MCP / pipe use) |
 
 ### Sample output
 
@@ -181,7 +185,7 @@ Pretty-print a registered strategy JSON to stdout.
 ### Synopsis
 
 ```bash
-alpha-forge strategy show <STRATEGY_ID>
+alpha-forge strategy show <STRATEGY_ID> [--json] [--with-silence-stats]
 ```
 
 ### Arguments and options
@@ -189,6 +193,8 @@ alpha-forge strategy show <STRATEGY_ID>
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID to display |
+| `--json` | flag | false | Output as pure JSON (for piping) |
+| `--with-silence-stats` | flag | false | Compute and display historical `hedge_trigger` firing stats for buy-hold-overlay (#966 Phase 3). For composite `REGIME_RULE`, per-condition and aggregated counts are shown. Requires OHLC data fetch. |
 
 ### Sample output
 
@@ -390,6 +396,53 @@ Use `purge` to wipe a strategy completely; use `delete --with-results` when you 
 
 ---
 
+## alpha-forge strategy scaffold
+
+Generate a ready-to-use strategy JSON from a symbol, a set of indicators, and a strategy type. Unlike `create` (which copies a built-in template you must edit), `scaffold` builds the indicators, entry/exit conditions, and risk-management block for you. This is the primary strategy-generation entrypoint used by the `/explore-strategies` workflow.
+
+### Synopsis
+
+```bash
+alpha-forge strategy scaffold --symbol <SYMBOL> --indicators <CSV> --type <TYPE> [OPTIONS]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--symbol` | required | - | Target symbol (e.g. `GC=F`, `AAPL`) |
+| `--indicators` | required | - | Comma-separated indicators: `BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH` (a mean-reversion + single EMA/SMA trend filter on FX/commodity tends to signal-starve; alternatives are emitted as a stderr `WARNING`, issue #830) |
+| `--type` | required | - | `mean-reversion` \| `trend-following` \| `buy-hold-overlay` |
+| `--strategy-id` | optional | auto-generated | `strategy_id` for the generated JSON |
+| `--output` | optional | - | Output JSON file path |
+| `--save` | flag | false | Save directly to the DB |
+| `--no-atr` | flag | false | Skip auto-adding ATR (added by default) |
+| `--goal` | optional | - | Goal name auto-applying `scaffold_defaults` from `goals.yaml` (issue #461) |
+| `--position-size-pct` | float | type-specific (`mean-reversion`=15.0 / `trend-following`=10.0) | Position size % of equity (issue #461) |
+| `--leverage` | float | `1.0` | Leverage multiplier (0=no position, >1=leveraged; issue #461) |
+| `--stop-loss-pct` | float | null | Stop-loss % from entry price (issue #461) |
+| `--take-profit-pct` | float | null | Take-profit % from entry price (issue #461) |
+| `--trailing-stop-pct` | float | null | Trailing-stop % drawdown from peak close (issue #765) |
+| `--target-exposure-pct` | float (0<x<=100) | `70.0` | (`buy-hold-overlay` only) Target exposure % during hedge regime (#922 Phase 3) |
+| `--hedge-trigger-mode` | `or` \| `and` | `or` | (`buy-hold-overlay` only) Aggregation mode for composite hedge triggers (#964/#965); ignored for single-indicator setups |
+| `--commission-pct` | float | inherits `backtest.commission_pct` | Strategy-specific one-way commission % (issue #766) |
+| `--slippage-pct` | float | inherits `backtest.slippage_pct` | Strategy-specific one-way slippage % (issue #766) |
+| `--cost-preset` | option | - | Cost preset name (issue #785; e.g. `moomoo-crypto-spot`, `binance-spot-vip0`, `oanda-fx-major`, `ibkr-us-stock-fixed`) — explicit `--commission-pct`/`--slippage-pct` win. See [`alpha-forge strategy cost-presets`](#alpha-forge-strategy-cost-presets) |
+| `--timeframe` | option | `1d` | Strategy timeframe (e.g. `1d`, `4h`; issue #463/#758) |
+| `--confirm-bars` | int | - | Reversal confirmation bars (`mean-reversion` only; issue #470/#473) |
+| `--wick-ratio` | float | - | Pin-bar wick-length threshold for reversals (issue #473; effective only when `confirm_bars>=1`) |
+| `--vol-tier` | `auto` \| `low` \| `mid` \| `high` | `auto` | Volatility tier controlling mean-reversion SL/TP defaults (issue #886): `low`=0.8%/1.6%, `mid`=1.5%/3.0%, `high`=3.5%/7.0%; `auto` infers from trailing-252d ATR%; explicit SL/TP win |
+| `--allow-extreme` | flag | false | Allow 5+ indicators (issue #888); normally aborted to avoid `no_signals`/`pre_filter_failed` |
+| `--reject-on-warning` | flag | false | Exit with code `2` (without saving) on any scaffold warning (issue #903) |
+
+### Exit codes
+
+- `0` on success
+- `2` when `--reject-on-warning` is set and a scaffold warning is detected
+- `1` when generation is aborted (e.g. 5+ indicators without `--allow-extreme`)
+
+---
+
 ## alpha-forge strategy validate
 
 Run **logical consistency checks** on a strategy. With `--symbol`, also runs **dynamic checks** (signal counts and condition correlation on real data). Pass a `.json` path as `STRATEGY_ID` to validate an unregistered file directly.
@@ -496,6 +549,24 @@ Strategy: my_v1  [NG]
 | Message | Cause | Fix |
 |---------|-------|-----|
 | `Error: file not found - <path>` | `.json` path not found | Verify the path |
+
+---
+
+## alpha-forge strategy cost-presets
+
+List the built-in cost presets (broker/exchange fee + slippage + spread profiles). Use a preset name with `alpha-forge strategy scaffold --cost-preset <NAME>` or `alpha-forge backtest run ... --cost-preset <NAME>` to bake `commission_pct` / `slippage_pct` / `spread_pct` into the strategy (issue #785).
+
+### Synopsis
+
+```bash
+alpha-forge strategy cost-presets [--json]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Output as JSON |
 
 ---
 

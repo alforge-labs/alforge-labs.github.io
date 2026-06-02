@@ -677,7 +677,7 @@ exploration:
 
 > ⚠️ **TV MCP は長期 fetch には使用不可**（issue #683）  
 > tradesdontlie / vinicius 系の MCP server の `chart_scroll_to_date` が `"evaluate is not defined"` エラーで動作せず、TV Desktop に過去データをロードできません。`data_get_ohlcv` は現在チャートに表示されている bars のみ返すため、`alpha-forge data fetch <SYM> --provider tv_mcp --period 20y` を呼んでも最新 ~14 ヶ月分しか取れません。長期データは **yfinance を推奨**します。  
-> TV MCP は引き続き Pine 検証 (`alpha-forge pine verify --check-mode metrics`) や チャート PNG 取得 (`alpha-forge tv chart`) には有用です。
+> TV MCP は引き続き Pine 検証 (`alpha-forge pine verify --check-mode metrics`) や チャート PNG 取得 (`alpha-forge data tv-mcp chart`) には有用です。
 
 #### `/explore-strategies` の TV MCP 事前確認
 

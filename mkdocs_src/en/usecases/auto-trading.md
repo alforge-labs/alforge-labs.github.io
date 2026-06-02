@@ -42,7 +42,7 @@ Broker API (actual orders)
 alpha-forge backtest run QQQ --strategy my_strategy
 
 # 2. Generate Pine Script
-alpha-forge pine generate my_strategy --output my_strategy.pine
+alpha-forge pine generate --strategy my_strategy
 
 # 3. Import to TradingView and configure alerts
 # (done in TradingView UI)

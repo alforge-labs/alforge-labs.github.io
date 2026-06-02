@@ -2891,10 +2891,6 @@
 <td>Run backtest → optimize → WFT → DB registration end-to-end (<strong>main command</strong>)</td>
 </tr>
 <tr>
-<td><code>index</code></td>
-<td>Build <code>exploration_index.yaml</code> from <code>explored_log.md</code></td>
-</tr>
-<tr>
 <td><code>import</code></td>
 <td>Bulk-import a Markdown log into the exploration DB</td>
 </tr>
@@ -2909,6 +2905,10 @@
 <tr>
 <td><code>result</code></td>
 <td>Show details of the latest trial saved in the exploration DB</td>
+</tr>
+<tr>
+<td><code>diagnose</code></td>
+<td>Estimate whether a longer backtest period would let a WFT-failed strategy pass, via linear extrapolation of the trade rate (issue #685)</td>
 </tr>
 <tr>
 <td><code>health</code></td>

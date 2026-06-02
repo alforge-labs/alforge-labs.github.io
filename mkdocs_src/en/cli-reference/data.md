@@ -39,6 +39,7 @@ alpha-forge data fetch --watchlist <FILE> [OPTIONS]
 | `--provider` | choice | - | Explicit provider override (`yfinance` / `moomoo` / `tv_mcp`). Falls back to `data.providers` in `forge.yaml` when omitted |
 | `--mcp-server` | option | - | MCP server command for `--provider tv_mcp` (e.g. `node /opt/tv-mcp/server.js`). When omitted, the value is resolved from the `FORGE_TV_MCP_ENDPOINT` environment variable, then `data.providers.tv_mcp.endpoint` in `forge.yaml` (issue #689). `~` / `$HOME` inside the command are expanded automatically |
 | `--mcp-server-flavor` | choice | - | MCP server flavor for `--provider tv_mcp` (`tradesdontlie` / `vinicius`). CLI value takes precedence over `forge.yaml` |
+| `--with-dividends` | flag | false | Also fetch and save dividend history alongside OHLCV (#958 Phase 2). Required for a true total-return evaluation of high-yield ETFs, and a prerequisite for `alpha-forge backtest run --dividend-reinvest` |
 
 You must provide either `SYMBOL` or `--watchlist`. With `--provider tv_mcp`, the command fails fast if no `endpoint` can be resolved.
 
@@ -229,7 +230,7 @@ No stored data found.
     **For long-range history, use a different provider**:
 
     - Stocks / ETFs: `--provider yfinance` (up to ~30y by default)
-    - FX deep history: `--provider dukascopy` (decades)
+    - FX deep history: set `data.providers.fx_provider: dukascopy` in `forge.yaml` (decades). The `--provider` CLI flag only accepts `yfinance` / `moomoo` / `tv_mcp`, so `dukascopy` must be selected via config, not the flag.
     - If you must use `tv_mcp` for deep history, manually scroll the TradingView Desktop chart back to your target years first so the bars cache grows; the MCP can then read whatever has been preloaded. A persistent fix requires a new MCP tool that triggers historical loading on the chart.
 - **`forge.yaml` example**:
 

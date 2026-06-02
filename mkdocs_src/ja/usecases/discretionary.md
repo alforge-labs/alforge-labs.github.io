@@ -72,7 +72,7 @@ alpha-forge data fetch QQQ --period 5y
 alpha-forge backtest run QQQ --strategy my_playbook --json
 
 # 4. 感情バイアスを可視化（裁量実績との差分）
-alpha-forge journal record my_playbook --note "裁量実績との比較ベースライン"
+alpha-forge journal note my_playbook "裁量実績との比較ベースライン"
 ```
 
 ## 関連ドキュメント

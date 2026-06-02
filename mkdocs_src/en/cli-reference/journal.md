@@ -286,7 +286,8 @@ Render the strategy's full history (snapshots, runs, tags, notes, verdicts) as a
 ### Synopsis
 
 ```bash
-alpha-forge journal report <STRATEGY_ID> [--output <FILE>] [--with-chart --symbol <SYM> --interval <TF>]
+alpha-forge journal report <STRATEGY_ID> [--output <FILE>]
+alpha-forge journal report <STRATEGY_ID> --output <FILE> --with-chart --symbol <SYM> --interval <TF>
 ```
 
 ### Arguments and options
@@ -295,7 +296,7 @@ alpha-forge journal report <STRATEGY_ID> [--output <FILE>] [--with-chart --symbo
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID |
 | `--output` | file path | - | Markdown output destination. Stdout when omitted |
-| `--with-chart` | flag | false | Append a TradingView chart PNG at the end of the report |
+| `--with-chart` | flag | false | Append a TradingView chart PNG at the end of the report. Also requires `--output` (the chart PNG is written next to the Markdown file) and `--symbol`/`--interval` |
 | `--symbol` | option | - | TV symbol for the chart (required when `--with-chart`) |
 | `--interval` | option | - | TV interval for the chart (e.g. `D`, `60`) |
 | `--mock` | flag | false | Use the mock MCP client for chart retrieval (CI) |
@@ -318,6 +319,7 @@ alpha-forge journal report spy_sma_v1 --output reports/spy.md \
 |---------|-------|-----|
 | `No journal found: <id>` | Journal missing | Verify with `alpha-forge journal list` |
 | `--with-chart requires --symbol / --interval.` | Missing chart args | Add `--symbol` and `--interval` |
+| `--with-chart requires --output (chart PNG is written next to the Markdown file).` | `--with-chart` given without `--output` (cannot combine with stdout output) | Add `--output <FILE>` |
 
 ---
 

@@ -29,7 +29,7 @@ emitted Pine matches the alpha-forge backtest combine logic.
 ```bash
 forge pine generate \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
-  --combine-allocation equal \
+  --allocation equal \
   --rebalance-freq monthly \
   --rebalance-threshold 0.05 \
   --portfolio-id beat_qqq_hedged_v1 \

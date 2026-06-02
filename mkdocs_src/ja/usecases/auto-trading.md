@@ -42,7 +42,7 @@ Alpha Strike（発注処理）
 alpha-forge backtest run QQQ --strategy my_strategy
 
 # 2. Pine Scriptを生成
-alpha-forge pine generate my_strategy --output my_strategy.pine
+alpha-forge pine generate --strategy my_strategy
 
 # 3. TradingViewにインポートしてアラート設定
 # （TradingView UIで実施）

@@ -31,7 +31,7 @@ For Pine Script writers who want to take their backtesting to the next level wit
 
 ```bash
 # Create a strategy from template
-alpha-forge strategy create my_strategy --template hmm_bb_rsi
+alpha-forge strategy create --template hmm_bb_rsi --out my_strategy.json
 
 # Fetch daily data (e.g. QQQ)
 alpha-forge data fetch QQQ --period 5y

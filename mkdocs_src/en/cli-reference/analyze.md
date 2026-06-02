@@ -4,7 +4,7 @@ Strategy-analysis utilities. Three nested subgroups: technical indicators (`indi
 
 ## alpha-forge analyze indicator
 
-Browse the catalog of 30+ technical indicators supported by `alpha-forge`.
+Browse the catalog of 50+ technical indicators supported by `alpha-forge`.
 
 ## alpha-forge analyze indicator list
 
@@ -22,14 +22,16 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail]
 Sample output:
 
 ```text
-Supported indicators (35):
+Supported indicators (52):
 
-  [Trend]         SMA  EMA  WMA  HMA  TEMA  MACD  ADX  SUPERTREND
-  [Momentum]      RSI  STOCH  CCI  WILLR  ROC
-  [Volatility]    ATR  BBANDS  KELTNER
-  [Volume]        OBV  VWAP  CMF
-  [Regime]        HMM
-  [Other]         EXPR  ALTDATA
+  [Moving Average]   ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
+  [Trend]            ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
+  [Oscillator]       CCI  MFI  MOM  ROC  RSI  STOCH  TRIX  WILLR
+  [Volatility]       ATR  BBANDS  KC
+  [Volume]           CMF  OBV  VWAP
+  [Pivot/Channel]    CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW
+  [Stats/ML]         CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
+  [Advanced]         ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
 
 Details: alpha-forge analyze indicator show <TYPE>
 ```

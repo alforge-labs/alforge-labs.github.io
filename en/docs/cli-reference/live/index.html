@@ -2460,6 +2460,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-live-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synopsis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-errors_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3623,6 +3684,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-live-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synopsis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-errors_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3707,6 +3829,10 @@
 <tr>
 <td><a href="#alpha-forge-live-sync-events"><code>alpha-forge live sync-events</code></a></td>
 <td>Sync event logs from VPS to local via rsync</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a></td>
+<td>Reconstruct position-based live metrics from a combine portfolio's alert log</td>
 </tr>
 </tbody>
 </table>
@@ -4212,6 +4338,83 @@
 <li>rsync timeout: <code>1</code></li>
 <li>rsync own error: propagates rsync's exit code as is</li>
 </ul>
+<hr />
+<h2 id="alpha-forge-live-replay">alpha-forge live replay<a class="headerlink" href="#alpha-forge-live-replay" title="Permanent link">&para;</a></h2>
+<p>Reconstruct position-based live metrics from a combine portfolio's alert log. Intended for always-in-market combine overlays: it rebuilds position transitions from synced <code>alpha-strike</code> events (<code>alpha-forge live sync-events</code>) and computes Sharpe / CAGR / MaxDD from the portfolio equity curve. <code>order_reconciled</code> receipts are preferred as the authoritative source.</p>
+<h3 id="synopsis_9">Synopsis<a class="headerlink" href="#synopsis_9" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span>
+</code></pre></div>
+<h3 id="arguments-and-options_9">Arguments and options<a class="headerlink" href="#arguments-and-options_9" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PORTFOLIO_ID</code></td>
+<td>argument (required)</td>
+<td>-</td>
+<td>Combine portfolio ID</td>
+</tr>
+<tr>
+<td><code>--combine-strategies</code></td>
+<td>option (required)</td>
+<td>-</td>
+<td>Comma-separated combine strategy IDs (<strong>2 or more required</strong>)</td>
+</tr>
+<tr>
+<td><code>--since</code></td>
+<td>option</td>
+<td>-</td>
+<td>Lower bound of the period (ISO format; UTC assumed when no timezone)</td>
+</tr>
+<tr>
+<td><code>--compare</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Also run the backtest combine and show it side by side</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sample-output_8">Sample output<a class="headerlink" href="#sample-output_8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>=== live replay (position-based) — combo_spy_qqq ===
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>receipts: 128
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>| Metric           | Live      | Backtest  |
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>|------------------|-----------|-----------|
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>| sharpe_ratio     |      1.21 |      1.38 |
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>| cagr_pct         |     14.30 |     16.80 |
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>| max_drawdown_pct |     -5.40 |     -4.90 |
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>| total_return_pct |     +9.85 |    +11.20 |
+</code></pre></div>
+<p>The <code>Backtest</code> column appears only when <code>--compare</code> is passed. When no receipts match the <code>portfolio_id</code>, a warning is shown prompting you to confirm <code>alpha-forge live sync-events</code> has been run.</p>
+<h3 id="common-errors_5">Common errors<a class="headerlink" href="#common-errors_5" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--combine-strategies must list 2 or more strategies (comma-separated)</code></td>
+<td>Fewer than 2 strategy IDs provided</td>
+<td>Pass at least two IDs, e.g. <code>--combine-strategies spy_sma_v1,qqq_hmm_v1</code></td>
+</tr>
+<tr>
+<td><code>Failed to parse --since as ISO: ...</code></td>
+<td>Invalid ISO datetime</td>
+<td>Use an ISO 8601 value, e.g. <code>2026-03-01</code> or <code>2026-03-01T00:00:00Z</code></td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="common-behavior">Common behavior<a class="headerlink" href="#common-behavior" title="Permanent link">&para;</a></h2>
 <ul>

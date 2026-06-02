@@ -48,6 +48,9 @@ alpha-forge optimize run <SYMBOL> --strategy <ID> [OPTIONS]
 | `--end` | option | - | Optimization period end date `YYYY-MM-DD` |
 | `--max-drawdown` | float | - | Max drawdown constraint (%); over-threshold trials are penalized |
 | `--objective` | repeatable | - | Multi-objective goal (e.g. `sharpe_ratio_maximize`, `max_drawdown_pct_minimize`) |
+| `--goal` | option | - | Goal name (e.g. `default`, `stocks`). Includes the `goals.yaml` `pre_filter` thresholds in the JSON output |
+| `--sharpe-min` | float | `--goal` value or `1.0` | Minimum Sharpe ratio for `pre_filter_pass` |
+| `--max-dd` | float | `--goal` value or `25.0` | Max drawdown limit (%) for `pre_filter_pass` |
 
 `--max-drawdown` and `--objective` cannot be used together.
 
@@ -285,6 +288,9 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--windows` | int | `5` | Number of windows |
 | `--min-window-trades` | int | - | Skip windows whose IS trade count is below N and exclude them from the mean. Useful for low-frequency strategies that would otherwise drop entire windows to `-∞` |
 | `--json` | flag | false | Output results as JSON |
+| `--goal` | option | - | Goal name (e.g. `default`, `stocks`). Includes `goals.yaml` `pre_filter` thresholds in the JSON output; when set, the goal's WFT settings (including the OOS aggregation method `mean` / `median` / `trimmed_mean`, #947) are also applied |
+| `--sharpe-min` | float | `--goal` value or `1.0` | Minimum Sharpe ratio for the `pre_filter_pass` decision |
+| `--max-dd` | float | `--goal` value or `25.0` | Max drawdown limit (%) for the `pre_filter_pass` decision |
 
 ### Early warning for IS trade insufficiency and the `[WARNING]` mark
 

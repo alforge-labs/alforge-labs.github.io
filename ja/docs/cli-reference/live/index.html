@@ -2460,7 +2460,46 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-live-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -3623,7 +3662,46 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-live-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live replay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live replay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -3707,6 +3785,10 @@
 <tr>
 <td><a href="#alpha-forge-live-sync-events"><code>alpha-forge live sync-events</code></a></td>
 <td>VPS 上のイベントログをローカルに rsync で同期</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a></td>
+<td>combine portfolio の alert log から position ベースで live メトリクスを再構築</td>
 </tr>
 </tbody>
 </table>
@@ -4213,7 +4295,50 @@
 <li>rsync 自体のエラー: rsync の終了コードをそのまま伝播</li>
 </ul>
 <hr />
-<h2 id="_35">共通の挙動<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h2>
+<h2 id="alpha-forge-live-replay">alpha-forge live replay<a class="headerlink" href="#alpha-forge-live-replay" title="Permanent link">&para;</a></h2>
+<p>always-in-market の combine overlay 向けに、同期済み alpha-strike イベント（<a href="#alpha-forge-live-sync-events"><code>alpha-forge live sync-events</code></a> で取得）から position 推移を再構築し、portfolio equity curve から Sharpe / CAGR / MaxDD を算出します（issue #57）。<code>order_reconciled</code> イベントを権威ソースとして優先します。</p>
+<h3 id="_35">構文<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1&gt;,&lt;ID2&gt;<span class="o">[</span>,...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<h3 id="_36">引数とオプション<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PORTFOLIO_ID</code></td>
+<td>引数（必須）</td>
+<td>-</td>
+<td>combine portfolio 識別子</td>
+</tr>
+<tr>
+<td><code>--combine-strategies</code></td>
+<td>オプション（必須）</td>
+<td>-</td>
+<td>combine 対象戦略 ID（カンマ区切り、2 戦略以上）</td>
+</tr>
+<tr>
+<td><code>--since</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>期間下限（ISO 形式）</td>
+</tr>
+<tr>
+<td><code>--compare</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td><code>backtest combine</code> の結果と並べて比較表示する</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_37">共通の挙動<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>保存先</strong>: <code>&lt;journal_path&gt;/../live/</code> 配下（<code>events/</code>、<code>trades/</code>、<code>summaries/</code> のサブディレクトリ）</li>
 <li><strong><code>forge.yaml</code></strong>: 上記すべてのパスは <code>FORGE_CONFIG</code> が指す <code>forge.yaml</code> で決まる</li>

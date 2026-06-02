@@ -31,7 +31,7 @@ TradingViewでPine Scriptを書いている方が、AlphaForgeを使ってバッ
 
 ```bash
 # 戦略テンプレートを作成
-alpha-forge strategy create my_strategy --template hmm_bb_rsi
+alpha-forge strategy create --template hmm_bb_rsi --out my_strategy.json
 
 # 日足データを取得（例：QQQ）
 alpha-forge data fetch QQQ --period 5y

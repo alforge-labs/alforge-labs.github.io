@@ -56,10 +56,11 @@ alpha-forge --version
 ```
 
 ```
-AlphaForge CLI v1.x.x
+AlphaForge, version 0.10.0
+Check for updates: alpha-forge self version
 ```
 
-バージョンが表示されれば完了です。手動インストールやインストール先のカスタマイズは、本ページ後半の「詳細インストール」セクションを参照してください。
+`AlphaForge, version <X.Y.Z>` のように表示されれば完了です。手動インストールやインストール先のカスタマイズは、本ページ後半の「詳細インストール」セクションを参照してください。
 
 !!! note "最新版バイナリの直接ダウンロード"
     インストーラを使わずバイナリを直接配置したい場合は、[GitHub Releases（最新版）](https://github.com/alforge-labs/alforge-labs.github.io/releases/latest) から各プラットフォーム向け（`alpha-forge-macos-arm64` / `alpha-forge-linux-x64` / `alpha-forge-windows-x64.exe` 等）をダウンロードできます。詳細は本ページ「詳細インストール → 手動インストール」を参照してください。

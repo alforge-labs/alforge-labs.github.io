@@ -12,11 +12,11 @@
 
 | グループ | 種別 | サブコマンド | 説明 | 詳細 |
 |---|---|---|---|---|
-| **strategy** | コア | `list` `create` `save` `show` `migrate` `delete` `purge` `validate` `signals` `scaffold` | 戦略 JSON の作成・登録・管理 | [strategy →](strategy.md) |
-| **backtest** | コア | `run` `batch` `diagnose` `list` `report` `migrate` `compare` `portfolio` `chart` `monte-carlo` `signal-count` | バックテストの実行・結果分析 | [backtest →](backtest.md) |
+| **strategy** | コア | `list` `create` `save` `show` `migrate` `delete` `purge` `validate` `signals` `scaffold` `cost-presets` | 戦略 JSON の作成・登録・管理 | [strategy →](strategy.md) |
+| **backtest** | コア | `run` `batch` `combine` `diagnose` `list` `report` `migrate` `compare` `portfolio` `chart` `monte-carlo` `signal-count` | バックテストの実行・結果分析 | [backtest →](backtest.md) |
 | **optimize** | コア | `run` `cross-symbol` `portfolio` `multi-portfolio` `walk-forward` `apply` `sensitivity` `history` `grid` | パラメータ最適化（ベイズ・グリッド・ウォークフォワード） | [optimize →](optimize.md) |
-| **explore** | コア | `run` `import` `log` `status` `health` `diagnose` `recommend show` `coverage {update,build,show}` `result show` | 自律探索ループ（バックテスト → 最適化 → WFT） | [explore →](explore.md) |
-| **live** | コア | `list` `events` `convert-check` `import-events` `trades` `summary` `compare` `doctor` `sync-events` | ライブトレード分析と運用記録 | [live →](live.md) |
+| **explore** | コア | `run` `import` `log` `status` `health` `diagnose` `recommend {show,prune}` `coverage {update,build,show}` `result show` | 自律探索ループ（バックテスト → 最適化 → WFT） | [explore →](explore.md) |
+| **live** | コア | `list` `events` `convert-check` `import-events` `trades` `summary` `compare` `doctor` `sync-events` `replay` | ライブトレード分析と運用記録 | [live →](live.md) |
 | **pine** | コア | `generate` `preview` `verify` `import` | 戦略 JSON ↔ TradingView Pine Script 変換（`verify` は TradingView MCP で構文検証） | [pine →](pine.md) |
 | **journal** | コア | `list` `show` `runs` `compare` `tag` `note` `report` `verdict` | 実行履歴・タグ・判定・Markdown レポートの管理 | [journal →](journal.md) |
 | **idea** | コア | `add` `list` `show` `status` `link` `tag` `note` `search` | 投資アイデアの管理・検索 | [idea →](idea.md) |
