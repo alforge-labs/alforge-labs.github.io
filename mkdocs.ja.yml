@@ -86,6 +86,7 @@ nav:
       - 設定: alpha-visualizer/configuration.md
       - FAQ: alpha-visualizer/faq.md
       - リリースノート:
+          - v0.7.1 (2026-06-02): alpha-visualizer/release-0.7.1.md
           - v0.2.0 (2026-05-11): alpha-visualizer/release-0.2.0.md
   - CLI リファレンス:
       - 概要: cli-reference/index.md

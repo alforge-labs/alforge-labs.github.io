@@ -6,19 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="AlphaForge CLI official documentation — installation, commands, strategy templates, and AI agent integration.">
+        <meta name="description" content="alpha-visualizer has moved from v0.2.0 to v0.7.1. Highlights include renaming the CLI from vis to alpha-vis, migrating the core charts to TradingView lightweight-charts, a new signal time-series chart, reading live performance directly from SQLite, relicensing to Apache-2.0, and continuous dependency updates — raising both visualization quality and production readiness.">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/en/docs/usecases/quants/">
+        <link rel="canonical" href="https://alforgelabs.com/en/docs/alpha-visualizer/release-0.7.1/">
       
       
-        <link rel="prev" href="../python-dev/">
+        <link rel="prev" href="../faq/">
       
       
-        <link rel="next" href="../auto-trading/">
+        <link rel="next" href="../release-0.2.0/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>Quants & Researchers - AlphaForge Documentation</title>
+        <title>alpha-visualizer v0.7.1 — TradingView charts, live SQLite reads, and Apache-2.0 (cumulative update since v0.2.0) - AlphaForge Documentation</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#quants-researchers" class="md-skip">
+        <a href="#alpha-visualizer-v071-cumulative-update-since-v020" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quants & Researchers
+              alpha-visualizer v0.7.1 — TradingView charts, live SQLite reads, and Apache-2.0 (cumulative update since v0.2.0)
             
           </span>
         </div>
@@ -268,12 +268,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../../guides/end-to-end-workflow/" class="md-tabs__link">
           
   
@@ -310,11 +308,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../alpha-visualizer/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -564,31 +564,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   
@@ -606,7 +601,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -845,31 +840,26 @@
                 
   
   
-    
   
   
-  
     
     
     
     
       
       
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_9" >
         
           
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_9" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="0">
             
   
   
@@ -887,7 +877,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -905,7 +895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../usecases/" class="md-nav__link">
         
   
   
@@ -933,7 +923,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tradingview/" class="md-nav__link">
+      <a href="../../usecases/tradingview/" class="md-nav__link">
         
   
   
@@ -961,7 +951,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../python-dev/" class="md-nav__link">
+      <a href="../../usecases/python-dev/" class="md-nav__link">
         
   
   
@@ -986,37 +976,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Quants & Researchers
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../usecases/quants/" class="md-nav__link">
         
   
   
@@ -1032,70 +995,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#quantitative-evaluation-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quantitative Evaluation Features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#typical-research-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Typical Research Workflow
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#evaluating-overfitting-risk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Evaluating Overfitting Risk
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-docs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related Docs
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1108,7 +1007,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../auto-trading/" class="md-nav__link">
+      <a href="../../usecases/auto-trading/" class="md-nav__link">
         
   
   
@@ -1136,7 +1035,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/" class="md-nav__link">
+      <a href="../../usecases/ai-agents/" class="md-nav__link">
         
   
   
@@ -1164,7 +1063,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../discretionary/" class="md-nav__link">
+      <a href="../../usecases/discretionary/" class="md-nav__link">
         
   
   
@@ -1192,7 +1091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../comparison/" class="md-nav__link">
+      <a href="../../usecases/comparison/" class="md-nav__link">
         
   
   
@@ -1347,26 +1246,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -1384,7 +1288,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1402,7 +1306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -1430,7 +1334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -1458,7 +1362,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/features/" class="md-nav__link">
+      <a href="../features/" class="md-nav__link">
         
   
   
@@ -1486,7 +1390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -1514,7 +1418,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/faq/" class="md-nav__link">
+      <a href="../faq/" class="md-nav__link">
         
   
   
@@ -1539,26 +1443,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
         
           
-          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="">
             
   
   
@@ -1576,7 +1485,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1591,10 +1500,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../alpha-visualizer/release-0.7.1/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.7.1 (2026-06-02)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1610,6 +1546,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Highlights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Highlights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cli-renamed-from-vis-to-alpha-vis-v030-breaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CLI renamed from vis to alpha-vis (v0.3.0, breaking)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-core-charts-migrated-to-tradingview-lightweight-charts-v030-v040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Core charts migrated to TradingView lightweight-charts (v0.3.0, v0.4.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-signal-time-series-chart-v040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Signal time-series chart (v0.4.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-live-performance-read-directly-from-sqlite-v070" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Live performance read directly from SQLite (v0.7.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-relicensed-to-apache-20-v060" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Relicensed to Apache-2.0 (v0.6.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-ongoing-security-and-dependency-updates-v050-v071" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ongoing security and dependency updates (v0.5.0, v0.7.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related links
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1622,7 +1683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/release-0.2.0/" class="md-nav__link">
+      <a href="../release-0.2.0/" class="md-nav__link">
         
   
   
@@ -2486,10 +2547,93 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quantitative-evaluation-features" class="md-nav__link">
+  <a href="#highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quantitative Evaluation Features
+        Highlights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Highlights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cli-renamed-from-vis-to-alpha-vis-v030-breaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. CLI renamed from vis to alpha-vis (v0.3.0, breaking)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-core-charts-migrated-to-tradingview-lightweight-charts-v030-v040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Core charts migrated to TradingView lightweight-charts (v0.3.0, v0.4.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-signal-time-series-chart-v040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Signal time-series chart (v0.4.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-live-performance-read-directly-from-sqlite-v070" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Live performance read directly from SQLite (v0.7.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-relicensed-to-apache-20-v060" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Relicensed to Apache-2.0 (v0.6.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-ongoing-security-and-dependency-updates-v050-v071" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ongoing security and dependency updates (v0.5.0, v0.7.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to upgrade
       
     </span>
   </a>
@@ -2497,32 +2641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#typical-research-workflow" class="md-nav__link">
+  <a href="#related-links" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Typical Research Workflow
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#evaluating-overfitting-risk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Evaluating Overfitting Risk
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-docs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related Docs
+        Related links
       
     </span>
   </a>
@@ -2546,73 +2668,70 @@
 
 
 
-<h1 id="quants-researchers">Quants &amp; Researchers<a class="headerlink" href="#quants-researchers" title="Permanent link">&para;</a></h1>
-<p>For quantitative analysts and researchers who prioritize statistical rigor and want systematic optimization and walk-forward validation.</p>
-<h2 id="quantitative-evaluation-features">Quantitative Evaluation Features<a class="headerlink" href="#quantitative-evaluation-features" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>Details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Walk-Forward Validation</strong></td>
-<td>Automatic IS/OOS splits to detect overfitting</td>
-</tr>
-<tr>
-<td><strong>Optuna Optimization</strong></td>
-<td>Bayesian search over parameter space (200–1000 trials)</td>
-</tr>
-<tr>
-<td><strong>Multiple Objectives</strong></td>
-<td>Choose from Sharpe ratio, max drawdown, Calmar ratio, etc.</td>
-</tr>
-<tr>
-<td><strong>Reproducibility</strong></td>
-<td>Lock seeds and config in JSON for fully reproducible experiments</td>
-</tr>
-<tr>
-<td><strong>Journal Logging</strong></td>
-<td>All experiment results automatically recorded as JSON/CSV</td>
-</tr>
-</tbody>
-</table>
-<h2 id="typical-research-workflow">Typical Research Workflow<a class="headerlink" href="#typical-research-workflow" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 1. Declare hypothesis in JSON</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>create<span class="w"> </span>regime_test<span class="w"> </span>--template<span class="w"> </span>hmm_bb_rsi
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># 2. Grid search over multiple parameters</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>grid<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>regime_test<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--param<span class="w"> </span>rsi_period<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">14</span><span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>--param<span class="w"> </span>bb_period<span class="w"> </span><span class="m">15</span><span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="m">25</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># 3. Walk-forward validation (5 folds)</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>walk-forward<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>regime_test<span class="w"> </span>--folds<span class="w"> </span><span class="m">5</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># 4. Save experiment to journal</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>record<span class="w"> </span>regime_test<span class="w"> </span>--note<span class="w"> </span><span class="s2">&quot;HMM period sensitivity analysis&quot;</span>
+<h1 id="alpha-visualizer-v071-cumulative-update-since-v020">alpha-visualizer v0.7.1 — Cumulative update since v0.2.0<a class="headerlink" href="#alpha-visualizer-v071-cumulative-update-since-v020" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Released</strong>: June 2, 2026 / <strong>Version</strong>: v0.7.1 / <strong>Distribution</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.7.1/">PyPI</a> · <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.7.1">GitHub Release</a></p>
+</blockquote>
+<p><a href="../">alpha-visualizer</a> is a standalone OSS package that renders backtest results produced by <code>alpha-forge</code> in a web browser. Since v0.2.0 (instant exploration with bundled samples), releases v0.3.0 through v0.7.1 have centered on <strong>revamping chart rendering and improving production readiness</strong>. This note summarizes the cumulative highlights since v0.2.0.</p>
+<blockquote>
+<p><strong>Two breaking changes</strong>: the CLI command was renamed (v0.3.0) and the license changed (v0.6.0). See the relevant sections below.</p>
+</blockquote>
+<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
+<h3 id="1-cli-renamed-from-vis-to-alpha-vis-v030-breaking">1. CLI renamed from <code>vis</code> to <code>alpha-vis</code> (v0.3.0, breaking)<a class="headerlink" href="#1-cli-renamed-from-vis-to-alpha-vis-v030-breaking" title="Permanent link">&para;</a></h3>
+<p>The command name now is <strong><code>alpha-vis</code></strong>, resolving a clash with macOS's built-in <code>/usr/bin/vis</code> (a BSD text-visualization utility) that caused newcomers running <code>vis serve</code> to hit errors like <code>vis: serve: No such file or directory</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># v0.3.0 and later</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--use-bundled-samples<span class="w"> </span>--no-open
 </code></pre></div>
-<h2 id="evaluating-overfitting-risk">Evaluating Overfitting Risk<a class="headerlink" href="#evaluating-overfitting-risk" title="Permanent link">&para;</a></h2>
-<p>AlphaForge provides walk-forward testing (WFT) as a standard feature. A large IS/OOS performance degradation suggests overfitting.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>IS Period  OOS Period  Sharpe(IS)  Sharpe(OOS)  Degradation
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>2020-22    2023        1.8         1.4          22%  ← acceptable
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>2020-22    2023        2.5         0.3          88%  ← likely overfit
-</code></pre></div>
-<h2 id="related-docs">Related Docs<a class="headerlink" href="#related-docs" title="Permanent link">&para;</a></h2>
+<p>The old <code>vis</code> command no longer works — update your scripts and shell aliases to <code>alpha-vis</code>.</p>
+<h3 id="2-core-charts-migrated-to-tradingview-lightweight-charts-v030-v040">2. Core charts migrated to TradingView lightweight-charts (v0.3.0, v0.4.0)<a class="headerlink" href="#2-core-charts-migrated-to-tradingview-lightweight-charts-v030-v040" title="Permanent link">&para;</a></h3>
+<p>The primary charts — equity/drawdown, rolling metrics, WFO synthetic equity, and Compare equity — now build on the industry-standard <strong>TradingView lightweight-charts</strong>. Zoom, pan, and crosshair interactions are improved, giving the familiar feel of a financial charting tool.</p>
+<h3 id="3-signal-time-series-chart-v040">3. Signal time-series chart (v0.4.0)<a class="headerlink" href="#3-signal-time-series-chart-v040" title="Permanent link">&para;</a></h3>
+<p>The Strategy structure tab in the Detail view gained <code>StrategySignalChartTV</code>, overlaying <strong>candlesticks + trade markers + price lines</strong>. You can read entry/exit timing directly on the price chart, with regime-change markers supported as well. A backend OHLC endpoint, a frontend OHLC API client, and a <code>useStrategyHistorical</code> hook were added.</p>
+<h3 id="4-live-performance-read-directly-from-sqlite-v070">4. Live performance read directly from SQLite (v0.7.0)<a class="headerlink" href="#4-live-performance-read-directly-from-sqlite-v070" title="Permanent link">&para;</a></h3>
+<p>The live-performance view now reads directly from <strong><code>backtest_results.db</code> (SQLite)</strong> instead of going through JSON files. Reconciliation against <code>alpha-forge</code> production data is more robust, and when <code>use_db=true</code> but the DB is missing, the app no longer silently falls back to JSON — it <strong>fails loud</strong> with an explicit error.</p>
+<h3 id="5-relicensed-to-apache-20-v060">5. Relicensed to Apache-2.0 (v0.6.0)<a class="headerlink" href="#5-relicensed-to-apache-20-v060" title="Permanent link">&para;</a></h3>
+<p>From v0.6.0 onward, the license changed from <strong>MIT to Apache-2.0</strong>, a more explicit license (including patent provisions) that clarifies usage terms for both commercial and OSS use. Releases at or before v0.5.0 remain MIT-licensed.</p>
+<h3 id="6-ongoing-security-and-dependency-updates-v050-v071">6. Ongoing security and dependency updates (v0.5.0, v0.7.1)<a class="headerlink" href="#6-ongoing-security-and-dependency-updates-v050-v071" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="../../templates/">Strategy Templates</a> — Full JSON for HMM, regime-switching, multi-timeframe</li>
-<li><a href="../../strategy-gallery/">Strategy Gallery</a> — Cross-market strategy comparison with result interpretation</li>
-<li><a href="../../guides/end-to-end-workflow/">End-to-End Strategy Development Workflow</a> — From optimization to WFT validation</li>
-<li><a href="../../cli-reference/optimize/">optimize command</a> — Full optimization options</li>
+<li>Resolved security alerts reported by <strong>CodeQL</strong> (v0.5.0).</li>
+<li>Switched the <strong>Dependabot</strong> Python ecosystem from <code>pip</code> to <code>uv</code>, so transitive dependencies in <code>uv.lock</code> are picked up by scheduled updates (v0.7.1).</li>
+<li>Updated dependencies — idna, SQLAlchemy, FastAPI, pandas, ruff, hypothesis, @vitejs/plugin-react — to their latest versions (v0.7.1).</li>
 </ul>
+<h2 id="how-to-upgrade">How to upgrade<a class="headerlink" href="#how-to-upgrade" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># pip</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># uv</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>uv<span class="w"> </span>add<span class="w"> </span>alpha-visualizer@latest<span class="w">        </span><span class="c1"># add to a project</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">       </span><span class="c1"># use as a CLI</span>
+</code></pre></div>
+<p>The easiest smoke test is the bundled samples (note the command is now <code>alpha-vis</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--use-bundled-samples<span class="w"> </span>--no-open
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># open http://127.0.0.1:8000</span>
+</code></pre></div>
+<p>To view data from your own <code>alpha-forge</code> project:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--forge-dir<span class="w"> </span>/path/to/your/alpha-strategies
+</code></pre></div>
+<p>There are no changes to the config file (<code>forge.yaml</code>); existing alpha-forge projects keep working as-is.</p>
+<h2 id="related-links">Related links<a class="headerlink" href="#related-links" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>PyPI</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.7.1/">https://pypi.org/project/alpha-visualizer/0.7.1/</a></li>
+<li><strong>GitHub Release (tag)</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.7.1">https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.7.1</a></li>
+<li><strong>CHANGELOG</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md">https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md</a></li>
+<li><strong>Installation</strong>: <a href="../installation/">alpha-visualizer / Installation</a></li>
+<li><strong>Features</strong>: <a href="../features/">alpha-visualizer / Features</a></li>
+<li><strong>Configuration</strong>: <a href="../configuration/">alpha-visualizer / Configuration</a></li>
+</ul>
+<p>Please file bugs and feature requests at <a href="https://github.com/alforge-labs/alpha-visualizer/issues">GitHub Issues</a>.</p>
 
 
 
 
 
 
+
+  
+  
 
 
 
@@ -2642,7 +2761,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../python-dev/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Python Developers">
+          <a href="../faq/" class="md-footer__link md-footer__link--prev" aria-label="Previous: FAQ">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2652,20 +2771,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Python Developers
+                FAQ
               </div>
             </div>
           </a>
         
         
           
-          <a href="../auto-trading/" class="md-footer__link md-footer__link--next" aria-label="Next: Automated Trading">
+          <a href="../release-0.2.0/" class="md-footer__link md-footer__link--next" aria-label="Next: v0.2.0 (2026-05-11)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Automated Trading
+                v0.2.0 (2026-05-11)
               </div>
             </div>
             <div class="md-footer__button md-icon">
