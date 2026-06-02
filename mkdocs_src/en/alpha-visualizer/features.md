@@ -40,6 +40,8 @@ Side-by-side view of multiple strategies.
 
 ![Compare view](assets/compare.png){ loading=lazy }
 
+![Strategy correlation heatmap](assets/compare-heatmap.png){ loading=lazy }
+
 - Parallel metric cards (CAGR / Sharpe / Sortino / MaxDD / Profit Factor, etc.)
 - Overlaid equity curves
 - Pearson correlation heatmap (normalized to overlapping period)
