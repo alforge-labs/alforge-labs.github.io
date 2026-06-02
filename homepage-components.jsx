@@ -5,7 +5,7 @@
 const CHART = {
   W: 480, H: 165,
   PAD: { l: 50, r: 10, t: 18, b: 22 },
-  Y_MIN: 75, Y_MAX: 212,
+  Y_MIN: 75, Y_MAX: 225,
 };
 
 function chartX(i, n) {

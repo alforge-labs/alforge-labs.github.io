@@ -1,14 +1,16 @@
-// Equity curve data — language-independent, 2021-05 to 2026-04 (61 points, base=100)
-// CL=F: computed from monthly_returns in multi_asset_hmm_bb_rsi_v1_cl_report.json
-// SPY/QQQ: monthly close prices normalized, index-0 = 2021-05-01 (prepended 100.0)
+// Equity curve data — language-independent, 2021-05 to 2026-05 (62 points, base=100)
+// `cl` key holds the STRATEGY series: TQQQ+GLD+TLT equal-weight hedged combine (SMA200+ATR
+//   trigger), daily equity from `forge backtest combine`, normalized to 100 at period start,
+//   sampled at month-ends. SPY/QQQ: Buy & Hold price return, same period & normalization.
+//   Endpoints equal the daily total returns (strat +113%, qqq +120%, spy +91%).
 window.EQUITY_CURVE = {
-  cl:  [100.0,100.0,100.0,108.88,116.75,116.75,116.75,105.12,114.91,114.91,114.91,114.91,114.91,114.91,114.91,114.91,114.91,119.01,125.15,123.43,119.91,119.91,119.91,124.9,124.9,126.95,135.63,135.63,135.63,135.63,142.08,142.84,144.91,144.91,144.91,144.91,144.91,146.29,153.07,154.88,159.08,162.56,162.56,162.56,162.56,162.56,164.43,160.81,160.81,174.21,174.21,174.21,174.21,179.1,182.79,184.24,191.4,191.4,191.4,191.4,191.4],
-  spy: [100.0,100.0,102.24,104.74,107.86,102.83,110.04,109.16,114.21,108.18,104.99,108.94,99.38,99.6,91.39,99.8,95.73,86.88,93.94,99.17,93.45,99.33,96.83,100.42,102.02,102.5,109.14,112.71,110.88,105.62,103.33,112.76,117.91,119.79,126.04,130.16,124.91,131.23,135.86,137.51,140.72,143.68,142.39,150.89,147.26,151.21,149.29,140.97,139.75,148.53,156.17,159.76,163.04,168.85,172.87,173.21,173.35,175.9,174.38,165.77,181.01],
-  qqq: [100.0,100.0,106.26,109.3,113.91,107.44,115.89,118.2,119.56,109.11,104.22,109.09,94.26,92.76,84.5,95.1,90.22,80.72,83.95,88.6,80.61,89.19,88.87,97.31,97.8,105.51,112.17,116.5,114.77,108.94,106.69,118.23,124.84,127.11,133.82,135.53,129.6,137.57,146.47,144.02,145.61,149.42,148.13,156.06,156.77,160.16,155.83,144.01,146.02,159.42,169.6,173.71,175.37,184.8,193.63,190.61,189.33,191.66,187.17,177.89,199.98],
-  // x-axis: indices into the 61-point arrays where each year label is positioned
-  // index 0 = 2021-05-01, index 9 = Jan 2022, index 21 = Jan 2023, index 33 = Jan 2024, index 45 = Jan 2025
-  yearLabels: ['2021','2022','2023','2024','2025'],
-  yearIndices: [0, 9, 21, 33, 45],
+  cl:  [100.0,95.8,105.9,108.4,110.5,104.6,110.1,111.8,112.3,105.4,102.8,104.2,96.7,95.3,92.3,95.2,93.0,89.7,89.7,91.4,89.6,92.1,91.2,99.1,99.2,111.1,115.6,118.8,116.4,104.6,104.1,117.4,129.2,130.3,135.2,136.7,128.5,137.1,150.7,148.6,149.0,147.2,143.4,149.5,150.5,152.7,140.8,134.1,133.6,139.5,153.6,159.5,157.6,165.3,171.9,169.9,165.2,169.4,169.0,161.0,191.5,213.4],
+  spy: [100.0,100.4,102.7,105.2,108.3,103.3,110.5,109.6,114.7,108.7,105.5,109.4,99.8,100.0,91.8,100.2,96.2,87.3,94.4,99.6,93.9,99.8,97.3,100.9,102.5,102.9,109.6,113.2,111.4,106.1,103.8,113.3,118.4,120.3,126.6,130.7,125.5,131.8,136.5,138.1,141.3,144.3,143.0,151.6,147.9,151.9,149.9,141.6,140.4,149.2,156.9,160.5,163.8,169.6,173.6,174.0,174.1,176.7,175.2,166.5,184.0,190.9],
+  qqq: [100.0,99.3,105.5,108.6,113.1,106.7,115.1,117.4,118.8,108.4,103.5,108.4,93.6,92.1,83.9,94.5,89.6,80.2,83.4,88.0,80.1,88.6,88.3,96.7,97.1,104.8,111.4,115.7,114.0,108.2,106.0,117.4,124.0,126.3,132.9,134.6,128.7,136.6,145.5,143.0,144.6,148.4,147.1,155.0,155.7,159.1,154.8,143.0,145.0,158.3,168.5,172.5,174.2,183.6,192.3,189.3,188.1,190.4,185.9,176.9,204.7,219.9],
+  // x-axis: indices into the 62-point arrays where each year label sits
+  // index 0 = period start (2021-05), 9 = Jan 2022, 21 = Jan 2023, 33 = Jan 2024, 45 = Jan 2025, 57 = Jan 2026
+  yearLabels: ['2021','2022','2023','2024','2025','2026'],
+  yearIndices: [0, 9, 21, 33, 45, 57],
 };
 
 // Bilingual copy — window.COPY
@@ -44,7 +46,7 @@ window.COPY = {
     },
     heroStats: [
       { val: 'AI 自律', accent: false, lbl: '戦略探索 × 検証 × Pine Script 生成' },
-      { val: 'Sharpe 2倍超', accent: true, lbl: 'vs SPY・QQQ Buy & Hold（5年検証）' },
+      { val: 'Max DD ‑23%', accent: true, lbl: 'QQQ(‑35%)比で大幅縮小・リターンは同等（5年検証）' },
       { val: '2026夏', accent: false, lbl: '正式リリース目標' },
     ],
     availability: {
@@ -226,18 +228,18 @@ window.COPY = {
     perf: {
       label: 'シミュレーション実績',
       title: 'シミュレーション結果（実データ）',
-      strategy: 'CL=F 5年時系列データ — HMM + ボリンジャーバンド + RSI シミュレーション',
-      period: '2021.05 – 2026.04（5年）',
-      note: '※ 実際のシミュレーション結果です。コスト0.1%込み。QQQ B&H の年率（14.9%）は本シミュレーション（13.9%）を上回ります。過去の結果は将来の成果を保証しません。',
+      strategy: 'TQQQ・GLD・TLT 等加重ヘッジ型コンバイン（SMA200+ATR トリガー）— 5年シミュレーション',
+      period: '2021.05 – 2026.05（5年）',
+      note: '※ 実バックテスト結果（スリッページ 0.05% 込み・price return）。3 倍レバレッジ NASDAQ100（TQQQ）に SMA200+ATR でヘッジを掛け、GLD・TLT を等加重した複合戦略。CAGR は QQQ B&H（16.9%）にわずかに及びませんが SPY B&H（13.7%）を上回り、最大ドローダウンを大幅に圧縮（-23.3% vs QQQ -35.1%）、Sharpe も両ベンチマークを上回ります。本戦略はウォークフォワード検証（WFT）で 2010–2026 の OOS 5 窓すべて正リターンを確認した過学習耐性設計です。過去の結果は将来の成果を保証しません。',
       stats: [
-        { val: '+13.9%', label: 'CAGR',          cls: 'val-pos' },
-        { val: '1.09',   label: 'Sharpe Ratio',   cls: 'val-neu' },
-        { val: '86.4%',  label: 'シグナル正答率', cls: 'val-neu' },
-        { val: '-17.0%', label: 'Max Drawdown',   cls: 'val-neg' },
-        { val: '22回',   label: 'シグナル回数',   cls: 'val-neu' },
+        { val: '+16.2%', label: 'CAGR',          cls: 'val-pos' },
+        { val: '0.91',   label: 'Sharpe Ratio',   cls: 'val-neu' },
+        { val: '-23.3%', label: 'Max Drawdown',   cls: 'val-neg' },
+        { val: '0.69',   label: 'Calmar Ratio',   cls: 'val-neu' },
+        { val: '+113%',  label: '累計リターン',   cls: 'val-pos' },
       ],
       legend: [
-        { color: 'var(--accent)',  label: '本シミュレーション（CL=F）' },
+        { color: 'var(--accent)',  label: '本シミュレーション（TQQQ+GLD+TLT ヘッジ）' },
         { color: 'var(--blue)',    label: 'SPY B&H' },
         { color: 'var(--amber)',   label: 'QQQ B&H' },
       ],
@@ -245,9 +247,9 @@ window.COPY = {
         label: 'vs ベンチマーク（同期間）',
         headers: ['', 'SPY B&H', 'QQQ B&H', '本シミュレーション'],
         rows: [
-          { metric: 'CAGR',    spy: '12.6%', qqq: '14.9%', strat: '13.9%', stratWin: false },
-          { metric: 'Sharpe',  spy: '≈0.5',  qqq: '≈0.5',  strat: '1.09',  stratWin: true },
-          { metric: 'Max DD',  spy: '-23.9%',qqq: '-32.6%', strat: '-17.0%',stratWin: true },
+          { metric: 'CAGR',    spy: '13.7%', qqq: '16.9%', strat: '16.2%', stratWin: false },
+          { metric: 'Sharpe',  spy: '0.84',  qqq: '0.81',  strat: '0.91',  stratWin: true },
+          { metric: 'Max DD',  spy: '-24.5%',qqq: '-35.1%', strat: '-23.3%',stratWin: true },
         ],
       },
     },
@@ -510,7 +512,7 @@ window.COPY = {
     },
     heroStats: [
       { val: 'AI-Driven', accent: false, lbl: 'Discovery × Validation × Pine Script' },
-      { val: '2× Sharpe', accent: true, lbl: 'vs SPY · QQQ Buy & Hold (5yr backtest)' },
+      { val: '‑23% Max DD', accent: true, lbl: 'vs QQQ ‑35%, comparable return (5yr backtest)' },
       { val: 'Summer 2026', accent: false, lbl: 'Target Release' },
     ],
     availability: {
@@ -692,18 +694,18 @@ window.COPY = {
     perf: {
       label: 'Simulation Results',
       title: 'Simulation Results (Live Data)',
-      strategy: 'CL=F 5yr Time-Series Data — HMM + Bollinger Bands + RSI Simulation',
-      period: '2021.05 – 2026.04 (5 years)',
-      note: '* Real simulation result with 0.1% cost. QQQ buy-and-hold CAGR (14.9%) exceeds this simulation (13.9%). Past results do not guarantee future outcomes.',
+      strategy: 'TQQQ · GLD · TLT equal-weight hedged combine (SMA200+ATR trigger) — 5-year simulation',
+      period: '2021.05 – 2026.05 (5 years)',
+      note: '* Real backtest (incl. 0.05% slippage, price return). A combine of 3× leveraged NASDAQ-100 (TQQQ) hedged via SMA200+ATR, equal-weighted with GLD and TLT. CAGR is just below QQQ buy-and-hold (16.9%) but above SPY (13.7%), with substantially lower max drawdown (-23.3% vs QQQ -35.1%) and higher Sharpe than both benchmarks. Walk-forward tested (WFT) with all 5 out-of-sample windows positive over 2010–2026. Past results do not guarantee future outcomes.',
       stats: [
-        { val: '+13.9%', label: 'CAGR',            cls: 'val-pos' },
-        { val: '1.09',   label: 'Sharpe Ratio',     cls: 'val-neu' },
-        { val: '86.4%',  label: 'Signal Accuracy',  cls: 'val-neu' },
-        { val: '-17.0%', label: 'Max Drawdown',      cls: 'val-neg' },
-        { val: '22',     label: 'Total Signals',     cls: 'val-neu' },
+        { val: '+16.2%', label: 'CAGR',            cls: 'val-pos' },
+        { val: '0.91',   label: 'Sharpe Ratio',     cls: 'val-neu' },
+        { val: '-23.3%', label: 'Max Drawdown',      cls: 'val-neg' },
+        { val: '0.69',   label: 'Calmar Ratio',      cls: 'val-neu' },
+        { val: '+113%',  label: 'Total Return',      cls: 'val-pos' },
       ],
       legend: [
-        { color: 'var(--accent)', label: 'This Simulation (CL=F)' },
+        { color: 'var(--accent)', label: 'This Simulation (TQQQ+GLD+TLT hedged)' },
         { color: 'var(--blue)',   label: 'SPY B&H' },
         { color: 'var(--amber)',  label: 'QQQ B&H' },
       ],
@@ -711,9 +713,9 @@ window.COPY = {
         label: 'vs Benchmark (same period)',
         headers: ['', 'SPY B&H', 'QQQ B&H', 'This Simulation'],
         rows: [
-          { metric: 'CAGR',    spy: '12.6%', qqq: '14.9%', strat: '13.9%', stratWin: false },
-          { metric: 'Sharpe',  spy: '≈0.5',  qqq: '≈0.5',  strat: '1.09',  stratWin: true },
-          { metric: 'Max DD',  spy: '-23.9%',qqq: '-32.6%', strat: '-17.0%',stratWin: true },
+          { metric: 'CAGR',    spy: '13.7%', qqq: '16.9%', strat: '16.2%', stratWin: false },
+          { metric: 'Sharpe',  spy: '0.84',  qqq: '0.81',  strat: '0.91',  stratWin: true },
+          { metric: 'Max DD',  spy: '-24.5%',qqq: '-35.1%', strat: '-23.3%',stratWin: true },
         ],
       },
     },
