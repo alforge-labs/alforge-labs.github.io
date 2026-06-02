@@ -86,6 +86,7 @@ nav:
       - Configuration: alpha-visualizer/configuration.md
       - FAQ: alpha-visualizer/faq.md
       - Release Notes:
+          - v0.7.1 (2026-06-02): alpha-visualizer/release-0.7.1.md
           - v0.2.0 (2026-05-11): alpha-visualizer/release-0.2.0.md
   - CLI Reference:
       - Overview: cli-reference/index.md
