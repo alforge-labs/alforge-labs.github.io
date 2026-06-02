@@ -24,12 +24,14 @@ To upgrade: alpha-forge self update
 Update the alpha-forge binary to the latest release. Downloads with SHA256 verification, then atomically swaps `forge.dist` and keeps the previous binary as `forge.dist.bak-<unix_ts>` (latest 2 generations).
 
 ```bash
-alpha-forge self update                 # interactive prompt [y/N]
-alpha-forge self update --yes           # skip the prompt (for CI)
-alpha-forge self update --check         # check only (no download)
-alpha-forge self update --version 0.4.0 # pin a specific version
-alpha-forge self update --dry-run       # download + verify + extract, no swap
-alpha-forge self update --print-target  # print the detected install layout (for bug reports)
+alpha-forge self update                  # interactive prompt [y/N]
+alpha-forge self update --yes            # skip the prompt (for CI)
+alpha-forge self update --check          # check only (no download)
+alpha-forge self update --version 0.4.0  # pin a specific version
+alpha-forge self update --force          # re-download even if already up to date
+alpha-forge self update --dry-run        # download + verify + extract, no swap
+alpha-forge self update --print-target   # print the detected install layout (for bug reports)
+alpha-forge self update --no-smoke-test  # skip the post-swap binary launch check (for CI)
 ```
 
 ### Requirements

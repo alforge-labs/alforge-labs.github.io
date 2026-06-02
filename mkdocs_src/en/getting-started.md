@@ -56,10 +56,11 @@ alpha-forge --version
 ```
 
 ```
-AlphaForge CLI v1.x.x
+AlphaForge, version 0.10.0
+Check for updates: alpha-forge self version
 ```
 
-If you see a version number, you're ready. For manual installation or custom install paths, see [Detailed Installation](#detailed-installation).
+If you see output like `AlphaForge, version <X.Y.Z>`, you're ready. For manual installation or custom install paths, see [Detailed Installation](#detailed-installation).
 
 !!! note "Download the latest binary directly"
     Prefer a manual setup over the installer? Grab the per-platform binaries (`alpha-forge-macos-arm64` / `alpha-forge-linux-x64` / `alpha-forge-windows-x64.exe`, etc.) from [GitHub Releases (latest)](https://github.com/alforge-labs/alforge-labs.github.io/releases/latest). See "Detailed Installation → Manual Install" later on this page for placement and PATH details.

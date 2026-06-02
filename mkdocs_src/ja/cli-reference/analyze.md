@@ -4,7 +4,7 @@
 
 ## alpha-forge analyze indicator
 
-`alpha-forge` がサポートするテクニカル指標 30+ のカタログ・詳細を参照します。
+`alpha-forge` がサポートするテクニカル指標 50+ のカタログ・詳細を参照します。
 
 ## alpha-forge analyze indicator list
 
@@ -22,14 +22,16 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail]
 サンプル出力：
 
 ```text
-利用可能なインジケーター一覧（35件）:
+利用可能なインジケーター一覧（52件）:
 
-  [トレンド]      SMA  EMA  WMA  HMA  TEMA  MACD  ADX  SUPERTREND
-  [モメンタム]    RSI  STOCH  CCI  WILLR  ROC
-  [ボラティリティ] ATR  BBANDS  KELTNER
-  [出来高]        OBV  VWAP  CMF
-  [レジーム]      HMM
-  [その他]        EXPR  ALTDATA
+  [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
+  [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
+  [オシレーター]  CCI  MFI  MOM  ROC  RSI  STOCH  TRIX  WILLR
+  [ボラティリティ]  ATR  BBANDS  KC
+  [出来高]  CMF  OBV  VWAP
+  [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW
+  [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
+  [高度な機能]  ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
 
 詳細: alpha-forge analyze indicator show <TYPE>
 ```

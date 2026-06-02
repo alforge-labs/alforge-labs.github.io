@@ -286,7 +286,7 @@ alpha-forge journal verdict <STRATEGY_ID> <RUN_ID> <pass|fail|review>
 ### 構文
 
 ```bash
-alpha-forge journal report <STRATEGY_ID> [--output <FILE>] [--with-chart --symbol <SYM> --interval <TF>]
+alpha-forge journal report <STRATEGY_ID> [--output <FILE>] [--with-chart --output <FILE> --symbol <SYM> --interval <TF>]
 ```
 
 ### 引数とオプション
@@ -295,7 +295,7 @@ alpha-forge journal report <STRATEGY_ID> [--output <FILE>] [--with-chart --symbo
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 戦略 ID |
 | `--output` | ファイルパス | - | Markdown 出力先。省略時は標準出力 |
-| `--with-chart` | フラグ | false | TradingView チャート PNG をレポート末尾に埋め込む |
+| `--with-chart` | フラグ | false | TradingView チャート PNG をレポート末尾に埋め込む（`--output` / `--symbol` / `--interval` も必須。チャート PNG は Markdown と同ディレクトリに保存されるため標準出力との併用は不可） |
 | `--symbol` | オプション | - | チャート用 TV シンボル（`--with-chart` 必須） |
 | `--interval` | オプション | - | チャート用 TV インターバル（例: `D`, `60`） |
 | `--mock` | フラグ | false | チャート取得を Mock MCP で行う（CI 用） |
@@ -318,6 +318,7 @@ alpha-forge journal report spy_sma_v1 --output reports/spy.md \
 |----------|------|------|
 | `ジャーナルがありません: <id>` | ジャーナル不存在 | `alpha-forge journal list` で確認 |
 | `--with-chart には --symbol / --interval を指定してください。` | チャート埋込時の引数不足 | `--symbol` と `--interval` を追加 |
+| `--with-chart には --output を指定してください。` | `--with-chart` 指定時に `--output` 未指定（チャート PNG は Markdown と同ディレクトリに保存するため標準出力併用不可） | `--output <FILE>` を追加 |
 
 ---
 

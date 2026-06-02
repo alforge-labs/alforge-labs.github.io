@@ -5,11 +5,11 @@ Manage exploration pipeline state and run the full pipeline in one command. Thes
 | Subcommand | Description |
 |-----------|-------------|
 | `run` | Run backtest → optimize → WFT → DB registration end-to-end (**main command**) |
-| `index` | Build `exploration_index.yaml` from `explored_log.md` |
 | `import` | Bulk-import a Markdown log into the exploration DB |
 | `log` | Manually record an exploration trial to the DB |
 | `status` | Show coverage map against a goal |
 | `result` | Show details of the latest trial saved in the exploration DB |
+| `diagnose` | Estimate whether a longer backtest period would let a WFT-failed strategy pass, via linear extrapolation of the trade rate (issue #685) |
 | `health` | Detect consecutive failures and scaffold fixation from recent trials (quality gate for unattended runs) |
 | `recommend` | Write next-exploration candidates to `recommendations.yaml` |
 | `coverage` | Update or view parameter coverage YAML |

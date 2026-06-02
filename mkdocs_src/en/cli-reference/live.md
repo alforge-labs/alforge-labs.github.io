@@ -28,6 +28,7 @@ Live trading event ingestion (VPS → local), raw event → trade record convers
 | [`alpha-forge live compare`](#alpha-forge-live-compare) | Compare the latest backtest run with live summary |
 | [`alpha-forge live doctor`](#alpha-forge-live-doctor) | Check the setup status of live trading analysis |
 | [`alpha-forge live sync-events`](#alpha-forge-live-sync-events) | Sync event logs from VPS to local via rsync |
+| [`alpha-forge live replay`](#alpha-forge-live-replay) | Reconstruct position-based live metrics from a combine portfolio's alert log |
 
 ---
 
@@ -399,6 +400,50 @@ sent 4,312 bytes  received 78 bytes  total size 4,160
 - Missing config: `1`
 - rsync timeout: `1`
 - rsync own error: propagates rsync's exit code as is
+
+---
+
+## alpha-forge live replay
+
+Reconstruct position-based live metrics from a combine portfolio's alert log. Intended for always-in-market combine overlays: it rebuilds position transitions from synced `alpha-strike` events (`alpha-forge live sync-events`) and computes Sharpe / CAGR / MaxDD from the portfolio equity curve. `order_reconciled` receipts are preferred as the authoritative source.
+
+### Synopsis
+
+```bash
+alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--since <ISO>] [--compare]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `PORTFOLIO_ID` | argument (required) | - | Combine portfolio ID |
+| `--combine-strategies` | option (required) | - | Comma-separated combine strategy IDs (**2 or more required**) |
+| `--since` | option | - | Lower bound of the period (ISO format; UTC assumed when no timezone) |
+| `--compare` | flag | false | Also run the backtest combine and show it side by side |
+
+### Sample output
+
+```text
+=== live replay (position-based) — combo_spy_qqq ===
+receipts: 128
+
+| Metric           | Live      | Backtest  |
+|------------------|-----------|-----------|
+| sharpe_ratio     |      1.21 |      1.38 |
+| cagr_pct         |     14.30 |     16.80 |
+| max_drawdown_pct |     -5.40 |     -4.90 |
+| total_return_pct |     +9.85 |    +11.20 |
+```
+
+The `Backtest` column appears only when `--compare` is passed. When no receipts match the `portfolio_id`, a warning is shown prompting you to confirm `alpha-forge live sync-events` has been run.
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `--combine-strategies must list 2 or more strategies (comma-separated)` | Fewer than 2 strategy IDs provided | Pass at least two IDs, e.g. `--combine-strategies spy_sma_v1,qqq_hmm_v1` |
+| `Failed to parse --since as ISO: ...` | Invalid ISO datetime | Use an ISO 8601 value, e.g. `2026-03-01` or `2026-03-01T00:00:00Z` |
 
 ---
 

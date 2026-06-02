@@ -16,6 +16,7 @@
 | [`alpha-forge backtest report`](#alpha-forge-backtest-report) | 保存済みのバックテスト結果を表示する |
 | [`alpha-forge backtest migrate`](#alpha-forge-backtest-migrate) | 既存の JSON レポートファイルを DB にインポートする |
 | [`alpha-forge backtest compare`](#alpha-forge-backtest-compare) | 複数戦略を同一シンボル・期間で並べてバックテスト比較する |
+| [`alpha-forge backtest combine`](#alpha-forge-backtest-combine) | 複数戦略の合算ポートフォリオバックテストを実行する |
 | [`alpha-forge backtest portfolio`](#alpha-forge-backtest-portfolio) | 複数銘柄のポートフォリオバックテストを実行する |
 | [`alpha-forge backtest chart`](#alpha-forge-backtest-chart) | ダッシュボードの URL を表示してチャートへ誘導する |
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | エントリー条件のシグナル発生件数を高速チェック |
@@ -48,14 +49,18 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--no-benchmark` | フラグ | false | ベンチマーク比較を完全に無効化（F-304）。FX / コモディティ等で SPY 比較が無意味な場合に使う |
 | `--check-criteria` | フラグ | false | 受け入れ基準チェックを行う |
 | `--cagr-min` | float | `20.0` | CAGR 最低基準（%、`--check-criteria` と併用） |
-| `--sharpe-min` | float | `1.0` | Sharpe 最低基準 |
-| `--max-dd` | float | `25.0` | MaxDD 上限（%）。`pre_filter_pass` の判定にも使用 |
+| `--sharpe-min` | float | `None`（省略時 `--goal` か `1.0`） | Sharpe 最低基準。省略時は `--goal`（goals.yaml）の値、無ければ `1.0` を適用 |
+| `--max-dd` | float | `None`（省略時 `--goal` か `25.0`） | MaxDD 上限（%）。省略時は `--goal`（goals.yaml）の値、無ければ `25.0` を適用。`pre_filter_pass` の判定にも使用 |
 | `--win-rate-min` | float | `55.0` | 勝率 最低基準（%） |
 | `--pf-min` | float | `1.3` | PF 最低基準 |
 | `--min-trades` | int | - | 最低取引数。閾値未満で終了コード 1 |
 | `--regime` | フラグ | false | レジーム別統計をコンソールに表示 |
 | `--trades-csv` | path | - | trade 一覧 CSV を指定パスに書き出す（issue #800、[詳細](#trades-csv-export)） |
 | `--debug` | フラグ | false | `alpha_forge.*` ロガーを DEBUG レベルに上げる（issue #800） |
+| `--goal` | オプション | - | ゴール名。`goals.yaml` の `pre_filter` 閾値（`sharpe-min` / `max-dd`）を自動適用する |
+| `--cost-preset` | オプション | - | コストプリセット名（issue #785）。戦略 JSON の `risk_management` の commission / slippage を実行時に preset 値で in-memory 上書きする（戦略 JSON は変更しない） |
+| `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
+| `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`forge data alt fetch FRED:T10Y3M`） |
 
 ### `--trades-csv` で trade 一覧 CSV をエクスポート {#trades-csv-export}
 
@@ -437,6 +442,31 @@ spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
 
 ---
 
+## alpha-forge backtest combine
+
+複数戦略を 1 つの合算ポートフォリオとしてバックテストする（#941）。`compare` が各戦略を並べて比較するのに対し、`combine` は資金配分を与えて 1 本の合算エクイティカーブとして評価する。
+
+### 構文
+
+```bash
+alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [STRATEGY_ID3 ...] [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `STRATEGY_IDS` | 引数（必須、2 つ以上） | - | 合算する戦略 ID のスペース区切りリスト（例: `iwm_sma200_bho_v1 qqq_ema_macd_v2`） |
+| `--allocation` | choice | `equal` | 資金配分方式（`equal` / `custom`） |
+| `--weights` | オプション | - | `--allocation custom` 時のウェイト（例: `sid1=0.4,sid2=0.6`）。合計が `1.0 ± 0.01` 以内である必要がある |
+| `--wft` | int | - | WFT（walk-forward test）を実行する window 数（`>= 2`）。指定時は結果に `wft` セクションを返す（#944） |
+| `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#960）。各戦略の symbol について保存済み配当データを読み込み、合算結果にも反映する |
+| `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+
+`--allocation equal` では各戦略へ均等配分し、`--allocation custom` では `--weights` で指定したウェイトを用いる。
+
+---
+
 ## alpha-forge backtest portfolio
 
 複数銘柄のポートフォリオバックテストを実行する。
@@ -542,6 +572,7 @@ alpha-forge backtest signal-count <SYMBOL> --strategy <ID> [--period 5y] [--json
 | `--strategy` | 必須 | - | 戦略 ID |
 | `--period` | オプション | `5y` | データ期間（例: `5y`, `1y`, `6m`, `30d`） |
 | `--json` | フラグ | false | JSON 形式で出力 |
+| `--estimate-trades` | フラグ | false | シグナルの連続ブロック数から期待取引数を推定する（トレンドフォロー戦略向け） |
 
 ### 出力例
 

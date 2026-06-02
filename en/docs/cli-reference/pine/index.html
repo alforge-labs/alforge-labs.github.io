@@ -2574,15 +2574,117 @@
 <tbody>
 <tr>
 <td><code>--strategy</code></td>
-<td>required</td>
+<td>option</td>
 <td>-</td>
-<td>Strategy name</td>
+<td>Strategy name (mutually exclusive with <code>--combine-strategies</code>)</td>
+</tr>
+<tr>
+<td><code>--combine-strategies</code></td>
+<td>option</td>
+<td>-</td>
+<td>Comma-separated buy-hold-overlay strategies emitted as one combine-portfolio Pine v6 Indicator (mutually exclusive with <code>--strategy</code>, issue #970)</td>
+</tr>
+<tr>
+<td><code>--allocation</code></td>
+<td>choice (<code>equal</code>/<code>custom</code>)</td>
+<td><code>equal</code></td>
+<td>Allocation mode for <code>--combine-strategies</code> (<code>custom</code> requires <code>--weights</code>)</td>
+</tr>
+<tr>
+<td><code>--weights</code></td>
+<td>option</td>
+<td>-</td>
+<td>Weights for <code>--allocation custom</code> (e.g. <code>tqqq_phase2=0.5,gld_bh=0.25,tlt_bh=0.25</code>, sum 1.0±0.01)</td>
+</tr>
+<tr>
+<td><code>--portfolio-id</code></td>
+<td>option</td>
+<td>-</td>
+<td>Portfolio identifier for <code>--combine-strategies</code> (written into the Pine indicator name and webhook payload)</td>
+</tr>
+<tr>
+<td><code>--rebalance-freq</code></td>
+<td>choice (<code>none</code>/<code>weekly</code>/<code>monthly</code>/<code>quarterly</code>/<code>yearly</code>)</td>
+<td><code>none</code></td>
+<td>Periodic rebalance frequency for <code>--combine-strategies</code> (issue #971 Phase 2)</td>
+</tr>
+<tr>
+<td><code>--rebalance-threshold</code></td>
+<td>float (0.001–0.5)</td>
+<td>-</td>
+<td>Threshold-based rebalance; fires when current_weight deviates ±X from target (OR-combined with <code>--rebalance-freq</code>, issue #971)</td>
+</tr>
+<tr>
+<td><code>--allow-non-buy-hold</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Allow MR / trend-following strategies in <code>--combine-strategies</code> (each sub-strategy holds an independent position, issue #971 experimental)</td>
+</tr>
+<tr>
+<td><code>--combine-mode</code></td>
+<td>choice (<code>indicator</code>/<code>hybrid-strategy</code>)</td>
+<td><code>indicator</code></td>
+<td>Combine output mode; <code>hybrid-strategy</code> emits the main symbol via strategy() for Strategy Tester support (requires <code>--main-strategy</code>, issue #985)</td>
+</tr>
+<tr>
+<td><code>--main-strategy</code></td>
+<td>option</td>
+<td>-</td>
+<td>Main strategy ID emitted as strategy() under <code>--combine-mode hybrid-strategy</code> (issue #985)</td>
 </tr>
 <tr>
 <td><code>--with-training-data</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Embed trained HMM parameters into Pine Script if HMM indicator exists (auto-fetches data)</td>
+<td>Embed trained HMM parameters into Pine Script if HMM indicator exists (auto-fetches data; with <code>--combine-strategies</code>, fetches combine-internal HMM strategies in parallel for full Forward Algorithm reproduction, issue #974)</td>
+</tr>
+<tr>
+<td><code>--with-webhook</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Attach alpha-strike webhook input + make_payload + alert() to the Pine output (issue #770)</td>
+</tr>
+<tr>
+<td><code>--webhook-broker</code></td>
+<td>choice (<code>moomoo</code>/<code>oanda</code>)</td>
+<td>-</td>
+<td>Order broker for <code>--with-webhook</code> (inferred from asset_type if omitted)</td>
+</tr>
+<tr>
+<td><code>--webhook-asset-class</code></td>
+<td>option</td>
+<td>-</td>
+<td>asset_class for <code>--with-webhook</code> (CRYPTO / FX / US_STOCK, etc.; inferred from asset_type if omitted)</td>
+</tr>
+<tr>
+<td><code>--webhook-ticker</code></td>
+<td>option</td>
+<td>-</td>
+<td>Broker-side ticker for <code>--with-webhook</code> (e.g. CC.BTC for moomoo crypto; inferred from target_symbols if omitted)</td>
+</tr>
+<tr>
+<td><code>--webhook-quantity</code></td>
+<td>float</td>
+<td><code>1.0</code></td>
+<td>Order quantity per signal for <code>--with-webhook</code> (adjustable via TradingView inputs)</td>
+</tr>
+<tr>
+<td><code>--webhook-run-mode</code></td>
+<td>choice (<code>paper</code>/<code>live</code>)</td>
+<td><code>paper</code></td>
+<td>run_mode for <code>--with-webhook</code> (record-only vs. live order on the alpha-strike side)</td>
+</tr>
+<tr>
+<td><code>--no-validate</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the Pine v6 signature-DB post-generate validator (emergency bypass, issue #786)</td>
+</tr>
+<tr>
+<td><code>--backtest-period</code></td>
+<td>option</td>
+<td>-</td>
+<td>Bake a period filter into the Pine output (format <code>YYYY-MM-DD:YYYY-MM-DD</code>, issue #823)</td>
 </tr>
 </tbody>
 </table>
@@ -2601,6 +2703,72 @@
 <p>Preview generated Pine Script on stdout without writing to a file. <strong>Paid plans only (Lifetime / Annual / Monthly).</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>preview<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--strategy</code></td>
+<td>required</td>
+<td>-</td>
+<td>Strategy name</td>
+</tr>
+<tr>
+<td><code>--with-webhook</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Embed alpha-strike webhook input + make_payload + alert() (issue #770)</td>
+</tr>
+<tr>
+<td><code>--webhook-broker</code></td>
+<td>choice (<code>moomoo</code>/<code>oanda</code>)</td>
+<td>-</td>
+<td>Broker for <code>--with-webhook</code> (inferred from asset_type if omitted)</td>
+</tr>
+<tr>
+<td><code>--webhook-asset-class</code></td>
+<td>option</td>
+<td>-</td>
+<td>asset_class for <code>--with-webhook</code></td>
+</tr>
+<tr>
+<td><code>--webhook-ticker</code></td>
+<td>option</td>
+<td>-</td>
+<td>Broker-side ticker for <code>--with-webhook</code></td>
+</tr>
+<tr>
+<td><code>--webhook-quantity</code></td>
+<td>float</td>
+<td><code>1.0</code></td>
+<td>Order quantity for <code>--with-webhook</code></td>
+</tr>
+<tr>
+<td><code>--webhook-run-mode</code></td>
+<td>choice (<code>paper</code>/<code>live</code>)</td>
+<td><code>paper</code></td>
+<td>run_mode for <code>--with-webhook</code></td>
+</tr>
+<tr>
+<td><code>--no-validate</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the Pine v6 post-generate validator (emergency bypass, issue #786)</td>
+</tr>
+<tr>
+<td><code>--backtest-period</code></td>
+<td>option</td>
+<td>-</td>
+<td>Bake a period filter into the Pine output (<code>YYYY-MM-DD:YYYY-MM-DD</code>, issue #823)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="alpha-forge-pine-import">alpha-forge pine import<a class="headerlink" href="#alpha-forge-pine-import" title="Permanent link">&para;</a></h2>
 <p>Parse a Pine Script (<code>.pine</code>) and import it as a strategy definition.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>import<span class="w"> </span>&lt;PINE_FILE&gt;<span class="w"> </span>--id<span class="w"> </span>&lt;STRATEGY_ID&gt;
@@ -2646,6 +2814,72 @@
 <td>required</td>
 <td>-</td>
 <td>Strategy name</td>
+</tr>
+<tr>
+<td><code>--combine-strategies</code></td>
+<td>option</td>
+<td>-</td>
+<td>Verify a combine-portfolio Pine (symbolic / alert-log / Strategy Tester). Mutually exclusive with <code>--strategy</code> (issue #975). e.g. <code>tqqq_phase2,gld_bh,tlt_bh</code></td>
+</tr>
+<tr>
+<td><code>--combine-allocation</code></td>
+<td>choice</td>
+<td><code>equal</code></td>
+<td>Allocation for <code>--combine-strategies</code> (<code>equal</code> / <code>custom</code>; <code>custom</code> requires <code>--combine-weights</code>)</td>
+</tr>
+<tr>
+<td><code>--combine-weights</code></td>
+<td>option</td>
+<td>-</td>
+<td>Weights for <code>--combine-allocation custom</code> (e.g. <code>tqqq=0.5,gld=0.5</code>)</td>
+</tr>
+<tr>
+<td><code>--combine-portfolio-id</code></td>
+<td>option</td>
+<td>-</td>
+<td>portfolio_id for <code>--combine-strategies</code> (auto-generated if omitted)</td>
+</tr>
+<tr>
+<td><code>--combine-rebalance-freq</code></td>
+<td>choice</td>
+<td><code>none</code></td>
+<td>Rebalance frequency for <code>--combine-strategies</code> (<code>none</code> / <code>weekly</code> / <code>monthly</code> / <code>quarterly</code> / <code>yearly</code>)</td>
+</tr>
+<tr>
+<td><code>--combine-rebalance-threshold</code></td>
+<td>float</td>
+<td>-</td>
+<td>Threshold-based rebalance for <code>--combine-strategies</code> (e.g. <code>0.05</code>)</td>
+</tr>
+<tr>
+<td><code>--verify-mode</code></td>
+<td>choice</td>
+<td><code>symbolic</code></td>
+<td>Combine verify mode. <code>symbolic</code>=symbolically compare <code>backtest combine</code> vs. Pine config (#975); <code>alert-log</code>=reconstruct positions from alpha-strike JSONL and compute metrics, requires <code>--receipts-source</code> (#980); <code>tradingview-strategy-tester</code>=run the hybrid-strategy Pine through Strategy Tester, requires <code>--combine-mode hybrid-strategy</code> + <code>--main-strategy</code> + <code>--symbol</code> + <code>--interval</code> (#986)</td>
+</tr>
+<tr>
+<td><code>--combine-mode</code></td>
+<td>choice</td>
+<td>-</td>
+<td>Pine output mode for combine (<code>indicator</code> / <code>hybrid-strategy</code>); use <code>hybrid-strategy</code> for <code>--verify-mode tradingview-strategy-tester</code> (#986)</td>
+</tr>
+<tr>
+<td><code>--main-strategy</code></td>
+<td>option</td>
+<td>-</td>
+<td>Main strategy ID emitted as <code>strategy()</code> during hybrid-strategy verify (#986)</td>
+</tr>
+<tr>
+<td><code>--receipts-source</code></td>
+<td>path</td>
+<td>-</td>
+<td>alpha-strike JSONL file or directory for <code>--verify-mode alert-log</code></td>
+</tr>
+<tr>
+<td><code>--receipts-since</code></td>
+<td>option</td>
+<td>-</td>
+<td>Lower time bound (ISO format, e.g. <code>YYYY-MM-DD</code>) for <code>--verify-mode alert-log</code>; full history if omitted</td>
 </tr>
 <tr>
 <td><code>--check-mode</code></td>

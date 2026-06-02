@@ -4690,7 +4690,7 @@
 <blockquote>
 <p>⚠️ <strong>TV MCP cannot be used for long-term fetches</strong> (issue #683)<br />
 The <code>chart_scroll_to_date</code> tool in tradesdontlie / vinicius MCP servers fails with <code>"evaluate is not defined"</code>, so TV Desktop never loads historical data beyond what is currently shown. Since <code>data_get_ohlcv</code> only returns bars currently visible on the chart, <code>alpha-forge data fetch &lt;SYM&gt; --provider tv_mcp --period 20y</code> returns only the latest ~14 months. <strong>Use yfinance for long-term data</strong>.<br />
-TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --check-mode metrics</code>) and chart PNG capture (<code>alpha-forge tv chart</code>).</p>
+TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --check-mode metrics</code>) and chart PNG capture (<code>alpha-forge data tv-mcp chart</code>).</p>
 </blockquote>
 <h4 id="explore-strategies-tv-mcp-preflight"><code>/explore-strategies</code> TV MCP preflight<a class="headerlink" href="#explore-strategies-tv-mcp-preflight" title="Permanent link">&para;</a></h4>
 <p>When a goal has <code>exploration.data_provider_override.{stock|fx}: tv_mcp</code> set, the skill executes <code>alpha-forge data tv-mcp check --json</code> at the start of each run:</p>

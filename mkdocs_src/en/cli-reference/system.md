@@ -80,6 +80,7 @@ alpha-forge system init [OPTIONS]
 |------|------|---------|-------------|
 | `--force` / `-f` | flag | false | Overwrite existing files without confirmation |
 | `--no-claude` | flag | false | Skip AI assistant integration files |
+| `--template` / `-t` | choice | `default` | Asset-class template to apply (`commodities` / `crypto` / `default` / `fx` / `stocks`) |
 
 ## Directories created
 

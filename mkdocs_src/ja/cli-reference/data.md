@@ -39,6 +39,7 @@ alpha-forge data fetch --watchlist <FILE> [OPTIONS]
 | `--provider` | choice | - | データソースを明示指定（`yfinance` / `moomoo` / `tv_mcp`）。省略時は `forge.yaml` の `data.providers` 設定で自動解決 |
 | `--mcp-server` | オプション | - | `--provider tv_mcp` 用 MCP サーバーコマンド（例: `node /opt/tv-mcp/server.js`）。省略時は環境変数 `FORGE_TV_MCP_ENDPOINT` → `forge.yaml` の `data.providers.tv_mcp.endpoint` の順で解決（issue #689）。endpoint 内の `~` / `$HOME` は自動展開される |
 | `--mcp-server-flavor` | choice | - | `--provider tv_mcp` 用 MCP server 系統（`tradesdontlie` / `vinicius`）。CLI 指定が `forge.yaml` より優先 |
+| `--with-dividends` | フラグ | false | OHLCV と同時に配当履歴も取得して保存する（#958 Phase 2）。高配当 ETF の真の total return 評価に必要 |
 
 `SYMBOL` も `--watchlist` も指定しないとエラーになります。`--provider tv_mcp` を指定しても `endpoint` が解決できない場合はエラーで停止します。
 
@@ -229,7 +230,7 @@ alpha-forge data update
     **長期データが必要な場合**は次のいずれかを選択してください：
 
     - 株 / ETF: `--provider yfinance`（既定の最大約 30 年）
-    - FX 超長期: `--provider dukascopy`（数十年）
+    - FX 超長期: `forge.yaml` の `data.providers.fx_provider: dukascopy`（または `fx_provider: auto` + `auto_routing` で FX を `dukascopy` にルーティング）を設定して取得する（数十年）。`--provider` CLI フラグは `yfinance` / `moomoo` / `tv_mcp` のみ受理するため `--provider dukascopy` は使えない点に注意
     - tv_mcp で深い履歴を取りたい場合は、事前に TradingView Desktop でチャートを目的の年代まで手動スクロールして bars cache を拡張しておくと、その範囲は MCP 経由で取得できるようになる（持続的な解決は MCP server 側の新 tool が必要）
 - **設定例**（`forge.yaml`）:
 

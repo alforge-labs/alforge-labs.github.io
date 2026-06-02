@@ -27,7 +27,7 @@ combine portfolio Pine は次の方針で複数銘柄を 1 つの Pine にまと
 ```bash
 forge pine generate \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
-  --combine-allocation equal \
+  --allocation equal \
   --rebalance-freq monthly \
   --rebalance-threshold 0.05 \
   --portfolio-id beat_qqq_hedged_v1 \

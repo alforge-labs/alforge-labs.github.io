@@ -48,6 +48,9 @@ alpha-forge optimize run <SYMBOL> --strategy <ID> [OPTIONS]
 | `--end` | オプション | - | 最適化期間の終了日 `YYYY-MM-DD` |
 | `--max-drawdown` | float | - | 最大ドローダウン制約（%）。超過トライアルをペナルティ除外 |
 | `--objective` | 複数指定可 | - | 多目的最適化の目標（例: `sharpe_ratio_maximize`、`max_drawdown_pct_minimize`） |
+| `--goal` | オプション | - | ゴール名（例: `default`、`stocks`）。`goals.yaml` の `pre_filter` 閾値を JSON 出力に含める |
+| `--sharpe-min` | float | `--goal` か `1.0` | `pre_filter_pass` 判定の Sharpe 下限 |
+| `--max-dd` | float | `--goal` か `25.0` | `pre_filter_pass` 判定の MaxDD 上限（%） |
 
 `--max-drawdown` と `--objective` は同時指定できません。
 
@@ -285,6 +288,9 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--windows` | int | `5` | ウィンドウ数 |
 | `--min-window-trades` | int | - | IS 期間の取引数が N 件未満のウィンドウをスキップして平均から除外する。シグナル発生回数が少ない戦略でウィンドウ全体が `-∞` に陥るのを防ぐ |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+| `--goal` | オプション | - | ゴール名（例: `default`, `stocks`）。`goals.yaml` の `pre_filter` 閾値を読み、`--json` 出力に `pre_filter` / `pre_filter_pass` を追加する。指定時は `goals.yaml` の `wft.aggregation_method`（OOS 集約方法 `mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）と `wft.trimmed_pct` も読み込み、`pre_filter_pass` 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は `forge.yaml` の `default_goal` をフォールバック） |
+| `--sharpe-min` | float | `--goal` か `1.0` | `pre_filter_pass` 判定の Sharpe 下限（集約後の OOS Sharpe がこの値以上で `true`） |
+| `--max-dd` | float | `--goal` か `25.0` | `pre_filter_pass` の MaxDD 上限（%）。`--json` 出力の `pre_filter.max_dd_max` に反映 |
 
 ### IS 取引不足の早期警告と `[WARNING]` マーク
 
@@ -352,6 +358,8 @@ WFT の `--json` 出力には、ウィンドウ単位のフィールドに加え
 | `skip_reason` | string \| null (各 window 内) | スキップ要因（後述） |
 
 `skip_reason` は探索エージェントがウィンドウ無効の原因を判別するために使えます。
+
+さらに `--goal`（または `--sharpe-min` / `--max-dd`）を指定すると、`--json` 出力に `pre_filter`（`sharpe_min` / `max_dd_max` / `min_trades` / `goal`）と `pre_filter_pass`（集約 OOS Sharpe が `sharpe_min` 以上かの判定）が追加されます。OOS 集約方法は `goals.yaml` の `wft.aggregation_method`（`mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）で切り替えられます。
 
 | 値 | 意味 |
 |----|------|

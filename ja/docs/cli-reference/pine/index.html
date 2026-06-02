@@ -2574,15 +2574,117 @@
 <tbody>
 <tr>
 <td><code>--strategy</code></td>
-<td>必須</td>
+<td>オプション</td>
 <td>-</td>
-<td>戦略名</td>
+<td>戦略名（<code>--combine-strategies</code> と排他）</td>
+</tr>
+<tr>
+<td><code>--combine-strategies</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>複数の buy-hold-overlay 戦略をカンマ区切りで指定し単一 Pine v6 Indicator として combine portfolio を生成（<code>--strategy</code> と排他、issue #970）</td>
+</tr>
+<tr>
+<td><code>--allocation</code></td>
+<td>choice(<code>equal</code>/<code>custom</code>)</td>
+<td><code>equal</code></td>
+<td><code>--combine-strategies</code> 用の配分モード（<code>custom</code> は <code>--weights</code> 必須）</td>
+</tr>
+<tr>
+<td><code>--weights</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--allocation custom</code> 時の weights（例 <code>tqqq_phase2=0.5,gld_bh=0.25,tlt_bh=0.25</code>、合計 1.0±0.01）</td>
+</tr>
+<tr>
+<td><code>--portfolio-id</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--combine-strategies</code> 時の portfolio 識別子（生成 Pine indicator 名と webhook payload に書き込む）</td>
+</tr>
+<tr>
+<td><code>--rebalance-freq</code></td>
+<td>choice(<code>none</code>/<code>weekly</code>/<code>monthly</code>/<code>quarterly</code>/<code>yearly</code>)</td>
+<td><code>none</code></td>
+<td><code>--combine-strategies</code> 用の定期 rebalance 頻度（issue #971 Phase 2）</td>
+</tr>
+<tr>
+<td><code>--rebalance-threshold</code></td>
+<td>float(0.001–0.5)</td>
+<td>-</td>
+<td>threshold-based rebalance。各 ticker の current_weight が target から ±X 乖離で発火（<code>--rebalance-freq</code> と OR 併用可、issue #971）</td>
+</tr>
+<tr>
+<td><code>--allow-non-buy-hold</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td><code>--combine-strategies</code> で mean-reversion / trend-following 戦略を許可（各 sub-strategy が独立 position、issue #971 experimental）</td>
+</tr>
+<tr>
+<td><code>--combine-mode</code></td>
+<td>choice(<code>indicator</code>/<code>hybrid-strategy</code>)</td>
+<td><code>indicator</code></td>
+<td>combine 出力モード。<code>hybrid-strategy</code> はメイン symbol を strategy() で出力し TradingView Strategy Tester に対応（<code>--main-strategy</code> 必須、issue #985）</td>
+</tr>
+<tr>
+<td><code>--main-strategy</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--combine-mode hybrid-strategy</code> で strategy() 化するメイン戦略 ID（<code>--combine-strategies</code> 内の buy-hold-overlay 戦略、issue #985）</td>
 </tr>
 <tr>
 <td><code>--with-training-data</code></td>
 <td>フラグ</td>
 <td>false</td>
-<td>HMM インジケータがある場合、学習済みパラメータを Pine Script に埋め込む（データを自動フェッチ）</td>
+<td>HMM インジケータがある場合、学習済みパラメータを Pine Script に埋め込む（データを自動フェッチ。<code>--combine-strategies</code> 併用時は combine 内 HMM を並列フェッチ、issue #974）</td>
+</tr>
+<tr>
+<td><code>--with-webhook</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>alpha-strike Webhook 連携用 input + make_payload + alert() を Pine Script に付与（issue #770）</td>
+</tr>
+<tr>
+<td><code>--webhook-broker</code></td>
+<td>choice(<code>moomoo</code>/<code>oanda</code>)</td>
+<td>-</td>
+<td><code>--with-webhook</code> の発注先 broker（省略時 asset_type から推論）</td>
+</tr>
+<tr>
+<td><code>--webhook-asset-class</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--with-webhook</code> の asset_class（CRYPTO / FX / US_STOCK 等。省略時 asset_type から推論）</td>
+</tr>
+<tr>
+<td><code>--webhook-ticker</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--with-webhook</code> の broker 側ティッカー（moomoo crypto は CC.BTC 等。省略時 target_symbols[0] から推論）</td>
+</tr>
+<tr>
+<td><code>--webhook-quantity</code></td>
+<td>float</td>
+<td>-</td>
+<td><code>--with-webhook</code> の 1 注文あたり数量（TradingView 側で input から調整可能）</td>
+</tr>
+<tr>
+<td><code>--webhook-run-mode</code></td>
+<td>choice(<code>paper</code>/<code>live</code>)</td>
+<td><code>paper</code></td>
+<td><code>--with-webhook</code> の run_mode（記録のみ／実発注を alpha-strike 側で切替）</td>
+</tr>
+<tr>
+<td><code>--no-validate</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>Pine v6 シグネチャ DB ベースの post-generate validator をスキップ（緊急避難用、issue #786）</td>
+</tr>
+<tr>
+<td><code>--backtest-period</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>Pine 出力に期間フィルタを焼き込む（形式 <code>YYYY-MM-DD:YYYY-MM-DD</code>、issue #823）</td>
 </tr>
 </tbody>
 </table>
@@ -2599,8 +2701,74 @@
 </code></pre></div>
 <h2 id="alpha-forge-pine-preview">alpha-forge pine preview <code>[有料プラン限定]</code><a class="headerlink" href="#alpha-forge-pine-preview" title="Permanent link">&para;</a></h2>
 <p>戦略定義から生成される Pine Script を標準出力でプレビューします（ファイル保存しない）。<strong>有料プラン（Lifetime / Annual / Monthly）限定</strong>。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>preview<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>preview<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--with-webhook<span class="o">]</span><span class="w"> </span><span class="o">[</span>--backtest-period<span class="w"> </span>&lt;YYYY-MM-DD:YYYY-MM-DD&gt;<span class="o">]</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--strategy</code></td>
+<td>必須</td>
+<td>-</td>
+<td>戦略名</td>
+</tr>
+<tr>
+<td><code>--with-webhook</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>alpha-strike Webhook 連携用の input + make_payload + alert() を付与（issue #770）</td>
+</tr>
+<tr>
+<td><code>--webhook-broker</code></td>
+<td>choice(<code>moomoo</code>/<code>oanda</code>)</td>
+<td>-</td>
+<td><code>--with-webhook</code> 用 broker（省略時は asset_type から推論）</td>
+</tr>
+<tr>
+<td><code>--webhook-asset-class</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--with-webhook</code> 用 asset_class</td>
+</tr>
+<tr>
+<td><code>--webhook-ticker</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--with-webhook</code> 用 broker ティッカー</td>
+</tr>
+<tr>
+<td><code>--webhook-quantity</code></td>
+<td>float</td>
+<td><code>1.0</code></td>
+<td><code>--with-webhook</code> 用 数量</td>
+</tr>
+<tr>
+<td><code>--webhook-run-mode</code></td>
+<td>choice(<code>paper</code>/<code>live</code>)</td>
+<td><code>paper</code></td>
+<td><code>--with-webhook</code> 用 run_mode</td>
+</tr>
+<tr>
+<td><code>--no-validate</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>Pine v6 シグネチャ DB に基づく post-generate validator をスキップ（緊急避難用、issue #786）</td>
+</tr>
+<tr>
+<td><code>--backtest-period</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>Pine 出力に期間フィルタを焼き込む（<code>YYYY-MM-DD:YYYY-MM-DD</code>、issue #823）</td>
+</tr>
+</tbody>
+</table>
 <h2 id="alpha-forge-pine-import">alpha-forge pine import<a class="headerlink" href="#alpha-forge-pine-import" title="Permanent link">&para;</a></h2>
 <p>Pine Script (<code>.pine</code>) をパースして戦略定義として取り込みます。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>import<span class="w"> </span>&lt;PINE_FILE&gt;<span class="w"> </span>--id<span class="w"> </span>&lt;STRATEGY_ID&gt;
@@ -2712,6 +2880,72 @@
 <td>ファイル</td>
 <td>-</td>
 <td>レポート Markdown 出力先</td>
+</tr>
+<tr>
+<td><code>--combine-strategies</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>combine portfolio Pine を symbolic / alert-log / Strategy Tester で検証（<code>--strategy</code> と排他、issue #975）。例: <code>tqqq_phase2,gld_bh,tlt_bh</code></td>
+</tr>
+<tr>
+<td><code>--combine-allocation</code></td>
+<td>choice</td>
+<td><code>equal</code></td>
+<td><code>equal</code> / <code>custom</code>。<code>--combine-strategies</code> 用 allocation</td>
+</tr>
+<tr>
+<td><code>--combine-weights</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--combine-allocation custom</code> 時の重み（例: <code>tqqq=0.5,gld=0.5</code>）</td>
+</tr>
+<tr>
+<td><code>--combine-portfolio-id</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--combine-strategies</code> 用 portfolio_id（省略時は自動生成）</td>
+</tr>
+<tr>
+<td><code>--combine-rebalance-freq</code></td>
+<td>choice</td>
+<td><code>none</code></td>
+<td><code>none</code> / <code>weekly</code> / <code>monthly</code> / <code>quarterly</code> / <code>yearly</code>。<code>--combine-strategies</code> 用 rebalance 頻度</td>
+</tr>
+<tr>
+<td><code>--combine-rebalance-threshold</code></td>
+<td>float</td>
+<td>-</td>
+<td><code>--combine-strategies</code> 用の threshold-based rebalance（例: <code>0.05</code>）</td>
+</tr>
+<tr>
+<td><code>--verify-mode</code></td>
+<td>choice</td>
+<td><code>symbolic</code></td>
+<td><code>--combine-strategies --check-mode metrics</code> 経路の検証モード（#975/#980/#986）。<code>symbolic</code>=backtest combine と Pine 設定を symbolic 比較／<code>alert-log</code>=alpha-strike JSONL から position 再構築して metrics 計算（<code>--receipts-source</code> 必須）／<code>tradingview-strategy-tester</code>=hybrid-strategy Pine を Strategy Tester で比較（<code>--combine-mode hybrid-strategy</code> + <code>--main-strategy</code> + <code>--symbol</code> + <code>--interval</code> 必須）</td>
+</tr>
+<tr>
+<td><code>--combine-mode</code></td>
+<td>choice</td>
+<td><code>indicator</code></td>
+<td><code>indicator</code> / <code>hybrid-strategy</code>。combine の Pine 出力モード。<code>tradingview-strategy-tester</code> verify では <code>hybrid-strategy</code> を指定（#986）</td>
+</tr>
+<tr>
+<td><code>--main-strategy</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>hybrid-strategy verify で <code>strategy()</code> 化するメイン戦略 ID（#986）</td>
+</tr>
+<tr>
+<td><code>--receipts-source</code></td>
+<td>パス</td>
+<td>-</td>
+<td><code>--verify-mode alert-log</code> 用の alpha-strike JSONL ファイル or ディレクトリ</td>
+</tr>
+<tr>
+<td><code>--receipts-since</code></td>
+<td>オプション</td>
+<td>-</td>
+<td><code>--verify-mode alert-log</code> の対象期間下限（ISO 形式 <code>YYYY-MM-DD</code> 等）。省略時は全期間</td>
 </tr>
 </tbody>
 </table>

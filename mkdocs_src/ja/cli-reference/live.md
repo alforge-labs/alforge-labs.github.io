@@ -28,6 +28,7 @@
 | [`alpha-forge live compare`](#alpha-forge-live-compare) | 最新 backtest run と live summary を比較 |
 | [`alpha-forge live doctor`](#alpha-forge-live-doctor) | live trading analysis の導入状態を確認 |
 | [`alpha-forge live sync-events`](#alpha-forge-live-sync-events) | VPS 上のイベントログをローカルに rsync で同期 |
+| [`alpha-forge live replay`](#alpha-forge-live-replay) | combine portfolio の alert log から position ベースで live メトリクスを再構築 |
 
 ---
 
@@ -399,6 +400,27 @@ sent 4,312 bytes  received 78 bytes  total size 4,160
 - 設定不足: `1`
 - rsync タイムアウト: `1`
 - rsync 自体のエラー: rsync の終了コードをそのまま伝播
+
+---
+
+## alpha-forge live replay
+
+always-in-market の combine overlay 向けに、同期済み alpha-strike イベント（[`alpha-forge live sync-events`](#alpha-forge-live-sync-events) で取得）から position 推移を再構築し、portfolio equity curve から Sharpe / CAGR / MaxDD を算出します（issue #57）。`order_reconciled` イベントを権威ソースとして優先します。
+
+### 構文
+
+```bash
+alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1>,<ID2>[,...] [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `PORTFOLIO_ID` | 引数（必須） | - | combine portfolio 識別子 |
+| `--combine-strategies` | オプション（必須） | - | combine 対象戦略 ID（カンマ区切り、2 戦略以上） |
+| `--since` | オプション | - | 期間下限（ISO 形式） |
+| `--compare` | フラグ | false | `backtest combine` の結果と並べて比較表示する |
 
 ---
 

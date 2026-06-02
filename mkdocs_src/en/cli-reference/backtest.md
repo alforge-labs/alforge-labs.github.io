@@ -16,6 +16,7 @@ Run backtests and analyze results. Provides single-strategy runs, parallel batch
 | [`alpha-forge backtest report`](#alpha-forge-backtest-report) | Display a saved backtest result |
 | [`alpha-forge backtest migrate`](#alpha-forge-backtest-migrate) | Import existing JSON report files into the database |
 | [`alpha-forge backtest compare`](#alpha-forge-backtest-compare) | Compare multiple strategies side by side on the same symbol and period |
+| [`alpha-forge backtest combine`](#alpha-forge-backtest-combine) | Run a combined portfolio backtest across multiple strategies |
 | [`alpha-forge backtest portfolio`](#alpha-forge-backtest-portfolio) | Run a portfolio backtest across multiple symbols |
 | [`alpha-forge backtest chart`](#alpha-forge-backtest-chart) | Display dashboard URL to navigate to charts |
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | Fast signal count check without running the full backtest |
@@ -48,14 +49,18 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--no-benchmark` | flag | false | Disable benchmark comparison entirely (F-304). Useful for FX / commodities where a SPY comparison is meaningless |
 | `--check-criteria` | flag | false | Run acceptance criteria check |
 | `--cagr-min` | float | `20.0` | Minimum CAGR (%), used with `--check-criteria` |
-| `--sharpe-min` | float | `1.0` | Minimum Sharpe ratio |
-| `--max-dd` | float | `25.0` | Max drawdown limit (%); also used for `pre_filter_pass` |
+| `--sharpe-min` | float | None (falls back to goal or `1.0`) | Minimum Sharpe ratio |
+| `--max-dd` | float | None (falls back to goal or `25.0`) | Max drawdown limit (%); also used for `pre_filter_pass` |
 | `--win-rate-min` | float | `55.0` | Minimum win rate (%) |
 | `--pf-min` | float | `1.3` | Minimum profit factor |
 | `--min-trades` | int | - | Minimum trade count; exits with code 1 if below |
 | `--regime` | flag | false | Display per-regime statistics on the console |
 | `--trades-csv` | path | - | Write a per-trade CSV to the given path (issue #800, [details](#trades-csv-export)) |
 | `--debug` | flag | false | Raise the `alpha_forge.*` loggers to DEBUG (issue #800) |
+| `--goal` | option | - | Goal name (e.g. `default`, `stocks`); auto-loads `pre_filter` thresholds from `goals.yaml` into `--sharpe-min` / `--max-dd` |
+| `--cost-preset` | option | - | Cost preset name (issue #785, e.g. `moomoo-crypto-spot` / `binance-spot-vip0` / `ibkr-us-stock-fixed`); overrides the strategy's `risk_management` commission/slippage in-memory at run time (strategy JSON is untouched) |
+| `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics in the result (#958); requires saved dividends data (`data fetch --with-dividends`) |
+| `--regime-filter` | option | - | Post-hoc entry gating by macro regime (issue #1012); format `<source>:<label>` (e.g. `macro:risk_on`), source=`macro` only; requires FRED data fetched in advance (`data alt fetch FRED:T10Y3M`) |
 
 ### Export per-trade CSV with `--trades-csv` {#trades-csv-export}
 
@@ -437,6 +442,36 @@ spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
 
 ---
 
+## alpha-forge backtest combine
+
+Run a combined portfolio backtest across two or more strategies. Phase 1 supports equal allocation; Phase 2 supports custom weights.
+
+### Synopsis
+
+```bash
+alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [...] [OPTIONS]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `STRATEGY_IDS` | arguments (required, 2 or more) | - | Strategy IDs to combine (e.g. `iwm_sma200_bho_v1 qqq_ema_macd_v2`) |
+| `--allocation` | choice | `equal` | Allocation method (`equal` / `custom`) |
+| `--weights` | option | - | Weights when `--allocation custom`, e.g. `sid1=0.4,sid2=0.6`. Sum must be within 1.0 ± 0.01. Required with `--allocation custom` |
+| `--wft` | int | - | Number of windows for a walk-forward test (>= 2). Returns a `wft` section when set |
+| `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics. Loads saved dividend data for each strategy's symbol and reflects it in the combined result |
+| `--json` | flag | false | Output results as JSON to stdout |
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `Error: --allocation custom requires --weights` | `--allocation custom` given without `--weights` | Provide `--weights` |
+| `Error: invalid --weights token (expected sid=val): <token>` | Malformed `--weights` entry | Use `sid1=0.4,sid2=0.6` style |
+
+---
+
 ## alpha-forge backtest portfolio
 
 Run a portfolio backtest across multiple symbols.
@@ -531,7 +566,7 @@ Skip vectorbt and just count entry-condition signal occurrences. Useful for sani
 ### Synopsis
 
 ```bash
-alpha-forge backtest signal-count <SYMBOL> --strategy <ID> [--period 5y] [--json]
+alpha-forge backtest signal-count <SYMBOL> --strategy <ID> [--period 5y] [--estimate-trades] [--json]
 ```
 
 ### Arguments and options
@@ -541,6 +576,7 @@ alpha-forge backtest signal-count <SYMBOL> --strategy <ID> [--period 5y] [--json
 | `SYMBOL` | argument (required) | - | Symbol |
 | `--strategy` | required | - | Strategy ID |
 | `--period` | option | `5y` | Data period (e.g. `5y`, `1y`, `6m`, `30d`) |
+| `--estimate-trades` | flag | false | Estimate expected trades from signal blocks (for trend-following strategies) |
 | `--json` | flag | false | Output as JSON |
 
 ### Sample output

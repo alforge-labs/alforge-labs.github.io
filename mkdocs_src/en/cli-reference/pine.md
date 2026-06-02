@@ -15,8 +15,25 @@ alpha-forge pine generate --strategy <ID> [--with-training-data]
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
-| `--strategy` | required | - | Strategy name |
-| `--with-training-data` | flag | false | Embed trained HMM parameters into Pine Script if HMM indicator exists (auto-fetches data) |
+| `--strategy` | option | - | Strategy name (mutually exclusive with `--combine-strategies`) |
+| `--combine-strategies` | option | - | Comma-separated buy-hold-overlay strategies emitted as one combine-portfolio Pine v6 Indicator (mutually exclusive with `--strategy`, issue #970) |
+| `--allocation` | choice (`equal`/`custom`) | `equal` | Allocation mode for `--combine-strategies` (`custom` requires `--weights`) |
+| `--weights` | option | - | Weights for `--allocation custom` (e.g. `tqqq_phase2=0.5,gld_bh=0.25,tlt_bh=0.25`, sum 1.0±0.01) |
+| `--portfolio-id` | option | - | Portfolio identifier for `--combine-strategies` (written into the Pine indicator name and webhook payload) |
+| `--rebalance-freq` | choice (`none`/`weekly`/`monthly`/`quarterly`/`yearly`) | `none` | Periodic rebalance frequency for `--combine-strategies` (issue #971 Phase 2) |
+| `--rebalance-threshold` | float (0.001–0.5) | - | Threshold-based rebalance; fires when current_weight deviates ±X from target (OR-combined with `--rebalance-freq`, issue #971) |
+| `--allow-non-buy-hold` | flag | false | Allow MR / trend-following strategies in `--combine-strategies` (each sub-strategy holds an independent position, issue #971 experimental) |
+| `--combine-mode` | choice (`indicator`/`hybrid-strategy`) | `indicator` | Combine output mode; `hybrid-strategy` emits the main symbol via strategy() for Strategy Tester support (requires `--main-strategy`, issue #985) |
+| `--main-strategy` | option | - | Main strategy ID emitted as strategy() under `--combine-mode hybrid-strategy` (issue #985) |
+| `--with-training-data` | flag | false | Embed trained HMM parameters into Pine Script if HMM indicator exists (auto-fetches data; with `--combine-strategies`, fetches combine-internal HMM strategies in parallel for full Forward Algorithm reproduction, issue #974) |
+| `--with-webhook` | flag | false | Attach alpha-strike webhook input + make_payload + alert() to the Pine output (issue #770) |
+| `--webhook-broker` | choice (`moomoo`/`oanda`) | - | Order broker for `--with-webhook` (inferred from asset_type if omitted) |
+| `--webhook-asset-class` | option | - | asset_class for `--with-webhook` (CRYPTO / FX / US_STOCK, etc.; inferred from asset_type if omitted) |
+| `--webhook-ticker` | option | - | Broker-side ticker for `--with-webhook` (e.g. CC.BTC for moomoo crypto; inferred from target_symbols if omitted) |
+| `--webhook-quantity` | float | `1.0` | Order quantity per signal for `--with-webhook` (adjustable via TradingView inputs) |
+| `--webhook-run-mode` | choice (`paper`/`live`) | `paper` | run_mode for `--with-webhook` (record-only vs. live order on the alpha-strike side) |
+| `--no-validate` | flag | false | Skip the Pine v6 signature-DB post-generate validator (emergency bypass, issue #786) |
+| `--backtest-period` | option | - | Bake a period filter into the Pine output (format `YYYY-MM-DD:YYYY-MM-DD`, issue #823) |
 
 Sample output (paid plan):
 
@@ -42,6 +59,18 @@ Preview generated Pine Script on stdout without writing to a file. **Paid plans 
 ```bash
 alpha-forge pine preview --strategy <ID>
 ```
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--strategy` | required | - | Strategy name |
+| `--with-webhook` | flag | false | Embed alpha-strike webhook input + make_payload + alert() (issue #770) |
+| `--webhook-broker` | choice (`moomoo`/`oanda`) | - | Broker for `--with-webhook` (inferred from asset_type if omitted) |
+| `--webhook-asset-class` | option | - | asset_class for `--with-webhook` |
+| `--webhook-ticker` | option | - | Broker-side ticker for `--with-webhook` |
+| `--webhook-quantity` | float | `1.0` | Order quantity for `--with-webhook` |
+| `--webhook-run-mode` | choice (`paper`/`live`) | `paper` | run_mode for `--with-webhook` |
+| `--no-validate` | flag | false | Skip the Pine v6 post-generate validator (emergency bypass, issue #786) |
+| `--backtest-period` | option | - | Bake a period filter into the Pine output (`YYYY-MM-DD:YYYY-MM-DD`, issue #823) |
 
 ## alpha-forge pine import
 
@@ -69,6 +98,17 @@ alpha-forge pine verify --strategy <ID> [--check-mode <MODE>] [--mcp-server <CMD
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `--strategy` | required | - | Strategy name |
+| `--combine-strategies` | option | - | Verify a combine-portfolio Pine (symbolic / alert-log / Strategy Tester). Mutually exclusive with `--strategy` (issue #975). e.g. `tqqq_phase2,gld_bh,tlt_bh` |
+| `--combine-allocation` | choice | `equal` | Allocation for `--combine-strategies` (`equal` / `custom`; `custom` requires `--combine-weights`) |
+| `--combine-weights` | option | - | Weights for `--combine-allocation custom` (e.g. `tqqq=0.5,gld=0.5`) |
+| `--combine-portfolio-id` | option | - | portfolio_id for `--combine-strategies` (auto-generated if omitted) |
+| `--combine-rebalance-freq` | choice | `none` | Rebalance frequency for `--combine-strategies` (`none` / `weekly` / `monthly` / `quarterly` / `yearly`) |
+| `--combine-rebalance-threshold` | float | - | Threshold-based rebalance for `--combine-strategies` (e.g. `0.05`) |
+| `--verify-mode` | choice | `symbolic` | Combine verify mode. `symbolic`=symbolically compare `backtest combine` vs. Pine config (#975); `alert-log`=reconstruct positions from alpha-strike JSONL and compute metrics, requires `--receipts-source` (#980); `tradingview-strategy-tester`=run the hybrid-strategy Pine through Strategy Tester, requires `--combine-mode hybrid-strategy` + `--main-strategy` + `--symbol` + `--interval` (#986) |
+| `--combine-mode` | choice | - | Pine output mode for combine (`indicator` / `hybrid-strategy`); use `hybrid-strategy` for `--verify-mode tradingview-strategy-tester` (#986) |
+| `--main-strategy` | option | - | Main strategy ID emitted as `strategy()` during hybrid-strategy verify (#986) |
+| `--receipts-source` | path | - | alpha-strike JSONL file or directory for `--verify-mode alert-log` |
+| `--receipts-since` | option | - | Lower time bound (ISO format, e.g. `YYYY-MM-DD`) for `--verify-mode alert-log`; full history if omitted |
 | `--check-mode` | choice | `compile_only` | `compile_only` / `metrics` / `signal` / `regime` |
 | `--mcp-server` | option | - | MCP server command (defaults to `tv_mcp.pine_verify.endpoint` in `forge.yaml`) |
 | `--mcp-server-flavor` | choice | `tradesdontlie` | `vinicius` is the `oviniciusramosp/tradingview-mcp` fork; recommended for metrics / signal modes |

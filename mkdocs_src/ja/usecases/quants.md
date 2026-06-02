@@ -18,16 +18,16 @@
 # 1. 仮説をJSONで宣言
 alpha-forge strategy create regime_test --template hmm_bb_rsi
 
-# 2. 複数パラメータをグリッドサーチ
-alpha-forge optimize grid QQQ --strategy regime_test \
-  --param rsi_period 10 14 20 \
-  --param bb_period 15 20 25
+# 2. パラメータ空間を戦略 JSON の optimizer_config.param_ranges で宣言し、
+#    グリッドサーチで網羅探索する
+#    例: param_ranges に rsi_period: [10, 14, 20], bb_period: [15, 20, 25]
+alpha-forge optimize grid QQQ --strategy regime_test --top-k 10
 
 # 3. ウォークフォワード検証（5分割）
-alpha-forge optimize walk-forward QQQ --strategy regime_test --folds 5
+alpha-forge optimize walk-forward QQQ --strategy regime_test --windows 5
 
 # 4. 実験結果をJournalに保存
-alpha-forge journal record regime_test --note "HMM期間別の感度分析"
+alpha-forge journal note regime_test "HMM期間別の感度分析"
 ```
 
 ## 過学習リスクの評価

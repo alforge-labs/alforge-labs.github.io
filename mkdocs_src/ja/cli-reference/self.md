@@ -30,6 +30,8 @@ alpha-forge self update --check         # ダウンロードせず確認のみ
 alpha-forge self update --version 0.4.0 # 任意バージョンへピン留め
 alpha-forge self update --dry-run       # DL・検証・展開のみ実行（差し替えなし）
 alpha-forge self update --print-target  # 検出したインストールレイアウトを表示（トラブル時に共有）
+alpha-forge self update --force         # 既に最新でも再ダウンロードする
+alpha-forge self update --no-smoke-test # 差し替え後の起動確認をスキップ（CI 等で時間を惜しむ場合）
 ```
 
 ### 動作する条件

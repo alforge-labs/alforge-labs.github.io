@@ -80,6 +80,7 @@ alpha-forge system init [OPTIONS]
 |------|------|----------|------|
 | `--force` / `-f` | フラグ | false | 既存ファイルを確認なしで上書き |
 | `--no-claude` | フラグ | false | AI アシスタント統合ファイルのセットアップをスキップ |
+| `--template` / `-t` | 選択肢 | `default` | 資産クラス別テンプレートを選択（`crypto` / `fx` / `stocks` / `commodities` / `default`） |
 
 ## 作成されるディレクトリ
 

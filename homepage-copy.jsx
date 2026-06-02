@@ -75,6 +75,7 @@ window.COPY = {
             'alpha-forge コア（Beta 版・購入して利用可能、v1.0 へ向け改善中）',
             'alpha-strike 自動執行サーバー（早期開発 / Dev）',
             'Claude / Codex 連携スキル（/explore-strategies など）',
+            'FRED / ALFRED マクロデータ provider（forge data alt fetch FRED: / backtest --regime-filter macro:）',
           ],
         },
         {
@@ -85,7 +86,6 @@ window.COPY = {
           items: [
             'v1.0 正式リリース（全プロダクト）',
             'MCP サーバ正式版（alpha 版は uvx alpha-forge-mcp で公開中）',
-            'FRED / ALFRED マクロデータ provider',
             'サポート・コミュニティ体制の整備',
           ],
         },
@@ -297,7 +297,7 @@ window.COPY = {
           status: 'active',
           badgeLabel: '進行中',
           title: '正式リリース・商用化',
-          items: ['全プロダクト正式リリース（v1.0）', '✅ MCP サーバ PyPI 公開済み（uvx alpha-forge-mcp・Claude Code / Codex / Cursor）', 'FRED/ALFRED マクロデータ provider', 'サポート・コミュニティ体制整備'],
+          items: ['全プロダクト正式リリース（v1.0）', '✅ MCP サーバ PyPI 公開済み（uvx alpha-forge-mcp・Claude Code / Codex / Cursor）', '✅ FRED/ALFRED マクロデータ provider 出荷済み（forge data alt fetch FRED: / backtest --regime-filter macro:）', 'サポート・コミュニティ体制整備'],
         },
       ],
     },
@@ -541,6 +541,7 @@ window.COPY = {
             'alpha-forge core (Beta — purchasable & usable, evolving toward v1.0)',
             'alpha-strike execution server (early development / Dev)',
             'Claude / Codex agent skills (/explore-strategies, etc.)',
+            'FRED / ALFRED macro data provider (forge data alt fetch FRED: / backtest --regime-filter macro:)',
           ],
         },
         {
@@ -551,7 +552,6 @@ window.COPY = {
           items: [
             'v1.0 official release (all products)',
             'MCP server GA (alpha already live: uvx alpha-forge-mcp)',
-            'FRED / ALFRED macro data provider',
             'Support & community infrastructure',
           ],
         },
@@ -728,7 +728,7 @@ window.COPY = {
         { period: 'Late March 2026', status: 'done', badgeLabel: 'Done', title: 'Live Execution Integration', items: ['alpha-strike Webhook server', 'OANDA & moomoo API execution', 'Execution & response event analysis pipeline'] },
         { period: 'April 2026', status: 'done', badgeLabel: 'Done', title: 'Productization', items: ['License management, binary distribution & CI/CD pipeline', 'Official site launch', 'Claude-driven autonomous parameter search'] },
         { period: 'May 2026', status: 'done', badgeLabel: 'Done', title: 'Beta Release', items: ['alpha-forge v0.4.0 release (macOS / Windows / Linux binaries)', 'alpha-visualizer v0.2.0 published (OSS, TradingView Lightweight Charts)', 'Trial plan launched', 'Documentation polish'] },
-        { period: 'Summer 2026', status: 'active', badgeLabel: 'Active', title: 'Public Launch & Commercialization', items: ['Full v1.0 product release', '✅ MCP server published on PyPI — uvx alpha-forge-mcp (Claude Code / Codex / Cursor)', 'FRED/ALFRED macro data provider', 'Support & community setup'] },
+        { period: 'Summer 2026', status: 'active', badgeLabel: 'Active', title: 'Public Launch & Commercialization', items: ['Full v1.0 product release', '✅ MCP server published on PyPI — uvx alpha-forge-mcp (Claude Code / Codex / Cursor)', '✅ FRED/ALFRED macro data provider shipped (forge data alt fetch FRED: / backtest --regime-filter macro:)', 'Support & community setup'] },
       ],
     },
     faq: {

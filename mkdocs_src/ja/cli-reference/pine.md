@@ -15,8 +15,25 @@ alpha-forge pine generate --strategy <ID> [--with-training-data]
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
-| `--strategy` | 必須 | - | 戦略名 |
-| `--with-training-data` | フラグ | false | HMM インジケータがある場合、学習済みパラメータを Pine Script に埋め込む（データを自動フェッチ） |
+| `--strategy` | オプション | - | 戦略名（`--combine-strategies` と排他） |
+| `--combine-strategies` | オプション | - | 複数の buy-hold-overlay 戦略をカンマ区切りで指定し単一 Pine v6 Indicator として combine portfolio を生成（`--strategy` と排他、issue #970） |
+| `--allocation` | choice(`equal`/`custom`) | `equal` | `--combine-strategies` 用の配分モード（`custom` は `--weights` 必須） |
+| `--weights` | オプション | - | `--allocation custom` 時の weights（例 `tqqq_phase2=0.5,gld_bh=0.25,tlt_bh=0.25`、合計 1.0±0.01） |
+| `--portfolio-id` | オプション | - | `--combine-strategies` 時の portfolio 識別子（生成 Pine indicator 名と webhook payload に書き込む） |
+| `--rebalance-freq` | choice(`none`/`weekly`/`monthly`/`quarterly`/`yearly`) | `none` | `--combine-strategies` 用の定期 rebalance 頻度（issue #971 Phase 2） |
+| `--rebalance-threshold` | float(0.001–0.5) | - | threshold-based rebalance。各 ticker の current_weight が target から ±X 乖離で発火（`--rebalance-freq` と OR 併用可、issue #971） |
+| `--allow-non-buy-hold` | フラグ | false | `--combine-strategies` で mean-reversion / trend-following 戦略を許可（各 sub-strategy が独立 position、issue #971 experimental） |
+| `--combine-mode` | choice(`indicator`/`hybrid-strategy`) | `indicator` | combine 出力モード。`hybrid-strategy` はメイン symbol を strategy() で出力し TradingView Strategy Tester に対応（`--main-strategy` 必須、issue #985） |
+| `--main-strategy` | オプション | - | `--combine-mode hybrid-strategy` で strategy() 化するメイン戦略 ID（`--combine-strategies` 内の buy-hold-overlay 戦略、issue #985） |
+| `--with-training-data` | フラグ | false | HMM インジケータがある場合、学習済みパラメータを Pine Script に埋め込む（データを自動フェッチ。`--combine-strategies` 併用時は combine 内 HMM を並列フェッチ、issue #974） |
+| `--with-webhook` | フラグ | false | alpha-strike Webhook 連携用 input + make_payload + alert() を Pine Script に付与（issue #770） |
+| `--webhook-broker` | choice(`moomoo`/`oanda`) | - | `--with-webhook` の発注先 broker（省略時 asset_type から推論） |
+| `--webhook-asset-class` | オプション | - | `--with-webhook` の asset_class（CRYPTO / FX / US_STOCK 等。省略時 asset_type から推論） |
+| `--webhook-ticker` | オプション | - | `--with-webhook` の broker 側ティッカー（moomoo crypto は CC.BTC 等。省略時 target_symbols[0] から推論） |
+| `--webhook-quantity` | float | - | `--with-webhook` の 1 注文あたり数量（TradingView 側で input から調整可能） |
+| `--webhook-run-mode` | choice(`paper`/`live`) | `paper` | `--with-webhook` の run_mode（記録のみ／実発注を alpha-strike 側で切替） |
+| `--no-validate` | フラグ | false | Pine v6 シグネチャ DB ベースの post-generate validator をスキップ（緊急避難用、issue #786） |
+| `--backtest-period` | オプション | - | Pine 出力に期間フィルタを焼き込む（形式 `YYYY-MM-DD:YYYY-MM-DD`、issue #823） |
 
 サンプル出力（有料プラン）：
 
@@ -40,8 +57,20 @@ alpha-forge pine generate --strategy <ID> [--with-training-data]
 戦略定義から生成される Pine Script を標準出力でプレビューします（ファイル保存しない）。**有料プラン（Lifetime / Annual / Monthly）限定**。
 
 ```bash
-alpha-forge pine preview --strategy <ID>
+alpha-forge pine preview --strategy <ID> [--with-webhook] [--backtest-period <YYYY-MM-DD:YYYY-MM-DD>]
 ```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--strategy` | 必須 | - | 戦略名 |
+| `--with-webhook` | フラグ | false | alpha-strike Webhook 連携用の input + make_payload + alert() を付与（issue #770） |
+| `--webhook-broker` | choice(`moomoo`/`oanda`) | - | `--with-webhook` 用 broker（省略時は asset_type から推論） |
+| `--webhook-asset-class` | オプション | - | `--with-webhook` 用 asset_class |
+| `--webhook-ticker` | オプション | - | `--with-webhook` 用 broker ティッカー |
+| `--webhook-quantity` | float | `1.0` | `--with-webhook` 用 数量 |
+| `--webhook-run-mode` | choice(`paper`/`live`) | `paper` | `--with-webhook` 用 run_mode |
+| `--no-validate` | フラグ | false | Pine v6 シグネチャ DB に基づく post-generate validator をスキップ（緊急避難用、issue #786） |
+| `--backtest-period` | オプション | - | Pine 出力に期間フィルタを焼き込む（`YYYY-MM-DD:YYYY-MM-DD`、issue #823） |
 
 ## alpha-forge pine import
 
@@ -80,6 +109,17 @@ alpha-forge pine verify --strategy <ID> [--check-mode <MODE>] [--mcp-server <CMD
 | `--match-tolerance-seconds` | int | `60` | signal モードのトレード時刻許容差（秒） |
 | `--min-match-rate` | float | `0.95` | signal モードの最低トレード一致率 |
 | `--output` | ファイル | - | レポート Markdown 出力先 |
+| `--combine-strategies` | オプション | - | combine portfolio Pine を symbolic / alert-log / Strategy Tester で検証（`--strategy` と排他、issue #975）。例: `tqqq_phase2,gld_bh,tlt_bh` |
+| `--combine-allocation` | choice | `equal` | `equal` / `custom`。`--combine-strategies` 用 allocation |
+| `--combine-weights` | オプション | - | `--combine-allocation custom` 時の重み（例: `tqqq=0.5,gld=0.5`） |
+| `--combine-portfolio-id` | オプション | - | `--combine-strategies` 用 portfolio_id（省略時は自動生成） |
+| `--combine-rebalance-freq` | choice | `none` | `none` / `weekly` / `monthly` / `quarterly` / `yearly`。`--combine-strategies` 用 rebalance 頻度 |
+| `--combine-rebalance-threshold` | float | - | `--combine-strategies` 用の threshold-based rebalance（例: `0.05`） |
+| `--verify-mode` | choice | `symbolic` | `--combine-strategies --check-mode metrics` 経路の検証モード（#975/#980/#986）。`symbolic`=backtest combine と Pine 設定を symbolic 比較／`alert-log`=alpha-strike JSONL から position 再構築して metrics 計算（`--receipts-source` 必須）／`tradingview-strategy-tester`=hybrid-strategy Pine を Strategy Tester で比較（`--combine-mode hybrid-strategy` + `--main-strategy` + `--symbol` + `--interval` 必須） |
+| `--combine-mode` | choice | `indicator` | `indicator` / `hybrid-strategy`。combine の Pine 出力モード。`tradingview-strategy-tester` verify では `hybrid-strategy` を指定（#986） |
+| `--main-strategy` | オプション | - | hybrid-strategy verify で `strategy()` 化するメイン戦略 ID（#986） |
+| `--receipts-source` | パス | - | `--verify-mode alert-log` 用の alpha-strike JSONL ファイル or ディレクトリ |
+| `--receipts-since` | オプション | - | `--verify-mode alert-log` の対象期間下限（ISO 形式 `YYYY-MM-DD` 等）。省略時は全期間 |
 
 **check-mode**
 

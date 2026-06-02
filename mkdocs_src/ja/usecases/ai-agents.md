@@ -15,8 +15,7 @@ AlphaForgeは**すべての操作がCLI/JSON/YAML**で完結するよう設計�
 
 | コマンド | 役割 |
 |---------|------|
-| `/explore-strategies` | 未試行の指標×銘柄を1回分自律探索 |
-| `/explore-strategies-loop` | レートリミットまで連続探索 |
+| `/explore-strategies` | 未試行の指標×銘柄を自律探索（`--runs N` で複数ラン、`--runs 0` で無制限ループ） |
 | `/analyze-exploration` | 全探索ログを集計・分析し次の推薦候補を出力 |
 | `/grid-tune` | 既存戦略の網羅的Gridチューニング + WFT検証 |
 | `/tune-live-strategies` | 実運用中戦略の乖離分析・再チューニング |

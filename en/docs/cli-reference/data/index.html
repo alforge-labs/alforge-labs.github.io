@@ -3405,6 +3405,12 @@
 <td>-</td>
 <td>MCP server flavor for <code>--provider tv_mcp</code> (<code>tradesdontlie</code> / <code>vinicius</code>). CLI value takes precedence over <code>forge.yaml</code></td>
 </tr>
+<tr>
+<td><code>--with-dividends</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Also fetch and save dividend history alongside OHLCV (#958 Phase 2). Required for a true total-return evaluation of high-yield ETFs, and a prerequisite for <code>alpha-forge backtest run --dividend-reinvest</code></td>
+</tr>
 </tbody>
 </table>
 <p>You must provide either <code>SYMBOL</code> or <code>--watchlist</code>. With <code>--provider tv_mcp</code>, the command fails fast if no <code>endpoint</code> can be resolved.</p>
@@ -3658,7 +3664,7 @@
 <p><strong>For long-range history, use a different provider</strong>:</p>
 <ul>
 <li>Stocks / ETFs: <code>--provider yfinance</code> (up to ~30y by default)</li>
-<li>FX deep history: <code>--provider dukascopy</code> (decades)</li>
+<li>FX deep history: set <code>data.providers.fx_provider: dukascopy</code> in <code>forge.yaml</code> (decades). The <code>--provider</code> CLI flag only accepts <code>yfinance</code> / <code>moomoo</code> / <code>tv_mcp</code>, so <code>dukascopy</code> must be selected via config, not the flag.</li>
 <li>If you must use <code>tv_mcp</code> for deep history, manually scroll the TradingView Desktop chart back to your target years first so the bars cache grows; the MCP can then read whatever has been preloaded. A persistent fix requires a new MCP tool that triggers historical loading on the chart.</li>
 </ul>
 </div>

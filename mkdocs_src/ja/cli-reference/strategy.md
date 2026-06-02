@@ -11,6 +11,7 @@
 |---------|------|
 | [`alpha-forge strategy list`](#alpha-forge-strategy-list) | 登録済み戦略の一覧を表示する |
 | [`alpha-forge strategy create`](#alpha-forge-strategy-create) | 組み込みテンプレートから JSON ファイルを作成する |
+| [`alpha-forge strategy scaffold`](#alpha-forge-strategy-scaffold) | シンボル・インジケータ・タイプから戦略をスキャフォールドする |
 | [`alpha-forge strategy save`](#alpha-forge-strategy-save) | JSON ファイルからカスタム戦略を登録する |
 | [`alpha-forge strategy show`](#alpha-forge-strategy-show) | 登録済みの戦略定義（JSON）を表示する |
 | [`alpha-forge strategy migrate`](#alpha-forge-strategy-migrate) | 既存 JSON ファイルを DB にインポートする |
@@ -18,6 +19,7 @@
 | [`alpha-forge strategy purge`](#alpha-forge-strategy-purge) | 戦略 JSON・関連結果・DB エントリを 1 コマンドで完全削除する |
 | [`alpha-forge strategy validate`](#alpha-forge-strategy-validate) | 戦略の論理整合性チェックを実行する |
 | [`alpha-forge strategy signals`](#alpha-forge-strategy-signals) | エントリーシグナル数を軽量集計する |
+| [`alpha-forge strategy cost-presets`](#alpha-forge-strategy-cost-presets) | ビルトインのコストプリセット一覧を表示する |
 
 ---
 
@@ -28,12 +30,14 @@
 ### 構文
 
 ```bash
-alpha-forge strategy list
+alpha-forge strategy list [--json]
 ```
 
 ### 引数とオプション
 
-なし。
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON 形式で出力する（機械可読・MCP/パイプ用途） |
 
 ### サンプル出力
 
@@ -137,6 +141,47 @@ AlphaForge は「ユーザー自身が戦略を作って育てる」プロダク
 
 ---
 
+## alpha-forge strategy scaffold
+
+シンボル・インジケータ・タイプから戦略 JSON を **生成** します。組み込みテンプレートに依存せず、指定したインジケータ群と戦略タイプ（逆張り／順張り／buy-and-hold オーバーレイ）から条件・リスク管理を自動構築します。`--save` を付ければそのまま戦略レジストリへ登録され、付けなければ JSON を出力します。`/explore-strategies` の戦略生成主経路です。
+
+### 構文
+
+```bash
+alpha-forge strategy scaffold --symbol <SYMBOL> --indicators <CSV> --type <TYPE> [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--symbol` | 必須 | - | 対象シンボル（例: `GC=F`, `AAPL`） |
+| `--indicators` | 必須 | - | 使用インジケータ（カンマ区切り）: `BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH`。mean-reversion + 単一 EMA/SMA トレンドフィルタ + FX/コモディティの組み合わせは signal-starve しやすく、生成時に stderr WARNING で代替案を案内（issue #830） |
+| `--type` | 必須（`mean-reversion` / `trend-following` / `buy-hold-overlay`） | - | 戦略タイプ |
+| `--strategy-id` | オプション | 自動生成 | 生成戦略の `strategy_id` |
+| `--output` | オプション | - | 出力 JSON ファイルパス |
+| `--save` | フラグ | false | DB（戦略レジストリ）に直接保存する |
+| `--no-atr` | フラグ | false | ATR の自動追加をスキップする（デフォルト: 自動追加） |
+| `--goal` | オプション | - | ゴール名（`goals.yaml` の `scaffold_defaults` を自動適用、issue #461） |
+| `--position-size-pct` | float | type 別（mean-reversion=15.0 / trend-following=10.0） | ポジションサイズ%（equity 比率、issue #461） |
+| `--leverage` | float | 1.0 | レバレッジ倍率（0=ノーポジ、>1=レバ、issue #461） |
+| `--stop-loss-pct` | float | null（SL なし） | 損切り%（エントリー価格からの距離、issue #461） |
+| `--take-profit-pct` | float | null（TP なし） | 利確%（エントリー価格からの距離、issue #461） |
+| `--trailing-stop-pct` | float | null（trailing なし） | トレーリングストップ%（ピーク close からの引き下げ幅、issue #765） |
+| `--target-exposure-pct` | float（0 < x ≤ 100） | 70.0 | （buy-hold-overlay 専用）hedge レジーム時の目標エクスポージャー%（#922 Phase 3） |
+| `--hedge-trigger-mode` | `or` / `and` | `or` | （buy-hold-overlay 専用）複合 hedge トリガーの集約モード（#964/#965）。`or`=任意の指標で hedge、`and`=全指標一致時のみ。対応: SMA200+ATR / SMA200+RSI / SMA200+BB |
+| `--commission-pct` | float | null（forge.yaml 継承） | 戦略固有の手数料%（片道、絶対 %。issue #766） |
+| `--slippage-pct` | float | null（forge.yaml 継承） | 戦略固有のスリッページ%（片道、絶対 %。issue #766） |
+| `--cost-preset` | オプション | - | コストプリセット名（issue #785、例: `moomoo-crypto-spot` / `binance-spot-vip0` / `oanda-fx-major` / `ibkr-us-stock-fixed`）。`--commission-pct` / `--slippage-pct` 併用時は明示値が優先。一覧は [`alpha-forge strategy cost-presets`](#alpha-forge-strategy-cost-presets) |
+| `--timeframe` | オプション | `1d` | 戦略の時間足（例: `1d`, `4h`、issue #463/#758、`--goal` の `scaffold_defaults.timeframe` を上書き） |
+| `--confirm-bars` | int | - | 反転確認バー数（mean-reversion のみ、issue #470/#473）。0=瞬間、1=前バー BB 抜け+現バー反転、2/3=連続反転 |
+| `--wick-ratio` | float | - | ピンバー的反転の wick 長さ閾値（issue #473）。`confirm_bars≥1` のみ有効 |
+| `--vol-tier` | `auto` / `low` / `mid` / `high` | - | asset ボラティリティ tier（issue #886）。mean-reversion の SL/TP デフォルトを tier 別に変える（low=0.8%/1.6%、mid=1.5%/3.0%、high=3.5%/7.0%）。`auto` は過去 252 営業日の ATR%/価格平均から自動判定。明示 SL/TP が優先 |
+| `--allow-extreme` | フラグ | false | 指標数 5 以上の戦略生成を許可する（issue #888）。通常は AND 条件過剰で no_signals / pre_filter_failed を量産するため abort される |
+| `--reject-on-warning` | フラグ | false | scaffold 警告を検出したら戦略を保存せず exit code 2 で終了する（issue #903）。agent (skill) が別組み合わせへ切り替える運用に使う。`--allow-extreme` による abort 突破は対象外（abort は exit 1） |
+
+---
+
 ## alpha-forge strategy save
 
 JSON ファイルからカスタム戦略を **戦略レジストリに登録** します。`config.journal.auto_record` が true の場合、Journal にスナップショットも記録されます。
@@ -182,7 +227,7 @@ alpha-forge strategy save <FILE_PATH> [--force]
 ### 構文
 
 ```bash
-alpha-forge strategy show <STRATEGY_ID>
+alpha-forge strategy show <STRATEGY_ID> [--json] [--with-silence-stats]
 ```
 
 ### 引数とオプション
@@ -190,6 +235,8 @@ alpha-forge strategy show <STRATEGY_ID>
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 表示する戦略 ID |
+| `--json` | フラグ | false | 純粋な JSON 形式で出力（パイプ用途向け） |
+| `--with-silence-stats` | フラグ | false | buy-hold-overlay の hedge_trigger 発火統計を historical OHLC で計算して表示（#966 Phase 3）。複合 REGIME_RULE では各 condition と集約結果の発火バー数を出力する。OHLC 取得を伴うため `--json` 時のみ別途実行が必要 |
 
 ### サンプル出力
 
@@ -546,6 +593,48 @@ alpha-forge strategy signals <SYMBOL> --strategy <NAME> [--period <PERIOD>] [--j
 | `estimated_trades` | 連続シグナルをブロック単位でカウントした推定取引数 |
 | `avg_per_year` | 年平均取引数 |
 | `wft_window_coverage` | WFT 窓あたりの推定取引数に基づくカバレッジ判定 |
+
+---
+
+## alpha-forge strategy cost-presets
+
+ビルトインのコストプリセット一覧を表示します（issue #785）。`alpha-forge strategy scaffold` / `alpha-forge backtest run` の `--cost-preset` に指定できるプリセット名（例: `moomoo-crypto-spot` / `binance-spot-vip0` / `oanda-fx-major` / `ibkr-us-stock-fixed`）を確認するために使います。
+
+### 構文
+
+```bash
+alpha-forge strategy cost-presets [--json]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | JSON 形式で出力する |
+
+### サンプル出力（テキスト）
+
+```text
+ビルトイン cost preset: 4 件
+──────────────────────────────────────────────────────────────────────────────
+  binance-spot-vip0
+    commission=0.1%  slippage=0.05%
+    ...
+    source: ...
+```
+
+### サンプル出力（`--json`）
+
+```json
+{
+  "binance-spot-vip0": {
+    "commission_pct": 0.1,
+    "slippage_pct": 0.05,
+    "spread_pct": null,
+    ...
+  }
+}
+```
 
 ---
 

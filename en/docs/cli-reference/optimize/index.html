@@ -3842,6 +3842,24 @@
 <td>-</td>
 <td>Multi-objective goal (e.g. <code>sharpe_ratio_maximize</code>, <code>max_drawdown_pct_minimize</code>)</td>
 </tr>
+<tr>
+<td><code>--goal</code></td>
+<td>option</td>
+<td>-</td>
+<td>Goal name (e.g. <code>default</code>, <code>stocks</code>). Includes the <code>goals.yaml</code> <code>pre_filter</code> thresholds in the JSON output</td>
+</tr>
+<tr>
+<td><code>--sharpe-min</code></td>
+<td>float</td>
+<td><code>--goal</code> value or <code>1.0</code></td>
+<td>Minimum Sharpe ratio for <code>pre_filter_pass</code></td>
+</tr>
+<tr>
+<td><code>--max-dd</code></td>
+<td>float</td>
+<td><code>--goal</code> value or <code>25.0</code></td>
+<td>Max drawdown limit (%) for <code>pre_filter_pass</code></td>
+</tr>
 </tbody>
 </table>
 <p><code>--max-drawdown</code> and <code>--objective</code> cannot be used together.</p>
@@ -4231,6 +4249,24 @@
 <td>flag</td>
 <td>false</td>
 <td>Output results as JSON</td>
+</tr>
+<tr>
+<td><code>--goal</code></td>
+<td>option</td>
+<td>-</td>
+<td>Goal name (e.g. <code>default</code>, <code>stocks</code>). Includes <code>goals.yaml</code> <code>pre_filter</code> thresholds in the JSON output; when set, the goal's WFT settings (including the OOS aggregation method <code>mean</code> / <code>median</code> / <code>trimmed_mean</code>, #947) are also applied</td>
+</tr>
+<tr>
+<td><code>--sharpe-min</code></td>
+<td>float</td>
+<td><code>--goal</code> value or <code>1.0</code></td>
+<td>Minimum Sharpe ratio for the <code>pre_filter_pass</code> decision</td>
+</tr>
+<tr>
+<td><code>--max-dd</code></td>
+<td>float</td>
+<td><code>--goal</code> value or <code>25.0</code></td>
+<td>Max drawdown limit (%) for the <code>pre_filter_pass</code> decision</td>
 </tr>
 </tbody>
 </table>
