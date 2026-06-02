@@ -40,6 +40,8 @@ URL クエリで `selectedId` / `compareIds` が同期されるため、特定�
 
 ![Compare 画面](assets/compare.png){ loading=lazy }
 
+![戦略間相関ヒートマップ](assets/compare-heatmap.png){ loading=lazy }
+
 - 指標カード（CAGR / Sharpe / Sortino / MaxDD / Profit Factor 等）の並列表示
 - エクイティカーブの重畳描画
 - Pearson 相関のヒートマップ（同期間データに正規化）
