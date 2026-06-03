@@ -314,6 +314,9 @@ MOOMOO_HOST=127.0.0.1
 MOOMOO_PORT=11111
 MOOMOO_TRADE_PWD_MD5=<32-char MD5 hex from §5-2>
 MOOMOO_TRADE_ENV=SIMULATE
+# Over-sell guard (default ON): clamps a SELL to the actual position,
+# skips it when no position is held — prevents moomoo "Not enough positions".
+# Set MOOMOO_SELL_POSITION_GUARD=0 only to disable.
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>
