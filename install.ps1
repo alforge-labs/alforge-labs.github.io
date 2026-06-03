@@ -166,6 +166,28 @@ try {
     } catch {
         Write-Fail ((L "ダウンロードに失敗しました" "Download failed") + ": $_`n  $DOWNLOAD_URL")
     }
+
+    # SHA256 整合性検証: Release 添付の <artifact>.zip.sha256 と照合する。
+    # 不一致は改ざん/破損として中断。.sha256 取得失敗は警告のうえ継続する
+    # （配信経路は HTTPS/TLS で保護済みのため、チェックサムは破損・取り違え検知の defense-in-depth）。
+    try {
+        $SHA_URL = "$DOWNLOAD_URL.sha256"
+        $shaTmp  = Join-Path $TMP_DIR "${ARTIFACT}.${EXT}.sha256"
+        Invoke-WebRequest -Uri $SHA_URL -OutFile $shaTmp -UseBasicParsing
+        $expected = ((Get-Content $shaTmp -Raw) -split '\s+' | Where-Object { $_ })[0]
+        if ($expected) { $expected = $expected.Trim().ToLower() }
+        $actual = (Get-FileHash -Algorithm SHA256 -Path $TMP_ZIP).Hash.ToLower()
+        if (-not $expected) {
+            Write-Warn (L "SHA256 チェックサムが空のため検証をスキップしました" "SHA256 checksum file was empty; skipping verification")
+        } elseif ($actual -eq $expected) {
+            Write-Ok (L "SHA256 整合性を検証しました" "Verified SHA256 checksum")
+        } else {
+            Write-Fail ((L "SHA256 が一致しません（改ざん/破損の可能性があります）" "SHA256 checksum mismatch (possible tampering/corruption)") + "`n  expected: $expected`n  actual:   $actual")
+        }
+    } catch {
+        Write-Warn ((L "SHA256 チェックサムを取得できず検証をスキップしました" "Could not fetch SHA256 checksum; skipping verification") + ": $_")
+    }
+
     try {
         Expand-Archive -Path $TMP_ZIP -DestinationPath $TMP_DIR -Force
     } catch {

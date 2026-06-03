@@ -31,20 +31,20 @@ AlphaForge CLI のインストールから最初のバックテスト結果を�
 
 ### ステップ 1 — インストール（約 2 分）
 
-=== "macOS / Linux"
-
-    ```bash
-    curl -sSL https://alforge-labs.github.io/install.sh | bash
-    ```
-
-    インストール後、**新しいターミナルを開いてから**次に進んでください。
-
 === "Windows"
 
     PowerShell で実行します（管理者権限不要）。
 
     ```powershell
     irm https://alforge-labs.github.io/install.ps1 | iex
+    ```
+
+    インストール後、**新しいターミナルを開いてから**次に進んでください。
+
+=== "macOS / Linux"
+
+    ```bash
+    curl -sSL https://alforge-labs.github.io/install.sh | bash
     ```
 
     インストール後、**新しいターミナルを開いてから**次に進んでください。

@@ -41,7 +41,7 @@ alpha-forge self update --no-smoke-test # 差し替え後の起動確認をス�
 | 環境 | 動作 |
 |------|------|
 | macOS arm64 / x64（install.sh 経由） | ✅ サポート |
-| Windows x64 | ⚠️ Phase 1 では未サポート（`install.ps1` を再実行してください） |
+| Windows x64 | ✅ サポート |
 | Linux x64 | ⚠️ Phase 3 で対応予定 |
 | 開発モード（`uv run alpha-forge`） | ⚠️ `DevModeError` で停止（`git pull && uv sync` を使ってください） |
 

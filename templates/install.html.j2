@@ -60,7 +60,7 @@
       </div>
 
       <div id="tab-ja-win" class="platform-content" role="tabpanel">
-        <p>PowerShell（管理者権限不要）で実行します。バイナリを <code>%USERPROFILE%\.forge\bin</code> にインストールし、PATH を自動設定します。</p>
+        <p>PowerShell（管理者権限不要）で実行します。バイナリを <code>%LOCALAPPDATA%\Programs\alpha-forge</code> にインストールし、PATH を自動設定します。</p>
         <pre><code>irm https://alforge-labs.github.io/install.ps1 | iex</code></pre>
       </div>
 
@@ -253,7 +253,7 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
       </div>
 
       <div id="tab-en-win" class="platform-content" role="tabpanel">
-        <p>Run this in PowerShell (no admin needed). Installs into <code>%USERPROFILE%\.forge\bin</code> and updates PATH.</p>
+        <p>Run this in PowerShell (no admin needed). Installs into <code>%LOCALAPPDATA%\Programs\alpha-forge</code> and updates PATH.</p>
         <pre><code>irm https://alforge-labs.github.io/install.ps1 | iex</code></pre>
       </div>
 
@@ -449,17 +449,32 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
     renderStandaloneHeader({ active: 'install' });
   </script>
   <script>
-    function switchTab(lang, id, event) {
+    // 指定プラットフォームのタブ/パネルを active にする（event 非依存）。
+    function activatePlatform(lang, id) {
       var scope = document.querySelector('.lang-' + lang);
+      if (!scope) return;
+      var targetTab = 'tab-' + lang + '-' + id;
       scope.querySelectorAll('.platform-tab').forEach(function(el) {
-        el.classList.remove('active');
-        el.setAttribute('aria-selected', 'false');
+        var isTarget = el.getAttribute('aria-controls') === targetTab;
+        el.classList.toggle('active', isTarget);
+        el.setAttribute('aria-selected', isTarget ? 'true' : 'false');
       });
-      scope.querySelectorAll('.platform-content').forEach(function(el) { el.classList.remove('active'); });
-      event.currentTarget.classList.add('active');
-      event.currentTarget.setAttribute('aria-selected', 'true');
-      document.getElementById('tab-' + lang + '-' + id).classList.add('active');
+      scope.querySelectorAll('.platform-content').forEach(function(el) {
+        el.classList.toggle('active', el.id === targetTab);
+      });
     }
+    function switchTab(lang, id, event) {
+      if (event) event.preventDefault();
+      activatePlatform(lang, id);
+    }
+    // Windows 主力配布: 訪問者の OS が Windows なら Windows タブを既定表示にする。
+    // macOS / Linux 訪問者は既定の macOS/Linux タブのまま（双方の導線を最短化）。
+    document.addEventListener('DOMContentLoaded', function() {
+      var ua = navigator.userAgent || navigator.platform || '';
+      if (/Windows|Win64|Win32|WOW64/i.test(ua)) {
+        ['ja', 'en'].forEach(function(lang) { activatePlatform(lang, 'win'); });
+      }
+    });
   </script>
 </body>
 </html>
