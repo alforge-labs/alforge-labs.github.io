@@ -225,6 +225,37 @@ if [ "${DRY_RUN}" = "false" ]; then
   curl -sSfL "${DOWNLOAD_URL}" -o "${TMP_DIR}/archive.${EXT}" \
     || fail "$(lang "ダウンロードに失敗しました。\n  ${DOWNLOAD_URL}" \
                      "Download failed.\n  ${DOWNLOAD_URL}")"
+
+  # SHA256 整合性検証: Release 添付の <artifact>.<ext>.sha256 と照合する。
+  # 不一致は改ざん/破損として中断。.sha256 取得失敗や検証ツール不在は警告のうえ継続
+  # （配信経路は HTTPS/TLS で保護済みのため、チェックサムは破損・取り違え検知の defense-in-depth）。
+  if curl -sSfL "${DOWNLOAD_URL}.sha256" -o "${TMP_DIR}/archive.${EXT}.sha256" 2>/dev/null; then
+    EXPECTED_SHA="$(awk '{print $1}' "${TMP_DIR}/archive.${EXT}.sha256" | head -1 | tr 'A-Z' 'a-z')"
+    if command -v sha256sum >/dev/null 2>&1; then
+      ACTUAL_SHA="$(sha256sum "${TMP_DIR}/archive.${EXT}" | awk '{print $1}')"
+    elif command -v shasum >/dev/null 2>&1; then
+      ACTUAL_SHA="$(shasum -a 256 "${TMP_DIR}/archive.${EXT}" | awk '{print $1}')"
+    else
+      ACTUAL_SHA=""
+    fi
+    ACTUAL_SHA="$(printf '%s' "${ACTUAL_SHA}" | tr 'A-Z' 'a-z')"
+    if [ -z "${ACTUAL_SHA}" ]; then
+      warn "$(lang "sha256sum / shasum が見つからず SHA256 検証をスキップしました" \
+                    "Neither sha256sum nor shasum found; skipping SHA256 verification")"
+    elif [ -z "${EXPECTED_SHA}" ]; then
+      warn "$(lang "SHA256 チェックサムが空のため検証をスキップしました" \
+                    "SHA256 checksum file was empty; skipping verification")"
+    elif [ "${ACTUAL_SHA}" = "${EXPECTED_SHA}" ]; then
+      ok "$(lang "SHA256 整合性を検証しました" "Verified SHA256 checksum")"
+    else
+      fail "$(lang "SHA256 が一致しません（改ざん/破損の可能性があります）\n  expected: ${EXPECTED_SHA}\n  actual:   ${ACTUAL_SHA}" \
+                   "SHA256 checksum mismatch (possible tampering/corruption)\n  expected: ${EXPECTED_SHA}\n  actual:   ${ACTUAL_SHA}")"
+    fi
+  else
+    warn "$(lang "SHA256 チェックサムを取得できず検証をスキップしました" \
+                  "Could not fetch SHA256 checksum; skipping verification")"
+  fi
+
   tar xzf "${TMP_DIR}/archive.${EXT}" -C "${TMP_DIR}"
   if [ ! -d "${TMP_DIR}/forge.dist" ]; then
     fail "$(lang "展開後に forge.dist ディレクトリが見つかりません" \

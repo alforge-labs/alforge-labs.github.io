@@ -31,20 +31,20 @@ A complete onboarding guide — from installing AlphaForge CLI to reading your f
 
 ### Step 1 — Install (~2 min)
 
-=== "macOS / Linux"
-
-    ```bash
-    curl -sSL https://alforge-labs.github.io/install.sh | bash
-    ```
-
-    After installation, **open a new terminal** before continuing.
-
 === "Windows"
 
     Run in PowerShell (no admin rights needed).
 
     ```powershell
     irm https://alforge-labs.github.io/install.ps1 | iex
+    ```
+
+    After installation, **open a new terminal** before continuing.
+
+=== "macOS / Linux"
+
+    ```bash
+    curl -sSL https://alforge-labs.github.io/install.sh | bash
     ```
 
     After installation, **open a new terminal** before continuing.

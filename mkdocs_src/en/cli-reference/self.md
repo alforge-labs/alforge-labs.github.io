@@ -41,7 +41,7 @@ Works against the **forge.dist directory + symlink layout** created by `install.
 | Environment | Status |
 |-------------|--------|
 | macOS arm64 / x64 (via install.sh) | ✅ Supported |
-| Windows x64 | ⚠️ Not supported in Phase 1 — re-run `install.ps1` instead |
+| Windows x64 | ✅ Supported |
 | Linux x64 | ⚠️ Planned for Phase 3 |
 | Dev mode (`uv run alpha-forge`) | ⚠️ Stops with `DevModeError` — use `git pull && uv sync` |
 
