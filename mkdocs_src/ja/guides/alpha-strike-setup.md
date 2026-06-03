@@ -321,6 +321,9 @@ MOOMOO_HOST=127.0.0.1
 MOOMOO_PORT=11111
 MOOMOO_TRADE_PWD_MD5=<§5-2 で生成した 32 桁 hex>
 MOOMOO_TRADE_ENV=SIMULATE
+# over-sell ガード（既定 ON）。実保有を超える SELL は実保有まで clamp、
+# 建玉ゼロは skip し、moomoo の "Not enough positions" を防ぐ。
+# 無効化する場合のみ設定: MOOMOO_SELL_POSITION_GUARD=0
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>
