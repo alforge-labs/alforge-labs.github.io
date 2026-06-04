@@ -105,17 +105,18 @@ class StrategyGalleryDocsTest(unittest.TestCase):
             self.assertRegex(combined, pattern)
 
     def test_existing_mkdocs_anchor_links_match_generated_ids(self):
+        """アンカーは mkdocs が生成する ID 形式（連続ダッシュ無し）と一致すること。
+
+        旧 cli-reference/other.md の #login-logout 検証は、コマンドカタログの
+        サブコマンド別ファイル分割でページごと消滅したため削除した。
+        """
         ja_templates = read("mkdocs_src/ja/templates.md")
         en_templates = read("mkdocs_src/en/templates.md")
-        ja_other = read("mkdocs_src/ja/cli-reference/other.md")
 
         self.assertNotIn("#hmm--bb--rsi", ja_templates)
         self.assertNotIn("#hmm--bb--rsi", en_templates)
         self.assertIn("#hmm-bb-rsi", ja_templates)
         self.assertIn("#hmm-bb-rsi", en_templates)
-
-        self.assertNotIn("#login-と-logout", ja_other)
-        self.assertIn("#login-logout", ja_other)
 
 
 if __name__ == "__main__":

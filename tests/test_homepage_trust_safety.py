@@ -20,7 +20,8 @@ class HomepageTrustSafetyTest(unittest.TestCase):
         self.assertIn("API keys, trade history, and strategy data", copy)
         self.assertIn("投資助言ではありません", copy)
         self.assertIn("not financial advice", copy)
-        self.assertIn("Free / Monthly / Annual / Lifetime", copy)
+        # Trial / Lifetime 2 ティア刷新（5bc4102）後のプランカード表記
+        self.assertIn("Trial / Monthly / Annual / Lifetime", copy)
         self.assertIn("/ja/docs/legal/trust-safety-limits/", copy)
         self.assertIn("/en/docs/legal/trust-safety-limits/", copy)
 
@@ -59,21 +60,26 @@ class HomepageTrustSafetyTest(unittest.TestCase):
 
         self.assertIn("# 信頼・安全・制限", ja_doc)
         self.assertIn("# Trust, Safety, and Limits", en_doc)
-        self.assertIn("ライセンス認証時", ja_doc)
-        self.assertIn("during license activation", en_doc)
-        self.assertIn("フリーミアム制限", ja_doc)
-        self.assertIn("Freemium Limits", en_doc)
+        # 認証時の送信情報・プラン制限の説明と Trial 制限ページへの導線が
+        # 揃っていることが、購入前の不安解消ページとしての成立条件
+        self.assertIn("## 認証で送信される情報", ja_doc)
+        self.assertIn("## What is sent during authentication", en_doc)
+        self.assertIn("## プラン制限", ja_doc)
+        self.assertIn("## Plan limits", en_doc)
+        self.assertIn("(../guides/trial-limits.md)", ja_doc)
+        self.assertIn("(../guides/trial-limits.md)", en_doc)
         self.assertIn("信頼・安全・制限: legal/trust-safety-limits.md", ja_nav)
         self.assertIn("Trust, Safety, and Limits: legal/trust-safety-limits.md", en_nav)
 
     def test_existing_legal_and_limits_pages_link_to_trust_safety_page(self):
+        # freemium-limits.md は Free プラン廃止（3a7b400）で trial-limits.md に改名
         paths = [
             "mkdocs_src/ja/legal/disclaimers.md",
             "mkdocs_src/ja/legal/privacy.md",
-            "mkdocs_src/ja/guides/freemium-limits.md",
+            "mkdocs_src/ja/guides/trial-limits.md",
             "mkdocs_src/en/legal/disclaimers.md",
             "mkdocs_src/en/legal/privacy.md",
-            "mkdocs_src/en/guides/freemium-limits.md",
+            "mkdocs_src/en/guides/trial-limits.md",
         ]
 
         for path in paths:
