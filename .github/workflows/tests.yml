@@ -1,0 +1,28 @@
+name: Tests
+
+# リポジトリの回帰テスト（LP コピー/コンポーネント整合・mkdocs 文書間リンク・
+# install.ps1 の PATH マージ純粋関数）を PR と main push で実行する。
+# テストが CI で一度も実行されず、サイト刷新時に stale 化したまま放置されていた
+# 問題の再発防止。ubuntu-latest には pwsh が同梱されているため
+# install.ps1 の PowerShell テストも skip されず実際に走る。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # setup-uv は浮動メジャータグ（v8 等）を公開していないため SHA でピンする
+      # （checkout も合わせて SHA ピン。コメントのバージョンは更新時に揃えること）
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
+
+      - name: Run unittest suite
+        run: uv run python -m unittest discover tests -v

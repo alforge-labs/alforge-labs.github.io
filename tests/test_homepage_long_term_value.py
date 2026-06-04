@@ -28,10 +28,9 @@ class HomepageLongTermValueTest(unittest.TestCase):
 
         self.assertIn("function LongTermValue", components)
         self.assertIn('className="long-term-value reveal"', components)
-        self.assertIn(
-            "Object.assign(window, { NavBar, Hero, FreeStart",
-            components,
-        )
+        # window 登録は app.jsx が別 script から参照するための必須条件
+        # （未登録だと undefined 参照で LP 全体が白画面になる）
+        self.assertRegex(components, r"Object\.assign\(window, \{[^}]*\bLongTermValue\b")
 
         usecases_pos = app.index("<UseCases t={t} />")
         long_term_pos = app.index("<LongTermValue t={t} />")
