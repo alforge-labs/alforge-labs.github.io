@@ -77,6 +77,9 @@ mkdir quickstart && cd quickstart
 alpha-forge system init
 ```
 
+!!! tip "v0.12.0 以降: ディレクトリ名を指定して 1 コマンドで初期化"
+    v0.12.0 以降は `alpha-forge system init quickstart && cd quickstart` のようにディレクトリ名を指定でき、作成と初期化が 1 コマンドで完了します。あわせて、ホームディレクトリ直下など意図しない場所への誤展開には確認プロンプトが表示されるようになりました（CI 等の非対話実行では `--yes` を指定）。
+
 !!! info "`alpha-forge system init` を必ず実行してください"
     `forge.yaml` が無いと戦略の DB 登録先・データ保存先・結果ファイル出力先が確定せず、後段の `alpha-forge backtest run` が `FileNotFoundError` で失敗します。クイックスタートでは `--force` 不要。
 
