@@ -3530,7 +3530,7 @@ by hand.</p>
 </tr>
 <tr>
 <td><code>forge.yaml not found</code> / <code>Config file not found</code></td>
-<td>No <code>forge.yaml</code> in the current directory. Run <code>alpha-forge system init</code> inside a project working directory, or pass <code>FORGE_CONFIG=/path/to/forge.yaml forge ...</code> as an environment variable.</td>
+<td>No <code>forge.yaml</code> in the current directory. Run <code>alpha-forge system init</code> inside a project working directory, or set the <code>FORGE_CONFIG</code> environment variable (macOS/Linux: <code>FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...</code>; Windows PowerShell: run <code>$env:FORGE_CONFIG = "C:\path\to\forge.yaml"</code> first, then <code>alpha-forge ...</code>).</td>
 </tr>
 <tr>
 <td>Backtest reports <code>0 trades</code></td>
