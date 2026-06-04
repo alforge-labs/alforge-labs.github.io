@@ -3526,7 +3526,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 </tr>
 <tr>
 <td><code>forge.yaml が見つかりません</code> / <code>Config file not found</code></td>
-<td>カレントディレクトリに <code>forge.yaml</code> がありません。プロジェクト作業ディレクトリで <code>alpha-forge system init</code> を実行するか、<code>FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...</code> の形で環境変数を指定してください。</td>
+<td>カレントディレクトリに <code>forge.yaml</code> がありません。プロジェクト作業ディレクトリで <code>alpha-forge system init</code> を実行するか、環境変数 <code>FORGE_CONFIG</code> で指定してください（macOS/Linux: <code>FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...</code>、Windows PowerShell: <code>$env:FORGE_CONFIG = "C:\path\to\forge.yaml"</code> を実行してから <code>alpha-forge ...</code>）。</td>
 </tr>
 <tr>
 <td>バックテスト結果が「取引数 0 件」</td>
