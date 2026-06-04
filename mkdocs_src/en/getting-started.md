@@ -39,7 +39,7 @@ A complete onboarding guide — from installing AlphaForge CLI to reading your f
     irm https://alforge-labs.github.io/install.ps1 | iex
     ```
 
-    After installation, **open a new terminal** before continuing.
+    After installation, **close all open terminals and open a new one** before continuing (new tabs/windows of an already-running Windows Terminal do not pick up the PATH change).
 
 === "macOS / Linux"
 
@@ -330,7 +330,7 @@ alpha-vis serve
 
 === "Windows"
 
-    Run this in PowerShell (no administrator rights required). It extracts the bundled binary set (`forge.dist\`) into `%LOCALAPPDATA%\Programs\alpha-forge\` and adds the sibling `forge.cmd` launcher to your User PATH.
+    Run this in PowerShell (no administrator rights required). It extracts the bundled binary set (`forge.dist\`) into `%LOCALAPPDATA%\Programs\alpha-forge\`, generates the sibling `alpha-forge.cmd` launcher, and automatically registers that directory in your User PATH.
 
     ```powershell
     irm https://alforge-labs.github.io/install.ps1 | iex
@@ -346,7 +346,7 @@ alpha-vis serve
         The installer auto-detects from Windows display language (`CurrentUICulture`). To force a specific language, set `$env:FORGE_INSTALL_LOCALE = "en"` (or `"ja"`) before `irm | iex`.
 
     !!! tip "New terminal"
-        Open a new terminal window after installation before continuing.
+        Close all open terminals after installation, then open a new one before continuing. While an already-running Windows Terminal process remains, even its new tabs/windows will not pick up the PATH change.
 
 === "Manual"
 
@@ -503,6 +503,7 @@ The six metrics you'll look at first. For the full metric list, see the [CLI Ref
 | Symptom | Cause & Fix |
 |---------|-------------|
 | `command not found: forge` / `command not found: alpha-forge` | Open a new terminal or run `source ~/.bashrc` / `source ~/.zshrc`. If that doesn't help, confirm the binary exists with `ls ~/.local/bin/alpha-forge` and that `echo $PATH` includes `~/.local/bin`. |
+| (Windows) `alpha-forge: The term 'alpha-forge' is not recognized ...` | Close all open terminals and open a new one (new tabs of an already-running Windows Terminal do not pick up PATH changes). If it persists, check that `[Environment]::GetEnvironmentVariable('PATH','User')` contains `%LOCALAPPDATA%\Programs\alpha-forge` as a standalone entry; if it is missing or corrupted, re-run the installer (it repairs the entry automatically). |
 | First command shows a `[y/n]` prompt / `Aborted!` in non-interactive runs | A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter `y`. In non-interactive environments (CI, pipes, agents), set `FORGE_ACCEPT_EULA=1` to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under `~/.config/forge/` and won't appear again. |
 | `Strategy 'sma_cross_qs' not found` / `戦略 'sma_cross_qs' が見つかりません` | Run `alpha-forge strategy save sma_cross.json` first to register the strategy in the DB. Or pass the JSON directly via `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...`. |
 | `FileNotFoundError: data not found: SPY (1d)` / `No data found for SPY` | Auto-fetch only works when `forge.yaml` exists. Run `alpha-forge system init` (Step 2) first, or fetch manually with `alpha-forge data fetch SPY --period 5y` and retry. |

@@ -2994,7 +2994,7 @@
 <p>PowerShell で実行します（管理者権限不要）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
 </code></pre></div>
-<p>インストール後、<strong>新しいターミナルを開いてから</strong>次に進んでください。</p>
+<p>インストール後、<strong>開いているターミナルをすべて閉じて、新しいターミナルを開いてから</strong>次に進んでください（起動済みの Windows Terminal の新しいタブ／ウィンドウには PATH の変更が反映されません）。</p>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
@@ -3329,7 +3329,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 </div>
 </div>
 <div class="tabbed-block">
-<p>PowerShell（管理者権限不要）で以下を実行してください。バイナリ一式（<code>forge.dist\</code> ディレクトリ）を <code>%LOCALAPPDATA%\Programs\alpha-forge\</code> に展開し、同階層の <code>forge.cmd</code> ラッパーを User PATH に追加します。</p>
+<p>PowerShell（管理者権限不要）で以下を実行してください。バイナリ一式（<code>forge.dist\</code> ディレクトリ）を <code>%LOCALAPPDATA%\Programs\alpha-forge\</code> に展開し、同階層に <code>alpha-forge.cmd</code> ラッパーを生成して、そのディレクトリを User PATH に自動登録します。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
 </code></pre></div>
 <p>旧バージョン（<code>$HOME\bin\forge.exe</code> 単体配置 / <code>C:\Program Files\forge\forge.exe</code>）が存在する場合は自動的に検出し、確認のうえ削除した後に新レイアウトを配置します。動作を事前確認したい場合は次のように <code>-DryRun</code> を付けて実行できます。</p>
@@ -3341,7 +3341,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 </div>
 <div class="admonition tip">
 <p class="admonition-title">新しいターミナル</p>
-<p>インストール後、新しいターミナルウィンドウを開いてから次の手順に進んでください。</p>
+<p>インストール後、開いているターミナルをすべて閉じてから新しいターミナルを開いて次の手順に進んでください。起動済みの Windows Terminal が残っていると、新しいタブ／ウィンドウにも PATH の変更が反映されません。</p>
 </div>
 </div>
 <div class="tabbed-block">
@@ -3503,6 +3503,10 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
 <td>新しいターミナルを開くか、<code>source ~/.bashrc</code> / <code>source ~/.zshrc</code> を実行してください。それでも出る場合は <code>ls ~/.local/bin/alpha-forge</code> でバイナリの存在を確認し、<code>echo $PATH</code> に <code>~/.local/bin</code> が含まれているか確認してください。</td>
+</tr>
+<tr>
+<td>（Windows）<code>alpha-forge: The term 'alpha-forge' is not recognized ...</code></td>
+<td>開いているターミナルをすべて閉じてから新しく開き直してください（起動済みの Windows Terminal の新しいタブには PATH が反映されません）。それでも出る場合は <code>[Environment]::GetEnvironmentVariable('PATH','User')</code> に <code>%LOCALAPPDATA%\Programs\alpha-forge</code> が独立したエントリとして含まれるか確認し、含まれない・壊れている場合はインストーラーを再実行してください（自動修復されます）。</td>
 </tr>
 <tr>
 <td>初回コマンドで <code>[y/n]</code> プロンプトが出る / 非対話実行で <code>Aborted!</code></td>
