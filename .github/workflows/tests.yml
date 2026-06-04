@@ -18,9 +18,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      # setup-uv は浮動メジャータグ（v8 等）を公開していないため SHA でピンする
+      # （checkout も合わせて SHA ピン。コメントのバージョンは更新時に揃えること）
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
 
-      - uses: astral-sh/setup-uv@v8
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
 
       - name: Run unittest suite
         run: uv run python -m unittest discover tests -v
