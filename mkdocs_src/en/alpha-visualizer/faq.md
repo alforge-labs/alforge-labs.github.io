@@ -18,18 +18,18 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ### `backtest_results.db` not found / no strategies shown
 
-`vis serve` may not see `<forge-dir>/data/results/backtest_results.db`.
+`alpha-vis serve` may not see `<forge-dir>/data/results/backtest_results.db`.
 
 ```bash
 # Inspect resolved paths (printed at startup)
-vis serve --forge-dir <path>
+alpha-vis serve --forge-dir <path>
 
 # Verify directly
 ls <path>/data/results/backtest_results.db
 ls <path>/data/strategies/
 ```
 
-If you have never executed `alpha-forge backtest run`, `backtest_results.db` does not exist yet. Run at least one backtest before launching `vis serve`.
+If you have never executed `alpha-forge backtest run`, `backtest_results.db` does not exist yet. Run at least one backtest before launching `alpha-vis serve`.
 
 ### Port already in use
 
@@ -40,7 +40,7 @@ If you have never executed `alpha-forge backtest run`, `backtest_results.db` doe
 Pick another port or stop the conflicting process.
 
 ```bash
-vis serve --port 9000
+alpha-vis serve --port 9000
 
 # Inspect what is using port 8000
 lsof -i :8000
@@ -69,7 +69,7 @@ If selected strategies have **no overlapping trade period**, correlation cannot 
 ### Access from another machine
 
 ```bash
-vis serve --host 0.0.0.0 --port 8000
+alpha-vis serve --host 0.0.0.0 --port 8000
 ```
 
 Then:

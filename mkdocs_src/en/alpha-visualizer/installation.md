@@ -48,7 +48,7 @@ git clone https://github.com/alforge-labs/alpha-visualizer.git
 cd alpha-visualizer
 uv sync                            # Python deps
 cd frontend && pnpm install && pnpm run build && cd ..
-uv run vis serve --forge-dir <path>
+uv run alpha-vis serve --forge-dir <path>
 ```
 
 See [CONTRIBUTING.en.md](https://github.com/alforge-labs/alpha-visualizer/blob/main/CONTRIBUTING.en.md) for the full development workflow.
@@ -56,10 +56,10 @@ See [CONTRIBUTING.en.md](https://github.com/alforge-labs/alpha-visualizer/blob/m
 ## Verify the install
 
 ```bash
-vis --version
+alpha-vis --version
 ```
 
-A correctly installed `vis` prints its version.
+A correctly installed `alpha-vis` prints its version.
 
 ## Upgrade
 

@@ -349,7 +349,7 @@ try {
     # ScriptBlock で {Output, ExitCode} を返してから親で判定する。
     Write-Host ""
     try {
-        $verifyLabel = L "動作確認中（forge コマンドの初回起動には時間がかかります）..." "Verifying installation (first forge launch may take a while)..."
+        $verifyLabel = L "動作確認中（alpha-forge コマンドの初回起動には時間がかかります）..." "Verifying installation (first alpha-forge launch may take a while)..."
         $launcherPath = $LAUNCHER
         $verifyResult = Invoke-WithSpinner -Label $verifyLabel -ScriptBlock {
             $out = & $using:launcherPath --version 2>&1
@@ -360,11 +360,11 @@ try {
             Write-Ok ((L "インストール完了！" "Installation complete!") + " ($firstLine)")
         } else {
             $code = if ($verifyResult) { $verifyResult.ExitCode } else { "n/a" }
-            Write-Warn ((L "forge の起動確認に失敗しました（exit code" "forge launch verification failed (exit code") + ": $code).")
+            Write-Warn ((L "alpha-forge の起動確認に失敗しました（exit code" "alpha-forge launch verification failed (exit code") + ": $code).")
             Write-Host ("    " + (L "手動確認" "Try manually") + ": $LAUNCHER --version")
         }
     } catch {
-        Write-Warn ((L "forge コマンドの動作確認に失敗しました" "Failed to verify forge command") + ": $_")
+        Write-Warn ((L "alpha-forge コマンドの動作確認に失敗しました" "Failed to verify alpha-forge command") + ": $_")
         Write-Host ("    " + (L "新しいターミナルを開いて再試行してください" "Open a new terminal and retry") + ": alpha-forge --version")
     }
 

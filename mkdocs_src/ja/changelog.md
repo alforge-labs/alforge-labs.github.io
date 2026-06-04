@@ -16,7 +16,7 @@ AlphaForge CLI の公開リリースごとの主な変更点をまとめてい�
 
 実運用（ペーパートレード）連携と複数戦略ポートフォリオのライブ集計を強化しました。
 
-- **forge live / replay**: 約定照合イベント（order_reconciled）を権威データとして扱い、未約定（phantom fill）を除外して正確なライブ実績を集計。
+- **alpha-forge live / replay**: 約定照合イベント（order_reconciled）を権威データとして扱い、未約定（phantom fill）を除外して正確なライブ実績を集計。
 - **Combine Portfolio のライブ集計**: always-in-market なオーバーレイ戦略の position ベースのライブ成績を SQLite に永続化し、[alpha-visualizer](alpha-visualizer/index.md) での可視化につなげる土台を整備。
 - **修正**: Combine Portfolio 向け Pine 出力の `signal_id` 日時整形を修正。
 
@@ -49,7 +49,7 @@ Buy & Hold ベンチマーク＋ヘッジオーバーレイと、複数戦略の
 
 初回セットアップ体験と対応マーケットを拡張しました。
 
-- **セットアップ強化**: `forge system init` がゴール設定サンプルや資産クラス別テンプレートを展開。`strategy create` に `--strategy-id` を追加。
+- **セットアップ強化**: `alpha-forge system init` がゴール設定サンプルや資産クラス別テンプレートを展開。`strategy create` に `--strategy-id` を追加。
 - **暗号資産対応**: 専用の Binance データプロバイダーを追加し、4h/1h を 5 年以上取得可能に。
 - **alpha-strike 連携**: `pine generate --with-webhook` で発注連携用の input/alert を Pine に自動付与。
 - **ベンチマーク**: `--no-benchmark` でベンチマーク比較を無効化可能に。
@@ -76,7 +76,7 @@ Buy & Hold ベンチマーク＋ヘッジオーバーレイと、複数戦略の
 
 ## v0.3.5 — 2026-05-13
 
-- **修正**: 配布バイナリ環境で `forge system init` がリソース展開に失敗する問題を解消。
+- **修正**: 配布バイナリ環境で `alpha-forge system init` がリソース展開に失敗する問題を解消。
 
 ---
 

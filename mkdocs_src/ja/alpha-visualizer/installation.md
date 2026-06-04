@@ -48,7 +48,7 @@ git clone https://github.com/alforge-labs/alpha-visualizer.git
 cd alpha-visualizer
 uv sync                            # Python 依存関係
 cd frontend && pnpm install && pnpm run build && cd ..
-uv run vis serve --forge-dir <path>
+uv run alpha-vis serve --forge-dir <path>
 ```
 
 開発フローの詳細は [CONTRIBUTING.md](https://github.com/alforge-labs/alpha-visualizer/blob/main/CONTRIBUTING.md) を参照してください。
@@ -56,7 +56,7 @@ uv run vis serve --forge-dir <path>
 ## インストール確認
 
 ```bash
-vis --version
+alpha-vis --version
 ```
 
 正常にインストールされていれば、バージョン番号が表示されます。

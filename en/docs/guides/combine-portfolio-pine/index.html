@@ -2766,7 +2766,7 @@ combine Pine (Strategy Tester only attaches to <code>strategy()</code>). Use the
 emitted Pine matches the alpha-forge backtest combine logic.</p>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <h3 id="1-generate-the-combine-pine">1. Generate the combine Pine<a class="headerlink" href="#1-generate-the-combine-pine" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--allocation<span class="w"> </span>equal<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--rebalance-freq<span class="w"> </span>monthly<span class="w"> </span><span class="se">\</span>
@@ -2883,17 +2883,17 @@ Algorithm inside Pine bar by bar.</p>
 <li>Without training data the volatility regime proxy (<code>ta.stdev</code>) is
   used as a fallback (backward compatible)</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>qqq_hmm_v1,tqqq_v1,gld_v1<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--allocation<span class="w"> </span>equal<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--with-training-data<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--portfolio-id<span class="w"> </span>combine_hmm_v1
 </code></pre></div>
 <h2 id="symbolic-verify">symbolic verify (issue <a href="https://github.com/ysakae/alpha-forge/issues/975">#975</a>)<a class="headerlink" href="#symbolic-verify" title="Permanent link">&para;</a></h2>
-<p><code>forge pine verify --combine-strategies</code> validates that the generated
+<p><code>alpha-forge pine verify --combine-strategies</code> validates that the generated
 Pine and the alpha-forge backtest combine share the same intent — without
 talking to TradingView at all.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--combine-allocation<span class="w"> </span>equal<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--combine-rebalance-freq<span class="w"> </span>monthly<span class="w"> </span><span class="se">\</span>
@@ -2942,7 +2942,7 @@ required).</p>
 Strategy Tester will not attach. When you want <strong>partial metrics for at
 least the main symbol</strong> from the TradingView Strategy Tester, use
 <code>--combine-mode hybrid-strategy</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--combine-mode<span class="w"> </span>hybrid-strategy<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--main-strategy<span class="w"> </span>tqqq_phase2<span class="w"> </span><span class="se">\</span>
@@ -2991,12 +2991,12 @@ aid to eyeball / sanity-check the main symbol's behaviour on TradingView.</p>
 </div>
 <h3 id="auto-verify-the-strategy-tester-result-issue-986">Auto-verify the Strategy Tester result (issue <a href="https://github.com/ysakae/alpha-forge/issues/986">#986</a>)<a class="headerlink" href="#auto-verify-the-strategy-tester-result-issue-986" title="Permanent link">&para;</a></h3>
 <p>After applying the hybrid-strategy Pine to the main symbol's chart and running
-the Strategy Tester, use <code>forge pine verify --verify-mode
+the Strategy Tester, use <code>alpha-forge pine verify --verify-mode
 tradingview-strategy-tester</code> to automatically compare the <strong>main symbol
 component's Sharpe / Max Drawdown</strong> against alpha-forge backtest combine's
 same-symbol component. The Strategy Tester aggregates are fetched via the MCP
 server (vinicius / tradesdontlie).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_phase2,gld_bh,tlt_bh<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--combine-mode<span class="w"> </span>hybrid-strategy<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--main-strategy<span class="w"> </span>tqqq_phase2<span class="w"> </span><span class="se">\</span>

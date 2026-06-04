@@ -60,7 +60,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--goal` | オプション | - | ゴール名。`goals.yaml` の `pre_filter` 閾値（`sharpe-min` / `max-dd`）を自動適用する |
 | `--cost-preset` | オプション | - | コストプリセット名（issue #785）。戦略 JSON の `risk_management` の commission / slippage を実行時に preset 値で in-memory 上書きする（戦略 JSON は変更しない） |
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
-| `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`forge data alt fetch FRED:T10Y3M`） |
+| `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`alpha-forge data alt fetch FRED:T10Y3M`） |
 
 ### `--trades-csv` で trade 一覧 CSV をエクスポート {#trades-csv-export}
 
@@ -539,18 +539,18 @@ alpha-forge backtest chart [RESULT_ID] [--open] [--compare <ID> ...]
 ### 出力例
 
 ```text
-📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
+📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
    http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
 ```
 
 複数戦略比較時:
 
 ```text
-📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
+📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
    http://localhost:8000/?ids=sma_crossover,rsi_reversion
 ```
 
-このコマンド自体は URL を表示するだけです。チャート閲覧には `vis serve`（[alpha-visualizer](https://github.com/ysakae/alpha-visualizer)）を起動する必要があります。
+このコマンド自体は URL を表示するだけです。チャート閲覧には `alpha-vis serve`（[alpha-visualizer](https://github.com/ysakae/alpha-visualizer)）を起動する必要があります。
 
 ---
 

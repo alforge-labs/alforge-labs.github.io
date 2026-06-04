@@ -200,7 +200,7 @@
             <table class="option-table">
               <thead><tr><th>コンポーネント</th><th>役割</th></tr></thead>
               <tbody>
-                <tr><td><code>forge</code></td><td>シミュレーション・最適化エンジン本体</td></tr>
+                <tr><td><code>alpha-forge</code></td><td>シミュレーション・最適化エンジン本体</td></tr>
                 <tr><td><code>data/</code></td><td>戦略 JSON・ヒストリカルデータ・バックテスト結果を保管するワークスペース</td></tr>
                 <tr><td><code>strike</code></td><td>TradingView Webhook を受け取り外部 API に自動送信するサーバー</td></tr>
               </tbody>
@@ -224,7 +224,7 @@
 curl -sSL https://alforge-labs.github.io/install.sh | bash
 
 # （任意）有料プラン購入後に Whop OAuth 認証で機能解放する
-# forge system auth login</code></pre>
+# alpha-forge system auth login</code></pre>
                 </div>
               </li>
               <li>
@@ -234,7 +234,7 @@ curl -sSL https://alforge-labs.github.io/install.sh | bash
                     作業ディレクトリに <code>forge.yaml</code>（設定ファイル）と <code>data/</code>・<code>output/</code>・<code>docs/</code>・<code>.claude/</code>・<code>.agents/</code> 等のディレクトリが生成されます。続けて <code>FORGE_CONFIG</code> 環境変数を設定すると以降のコマンドが自動でこの <code>forge.yaml</code> を参照します。
                   </p>
                   <pre><code>mkdir my-strategies && cd my-strategies
-forge system init
+alpha-forge system init
 # → forge.yaml, data/, output/, docs/, .claude/, .agents/ が作成されます
 
 # 以降のコマンドで forge.yaml を自動参照させる（~/.zshrc などに追加すると便利）
@@ -248,11 +248,11 @@ export FORGE_CONFIG=$(pwd)/forge.yaml</code></pre>
                     Yahoo Finance からデータをダウンロードしてローカルキャッシュ（<code>data/historical/</code>）に保存します。複数銘柄を一括で取得したい場合は <code>--watchlist FILE</code> で銘柄リストを渡せます。
                   </p>
                   <pre><code># CL=F（WTI原油先物）の過去 5 年分を取得
-forge data fetch CL=F --period 5y
+alpha-forge data fetch CL=F --period 5y
 
 # 複数銘柄をまとめて取得する場合は watchlist ファイル（1 行 1 銘柄）を使う
 printf "SPY\nQQQ\n" > watchlist.txt
-forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
+alpha-forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
                 </div>
               </li>
             </ol>
@@ -267,7 +267,7 @@ forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
             <p style="color: var(--text2); line-height: 1.8; margin-bottom: 1rem;">
               AlphaForge の戦略はすべて JSON ファイルで定義します。
               以下は CL=F 向けの HMM + ボリンジャーバンド + RSI 複合戦略の例です。
-              作業ディレクトリ直下に <code>cl_hmm_bb_rsi_v1.json</code> として保存し、後述する <code>forge strategy save</code> で登録します。
+              作業ディレクトリ直下に <code>cl_hmm_bb_rsi_v1.json</code> として保存し、後述する <code>alpha-forge strategy save</code> で登録します。
             </p>
             <pre><code>{
   "strategy_id": "cl_hmm_bb_rsi_v1",
@@ -335,10 +335,10 @@ forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
             </div>
 
             <p style="color: var(--text2); line-height: 1.8; margin-top: 1rem; margin-bottom: 0.5rem;">
-              JSON ファイルを <code>forge strategy save</code> でローカルに登録します。登録後は <code>forge strategy list</code> や <code>--strategy &lt;strategy_id&gt;</code> オプションから参照可能になります。
+              JSON ファイルを <code>alpha-forge strategy save</code> でローカルに登録します。登録後は <code>alpha-forge strategy list</code> や <code>--strategy &lt;strategy_id&gt;</code> オプションから参照可能になります。
             </p>
-            <pre><code>forge strategy save cl_hmm_bb_rsi_v1.json
-forge strategy list   # 登録された戦略一覧を確認</code></pre>
+            <pre><code>alpha-forge strategy save cl_hmm_bb_rsi_v1.json
+alpha-forge strategy list   # 登録された戦略一覧を確認</code></pre>
           </section>
 
           <hr class="section-divider" />
@@ -351,7 +351,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
               <li>
                 <div>
                   <strong>基本的なバックテストを実行</strong>
-                  <pre><code>forge backtest run CL=F \
+                  <pre><code>alpha-forge backtest run CL=F \
   --strategy cl_hmm_bb_rsi_v1 \
   --start 2019-01-01 \
   --end 2024-12-31</code></pre>
@@ -360,7 +360,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
               <li>
                 <div>
                   <strong>JSON 形式で結果を取得（スクリプト連携向け）</strong>
-                  <pre><code>forge backtest run CL=F \
+                  <pre><code>alpha-forge backtest run CL=F \
   --strategy cl_hmm_bb_rsi_v1 \
   --json | jq '.summary'</code></pre>
                   <p style="font-size:0.88rem;color:var(--text2);margin-top:0.5rem;">出力例：</p>
@@ -395,7 +395,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
               <li>
                 <div>
                   <strong>最適化を実行（200 試行）</strong>
-                  <pre><code>forge optimize run CL=F \
+                  <pre><code>alpha-forge optimize run CL=F \
   --strategy cl_hmm_bb_rsi_v1 \
   --trials 200 \
   --metric sharpe_ratio \
@@ -405,7 +405,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
               <li>
                 <div>
                   <strong>最適化履歴を確認</strong>
-                  <pre><code>forge optimize history \
+                  <pre><code>alpha-forge optimize history \
   --strategy cl_hmm_bb_rsi_v1</code></pre>
                   <p style="font-size:0.88rem;color:var(--text2);margin-top:0.5rem;">出力例（スコアボード形式）：</p>
                   <pre><code>Timestamp           Sharpe  CAGR    MaxDD   bb_length  bb_std  rsi_length  rsi_entry  rsi_exit
@@ -420,7 +420,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
                   <p style="font-size:0.88rem;color:var(--text2);margin-top:0.3rem;">
                     結果ファイルは <code>optimize run --save</code> の出力に表示され、<code>data/results/</code> 配下に保存されます。
                   </p>
-                  <pre><code>forge optimize apply \
+                  <pre><code>alpha-forge optimize apply \
   data/results/optimize_cl_hmm_bb_rsi_v1_&lt;timestamp&gt;.json \
   --to-strategy cl_hmm_bb_rsi_v1</code></pre>
                 </div>
@@ -448,7 +448,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
               <li>
                 <div>
                   <strong>ウォークフォワード検証を実行</strong>
-                  <pre><code>forge optimize walk-forward CL=F \
+                  <pre><code>alpha-forge optimize walk-forward CL=F \
   --strategy cl_hmm_bb_rsi_v1_optimized \
   --windows 5 \
   --metric sharpe_ratio</code></pre>
@@ -457,7 +457,7 @@ forge strategy list   # 登録された戦略一覧を確認</code></pre>
               <li>
                 <div>
                   <strong>ウィンドウ別の詳細を確認（JSON）</strong>
-                  <pre><code>forge optimize walk-forward CL=F \
+                  <pre><code>alpha-forge optimize walk-forward CL=F \
   --strategy cl_hmm_bb_rsi_v1_optimized \
   --windows 5 --json | jq '.windows'</code></pre>
                   <p style="font-size:0.88rem;color:var(--text2);margin-top:0.5rem;">出力例：</p>
@@ -532,7 +532,7 @@ Avg Sharpe: 1.10  |  Avg CAGR: 13.9%  |  WF Efficiency: 89%</code></pre>
                   <strong style="display:block;margin-bottom:0.4rem;">HMM の状態番号の意味は？</strong>
                   <p style="font-size:0.88rem;color:var(--text2);line-height:1.7;">
                     HMM の状態番号（0, 1, ...）は学習の都度変わります。
-                    バックテスト後に <code>forge backtest run &lt;SYMBOL&gt; --strategy &lt;strategy_id&gt; --regime</code> で
+                    バックテスト後に <code>alpha-forge backtest run &lt;SYMBOL&gt; --strategy &lt;strategy_id&gt; --regime</code> で
                     各状態の平均リターン・ボラティリティを確認して、「上昇トレンド」状態を特定してください。
                   </p>
                 </div>
@@ -541,7 +541,7 @@ Avg Sharpe: 1.10  |  Avg CAGR: 13.9%  |  WF Efficiency: 89%</code></pre>
                 <div>
                   <strong style="display:block;margin-bottom:0.4rem;">TradingView との連携方法は？</strong>
                   <p style="font-size:0.88rem;color:var(--text2);line-height:1.7;">
-                    最適化後に <code>forge pine generate --strategy &lt;strategy_id&gt;</code> を実行すると
+                    最適化後に <code>alpha-forge pine generate --strategy &lt;strategy_id&gt;</code> を実行すると
                     TradingView Pine Script v6 のコードが生成されます。
                     アラートを alpha-strike に送信することで自動実行が可能です。
                   </p>
@@ -554,7 +554,7 @@ Avg Sharpe: 1.10  |  Avg CAGR: 13.9%  |  WF Efficiency: 89%</code></pre>
                     パラメータ数が 3〜5 個の場合は 100〜200 試行で十分な探索が可能です。
                     パラメータ数が多い場合や精度を高めたい場合は 500〜1000 試行を推奨します。
                   </p>
-                  <pre><code>forge optimize run CL=F --strategy cl_hmm_bb_rsi_v1 --trials 500 --metric sharpe_ratio --save</code></pre>
+                  <pre><code>alpha-forge optimize run CL=F --strategy cl_hmm_bb_rsi_v1 --trials 500 --metric sharpe_ratio --save</code></pre>
                 </div>
               </li>
             </ul>

@@ -85,13 +85,13 @@
       <p>When you purchase a membership through Whop, information such as your name or company name, email address, payment details, and country or region may be collected. Payment details are processed by Whop and its payment providers (e.g. Stripe); Alforge Labs does not store card-level information.</p>
 
       <h3 class="sub-heading">1.2 Information Exchanged During Authentication</h3>
-      <p>When you run <code>forge system auth login</code>, the OAuth 2.0 PKCE flow sends and receives the following with the Whop API (<code>api.whop.com</code>):</p>
+      <p>When you run <code>alpha-forge system auth login</code>, the OAuth 2.0 PKCE flow sends and receives the following with the Whop API (<code>api.whop.com</code>):</p>
       <ul>
         <li>Sent to Whop: OAuth authorization code, PKCE code_verifier, refresh token (during token refresh)</li>
         <li>Received from Whop: access token, refresh token, user ID, membership validity</li>
         <li>During periodic re-verification: the access token is sent to <code>api.whop.com/api/v1</code> to confirm access to your purchased product</li>
       </ul>
-      <p>The retrieved tokens and authentication metadata are stored locally at <code>~/.forge/credentials.json</code> and are not sent to Alforge Labs servers.</p>
+      <p>The retrieved tokens and authentication metadata are stored locally at <code>~/.config/forge/credentials.json</code> and are not sent to Alforge Labs servers.</p>
 
       <h3 class="sub-heading">1.3 Information We Do Not Collect</h3>
       <div class="callout">
@@ -114,7 +114,7 @@
       <ul>
         <li>Purchase and membership information: retained according to Whop's data retention policy</li>
         <li>Support email: retained for two years after the support request is resolved</li>
-        <li>Local authentication cache (<code>~/.forge/credentials.json</code>): retained until the user removes it or runs <code>forge system auth logout</code></li>
+        <li>Local authentication cache (<code>~/.config/forge/credentials.json</code>): retained until the user removes it or runs <code>alpha-forge system auth logout</code></li>
       </ul>
 
       <h2 class="section-heading">5. Cookies and Tracking</h2>

@@ -18,7 +18,7 @@ When you run `alpha-forge system auth login`, the OAuth 2.0 PKCE flow sends and 
 - Received from Whop: access token, refresh token, user ID, membership validity
 - During periodic re-verification: the access token is sent to `api.whop.com/api/v1` to confirm access to your purchased product
 
-The retrieved tokens and authentication metadata are stored locally at `~/.forge/credentials.json` and are not sent to Alforge Labs servers.
+The retrieved tokens and authentication metadata are stored locally at `~/.config/forge/credentials.json` and are not sent to Alforge Labs servers.
 
 ### 1.3 Information We Do Not Collect
 
@@ -41,7 +41,7 @@ We do not share personal information with third parties except when necessary fo
 
 - Purchase and membership information: retained according to Whop's data retention policy
 - Support email: retained for two years after the support request is resolved
-- Local authentication cache (`~/.forge/credentials.json`): retained until the user removes it or runs `alpha-forge system auth logout`
+- Local authentication cache (`~/.config/forge/credentials.json`): retained until the user removes it or runs `alpha-forge system auth logout`
 
 ## 5. Cookies and Tracking
 

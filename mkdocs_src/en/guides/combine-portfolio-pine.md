@@ -27,7 +27,7 @@ emitted Pine matches the alpha-forge backtest combine logic.
 ### 1. Generate the combine Pine
 
 ```bash
-forge pine generate \
+alpha-forge pine generate \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --allocation equal \
   --rebalance-freq monthly \
@@ -107,7 +107,7 @@ Algorithm inside Pine bar by bar.
   used as a fallback (backward compatible)
 
 ```bash
-forge pine generate \
+alpha-forge pine generate \
   --combine-strategies qqq_hmm_v1,tqqq_v1,gld_v1 \
   --allocation equal \
   --with-training-data \
@@ -116,12 +116,12 @@ forge pine generate \
 
 ## symbolic verify (issue [#975](https://github.com/ysakae/alpha-forge/issues/975)) {#symbolic-verify}
 
-`forge pine verify --combine-strategies` validates that the generated
+`alpha-forge pine verify --combine-strategies` validates that the generated
 Pine and the alpha-forge backtest combine share the same intent — without
 talking to TradingView at all.
 
 ```bash
-forge pine verify \
+alpha-forge pine verify \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --combine-allocation equal \
   --combine-rebalance-freq monthly \
@@ -178,7 +178,7 @@ least the main symbol** from the TradingView Strategy Tester, use
 `--combine-mode hybrid-strategy`.
 
 ```bash
-forge pine generate \
+alpha-forge pine generate \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --combine-mode hybrid-strategy \
   --main-strategy tqqq_phase2 \
@@ -215,14 +215,14 @@ Behaviour:
 ### Auto-verify the Strategy Tester result (issue [#986](https://github.com/ysakae/alpha-forge/issues/986))
 
 After applying the hybrid-strategy Pine to the main symbol's chart and running
-the Strategy Tester, use `forge pine verify --verify-mode
+the Strategy Tester, use `alpha-forge pine verify --verify-mode
 tradingview-strategy-tester` to automatically compare the **main symbol
 component's Sharpe / Max Drawdown** against alpha-forge backtest combine's
 same-symbol component. The Strategy Tester aggregates are fetched via the MCP
 server (vinicius / tradesdontlie).
 
 ```bash
-forge pine verify \
+alpha-forge pine verify \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --combine-mode hybrid-strategy \
   --main-strategy tqqq_phase2 \

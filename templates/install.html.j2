@@ -72,20 +72,20 @@
 
       <h2 class="section-heading">ステップ 2 — そのまま Trial プランで使う（Whop 登録不要）</h2>
       <p>
-        インストール直後から Trial プランで <code>forge backtest run</code> / <code>forge optimize run</code> / <code>forge optimize walk-forward</code> 等が動きます。Trial の制限はデータ上限 2023-12-31・最適化 50 trials・Pine Script 生成不可の 3 点のみで、それ以外は有料プランと同じ機能を試せます。
+        インストール直後から Trial プランで <code>alpha-forge backtest run</code> / <code>alpha-forge optimize run</code> / <code>alpha-forge optimize walk-forward</code> 等が動きます。Trial の制限はデータ上限 2023-12-31・最適化 50 trials・Pine Script 生成不可の 3 点のみで、それ以外は有料プランと同じ機能を試せます。
       </p>
       <pre><code># 例: いきなりバックテストを動かす（Trial プラン・Whop 登録不要）
-forge system init                 # 作業ディレクトリ初期化
-forge data fetch SPY --period 5y  # 2023-12-31 までのデータを自動取得
-forge backtest run SPY --strategy sma_crossover_v1</code></pre>
+alpha-forge system init                 # 作業ディレクトリ初期化
+alpha-forge data fetch SPY --period 5y  # 2023-12-31 までのデータを自動取得
+alpha-forge backtest run SPY --strategy sma_crossover_v1</code></pre>
 
       <h2 class="section-heading">有料プラン（任意） — Whop でログイン認証</h2>
       <p>
-        Trial の制限を解除したい場合のみ、<a href="https://whop.com/alforge-labs/alphaforge/" target="_blank" rel="noopener">Whop の有料プラン</a>（Lifetime / Annual / Monthly）を購入してから以下を実行します。OAuth 2.0 PKCE 認証でブラウザが自動で開き、認証情報は <code>~/.forge/credentials.json</code> に保存されます。
+        Trial の制限を解除したい場合のみ、<a href="https://whop.com/alforge-labs/alphaforge/" target="_blank" rel="noopener">Whop の有料プラン</a>（Lifetime / Annual / Monthly）を購入してから以下を実行します。OAuth 2.0 PKCE 認証でブラウザが自動で開き、認証情報は <code>~/.config/forge/credentials.json</code> に保存されます。
       </p>
-      <pre><code>forge system auth login</code></pre>
+      <pre><code>alpha-forge system auth login</code></pre>
       <p>認証済みメンバーシップは以下で確認できます：</p>
-      <pre><code>forge system auth status</code></pre>
+      <pre><code>alpha-forge system auth status</code></pre>
       <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text2);">
         Trial / 各有料プランの機能差は <a href="/ja/docs/guides/trial-limits/">Trial 制限</a> を参照。
       </p>
@@ -136,7 +136,7 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
         <thead><tr><th>症状</th><th>対処</th></tr></thead>
         <tbody>
           <tr><td><code>command not found: forge</code></td><td>新しいターミナルを開くか、<code>source ~/.bashrc</code> を実行してください。</td></tr>
-          <tr><td>認証エラー</td><td>ネットワーク接続を確認のうえ <code>forge system auth login</code> を再実行してください。Whop マイページでメンバーシップが有効か確認してください。</td></tr>
+          <tr><td>認証エラー</td><td>ネットワーク接続を確認のうえ <code>alpha-forge system auth login</code> を再実行してください。Whop マイページでメンバーシップが有効か確認してください。</td></tr>
           <tr><td>macOS セキュリティ警告</td><td>システム設定 → プライバシーとセキュリティ → 「forge を開く」を許可してください。</td></tr>
         </tbody>
       </table>
@@ -162,44 +162,44 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
       <h3 class="sub-heading">主要コマンド</h3>
       <div class="cmd-card-grid">
         <a class="cmd-card" href="/ja/docs/cli-reference/backtest/#forge-backtest-run">
-          <div class="cmd-card-name">forge backtest run</div>
+          <div class="cmd-card-name">alpha-forge backtest run</div>
           <div class="cmd-card-desc">単一銘柄に戦略を適用してバックテストを実行する。</div>
-          <pre class="cmd-card-usage"><code>forge backtest run SYMBOL --strategy ID</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge backtest run SYMBOL --strategy ID</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--strategy</span><span class="cmd-card-option">--start</span><span class="cmd-card-option">--json</span></div>
           <div class="cmd-card-link">cli-reference で詳細 →</div>
         </a>
         <a class="cmd-card" href="/ja/docs/cli-reference/optimize/#forge-optimize-run">
-          <div class="cmd-card-name">forge optimize run</div>
+          <div class="cmd-card-name">alpha-forge optimize run</div>
           <div class="cmd-card-desc">Optuna によるパラメータ最適化（TPE）。多目的最適化にも対応。</div>
-          <pre class="cmd-card-usage"><code>forge optimize run SYMBOL --strategy ID</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge optimize run SYMBOL --strategy ID</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--metric</span><span class="cmd-card-option">--trials</span><span class="cmd-card-option">--apply</span></div>
           <div class="cmd-card-link">cli-reference で詳細 →</div>
         </a>
         <a class="cmd-card" href="/ja/docs/cli-reference/optimize/#forge-optimize-walk-forward">
-          <div class="cmd-card-name">forge optimize walk-forward</div>
+          <div class="cmd-card-name">alpha-forge optimize walk-forward</div>
           <div class="cmd-card-desc">時系列をウィンドウ分割し IS 最適化 → OOS 評価で過学習耐性を測定。</div>
-          <pre class="cmd-card-usage"><code>forge optimize walk-forward SYMBOL --strategy ID --windows N</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge optimize walk-forward SYMBOL --strategy ID --windows N</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--windows</span><span class="cmd-card-option">--metric</span></div>
           <div class="cmd-card-link">cli-reference で詳細 →</div>
         </a>
         <a class="cmd-card" href="/ja/docs/cli-reference/data/#forge-data-fetch">
-          <div class="cmd-card-name">forge data fetch</div>
+          <div class="cmd-card-name">alpha-forge data fetch</div>
           <div class="cmd-card-desc">OHLCV をプロバイダーから取得し Parquet で保存。</div>
-          <pre class="cmd-card-usage"><code>forge data fetch SYMBOL --period 5y --interval 1d</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge data fetch SYMBOL --period 5y --interval 1d</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--period</span><span class="cmd-card-option">--interval</span><span class="cmd-card-option">--watchlist</span></div>
           <div class="cmd-card-link">cli-reference で詳細 →</div>
         </a>
         <a class="cmd-card" href="/ja/docs/cli-reference/strategy/#forge-strategy-save">
-          <div class="cmd-card-name">forge strategy save</div>
+          <div class="cmd-card-name">alpha-forge strategy save</div>
           <div class="cmd-card-desc">戦略 JSON をレジストリに登録（任意で Journal に記録）。</div>
-          <pre class="cmd-card-usage"><code>forge strategy save FILE_PATH</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge strategy save FILE_PATH</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--force</span></div>
           <div class="cmd-card-link">cli-reference で詳細 →</div>
         </a>
         <a class="cmd-card" href="/ja/docs/cli-reference/journal/#forge-journal-show">
-          <div class="cmd-card-name">forge journal show</div>
+          <div class="cmd-card-name">alpha-forge journal show</div>
           <div class="cmd-card-desc">戦略の全履歴（スナップショット・Runs・タグ・ライブサマリ）を表示。</div>
-          <pre class="cmd-card-usage"><code>forge journal show STRATEGY_ID</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge journal show STRATEGY_ID</code></pre>
           <div class="cmd-card-link">cli-reference で詳細 →</div>
         </a>
       </div>
@@ -208,12 +208,12 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
       <table class="cmd-table">
         <thead><tr><th>グループ</th><th>説明</th><th>サブコマンド数</th></tr></thead>
         <tbody>
-          <tr><td><a href="/ja/docs/cli-reference/backtest/"><code>forge backtest</code></a></td><td>バックテスト実行・スキャン・カスタム実験</td><td>12</td></tr>
-          <tr><td><a href="/ja/docs/cli-reference/optimize/"><code>forge optimize</code></a></td><td>パラメータ最適化（grid / bayes / wfa）</td><td>9</td></tr>
-          <tr><td><a href="/ja/docs/cli-reference/strategy/"><code>forge strategy</code></a></td><td>戦略 JSON の保存・検証・適用</td><td>11</td></tr>
-          <tr><td><a href="/ja/docs/cli-reference/data/"><code>forge data</code></a></td><td>ヒストリカル / 代替 / TradingView MCP データ取得</td><td>6</td></tr>
-          <tr><td><a href="/ja/docs/cli-reference/journal/"><code>forge journal</code></a></td><td>取引ジャーナル・トレード分析</td><td>8</td></tr>
-          <tr><td><a href="/ja/docs/cli-reference/live/"><code>forge live</code></a></td><td>ライブトレード分析・リプレイ・運用記録</td><td>10</td></tr>
+          <tr><td><a href="/ja/docs/cli-reference/backtest/"><code>alpha-forge backtest</code></a></td><td>バックテスト実行・スキャン・カスタム実験</td><td>12</td></tr>
+          <tr><td><a href="/ja/docs/cli-reference/optimize/"><code>alpha-forge optimize</code></a></td><td>パラメータ最適化（grid / bayes / wfa）</td><td>9</td></tr>
+          <tr><td><a href="/ja/docs/cli-reference/strategy/"><code>alpha-forge strategy</code></a></td><td>戦略 JSON の保存・検証・適用</td><td>11</td></tr>
+          <tr><td><a href="/ja/docs/cli-reference/data/"><code>alpha-forge data</code></a></td><td>ヒストリカル / 代替 / TradingView MCP データ取得</td><td>6</td></tr>
+          <tr><td><a href="/ja/docs/cli-reference/journal/"><code>alpha-forge journal</code></a></td><td>取引ジャーナル・トレード分析</td><td>8</td></tr>
+          <tr><td><a href="/ja/docs/cli-reference/live/"><code>alpha-forge live</code></a></td><td>ライブトレード分析・リプレイ・運用記録</td><td>10</td></tr>
           <tr><td><a href="/ja/docs/cli-reference/">その他コマンド</a></td><td><code>system</code> / <code>pine</code> / <code>idea</code> / <code>analyze</code> / <code>explore</code> / <code>self</code></td><td>6 グループ</td></tr>
         </tbody>
       </table>
@@ -264,20 +264,20 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
 
       <h2 class="section-heading">Step 2 — Run on the Trial plan right away (no Whop registration)</h2>
       <p>
-        Once installed, the Trial plan lets you immediately run <code>forge backtest run</code>, <code>forge optimize run</code>, <code>forge optimize walk-forward</code>, and more. The only Trial limits are: data capped at 2023-12-31, optimization capped at 50 trials, and no Pine Script export — everything else mirrors the paid plans.
+        Once installed, the Trial plan lets you immediately run <code>alpha-forge backtest run</code>, <code>alpha-forge optimize run</code>, <code>alpha-forge optimize walk-forward</code>, and more. The only Trial limits are: data capped at 2023-12-31, optimization capped at 50 trials, and no Pine Script export — everything else mirrors the paid plans.
       </p>
       <pre><code># Example: run a backtest right away (Trial plan, no Whop registration)
-forge system init                 # initialize a working directory
-forge data fetch SPY --period 5y  # auto-fetch data up to 2023-12-31
-forge backtest run SPY --strategy sma_crossover_v1</code></pre>
+alpha-forge system init                 # initialize a working directory
+alpha-forge data fetch SPY --period 5y  # auto-fetch data up to 2023-12-31
+alpha-forge backtest run SPY --strategy sma_crossover_v1</code></pre>
 
       <h2 class="section-heading">Paid plans (optional) — Sign in with Whop</h2>
       <p>
-        To lift the Trial limits, purchase a <a href="https://whop.com/alforge-labs/alphaforge/" target="_blank" rel="noopener">paid plan on Whop</a> (Lifetime / Annual / Monthly) and then run the command below. The OAuth 2.0 PKCE flow opens your browser automatically; credentials are cached at <code>~/.forge/credentials.json</code>.
+        To lift the Trial limits, purchase a <a href="https://whop.com/alforge-labs/alphaforge/" target="_blank" rel="noopener">paid plan on Whop</a> (Lifetime / Annual / Monthly) and then run the command below. The OAuth 2.0 PKCE flow opens your browser automatically; credentials are cached at <code>~/.config/forge/credentials.json</code>.
       </p>
-      <pre><code>forge system auth login</code></pre>
+      <pre><code>alpha-forge system auth login</code></pre>
       <p>Verify the activated membership with:</p>
-      <pre><code>forge system auth status</code></pre>
+      <pre><code>alpha-forge system auth status</code></pre>
       <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text2);">
         See <a href="/en/docs/guides/trial-limits/">Trial Limits</a> for the full feature comparison between Trial and paid plans.
       </p>
@@ -285,7 +285,7 @@ forge backtest run SPY --strategy sma_crossover_v1</code></pre>
       <h2 class="section-heading">Visualize Results — alpha-visualizer (optional)</h2>
       <p>
         <strong>alpha-visualizer</strong> is an OSS Python package (PyPI, Apache-2.0-licensed) that renders the backtest results
-        produced by <code>forge</code> in your browser. It runs standalone — no dependency on <code>forge</code> itself — so you can add it any time.
+        produced by <code>alpha-forge</code> in your browser. It runs standalone — no dependency on <code>alpha-forge</code> itself — so you can add it any time.
       </p>
       <pre><code># uv (recommended)
 uv tool install alpha-visualizer
@@ -326,8 +326,8 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
         <thead><tr><th>Issue</th><th>Fix</th></tr></thead>
         <tbody>
           <tr><td><code>command not found: forge</code></td><td>Open a new terminal or run <code>source ~/.bashrc</code>.</td></tr>
-          <tr><td>Authentication error</td><td>Check your network connection and re-run <code>forge system auth login</code>. Make sure your Whop membership is active.</td></tr>
-          <tr><td>macOS security warning</td><td>Open System Settings → Privacy & Security and allow <code>forge</code>.</td></tr>
+          <tr><td>Authentication error</td><td>Check your network connection and re-run <code>alpha-forge system auth login</code>. Make sure your Whop membership is active.</td></tr>
+          <tr><td>macOS security warning</td><td>Open System Settings → Privacy & Security and allow <code>alpha-forge</code>.</td></tr>
         </tbody>
       </table>
 
@@ -352,44 +352,44 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
       <h3 class="sub-heading">Top Commands</h3>
       <div class="cmd-card-grid">
         <a class="cmd-card" href="/en/docs/cli-reference/backtest/#forge-backtest-run">
-          <div class="cmd-card-name">forge backtest run</div>
+          <div class="cmd-card-name">alpha-forge backtest run</div>
           <div class="cmd-card-desc">Run a backtest applying a strategy to a single symbol.</div>
-          <pre class="cmd-card-usage"><code>forge backtest run SYMBOL --strategy ID</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge backtest run SYMBOL --strategy ID</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--strategy</span><span class="cmd-card-option">--start</span><span class="cmd-card-option">--json</span></div>
           <div class="cmd-card-link">See cli-reference →</div>
         </a>
         <a class="cmd-card" href="/en/docs/cli-reference/optimize/#forge-optimize-run">
-          <div class="cmd-card-name">forge optimize run</div>
+          <div class="cmd-card-name">alpha-forge optimize run</div>
           <div class="cmd-card-desc">Parameter optimization with Optuna (TPE). Multi-objective also supported.</div>
-          <pre class="cmd-card-usage"><code>forge optimize run SYMBOL --strategy ID</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge optimize run SYMBOL --strategy ID</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--metric</span><span class="cmd-card-option">--trials</span><span class="cmd-card-option">--apply</span></div>
           <div class="cmd-card-link">See cli-reference →</div>
         </a>
         <a class="cmd-card" href="/en/docs/cli-reference/optimize/#forge-optimize-walk-forward">
-          <div class="cmd-card-name">forge optimize walk-forward</div>
+          <div class="cmd-card-name">alpha-forge optimize walk-forward</div>
           <div class="cmd-card-desc">Split time series into windows; IS optimization → OOS evaluation for overfitting resistance.</div>
-          <pre class="cmd-card-usage"><code>forge optimize walk-forward SYMBOL --strategy ID --windows N</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge optimize walk-forward SYMBOL --strategy ID --windows N</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--windows</span><span class="cmd-card-option">--metric</span></div>
           <div class="cmd-card-link">See cli-reference →</div>
         </a>
         <a class="cmd-card" href="/en/docs/cli-reference/data/#forge-data-fetch">
-          <div class="cmd-card-name">forge data fetch</div>
+          <div class="cmd-card-name">alpha-forge data fetch</div>
           <div class="cmd-card-desc">Fetch OHLCV from a provider and store as Parquet.</div>
-          <pre class="cmd-card-usage"><code>forge data fetch SYMBOL --period 5y --interval 1d</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge data fetch SYMBOL --period 5y --interval 1d</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--period</span><span class="cmd-card-option">--interval</span><span class="cmd-card-option">--watchlist</span></div>
           <div class="cmd-card-link">See cli-reference →</div>
         </a>
         <a class="cmd-card" href="/en/docs/cli-reference/strategy/#forge-strategy-save">
-          <div class="cmd-card-name">forge strategy save</div>
+          <div class="cmd-card-name">alpha-forge strategy save</div>
           <div class="cmd-card-desc">Register a strategy JSON to the registry (optionally recorded in the Journal).</div>
-          <pre class="cmd-card-usage"><code>forge strategy save FILE_PATH</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge strategy save FILE_PATH</code></pre>
           <div class="cmd-card-options"><span class="cmd-card-option">--force</span></div>
           <div class="cmd-card-link">See cli-reference →</div>
         </a>
         <a class="cmd-card" href="/en/docs/cli-reference/journal/#forge-journal-show">
-          <div class="cmd-card-name">forge journal show</div>
+          <div class="cmd-card-name">alpha-forge journal show</div>
           <div class="cmd-card-desc">Show the full history of a strategy (snapshots, runs, tags, live summary).</div>
-          <pre class="cmd-card-usage"><code>forge journal show STRATEGY_ID</code></pre>
+          <pre class="cmd-card-usage"><code>alpha-forge journal show STRATEGY_ID</code></pre>
           <div class="cmd-card-link">See cli-reference →</div>
         </a>
       </div>
@@ -398,12 +398,12 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
       <table class="cmd-table">
         <thead><tr><th>Group</th><th>Description</th><th>Subcommands</th></tr></thead>
         <tbody>
-          <tr><td><a href="/en/docs/cli-reference/backtest/"><code>forge backtest</code></a></td><td>Backtest execution, scanning, custom experiments</td><td>12</td></tr>
-          <tr><td><a href="/en/docs/cli-reference/optimize/"><code>forge optimize</code></a></td><td>Parameter optimization (grid / bayes / wfa)</td><td>9</td></tr>
-          <tr><td><a href="/en/docs/cli-reference/strategy/"><code>forge strategy</code></a></td><td>Strategy JSON save / validate / apply</td><td>11</td></tr>
-          <tr><td><a href="/en/docs/cli-reference/data/"><code>forge data</code></a></td><td>Historical / alternative / TradingView MCP data fetch</td><td>6</td></tr>
-          <tr><td><a href="/en/docs/cli-reference/journal/"><code>forge journal</code></a></td><td>Trading journal and trade analysis</td><td>8</td></tr>
-          <tr><td><a href="/en/docs/cli-reference/live/"><code>forge live</code></a></td><td>Live trade analysis, replay, operations log</td><td>10</td></tr>
+          <tr><td><a href="/en/docs/cli-reference/backtest/"><code>alpha-forge backtest</code></a></td><td>Backtest execution, scanning, custom experiments</td><td>12</td></tr>
+          <tr><td><a href="/en/docs/cli-reference/optimize/"><code>alpha-forge optimize</code></a></td><td>Parameter optimization (grid / bayes / wfa)</td><td>9</td></tr>
+          <tr><td><a href="/en/docs/cli-reference/strategy/"><code>alpha-forge strategy</code></a></td><td>Strategy JSON save / validate / apply</td><td>11</td></tr>
+          <tr><td><a href="/en/docs/cli-reference/data/"><code>alpha-forge data</code></a></td><td>Historical / alternative / TradingView MCP data fetch</td><td>6</td></tr>
+          <tr><td><a href="/en/docs/cli-reference/journal/"><code>alpha-forge journal</code></a></td><td>Trading journal and trade analysis</td><td>8</td></tr>
+          <tr><td><a href="/en/docs/cli-reference/live/"><code>alpha-forge live</code></a></td><td>Live trade analysis, replay, operations log</td><td>10</td></tr>
           <tr><td><a href="/en/docs/cli-reference/">Other commands</a></td><td><code>system</code> / <code>pine</code> / <code>idea</code> / <code>analyze</code> / <code>explore</code> / <code>self</code></td><td>6 groups</td></tr>
         </tbody>
       </table>

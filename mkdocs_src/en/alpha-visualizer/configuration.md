@@ -2,12 +2,12 @@
 
 ## CLI options
 
-### `vis serve`
+### `alpha-vis serve`
 
 Starts the web dashboard.
 
 ```bash
-vis serve [OPTIONS]
+alpha-vis serve [OPTIONS]
 ```
 
 | Option | Default | Description |
@@ -21,13 +21,13 @@ vis serve [OPTIONS]
 Help:
 
 ```bash
-vis --help
-vis serve --help
+alpha-vis --help
+alpha-vis serve --help
 ```
 
 ## Data paths (ForgeConfig)
 
-`vis serve` resolves the following paths relative to `--forge-dir`:
+`alpha-vis serve` resolves the following paths relative to `--forge-dir`:
 
 | Purpose | Path |
 |---|---|
@@ -59,7 +59,7 @@ If `forge.yaml` lives directly under `<forge-dir>`, it is loaded automatically. 
 |---|---|
 | `FORGE_CONFIG` | Equivalent to `--forge-config` (CLI flag wins on conflict) |
 
-For CI scenarios, you can clear it: `env FORGE_CONFIG= vis serve ...`.
+For CI scenarios, you can clear it: `env FORGE_CONFIG= alpha-vis serve ...`.
 
 ## Notes for remote / public deployment
 
