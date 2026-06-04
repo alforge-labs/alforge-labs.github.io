@@ -77,6 +77,9 @@ mkdir quickstart && cd quickstart
 alpha-forge system init
 ```
 
+!!! tip "v0.12.0+: one-command initialization with a directory name"
+    From v0.12.0 you can pass a directory name, e.g. `alpha-forge system init quickstart && cd quickstart`, creating and initializing it in one command. A confirmation prompt also now guards against accidental deployment into unintended locations such as your home directory (pass `--yes` for non-interactive runs like CI).
+
 !!! info "`alpha-forge system init` is required"
     Without `forge.yaml`, the strategy DB location, data store, and result output paths are unresolved, so the next `alpha-forge backtest run` will fail with `FileNotFoundError`. The default invocation (no `--force`) is sufficient for quickstart.
 

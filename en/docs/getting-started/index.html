@@ -3023,6 +3023,10 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>quickstart<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>quickstart
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">v0.12.0+: one-command initialization with a directory name</p>
+<p>From v0.12.0 you can pass a directory name, e.g. <code>alpha-forge system init quickstart &amp;&amp; cd quickstart</code>, creating and initializing it in one command. A confirmation prompt also now guards against accidental deployment into unintended locations such as your home directory (pass <code>--yes</code> for non-interactive runs like CI).</p>
+</div>
 <div class="admonition info">
 <p class="admonition-title"><code>alpha-forge system init</code> is required</p>
 <p>Without <code>forge.yaml</code>, the strategy DB location, data store, and result output paths are unresolved, so the next <code>alpha-forge backtest run</code> will fail with <code>FileNotFoundError</code>. The default invocation (no <code>--force</code>) is sufficient for quickstart.</p>

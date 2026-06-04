@@ -3023,6 +3023,10 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>quickstart<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>quickstart
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">v0.12.0 以降: ディレクトリ名を指定して 1 コマンドで初期化</p>
+<p>v0.12.0 以降は <code>alpha-forge system init quickstart &amp;&amp; cd quickstart</code> のようにディレクトリ名を指定でき、作成と初期化が 1 コマンドで完了します。あわせて、ホームディレクトリ直下など意図しない場所への誤展開には確認プロンプトが表示されるようになりました（CI 等の非対話実行では <code>--yes</code> を指定）。</p>
+</div>
 <div class="admonition info">
 <p class="admonition-title"><code>alpha-forge system init</code> を必ず実行してください</p>
 <p><code>forge.yaml</code> が無いと戦略の DB 登録先・データ保存先・結果ファイル出力先が確定せず、後段の <code>alpha-forge backtest run</code> が <code>FileNotFoundError</code> で失敗します。クイックスタートでは <code>--force</code> 不要。</p>
