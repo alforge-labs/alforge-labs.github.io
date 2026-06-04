@@ -106,6 +106,19 @@ class InstallPs1PathMergeTest(unittest.TestCase):
         result = merge_user_path(current)
         self.assertEqual(result["NewPath"], f"{WINDOWS_APPS};{INSTALL_ROOT}")
 
+    def test_trailing_backslash_entry_is_not_duplicated(self):
+        """末尾バックスラッシュ付きで登録済みなら追加しない（二重登録の防止）。"""
+        current = f"{WINDOWS_APPS};{INSTALL_ROOT}\\"
+        result = merge_user_path(current)
+        self.assertEqual(result["NewPath"], current)
+        self.assertEqual(result["Repaired"], [])
+
+    def test_case_insensitive_entry_is_not_duplicated(self):
+        """大文字小文字違いで登録済みなら追加しない（Windows パスはケース非区別）。"""
+        current = f"{WINDOWS_APPS};{INSTALL_ROOT.upper()}"
+        result = merge_user_path(current)
+        self.assertEqual(result["NewPath"], current)
+
 
 if __name__ == "__main__":
     unittest.main()

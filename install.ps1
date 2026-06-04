@@ -116,7 +116,7 @@ function Invoke-WithSpinner {
 function Get-MergedUserPath {
     param(
         [string]$CurrentPath,
-        [string]$InstallRoot,
+        [ValidateNotNullOrEmpty()][string]$InstallRoot,
         [string[]]$RemoveDirs = @()
     )
 
@@ -146,7 +146,10 @@ function Get-MergedUserPath {
     # 初回インストールの大半が該当していた）。
     $cleaned = @($cleaned | Where-Object { $_ -ne "" -and $RemoveDirs -notcontains $_ })
 
-    if ($cleaned -notcontains $InstallRoot) {
+    # 末尾バックスラッシュ違いの既存エントリ（例: "...\alpha-forge\"）を
+    # 二重登録しないよう、比較時のみ正規化する（エントリ自体は書き換えない）
+    $normalizedRoot = $InstallRoot.TrimEnd('\')
+    if (@($cleaned | ForEach-Object { $_.TrimEnd('\') }) -notcontains $normalizedRoot) {
         $cleaned = @($cleaned) + $InstallRoot
     }
 
