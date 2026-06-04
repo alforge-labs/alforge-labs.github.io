@@ -2,135 +2,15 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>プライバシーポリシー — Alforge Labs</title>
-  <meta name="description" content="Alforge Labs privacy policy for purchase, license activation, and support data." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="page.css" />
+  <meta name="robots" content="noindex, follow" />
+  <meta http-equiv="refresh" content="0;url=/ja/privacy.html" />
+  <link rel="canonical" href="https://alforgelabs.com/ja/privacy.html" />
   <script>
-    (function() {
-      var t = localStorage.getItem('al_theme') || 'dark';
-      var l = localStorage.getItem('al_lang') || 'ja';
-      document.documentElement.setAttribute('data-theme', t);
-      document.documentElement.setAttribute('lang', l);
-      document.addEventListener('DOMContentLoaded', function() {
-        document.body.setAttribute('data-theme', t);
-        document.body.setAttribute('data-lang', l);
-      });
-    })();
+    // 言語設定（al_lang）を保存済みのユーザーは対応言語版へ。既定は /ja/。
+    var lang = 'ja';
+    try { if (localStorage.getItem('al_lang') === 'en') lang = 'en'; } catch (e) {}
+    window.location.replace('/' + lang + '/privacy.html');
   </script>
 </head>
-<body data-theme="dark" data-lang="ja">
-  <div id="site-header"></div>
-
-  <div class="page-wrap">
-    <div class="lang-content lang-ja">
-      <div class="page-label">Legal</div>
-      <h1 class="page-title">プライバシーポリシー</h1>
-      <p class="page-subtitle">最終更新日: 2026年4月25日</p>
-
-      <p>Alforge Labs（以下「当社」）は、AlphaForge CLI の提供にあたり収集する個人情報の取り扱いについて、以下の通りプライバシーポリシーを定めます。</p>
-
-      <h2 class="section-heading">1. 収集する情報</h2>
-      <h3 class="sub-heading">1.1 購入時に収集する情報</h3>
-      <p>LemonSqueezy を通じたライセンス購入時に、氏名または会社名、メールアドレス、決済情報、国・地域情報が収集されます。決済情報は LemonSqueezy が処理し、当社は保持しません。</p>
-
-      <h3 class="sub-heading">1.2 ライセンス認証時に収集する情報</h3>
-      <p><code>forge license activate</code> 実行時に、ライセンスキー、インスタンス名、アクティベーション日時が LemonSqueezy の License API に送信されます。</p>
-
-      <h3 class="sub-heading">1.3 収集しない情報</h3>
-      <div class="callout">
-        <p>AlphaForge CLI はローカル完結型ソフトウェアです。バックテスト設定、最適化パラメータ、戦略データ、取引履歴、ポジション情報、ローカルファイル、操作ログは当社サーバーへ送信されません。</p>
-      </div>
-
-      <h2 class="section-heading">2. 情報の利用目的</h2>
-      <ul>
-        <li>ライセンスキーの発行・認証・管理</li>
-        <li>購入確認メール・領収書の送付</li>
-        <li>製品アップデートのお知らせ（登録ユーザーのみ、配信停止可）</li>
-        <li>サポート対応</li>
-        <li>法令上の義務履行（税務・会計処理）</li>
-      </ul>
-
-      <h2 class="section-heading">3. 第三者への情報提供</h2>
-      <p>当社は、決済処理・ライセンス管理のために LemonSqueezy と必要な情報を共有する場合、および法令上の要請がある場合を除き、個人情報を第三者に提供しません。マーケティング目的でのデータ販売・共有は行いません。</p>
-
-      <h2 class="section-heading">4. データの保存期間</h2>
-      <ul>
-        <li>購入情報・ライセンス情報: LemonSqueezy のデータ保持ポリシーに準拠</li>
-        <li>サポートメール: 対応完了後2年間</li>
-        <li>ローカル認証キャッシュ: ユーザーが削除するまで、または <code>forge license deactivate</code> 実行まで保持</li>
-      </ul>
-
-      <h2 class="section-heading">5. Cookie・トラッキング</h2>
-      <p>本ウェブサイトでは Google Analytics を使用してアクセス状況を分析しています。ブラウザの設定から Cookie を無効化することで計測を拒否できます。</p>
-
-      <h2 class="section-heading">6. お問い合わせ</h2>
-      <p>個人情報の取り扱いに関するお問い合わせ・開示・削除要求は以下にご連絡ください。</p>
-      <p>Email: <a href="mailto:support@alforgelabs.com">support@alforgelabs.com</a></p>
-    </div>
-
-    <div class="lang-content lang-en">
-      <div class="page-label">Legal</div>
-      <h1 class="page-title">Privacy Policy</h1>
-      <p class="page-subtitle">Last Updated: April 25, 2026</p>
-
-      <p>Alforge Labs defines this privacy policy to explain how personal information is handled in connection with AlphaForge CLI.</p>
-
-      <h2 class="section-heading">1. Information We Collect</h2>
-      <h3 class="sub-heading">1.1 Purchase Information</h3>
-      <p>When you purchase a license through LemonSqueezy, information such as your name or company name, email address, payment details, and country or region may be collected. Payment details are processed by LemonSqueezy and are not stored by Alforge Labs.</p>
-
-      <h3 class="sub-heading">1.2 License Activation Information</h3>
-      <p>When you run <code>forge license activate</code>, the license key, instance name, and activation timestamp are sent to the LemonSqueezy License API.</p>
-
-      <h3 class="sub-heading">1.3 Information We Do Not Collect</h3>
-      <div class="callout">
-        <p>AlphaForge CLI is local-first software. Backtest settings, optimization parameters, strategy data, trading history, positions, local files, and usage logs are not sent to Alforge Labs servers.</p>
-      </div>
-
-      <h2 class="section-heading">2. How We Use Information</h2>
-      <ul>
-        <li>Issuing, activating, and managing license keys</li>
-        <li>Sending purchase confirmations and receipts</li>
-        <li>Sending product update notices to registered users, with opt-out available</li>
-        <li>Providing technical support</li>
-        <li>Meeting legal, tax, and accounting obligations</li>
-      </ul>
-
-      <h2 class="section-heading">3. Third-Party Sharing</h2>
-      <p>We do not share personal information with third parties except when necessary for payment processing and license management through LemonSqueezy, or when required by law. We do not sell or share data for marketing purposes.</p>
-
-      <h2 class="section-heading">4. Data Retention</h2>
-      <ul>
-        <li>Purchase and license information: retained according to LemonSqueezy's data retention policy</li>
-        <li>Support email: retained for two years after the support request is resolved</li>
-        <li>Local authentication cache: retained until the user removes it or runs <code>forge license deactivate</code></li>
-      </ul>
-
-      <h2 class="section-heading">5. Cookies and Tracking</h2>
-      <p>This website uses Google Analytics to analyze site traffic. You can opt out of measurement by disabling cookies in your browser settings.</p>
-
-      <h2 class="section-heading">6. Contact</h2>
-      <p>For privacy inquiries, disclosure requests, or deletion requests, please contact:</p>
-      <p>Email: <a href="mailto:support@alforgelabs.com">support@alforgelabs.com</a></p>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-logo">alforge<span class="dot">.</span>labs</div>
-    <div class="lang-content lang-ja"><div class="footer-links"><a href="/">ホーム</a><a href="install.html">インストール</a><a href="docs.html">ドキュメント</a><a href="terms.html">利用規約</a><a href="privacy.html">プライバシー</a></div></div>
-    <div class="lang-content lang-en"><div class="footer-links"><a href="/">Home</a><a href="install.html">Install</a><a href="docs.html">Docs</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div></div>
-  </footer>
-
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script type="text/babel" src="site-header.jsx"></script>
-  <script type="text/babel">
-    renderStandaloneHeader();
-  </script>
-</body>
+<body></body>
 </html>
