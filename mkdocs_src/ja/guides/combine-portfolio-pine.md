@@ -25,7 +25,7 @@ combine portfolio Pine は次の方針で複数銘柄を 1 つの Pine にまと
 ### 1. combine Pine を生成する
 
 ```bash
-forge pine generate \
+alpha-forge pine generate \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --allocation equal \
   --rebalance-freq monthly \
@@ -103,7 +103,7 @@ means / variances を Pine に焼き込み、Forward Algorithm を Pine 内で
   フォールバック (後方互換)
 
 ```bash
-forge pine generate \
+alpha-forge pine generate \
   --combine-strategies qqq_hmm_v1,tqqq_v1,gld_v1 \
   --allocation equal \
   --with-training-data \
@@ -112,12 +112,12 @@ forge pine generate \
 
 ## symbolic verify (issue [#975](https://github.com/ysakae/alpha-forge/issues/975)) {#symbolic-verify}
 
-`forge pine verify --combine-strategies` で、生成 Pine と alpha-forge
+`alpha-forge pine verify --combine-strategies` で、生成 Pine と alpha-forge
 backtest combine が **同じ意図で動く** ことを TradingView を介さず
 symbolic に検証できます。
 
 ```bash
-forge pine verify \
+alpha-forge pine verify \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --combine-allocation equal \
   --combine-rebalance-freq monthly \
@@ -174,7 +174,7 @@ Strategy Tester で部分 metrics を取りたい** 場合は `--combine-mode
 hybrid-strategy` を使います。
 
 ```bash
-forge pine generate \
+alpha-forge pine generate \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --combine-mode hybrid-strategy \
   --main-strategy tqqq_phase2 \
@@ -210,13 +210,13 @@ forge pine generate \
 ### Strategy Tester 結果の自動 verify (issue [#986](https://github.com/ysakae/alpha-forge/issues/986))
 
 hybrid-strategy Pine をメイン銘柄のチャートに適用して Strategy Tester を回したあと、
-`forge pine verify --verify-mode tradingview-strategy-tester` で **メイン symbol
+`alpha-forge pine verify --verify-mode tradingview-strategy-tester` で **メイン symbol
 component の Sharpe / Max Drawdown** を alpha-forge backtest combine の同 symbol
 component と自動比較できます。MCP server (vinicius / tradesdontlie) 経由で
 Strategy Tester の集計を取得します。
 
 ```bash
-forge pine verify \
+alpha-forge pine verify \
   --combine-strategies tqqq_phase2,gld_bh,tlt_bh \
   --combine-mode hybrid-strategy \
   --main-strategy tqqq_phase2 \

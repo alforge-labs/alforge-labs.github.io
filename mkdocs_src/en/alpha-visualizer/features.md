@@ -1,6 +1,6 @@
 # Features
 
-Walkthrough of each dashboard screen served by `vis serve`.
+Walkthrough of each dashboard screen served by `alpha-vis serve`.
 
 ## Browse
 

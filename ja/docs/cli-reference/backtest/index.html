@@ -4312,7 +4312,7 @@
 <td><code>--regime-filter</code></td>
 <td>オプション</td>
 <td>-</td>
-<td>マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は <code>source:label</code>（例: <code>macro:risk_on</code>）で <code>source</code> は <code>macro</code> のみ対応。事前に FRED データの取得が必要（<code>forge data alt fetch FRED:T10Y3M</code>）</td>
+<td>マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は <code>source:label</code>（例: <code>macro:risk_on</code>）で <code>source</code> は <code>macro</code> のみ対応。事前に FRED データの取得が必要（<code>alpha-forge data alt fetch FRED:T10Y3M</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -5201,14 +5201,14 @@
 </tbody>
 </table>
 <h3 id="_38">出力例<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
 <a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>   http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
 </code></pre></div>
 <p>複数戦略比較時:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>📊 チャートを表示するには `vis serve`（alpha-visualizer）を起動してください:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
 </code></pre></div>
-<p>このコマンド自体は URL を表示するだけです。チャート閲覧には <code>vis serve</code>（<a href="https://github.com/ysakae/alpha-visualizer">alpha-visualizer</a>）を起動する必要があります。</p>
+<p>このコマンド自体は URL を表示するだけです。チャート閲覧には <code>alpha-vis serve</code>（<a href="https://github.com/ysakae/alpha-visualizer">alpha-visualizer</a>）を起動する必要があります。</p>
 <hr />
 <h2 id="alpha-forge-backtest-signal-count">alpha-forge backtest signal-count<a class="headerlink" href="#alpha-forge-backtest-signal-count" title="Permanent link">&para;</a></h2>
 <p>vectorbt をスキップし、エントリー条件のシグナル発生件数だけを高速で集計する。条件式の妥当性確認用。</p>

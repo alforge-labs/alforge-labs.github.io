@@ -18,7 +18,7 @@ Whop を通じたメンバーシップ購入時に、氏名または会社名、
 - Whop からの受信: アクセストークン（access_token）、リフレッシュトークン（refresh_token）、ユーザー ID、メンバーシップ有効性
 - 定期的なアクセス検証時: アクセストークンを `api.whop.com/api/v1` に送信し、購入済みプロダクトへのアクセス権を確認
 
-取得したトークンと認証メタデータはローカルの `~/.forge/credentials.json` に保存され、当社サーバーには保管されません。
+取得したトークンと認証メタデータはローカルの `~/.config/forge/credentials.json` に保存され、当社サーバーには保管されません。
 
 ### 1.3 収集しない情報
 
@@ -41,7 +41,7 @@ Whop を通じたメンバーシップ購入時に、氏名または会社名、
 
 - 購入情報・メンバーシップ情報: Whop のデータ保持ポリシーに準拠
 - サポートメール: 対応完了後 2 年間
-- ローカル認証キャッシュ（`~/.forge/credentials.json`）: ユーザーが削除するまで、または `alpha-forge system auth logout` 実行まで保持
+- ローカル認証キャッシュ（`~/.config/forge/credentials.json`）: ユーザーが削除するまで、または `alpha-forge system auth logout` 実行まで保持
 
 ## 5. Cookie・トラッキング
 

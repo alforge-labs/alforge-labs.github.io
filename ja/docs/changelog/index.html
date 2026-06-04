@@ -2656,7 +2656,7 @@
 <h2 id="v0100-2026-05-30">v0.10.0 — 2026-05-30<a class="headerlink" href="#v0100-2026-05-30" title="Permanent link">&para;</a></h2>
 <p>実運用（ペーパートレード）連携と複数戦略ポートフォリオのライブ集計を強化しました。</p>
 <ul>
-<li><strong>forge live / replay</strong>: 約定照合イベント（order_reconciled）を権威データとして扱い、未約定（phantom fill）を除外して正確なライブ実績を集計。</li>
+<li><strong>alpha-forge live / replay</strong>: 約定照合イベント（order_reconciled）を権威データとして扱い、未約定（phantom fill）を除外して正確なライブ実績を集計。</li>
 <li><strong>Combine Portfolio のライブ集計</strong>: always-in-market なオーバーレイ戦略の position ベースのライブ成績を SQLite に永続化し、<a href="../alpha-visualizer/">alpha-visualizer</a> での可視化につなげる土台を整備。</li>
 <li><strong>修正</strong>: Combine Portfolio 向け Pine 出力の <code>signal_id</code> 日時整形を修正。</li>
 </ul>
@@ -2685,7 +2685,7 @@
 <h2 id="v060-2026-05-18">v0.6.0 — 2026-05-18<a class="headerlink" href="#v060-2026-05-18" title="Permanent link">&para;</a></h2>
 <p>初回セットアップ体験と対応マーケットを拡張しました。</p>
 <ul>
-<li><strong>セットアップ強化</strong>: <code>forge system init</code> がゴール設定サンプルや資産クラス別テンプレートを展開。<code>strategy create</code> に <code>--strategy-id</code> を追加。</li>
+<li><strong>セットアップ強化</strong>: <code>alpha-forge system init</code> がゴール設定サンプルや資産クラス別テンプレートを展開。<code>strategy create</code> に <code>--strategy-id</code> を追加。</li>
 <li><strong>暗号資産対応</strong>: 専用の Binance データプロバイダーを追加し、4h/1h を 5 年以上取得可能に。</li>
 <li><strong>alpha-strike 連携</strong>: <code>pine generate --with-webhook</code> で発注連携用の input/alert を Pine に自動付与。</li>
 <li><strong>ベンチマーク</strong>: <code>--no-benchmark</code> でベンチマーク比較を無効化可能に。</li>
@@ -2710,7 +2710,7 @@
 </ul>
 <h2 id="v035-2026-05-13">v0.3.5 — 2026-05-13<a class="headerlink" href="#v035-2026-05-13" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>修正</strong>: 配布バイナリ環境で <code>forge system init</code> がリソース展開に失敗する問題を解消。</li>
+<li><strong>修正</strong>: 配布バイナリ環境で <code>alpha-forge system init</code> がリソース展開に失敗する問題を解消。</li>
 </ul>
 <hr />
 <p>過去バージョンの配布物・チェックサムは <a href="https://github.com/alforge-labs/alforge-labs.github.io/releases">GitHub Releases</a> を参照してください。</p>

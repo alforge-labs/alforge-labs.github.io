@@ -18,18 +18,18 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ### `backtest_results.db` が見つからない / 戦略が表示されない
 
-`vis serve` が見ている `<forge-dir>/data/results/backtest_results.db` が存在しない可能性があります。
+`alpha-vis serve` が見ている `<forge-dir>/data/results/backtest_results.db` が存在しない可能性があります。
 
 ```bash
-# 起動時に解決されたパスを確認（vis serve のログに表示される）
-vis serve --forge-dir <path>
+# 起動時に解決されたパスを確認（alpha-vis serve のログに表示される）
+alpha-vis serve --forge-dir <path>
 
 # 想定パスを直接確認
 ls <path>/data/results/backtest_results.db
 ls <path>/data/strategies/
 ```
 
-`alpha-forge backtest run` を一度も実行していない場合、`backtest_results.db` は作成されません。最低 1 件のバックテストを実行してから `vis serve` を試してください。
+`alpha-forge backtest run` を一度も実行していない場合、`backtest_results.db` は作成されません。最低 1 件のバックテストを実行してから `alpha-vis serve` を試してください。
 
 ### ポートが既に使用されている
 
@@ -40,7 +40,7 @@ ls <path>/data/strategies/
 別のポートを指定するか、既存プロセスを停止してください。
 
 ```bash
-vis serve --port 9000
+alpha-vis serve --port 9000
 
 # 8000 番を使っているプロセスを確認
 lsof -i :8000
@@ -69,7 +69,7 @@ lsof -i :8000
 ### 別マシンからアクセスしたい
 
 ```bash
-vis serve --host 0.0.0.0 --port 8000
+alpha-vis serve --host 0.0.0.0 --port 8000
 ```
 
 その上で：

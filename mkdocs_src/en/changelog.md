@@ -16,7 +16,7 @@ A user-facing summary of notable changes in each public AlphaForge CLI release. 
 
 Strengthened live (paper-trading) integration and portfolio-level live aggregation.
 
-- **forge live / replay**: Treats order-reconciliation events (order_reconciled) as the authoritative source and excludes phantom (unfilled) fills, so live performance is computed accurately.
+- **alpha-forge live / replay**: Treats order-reconciliation events (order_reconciled) as the authoritative source and excludes phantom (unfilled) fills, so live performance is computed accurately.
 - **Combine Portfolio live aggregation**: Persists position-based live performance of always-in-market overlay strategies to SQLite, laying the groundwork for visualization in [alpha-visualizer](alpha-visualizer/index.md).
 - **Fix**: Corrected `signal_id` timestamp formatting in Combine Portfolio Pine output.
 
@@ -49,7 +49,7 @@ Major progress on cost realism and TradingView consistency.
 
 Expanded the first-run experience and supported markets.
 
-- **Setup**: `forge system init` now scaffolds goal-configuration samples and asset-class templates. Added `--strategy-id` to `strategy create`.
+- **Setup**: `alpha-forge system init` now scaffolds goal-configuration samples and asset-class templates. Added `--strategy-id` to `strategy create`.
 - **Crypto support**: A dedicated Binance data provider, fetching 4h/1h over 5+ years.
 - **alpha-strike integration**: `pine generate --with-webhook` automatically adds order-routing inputs/alerts to Pine.
 - **Benchmark**: `--no-benchmark` disables benchmark comparison.
@@ -76,7 +76,7 @@ Dramatically improved startup speed.
 
 ## v0.3.5 — 2026-05-13
 
-- **Fix**: Resolved a failure where `forge system init` could not expand resources in the distributed binary.
+- **Fix**: Resolved a failure where `alpha-forge system init` could not expand resources in the distributed binary.
 
 ---
 

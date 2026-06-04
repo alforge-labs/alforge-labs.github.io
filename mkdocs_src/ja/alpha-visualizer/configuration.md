@@ -2,12 +2,12 @@
 
 ## CLI オプション
 
-### `vis serve`
+### `alpha-vis serve`
 
 Web ダッシュボードを起動します。
 
 ```bash
-vis serve [OPTIONS]
+alpha-vis serve [OPTIONS]
 ```
 
 | オプション | デフォルト | 説明 |
@@ -21,13 +21,13 @@ vis serve [OPTIONS]
 ヘルプ表示:
 
 ```bash
-vis --help
-vis serve --help
+alpha-vis --help
+alpha-vis serve --help
 ```
 
 ## データパス（ForgeConfig）
 
-`vis serve` は `--forge-dir` を起点に以下のパスを解決します。
+`alpha-vis serve` は `--forge-dir` を起点に以下のパスを解決します。
 
 | 用途 | パス |
 |---|---|
@@ -59,7 +59,7 @@ ideas:
 |---|---|
 | `FORGE_CONFIG` | `--forge-config` と同等の指定（CLI 引数の方が優先） |
 
-CI などで明示的にクリアしたい場合は `env FORGE_CONFIG= vis serve ...` のように空に設定できます。
+CI などで明示的にクリアしたい場合は `env FORGE_CONFIG= alpha-vis serve ...` のように空に設定できます。
 
 ## リモート公開時の注意
 

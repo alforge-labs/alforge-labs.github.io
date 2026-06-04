@@ -83,11 +83,11 @@ Human-readable summary after optimization completes:
 Best score (sharpe_ratio): 1.32
 Best parameters: {'fast_period': 12, 'slow_period': 50}
 💾 Result file: data/results/optimize_my_v1_20260415_103021.json
-   Next: forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
+   Next: alpha-forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
 DB saved: run_id=opt_20260415_103021
 ```
 
-With `--save`, the absolute path to the result JSON and the next step (`forge optimize apply ...`) are printed (F-401).
+With `--save`, the absolute path to the result JSON and the next step (`alpha-forge optimize apply ...`) are printed (F-401).
 
 With `--apply` (no prompt when `my_v1_optimized` does not yet exist):
 
@@ -122,7 +122,7 @@ If `my_v1_optimized` already exists, an overwrite confirmation appears:
 |-------|---------|
 | `param_ranges_effective` | Effective range dict actually searched (from strategy JSON or built-in default) |
 | `param_ranges_source` | `"strategy"` (from JSON) or `"default"` (built-in) |
-| `saved_path` | Absolute path of the saved JSON when `--save` is used. Can be passed straight to `forge optimize apply` |
+| `saved_path` | Absolute path of the saved JSON when `--save` is used. Can be passed straight to `alpha-forge optimize apply` |
 
 ### Common errors
 

@@ -83,11 +83,11 @@ alpha-forge optimize run <SYMBOL> --strategy <ID> [OPTIONS]
 ベストスコア (sharpe_ratio): 1.32
 ベストパラメータ: {'fast_period': 12, 'slow_period': 50}
 💾 結果ファイル: data/results/optimize_my_v1_20260415_103021.json
-   次のステップ: forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
+   次のステップ: alpha-forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
 DB 保存: run_id=opt_20260415_103021
 ```
 
-`--save` を付けた場合、結果 JSON の絶対パスと次のステップ（`forge optimize apply ...`）が表示されます（F-401）。
+`--save` を付けた場合、結果 JSON の絶対パスと次のステップ（`alpha-forge optimize apply ...`）が表示されます（F-401）。
 
 `--apply` 指定時（`my_v1_optimized` が未存在の場合は確認なしで作成）：
 
@@ -122,7 +122,7 @@ DB 保存: run_id=opt_20260415_103021
 |----------|------|
 | `param_ranges_effective` | 実際に探索された range 辞書（戦略 JSON 由来または内蔵デフォルト） |
 | `param_ranges_source` | `"strategy"`（戦略 JSON 由来）または `"default"`（内蔵デフォルト） |
-| `saved_path` | `--save` 指定時の結果ファイル絶対パス。`forge optimize apply` の引数にそのまま渡せる |
+| `saved_path` | `--save` 指定時の結果ファイル絶対パス。`alpha-forge optimize apply` の引数にそのまま渡せる |
 
 ### 主なエラー
 

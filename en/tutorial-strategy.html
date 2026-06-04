@@ -201,7 +201,7 @@
             <table class="option-table">
               <thead><tr><th>Component</th><th>Role</th></tr></thead>
               <tbody>
-                <tr><td><code>forge</code></td><td>Core simulation and optimization engine</td></tr>
+                <tr><td><code>alpha-forge</code></td><td>Core simulation and optimization engine</td></tr>
                 <tr><td><code>data/</code></td><td>Workspace holding strategy JSON, historical data, and backtest results</td></tr>
                 <tr><td><code>strike</code></td><td>Webhook server that receives TradingView alerts and forwards to broker APIs</td></tr>
               </tbody>
@@ -225,7 +225,7 @@
 curl -sSL https://alforge-labs.github.io/install.sh | bash
 
 # (optional) After purchasing a paid plan, sign in via Whop OAuth to unlock it
-# forge system auth login</code></pre>
+# alpha-forge system auth login</code></pre>
                 </div>
               </li>
               <li>
@@ -235,7 +235,7 @@ curl -sSL https://alforge-labs.github.io/install.sh | bash
                     Creates <code>forge.yaml</code> plus the <code>data/</code>, <code>output/</code>, <code>docs/</code>, <code>.claude/</code>, and <code>.agents/</code> directories. Setting <code>FORGE_CONFIG</code> lets subsequent commands pick up this <code>forge.yaml</code> automatically.
                   </p>
                   <pre><code>mkdir my-strategies && cd my-strategies
-forge system init
+alpha-forge system init
 # → forge.yaml, data/, output/, docs/, .claude/, .agents/ are created
 
 # Make the new forge.yaml the default for later commands (add to ~/.zshrc to make it permanent)
@@ -249,11 +249,11 @@ export FORGE_CONFIG=$(pwd)/forge.yaml</code></pre>
                     Downloads from Yahoo Finance and caches under <code>data/historical/</code>. To grab several symbols at once, list them in a watchlist file (one symbol per line).
                   </p>
                   <pre><code># Download 5 years of CL=F (WTI crude oil futures)
-forge data fetch CL=F --period 5y
+alpha-forge data fetch CL=F --period 5y
 
 # Batch download via a watchlist file (one symbol per line)
 printf "SPY\nQQQ\n" > watchlist.txt
-forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
+alpha-forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
                 </div>
               </li>
             </ol>
@@ -268,7 +268,7 @@ forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
             <p style="color: var(--text2); line-height: 1.8; margin-bottom: 1rem;">
               Every AlphaForge strategy is defined in a JSON file.
               Below is an example HMM + Bollinger Bands + RSI strategy for CL=F.
-              Save it as <code>cl_hmm_bb_rsi_v1.json</code> in your working directory; the next step registers it via <code>forge strategy save</code>.
+              Save it as <code>cl_hmm_bb_rsi_v1.json</code> in your working directory; the next step registers it via <code>alpha-forge strategy save</code>.
             </p>
             <pre><code>{
   "strategy_id": "cl_hmm_bb_rsi_v1",
@@ -332,15 +332,15 @@ forge data fetch --watchlist watchlist.txt --period 5y</code></pre>
             <div class="callout">
               <strong>Note on HMM states:</strong> The <code>hmm_state</code> value of <code>1</code>
               typically corresponds to the bullish regime, but this can vary per dataset.
-              Run <code>forge backtest run &lt;SYMBOL&gt; --strategy &lt;id&gt; --regime</code> to inspect
+              Run <code>alpha-forge backtest run &lt;SYMBOL&gt; --strategy &lt;id&gt; --regime</code> to inspect
               the per-regime statistics and verify state meanings.
             </div>
 
             <p style="color: var(--text2); line-height: 1.8; margin-top: 1rem; margin-bottom: 0.5rem;">
-              Register the JSON locally with <code>forge strategy save</code>. Once registered, you can reference it via <code>--strategy &lt;strategy_id&gt;</code> and see it in <code>forge strategy list</code>.
+              Register the JSON locally with <code>alpha-forge strategy save</code>. Once registered, you can reference it via <code>--strategy &lt;strategy_id&gt;</code> and see it in <code>alpha-forge strategy list</code>.
             </p>
-            <pre><code>forge strategy save cl_hmm_bb_rsi_v1.json
-forge strategy list   # verify the strategy is registered</code></pre>
+            <pre><code>alpha-forge strategy save cl_hmm_bb_rsi_v1.json
+alpha-forge strategy list   # verify the strategy is registered</code></pre>
           </section>
 
           <hr class="section-divider" />
@@ -353,7 +353,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
               <li>
                 <div>
                   <strong>Run a basic backtest</strong>
-                  <pre><code>forge backtest run CL=F \
+                  <pre><code>alpha-forge backtest run CL=F \
   --strategy cl_hmm_bb_rsi_v1 \
   --start 2019-01-01 \
   --end 2024-12-31</code></pre>
@@ -362,7 +362,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
               <li>
                 <div>
                   <strong>Get JSON output (for scripting)</strong>
-                  <pre><code>forge backtest run CL=F \
+                  <pre><code>alpha-forge backtest run CL=F \
   --strategy cl_hmm_bb_rsi_v1 \
   --json | jq '.summary'</code></pre>
                   <p style="font-size:0.88rem;color:var(--text2);margin-top:0.5rem;">Example output:</p>
@@ -396,7 +396,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
               <li>
                 <div>
                   <strong>Run optimization (200 trials)</strong>
-                  <pre><code>forge optimize run CL=F \
+                  <pre><code>alpha-forge optimize run CL=F \
   --strategy cl_hmm_bb_rsi_v1 \
   --trials 200 \
   --metric sharpe_ratio \
@@ -406,7 +406,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
               <li>
                 <div>
                   <strong>View the optimization history</strong>
-                  <pre><code>forge optimize history \
+                  <pre><code>alpha-forge optimize history \
   --strategy cl_hmm_bb_rsi_v1</code></pre>
                 </div>
               </li>
@@ -416,7 +416,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
                   <p style="font-size:0.88rem;color:var(--text2);margin-top:0.3rem;">
                     The result file is printed by <code>optimize run --save</code> and lives under <code>data/results/</code>.
                   </p>
-                  <pre><code>forge optimize apply \
+                  <pre><code>alpha-forge optimize apply \
   data/results/optimize_cl_hmm_bb_rsi_v1_&lt;timestamp&gt;.json \
   --to-strategy cl_hmm_bb_rsi_v1</code></pre>
                 </div>
@@ -443,7 +443,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
               <li>
                 <div>
                   <strong>Run walk-forward test</strong>
-                  <pre><code>forge optimize walk-forward CL=F \
+                  <pre><code>alpha-forge optimize walk-forward CL=F \
   --strategy cl_hmm_bb_rsi_v1_optimized \
   --windows 5 \
   --metric sharpe_ratio</code></pre>
@@ -452,7 +452,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
               <li>
                 <div>
                   <strong>View the fold-by-fold report (JSON)</strong>
-                  <pre><code>forge optimize walk-forward CL=F \
+                  <pre><code>alpha-forge optimize walk-forward CL=F \
   --strategy cl_hmm_bb_rsi_v1_optimized \
   --windows 5 --json | jq '.windows'</code></pre>
                 </div>
@@ -514,7 +514,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
                   <strong style="display:block;margin-bottom:0.4rem;">What do HMM state numbers mean?</strong>
                   <p style="font-size:0.88rem;color:var(--text2);line-height:1.7;">
                     HMM state numbers (0, 1, ...) can change between training runs.
-                    Run <code>forge backtest run &lt;SYMBOL&gt; --strategy &lt;strategy_id&gt; --regime</code>
+                    Run <code>alpha-forge backtest run &lt;SYMBOL&gt; --strategy &lt;strategy_id&gt; --regime</code>
                     to view the mean return and volatility for each state and identify which is the bullish regime.
                   </p>
                 </div>
@@ -523,7 +523,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
                 <div>
                   <strong style="display:block;margin-bottom:0.4rem;">How do I connect to TradingView?</strong>
                   <p style="font-size:0.88rem;color:var(--text2);line-height:1.7;">
-                    Run <code>forge pine generate --strategy &lt;strategy_id&gt;</code> to generate
+                    Run <code>alpha-forge pine generate --strategy &lt;strategy_id&gt;</code> to generate
                     TradingView Pine Script v6 code. Set up a Webhook alert in TradingView pointing to
                     alpha-strike for automated order execution.
                   </p>
@@ -536,7 +536,7 @@ forge strategy list   # verify the strategy is registered</code></pre>
                     100–200 trials is sufficient for strategies with 3–5 parameters.
                     For more parameters or higher precision, use 500–1000 trials.
                   </p>
-                  <pre><code>forge optimize run CL=F --strategy cl_hmm_bb_rsi_v1 --trials 500 --metric sharpe_ratio --save</code></pre>
+                  <pre><code>alpha-forge optimize run CL=F --strategy cl_hmm_bb_rsi_v1 --trials 500 --metric sharpe_ratio --save</code></pre>
                 </div>
               </li>
             </ul>

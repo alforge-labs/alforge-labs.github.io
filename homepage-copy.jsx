@@ -1,6 +1,6 @@
 // Equity curve data — language-independent, 2021-05 to 2026-05 (62 points, base=100)
 // `cl` key holds the STRATEGY series: TQQQ+GLD+TLT equal-weight hedged combine (SMA200+ATR
-//   trigger), daily equity from `forge backtest combine`, normalized to 100 at period start,
+//   trigger), daily equity from `alpha-forge backtest combine`, normalized to 100 at period start,
 //   sampled at month-ends. SPY/QQQ: Buy & Hold price return, same period & normalization.
 //   Endpoints equal the daily total returns (strat +113%, qqq +120%, spy +91%).
 window.EQUITY_CURVE = {
@@ -75,7 +75,7 @@ window.COPY = {
             'alpha-forge コア（Beta 版・購入して利用可能、v1.0 へ向け改善中）',
             'alpha-strike 自動執行サーバー（早期開発 / Dev）',
             'Claude / Codex 連携スキル（/explore-strategies など）',
-            'FRED / ALFRED マクロデータ provider（forge data alt fetch FRED: / backtest --regime-filter macro:）',
+            'FRED / ALFRED マクロデータ provider（alpha-forge data alt fetch FRED: / backtest --regime-filter macro:）',
           ],
         },
         {
@@ -168,7 +168,7 @@ window.COPY = {
         },
       ],
       buyNow: '今すぐ購入',
-      note: 'ローンチ記念の早割 Lifetime $299 は先着50名限定。早割の $299 クーポンは X（@alforge_bot）をフォローのうえ DM で配布します。早割枠が埋まると Lifetime は通常価格 $799 になります（合計100席上限）。Lifetime は常に最新バージョンを利用可能で、v2 以降のメジャーアップグレードも追加料金はかかりません。Annual / Monthly は通常価格のサブスクリプションで、常に最新バージョンを利用できます。購入後は forge system auth login を実行して Whop OAuth 認証で有効化します。',
+      note: 'ローンチ記念の早割 Lifetime $299 は先着50名限定。早割の $299 クーポンは X（@alforge_bot）をフォローのうえ DM で配布します。早割枠が埋まると Lifetime は通常価格 $799 になります（合計100席上限）。Lifetime は常に最新バージョンを利用可能で、v2 以降のメジャーアップグレードも追加料金はかかりません。Annual / Monthly は通常価格のサブスクリプションで、常に最新バージョンを利用できます。購入後は alpha-forge system auth login を実行して Whop OAuth 認証で有効化します。',
       comparison: {
         label: 'プラン比較',
         colTrial: 'Trial（Whop 登録不要）',
@@ -297,7 +297,7 @@ window.COPY = {
           status: 'active',
           badgeLabel: '進行中',
           title: '正式リリース・商用化',
-          items: ['全プロダクト正式リリース（v1.0）', '✅ MCP サーバ PyPI 公開済み（uvx alpha-forge-mcp・Claude Code / Codex / Cursor）', '✅ FRED/ALFRED マクロデータ provider 出荷済み（forge data alt fetch FRED: / backtest --regime-filter macro:）', 'サポート・コミュニティ体制整備'],
+          items: ['全プロダクト正式リリース（v1.0）', '✅ MCP サーバ PyPI 公開済み（uvx alpha-forge-mcp・Claude Code / Codex / Cursor）', '✅ FRED/ALFRED マクロデータ provider 出荷済み（alpha-forge data alt fetch FRED: / backtest --regime-filter macro:）', 'サポート・コミュニティ体制整備'],
         },
       ],
     },
@@ -308,7 +308,7 @@ window.COPY = {
         { q: '動作環境は？', a: 'macOS（Apple Silicon / Intel）、Windows 10 以降、Linux に対応した単一バイナリで配布しています。Python やランタイムを別途インストールする必要はなく、ダウンロード後すぐに動作します。' },
         { q: '無料で試せますか？', a: 'Trial プランは Whop 登録不要・期限なしで、インストール直後から利用できます。データは 2023/12/31 まで、最適化は累計 50 回まで、Pine Script 生成は無効、の 3 つの制限があります。フル機能の解放は Lifetime / Annual / Monthly のいずれかを購入後です。' },
         { q: '対応するデータソースは？', a: 'yfinance（株式・ETF）、moomoo（株式・板情報）、OANDA（FX・CFD）、Dukascopy（FX 長期ヒストリカル）の 4 プロバイダーに対応しています。取得したデータはローカルに Parquet キャッシュとして保存されます。' },
-        { q: '過学習（オーバーフィット）対策はどうしていますか？', a: 'Optuna TPE によるベイズ最適化とウォークフォワード分析（WFT）を標準搭載しています。`forge optimize run --split` で IS（学習期間）/ OOS（検証期間）のスコア差を一発で計測でき、過剰最適化の検出に使えます。' },
+        { q: '過学習（オーバーフィット）対策はどうしていますか？', a: 'Optuna TPE によるベイズ最適化とウォークフォワード分析（WFT）を標準搭載しています。`alpha-forge optimize run --split` で IS（学習期間）/ OOS（検証期間）のスコア差を一発で計測でき、過剰最適化の検出に使えます。' },
         { q: 'TradingView は必須ですか？', a: 'alpha-forge 単体での戦略開発・バックテスト・最適化・Pine Script 生成には TradingView は不要です。生成した Pine Script v6 を TradingView でアラート・自動売買に流したい場合や、alpha-strike による自動執行を組む場合のみ TradingView アカウントが必要になります。' },
         { q: 'AI エージェントと組み合わせて使えますか？', a: 'Claude Code / Codex 用のスキル（`/explore-strategies` など）を同梱しています。夜間に未試行の指標 × 銘柄を自律探索するループや、戦略 JSON の自動生成・チューニングといったワークフローを CLI から直接呼び出せます。' },
         { q: '複数 PC で使えますか？／アップデートは？', a: 'Trial・有料プランとも、個人利用の範囲で複数端末に対応します（honor system、詳細は EULA を参照）。Lifetime は常に最新バージョンを利用でき、v2 以降のメジャーアップグレードも追加料金はかかりません。' },
@@ -502,7 +502,7 @@ window.COPY = {
       outExamplesCta: 'See output samples',
       steps: [
         { num: '01', title: 'Install the CLI', desc: 'Install the CLI with a single command on macOS, Linux, or Windows. No Whop registration required.' },
-        { num: '02', title: 'Run a sample strategy & review results', desc: 'Right after install, forge runs on the Trial plan. Backtest a ready-made strategy JSON and inspect metrics, the equity curve, and optimization results.' },
+        { num: '02', title: 'Run a sample strategy & review results', desc: 'Right after install, alpha-forge runs on the Trial plan. Backtest a ready-made strategy JSON and inspect metrics, the equity curve, and optimization results.' },
       ],
       limits: [
         'Data through Dec 31, 2023',
@@ -541,7 +541,7 @@ window.COPY = {
             'alpha-forge core (Beta — purchasable & usable, evolving toward v1.0)',
             'alpha-strike execution server (early development / Dev)',
             'Claude / Codex agent skills (/explore-strategies, etc.)',
-            'FRED / ALFRED macro data provider (forge data alt fetch FRED: / backtest --regime-filter macro:)',
+            'FRED / ALFRED macro data provider (alpha-forge data alt fetch FRED: / backtest --regime-filter macro:)',
           ],
         },
         {
@@ -634,7 +634,7 @@ window.COPY = {
         },
       ],
       buyNow: 'Get Access',
-      note: 'Early Bird Lifetime ($299) is limited to the first 50 buyers. The $299 early-bird coupon is distributed by DM — follow @alforge_bot on X. Once the early-bird seats are taken, Lifetime returns to $799 (capped at 100 total seats). Lifetime always runs on the latest version, with no extra fee for major upgrades like v2. Annual and Monthly are standard-priced subscriptions that always run on the latest version. After purchase, run `forge system auth login` and complete the Whop OAuth flow in your browser to activate.',
+      note: 'Early Bird Lifetime ($299) is limited to the first 50 buyers. The $299 early-bird coupon is distributed by DM — follow @alforge_bot on X. Once the early-bird seats are taken, Lifetime returns to $799 (capped at 100 total seats). Lifetime always runs on the latest version, with no extra fee for major upgrades like v2. Annual and Monthly are standard-priced subscriptions that always run on the latest version. After purchase, run `alpha-forge system auth login` and complete the Whop OAuth flow in your browser to activate.',
       comparison: {
         label: 'Plan Comparison',
         colTrial: 'Trial (no Whop registration)',
@@ -654,7 +654,7 @@ window.COPY = {
     products: {
       label: 'Products',
       title: 'Three layers.\nOne integrated system.',
-      subtitle: 'forge develops and optimizes strategies, visualizer renders the results, and strike auto-executes on external webhook signals — a complete three-layer loop.',
+      subtitle: 'alpha-forge develops and optimizes strategies, visualizer renders the results, and strike auto-executes on external webhook signals — a complete three-layer loop.',
       items: [
         {
           id: 'forge',
@@ -674,7 +674,7 @@ window.COPY = {
           icon: '▦',
           name: 'visualizer',
           role: 'Visualization & Analytics Dashboard',
-          desc: 'Open-source browser dashboard that visualizes forge backtest and optimization results. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff — all in one click. Runs independently of forge.',
+          desc: 'Open-source browser dashboard that visualizes alpha-forge backtest and optimization results. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff — all in one click. Runs independently of forge.',
           tags: ['Python', 'React', 'SQLite', 'PyPI', 'MIT'],
           accent: 'var(--accent)',
         },
@@ -728,7 +728,7 @@ window.COPY = {
         { period: 'Late March 2026', status: 'done', badgeLabel: 'Done', title: 'Live Execution Integration', items: ['alpha-strike Webhook server', 'OANDA & moomoo API execution', 'Execution & response event analysis pipeline'] },
         { period: 'April 2026', status: 'done', badgeLabel: 'Done', title: 'Productization', items: ['License management, binary distribution & CI/CD pipeline', 'Official site launch', 'Claude-driven autonomous parameter search'] },
         { period: 'May 2026', status: 'done', badgeLabel: 'Done', title: 'Beta Release', items: ['alpha-forge v0.4.0 release (macOS / Windows / Linux binaries)', 'alpha-visualizer v0.2.0 published (OSS, TradingView Lightweight Charts)', 'Trial plan launched', 'Documentation polish'] },
-        { period: 'Summer 2026', status: 'active', badgeLabel: 'Active', title: 'Public Launch & Commercialization', items: ['Full v1.0 product release', '✅ MCP server published on PyPI — uvx alpha-forge-mcp (Claude Code / Codex / Cursor)', '✅ FRED/ALFRED macro data provider shipped (forge data alt fetch FRED: / backtest --regime-filter macro:)', 'Support & community setup'] },
+        { period: 'Summer 2026', status: 'active', badgeLabel: 'Active', title: 'Public Launch & Commercialization', items: ['Full v1.0 product release', '✅ MCP server published on PyPI — uvx alpha-forge-mcp (Claude Code / Codex / Cursor)', '✅ FRED/ALFRED macro data provider shipped (alpha-forge data alt fetch FRED: / backtest --regime-filter macro:)', 'Support & community setup'] },
       ],
     },
     faq: {
@@ -738,7 +738,7 @@ window.COPY = {
         { q: 'What operating systems are supported?', a: 'macOS (Apple Silicon / Intel), Windows 10 or later, and Linux. AlphaForge ships as a single binary — no Python or runtime install is required. Just download and run.' },
         { q: 'Can I try it for free?', a: 'Yes. The Trial plan requires no Whop signup and never expires. It runs immediately after install, with three limits: historical data through 2023/12/31, up to 50 cumulative optimization runs, and no Pine Script generation. Full functionality unlocks with a Lifetime / Annual / Monthly purchase.' },
         { q: 'Which data sources are supported?', a: 'yfinance (equities / ETFs), moomoo (equities with deeper order book), OANDA (FX / CFD), and Dukascopy (long-horizon FX historical) — four providers in total. All fetched data is cached locally as Parquet on your machine.' },
-        { q: 'How does AlphaForge avoid overfitting?', a: 'Optuna TPE Bayesian optimization and Walk-Forward Test (WFT) are standard. Run `forge optimize run --split` to get in-sample and out-of-sample scores in one command — the gap between them is the primary overfitting signal.' },
+        { q: 'How does AlphaForge avoid overfitting?', a: 'Optuna TPE Bayesian optimization and Walk-Forward Test (WFT) are standard. Run `alpha-forge optimize run --split` to get in-sample and out-of-sample scores in one command — the gap between them is the primary overfitting signal.' },
         { q: 'Do I need TradingView?', a: 'No, not for strategy authoring, backtesting, optimization, or Pine Script generation — alpha-forge runs standalone. You only need TradingView if you want to deploy the generated Pine Script v6 for alerts/automation on TradingView, or if you wire alpha-strike for automated execution.' },
         { q: 'Can I use it with AI coding agents?', a: 'Yes. Skills for Claude Code and Codex (e.g., `/explore-strategies`) are bundled, so you can run overnight autonomous loops that explore untried indicator × symbol combinations or auto-generate and tune strategy JSON from the CLI.' },
         { q: 'Can I use it on multiple machines? What about updates?', a: 'Both Trial and paid plans cover personal use on multiple devices on an honor-system basis (see the EULA for details). Lifetime always runs on the latest version, with no extra fee for major upgrades like v2.' },

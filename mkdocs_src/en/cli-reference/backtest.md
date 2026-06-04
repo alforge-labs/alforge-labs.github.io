@@ -544,18 +544,18 @@ alpha-forge backtest chart [RESULT_ID] [--open] [--compare <ID> ...]
 ### Sample output
 
 ```text
-📊 To view charts, start `vis serve` (alpha-visualizer):
+📊 To view charts, start `alpha-vis serve` (alpha-visualizer):
    http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
 ```
 
 When comparing strategies:
 
 ```text
-📊 To view charts, start `vis serve` (alpha-visualizer):
+📊 To view charts, start `alpha-vis serve` (alpha-visualizer):
    http://localhost:8000/?ids=sma_crossover,rsi_reversion
 ```
 
-The command itself only prints a URL. To view charts, start `vis serve` ([alpha-visualizer](https://github.com/ysakae/alpha-visualizer)).
+The command itself only prints a URL. To view charts, start `alpha-vis serve` ([alpha-visualizer](https://github.com/ysakae/alpha-visualizer)).
 
 ---
 

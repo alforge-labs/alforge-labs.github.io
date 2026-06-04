@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AlphaForge forge インストーラー / AlphaForge forge installer
+# AlphaForge インストーラー / AlphaForge installer
 # Usage:
 #   bash <(curl -sSL https://alforge-labs.github.io/install.sh)
 #   bash <(curl -sSL https://alforge-labs.github.io/install.sh) --dry-run
@@ -440,7 +440,7 @@ else
               "Dry run complete. Re-run without --dry-run to actually install.")"
 fi
 
-# ── 9. ライセンス認証の案内（forge system auth login）────────────
+# ── 9. ライセンス認証の案内（alpha-forge system auth login）────────────
 echo ""
 echo "$(lang "次のステップ: ライセンス認証" "Next step: license activation")"
 echo "  $(lang "AlphaForge は Whop OAuth でライセンス認証を行います。" \
