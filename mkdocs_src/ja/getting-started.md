@@ -39,7 +39,7 @@ AlphaForge CLI のインストールから最初のバックテスト結果を�
     irm https://alforge-labs.github.io/install.ps1 | iex
     ```
 
-    インストール後、**新しいターミナルを開いてから**次に進んでください。
+    インストール後、**開いているターミナルをすべて閉じて、新しいターミナルを開いてから**次に進んでください（起動済みの Windows Terminal の新しいタブ／ウィンドウには PATH の変更が反映されません）。
 
 === "macOS / Linux"
 
@@ -326,7 +326,7 @@ alpha-vis serve
 
 === "Windows"
 
-    PowerShell（管理者権限不要）で以下を実行してください。バイナリ一式（`forge.dist\` ディレクトリ）を `%LOCALAPPDATA%\Programs\alpha-forge\` に展開し、同階層の `forge.cmd` ラッパーを User PATH に追加します。
+    PowerShell（管理者権限不要）で以下を実行してください。バイナリ一式（`forge.dist\` ディレクトリ）を `%LOCALAPPDATA%\Programs\alpha-forge\` に展開し、同階層に `alpha-forge.cmd` ラッパーを生成して、そのディレクトリを User PATH に自動登録します。
 
     ```powershell
     irm https://alforge-labs.github.io/install.ps1 | iex
@@ -342,7 +342,7 @@ alpha-vis serve
         Windows の表示言語（`CurrentUICulture`）から自動判定します。明示的に切り替える場合は `$env:FORGE_INSTALL_LOCALE = "en"` を `irm | iex` の前に設定してください（`ja` または `en`）。
 
     !!! tip "新しいターミナル"
-        インストール後、新しいターミナルウィンドウを開いてから次の手順に進んでください。
+        インストール後、開いているターミナルをすべて閉じてから新しいターミナルを開いて次の手順に進んでください。起動済みの Windows Terminal が残っていると、新しいタブ／ウィンドウにも PATH の変更が反映されません。
 
 === "手動インストール"
 
@@ -499,6 +499,7 @@ alpha-forge pine generate --strategy sma_cross_qs
 | エラーメッセージ / 症状 | 原因と対処 |
 |------------------------|-----------|
 | `command not found: forge` / `command not found: alpha-forge` | 新しいターミナルを開くか、`source ~/.bashrc` / `source ~/.zshrc` を実行してください。それでも出る場合は `ls ~/.local/bin/alpha-forge` でバイナリの存在を確認し、`echo $PATH` に `~/.local/bin` が含まれているか確認してください。 |
+| （Windows）`alpha-forge: The term 'alpha-forge' is not recognized ...` | 開いているターミナルをすべて閉じてから新しく開き直してください（起動済みの Windows Terminal の新しいタブには PATH が反映されません）。それでも出る場合は `[Environment]::GetEnvironmentVariable('PATH','User')` に `%LOCALAPPDATA%\Programs\alpha-forge` が独立したエントリとして含まれるか確認し、含まれない・壊れている場合はインストーラーを再実行してください（自動修復されます）。 |
 | 初回コマンドで `[y/n]` プロンプトが出る / 非対話実行で `Aborted!` | 初回のみ EULA 同意プロンプトが表示されます。対話端末では `y` を入力してください。CI・パイプ・エージェントなどの非対話環境では環境変数 `FORGE_ACCEPT_EULA=1` を設定すると初回 EULA に自動同意して続行できます（対応バージョン以降）。同意状態は `~/.config/forge/` に記録され次回以降は出ません。 |
 | `戦略 'sma_cross_qs' が見つかりません` / `Strategy not found` | `alpha-forge strategy save sma_cross.json` を先に実行して戦略 DB に登録してください。または `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...` のように `--strategy-file` で JSON を直接指定できます。 |
 | `FileNotFoundError: データが見つかりません: SPY (1d)` / `No data found for SPY` | `alpha-forge system init` を実行していない / `forge.yaml` が無いと自動取得が動きません。ステップ 2 の `alpha-forge system init` を先に実行するか、`alpha-forge data fetch SPY --period 5y` を手動で先に実行してください。 |

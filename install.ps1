@@ -106,6 +106,56 @@ function Invoke-WithSpinner {
     }
 }
 
+# User PATH に InstallRoot を統合した新しい PATH 文字列を計算する純粋関数
+# （副作用なし。tests/test_install_ps1_path_merge.py が AST 抽出して検証する）。
+# - 空エントリと旧レイアウトのエントリ（$RemoveDirs）を除去する
+# - 過去の単一エントリ連結バグで「<別エントリ><InstallRoot>」とセミコロン無しで
+#   壊れたエントリは前半部分に分割修復する（InstallRoot 自体は末尾追加に任せる）
+# - InstallRoot が含まれなければ末尾に追加する
+# 戻り値: @{ NewPath = <新 PATH 文字列>; Repaired = <修復した壊れエントリの配列> }
+function Get-MergedUserPath {
+    param(
+        [string]$CurrentPath,
+        [string]$InstallRoot,
+        [string[]]$RemoveDirs = @()
+    )
+
+    $entries = if ($CurrentPath) { $CurrentPath -split ";" } else { @() }
+
+    # 壊れエントリの修復: InstallRoot で終わるが完全一致しないエントリは
+    # 連結バグの産物（再実行による多重連結も while で全て剥がす）
+    $repaired = @()
+    $cleaned = @()
+    foreach ($entry in $entries) {
+        $e = $entry
+        while ($e.Length -gt $InstallRoot.Length -and
+               $e.EndsWith($InstallRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $e = $e.Substring(0, $e.Length - $InstallRoot.Length)
+        }
+        if ($e -ne $entry) {
+            $repaired += $entry
+            if ($e) { $cleaned += $e }
+        } else {
+            $cleaned += $entry
+        }
+    }
+
+    # @(...) で配列性を保証する。結果が 1 件だとスカラー文字列に縮退し、
+    # 後段の `+` が配列追加でなく文字列連結になって PATH を破壊するため
+    # （素の Windows は User PATH が WindowsApps 1 エントリのみが典型で、
+    # 初回インストールの大半が該当していた）。
+    $cleaned = @($cleaned | Where-Object { $_ -ne "" -and $RemoveDirs -notcontains $_ })
+
+    if ($cleaned -notcontains $InstallRoot) {
+        $cleaned = @($cleaned) + $InstallRoot
+    }
+
+    return [PSCustomObject]@{
+        NewPath  = ($cleaned -join ";")
+        Repaired = $repaired
+    }
+}
+
 if ($DryRun) {
     Write-Host (L "[dry-run] 実際のインストールは行いません。" "[dry-run] No actual installation will be performed.") -ForegroundColor Cyan
 }
@@ -314,18 +364,12 @@ try {
 
     # ── 5. PATH 自動登録 ─────────────────────────────────────────────
     $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
-    $pathEntries = if ($currentPath) { $currentPath -split ";" } else { @() }
-    # 旧エントリを除去
-    $pathEntries = $pathEntries | Where-Object {
-        $_ -ne "" -and
-        $_ -ne $OLD_PROGRAM_DIR -and
-        $_ -ne (Split-Path -Parent $OLD_USER_BIN)
+    $merged = Get-MergedUserPath -CurrentPath $currentPath -InstallRoot $INSTALL_ROOT `
+        -RemoveDirs @($OLD_PROGRAM_DIR, (Split-Path -Parent $OLD_USER_BIN))
+    foreach ($broken in $merged.Repaired) {
+        Write-Warn ((L "壊れた PATH エントリを修復しました" "Repaired a corrupted PATH entry") + ": $broken")
     }
-    # 新エントリが含まれなければ追加
-    if ($pathEntries -notcontains $INSTALL_ROOT) {
-        $pathEntries = $pathEntries + $INSTALL_ROOT
-    }
-    $newPath = ($pathEntries -join ";")
+    $newPath = $merged.NewPath
 
     if ($newPath.Length -gt 2048) {
         Write-Warn (L "User PATH が 2048 文字を超えています。手動で追加してください:" "User PATH exceeds 2048 chars; please add it manually:")

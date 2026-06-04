@@ -2994,7 +2994,7 @@
 <p>Run in PowerShell (no admin rights needed).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
 </code></pre></div>
-<p>After installation, <strong>open a new terminal</strong> before continuing.</p>
+<p>After installation, <strong>close all open terminals and open a new one</strong> before continuing (new tabs/windows of an already-running Windows Terminal do not pick up the PATH change).</p>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
@@ -3333,7 +3333,7 @@ by hand.</p>
 </div>
 </div>
 <div class="tabbed-block">
-<p>Run this in PowerShell (no administrator rights required). It extracts the bundled binary set (<code>forge.dist\</code>) into <code>%LOCALAPPDATA%\Programs\alpha-forge\</code> and adds the sibling <code>forge.cmd</code> launcher to your User PATH.</p>
+<p>Run this in PowerShell (no administrator rights required). It extracts the bundled binary set (<code>forge.dist\</code>) into <code>%LOCALAPPDATA%\Programs\alpha-forge\</code>, generates the sibling <code>alpha-forge.cmd</code> launcher, and automatically registers that directory in your User PATH.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
 </code></pre></div>
 <p>If a legacy install (<code>$HOME\bin\forge.exe</code> or <code>C:\Program Files\forge\forge.exe</code>) is detected, it is removed after confirmation and replaced with the new layout. To preview what the installer would do without touching the filesystem, run with <code>-DryRun</code>:</p>
@@ -3345,7 +3345,7 @@ by hand.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">New terminal</p>
-<p>Open a new terminal window after installation before continuing.</p>
+<p>Close all open terminals after installation, then open a new one before continuing. While an already-running Windows Terminal process remains, even its new tabs/windows will not pick up the PATH change.</p>
 </div>
 </div>
 <div class="tabbed-block">
@@ -3507,6 +3507,10 @@ by hand.</p>
 <tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
 <td>Open a new terminal or run <code>source ~/.bashrc</code> / <code>source ~/.zshrc</code>. If that doesn't help, confirm the binary exists with <code>ls ~/.local/bin/alpha-forge</code> and that <code>echo $PATH</code> includes <code>~/.local/bin</code>.</td>
+</tr>
+<tr>
+<td>(Windows) <code>alpha-forge: The term 'alpha-forge' is not recognized ...</code></td>
+<td>Close all open terminals and open a new one (new tabs of an already-running Windows Terminal do not pick up PATH changes). If it persists, check that <code>[Environment]::GetEnvironmentVariable('PATH','User')</code> contains <code>%LOCALAPPDATA%\Programs\alpha-forge</code> as a standalone entry; if it is missing or corrupted, re-run the installer (it repairs the entry automatically).</td>
 </tr>
 <tr>
 <td>First command shows a <code>[y/n]</code> prompt / <code>Aborted!</code> in non-interactive runs</td>
