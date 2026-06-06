@@ -330,6 +330,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # target_qty による closed-loop 数量解決（既定 ON、v0.7.0+）。payload の
 # target_qty（目標絶対保有量）と実保有の差分から発注数量・方向を再解決する。
 # 旧 delta 解釈に戻す場合のみ設定: MOOMOO_TARGET_QTY_RECONCILE=0
+# GTC 注文の翌営業日約定をイベントログへ反映する遅延再照合（既定 ON、v0.7.1+）。
+# 間隔調整は PENDING_RECONCILE_INTERVAL_SECONDS=600、
+# 無効化する場合のみ設定: PENDING_RECONCILE_ENABLED=0
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>
