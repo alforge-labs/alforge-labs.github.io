@@ -321,6 +321,10 @@ MOOMOO_TRADE_ENV=SIMULATE
 # after the market close, so GTC carries them over to the next session's open
 # (with DAY they would expire unfilled).
 # Set MOOMOO_TIME_IN_FORCE=DAY only to restore the legacy behavior.
+# Closed-loop quantity resolution via target_qty (default ON, v0.7.0+).
+# Re-resolves the order side/quantity from the difference between the
+# payload's target_qty (absolute target holding) and the actual position.
+# Set MOOMOO_TARGET_QTY_RECONCILE=0 only to restore the legacy delta mode.
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>

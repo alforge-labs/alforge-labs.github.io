@@ -2860,16 +2860,24 @@ line:</p>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;buy&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;ticker&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;US.TQQQ&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">33</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat_qqq_hedged_v1&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;sub_strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tqqq_phase2&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;portfolio_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat_qqq_hedged_v1&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20260529-135959&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="nt">&quot;timeframe&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1D&quot;</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;target_qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat_qqq_hedged_v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;sub_strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tqqq_phase2&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;portfolio_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat_qqq_hedged_v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">&quot;signal_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20260529-135959&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="nt">&quot;run_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="nt">&quot;timeframe&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1D&quot;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>run_mode</code> is <code>paper</code> or <code>live</code>, switchable from the TradingView input
 panel. Keep <code>paper</code> during validation to route to moomoo SIMULATE.</p>
+<p><code>target_qty</code> is the sub-strategy's <strong>absolute target holding</strong> (alpha-forge
+<a href="https://github.com/ysakae/alpha-forge/issues/1037">#1037</a>). alpha-strike
+v0.7.0+ re-resolves the order side/quantity from the difference between
+<code>target_qty</code> and the broker's actual position, so even if zero fills,
+partial fills, or rounding drift Pine's assumed position, the real holding
+converges back to the target on the next signal (closed-loop). <code>quantity</code>
+remains as the delta fallback for versions without <code>target_qty</code> support.</p>
 <h2 id="hmm-forward-algorithm-reproduction-issue-974">HMM Forward Algorithm reproduction (issue <a href="https://github.com/ysakae/alpha-forge/issues/974">#974</a>)<a class="headerlink" href="#hmm-forward-algorithm-reproduction-issue-974" title="Permanent link">&para;</a></h2>
 <p>When the combine includes an HMM regime strategy, pass
 <code>--with-training-data</code> to fetch each HMM's training data in parallel,
