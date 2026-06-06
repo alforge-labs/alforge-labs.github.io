@@ -67,6 +67,17 @@ URL クエリで `selectedId` / `compareIds` が同期されるため、特定�
 - リスク管理（ストップ・ポジションサイジング）
 - ターゲット銘柄・タイムフレーム
 
+## Live 画面
+
+ライブ / ペーパートレード実績の一覧と、バックテストとの突き合わせ。`/live` でアクセスでき、Browse 画面ヘッダの「Live →」リンクからも遷移できます。
+
+- ライブ実績を持つエントリの一覧（戦略単位 / combine ポートフォリオの両方）
+- **戦略単位**（trade ベース）: 総取引数・勝率・プロフィットファクター・最大 DD・純 PnL を、同期間のバックテスト値と diff 付きで比較
+- **combine ポートフォリオ**（position ベース）: トータルリターン・CAGR・シャープレシオ・最大 DD・ボラティリティと live equity カーブを、バックテスト combine と比較
+- 選択エントリは URL クエリ（`?id=`）に同期されるため共有可能
+
+ライブ実績データは AlphaForge CLI（`alpha-forge live sync-events` → `live import-events` / `live replay`）で `backtest_results.db` に取り込んだものが自動で表示されます。
+
 ## Ideas 画面
 
 探索アイデアの一覧と状態管理。

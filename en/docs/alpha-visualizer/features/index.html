@@ -1477,6 +1477,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ideas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2622,6 +2633,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ideas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2787,6 +2809,15 @@
 <li>Risk management (stop logic, position sizing)</li>
 <li>Target symbols and timeframe</li>
 </ul>
+<h2 id="live">Live<a class="headerlink" href="#live" title="Permanent link">&para;</a></h2>
+<p>Browse live / paper trading records and compare them against backtests. Accessible at <code>/live</code>, or via the "Live →" link in the Browse header.</p>
+<ul>
+<li>Lists every entry with live records (both per-strategy and combine portfolios)</li>
+<li><strong>Per-strategy</strong> (trade-based): total trades, win rate, profit factor, max drawdown, and net PnL compared with the period-aligned backtest, with diffs</li>
+<li><strong>Combine portfolios</strong> (position-based): total return, CAGR, Sharpe ratio, max drawdown, and volatility with the live equity curve, compared against the backtest combine</li>
+<li>The selected entry is synced to the URL query (<code>?id=</code>) for sharing</li>
+</ul>
+<p>Live records imported into <code>backtest_results.db</code> via the AlphaForge CLI (<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>) appear automatically.</p>
 <h2 id="ideas">Ideas<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>Browse exploration ideas and their state.</p>
 <p><img alt="Ideas view" loading="lazy" src="../assets/ideas.png" /></p>

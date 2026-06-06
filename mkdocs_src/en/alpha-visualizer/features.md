@@ -67,6 +67,17 @@ Visualize the structure of a strategy JSON.
 - Risk management (stop logic, position sizing)
 - Target symbols and timeframe
 
+## Live
+
+Browse live / paper trading records and compare them against backtests. Accessible at `/live`, or via the "Live →" link in the Browse header.
+
+- Lists every entry with live records (both per-strategy and combine portfolios)
+- **Per-strategy** (trade-based): total trades, win rate, profit factor, max drawdown, and net PnL compared with the period-aligned backtest, with diffs
+- **Combine portfolios** (position-based): total return, CAGR, Sharpe ratio, max drawdown, and volatility with the live equity curve, compared against the backtest combine
+- The selected entry is synced to the URL query (`?id=`) for sharing
+
+Live records imported into `backtest_results.db` via the AlphaForge CLI (`alpha-forge live sync-events` → `live import-events` / `live replay`) appear automatically.
+
 ## Ideas
 
 Browse exploration ideas and their state.

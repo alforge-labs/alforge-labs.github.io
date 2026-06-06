@@ -1477,6 +1477,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live 画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ideas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2622,6 +2633,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live 画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ideas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2787,6 +2809,15 @@
 <li>リスク管理（ストップ・ポジションサイジング）</li>
 <li>ターゲット銘柄・タイムフレーム</li>
 </ul>
+<h2 id="live">Live 画面<a class="headerlink" href="#live" title="Permanent link">&para;</a></h2>
+<p>ライブ / ペーパートレード実績の一覧と、バックテストとの突き合わせ。<code>/live</code> でアクセスでき、Browse 画面ヘッダの「Live →」リンクからも遷移できます。</p>
+<ul>
+<li>ライブ実績を持つエントリの一覧（戦略単位 / combine ポートフォリオの両方）</li>
+<li><strong>戦略単位</strong>（trade ベース）: 総取引数・勝率・プロフィットファクター・最大 DD・純 PnL を、同期間のバックテスト値と diff 付きで比較</li>
+<li><strong>combine ポートフォリオ</strong>（position ベース）: トータルリターン・CAGR・シャープレシオ・最大 DD・ボラティリティと live equity カーブを、バックテスト combine と比較</li>
+<li>選択エントリは URL クエリ（<code>?id=</code>）に同期されるため共有可能</li>
+</ul>
+<p>ライブ実績データは AlphaForge CLI（<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>）で <code>backtest_results.db</code> に取り込んだものが自動で表示されます。</p>
 <h2 id="ideas">Ideas 画面<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>探索アイデアの一覧と状態管理。</p>
 <p><img alt="Ideas 画面" loading="lazy" src="../assets/ideas.png" /></p>
