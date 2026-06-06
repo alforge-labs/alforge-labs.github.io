@@ -317,6 +317,10 @@ MOOMOO_TRADE_ENV=SIMULATE
 # Over-sell guard (default ON): clamps a SELL to the actual position,
 # skips it when no position is held — prevents moomoo "Not enough positions".
 # Set MOOMOO_SELL_POSITION_GUARD=0 only to disable.
+# Time-in-force for US-market MARKET orders (default GTC). Daily alerts arrive
+# after the market close, so GTC carries them over to the next session's open
+# (with DAY they would expire unfilled).
+# Set MOOMOO_TIME_IN_FORCE=DAY only to restore the legacy behavior.
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>

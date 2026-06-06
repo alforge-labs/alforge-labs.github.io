@@ -324,6 +324,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # over-sell ガード（既定 ON）。実保有を超える SELL は実保有まで clamp、
 # 建玉ゼロは skip し、moomoo の "Not enough positions" を防ぐ。
 # 無効化する場合のみ設定: MOOMOO_SELL_POSITION_GUARD=0
+# 米国市場の成行注文の有効期限（既定 GTC）。日足アラートは市場クローズ後に
+# 届くため、GTC で翌営業日寄付に持ち越して約定させる（DAY だと約定せず失効）。
+# 旧挙動に戻す場合のみ設定: MOOMOO_TIME_IN_FORCE=DAY
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>
