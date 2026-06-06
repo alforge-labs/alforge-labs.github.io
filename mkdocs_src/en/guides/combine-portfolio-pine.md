@@ -80,6 +80,7 @@ line:
   "action": "buy",
   "ticker": "US.TQQQ",
   "quantity": 33,
+  "target_qty": 47,
   "strategy_id": "beat_qqq_hedged_v1",
   "sub_strategy_id": "tqqq_phase2",
   "portfolio_id": "beat_qqq_hedged_v1",
@@ -91,6 +92,14 @@ line:
 
 `run_mode` is `paper` or `live`, switchable from the TradingView input
 panel. Keep `paper` during validation to route to moomoo SIMULATE.
+
+`target_qty` is the sub-strategy's **absolute target holding** (alpha-forge
+[#1037](https://github.com/ysakae/alpha-forge/issues/1037)). alpha-strike
+v0.7.0+ re-resolves the order side/quantity from the difference between
+`target_qty` and the broker's actual position, so even if zero fills,
+partial fills, or rounding drift Pine's assumed position, the real holding
+converges back to the target on the next signal (closed-loop). `quantity`
+remains as the delta fallback for versions without `target_qty` support.
 
 ## HMM Forward Algorithm reproduction (issue [#974](https://github.com/ysakae/alpha-forge/issues/974))
 

@@ -77,6 +77,7 @@ alpha-forge pine generate \
   "action": "buy",
   "ticker": "US.TQQQ",
   "quantity": 33,
+  "target_qty": 47,
   "strategy_id": "beat_qqq_hedged_v1",
   "sub_strategy_id": "tqqq_phase2",
   "portfolio_id": "beat_qqq_hedged_v1",
@@ -88,6 +89,13 @@ alpha-forge pine generate \
 
 `run_mode` は `paper` か `live` の二択で、TradingView 上の入力で切替可能。
 ペーパー検証中は必ず `paper` を指定して moomoo SIMULATE 環境に流すこと。
+
+`target_qty` はそのサブ戦略の **目標絶対保有量** です（alpha-forge
+[#1037](https://github.com/ysakae/alpha-forge/issues/1037)）。alpha-strike
+v0.7.0+ は `target_qty` と broker 実保有の差分から発注数量・方向を再解決する
+ため、0 約定・部分約定・端数で Pine の想定保有がズレても次のシグナルで実保有が
+target に収束します（closed-loop）。`quantity` は target_qty 非対応バージョン
+向けの増減量フォールバックです。
 
 ## HMM Forward Algorithm の完全再現 (issue [#974](https://github.com/ysakae/alpha-forge/issues/974))
 

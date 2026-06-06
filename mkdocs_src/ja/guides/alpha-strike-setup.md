@@ -327,6 +327,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # 米国市場の成行注文の有効期限（既定 GTC）。日足アラートは市場クローズ後に
 # 届くため、GTC で翌営業日寄付に持ち越して約定させる（DAY だと約定せず失効）。
 # 旧挙動に戻す場合のみ設定: MOOMOO_TIME_IN_FORCE=DAY
+# target_qty による closed-loop 数量解決（既定 ON、v0.7.0+）。payload の
+# target_qty（目標絶対保有量）と実保有の差分から発注数量・方向を再解決する。
+# 旧 delta 解釈に戻す場合のみ設定: MOOMOO_TARGET_QTY_RECONCILE=0
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>
