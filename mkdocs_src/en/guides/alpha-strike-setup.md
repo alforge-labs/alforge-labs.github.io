@@ -325,6 +325,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # Re-resolves the order side/quantity from the difference between the
 # payload's target_qty (absolute target holding) and the actual position.
 # Set MOOMOO_TARGET_QTY_RECONCILE=0 only to restore the legacy delta mode.
+# Delayed re-reconciliation that reflects next-day GTC fills into the event
+# log (default ON, v0.7.1+). Tune with PENDING_RECONCILE_INTERVAL_SECONDS=600.
+# Set PENDING_RECONCILE_ENABLED=0 only to disable.
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>
