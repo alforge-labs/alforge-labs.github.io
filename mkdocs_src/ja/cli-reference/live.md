@@ -80,13 +80,12 @@ alpha-forge live events [OPTIONS]
 ### サンプル出力
 
 ```text
-timestamp           strategy_id     broker      event_type   symbol   side   qty   price
-2026-04-15 09:31    spy_sma_v1      ibkr        fill         SPY      long   100   452.30
-2026-04-15 14:02    spy_sma_v1      ibkr        close        SPY      long   100   458.12
-...
+=== live events ===
+2026-04-15T09:31:00+00:00 | fill | spy_sma_v1 | SPY | buy | filled | sig_0042
+2026-04-15T14:02:00+00:00 | trade_closed | spy_sma_v1 | SPY | sell | closed | sig_0042
 ```
 
-整形は `format_live_events` に依存します。
+整形は `format_live_events` に依存します。各行はパイプ（`|`）区切りで、`timestamp`（ISO 形式）/ `event_type` / `strategy_id` / `symbol`（`ticker`）/ `side`（`action`）/ `status` / `signal_id` の順に出力されます。`broker` / `qty` / `price` 列はありません。`--broker` オプションで絞り込みは可能ですが、`broker` 値そのものは行に表示されません。
 
 ---
 
@@ -109,20 +108,34 @@ alpha-forge live convert-check [--strategy-id <ID>]
 ### サンプル出力
 
 ```text
-=== Conversion readiness ===
-strategy_id              fill_events   close_events   matched   pending   status
-spy_sma_v1                        18             16        16         2   partial
-qqq_hmm_macd_ema_rsi_v1            8              8         8         0   ready
-broken_v1                          5              0         0         5   missing close events
+=== event conversion report ===
+strategy_id                     : spy_sma_v1
+total_events                    : 96
+total_signals                   : 20
+total_orders                    : 18
+total_fills                     : 16
+total_trade_closed              : 16
+accepted_orders                 : 18
+failed_orders                   : 0
+live_events                     : 80
+paper_events                    : 16
+signals_without_orders          : 2
+accepted_missing_strategy_meta  : 0
+accepted_missing_snapshot_id    : 0
+accepted_missing_fill_data      : 2
+accepted_missing_close_data     : 2
+fill_events_missing_trade_id    : 0
+trade_closed_missing_pnl        : 0
+conversion_ready                : yes
 ```
 
-整形は `format_event_conversion_report` に依存します。
+整形は `format_event_conversion_report`（`EventConversionReport` モデル）に依存します。ヘッダは `=== event conversion report ===` で、各フィールドは `key : value` 形式で出力されます。`conversion_ready` は `yes` / `no`。変換を妨げる要因がある場合は末尾に `blockers :` とその一覧が表示されます。`matched` / `pending` / `status`（ready/partial/missing）といった列はありません。
 
 ---
 
 ## alpha-forge live import-events
 
-`fill` / `close` event から trade records を生成し、`<live_path>/trades/<strategy_id>.json` および `<live_path>/summaries/<strategy_id>.json` に保存します。
+`fill` / `close` event から trade records を生成し、SQLite DB（`config.report.output_path` 配下の `backtest_results.db`）に保存します。trades / summaries は v0.12.0 で JSON ファイルから SQLite へ移行済みで、`<live_path>/trades/` や `<live_path>/summaries/` に JSON は作られません。
 
 ### 構文
 
@@ -140,17 +153,18 @@ alpha-forge live import-events <STRATEGY_ID>
 
 - `<live_path>/events/` に該当 `strategy_id` の event ログが存在すること（`alpha-forge live sync-events` で取得済み、または手動配置）
 - 各エントリーに対して **`fill` event と `close` event のペア** が揃っていること
-- 事前に [`alpha-forge live convert-check`](#alpha-forge-live-convert-check) で `status: ready`（または `partial` で許容範囲）を確認しておくこと
-- 1 戦略 ID に対して 1 回実行すれば `<strategy_id>.json` が生成される（再実行で上書き）
+- 事前に [`alpha-forge live convert-check`](#alpha-forge-live-convert-check) で `conversion_ready : yes` を確認しておくこと
+- 1 戦略 ID に対して 1 回実行すれば trade records が SQLite に保存される（再実行で上書き）
 
 ### サンプル出力
 
 ```text
 imported_trades   : 16
 strategy_id       : spy_sma_v1
-trades_file       : data/live/trades/spy_sma_v1.json
-summary_file      : data/live/summaries/spy_sma_v1.json
+db_path           : data/results/backtest_results.db
 ```
+
+出力されるのは `imported_trades` / `strategy_id` / `db_path` の 3 項目のみです（`trades_file` / `summary_file` は出力されません）。trade records は `db_path` が指す SQLite DB に保存されます。
 
 ### 主なエラー
 
@@ -184,19 +198,20 @@ alpha-forge live trades <STRATEGY_ID> [OPTIONS]
 ### サンプル出力
 
 ```text
-trade_id  side    entry_at              exit_at               qty   pnl_pct   exit_reason
-t_0042    long    2026-04-15 09:31      2026-04-15 14:02      100   +1.29%    take_profit
-t_0041    long    2026-04-12 10:05      2026-04-12 15:48      100   -0.42%    stop_loss
-...
+=== live trades ===
+entry_at             symbol     side        qty        entry         exit    net_pnl     ret%   hold_m exit_reason
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+2026-04-15 09:31     SPY        long     100.00     452.3000     458.1200    +582.00   +1.29%      271 take_profit
+2026-04-12 10:05     SPY        long     100.00     451.0000     449.1000    -190.00   -0.42%      343 stop_loss
 ```
 
-整形は `format_live_trades` に依存します。
+整形は `format_live_trades` に依存します。列は `entry_at` / `symbol` / `side` / `qty` / `entry` / `exit` / `net_pnl` / `ret%` / `hold_m`（保有分数）/ `exit_reason`。`trade_id` 列・`exit_at` 列はありません。
 
 ### 主なエラー
 
 | メッセージ | 原因 | 対処 |
 |----------|------|------|
-| `live trade records がありません: <id>` | `<live_path>/trades/<id>.json` 不存在 | `alpha-forge live import-events <id>` で生成 |
+| `live trade records がありません: <id>` | 該当戦略の trade records が SQLite に存在しない | `alpha-forge live import-events <id>` で生成 |
 
 ---
 
@@ -219,18 +234,24 @@ alpha-forge live summary <STRATEGY_ID>
 ### サンプル出力
 
 ```text
-=== spy_sma_v1 / Live Summary ===
-trades            : 16
-win_rate          : 56.3%
-total_pnl_pct     : +8.42%
-avg_win_pct       : +1.85%
-avg_loss_pct      : -1.12%
-max_drawdown_pct  : -4.20%
-sharpe_ratio      : 1.32
-period            : 2026-03-01 → 2026-04-15
+=== spy_sma_v1 live summary ===
+version          : v1.1.0
+snapshot_id      : snap_20260415
+broker           : ibkr
+symbols          : SPY
+total_trades     : 16
+win_rate_pct     : 56.25
+gross_pnl        : 1280.00
+net_pnl          : 1184.50
+profit_factor    : 1.92
+avg_win          : 185.30
+avg_loss         : -112.40
+avg_slippage_bps : 1.80
+total_commission : 95.50
+max_drawdown_pct : -4.20
 ```
 
-整形は `format_live_summary` に依存します。
+整形は `format_live_summary`（`StrategyLiveSummary` モデル）に依存します。フィールドは `version` / `snapshot_id` / `broker` / `symbols` / `total_trades` / `win_rate_pct` / `gross_pnl` / `net_pnl` / `profit_factor` / `avg_win` / `avg_loss` / `avg_slippage_bps` / `total_commission` / `max_drawdown_pct`。`total_pnl_pct` / `sharpe_ratio` / `period` は出力されません。`avg_win` / `avg_loss` は % ではなく絶対額（建玉通貨の損益）です。
 
 ### 主なエラー
 
@@ -259,17 +280,24 @@ alpha-forge live compare <STRATEGY_ID>
 ### サンプル出力
 
 ```text
-=== spy_sma_v1: Backtest vs Live ===
+=== spy_sma_v1 live vs backtest ===
+backtest_run     : run_20260410181522
+backtest_symbol  : SPY
+live_symbols     : SPY
+snapshot_id      : snap_20260415
 
-Metric             Backtest (run_20260410)    Live (2026-03-01 → 2026-04-15)    Diff
-trades             18                          16                                 -2
-win_rate_pct       58.3                        56.3                              -2.0
-total_return_pct   +12.4                       +8.42                             -3.98
-sharpe_ratio       1.45                        1.32                              -0.13
-max_drawdown_pct   -3.80                       -4.20                             -0.40
+metric                 backtest         live         delta
+──────────────────────────────────────────────────────────────
+total_trades                 18           16           -2
+win_rate_pct              58.30%       56.25%       -2.05%
+profit_factor              2.10         1.92        -0.18
+total_return_pct         +12.40%            -            -
+max_drawdown_pct          -3.80%       -4.20%       -0.40%
+net_pnl                       -      1184.50            -
+avg_slippage_bps              -         1.80            -
 ```
 
-整形は `format_live_compare` に依存します。
+整形は `format_live_compare` に依存します。ヘッダは `=== <id> live vs backtest ===` で、`backtest_run` / `backtest_symbol` / `live_symbols` / `snapshot_id` のメタ行に続いて `metric` / `backtest` / `live` / `delta` の表が出力されます。行は `total_trades` / `win_rate_pct` / `profit_factor` / `total_return_pct` / `max_drawdown_pct` / `net_pnl` / `avg_slippage_bps`。`sharpe_ratio` 行はありません。backtest 側にしか無い指標（`total_return_pct`）や live 側にしか無い指標（`net_pnl` / `avg_slippage_bps`）は片側が `-` になります。
 
 ### 主なエラー
 
@@ -302,19 +330,22 @@ alpha-forge live doctor [STRATEGY_ID]
 === live trading doctor ===
 live_path       : data/live
 events_path     : data/live/events
-trades_path     : data/live/trades
-summaries_path  : data/live/summaries
+db_path         : data/results/backtest_results.db
 events_exists   : yes
 event_files     : 24
 hint            : pass a strategy_id to validate trades/summary readiness
 ```
+
+`trades_path` / `summaries_path` は出力されません。trades / summaries は SQLite（`db_path` が指す `backtest_results.db`）に保存されるため、代わりに `db_path` が表示されます。
 
 ### サンプル出力（戦略 ID 指定）
 
 ```text
 === live trading doctor ===
 live_path       : data/live
-...
+events_path     : data/live/events
+db_path         : data/results/backtest_results.db
+events_exists   : yes
 event_files     : 24
 strategy_id     : spy_sma_v1
 trades_exists   : yes
@@ -322,7 +353,7 @@ summary_exists  : yes
 rollout_status  : ready
 ```
 
-`rollout_status` は `events_exists` かつ `event_files > 0` かつ（`trades_exists` か `summary_exists`）が満たされれば `ready`、それ以外は `incomplete`。
+trades はあるが summary が未生成の場合、その場で summary を構築し `summary_built : yes` 行が追加されます。`rollout_status` は `events_exists` かつ `event_files > 0` かつ（`trades_exists` か `summary_exists`）が満たされれば `ready`、それ以外は `incomplete`。
 
 ---
 
@@ -426,12 +457,11 @@ alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1>,<ID2>[,...] [O
 
 ## 共通の挙動
 
-- **保存先**: `<journal_path>/../live/` 配下（`events/`、`trades/`、`summaries/` のサブディレクトリ）
+- **保存先**:
+    - raw event ログ: `<journal_path>/../live/events/`（ファイルシステム上の JSON）
+    - trade records / summary: SQLite DB（`config.report.output_path` 配下の `backtest_results.db`）。v0.12.0 で `trades/` / `summaries/` の JSON ファイルから SQLite へ移行済み
 - **`forge.yaml`**: 上記すべてのパスは `FORGE_CONFIG` が指す `forge.yaml` で決まる
 - **VPS 連携**: `sync-events` は `forge.yaml` の `remote.*` セクションを参照
-- **詳細仕様**: データモデルとロールアウト手順は alpha-forge リポジトリ内の以下を参照
-    - `alpha-forge/docs/live-trading-data-model.md`
-    - `alpha-forge/docs/live-trading-rollout.md`
 - **終了コード**: 通常 `0`、引数エラーは Click が `2`、設定不足や record 不存在は通常 `1`
 
 ---
