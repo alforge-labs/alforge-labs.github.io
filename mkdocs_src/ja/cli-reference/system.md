@@ -52,6 +52,9 @@ alpha-forge system auth status
 
 開発スキップ環境変数（`ALPHA_FORGE_DEV_SKIP_LICENSE=1`）が有効な場合は `[AlphaForge] 開発スキップ中（EULA/認証は未完了）` を表示します。
 
+!!! note "`ALPHA_FORGE_DEV_SKIP_LICENSE` はソース実行限定"
+    この開発スキップ表示は **ソース実行（`uv run` など、`pyproject.toml` が存在する開発ツリー）でのみ有効**です。配布バイナリ（リリース版）では `ALPHA_FORGE_DEV_SKIP_LICENSE=1` を設定しても常に無効となり、上記の `開発スキップ中` は表示されず、未認証時は通常どおり `[AlphaForge] ログイン情報がありません。` が表示されます（意図的な設計）。
+
 ## alpha-forge system auth check op
 
 1Password CLI（`op`）のセッション有効性を検証します。`.env.op` を併用するチームの CI フックで使用するためのもの（issue #411）。詳細は実装コメントを参照。
@@ -71,14 +74,21 @@ alpha-forge system auth check op [--json]
 ## 構文
 
 ```bash
-alpha-forge system init [OPTIONS]
+alpha-forge system init [OPTIONS] [DIRECTORY]
 ```
+
+## 引数
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `DIRECTORY` | 引数（任意） | カレントディレクトリ | 指定したディレクトリを作成し、そこへ初期化ファイル一式を展開する |
 
 ## オプション
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `--force` / `-f` | フラグ | false | 既存ファイルを確認なしで上書き |
+| `--yes` / `-y` | フラグ | false | 展開先の確認プロンプトをスキップ（CI・AI エージェント等の非対話実行向け） |
 | `--no-claude` | フラグ | false | AI アシスタント統合ファイルのセットアップをスキップ |
 | `--template` / `-t` | 選択肢 | `default` | 資産クラス別テンプレートを選択（`crypto` / `fx` / `stocks` / `commodities` / `default`） |
 

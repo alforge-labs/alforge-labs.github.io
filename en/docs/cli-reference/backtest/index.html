@@ -4396,7 +4396,7 @@
 </tr>
 </tbody>
 </table>
-<p>Even with zero trades, the header row is still written so that <code>sort</code> / <code>uniq</code> / <code>diff</code> pipelines do not break on empty stdout. Use <code>--debug</code> in combination to also stream signal-evaluation / mask / metrics DEBUG logs to stderr (only <code>alpha_forge.*</code> loggers are raised).</p>
+<p>Even with zero trades, the header row is still written so that <code>sort</code> / <code>uniq</code> / <code>diff</code> pipelines do not break on empty stdout. <code>--debug</code> raises the <code>alpha_forge.*</code> loggers to DEBUG level, but a backtest that completes normally emits almost no additional DEBUG output (most detailed logs are for diagnosing exceptions). Detailed logs appear on stderr in error paths such as data-fetch failures or signal-evaluation errors.</p>
 <h3 id="benchmark-selection">Benchmark selection logic (F-304)<a class="headerlink" href="#benchmark-selection" title="Permanent link">&para;</a></h3>
 <p>Resolution order when <code>--benchmark</code> is omitted:</p>
 <ol>
@@ -4477,14 +4477,16 @@
 <p><img alt="Backtest 6-Phase Pipeline" src="../../assets/illustrations/backtest/backtest-pipeline-6phases.png" /></p>
 <p>The progress bar is rendered on <strong>stderr</strong>, so combining it with <code>--json</code> keeps stdout as pure JSON (when <code>--json</code> is passed and stderr is a TTY, the dashboard is still drawn on stderr). When stderr is not a TTY (CI, pipes, redirected files), the progress bar is automatically suppressed. This way, <code>--json</code> invocations from agent loops like <code>/explore-strategies</code> show progress in interactive terminals without polluting CI logs.</p>
 <h3 id="sample-output-text">Sample output (text)<a class="headerlink" href="#sample-output-text" title="Permanent link">&para;</a></h3>
+<p>The leading icon is driven by whether the trade count is statistically sufficient (<code>is_valid</code> = <code>total_trades &gt;= 30</code>): <code>✅</code> when sufficient, <code>⚠️</code> when not. The signal quality score line always carries a hint about how to read the score (<code>≥0.7</code> is reliable / <code>0.4–0.7</code> caution / <code>&lt;0.4</code> low reliability).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Running backtest: SPY x sma_crossover_v1
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>✅ Backtest complete  Signal quality score: 0.78/1.0
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Total Return: +52.30%  CAGR: 5.40%
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>MDD: -16.80%  Duration: 187d  Recovery: 92d
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>PF: 1.74  Win%: 50.0%  avg_win: 4.20%  avg_loss: -2.40%
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)  Win streak: 4  Loss streak: 3
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>Win rate CI(90%): 35.2% - 64.8%
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>⚠️ Backtest complete  Signal quality score: 0.38/1.0 (&lt;0.4: low reliability, treat as reference only)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Total Return: +52.30%  CAGR: 5.40%
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>MDD: -16.80%  Duration: 187d  Recovery: 92d
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>PF: 1.74  Win%: 50.0%  avg_win: 4.20%  avg_loss: -2.40%
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)  Win streak: 4  Loss streak: 3
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>Win rate CI(90%): 35.2% - 64.8%
 </code></pre></div>
 <p>When the score or trade count fails the recommended thresholds, a warning and a one-line docs link are added (F-302):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>⚠️  Backtest complete  Signal quality score: 0.43/1.0 (0.4–0.7: caution, more validation suggested)
@@ -4497,10 +4499,16 @@
 </code></pre></div>
 <h3 id="signal-quality-score">Signal Quality Score and Minimum Trades (F-302)<a class="headerlink" href="#signal-quality-score" title="Permanent link">&para;</a></h3>
 <h4 id="signal-quality-score-signal_quality_score-0010">Signal Quality Score (<code>signal_quality_score</code>, 0.0–1.0)<a class="headerlink" href="#signal-quality-score-signal_quality_score-0010" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">sample_size_score</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_trades</span> <span class="o">/</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.4</span>   <span class="c1"># 40%</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">win_rate_score</span>      <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">win_rate_pct</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span>  <span class="c1"># 30%</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">profit_factor_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">profit_factor</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="c1"># 30%</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">signal_quality_score</span> <span class="o">=</span> <span class="n">sample_size_score</span> <span class="o">+</span> <span class="n">win_rate_score</span> <span class="o">+</span> <span class="n">profit_factor_score</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">sharpe_score</span>        <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sharpe_ratio</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>             <span class="c1"># 30%</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">profit_factor_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span><span class="n">profit_factor</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>    <span class="c1"># 20% (0 when profit_factor is None)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">win_rate_score</span>      <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">win_rate_pct</span> <span class="o">-</span> <span class="mf">50.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">30.0</span><span class="p">)</span>             <span class="c1"># 20% (only the portion above 50% win rate contributes)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">sample_size_score</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_trades</span> <span class="o">/</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>                        <span class="c1"># 30%</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">signal_quality_score</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="mf">0.30</span> <span class="o">*</span> <span class="n">sharpe_score</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">profit_factor_score</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">win_rate_score</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="o">+</span> <span class="mf">0.30</span> <span class="o">*</span> <span class="n">sample_size_score</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -5001,12 +5009,21 @@
 </tbody>
 </table>
 <h3 id="sample-output-text-table">Sample output (text table)<a class="headerlink" href="#sample-output-text-table" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>=== Strategy Comparison: SPY (2020-01-01 to present) (3 strategies) ===
+<p>The output uses a <strong>one-row-per-metric</strong> transposed layout. The first strategy you pass is the "baseline" (<code>基準:</code>); for each subsequent strategy the difference from the baseline is shown in the <code>Delta</code> column (<code>✅</code> = improvement / <code>❌</code> = regression). The final line shows the <code>Winner</code> (most improvements; ties broken by Sharpe Ratio). The header column labels are emitted in Japanese (<code>指標</code> = metric, <code>基準:</code> = baseline) regardless of locale.</p>
+<p>The period (e.g. <code>(2020-01-01 to present)</code>) is only added to the header when <code>--start</code> / <code>--end</code> are supplied; otherwise only the strategy count is shown.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>=== Strategy Comparison: SPY (2 strategies) ===
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>Strategy        Return    CAGR  Sharpe     MDD   Win%      PF  Trades
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>spy_sma_v1     +52.3%   5.40    0.92  -16.8%   50%   1.74      14
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>spy_macd_v1    +38.1%   4.20    1.18  -15.6%   58%   1.92      12
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>────────────────────────────────────────────────────────────
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>────────────────────────────────────────────────────────────
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>Sharpe Ratio                       0.92            1.18          +0.26 ✅
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>Total Return %                    52.30%          38.10%         -14.2% ❌
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>CAGR %                             5.40%           4.20%          -1.2% ❌
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>Max Drawdown %                   -16.80%         -15.60%          +1.2% ✅
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>Win Rate %                        50.00%          58.00%          +8.0% ✅
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>Profit Factor                      1.74            1.92          +0.18 ✅
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>────────────────────────────────────────────────────────────
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>Winner: sma_cross_qs (4/6 metrics)
 </code></pre></div>
 <h3 id="common-errors_3">Common errors<a class="headerlink" href="#common-errors_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -5244,11 +5261,12 @@
 </tbody>
 </table>
 <h3 id="sample-output_5">Sample output<a class="headerlink" href="#sample-output_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>📊 To view charts, start `alpha-vis serve` (alpha-visualizer):
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>   http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>📊 To view charts, start `alpha-vis serve`:
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>   http://localhost:8000/?run_id=spy_sma_v1
 </code></pre></div>
+<p><code>?run_id=</code> contains the <code>RESULT_ID</code> you passed verbatim (pass a <code>strategy_id</code> and you get that <code>strategy_id</code>; pass a specific <code>run_id</code> and you get that <code>run_id</code>).</p>
 <p>When comparing strategies:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>📊 To view charts, start `alpha-vis serve` (alpha-visualizer):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>📊 To view charts, start `alpha-vis serve`:
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
 </code></pre></div>
 <p>The command itself only prints a URL. To view charts, start <code>alpha-vis serve</code> (<a href="https://github.com/ysakae/alpha-visualizer">alpha-visualizer</a>).</p>
@@ -5336,7 +5354,12 @@
 </tr>
 <tr>
 <td><code>Error: No data for &lt;SYM&gt; (period: &lt;p&gt;).</code></td>
-<td>Data missing</td>
+<td>Data exists but no rows fall within the period</td>
+<td>Widen <code>--period</code>, or re-fetch with <code>alpha-forge data fetch &lt;SYM&gt;</code></td>
+</tr>
+<tr>
+<td><code>⚠️  1d data not found. Falling back to 1d data.</code> + <code>❌ データが見つかりません: &lt;SYM&gt; (1d)</code> + a data-fetch hint</td>
+<td>The parquet file itself was never fetched</td>
 <td><code>alpha-forge data fetch &lt;SYM&gt;</code></td>
 </tr>
 </tbody>

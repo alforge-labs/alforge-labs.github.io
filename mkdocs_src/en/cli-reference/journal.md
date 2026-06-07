@@ -22,7 +22,7 @@ Manage strategy execution history, snapshots, tags, notes, and verdicts (pass / 
 
 ## alpha-forge journal list
 
-List all strategies that have a journal. Walks `<strategy_id>.journal.json` files under `config.journal.journal_path`.
+List all strategies that have a journal. Walks the `journal_entries` table in the SQLite DB (`strategies.db`) under `config.strategies.path`.
 
 ### Synopsis
 
@@ -37,12 +37,14 @@ None.
 ### Sample output
 
 ```text
-spy_sma_v1                  runs:14   tags: production, validated   verdict: pass
-qqq_hmm_macd_ema_rsi_v1     runs: 8   tags: experimental             verdict: review
-gc_hmm_macd_ema_v1          runs: 5   tags: -                         verdict: -
+戦略ID                                  最終実行   実行数   スナップ  タグ
+────────────────────────────────────────────────────────────────────────────────
+spy_sma_v1                   2026-04-15 10:30   14      2  production, validated
+qqq_hmm_macd_ema_rsi_v1      2026-04-12 18:05    8      1  experimental
+gc_hmm_macd_ema_v1           2026-04-01 09:20    5      1  -
 ```
 
-Formatting is delegated to `format_journal_list` in `journal/formatter.py`. When no journals exist, an empty result or guidance message is returned.
+Formatting is delegated to `format_journal_list` in `journal/formatter.py`. The header labels are emitted in Japanese; columns are strategy ID, last run (timestamp of the most recent run, `-` when none), run count, snapshot count, and tags. When no journals exist, the message "ジャーナルが登録されている戦略はありません。" is shown.
 
 ---
 
@@ -114,13 +116,15 @@ alpha-forge journal runs <STRATEGY_ID> [--best <KEY>]
 ### Sample output
 
 ```text
-run_id                       type            sharpe   ret%    mdd%   win%   verdict
-run_20260415103021           optimization      1.45    +52.3   -16.8   50.0   pass
-run_20260410181522           backtest          0.92    +38.1   -15.6   58.3   review
-run_20260401092030           backtest          0.78    +28.0   -18.2   45.7   -
+=== spy_sma_v1 実行一覧 (3件) ===
+run_id                                   日時           種別 symbol    Return   CAGR    SR Sortino    MDD  Win%    PF   取引  verdict
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+run_20260410181522           2026-04-10 18:15     backtest    SPY    +38.1%  +12.4%  0.92    1.31  -15.6% 58.3% 1.85   24  ✅ pass
+run_20260401092030           2026-04-01 09:20     backtest    SPY    +28.0%   +9.7%  0.78    1.04  -18.2% 45.7% 1.42   31  🔍 review
+run_20260415103021           2026-04-15 10:30 optimization    SPY         -       -     -       -       -     -    -    -  -
 ```
 
-Formatting is delegated to `format_runs_table(j, sort_by)`.
+Formatting is delegated to `format_runs_table(j, sort_by)`. The title line and the `日時` (date) / `種別` (type) / `取引` (trades) header labels are emitted in Japanese. Columns are `run_id` / `日時` / `種別` / `symbol` / `Return` / `CAGR` / `SR` / `Sortino` / `MDD` / `Win%` / `PF` / `取引` / `verdict`. The `verdict` is shown with an emoji (`✅ pass` / `❌ fail` / `🔍 review` / `-` when none). For non-`backtest` types (e.g. `optimization`), the metric columns render as `-`.
 
 ---
 
@@ -144,18 +148,25 @@ alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2>
 ### Sample output
 
 ```text
-=== Compare runs of spy_sma_v1 ===
+=== spy_sma_v1: 実行比較 ===
+  A: run_20260415103021  (2026-04-15 10:30  SPY)
+  B: run_20260410181522  (2026-04-10 18:15  SPY)
 
-Metric              run_20260415103021      run_20260410181522
-type                optimization            backtest
-sharpe_ratio        1.45                    0.92
-total_return_pct    +52.3                   +38.1
-max_drawdown_pct    -16.8                   -15.6
-win_rate_pct        50.0                    58.3
-verdict             pass                    review
+指標                                  A            B  差分
+─────────────────────────────────────────────────────────────────
+  総リターン (%)                    52.30        38.10  -14.20
+  CAGR (%)                          16.80        12.40  -4.40
+  シャープレシオ                     1.45         0.92  -0.53
+  ソルティノレシオ                   2.01         1.31  -0.70
+  最大ドローダウン (%)             -16.80       -15.60  +1.20
+  勝率 (%)                          50.00        58.30  +8.30
+  プロフィットファクター             2.10         1.85  -0.25
+  取引数                            18.00        24.00  +6.00
+  平均保有日数                       3.20         2.80  -0.40
+  露出率 (%)                        62.00        58.00  -4.00
 ```
 
-Formatting is delegated to `format_compare(j, run1, run2)`.
+Formatting is delegated to `format_compare(j, run1, run2)`. The metric labels (`指標` column) are emitted in Japanese. Columns are `指標` (metric) / `A` (first run) / `B` (second run) / `差分` (delta = B − A; colored, with max drawdown treated as lower-is-better). There are no `type` or `verdict` rows. The compared run IDs, timestamps, and symbols appear in the `A:` / `B:` lines right under the header.
 
 ### Common errors
 
@@ -190,11 +201,11 @@ alpha-forge journal tag <STRATEGY_ID> [--add <TAG>] [--remove <TAG>]
 ✅ Tag 'production' added: spy_sma_v1
 ```
 
-When both flags are given:
+When both flags are given, they are processed and printed in **add-then-remove order**:
 
 ```text
-✅ Tag 'experimental' removed: spy_sma_v1
 ✅ Tag 'production' added: spy_sma_v1
+✅ Tag 'experimental' removed: spy_sma_v1
 ```
 
 ### Common errors
@@ -325,7 +336,7 @@ alpha-forge journal report spy_sma_v1 --output reports/spy.md \
 
 ## Common behavior
 
-- **Storage location**: `config.journal.journal_path / <strategy_id>.journal.json`
+- **Storage location**: a SQLite DB (`strategies.db`) under `config.strategies.path`. Journals are stored in the `journal_entries` / `journal_runs` / `journal_snapshots` tables (migrated from the legacy `<strategy_id>.journal.json` files to SQLite in v0.12.0)
 - **Auto-recording**: With `config.journal.auto_record` true, `alpha-forge strategy save` snapshots and `alpha-forge optimize run` records are added automatically
 - **Live integration**: `LiveStore` reads from `<journal_path>/../live/` and feeds into `show`
 - **`FORGE_CONFIG`**: All paths above are determined by the `forge.yaml` referenced by the `FORGE_CONFIG` environment variable

@@ -2820,6 +2820,10 @@
 <li><strong>警告のみ</strong>: DB 未登録の v6 関数を検出した場合は warning にとどまり、コマンドは正常終了します（false positive 抑止のため）。</li>
 <li>緊急バイパスが必要な場合は <code>--no-validate</code> フラグでスキップ可能ですが、TradingView 上で syntax error になる可能性が高いため、原則として戦略 JSON や生成器側の修正を優先してください。</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title"><code>_optimized</code> 接尾辞について</p>
+<p>以下の例で使う <code>sma_crossover_v1_optimized</code> は、<code>alpha-forge optimize apply &lt;result.json&gt; --to-strategy sma_crossover_v1</code> を実行したときに CLI が自動で登録する ID です。<code>apply</code> 直前のベース ID が <code>&lt;base&gt;</code> なら、登録される最適化済み戦略 ID は <code>&lt;base&gt;_optimized</code> になります（<code>--to-strategy</code> には接尾辞なしのベース ID を渡してください）。</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 通常の生成（validator 自動実行）</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1_optimized
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -2930,7 +2934,11 @@
 <p>bollinger_mr_v1 の win_rate は 41.18% (alpha) vs 41.41% (TV) と 0.23pp 差で <strong>signal 品質は同一</strong>、trade 数だけがペアの数え方差で 1.86x ズレることが確認できます。</p>
 <h3 id="-tolerance-profile-auto-alpha-forge-issue-828">自動切替: <code>--tolerance-profile auto</code> (alpha-forge issue #828)<a class="headerlink" href="#-tolerance-profile-auto-alpha-forge-issue-828" title="Permanent link">&para;</a></h3>
 <p>SL/TP 戦略を cross-validation する際は、<code>scripts/tv_cross_validate.py check</code> の <code>--tolerance-profile auto</code>（既定）で許容差分プロファイルが自動切替されます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>ディレクトリで実行
+<div class="admonition note">
+<p class="admonition-title"><code>scripts/tv_cross_validate.py</code> はソースリポジトリ専用</p>
+<p><code>scripts/tv_cross_validate.py</code> および golden fixture（<code>tests/fixtures/tv_golden/</code>）は <strong>alpha-forge のソースリポジトリにのみ含まれ、配布バイナリには同梱されません</strong>。配布バイナリ版を利用している場合、本節のコマンドはそのままでは実行できません（cross-validation は alpha-forge のソースを clone した開発環境で行ってください）。</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># alpha-forge ディレクトリで実行</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/tv_cross_validate.py<span class="w"> </span>check<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--strategy<span class="w"> </span>bollinger_mr_v1<span class="w"> </span>--symbol<span class="w"> </span>SPY<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--golden<span class="w"> </span>tests/fixtures/tv_golden/bollinger_mr_v1__SPY__1d.json

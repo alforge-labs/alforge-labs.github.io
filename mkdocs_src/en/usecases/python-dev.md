@@ -16,10 +16,10 @@ For Python developers who want to manage strategy experiments with a CLI/JSON-fi
 alpha-forge backtest run QQQ --strategy my_strategy --json | python analyze.py
 
 # Optuna optimization (maximize Sharpe ratio)
-alpha-forge optimize run QQQ --strategy my_strategy --trials 200 --objective sharpe
+alpha-forge optimize run QQQ --strategy my_strategy --trials 200 --metric sharpe_ratio
 
 # Walk-forward validation
-alpha-forge optimize walk-forward QQQ --strategy my_strategy --folds 5
+alpha-forge optimize walk-forward QQQ --strategy my_strategy --windows 5
 ```
 
 ## Managing Strategies as JSON
@@ -28,14 +28,25 @@ AlphaForge strategies are defined in JSON files — easy to version-control and 
 
 ```json
 {
-  "name": "my_strategy",
+  "strategy_id": "my_strategy",
+  "name": "My Strategy",
+  "target_symbols": ["QQQ"],
   "indicators": [
-    { "id": "rsi", "period": 14 },
-    { "id": "bbands", "period": 20 }
+    { "id": "rsi", "type": "RSI", "params": { "length": 14 } },
+    { "id": "bb_lower", "type": "BBANDS", "params": { "length": 20, "std": 2.0, "line": "lower" } }
   ],
-  "entry": { "rsi_lt": 30, "price_lt_lower_band": true },
-  "exit": { "rsi_gt": 70 },
-  "risk": { "max_position_size": 0.1 }
+  "entry_conditions": {
+    "long": { "logic": "AND", "conditions": [
+      { "left": "rsi", "op": "<", "right": 30 },
+      { "left": "close", "op": "<", "right": "bb_lower" }
+    ] }
+  },
+  "exit_conditions": {
+    "long": { "logic": "OR", "conditions": [
+      { "left": "rsi", "op": ">", "right": 70 }
+    ] }
+  },
+  "risk_management": { "position_size_pct": 100.0 }
 }
 ```
 

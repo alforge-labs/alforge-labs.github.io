@@ -2820,6 +2820,10 @@
 <li><strong>Warning only</strong>: the function is not yet registered in the signature DB. The command still succeeds (to avoid false positives).</li>
 <li>Use <code>--no-validate</code> to bypass the validator in emergencies, but fixing the underlying strategy JSON or generator output is strongly preferred — Pine v6 syntax errors will block the script in TradingView anyway.</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">About the <code>_optimized</code> suffix</p>
+<p>The <code>sma_crossover_v1_optimized</code> ID used in the examples below is what the CLI registers automatically when you run <code>alpha-forge optimize apply &lt;result.json&gt; --to-strategy sma_crossover_v1</code>. If the base ID before <code>apply</code> is <code>&lt;base&gt;</code>, the registered optimized strategy ID becomes <code>&lt;base&gt;_optimized</code> (pass the bare base ID to <code>--to-strategy</code>, without the suffix).</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Normal generation (validator runs automatically)</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1_optimized
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -2930,6 +2934,10 @@
 <p>bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.23pp gap, indicating <strong>identical signal quality</strong>. The 1.86x trade-count gap is purely an artifact of how entry-exit pairs are counted.</p>
 <h3 id="automatic-profile-selection-tolerance-profile-auto-alpha-forge-issue-828">Automatic profile selection: <code>--tolerance-profile auto</code> (alpha-forge issue #828)<a class="headerlink" href="#automatic-profile-selection-tolerance-profile-auto-alpha-forge-issue-828" title="Permanent link">&para;</a></h3>
 <p>When cross-validating SL/TP strategies, <code>scripts/tv_cross_validate.py check</code> automatically switches the tolerance profile via <code>--tolerance-profile auto</code> (the default).</p>
+<div class="admonition note">
+<p class="admonition-title"><code>scripts/tv_cross_validate.py</code> is source-repository only</p>
+<p><code>scripts/tv_cross_validate.py</code> and the golden fixtures (<code>tests/fixtures/tv_golden/</code>) ship <strong>only with the alpha-forge source repository — they are not bundled with the distributed binary</strong>. If you are on the binary build, the commands in this section cannot be run as-is (run cross-validation from a development checkout of the alpha-forge source instead).</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Run from the alpha-forge directory</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/tv_cross_validate.py<span class="w"> </span>check<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--strategy<span class="w"> </span>bollinger_mr_v1<span class="w"> </span>--symbol<span class="w"> </span>SPY<span class="w"> </span><span class="se">\</span>

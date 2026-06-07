@@ -77,7 +77,7 @@ AlphaForge は **「ユーザー自身が戦略を作って育てる」開発・
   "strategy_id": "my_hmm_bb_rsi_v1",
   "name": "マルチアセット HMM×BB+RSI v1 (QQQ)",
   "version": "1.0.0",
-  "description": "HMM 3状態レジームフィルター × BB+RSI 平均回帰。Bull(state=0): BB下限+RSI過売でロング(leverage=3)。Neutral(state=1): 同条件でロング(leverage=1.5)。Bear(state=2): スキップ。日足ベース。",
+  "description": "HMM 3状態レジームフィルター × BB+RSI 平均回帰。Bull(state=0): BB下限+RSI過売でロング(leverage=5)。Neutral(state=1): 同条件でロング(leverage=3)。Bear(state=2): スキップ。日足ベース。",
   "target_symbols": ["QQQ"],
   "asset_type": "stock",
   "timeframe": "1d",
@@ -260,6 +260,13 @@ HMM 出力をキーに **レジームごとに別の戦略を適用** するパ�
       }
     }
   },
+  "backtest_config": {
+    "regime_analysis": {
+      "method": "hmm",
+      "hmm_indicator_id": "regime",
+      "label_names": { "0": "Bull", "1": "Bear" }
+    }
+  },
   "optimizer_config": {
     "param_ranges": {
       "supertrend_val.multiplier": { "min": 2.0, "max": 4.0, "step": 0.5 },
@@ -295,8 +302,18 @@ HMM 出力をキーに **レジームごとに別の戦略を適用** するパ�
    trades: 27   win_rate: 51.9%   profit_factor: 1.82
    total_return: +88.3%   cagr: +8.4%   sharpe: 1.21
    max_drawdown: -22.1%   exposure: 31.5%
-   regime_breakdown: state=0 (Bull): 14 trades, sharpe 1.45  /  state=1 (Bear): 13 trades, sharpe 0.92
 ```
+
+`backtest_config.regime_analysis` を設定した戦略を `--regime` 付きで実行すると、レジーム別パフォーマンスが追加で表示されます（数値はサンプル）。
+
+```text
+=== レジーム別パフォーマンス ===
+  Bull      : Trades= 14 | Sharpe=  1.45 | WinRate= 57.1% | MDD=  12.30%
+  Bear      : Trades= 13 | Sharpe=  0.92 | WinRate= 46.2% | MDD=  22.10%
+```
+
+!!! note "出力構造について"
+    `--json` で出力すると、`regime_breakdown` キーは `{ "method", "description", "periods": [...], "aggregates": {...} }` という構造で返ります。`periods` はレジームが連続した区間ごとの `label / start / end / sharpe / total_trades` などを持ち、`aggregates` は同一ラベルの平均（`sharpe_avg` など）を持ちます。
 
 ### カスタマイズのポイント
 

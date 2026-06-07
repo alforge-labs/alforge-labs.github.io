@@ -2186,6 +2186,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#arguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2679,6 +2690,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#arguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2801,6 +2823,10 @@
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  Run: alpha-forge system auth login
 </code></pre></div>
 <p>If the development skip env var (<code>ALPHA_FORGE_DEV_SKIP_LICENSE=1</code>) is enabled, the message is <code>[AlphaForge] Development skip active (EULA/authentication is not verified)</code>.</p>
+<div class="admonition note">
+<p class="admonition-title"><code>ALPHA_FORGE_DEV_SKIP_LICENSE</code> is source-execution only</p>
+<p>This development-skip message is <strong>only effective when running from source</strong> (e.g. <code>uv run</code>, i.e. a development tree where <code>pyproject.toml</code> exists). In the distributed binary (release build) it is always disabled even if you set <code>ALPHA_FORGE_DEV_SKIP_LICENSE=1</code>: the <code>Development skip active</code> message is never shown, and when not logged in you simply get the usual <code>[AlphaForge] Not logged in.</code> message (this is intentional).</p>
+</div>
 <h2 id="alpha-forge-system-auth-check-op">alpha-forge system auth check op<a class="headerlink" href="#alpha-forge-system-auth-check-op" title="Permanent link">&para;</a></h2>
 <p>Verify the 1Password CLI (<code>op</code>) session validity. Used as a CI hook for teams sharing <code>.env.op</code> (issue #411).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>check<span class="w"> </span>op<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
@@ -2810,8 +2836,27 @@
 <h2 id="alpha-forge-system-init">alpha-forge system init<a class="headerlink" href="#alpha-forge-system-init" title="Permanent link">&para;</a></h2>
 <p>Initialize the working directory: creates <code>forge.yaml</code>, data directories, documentation, and AI assistant integration files.</p>
 <h2 id="synopsis">Synopsis<a class="headerlink" href="#synopsis" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>DIRECTORY<span class="o">]</span>
 </code></pre></div>
+<h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DIRECTORY</code></td>
+<td>argument (optional)</td>
+<td>current directory</td>
+<td>Create the given directory and deploy the init file set into it</td>
+</tr>
+</tbody>
+</table>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2828,6 +2873,12 @@
 <td>flag</td>
 <td>false</td>
 <td>Overwrite existing files without confirmation</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the target-directory confirmation prompt (for CI / AI agents / non-interactive runs)</td>
 </tr>
 <tr>
 <td><code>--no-claude</code></td>

@@ -42,6 +42,9 @@ alertcondition(longSignal, title="Long Entry", message="long")
 - **警告のみ**: DB 未登録の v6 関数を検出した場合は warning にとどまり、コマンドは正常終了します（false positive 抑止のため）。
 - 緊急バイパスが必要な場合は `--no-validate` フラグでスキップ可能ですが、TradingView 上で syntax error になる可能性が高いため、原則として戦略 JSON や生成器側の修正を優先してください。
 
+!!! note "`_optimized` 接尾辞について"
+    以下の例で使う `sma_crossover_v1_optimized` は、`alpha-forge optimize apply <result.json> --to-strategy sma_crossover_v1` を実行したときに CLI が自動で登録する ID です。`apply` 直前のベース ID が `<base>` なら、登録される最適化済み戦略 ID は `<base>_optimized` になります（`--to-strategy` には接尾辞なしのベース ID を渡してください）。
+
 ```bash
 # 通常の生成（validator 自動実行）
 alpha-forge pine generate --strategy sma_crossover_v1_optimized
@@ -105,8 +108,11 @@ bollinger_mr_v1 の win_rate は 41.18% (alpha) vs 41.41% (TV) と 0.23pp 差で
 
 SL/TP 戦略を cross-validation する際は、`scripts/tv_cross_validate.py check` の `--tolerance-profile auto`（既定）で許容差分プロファイルが自動切替されます。
 
+!!! note "`scripts/tv_cross_validate.py` はソースリポジトリ専用"
+    `scripts/tv_cross_validate.py` および golden fixture（`tests/fixtures/tv_golden/`）は **alpha-forge のソースリポジトリにのみ含まれ、配布バイナリには同梱されません**。配布バイナリ版を利用している場合、本節のコマンドはそのままでは実行できません（cross-validation は alpha-forge のソースを clone した開発環境で行ってください）。
+
 ```bash
-alpha-forge ディレクトリで実行
+# alpha-forge ディレクトリで実行
 uv run python scripts/tv_cross_validate.py check \
   --strategy bollinger_mr_v1 --symbol SPY \
   --golden tests/fixtures/tv_golden/bollinger_mr_v1__SPY__1d.json

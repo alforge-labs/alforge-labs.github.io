@@ -132,23 +132,39 @@ alpha-forge data trend [OPTIONS]
 
 ### サンプル出力（テキスト）
 
+各行は `<シンボル>: <ラベル> - <サマリ>` 形式です。ラベルは日本語（`上昇トレンド` / `下降トレンド` / `回復基調` / `失速気味` / `中立`）で、サマリには 20 日騰落率が添えられます。
+
 ```text
-SPY: BULLISH - 50EMA > 200EMA, momentum positive
-QQQ: BULLISH - 50EMA > 200EMA, momentum positive
-^N225: NEUTRAL - mixed signals
-USDJPY=X: BEARISH - 50EMA < 200EMA
+SPY: 上昇トレンド - SPY は 上昇トレンド です（20日騰落率 +5.23%）
+QQQ: 上昇トレンド - QQQ は 上昇トレンド です（20日騰落率 +7.81%）
+^N225: 中立 - ^N225 は 中立 です（20日騰落率 +0.42%）
+USDJPY=X: 下降トレンド - USDJPY=X は 下降トレンド です（20日騰落率 -2.10%）
 ```
 
 ### サンプル出力（`--json`）
+
+JSON では `trend`（英小文字 enum: `bullish` / `bearish` / `recovery` / `weakening` / `neutral`）と `label`（日本語表示名）の 2 フィールドに加え、`close` / `pct_1d` / `pct_5d` / `pct_20d` / `sma20` / `sma50` / `sma200` を返します。
 
 ```json
 {
   "source": "alpha-forge:data:trend",
   "interval": "1d",
-  "as_of": "2025-12-31",
+  "as_of": null,
   "signals": [
-    {"symbol": "SPY", "label": "BULLISH", "summary": "50EMA > 200EMA, momentum positive", ...},
-    {"symbol": "QQQ", "label": "BULLISH", "summary": "...", ...}
+    {
+      "symbol": "SPY",
+      "as_of": "2025-12-31",
+      "close": 512.34,
+      "pct_1d": 0.31,
+      "pct_5d": 1.42,
+      "pct_20d": 5.23,
+      "sma20": 498.10,
+      "sma50": 480.55,
+      "sma200": 455.02,
+      "trend": "bullish",
+      "label": "上昇トレンド",
+      "summary": "SPY は 上昇トレンド です（20日騰落率 +5.23%）"
+    }
   ]
 }
 ```
@@ -443,6 +459,12 @@ alpha-forge data alt list
 SOURCE_KEY                INTERVAL   ROWS         START           END
 fear_greed_index          1d          1525   2020-01-01   2025-12-31
 vix_termstructure         1d          1530   2020-01-01   2025-12-31
+```
+
+保存済みの代替データが無い場合は次の 1 行のみを出力して終了コード `0` で終わります。
+
+```text
+保存済みの代替データはありません。
 ```
 
 ## alpha-forge data alt info

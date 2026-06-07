@@ -15,12 +15,12 @@ For traders who have built up a discretionary playbook over years and want to **
 If your discretionary rule is "buy when the 20-day MA crosses up and RSI(14) < 30, stop out at 2× ATR," you can declare this directly in an AlphaForge strategy JSON.
 
 ```bash
-# Start from a template
-alpha-forge strategy create my_playbook --template ma_rsi_atr
+# Start from a basic template (RSI mean reversion)
+alpha-forge strategy create --template rsi_reversion_v1 --out my_playbook.json
 
 # Edit the strategy JSON to match your discretionary rules:
 #   - Entry conditions (MA period, RSI threshold)
-#   - Exit conditions (ATR multiple, take-profit width)
+#   - Exit conditions (add an ATR indicator to set the stop multiple and take-profit width)
 #   - Sizing (fraction of account balance)
 ```
 
@@ -35,7 +35,7 @@ Apply the *same* rule mechanically across `2018–2025` and the gap between this
 alpha-forge backtest run QQQ --strategy my_playbook
 
 # 2. Walk-forward to evaluate only with information available beforehand
-alpha-forge optimize walk-forward QQQ --strategy my_playbook --folds 5
+alpha-forge optimize walk-forward QQQ --strategy my_playbook --windows 5
 
 # 3. Compare against your actual discretionary record
 #    - Systematic backtest Sharpe: 1.10
@@ -62,8 +62,8 @@ You can let AlphaForge raise alerts for the patterns you "always miss," while ke
 ## First Steps
 
 ```bash
-# 1. Start from a simple MA + RSI template
-alpha-forge strategy create my_playbook --template ma_rsi_atr
+# 1. Start from a simple RSI mean-reversion template (add MA and ATR by editing the JSON)
+alpha-forge strategy create --template rsi_reversion_v1 --out my_playbook.json
 
 # 2. Fetch 5 years of historical data
 alpha-forge data fetch QQQ --period 5y

@@ -22,7 +22,7 @@
 
 ## alpha-forge journal list
 
-ジャーナルが存在する戦略の一覧を表示します。`config.journal.journal_path` 配下の `<strategy_id>.journal.json` を走査します。
+ジャーナルが存在する戦略の一覧を表示します。`config.strategies.path` 配下の SQLite DB（`strategies.db`）の `journal_entries` テーブルを走査します。
 
 ### 構文
 
@@ -37,12 +37,14 @@ alpha-forge journal list
 ### サンプル出力
 
 ```text
-spy_sma_v1                  runs:14   tags: production, validated   verdict: pass
-qqq_hmm_macd_ema_rsi_v1     runs: 8   tags: experimental             verdict: review
-gc_hmm_macd_ema_v1          runs: 5   tags: -                         verdict: -
+戦略ID                                  最終実行   実行数   スナップ  タグ
+────────────────────────────────────────────────────────────────────────────────
+spy_sma_v1                   2026-04-15 10:30   14      2  production, validated
+qqq_hmm_macd_ema_rsi_v1      2026-04-12 18:05    8      1  experimental
+gc_hmm_macd_ema_v1           2026-04-01 09:20    5      1  -
 ```
 
-整形は `journal/formatter.py` の `format_journal_list` に依存し、ジャーナルがない場合は空または案内メッセージを返します。
+整形は `journal/formatter.py` の `format_journal_list` に依存します。各行は `戦略ID` / `最終実行`（最新 run の日時。run がなければ `-`）/ `実行数` / `スナップ`（スナップショット数）/ `タグ` で構成されます。ジャーナルが 1 件もない場合は「ジャーナルが登録されている戦略はありません。」と表示されます。
 
 ---
 
@@ -114,13 +116,15 @@ alpha-forge journal runs <STRATEGY_ID> [--best <KEY>]
 ### サンプル出力
 
 ```text
-run_id                       type            sharpe   ret%    mdd%   win%   verdict
-run_20260415103021           optimization      1.45    +52.3   -16.8   50.0   pass
-run_20260410181522           backtest          0.92    +38.1   -15.6   58.3   review
-run_20260401092030           backtest          0.78    +28.0   -18.2   45.7   -
+=== spy_sma_v1 実行一覧 (3件) ===
+run_id                                   日時           種別 symbol    Return   CAGR    SR Sortino    MDD  Win%    PF   取引  verdict
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+run_20260410181522           2026-04-10 18:15     backtest    SPY    +38.1%  +12.4%  0.92    1.31  -15.6% 58.3% 1.85   24  ✅ pass
+run_20260401092030           2026-04-01 09:20     backtest    SPY    +28.0%   +9.7%  0.78    1.04  -18.2% 45.7% 1.42   31  🔍 review
+run_20260415103021           2026-04-15 10:30 optimization    SPY         -       -     -       -       -     -    -    -  -
 ```
 
-整形は `format_runs_table(j, sort_by)` に依存します。
+整形は `format_runs_table(j, sort_by)` に依存します。列は `run_id` / `日時` / `種別` / `symbol` / `Return` / `CAGR` / `SR` / `Sortino` / `MDD` / `Win%` / `PF` / `取引` / `verdict`。`verdict` は `✅ pass` / `❌ fail` / `🔍 review` / `-`（未判定）の絵文字付きで表示されます。`backtest` 以外の種別（`optimization` など）はメトリクス各列が `-` になります。
 
 ---
 
@@ -144,18 +148,25 @@ alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2>
 ### サンプル出力
 
 ```text
-=== Compare runs of spy_sma_v1 ===
+=== spy_sma_v1: 実行比較 ===
+  A: run_20260415103021  (2026-04-15 10:30  SPY)
+  B: run_20260410181522  (2026-04-10 18:15  SPY)
 
-Metric              run_20260415103021      run_20260410181522
-type                optimization            backtest
-sharpe_ratio        1.45                    0.92
-total_return_pct    +52.3                   +38.1
-max_drawdown_pct    -16.8                   -15.6
-win_rate_pct        50.0                    58.3
-verdict             pass                    review
+指標                                  A            B  差分
+─────────────────────────────────────────────────────────────────
+  総リターン (%)                    52.30        38.10  -14.20
+  CAGR (%)                          16.80        12.40  -4.40
+  シャープレシオ                     1.45         0.92  -0.53
+  ソルティノレシオ                   2.01         1.31  -0.70
+  最大ドローダウン (%)             -16.80       -15.60  +1.20
+  勝率 (%)                          50.00        58.30  +8.30
+  プロフィットファクター             2.10         1.85  -0.25
+  取引数                            18.00        24.00  +6.00
+  平均保有日数                       3.20         2.80  -0.40
+  露出率 (%)                        62.00        58.00  -4.00
 ```
 
-整形は `format_compare(j, run1, run2)` に依存します。
+整形は `format_compare(j, run1, run2)` に依存します。列は `指標`（日本語ラベル）/ `A`（1 つ目の run）/ `B`（2 つ目の run）/ `差分`（B − A、最大ドローダウンのみ小さいほど良いとして色付け）。`type` 行・`verdict` 行は表示されません。比較対象の run_id・日時・symbol はヘッダー直下の `A:` / `B:` 行に表示されます。
 
 ### 主なエラー
 
@@ -190,11 +201,11 @@ alpha-forge journal tag <STRATEGY_ID> [--add <TAG>] [--remove <TAG>]
 ✅ タグ 'production' を追加しました: spy_sma_v1
 ```
 
-`--add` と `--remove` を同時指定した場合：
+`--add` と `--remove` を同時指定した場合、**追加 → 削除の順** で処理・出力されます：
 
 ```text
-✅ タグ 'experimental' を削除しました: spy_sma_v1
 ✅ タグ 'production' を追加しました: spy_sma_v1
+✅ タグ 'experimental' を削除しました: spy_sma_v1
 ```
 
 ### 主なエラー
@@ -324,7 +335,7 @@ alpha-forge journal report spy_sma_v1 --output reports/spy.md \
 
 ## 共通の挙動
 
-- **保存先**: `config.journal.journal_path / <strategy_id>.journal.json`
+- **保存先**: `config.strategies.path` 配下の SQLite DB（`strategies.db`）。ジャーナルは `journal_entries` / `journal_runs` / `journal_snapshots` テーブルに保存される（v0.12.0 で旧 `<strategy_id>.journal.json` から SQLite へ移行済み）
 - **自動記録**: `config.journal.auto_record` が true なら、`alpha-forge strategy save` のスナップショット、`alpha-forge optimize run` の実行記録などが自動でジャーナルへ追加される
 - **ライブ連携**: `journal_path` の親ディレクトリ配下の `live/` から `LiveStore` を読み、`show` の表示に反映される
 - **`FORGE_CONFIG`**: 上記すべてのパスは環境変数 `FORGE_CONFIG` が指す `forge.yaml` で決まる

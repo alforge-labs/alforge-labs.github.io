@@ -42,6 +42,9 @@ alertcondition(longSignal, title="Long Entry", message="long")
 - **Warning only**: the function is not yet registered in the signature DB. The command still succeeds (to avoid false positives).
 - Use `--no-validate` to bypass the validator in emergencies, but fixing the underlying strategy JSON or generator output is strongly preferred — Pine v6 syntax errors will block the script in TradingView anyway.
 
+!!! note "About the `_optimized` suffix"
+    The `sma_crossover_v1_optimized` ID used in the examples below is what the CLI registers automatically when you run `alpha-forge optimize apply <result.json> --to-strategy sma_crossover_v1`. If the base ID before `apply` is `<base>`, the registered optimized strategy ID becomes `<base>_optimized` (pass the bare base ID to `--to-strategy`, without the suffix).
+
 ```bash
 # Normal generation (validator runs automatically)
 alpha-forge pine generate --strategy sma_crossover_v1_optimized
@@ -104,6 +107,9 @@ bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.
 ### Automatic profile selection: `--tolerance-profile auto` (alpha-forge issue #828)
 
 When cross-validating SL/TP strategies, `scripts/tv_cross_validate.py check` automatically switches the tolerance profile via `--tolerance-profile auto` (the default).
+
+!!! note "`scripts/tv_cross_validate.py` is source-repository only"
+    `scripts/tv_cross_validate.py` and the golden fixtures (`tests/fixtures/tv_golden/`) ship **only with the alpha-forge source repository — they are not bundled with the distributed binary**. If you are on the binary build, the commands in this section cannot be run as-is (run cross-validation from a development checkout of the alpha-forge source instead).
 
 ```bash
 # Run from the alpha-forge directory

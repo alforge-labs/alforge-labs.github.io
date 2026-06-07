@@ -14,4 +14,4 @@
 
 ---
 
-既存の市場別ユースケースは **[ホームページ](https://alforge-labs.github.io/ja/)** のActvation Scenesセクションも参照してください。
+既存の市場別ユースケースは **[ホームページ](https://alforge-labs.github.io/ja/)** のActivation Scenesセクションも参照してください。

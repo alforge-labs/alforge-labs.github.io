@@ -1490,10 +1490,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#vis-command-not-found" class="md-nav__link">
+  <a href="#alpha-vis-command-not-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vis: command not found が出る
+        alpha-vis: command not found が出る
       
     </span>
   </a>
@@ -2702,10 +2702,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#vis-command-not-found" class="md-nav__link">
+  <a href="#alpha-vis-command-not-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vis: command not found が出る
+        alpha-vis: command not found が出る
       
     </span>
   </a>
@@ -2958,7 +2958,7 @@
 
 <h1 id="faq">FAQ・トラブルシューティング<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h1>
 <h2 id="_1">インストール・起動<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h3 id="vis-command-not-found"><code>vis: command not found</code> が出る<a class="headerlink" href="#vis-command-not-found" title="Permanent link">&para;</a></h3>
+<h3 id="alpha-vis-command-not-found"><code>alpha-vis: command not found</code> が出る<a class="headerlink" href="#alpha-vis-command-not-found" title="Permanent link">&para;</a></h3>
 <p><code>uv tool install</code> でインストールした場合、シェルの PATH に uv のツールディレクトリが含まれている必要があります。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># uv tool dir を確認</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>dir
@@ -2979,7 +2979,7 @@
 </code></pre></div>
 <p><code>alpha-forge backtest run</code> を一度も実行していない場合、<code>backtest_results.db</code> は作成されません。最低 1 件のバックテストを実行してから <code>alpha-vis serve</code> を試してください。</p>
 <h3 id="_2">ポートが既に使用されている<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Errno 48] Address already in use: 0.0.0.0:8000
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ERROR:    [Errno 48] error while attempting to bind on address (&#39;127.0.0.1&#39;, 8000): address already in use
 </code></pre></div>
 <p>別のポートを指定するか、既存プロセスを停止してください。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--port<span class="w"> </span><span class="m">9000</span>

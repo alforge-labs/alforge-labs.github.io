@@ -53,7 +53,7 @@ alpha-forge backtest run SPY --strategy sma_crossover_v1 --start 2019-01-01 --en
   "calmar_ratio": 0.32,
   "max_drawdown_pct": -16.80,
   "max_drawdown_duration_days": 187,
-  "max_drawdown_recovery_days": 92,
+  "recovery_days": 92,
   "profit_factor": 1.74,
   "win_rate_pct": 50.0,
   "total_trades": 14,
@@ -102,8 +102,8 @@ alpha-forge backtest chart sma_crossover_v1 --open
 ```
 
 ```text
-📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
-   http://localhost:8000/?run_id=sma_crossover_v1_20260415_103021
+📊 チャートを表示するには `alpha-vis serve` を起動してください:
+   http://localhost:8000/?run_id=sma_crossover_v1
 ```
 
 ダッシュボード（`alpha-vis serve`）では以下のタブを確認できます:
@@ -150,9 +150,13 @@ alpha-forge optimize run SPY --strategy sma_crossover_v1 --metric sharpe_ratio -
 ✅ 最適化完了
 ベストスコア (sharpe_ratio): 1.32
 ベストパラメータ: {'fast_period': 12, 'slow_period': 50}
-DB 保存: run_id=opt_20260415_103021
-✅ 最適化結果を保存しました: data/results/optimize_sma_crossover_v1_20260415_103021.json
+💾 結果ファイル: data/results/optimize_sma_crossover_v1_20260415_103021.json
+   次のステップ: alpha-forge optimize apply data/results/optimize_sma_crossover_v1_20260415_103021.json --to-strategy sma_crossover_v1_optimized
+DB 保存: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 ```
+
+!!! warning "サンプル中の「次のステップ」ヒントについて"
+    上記の `次のステップ:` 行は CLI の実出力をそのまま再現していますが、表示される `--to-strategy sma_crossover_v1_optimized` をそのまま渡すと、登録される ID が `sma_crossover_v1_optimized_optimized` と接尾辞二重付与になります（CLI ヒント文言の既知バグ）。実際には後述の例のように、接尾辞なしのベース ID（`--to-strategy sma_crossover_v1`）を指定してください。
 
 `--json` フラグで機械可読な形式での出力:
 
@@ -170,8 +174,9 @@ alpha-forge optimize run SPY --strategy sma_crossover_v1 --metric sharpe_ratio -
 ### 最適化済みパラメータを戦略に適用
 
 ```bash
+# --to-strategy にはベース ID（接尾辞なし）を渡す。CLI が自動で _optimized を付与し、sma_crossover_v1_optimized が登録される
 alpha-forge optimize apply data/results/optimize_sma_crossover_v1_20260415_103021.json \
-  --to-strategy sma_crossover_v1_optimized
+  --to-strategy sma_crossover_v1
 ```
 
 ---
@@ -185,7 +190,9 @@ alpha-forge strategy validate sma_crossover_v1
 ```
 
 ```text
-✅ 戦略 JSON のフォーマットが正常です: sma_crossover_v1
+戦略: sma_crossover_v1  [OK]
+
+✓ 問題は検出されませんでした
 ```
 
 ---

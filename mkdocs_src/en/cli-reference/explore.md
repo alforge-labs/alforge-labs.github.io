@@ -129,7 +129,7 @@ exploration agents can decide programmatically which criterion failed and by how
     "sharpe_ratio":      {"value": 0.716, "threshold": 1.0,  "passed": false, "gap": -0.284},
     "max_drawdown":      {"value": 1.66,  "threshold": 25.0, "passed": true,  "gap": 23.34},
     "trades":            {"value": 16,    "threshold": 30,   "passed": false, "gap": -14},
-    "monthly_volume_usd":{"value": null,  "threshold": 0.0,  "passed": null,  "note": "not evaluated"},
+    "monthly_volume_usd":{"value": 10606.43, "threshold": 0.0, "passed": null, "note": "未チェック（monthly_volume_usd_min が 0 以下です）"},
     "verdict": "failed",
     "failed_criteria": ["sharpe_ratio", "trades"]
   }
@@ -138,7 +138,7 @@ exploration agents can decide programmatically which criterion failed and by how
 
 | Field | Description |
 |-------|-------------|
-| `value` | Observed metric from the backtest (`monthly_volume_usd` is currently not computed, so `null`) |
+| `value` | Observed metric from the backtest. `monthly_volume_usd` is also computed, but when its threshold (`monthly_volume_usd_min`) is 0 or below it is treated as "not evaluated" — `passed` becomes `null` and a `note` is attached, while `value` itself is still computed. The `note` text is emitted in Japanese regardless of locale |
 | `threshold` | Threshold resolved from the `pre_filter` section of goals.yaml |
 | `passed` | Whether the criterion is met (`null` means not evaluated) |
 | `gap` | "value − threshold" (for `max_drawdown` it is "threshold − value"). Negative = shortfall, positive = headroom |

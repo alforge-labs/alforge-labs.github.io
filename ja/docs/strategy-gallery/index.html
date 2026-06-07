@@ -3373,7 +3373,7 @@
 <tr>
 <td>FXペア向け</td>
 <td>主要通貨ペアの短中期検証</td>
-<td><code>EURUSD</code></td>
+<td><code>EURUSD=X</code></td>
 <td>可</td>
 </tr>
 <tr>
@@ -3649,7 +3649,7 @@
 </tr>
 <tr>
 <td>向いている市場</td>
-<td>EURUSD, USDJPY など流動性の高いFXペア</td>
+<td>EURUSD=X, USDJPY=X など流動性の高いFXペア</td>
 </tr>
 <tr>
 <td>戦略タイプ</td>
@@ -3661,7 +3661,7 @@
 </tr>
 <tr>
 <td>想定シンボル</td>
-<td><code>EURUSD</code>, <code>USDJPY</code></td>
+<td><code>EURUSD=X</code>, <code>USDJPY=X</code></td>
 </tr>
 <tr>
 <td>Pine Script生成可否</td>
@@ -3672,7 +3672,7 @@
 <h3 id="json_4">JSON要点スニペット<a class="headerlink" href="#json_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gallery_fx_pair_v1&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;target_symbols&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;EURUSD&quot;</span><span class="p">],</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;target_symbols&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;EURUSD=X&quot;</span><span class="p">],</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;asset_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fx&quot;</span><span class="p">,</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;indicators&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;length&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
@@ -3688,14 +3688,14 @@
 <h3 id="_17">実行コマンド<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>save<span class="w"> </span>data/strategies/gallery_fx_pair_v1.json
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>validate<span class="w"> </span>gallery_fx_pair_v1
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>EURUSD<span class="w"> </span>--strategy<span class="w"> </span>gallery_fx_pair_v1<span class="w"> </span>--json
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>run<span class="w"> </span>EURUSD<span class="w"> </span>--strategy<span class="w"> </span>gallery_fx_pair_v1<span class="w"> </span>--metric<span class="w"> </span>sharpe_ratio<span class="w"> </span>--save
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--strategy<span class="w"> </span>gallery_fx_pair_v1<span class="w"> </span>--json
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>run<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--strategy<span class="w"> </span>gallery_fx_pair_v1<span class="w"> </span>--metric<span class="w"> </span>sharpe_ratio<span class="w"> </span>--save
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>gallery_fx_pair_v1
 </code></pre></div>
 <h3 id="_18">結果の読み方<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
 <p>FXはトレンドが短く反転しやすいため、平均保有期間とPFを重視します。通貨ペアごとのボラティリティ差でATR設定が効きすぎていないか確認します。</p>
 <h3 id="_19">改良ポイント<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
-<p>USDJPYやGBPUSDでも同じ戦略を検証し、<code>alpha-forge optimize cross-symbol</code> でペア横断の頑健性を確認します。</p>
+<p>USDJPY=XやGBPUSD=Xでも同じ戦略を検証し、<code>alpha-forge optimize cross-symbol</code> でペア横断の頑健性を確認します。</p>
 <h2 id="etf">インデックスETF向け<a class="headerlink" href="#etf" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

@@ -84,10 +84,12 @@ Best score (sharpe_ratio): 1.32
 Best parameters: {'fast_period': 12, 'slow_period': 50}
 💾 Result file: data/results/optimize_my_v1_20260415_103021.json
    Next: alpha-forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
-DB saved: run_id=opt_20260415_103021
+DB saved: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 ```
 
-With `--save`, the absolute path to the result JSON and the next step (`alpha-forge optimize apply ...`) are printed (F-401).
+The `run_id` is a UUID recorded in the `optimization_runs` table — it is not an `opt_<timestamp>` value.
+
+With `--save`, the path to the result file (relative to `report.output_path`: absolute when launched via `FORGE_CONFIG`, cwd-relative under the default config) and the next step (`alpha-forge optimize apply ...`) are printed (F-401).
 
 With `--apply` (no prompt when `my_v1_optimized` does not yet exist):
 
@@ -114,7 +116,7 @@ If `my_v1_optimized` already exists, an overwrite confirmation appears:
     "sma_slow.length": { "min": 20, "max": 60, "step": 5 }
   },
   "param_ranges_source": "default",
-  "saved_path": "/abs/path/data/results/optimize_my_v1_20260415_103021.json"
+  "saved_path": "data/results/optimize_my_v1_20260415_103021.json"
 }
 ```
 
@@ -122,7 +124,7 @@ If `my_v1_optimized` already exists, an overwrite confirmation appears:
 |-------|---------|
 | `param_ranges_effective` | Effective range dict actually searched (from strategy JSON or built-in default) |
 | `param_ranges_source` | `"strategy"` (from JSON) or `"default"` (built-in) |
-| `saved_path` | Absolute path of the saved JSON when `--save` is used. Can be passed straight to `alpha-forge optimize apply` |
+| `saved_path` | Path of the saved JSON when `--save` is used, relative to `report.output_path`. It is an absolute path when launched via `FORGE_CONFIG`, and a cwd-relative path under the default config (`FORGE_CONFIG` unset). Can be passed straight to `alpha-forge optimize apply` |
 
 ### Common errors
 
@@ -365,6 +367,7 @@ In addition to per-window fields, the `--json` output includes summary fields de
 | `"is_trades_insufficient"` | IS trade count below `--min-window-trades` (frequency issue) |
 | `"oos_metric_invalid"` | OOS metric was `±∞` or NaN (signal-quality issue) |
 | `"oos_trades_zero"` | OOS-period trade count was 0 (no signal) |
+| `"oos_trades_insufficient"` | OOS-period trade count was at least 1 but below `min_oos_trades` (only when `min_oos_trades > 1`; statistically invalid, #319) |
 
 ---
 
@@ -568,17 +571,20 @@ Failures: 0
 
 ### Sample output (Top-K table after completion)
 
+On completion the Top-K is shown as a Rich framed table titled `Top-N by <metric>` (there is no strategy-name / symbol / `metric=...` header row). The columns are `rank`, each parameter key (`<indicator_id>.<param>` form), the metric column, then `max_drawdown_pct` / `total_trades` / `total_return_pct` (those present in the results and not the metric itself).
+
 ```text
 Grid size: 1500 trials (chunk_size=100, max_memory_mb=None)
 Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 ... (Rich dashboard streaming) ...
 
-=== Grid Search Top-20: my_v1 / SPY (metric=sharpe_ratio) ===
-fast_period  slow_period   sharpe_ratio   max_drawdown_pct   n_trades
------------------------------------------------------------------------
-         12           50           1.45              -16.8         18
-         14           55           1.41              -17.2         16
-         ...
+                         Top-20 by sharpe_ratio
+┏━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ rank ┃ sma_fast.length ┃ sma_slow.length ┃ sharpe_ratio ┃ max_drawdown_pct ┃ total_trades ┃ total_return_pct ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│    1 │              12 │              50 │       1.4500 │         -16.8000 │           18 │          52.3000 │
+│    2 │              14 │              55 │       1.4100 │         -17.2000 │           16 │          48.1000 │
+└──────┴─────────────────┴─────────────────┴──────────────┴──────────────────┴──────────────┴──────────────────┘
 ```
 
 ### Common errors

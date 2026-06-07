@@ -103,6 +103,17 @@ AlphaForge は **すべての設定・戦略・実行が JSON / YAML / CLI で�
 
 パスはすべて `alpha-trade/` を作業ルートとした相対パスです。
 
+!!! warning "バイナリ版ユーザーはパスを作業ディレクトリ相対に読み替える"
+    上記の許可パターンは `alpha-trade` モノレポ前提（`alpha-strategies/data/strategies/*.json`・`uv --directory alpha-forge run alpha-forge`）です。「バイナリ版ユーザー向け最短セットアップ」で作った作業ディレクトリ（`my-strategies/` 等）では、戦略 JSON は `<作業ディレクトリ>/data/strategies/` に生成され、コマンドは PATH 上の `alpha-forge` を直接呼びます。バイナリ版では以下のパターンに読み替えてください。
+    ```json
+    "Write(data/strategies/*.json)",
+    "Bash(alpha-forge *)",
+    "Bash(FORGE_CONFIG=* alpha-forge *)",
+    "Bash(FORCE_COLOR=1 FORGE_CONFIG=* alpha-forge *)",
+    "Bash(rm data/strategies/*.json)"
+    ```
+    git 関連パターン（`git -C */alpha-strategies ...`）は、作業ディレクトリを git 管理する場合のみ各自のリポジトリパスに合わせて追加してください。
+
 | パターン | 許可される操作 |
 |---------|--------------|
 | `Write(alpha-strategies/data/strategies/*.json)` | 戦略 JSON の一時ファイル生成（1 戦略ごと） |
@@ -203,7 +214,7 @@ codex exec \
   ↓
 Step 1: /explore-strategies [--goal <name>] [--runs N]
   └─ 銘柄×指標を組み合わせてバックテスト→最適化→WFT を自動実行
-     初期フィルタ: Sharpe ≥ 1.0 かつ MaxDD ≤ 25%
+     初期フィルタ: Sharpe ≥ 1.0 かつ MaxDD ≤ 30%
   ↓
 Step 2: /analyze-exploration
   └─ 全探索ログを集計し、次に深掘りすべき候補を recommendations.yaml に出力
@@ -242,8 +253,8 @@ AI エージェント × AlphaForge の使い方は、**起点となる材料** 
 
 **典型フロー**:
 
-1. Claude Code に「`alpha-forge strategy show multi_asset_hmm_bb_rsi_v1_qqq` の戦略をベースに、MACD を追加した派生版を作って」と指示
-2. AI が JSON を編集して `multi_asset_hmm_bb_rsi_macd_v1_qqq.json` を生成
+1. Claude Code に「`alpha-forge strategy show hmm_bb_pipeline_v1`（同梱テンプレート）の戦略をベースに、MACD を追加した派生版を作って」と指示
+2. AI が JSON を編集して `hmm_bb_pipeline_macd_v1.json` を生成
 3. `alpha-forge strategy validate` → `alpha-forge strategy save` → `alpha-forge backtest run`
 4. 結果を見て、Sharpe が改善していれば `alpha-forge optimize run` で詰める
 
@@ -304,7 +315,7 @@ AI エージェント × AlphaForge の使い方は、**起点となる材料** 
 
 | フェーズ | 基準 |
 |---------|------|
-| 初期フィルタ | Sharpe ≥ 1.0 **かつ** MaxDD ≤ 25% |
+| 初期フィルタ（pre_filter） | Sharpe ≥ 1.0 **かつ** MaxDD ≤ 30% |
 | WFT 最終合格 | WFT 全ウィンドウ平均 Sharpe ≥ `goals/<goal_name>/goals.yaml` の `target_metrics.sharpe_ratio` |
 
 ### 任意: 合格戦略への TradingView MCP 添付（issue #582）
@@ -450,8 +461,11 @@ short も対称（前バー BB 上抜け + 現バー陰線）。`goals.yaml.expl
 
 ```bash
 alpha-forge strategy scaffold --symbol GBPUSD=X --indicators BB,EMA,ADX \
-  --type mean-reversion --confirm-bars 2 --wick-ratio 1.0 --save
+  --type mean-reversion --confirm-bars 2 --wick-ratio 1.0 --allow-extreme --save
 ```
+
+!!! warning "`--confirm-bars` 指定時は指標数ゲート（issue #888）に注意"
+    `--indicators BB,EMA,ADX` は ATR が自動追加されて 4 指標、さらに `--confirm-bars` を指定すると反転確認の EXPR 指標が追加されて **計 5 指標** になります。指標数 5 以上は AND 条件が過剰で no_signals / pre_filter_failed を量産しやすいため、scaffold は **exit 1 で abort**（「指標数 5 は AND 条件が過剰で…`--allow-extreme` フラグを付けてください」）します。上記のように意図的に試行する場合は `--allow-extreme` を付与してください。
 
 `goals.yaml.scaffold_defaults.wick_ratio: 1.0` で goal 別既定値。**実測効果（GBPUSD BB+EMA+ADX 1h）**: confirm_bars=2 + wick_ratio=1.0 で **trades 140→7 / MDD 87% → 8.84% / CAGR -55% → +3.40%**（MDD 1/10、CAGR プラス転換）。trades 確保には wick_ratio=0.5 等で調整可能。
 
@@ -504,13 +518,13 @@ alpha-forge strategy scaffold ... \
 
 | フィールド | scaffold default | 単位 | 説明 |
 |---|---|---|---|
-| `position_size_pct` | type 別: mean-reversion=**15.0** / trend-following=**10.0** | % of equity | 1 ポジションが equity に占める比率（`fixed` モード時に使用） |
+| `position_size_pct` | type 別: mean-reversion=**15.0** / trend-following=**50.0**（issue #949） | % of equity | 1 ポジションが equity に占める比率（`fixed` モード時に使用）。trend-following は long-term holding 前提のため #949 で 10.0 → **50.0** に引き上げ |
 | `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` |
 | `risk_per_trade_pct` | 1.0 | % of equity / trade | `risk_based` モード時のみ使用（`risk_per_trade_pct ÷ stop_loss_pct` でサイズ算出） |
 | `max_positions` | 1 | 件 | 同時保有可能なポジション数 |
 | `leverage` | 1.0 | 倍 | 0=ノーポジ、1=等倍、>1=レバレッジ |
-| `stop_loss_pct` | `null` | %（エントリー価格基準） | `null`=SL なし |
-| `take_profit_pct` | `null` | %（エントリー価格基準） | `null`=TP なし |
+| `stop_loss_pct` | type 別: mean-reversion=**2.0**（vol-tier 既定、issue #886）/ trend-following=`null` | %（エントリー価格基準） | mean-reversion は `--vol-tier` 指定時に tier 別既定、未指定時は 2.0。`null`=SL なし |
+| `take_profit_pct` | type 別: mean-reversion=**4.0**（vol-tier 既定、issue #886）/ trend-following=`null` | %（エントリー価格基準） | mean-reversion は `--vol-tier` 指定時に tier 別既定、未指定時は 4.0。`null`=TP なし |
 | `trailing_stop_pct` | `null` | %（ピーク close からの引き下げ幅、issue #765） | `null`=trailing なし |
 | `commission_pct` | `null` | %（片道、絶対表記） | `null` なら **`forge.yaml` の `backtest.commission_pct` を継承**（issue #766） |
 | `slippage_pct` | `null` | %（片道、絶対表記） | 同上、`backtest.slippage_pct` を継承 |
@@ -521,7 +535,7 @@ alpha-forge strategy scaffold ... \
 
 #### forge.yaml の broker preset 別 backtest defaults
 
-`commission_pct` / `slippage_pct` が `null` の戦略は `forge.yaml` の `backtest.commission_pct` / `slippage_pct` を継承します。`alpha-forge init` で選択できる broker preset（`src/alpha_forge/resources/config/*.yaml`）の既定値:
+`commission_pct` / `slippage_pct` が `null` の戦略は `forge.yaml` の `backtest.commission_pct` / `slippage_pct` を継承します。`alpha-forge system init --template [commodities|crypto|default|fx|stocks]` で選択できる broker preset（`src/alpha_forge/resources/config/*.yaml`）の既定値:
 
 | preset | `backtest.commission_pct` | `backtest.slippage_pct` | 想定 |
 |---|---|---|---|
@@ -693,7 +707,7 @@ exploration:
 ```yaml
 pre_filter:
   sharpe_ratio:        ">= 1.0"
-  max_drawdown:        "<= 25%"
+  max_drawdown:        "<= 30%"
   min_trades:          ">= 15"          # issue #429: 推奨は target_metrics.min_trades の半分程度
   monthly_volume_usd:  ">= 500000"
 ```
@@ -941,7 +955,7 @@ candidates:
     rationale: "HMM × BBANDS の平均 Sharpe が高く、QQQ は試行少。MACD 追加で新規性 +"
     basis_sharpe: 1.32
     basis_maxdd: 18.4
-    variant_of: multi_asset_hmm_bb_rsi_v1_qqq
+    variant_of: hmm_bb_pipeline_v1
 ```
 
 ---
@@ -1066,27 +1080,27 @@ alpha-forge idea add "QQQ HMM×BB×RSI に MACD を追加" \
 # → WFT 平均 Sharpe=1.32 で合格
 
 # 4. /grid-tune で網羅最適化
-> /grid-tune multi_asset_hmm_bb_rsi_macd_v1_qqq QQQ
+> /grid-tune hmm_bb_pipeline_macd_v1 QQQ
 # → Grid Top-1 → apply → WFT 検証で 1.45 達成
 # → alpha-forge journal verdict pass で記録
 
 # 5. 過学習ロバスト性チェック
 alpha-forge optimize sensitivity \
-  /path/to/data/results/optimize_multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized_20260415_103021.json
+  /path/to/data/results/optimize_hmm_bb_pipeline_macd_v1_optimized_20260415_103021.json
 # → overall_robustness_score=0.82（合格）
 
 # 6. ジャーナルに最終承認を記録
-alpha-forge journal verdict multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized <run_id> pass
-alpha-forge journal note multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized "OOS pass + sensitivity 0.82。本番投入候補。"
+alpha-forge journal verdict hmm_bb_pipeline_macd_v1_optimized <run_id> pass
+alpha-forge journal note hmm_bb_pipeline_macd_v1_optimized "OOS pass + sensitivity 0.82。本番投入候補。"
 
 # 7. TradingView 用 Pine Script を生成
-alpha-forge pine generate --strategy multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized --with-training-data
+alpha-forge pine generate --strategy hmm_bb_pipeline_macd_v1_optimized --with-training-data
 
 # 8. ライブ運用開始（VPS に発注エンジンを配置、本ドキュメント範囲外）
 
 # 9. 1 週間後、ライブ成績を比較
-alpha-forge live import-events multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
-alpha-forge live compare multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
+alpha-forge live import-events hmm_bb_pipeline_macd_v1_optimized
+alpha-forge live compare hmm_bb_pipeline_macd_v1_optimized
 
 # 10. 乖離が大きければ /tune-live-strategies で自動再チューニング
 > /tune-live-strategies

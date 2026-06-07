@@ -52,6 +52,9 @@ When not logged in:
 
 If the development skip env var (`ALPHA_FORGE_DEV_SKIP_LICENSE=1`) is enabled, the message is `[AlphaForge] Development skip active (EULA/authentication is not verified)`.
 
+!!! note "`ALPHA_FORGE_DEV_SKIP_LICENSE` is source-execution only"
+    This development-skip message is **only effective when running from source** (e.g. `uv run`, i.e. a development tree where `pyproject.toml` exists). In the distributed binary (release build) it is always disabled even if you set `ALPHA_FORGE_DEV_SKIP_LICENSE=1`: the `Development skip active` message is never shown, and when not logged in you simply get the usual `[AlphaForge] Not logged in.` message (this is intentional).
+
 ## alpha-forge system auth check op
 
 Verify the 1Password CLI (`op`) session validity. Used as a CI hook for teams sharing `.env.op` (issue #411).
@@ -71,14 +74,21 @@ Initialize the working directory: creates `forge.yaml`, data directories, docume
 ## Synopsis
 
 ```bash
-alpha-forge system init [OPTIONS]
+alpha-forge system init [OPTIONS] [DIRECTORY]
 ```
+
+## Arguments
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `DIRECTORY` | argument (optional) | current directory | Create the given directory and deploy the init file set into it |
 
 ## Options
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `--force` / `-f` | flag | false | Overwrite existing files without confirmation |
+| `--yes` / `-y` | flag | false | Skip the target-directory confirmation prompt (for CI / AI agents / non-interactive runs) |
 | `--no-claude` | flag | false | Skip AI assistant integration files |
 | `--template` / `-t` | choice | `default` | Asset-class template to apply (`commodities` / `crypto` / `default` / `fx` / `stocks`) |
 

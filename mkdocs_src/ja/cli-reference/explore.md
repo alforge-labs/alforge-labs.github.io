@@ -129,7 +129,7 @@ FORGE_CONFIG=forge.yaml alpha-forge explore result show gc_bb_hmm_rsi_v1 --goal 
     "sharpe_ratio":      {"value": 0.716, "threshold": 1.0,  "passed": false, "gap": -0.284},
     "max_drawdown":      {"value": 1.66,  "threshold": 25.0, "passed": true,  "gap": 23.34},
     "trades":            {"value": 16,    "threshold": 30,   "passed": false, "gap": -14},
-    "monthly_volume_usd":{"value": null,  "threshold": 0.0,  "passed": null,  "note": "未チェック"},
+    "monthly_volume_usd":{"value": 10606.43, "threshold": 0.0, "passed": null, "note": "未チェック（monthly_volume_usd_min が 0 以下です）"},
     "verdict": "failed",
     "failed_criteria": ["sharpe_ratio", "trades"]
   }
@@ -138,7 +138,7 @@ FORGE_CONFIG=forge.yaml alpha-forge explore result show gc_bb_hmm_rsi_v1 --goal 
 
 | フィールド | 説明 |
 |-----------|------|
-| `value` | バックテストでの実測値（`monthly_volume_usd` は現状計算しないため `null`） |
+| `value` | バックテストでの実測値。`monthly_volume_usd` も実測値が計算されますが、`monthly_volume_usd_min`（閾値）が 0 以下のときは「未チェック」扱いとなり `passed` が `null`・`note` 付きになります（`value` 自体は計算済み） |
 | `threshold` | goals.yaml の `pre_filter` セクションから解決した閾値 |
 | `passed` | 基準を満たしているかどうか（`null` の場合は未チェック） |
 | `gap` | 「実測値 − 閾値」（max_drawdown のみ「閾値 − 実測値」）。負なら不足量、正なら余裕量 |

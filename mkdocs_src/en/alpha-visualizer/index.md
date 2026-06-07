@@ -29,7 +29,7 @@
 
 ## License & repository
 
-- **License**: MIT
+- **License**: Apache-2.0
 - **GitHub**: <https://github.com/alforge-labs/alpha-visualizer>
 - **PyPI**: <https://pypi.org/project/alpha-visualizer/>
 - **Code of Conduct**: [Contributor Covenant v2.1](https://github.com/alforge-labs/alpha-visualizer/blob/main/CODE_OF_CONDUCT.en.md)

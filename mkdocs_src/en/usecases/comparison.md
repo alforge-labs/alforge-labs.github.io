@@ -145,15 +145,23 @@ Here's why AlphaForge defines strategies in JSON rather than Python code.
 
 ```json
 {
-  "strategy": "cl_hmm_bb_rsi_v1",
-  "symbol": "CL=F",
-  "params": {
-    "hmm_states": 3,
-    "bb_period": 20,
-    "rsi_period": 14,
-    "rsi_upper": 65
+  "strategy_id": "my_rsi_reversion_v1",
+  "name": "RSI Mean Reversion V1",
+  "target_symbols": ["QQQ"],
+  "indicators": [
+    { "id": "rsi", "type": "RSI", "params": { "length": 14 } }
+  ],
+  "entry_conditions": {
+    "long": { "logic": "AND", "conditions": [
+      { "left": "rsi", "op": "<", "right": 30 }
+    ] }
   },
-  "seed": 42
+  "exit_conditions": {
+    "long": { "logic": "OR", "conditions": [
+      { "left": "rsi", "op": ">", "right": 70 }
+    ] }
+  },
+  "risk_management": { "position_size_pct": 100.0 }
 }
 ```
 
@@ -212,15 +220,15 @@ IS: 2022-2024  → Optimize → Validate on OOS: 2025
 
 ```bash
 # Run 5-fold walk-forward validation with a single command
-alpha-forge optimize walk-forward CL=F --strategy cl_hmm_bb_rsi_v1 --folds 5
+alpha-forge optimize walk-forward CL=F --strategy donchian_turtle_v1 --windows 5
 ```
 
-A large gap between IS and OOS Sharpe ratios suggests overfitting:
+The output is a table listing each window's IS Score and OOS Score; a large gap between IS and OOS suggests overfitting (compute the degradation yourself from IS/OOS):
 
 ```
-IS Period  OOS Period  Sharpe(IS)  Sharpe(OOS)  Assessment
-2020-22    2023        1.8         1.4          22% drop → acceptable
-2020-22    2023        2.5         0.3          88% drop → likely overfit
+Window     IS Score   OOS Score  Best Params
+1            1.8000     1.4000    {...}   ← small drop, acceptable
+2            2.5000     0.3000    {...}   ← large drop, likely overfit
 ```
 
 See the [Quants & Researchers Guide](quants.md) for details.

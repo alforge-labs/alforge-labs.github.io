@@ -2841,17 +2841,16 @@
 <p>サンプル出力：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>SMA — Simple Moving Average
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>カテゴリー: トレンド
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>カテゴリー: 移動平均
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>パラメーター:
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  名前                 型       デフォルト              説明
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  length              int      14                    期間
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  source              str      close                 ソース列
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>出力: スカラー時系列
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>使用例 (JSON):
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>  {&quot;id&quot;: &quot;sma_20&quot;, &quot;type&quot;: &quot;SMA&quot;, &quot;params&quot;: {&quot;length&quot;: 20}, &quot;source&quot;: &quot;close&quot;}
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  length              int      20                    期間
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>出力: スカラー時系列
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>使用例 (JSON):
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>  {&quot;id&quot;: &quot;sma_20&quot;, &quot;type&quot;: &quot;SMA&quot;, &quot;params&quot;: {&quot;length&quot;: 20}}
 </code></pre></div>
 <p>未知の指標名を指定すると <code>エラー: '&lt;TYPE&gt;' は認識されないインジケーターです。</code> を出して終了コード <code>1</code>。</p>
 <hr />

@@ -145,15 +145,23 @@ AlphaForge が戦略を Python コードではなく JSON で定義する理由�
 
 ```json
 {
-  "strategy": "cl_hmm_bb_rsi_v1",
-  "symbol": "CL=F",
-  "params": {
-    "hmm_states": 3,
-    "bb_period": 20,
-    "rsi_period": 14,
-    "rsi_upper": 65
+  "strategy_id": "my_rsi_reversion_v1",
+  "name": "RSI Mean Reversion V1",
+  "target_symbols": ["QQQ"],
+  "indicators": [
+    { "id": "rsi", "type": "RSI", "params": { "length": 14 } }
+  ],
+  "entry_conditions": {
+    "long": { "logic": "AND", "conditions": [
+      { "left": "rsi", "op": "<", "right": 30 }
+    ] }
   },
-  "seed": 42
+  "exit_conditions": {
+    "long": { "logic": "OR", "conditions": [
+      { "left": "rsi", "op": ">", "right": 70 }
+    ] }
+  },
+  "risk_management": { "position_size_pct": 100.0 }
 }
 ```
 
@@ -212,15 +220,15 @@ IS: 2022-2024  → 最適化 → OOS: 2025  で評価
 
 ```bash
 # 5 分割のウォークフォワード検証を 1 コマンドで実行
-alpha-forge optimize walk-forward CL=F --strategy cl_hmm_bb_rsi_v1 --folds 5
+alpha-forge optimize walk-forward CL=F --strategy donchian_turtle_v1 --windows 5
 ```
 
-IS と OOS の Sharpe 比の乖離が大きい場合は過学習を疑います：
+出力は各ウィンドウの IS Score と OOS Score を並べた表で、IS と OOS の乖離が大きい場合は過学習を疑います（劣化率は IS/OOS から各自で算出します）：
 
 ```
-IS期間   OOS期間  Sharpe(IS)  Sharpe(OOS)  判定
-2020-22  2023     1.8         1.4          22% 低下 → 許容範囲
-2020-22  2023     2.5         0.3          88% 低下 → 過学習の疑い
+Window     IS Score   OOS Score  ベストパラメータ
+1            1.8000     1.4000    {...}   ← 低下が小さく許容範囲
+2            2.5000     0.3000    {...}   ← 大幅に低下し過学習の疑い
 ```
 
 詳しくは [クオンツ・研究者向けガイド](quants.md) を参照してください。

@@ -81,7 +81,7 @@ alpha-forge system init
     v0.12.0 以降は `alpha-forge system init quickstart && cd quickstart` のようにディレクトリ名を指定でき、作成と初期化が 1 コマンドで完了します。あわせて、ホームディレクトリ直下など意図しない場所への誤展開には確認プロンプトが表示されるようになりました（CI 等の非対話実行では `--yes` を指定）。
 
 !!! info "`alpha-forge system init` を必ず実行してください"
-    `forge.yaml` が無いと戦略の DB 登録先・データ保存先・結果ファイル出力先が確定せず、後段の `alpha-forge backtest run` が `FileNotFoundError` で失敗します。クイックスタートでは `--force` 不要。
+    `forge.yaml` が無いとデフォルト設定にフォールバックして `data/` を自動生成し、戦略・データ未登録の場合は友好的なエラーメッセージで停止します（raw な `FileNotFoundError` トレースは出ません）。`forge.yaml` で戦略の DB 登録先・データ保存先・結果ファイル出力先を明示しておくと意図しない場所への展開を避けられるため、クイックスタートでは先に実行しておくことを推奨します。`--force` は不要です。
 
 !!! note "初回のみ EULA 同意プロンプト `[y/n]` が表示されます"
     最初に主要コマンド（上記 `alpha-forge system init` など）を実行すると、初回だけエンドユーザー使用許諾契約（EULA）の要約が表示され、`[y/n]` の同意プロンプトが出ます。**`y` を入力**すると同意状態が `~/.config/forge/` に記録され、次回以降は表示されません。
@@ -124,20 +124,20 @@ alpha-forge system init
 }
 ```
 
-### ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・任意）
+### ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・必須）
 
-明示的にヒストリカルデータを取得しておくと、後続のバックテストや再実行がオフラインでも安定します（任意ステップですが推奨）。
+次のバックテストに必要なヒストリカルデータを取得します。`backtest run` は対象シンボルのデータを自動取得しないため、**このステップを先に実行しないと次のバックテストが `❌ データが見つかりません: SPY (1d)` で失敗します**。
 
 ```bash
 alpha-forge data fetch SPY --period 5y
 ```
 
 ```
-✅ SPY (1d) のヒストリカルデータを取得しました: data/historical/SPY_1d.parquet
+データの取得を開始します: SPY (period=5y, interval=1d)
+SPY のデータを取得し保存しました (N lines)
 ```
 
-!!! note "次ステップの `backtest run` 内部でも自動取得は走ります"
-    `forge.yaml` がある状態であれば、次の `alpha-forge backtest run` は **未取得の場合のみ** データを自動取得します。本ステップでデータを取得済みなら、次の `backtest run` は取得をスキップして高速に走ります。`yfinance` 等のオンライン取得に失敗するケース（ネットワーク不調・レート制限）を切り分けて先に解消したい場合は、本ステップを単独で実行してください。
+データは `data/historical/SPY_1d.parquet` に保存されます。`yfinance` 等のオンライン取得に失敗するケース（ネットワーク不調・レート制限）はこのステップで切り分けられます。
 
 ### ステップ 3 — 戦略を登録してバックテストを実行する（約 2 分）
 
@@ -163,8 +163,8 @@ alpha-forge backtest run SPY \
   --end 2023-12-31
 ```
 
-!!! note "データの自動取得"
-    `forge.yaml` がある（= ステップ 2 で `alpha-forge system init` を実行した）状態であれば、初回実行時に対象シンボルのデータが自動的に取得されます。ステップ 2.5 で先取りで取得済みであれば、ここでの自動取得はスキップされて高速に走ります。失敗した場合はステップ 2.5 を手動で実行してから再試行してください。
+!!! note "事前にヒストリカルデータが必要です"
+    `backtest run` は対象シンボルのデータを自動取得しません。ステップ 2.5 で `alpha-forge data fetch SPY --period 5y` を済ませていない場合は `❌ データが見つかりません: SPY (1d)` で停止します。停止したらステップ 2.5 を実行してから再試行してください。
 
 ### ステップ 4 — 結果を読む（約 3 分）
 
@@ -190,11 +190,10 @@ alpha-forge backtest run SPY \
 SR: 0.85  Sortino: -2.86  Calmar: 0.52
 MDD: 1.79%  期間: 71日  回復: 154日
 PF: 4.01  Win%: 35.7%  avg勝: 10.39%  avg負: -1.72%
-取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)
+取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)  連勝: 4  連敗: 6
 勝率CI(90%): 17.8% - 54.8%
 📊 チャートは `alpha-vis serve` で確認できます（結果ID: sma_cross_qs_report）
 DB 保存: run_id=<uuid>
-💾 結果ファイル: data/results/optimize_sma_cross_qs_<timestamp>.json  ← --save 指定時のみ
 ```
 
 主要指標の見方は次のとおりです。指標の詳細な目安は本ページ後半の「結果の見方（詳細）」セクション、全指標一覧は [CLI リファレンス](cli-reference/index.md) を参照してください。
@@ -259,8 +258,8 @@ alpha-vis serve
     ```
 
     省略した場合は alpha-forge が内蔵デフォルト範囲 (`sma_fast.length=[5,25]` /
-    `sma_slow.length=[20,60]`) を使って探索します（起動時に `探索パラメータ ...
-    （既定範囲を使用）` と表示されます）。明示すれば再現性が高まり、`min`/`max`/`step`
+    `sma_slow.length=[20,60]`) を使って探索します（起動時に
+    `探索パラメータ（内蔵デフォルト範囲）:` と表示されます）。明示すれば再現性が高まり、`min`/`max`/`step`
     を編集すれば探索範囲を自分で制御できます。
 
 ### ここまでできたら次のステップへ
@@ -288,7 +287,7 @@ alpha-vis serve
 
 === "macOS / Linux"
 
-    ターミナルで以下のコマンドを実行してください。インストーラーが最新バイナリ（`forge.dist` 一式）を `~/.local/share/alpha-forge/` に展開し、実行ファイル `alpha-forge` への symlink を `~/.local/bin/forge` に作成します。
+    ターミナルで以下のコマンドを実行してください。インストーラーが最新バイナリ（`forge.dist` 一式）を `~/.local/share/alpha-forge/` に展開し、実行ファイル `alpha-forge` への symlink を `~/.local/bin/alpha-forge` に作成します。
 
     ```bash
     curl -sSL https://alforge-labs.github.io/install.sh | bash
@@ -398,7 +397,7 @@ alpha-forge system auth status
 プラン          : 有料 (Lifetime)
 ```
 
-「プラン: 有料 (Lifetime)」と表示されれば有料プラン（Lifetime / Annual / Monthly のいずれか）で利用可能です。なお、現在の CLI 表示は内部実装の歴史的経緯で Annual / Monthly を購入したユーザーにも `有料 (Lifetime)` と表示されます（Whop OAuth 上はいずれも customer 扱いのため区別していません）。Whop 未登録 / 未購入時は `プラン: 無料 (Trial)` 相当の表示になります。
+「プラン: 有料 (Lifetime)」と表示されれば有料プラン（Lifetime / Annual / Monthly のいずれか）で利用可能です。なお、現在の CLI 表示は内部実装の歴史的経緯で Annual / Monthly を購入したユーザーにも `有料 (Lifetime)` と表示されます（Whop OAuth 上はいずれも customer 扱いのため区別していません）。Whop 未登録 / 未認証（= Trial プラン）の場合は上記のプラン情報は表示されず、`[AlphaForge] ログイン情報がありません。` と `実行: alpha-forge system auth login` の案内のみが表示されます。
 
 ### 4. ロック解除の確認
 
@@ -504,15 +503,15 @@ alpha-forge pine generate --strategy sma_cross_qs
 | `command not found: forge` / `command not found: alpha-forge` | 新しいターミナルを開くか、`source ~/.bashrc` / `source ~/.zshrc` を実行してください。それでも出る場合は `ls ~/.local/bin/alpha-forge` でバイナリの存在を確認し、`echo $PATH` に `~/.local/bin` が含まれているか確認してください。 |
 | （Windows）`alpha-forge: The term 'alpha-forge' is not recognized ...` | 開いているターミナルをすべて閉じてから新しく開き直してください（起動済みの Windows Terminal の新しいタブには PATH が反映されません）。それでも出る場合は `[Environment]::GetEnvironmentVariable('PATH','User')` に `%LOCALAPPDATA%\Programs\alpha-forge` が独立したエントリとして含まれるか確認し、含まれない・壊れている場合はインストーラーを再実行してください（自動修復されます）。 |
 | 初回コマンドで `[y/n]` プロンプトが出る / 非対話実行で `Aborted!` | 初回のみ EULA 同意プロンプトが表示されます。対話端末では `y` を入力してください。CI・パイプ・エージェントなどの非対話環境では環境変数 `FORGE_ACCEPT_EULA=1` を設定すると初回 EULA に自動同意して続行できます（対応バージョン以降）。同意状態は `~/.config/forge/` に記録され次回以降は出ません。 |
-| `戦略 'sma_cross_qs' が見つかりません` / `Strategy not found` | `alpha-forge strategy save sma_cross.json` を先に実行して戦略 DB に登録してください。または `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...` のように `--strategy-file` で JSON を直接指定できます。 |
-| `FileNotFoundError: データが見つかりません: SPY (1d)` / `No data found for SPY` | `alpha-forge system init` を実行していない / `forge.yaml` が無いと自動取得が動きません。ステップ 2 の `alpha-forge system init` を先に実行するか、`alpha-forge data fetch SPY --period 5y` を手動で先に実行してください。 |
+| `❌ 未知のテンプレート名です: <id>。利用可能: ...` / `戦略 'sma_cross_qs' が見つかりません` | `alpha-forge strategy save sma_cross.json` を先に実行して戦略 DB に登録してください。または `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...` のように `--strategy-file` で JSON を直接指定できます。 |
+| `❌ データが見つかりません: SPY (1d)` / `No data found for SPY` | 対象シンボルのヒストリカルデータが未取得です。`backtest run` はデータを自動取得しないため、ステップ 2.5 の `alpha-forge data fetch SPY --period 5y` を先に実行してください。 |
 | `データが取得できませんでした: symbol=USDJPY` 等 FX で 404 | yfinance では FX シンボルに `=X` サフィックスが必須です（例: `USDJPY=X`, `EURUSD=X`, `GBPJPY=X`）。先物は `CL=F` のような `=F`、暗号資産は `BTC-USD` のような形式です。 |
 | `forge.yaml が見つかりません` / `Config file not found` | カレントディレクトリに `forge.yaml` がありません。プロジェクト作業ディレクトリで `alpha-forge system init` を実行するか、環境変数 `FORGE_CONFIG` で指定してください（macOS/Linux: `FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...`、Windows PowerShell: `$env:FORGE_CONFIG = "C:\path\to\forge.yaml"` を実行してから `alpha-forge ...`）。 |
 | バックテスト結果が「取引数 0 件」 | 戦略パラメータが厳しすぎてエントリー条件を満たさない / データ期間が短すぎる、のどちらかが原因です。`alpha-forge strategy show <id> --json` でパラメータ確認、`alpha-forge data fetch '<SYM>' --period 10y` でデータ拡張、または `bbands_breakout_v1` など別テンプレートを試してください。 |
 | `Best score: -inf` / 最適化結果がすべて `-inf` | 全 trial が NaN を返した状態です。`optimizer_config.param_ranges` の範囲が狭い・取引数が極端に少ない等が原因。範囲を広げるか `--trials` を増やす、`--metric` を `total_return` 等に変えて試してください。 |
 | WFT が全ウィンドウ「OOS 0 件」「skipped」 | データ期間が短いと各ウィンドウで取引が発生せずスキップされます。FX / 1d データなら 5 年（約 1,250 行）以上を推奨。`alpha-forge data fetch '<SYM>' --period 5y` で長期データを揃えるか `--windows 2` で粗くしてください。 |
 | `vis: serve: No such file or directory` / `vis: illegal option` | macOS には標準コマンド `/usr/bin/vis` があり、`$PATH` の並びによってはこちらが優先されます。`~/.local/bin/alpha-vis serve`（uv tool）または `~/.local/share/uv/tools/alpha-visualizer/bin/alpha-vis serve` のように絶対パスで起動してください（v0.3.0 以降は `alpha-vis` コマンドに改名済み）。 |
-| `Trial plan: date clipped to 2023-12-31` | 仕様どおりの動作です。Trial プランの上限日以降のデータは自動的に除外されます。 有料プラン（Lifetime / Annual / Monthly）購入後は制限解除されます。 |
+| `Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。` | 仕様どおりの動作です。Trial プランの上限日以降のデータは自動的に除外されます。 有料プラン（Lifetime / Annual / Monthly）購入後は制限解除されます。 |
 | `認証情報の有効期限が切れています` / `Token expired` | `alpha-forge system auth login` で再認証してください。Whop 側でメンバーシップが失効していないか [マイページ](https://whop.com/) で確認してください。 |
 | 認証エラー（その他） | ネットワーク接続を確認のうえ `alpha-forge system auth login` を再実行してください。Whop マイページでメンバーシップが有効か確認してください。 |
 | macOS セキュリティ警告 | システム設定 → プライバシーとセキュリティ → 「alpha-forge を開く」を許可してください。 |

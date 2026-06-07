@@ -136,7 +136,7 @@ For a complete walkthrough see the *Strategy JSON Editing* section in [end-to-en
 
 | Situation | Behavior |
 |-----------|----------|
-| Unknown template name | Raises `ValueError: Unknown template name: <name>. Available: ...` |
+| Unknown template name | Prints `❌ Unknown template name: <name>. Available: ...` to stderr along with a guidance block (save / specify JSON), then exits with code `1` (no raw `ValueError:` traceback) |
 
 ---
 
@@ -398,7 +398,7 @@ Use `purge` to wipe a strategy completely; use `delete --with-results` when you 
 
 ## alpha-forge strategy scaffold
 
-Generate a ready-to-use strategy JSON from a symbol, a set of indicators, and a strategy type. Unlike `create` (which copies a built-in template you must edit), `scaffold` builds the indicators, entry/exit conditions, and risk-management block for you. This is the primary strategy-generation entrypoint used by the `/explore-strategies` workflow.
+Generate a ready-to-use strategy JSON from a symbol, a set of indicators, and a strategy type. Unlike `create` (which copies a built-in template you must edit), `scaffold` builds the indicators, entry/exit conditions, and risk-management block for you. You must specify **one of** `--output` (write to a file) or `--save` (register in the strategy registry) as the destination; if neither is given the command prints `Error: specify --output and/or --save` and exits with code `1` (it does not print JSON to stdout). This is the primary strategy-generation entrypoint used by the `/explore-strategies` workflow.
 
 ### Synopsis
 
@@ -519,23 +519,33 @@ Strategy: my_v1  [NG]
 
 ### Sample output (`--json`)
 
+Static checks are returned under `static_checks`; dynamic checks (only when `--symbol` is given) are returned as a nested `dynamic_checks` object (without `--symbol`, `dynamic_checks` is omitted entirely).
+
 ```json
 {
-  "strategy_id": "my_v1",
   "ok": false,
-  "static_errors": [
-    {"code": "E_INDICATOR_REF", "message": "...", "suggestion": "..."}
-  ],
-  "static_warnings": [],
-  "signal_stats": {
+  "strategy_id": "my_v1",
+  "static_checks": {
+    "errors": [
+      {"code": "E_INDICATOR_REF", "severity": "error", "message": "...", "suggestion": "..."}
+    ],
+    "warnings": []
+  },
+  "dynamic_checks": {
     "symbol": "SPY",
     "period": "1y",
     "total_days": 252,
     "entry_signal_days": 12,
-    ...
-  },
-  "dynamic_warnings": [...],
-  "correlations": [...]
+    "signal_rate_pct": 4.8,
+    "leaf_conditions": [
+      {"description": "rsi < 30", "true_days": 18, "total_days": 252, "true_pct": 7.1}
+    ],
+    "hmm_regime_days": null,
+    "warnings": [
+      {"code": "W_LOW_SIGNALS", "severity": "warning", "message": "...", "suggestion": "..."}
+    ],
+    "correlations": []
+  }
 }
 ```
 
@@ -625,7 +635,7 @@ alpha-forge strategy signals <SYMBOL> --strategy <NAME> [--period <PERIOD>] [--j
 - **Locations**: `config.strategies.path` (strategy JSON), `config.report.output_path` (backtest / optimization results), `config.journal.journal_path` (journal).
 - **Journal integration**: When `config.journal.auto_record` is true, `save` automatically records a journal snapshot.
 - **`FORGE_CONFIG`**: All paths above are determined by the `forge.yaml` referenced by the `FORGE_CONFIG` environment variable.
-- **Exit codes**: `0` on success; `validate` returns `1` when errors are detected; argument errors return Click's `2`; runtime errors typically `1`.
+- **Exit codes**: `0` on success; `validate` returns `1` when errors are detected; argument errors return Click's `2`; runtime errors typically `1`. Note that missing-resource cases (e.g. `strategy show <nonexistent_id>`) intentionally exit with code `2` so that scripts piping `--json` output do not break on `json.load(stdout)` (issue #782).
 
 ---
 

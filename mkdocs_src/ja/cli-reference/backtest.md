@@ -84,7 +84,7 @@ alpha-forge backtest run AAPL --strategy sma_crossover_v1 --trades-csv trades.cs
 | `entry_reason` | 戦略 entry conditions の 1 行サマリ（Phase 1 は全 trade 共通） |
 | `exit_reason` | `strategy_exit` placeholder（Phase 2 で SL/TP/trailing 区別予定） |
 
-trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `uniq` / `diff` 等のパイプラインが空 stdout で落ちることはありません。`--debug` を併用すると、シグナル評価・mask 適用・metrics 計算の DEBUG ログが stderr に流れます（`alpha_forge.*` 配下の logger のみ昇格）。
+trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `uniq` / `diff` 等のパイプラインが空 stdout で落ちることはありません。`--debug` は `alpha_forge.*` 配下の logger を DEBUG レベルに引き上げますが、正常に完了するバックテストでは追加の DEBUG ログはほとんど出力されません（詳細ログの多くは例外発生時の診断用です）。データ取得失敗やシグナル評価エラーなど異常系で stderr に詳細が流れます。
 
 ### ベンチマーク選択ロジック（F-304） {#benchmark-selection}
 
@@ -129,9 +129,12 @@ trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `u
 
 ### 出力例（テキスト）
 
+先頭のアイコンは取引数が統計的に十分か（`is_valid` ＝ `total_trades >= 30`）で決まり、十分なら `✅`、不足なら `⚠️` になります。信号品質スコアの行末には判断基準を示すヒント文（`≥0.7` は信頼できる水準 / `0.4–0.7` は要注意 / `<0.4` は低信頼度）が常に付与されます。
+
 ```text
 バックテストを実行中: SPY x sma_crossover_v1
-✅ バックテスト完了  信号品質スコア: 0.78/1.0
+⚠️ バックテスト完了  信号品質スコア: 0.38/1.0 （<0.4 は信頼度が低く参考値扱い）
+    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
 総リターン: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  期間: 187日  回復: 92日
@@ -157,10 +160,16 @@ PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
 #### 信号品質スコア（`signal_quality_score`, 0.0–1.0）
 
 ```python
-sample_size_score   = min(total_trades / 30, 1.0) * 0.4   # 40%
-win_rate_score      = min(win_rate_pct / 100, 1.0) * 0.3  # 30%
-profit_factor_score = min(profit_factor / 2.0, 1.0) * 0.3 # 30%
-signal_quality_score = sample_size_score + win_rate_score + profit_factor_score
+sharpe_score        = min(max(sharpe_ratio / 2.0, 0.0), 1.0)             # 30%
+profit_factor_score = min(max((profit_factor - 1.0) / 1.5, 0.0), 1.0)    # 20%（profit_factor が None のときは 0）
+win_rate_score      = max(0.0, (win_rate_pct - 50.0) / 30.0)             # 20%（勝率 50% 超過分のみ寄与）
+sample_size_score   = min(total_trades / 30, 1.0)                        # 30%
+signal_quality_score = (
+    0.30 * sharpe_score
+    + 0.20 * profit_factor_score
+    + 0.20 * win_rate_score
+    + 0.30 * sample_size_score
+)
 ```
 
 | スコア帯 | 判断 | CLI 表示 |
@@ -424,13 +433,24 @@ alpha-forge backtest compare <STRATEGY1> [STRATEGY2 ...] --symbol <SYM> [--symbo
 
 ### 出力例（テキスト表）
 
-```text
-=== 戦略比較: SPY (2020-01-01 〜 現在) (3 戦略) ===
+出力は **1 行 = 1 指標** の転置レイアウトです。先頭に指定した戦略が「基準」となり、2 つ目以降の戦略について基準との差分が `Delta` 列（`✅` = 改善 / `❌` = 悪化）に表示されます。最終行に最多改善の `Winner` が示されます（同数の場合は Sharpe Ratio で決定）。
 
-戦略             Return    CAGR  Sharpe     MDD   Win%      PF  取引数
-spy_sma_v1     +52.3%   5.40    0.92  -16.8%   50%   1.74      14
-spy_macd_v1    +38.1%   4.20    1.18  -15.6%   58%   1.92      12
-spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
+期間（`(2020-01-01 〜 現在)` のような表記）は `--start` / `--end` を指定したときのみヘッダに付きます。指定しない場合は戦略数のみが表示されます。
+
+```text
+=== 戦略比較: SPY (2 戦略) ===
+
+────────────────────────────────────────────────────────────
+指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
+────────────────────────────────────────────────────────────
+Sharpe Ratio                       0.92            1.18          +0.26 ✅
+Total Return %                    52.30%          38.10%         -14.2% ❌
+CAGR %                             5.40%           4.20%          -1.2% ❌
+Max Drawdown %                   -16.80%         -15.60%          +1.2% ✅
+Win Rate %                        50.00%          58.00%          +8.0% ✅
+Profit Factor                      1.74            1.92          +0.18 ✅
+────────────────────────────────────────────────────────────
+Winner: sma_cross_qs (4/6 metrics)
 ```
 
 ### 主なエラー
@@ -539,14 +559,16 @@ alpha-forge backtest chart [RESULT_ID] [--open] [--compare <ID> ...]
 ### 出力例
 
 ```text
-📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
-   http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
+📊 チャートを表示するには `alpha-vis serve` を起動してください:
+   http://localhost:8000/?run_id=spy_sma_v1
 ```
+
+`?run_id=` には引数に渡した `RESULT_ID` がそのまま入ります（`strategy_id` を渡せば `strategy_id` が、特定ランの `run_id` を渡せばその `run_id` が入ります）。
 
 複数戦略比較時:
 
 ```text
-📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
+📊 チャートを表示するには `alpha-vis serve` を起動してください:
    http://localhost:8000/?ids=sma_crossover,rsi_reversion
 ```
 
@@ -600,7 +622,8 @@ alpha-forge backtest signal-count <SYMBOL> --strategy <ID> [--period 5y] [--json
 | メッセージ | 原因 | 対処 |
 |----------|------|------|
 | `期間の形式が不正です: <value>` | `--period` 形式不正 | `5y`, `6m`, `30d` 形式で指定 |
-| `エラー: <SYM> のデータが空です（期間: <p>）` | データ未取得 | `alpha-forge data fetch <SYM>` |
+| `エラー: <SYM> のデータが空です（期間: <p>）` | データはあるが指定期間内に行が無い | より広い `--period` を指定、または `alpha-forge data fetch <SYM>` で再取得 |
+| `⚠️  1d データが見つかりません。1d データにフォールバックします。` ＋ `❌ データが見つかりません: <SYM> (1d)` ＋ data fetch 案内 | ファイル自体が未取得（パーケット不在） | `alpha-forge data fetch <SYM>` |
 
 ---
 

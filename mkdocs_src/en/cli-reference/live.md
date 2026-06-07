@@ -80,13 +80,12 @@ alpha-forge live events [OPTIONS]
 ### Sample output
 
 ```text
-timestamp           strategy_id     broker      event_type   symbol   side   qty   price
-2026-04-15 09:31    spy_sma_v1      ibkr        fill         SPY      long   100   452.30
-2026-04-15 14:02    spy_sma_v1      ibkr        close        SPY      long   100   458.12
-...
+=== live events ===
+2026-04-15T09:31:00+00:00 | fill | spy_sma_v1 | SPY | buy | filled | sig_0042
+2026-04-15T14:02:00+00:00 | trade_closed | spy_sma_v1 | SPY | sell | closed | sig_0042
 ```
 
-Formatting is delegated to `format_live_events`.
+Formatting is delegated to `format_live_events`. Each row is pipe (`|`) delimited in the order `timestamp` (ISO format) / `event_type` / `strategy_id` / `symbol` (`ticker`) / `side` (`action`) / `status` / `signal_id`. There are no `broker` / `qty` / `price` columns. You can still filter with `--broker`, but the `broker` value itself is not shown in the rows.
 
 ---
 
@@ -109,20 +108,34 @@ alpha-forge live convert-check [--strategy-id <ID>]
 ### Sample output
 
 ```text
-=== Conversion readiness ===
-strategy_id              fill_events   close_events   matched   pending   status
-spy_sma_v1                        18             16        16         2   partial
-qqq_hmm_macd_ema_rsi_v1            8              8         8         0   ready
-broken_v1                          5              0         0         5   missing close events
+=== event conversion report ===
+strategy_id                     : spy_sma_v1
+total_events                    : 96
+total_signals                   : 20
+total_orders                    : 18
+total_fills                     : 16
+total_trade_closed              : 16
+accepted_orders                 : 18
+failed_orders                   : 0
+live_events                     : 80
+paper_events                    : 16
+signals_without_orders          : 2
+accepted_missing_strategy_meta  : 0
+accepted_missing_snapshot_id    : 0
+accepted_missing_fill_data      : 2
+accepted_missing_close_data     : 2
+fill_events_missing_trade_id    : 0
+trade_closed_missing_pnl        : 0
+conversion_ready                : yes
 ```
 
-Formatting is delegated to `format_event_conversion_report`.
+Formatting is delegated to `format_event_conversion_report` (the `EventConversionReport` model). The header is `=== event conversion report ===` and each field is printed as `key : value`. `conversion_ready` is `yes` / `no`. When there are conversion blockers, a `blockers :` section and the list follow at the end. There are no `matched` / `pending` / `status` (ready/partial/missing) columns.
 
 ---
 
 ## alpha-forge live import-events
 
-Generate trade records from `fill` / `close` events and save them as `<live_path>/trades/<strategy_id>.json` and `<live_path>/summaries/<strategy_id>.json`.
+Generate trade records from `fill` / `close` events and save them to a SQLite DB (`backtest_results.db` under `config.report.output_path`). Trades and summaries were migrated from JSON files to SQLite in v0.12.0; no JSON is written to `<live_path>/trades/` or `<live_path>/summaries/`.
 
 ### Synopsis
 
@@ -140,17 +153,18 @@ alpha-forge live import-events <STRATEGY_ID>
 
 - Event logs for the `strategy_id` must exist under `<live_path>/events/` (fetched via `alpha-forge live sync-events`, or placed manually)
 - Each entry must have a **paired `fill` event and `close` event**
-- Verify with [`alpha-forge live convert-check`](#alpha-forge-live-convert-check) first that the status is `ready` (or `partial` within tolerance)
-- Running once per `strategy_id` produces `<strategy_id>.json` (re-runs overwrite)
+- Verify with [`alpha-forge live convert-check`](#alpha-forge-live-convert-check) first that `conversion_ready : yes`
+- Running once per `strategy_id` persists the trade records to SQLite (re-runs overwrite)
 
 ### Sample output
 
 ```text
 imported_trades   : 16
 strategy_id       : spy_sma_v1
-trades_file       : data/live/trades/spy_sma_v1.json
-summary_file      : data/live/summaries/spy_sma_v1.json
+db_path           : data/results/backtest_results.db
 ```
+
+Only three fields are printed: `imported_trades` / `strategy_id` / `db_path` (no `trades_file` / `summary_file`). The trade records are stored in the SQLite DB referenced by `db_path`.
 
 ### Common errors
 
@@ -184,19 +198,20 @@ Trades are sorted newest-first (`entry_at` descending).
 ### Sample output
 
 ```text
-trade_id  side    entry_at              exit_at               qty   pnl_pct   exit_reason
-t_0042    long    2026-04-15 09:31      2026-04-15 14:02      100   +1.29%    take_profit
-t_0041    long    2026-04-12 10:05      2026-04-12 15:48      100   -0.42%    stop_loss
-...
+=== live trades ===
+entry_at             symbol     side        qty        entry         exit    net_pnl     ret%   hold_m exit_reason
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+2026-04-15 09:31     SPY        long     100.00     452.3000     458.1200    +582.00   +1.29%      271 take_profit
+2026-04-12 10:05     SPY        long     100.00     451.0000     449.1000    -190.00   -0.42%      343 stop_loss
 ```
 
-Formatting is delegated to `format_live_trades`.
+Formatting is delegated to `format_live_trades`. Columns are `entry_at` / `symbol` / `side` / `qty` / `entry` / `exit` / `net_pnl` / `ret%` / `hold_m` (holding minutes) / `exit_reason`. There are no `trade_id` or `exit_at` columns.
 
 ### Common errors
 
 | Message | Cause | Fix |
 |---------|-------|-----|
-| `No live trade records found: <id>` | `<live_path>/trades/<id>.json` does not exist | Generate via `alpha-forge live import-events <id>` |
+| `No live trade records found: <id>` | No trade records for the strategy in SQLite | Generate via `alpha-forge live import-events <id>` |
 
 ---
 
@@ -219,18 +234,24 @@ alpha-forge live summary <STRATEGY_ID>
 ### Sample output
 
 ```text
-=== spy_sma_v1 / Live Summary ===
-trades            : 16
-win_rate          : 56.3%
-total_pnl_pct     : +8.42%
-avg_win_pct       : +1.85%
-avg_loss_pct      : -1.12%
-max_drawdown_pct  : -4.20%
-sharpe_ratio      : 1.32
-period            : 2026-03-01 → 2026-04-15
+=== spy_sma_v1 live summary ===
+version          : v1.1.0
+snapshot_id      : snap_20260415
+broker           : ibkr
+symbols          : SPY
+total_trades     : 16
+win_rate_pct     : 56.25
+gross_pnl        : 1280.00
+net_pnl          : 1184.50
+profit_factor    : 1.92
+avg_win          : 185.30
+avg_loss         : -112.40
+avg_slippage_bps : 1.80
+total_commission : 95.50
+max_drawdown_pct : -4.20
 ```
 
-Formatting is delegated to `format_live_summary`.
+Formatting is delegated to `format_live_summary` (the `StrategyLiveSummary` model). Fields are `version` / `snapshot_id` / `broker` / `symbols` / `total_trades` / `win_rate_pct` / `gross_pnl` / `net_pnl` / `profit_factor` / `avg_win` / `avg_loss` / `avg_slippage_bps` / `total_commission` / `max_drawdown_pct`. There is no `total_pnl_pct`, `sharpe_ratio`, or `period`. `avg_win` / `avg_loss` are absolute amounts (P/L in the position currency), not percentages.
 
 ### Common errors
 
@@ -259,17 +280,24 @@ alpha-forge live compare <STRATEGY_ID>
 ### Sample output
 
 ```text
-=== spy_sma_v1: Backtest vs Live ===
+=== spy_sma_v1 live vs backtest ===
+backtest_run     : run_20260410181522
+backtest_symbol  : SPY
+live_symbols     : SPY
+snapshot_id      : snap_20260415
 
-Metric             Backtest (run_20260410)    Live (2026-03-01 → 2026-04-15)    Diff
-trades             18                          16                                 -2
-win_rate_pct       58.3                        56.3                              -2.0
-total_return_pct   +12.4                       +8.42                             -3.98
-sharpe_ratio       1.45                        1.32                              -0.13
-max_drawdown_pct   -3.80                       -4.20                             -0.40
+metric                 backtest         live         delta
+──────────────────────────────────────────────────────────────
+total_trades                 18           16           -2
+win_rate_pct              58.30%       56.25%       -2.05%
+profit_factor              2.10         1.92        -0.18
+total_return_pct         +12.40%            -            -
+max_drawdown_pct          -3.80%       -4.20%       -0.40%
+net_pnl                       -      1184.50            -
+avg_slippage_bps              -         1.80            -
 ```
 
-Formatting is delegated to `format_live_compare`.
+Formatting is delegated to `format_live_compare`. The header is `=== <id> live vs backtest ===`, followed by `backtest_run` / `backtest_symbol` / `live_symbols` / `snapshot_id` metadata lines and then a `metric` / `backtest` / `live` / `delta` table. The rows are `total_trades` / `win_rate_pct` / `profit_factor` / `total_return_pct` / `max_drawdown_pct` / `net_pnl` / `avg_slippage_bps`. There is no `sharpe_ratio` row. Metrics available only on the backtest side (`total_return_pct`) or only on the live side (`net_pnl` / `avg_slippage_bps`) render `-` on the missing side.
 
 ### Common errors
 
@@ -302,19 +330,22 @@ alpha-forge live doctor [STRATEGY_ID]
 === live trading doctor ===
 live_path       : data/live
 events_path     : data/live/events
-trades_path     : data/live/trades
-summaries_path  : data/live/summaries
+db_path         : data/results/backtest_results.db
 events_exists   : yes
 event_files     : 24
 hint            : pass a strategy_id to validate trades/summary readiness
 ```
+
+There are no `trades_path` / `summaries_path` lines. Because trades and summaries are stored in SQLite (the `backtest_results.db` referenced by `db_path`), `db_path` is shown instead.
 
 ### Sample output (with strategy ID)
 
 ```text
 === live trading doctor ===
 live_path       : data/live
-...
+events_path     : data/live/events
+db_path         : data/results/backtest_results.db
+events_exists   : yes
 event_files     : 24
 strategy_id     : spy_sma_v1
 trades_exists   : yes
@@ -322,7 +353,7 @@ summary_exists  : yes
 rollout_status  : ready
 ```
 
-`rollout_status` is `ready` when `events_exists` is true, `event_files > 0`, and either `trades_exists` or `summary_exists` is true; otherwise `incomplete`.
+When trades exist but the summary has not been built, it is constructed on the spot and a `summary_built : yes` line is added. `rollout_status` is `ready` when `events_exists` is true, `event_files > 0`, and either `trades_exists` or `summary_exists` is true; otherwise `incomplete`.
 
 ---
 
@@ -449,12 +480,11 @@ The `Backtest` column appears only when `--compare` is passed. When no receipts 
 
 ## Common behavior
 
-- **Storage location**: under `<journal_path>/../live/` (subdirectories `events/`, `trades/`, `summaries/`)
+- **Storage location**:
+    - raw event logs: `<journal_path>/../live/events/` (JSON on the filesystem)
+    - trade records / summary: a SQLite DB (`backtest_results.db` under `config.report.output_path`). Migrated from JSON files in `trades/` / `summaries/` to SQLite in v0.12.0
 - **`forge.yaml`**: All paths above are determined by the `forge.yaml` referenced by the `FORGE_CONFIG` environment variable
 - **VPS integration**: `sync-events` reads the `remote.*` section of `forge.yaml`
-- **Detailed specs**: For data model and rollout procedure, see the alpha-forge repo
-    - `alpha-forge/docs/live-trading-data-model.md`
-    - `alpha-forge/docs/live-trading-rollout.md`
 - **Exit codes**: `0` on success; argument errors return Click's `2`; missing config or records typically `1`
 
 ---

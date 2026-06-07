@@ -3884,9 +3884,10 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Best parameters: {&#39;fast_period&#39;: 12, &#39;slow_period&#39;: 50}
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>💾 Result file: data/results/optimize_my_v1_20260415_103021.json
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>   Next: alpha-forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>DB saved: run_id=opt_20260415_103021
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>DB saved: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 </code></pre></div>
-<p>With <code>--save</code>, the absolute path to the result JSON and the next step (<code>alpha-forge optimize apply ...</code>) are printed (F-401).</p>
+<p>The <code>run_id</code> is a UUID recorded in the <code>optimization_runs</code> table — it is not an <code>opt_&lt;timestamp&gt;</code> value.</p>
+<p>With <code>--save</code>, the path to the result file (relative to <code>report.output_path</code>: absolute when launched via <code>FORGE_CONFIG</code>, cwd-relative under the default config) and the next step (<code>alpha-forge optimize apply ...</code>) are printed (F-401).</p>
 <p>With <code>--apply</code> (no prompt when <code>my_v1_optimized</code> does not yet exist):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>✅ Best parameters saved as &#39;my_v1_optimized&#39; (original &#39;my_v1&#39; unchanged)
 </code></pre></div>
@@ -3904,7 +3905,7 @@
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">&quot;sma_slow.length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="p">},</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&quot;param_ranges_source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;saved_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/abs/path/data/results/optimize_my_v1_20260415_103021.json&quot;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;saved_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/results/optimize_my_v1_20260415_103021.json&quot;</span>
 <a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </code></pre></div>
 <table>
@@ -3925,7 +3926,7 @@
 </tr>
 <tr>
 <td><code>saved_path</code></td>
-<td>Absolute path of the saved JSON when <code>--save</code> is used. Can be passed straight to <code>alpha-forge optimize apply</code></td>
+<td>Path of the saved JSON when <code>--save</code> is used, relative to <code>report.output_path</code>. It is an absolute path when launched via <code>FORGE_CONFIG</code>, and a cwd-relative path under the default config (<code>FORGE_CONFIG</code> unset). Can be passed straight to <code>alpha-forge optimize apply</code></td>
 </tr>
 </tbody>
 </table>
@@ -4368,6 +4369,10 @@
 <td><code>"oos_trades_zero"</code></td>
 <td>OOS-period trade count was 0 (no signal)</td>
 </tr>
+<tr>
+<td><code>"oos_trades_insufficient"</code></td>
+<td>OOS-period trade count was at least 1 but below <code>min_oos_trades</code> (only when <code>min_oos_trades &gt; 1</code>; statistically invalid, #319)</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -4729,16 +4734,18 @@
 <a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>Failures: 0
 </code></pre></div>
 <h3 id="sample-output-top-k-table-after-completion">Sample output (Top-K table after completion)<a class="headerlink" href="#sample-output-top-k-table-after-completion" title="Permanent link">&para;</a></h3>
+<p>On completion the Top-K is shown as a Rich framed table titled <code>Top-N by &lt;metric&gt;</code> (there is no strategy-name / symbol / <code>metric=...</code> header row). The columns are <code>rank</code>, each parameter key (<code>&lt;indicator_id&gt;.&lt;param&gt;</code> form), the metric column, then <code>max_drawdown_pct</code> / <code>total_trades</code> / <code>total_return_pct</code> (those present in the results and not the metric itself).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Grid size: 1500 trials (chunk_size=100, max_memory_mb=None)
 <a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 <a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>... (Rich dashboard streaming) ...
 <a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>=== Grid Search Top-20: my_v1 / SPY (metric=sharpe_ratio) ===
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>fast_period  slow_period   sharpe_ratio   max_drawdown_pct   n_trades
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>-----------------------------------------------------------------------
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>         12           50           1.45              -16.8         18
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>         14           55           1.41              -17.2         16
-<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>         ...
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>                         Top-20 by sharpe_ratio
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>┏━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>┃ rank ┃ sma_fast.length ┃ sma_slow.length ┃ sharpe_ratio ┃ max_drawdown_pct ┃ total_trades ┃ total_return_pct ┃
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>┡━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>│    1 │              12 │              50 │       1.4500 │         -16.8000 │           18 │          52.3000 │
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>│    2 │              14 │              55 │       1.4100 │         -17.2000 │           16 │          48.1000 │
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>└──────┴─────────────────┴─────────────────┴──────────────┴──────────────────┴──────────────┴──────────────────┘
 </code></pre></div>
 <h3 id="common-errors_4">Common errors<a class="headerlink" href="#common-errors_4" title="Permanent link">&para;</a></h3>
 <table>

@@ -13,7 +13,7 @@ This page is a short example catalog for choosing strategy ideas by market and p
 | MACD + RSI | Momentum with overheat filter | `SPY` | Available |
 | Trend following | Follow sustained uptrends | `AAPL` | Available |
 | Mean reversion | Buy stretched downside moves in ranges | `MSFT` | Available |
-| FX pairs | Test liquid major FX pairs | `EURUSD` | Available |
+| FX pairs | Test liquid major FX pairs | `EURUSD=X` | Available |
 | Index ETFs | Search robust settings across ETFs | `SPY` | Available |
 | Commodity futures | Handle commodity trend/range shifts | `CL=F` | Conditional |
 
@@ -210,10 +210,10 @@ Add higher-timeframe trend and volatility filters so the strategy stands aside d
 | Field | Details |
 |---|---|
 | Purpose | Test short-to-medium-term trend and oscillator behavior on major FX pairs |
-| Suitable markets | Liquid major pairs such as EURUSD and USDJPY |
+| Suitable markets | Liquid major pairs such as EURUSD=X and USDJPY=X |
 | Strategy type | Trend with oscillator filter |
 | Key indicators | SMA, RSI, ATR |
-| Example symbols | `EURUSD`, `USDJPY` |
+| Example symbols | `EURUSD=X`, `USDJPY=X` |
 | Pine Script export | Available |
 
 ### JSON snippet
@@ -221,7 +221,7 @@ Add higher-timeframe trend and volatility filters so the strategy stands aside d
 ```json
 {
   "strategy_id": "gallery_fx_pair_v1",
-  "target_symbols": ["EURUSD"],
+  "target_symbols": ["EURUSD=X"],
   "asset_type": "fx",
   "indicators": [
     { "id": "sma_fast", "type": "SMA", "params": { "length": 20 } },
@@ -240,8 +240,8 @@ Add higher-timeframe trend and volatility filters so the strategy stands aside d
 ```bash
 alpha-forge strategy save data/strategies/gallery_fx_pair_v1.json
 alpha-forge strategy validate gallery_fx_pair_v1
-alpha-forge backtest run EURUSD --strategy gallery_fx_pair_v1 --json
-alpha-forge optimize run EURUSD --strategy gallery_fx_pair_v1 --metric sharpe_ratio --save
+alpha-forge backtest run EURUSD=X --strategy gallery_fx_pair_v1 --json
+alpha-forge optimize run EURUSD=X --strategy gallery_fx_pair_v1 --metric sharpe_ratio --save
 alpha-forge pine generate --strategy gallery_fx_pair_v1
 ```
 
@@ -251,7 +251,7 @@ FX trends can reverse quickly, so average holding period and PF are important. C
 
 ### Improvement ideas
 
-Run the same idea on USDJPY and GBPUSD, then use `alpha-forge optimize cross-symbol` to inspect cross-pair robustness.
+Run the same idea on USDJPY=X and GBPUSD=X, then use `alpha-forge optimize cross-symbol` to inspect cross-pair robustness.
 
 ## Index ETFs
 

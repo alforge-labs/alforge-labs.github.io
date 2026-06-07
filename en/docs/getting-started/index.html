@@ -603,10 +603,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-25-fetch-historical-data-1-min-optional" class="md-nav__link">
+  <a href="#step-25-fetch-historical-data-1-min-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2.5 — Fetch historical data (~1 min, optional)
+        Step 2.5 — Fetch historical data (~1 min, required)
       
     </span>
   </a>
@@ -2709,10 +2709,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-25-fetch-historical-data-1-min-optional" class="md-nav__link">
+  <a href="#step-25-fetch-historical-data-1-min-required" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2.5 — Fetch historical data (~1 min, optional)
+        Step 2.5 — Fetch historical data (~1 min, required)
       
     </span>
   </a>
@@ -3029,7 +3029,7 @@
 </div>
 <div class="admonition info">
 <p class="admonition-title"><code>alpha-forge system init</code> is required</p>
-<p>Without <code>forge.yaml</code>, the strategy DB location, data store, and result output paths are unresolved, so the next <code>alpha-forge backtest run</code> will fail with <code>FileNotFoundError</code>. The default invocation (no <code>--force</code>) is sufficient for quickstart.</p>
+<p>Without <code>forge.yaml</code>, the CLI falls back to its default config, auto-creates a <code>data/</code> directory, and—if no strategy or data is registered yet—stops with a friendly error message (no raw <code>FileNotFoundError</code> traceback). Running <code>system init</code> first pins the strategy DB location, data store, and result output paths and avoids deploying into an unintended location, so it is recommended to run it before the steps below. The default invocation (no <code>--force</code>) is sufficient for quickstart.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">A one-time EULA acceptance prompt <code>[y/n]</code> appears on first run</p>
@@ -3069,16 +3069,14 @@
 <a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="p">}</span>
 </code></pre></div>
-<h3 id="step-25-fetch-historical-data-1-min-optional">Step 2.5 — Fetch historical data (~1 min, optional)<a class="headerlink" href="#step-25-fetch-historical-data-1-min-optional" title="Permanent link">&para;</a></h3>
-<p>Explicitly fetching the historical data up front makes subsequent backtests and re-runs work offline more reliably (optional but recommended).</p>
+<h3 id="step-25-fetch-historical-data-1-min-required">Step 2.5 — Fetch historical data (~1 min, required)<a class="headerlink" href="#step-25-fetch-historical-data-1-min-required" title="Permanent link">&para;</a></h3>
+<p>Fetch the historical data the next backtest needs. <code>backtest run</code> does <strong>not</strong> auto-fetch data for the target symbol, so <strong>if you skip this step the next backtest fails with <code>❌ データが見つかりません: SPY (1d)</code> (data not found)</strong>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--period<span class="w"> </span>5y
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>✅ Fetched historical data for SPY (1d): data/historical/SPY_1d.parquet
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Fetching data: SPY (period=5y, interval=1d)
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Fetched and saved data for SPY (N lines)
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">The next <code>backtest run</code> will also auto-fetch if needed</p>
-<p>With <code>forge.yaml</code> in place, the next <code>alpha-forge backtest run</code> auto-fetches data <strong>only when it is missing</strong>. If you fetch up front here, the subsequent <code>backtest run</code> skips the download and starts faster. If you want to isolate online-fetch failures (network issues, rate limits) from backtest issues, run this step on its own first.</p>
-</div>
+<p>The data is saved to <code>data/historical/SPY_1d.parquet</code>. Running this step on its own also helps you isolate online-fetch failures (network issues, rate limits) before the backtest.</p>
 <h3 id="step-3-register-the-strategy-and-run-the-backtest-2-min">Step 3 — Register the strategy and run the backtest (~2 min)<a class="headerlink" href="#step-3-register-the-strategy-and-run-the-backtest-2-min" title="Permanent link">&para;</a></h3>
 <p>Register <code>sma_cross.json</code> (from Step 2) with AlphaForge (the strategy DB).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>save<span class="w"> </span>sma_cross.json
@@ -3096,8 +3094,8 @@
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>--end<span class="w"> </span><span class="m">2023</span>-12-31
 </code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Automatic data fetching</p>
-<p>With <code>forge.yaml</code> in place (because you ran <code>alpha-forge system init</code> in Step 2), the symbol's historical data is fetched automatically on first run. If you already fetched it in Step 2.5, the auto-fetch is skipped and this step runs faster. If the auto-fetch fails, run Step 2.5 manually and retry.</p>
+<p class="admonition-title">Historical data must be fetched first</p>
+<p><code>backtest run</code> does not auto-fetch data for the target symbol. If you have not run <code>alpha-forge data fetch SPY --period 5y</code> in Step 2.5, the backtest stops with <code>❌ データが見つかりません: SPY (1d)</code> (data not found). If it stops, run Step 2.5 and retry.</p>
 </div>
 <h3 id="step-4-read-the-results-3-min">Step 4 — Read the results (~3 min)<a class="headerlink" href="#step-4-read-the-results-3-min" title="Permanent link">&para;</a></h3>
 <p>When complete, you'll see output like this.</p>
@@ -3123,11 +3121,10 @@ The CLI label table below maps Japanese CLI labels to conventional English metri
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>SR: 0.85   Sortino: -2.86   Calmar: 0.52
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>MDD: 1.79%   Length: 71d   Recovery: 154d
 <a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>PF: 4.01   Win%: 35.7%   avgWin: 10.39%   avgLoss: -1.72%
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
 <a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>Win-rate CI(90%): 17.8% - 54.8%
 <a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
 <a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>DB save: run_id=&lt;uuid&gt;
-<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>💾 Result file: data/results/optimize_sma_cross_qs_&lt;timestamp&gt;.json  ← only with --save
 </code></pre></div>
 <p>A quick read of the key metrics is below. For the full metric list, see <a href="#reading-the-results-detailed">Reading the Results in detail</a> or the <a href="../cli-reference/">CLI Reference</a>.</p>
 <table>
@@ -3256,7 +3253,7 @@ append the block below just before the trailing <code>}</code> of the JSON
 </code></pre></div>
 <p>If you skip it, alpha-forge falls back to its built-in default ranges
 (<code>sma_fast.length=[5,25]</code> / <code>sma_slow.length=[20,60]</code>) and prints
-<code>optimization params ... (using default ranges)</code> at startup. Declaring the
+<code>Search params (built-in default ranges):</code> at startup. Declaring the
 block explicitly makes runs reproducible and lets you tune <code>min</code>/<code>max</code>/<code>step</code>
 by hand.</p>
 </div>
@@ -3307,7 +3304,7 @@ by hand.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">macOS / Linux</label><label for="__tabbed_2_2">Windows</label><label for="__tabbed_2_3">Manual</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>Run the following command in your terminal. The installer extracts the latest binary bundle (<code>forge.dist</code>) into <code>~/.local/share/alpha-forge/</code> and symlinks the executable as <code>~/.local/bin/forge</code>.</p>
+<p>Run the following command in your terminal. The installer extracts the latest binary bundle (<code>forge.dist</code>) into <code>~/.local/share/alpha-forge/</code> and symlinks the executable as <code>~/.local/bin/alpha-forge</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 </code></pre></div>
 <p>The default install location is <code>~/.local/bin</code> (user-local, no sudo required). During install, you'll be asked <code>Install to system-wide /usr/local/bin instead? (requires sudo) [y/N]:</code>. Press Enter or <code>n</code> to keep the default, or <code>y</code> to install system-wide to <code>/usr/local/bin</code> (which will prompt for sudo).</p>
@@ -3393,7 +3390,7 @@ by hand.</p>
 <a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>Last verified   : 2026-05-13 11:45 UTC (13 min ago)
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>Plan            : Paid (Lifetime)
 </code></pre></div>
-<p><code>Plan: Paid (Lifetime)</code> confirms a successful paid-plan activation. Due to an implementation holdover, the CLI also shows <code>Paid (Lifetime)</code> for Annual and Monthly subscribers (Whop OAuth treats all paid tiers as a single "customer" access level). Without Whop registration the plan field reads <code>Plan: Free (Trial)</code> (Trial mode).</p>
+<p><code>Plan: Paid (Lifetime)</code> confirms a successful paid-plan activation. Due to an implementation holdover, the CLI also shows <code>Paid (Lifetime)</code> for Annual and Monthly subscribers (Whop OAuth treats all paid tiers as a single "customer" access level). Without Whop registration (i.e. on the Trial plan), the plan details above are not shown at all; instead the command prints only <code>[AlphaForge] Not logged in.</code> followed by <code>Run: alpha-forge system auth login</code>.</p>
 <h3 id="4-confirm-the-unlock">4. Confirm the unlock<a class="headerlink" href="#4-confirm-the-unlock" title="Permanent link">&para;</a></h3>
 <p>Verify that a paid-plan-only feature (Pine Script export) now works:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_cross_qs
@@ -3521,12 +3518,12 @@ by hand.</p>
 <td>A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter <code>y</code>. In non-interactive environments (CI, pipes, agents), set <code>FORGE_ACCEPT_EULA=1</code> to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under <code>~/.config/forge/</code> and won't appear again.</td>
 </tr>
 <tr>
-<td><code>Strategy 'sma_cross_qs' not found</code> / <code>戦略 'sma_cross_qs' が見つかりません</code></td>
+<td><code>❌ 未知のテンプレート名です: &lt;id&gt;。利用可能: ...</code> (unknown template name) / <code>戦略 'sma_cross_qs' が見つかりません</code></td>
 <td>Run <code>alpha-forge strategy save sma_cross.json</code> first to register the strategy in the DB. Or pass the JSON directly via <code>alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...</code>.</td>
 </tr>
 <tr>
-<td><code>FileNotFoundError: data not found: SPY (1d)</code> / <code>No data found for SPY</code></td>
-<td>Auto-fetch only works when <code>forge.yaml</code> exists. Run <code>alpha-forge system init</code> (Step 2) first, or fetch manually with <code>alpha-forge data fetch SPY --period 5y</code> and retry.</td>
+<td><code>❌ データが見つかりません: SPY (1d)</code> (data not found)</td>
+<td>The target symbol's historical data has not been fetched. <code>backtest run</code> does not auto-fetch, so run Step 2.5 (<code>alpha-forge data fetch SPY --period 5y</code>) first.</td>
 </tr>
 <tr>
 <td><code>Failed to fetch data: symbol=USDJPY</code> (404)</td>
@@ -3553,7 +3550,7 @@ by hand.</p>
 <td>macOS ships a built-in <code>/usr/bin/vis</code> that wins on <code>$PATH</code>. Run with the absolute path <code>~/.local/bin/alpha-vis serve</code> (uv tool) or <code>~/.local/share/uv/tools/alpha-visualizer/bin/alpha-vis serve</code> (renamed to <code>alpha-vis</code> in v0.3.0+).</td>
 </tr>
 <tr>
-<td><code>Trial plan: date clipped to 2023-12-31</code></td>
+<td><code>Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。</code> (shown in Japanese regardless of locale)</td>
 <td>Expected behavior. Data beyond the Trial plan cap is automatically excluded. Purchase a paid plan (Lifetime / Annual / Monthly) to lift the cap.</td>
 </tr>
 <tr>

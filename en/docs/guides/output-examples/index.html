@@ -2869,7 +2869,7 @@
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">&quot;calmar_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.32</span><span class="p">,</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-16.80</span><span class="p">,</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_duration_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">187</span><span class="p">,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_recovery_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">92</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">&quot;recovery_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">92</span><span class="p">,</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">&quot;profit_factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.74</span><span class="p">,</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">&quot;win_rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">50.0</span><span class="p">,</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="nt">&quot;total_trades&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
@@ -2902,8 +2902,8 @@
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Open directly in browser (requires alpha-vis serve running)</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--open
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>📊 Start `alpha-vis serve` (alpha-visualizer) to view the chart:
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>   http://localhost:8000/?run_id=sma_crossover_v1_20260415_103021
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>📊 To view charts, start `alpha-vis serve`:
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>   http://localhost:8000/?run_id=sma_crossover_v1
 </code></pre></div>
 <p>The dashboard (<code>alpha-vis serve</code>) provides these tabs:</p>
 <table>
@@ -2954,9 +2954,14 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>✅ Optimization complete
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Best score (sharpe_ratio): 1.32
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>Best params: {&#39;fast_period&#39;: 12, &#39;slow_period&#39;: 50}
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>DB saved: run_id=opt_20260415_103021
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>✅ Results saved: data/results/optimize_sma_crossover_v1_20260415_103021.json
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>💾 Result file: data/results/optimize_sma_crossover_v1_20260415_103021.json
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>   Next: alpha-forge optimize apply data/results/optimize_sma_crossover_v1_20260415_103021.json --to-strategy sma_crossover_v1_optimized
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>DB saved: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 </code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">About the <code>Next:</code> hint in the sample</p>
+<p>The <code>Next:</code> line above reproduces the actual CLI output, but passing the displayed <code>--to-strategy sma_crossover_v1_optimized</code> verbatim registers a doubly-suffixed ID (<code>sma_crossover_v1_optimized_optimized</code>) — a known wording bug in the CLI hint. Pass the base ID without the suffix (<code>--to-strategy sma_crossover_v1</code>) as shown in the example below.</p>
+</div>
 <p>Machine-readable output with <code>--json</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>run<span class="w"> </span>SPY<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--metric<span class="w"> </span>sharpe_ratio<span class="w"> </span>--trials<span class="w"> </span><span class="m">300</span><span class="w"> </span>--json
 </code></pre></div>
@@ -2966,8 +2971,9 @@
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="apply-optimized-parameters-to-a-strategy">Apply optimized parameters to a strategy<a class="headerlink" href="#apply-optimized-parameters-to-a-strategy" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>apply<span class="w"> </span>data/results/optimize_sma_crossover_v1_20260415_103021.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>--to-strategy<span class="w"> </span>sma_crossover_v1_optimized
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Pass the base ID (no suffix) to --to-strategy. The CLI appends _optimized automatically, registering sma_crossover_v1_optimized</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>apply<span class="w"> </span>data/results/optimize_sma_crossover_v1_20260415_103021.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--to-strategy<span class="w"> </span>sma_crossover_v1
 </code></pre></div>
 <hr />
 <h2 id="strategy-json-validation">Strategy JSON Validation<a class="headerlink" href="#strategy-json-validation" title="Permanent link">&para;</a></h2>
@@ -2975,7 +2981,9 @@
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>save<span class="w"> </span>data/strategies/sma_crossover_v1.json
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>validate<span class="w"> </span>sma_crossover_v1
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>✅ Strategy JSON format is valid: sma_crossover_v1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Strategy: sma_crossover_v1  [OK]
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>✓ No issues detected
 </code></pre></div>
 <hr />
 <h2 id="pine-script-generation-paid-plans">Pine Script Generation (Paid Plans)<a class="headerlink" href="#pine-script-generation-paid-plans" title="Permanent link">&para;</a></h2>

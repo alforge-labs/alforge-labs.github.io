@@ -2672,7 +2672,7 @@
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">DB 登録を省きたい場合 (<code>--strategy-file</code>)</p>
-<p><code>alpha-forge backtest run</code> / <code>alpha-forge optimize run</code> には <code>--strategy-file &lt;path&gt;</code> オプションがあり、JSON を直接指定できます（DB 登録不要）。試行錯誤段階では便利です。</p>
+<p><code>alpha-forge backtest run</code> には <code>--strategy-file &lt;path&gt;</code> オプションがあり、JSON を直接指定できます（DB 登録不要）。試行錯誤段階では便利です。</p>
 </div>
 <h2 id="3">3. バックテスト実行<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <p>定義した戦略のパフォーマンスを過去データで検証します。</p>
@@ -2691,8 +2691,9 @@
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--metric<span class="w"> </span>sharpe_ratio<span class="w"> </span>--trials<span class="w"> </span><span class="m">300</span><span class="w"> </span>--save
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># 保存された結果ファイル（optimize_usdjpy_sma_v1_&lt;timestamp&gt;.json）を新しい戦略として適用</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>apply<span class="w"> </span>data/results/optimize_usdjpy_sma_v1_&lt;timestamp&gt;.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>--to-strategy<span class="w"> </span>usdjpy_sma_v1_optimized
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># --to-strategy にはベース ID（接尾辞なし）を渡す。CLI が自動で _optimized を付与し、usdjpy_sma_v1_optimized が登録される</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>apply<span class="w"> </span>data/results/optimize_usdjpy_sma_v1_&lt;timestamp&gt;.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>--to-strategy<span class="w"> </span>usdjpy_sma_v1
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">ベストスコアが <code>-inf</code> になったとき</p>
