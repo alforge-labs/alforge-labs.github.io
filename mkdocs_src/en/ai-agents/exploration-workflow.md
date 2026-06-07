@@ -6,7 +6,7 @@ Combining Claude Code, Codex, and similar AI coding agents with AlphaForge as th
     - **Audience**: intermediate-to-advanced users who **already use** AI coding agents (Claude Code / Codex). You should be comfortable writing prompts for an agent and understand how slash commands work.
     - **Requirements**: AlphaForge **binary v0.5.4+**, or the `alpha-trade` monorepo dev setup (`alpha-forge` + `alpha-strategies`).
     - **Time budget**: ~10 min for the initial setup. The exploration loop itself is long-running (hours to overnight) — plan to run it unattended (e.g., overnight) for best results.
-    - **If you want to learn the manual CLI step by step first**: read the [End-to-End Strategy Workflow](end-to-end-workflow.md) before coming back here. This page assumes you want the **automated AI exploration** path.
+    - **If you want to learn the manual CLI step by step first**: read the [End-to-End Strategy Workflow](../guides/end-to-end-workflow.md) before coming back here. This page assumes you want the **automated AI exploration** path.
     - **Binary users**: complete the "Minimum setup for binary users" section first. Where this page shows monorepo-style commands, you can **substitute `alpha-forge` (the binary on your PATH)** instead.
 
 ## Minimum setup for binary users {#binary-user-setup}
@@ -58,7 +58,7 @@ The result: humans focus on "directional decisions" and "pass/fail judgment", wh
 
 | Goal | Recommended flow |
 |------|-----------------|
-| Understand every step of AlphaForge | [End-to-End Strategy Development Workflow](end-to-end-workflow.md) (manual CLI) |
+| Understand every step of AlphaForge | [End-to-End Strategy Development Workflow](../guides/end-to-end-workflow.md) (manual CLI) |
 | Quickly explore new indicator × symbol combinations | This page (AI-driven autonomous exploration) |
 | Already have a promising strategy and want to fine-tune | Start from Step 3 [`/grid-tune`](#step-3-grid-tune) |
 | Monitor drift in live strategies | Step 4 [`/tune-live-strategies`](#step-4-tune-live-strategies) |
@@ -171,6 +171,8 @@ When `--json` is set, stdout contains pure JSON only; decoration, progress, and 
 # Safely invoking a destructive command from an agent / CI
 FORGE_NONINTERACTIVE=1 alpha-forge optimize clean --older-than 30d --yes --json
 ```
+
+For the full set of conventions (JSON output, exit codes, and `system config`), see [CLI conventions for agents](cli-conventions.md).
 
 !!! note "EULA auto-accept is a separate env var"
     `FORGE_NONINTERACTIVE` does not auto-accept the first-run EULA prompt. In CI, combine it with `FORGE_ACCEPT_EULA=1` (see [Getting Started](../getting-started.md)).
@@ -353,7 +355,7 @@ When `tv_mcp.pine_verify.enabled: true` is set in `forge.yaml` and a TradingView
 - `alpha-forge pine verify --check-mode metrics --auto-backtest --mcp-server-flavor vinicius --output reports/<id>/verify.md`
 - `alpha-forge journal report --with-chart --symbol <SYM> --interval D --output reports/<id>/journal.md`
 
-For goals without an MCP server running (or with `tv_mcp.pine_verify.enabled: false`), the step is skipped and the existing loop behavior is preserved. See the [TradingView Pine integration guide](tradingview-pine-integration.md) for details.
+For goals without an MCP server running (or with `tv_mcp.pine_verify.enabled: false`), the step is skipped and the existing loop behavior is preserved. See the [TradingView Pine integration guide](../guides/tradingview-pine-integration.md) for details.
 
 ### Idempotency
 
@@ -818,7 +820,7 @@ The `target_metrics` section of `goals.yaml` accepts the following arbitrary met
 | `wft_sharpe_std` | Population stdev (pstdev) of OOS Sharpe across WFT valid windows (issue #859) | backtest (WFT injected) |
 | `positive_oos_windows_ratio` | Fraction of WFT valid windows with OOS Sharpe > 0 (0–1, issue #859) | backtest (WFT injected) |
 
-Example targeting "almost surely positive every month":
+Example requiring a high positive-months ratio (not a guarantee of achieving it):
 
 ```yaml
 target_metrics:
@@ -1007,7 +1009,7 @@ candidates:
 7. **WFT validation**: `alpha-forge optimize walk-forward <symbol> --strategy <name>_optimized --windows 5`
 8. **Decision**: If WFT mean Sharpe **exceeds the original strategy's Sharpe**, pass
     - Pass → `alpha-forge journal verdict <name>_optimized <run_id> pass`
-    - Fail → `alpha-forge strategy delete <name>_optimized --force` + add a `note` to the original strategy's journal
+    - Fail → `alpha-forge strategy delete <name>_optimized --yes` + add a `note` to the original strategy's journal
 
 ### Memory / OOM guidance
 
@@ -1146,7 +1148,7 @@ Everything else runs autonomously through the agent.
 
 ## Related documentation
 
-- [End-to-End Strategy Development Workflow](end-to-end-workflow.md) — Manual CLI walkthrough for every step
+- [End-to-End Strategy Development Workflow](../guides/end-to-end-workflow.md) — Manual CLI walkthrough for every step
 - [Getting Started](../getting-started.md) — Tutorial through the first backtest
 - [CLI Reference](../cli-reference/index.md) — Every `alpha-forge` command parameter
 - [Strategy Templates](../templates.md) — Bundled strategies like HMM × BB × RSI

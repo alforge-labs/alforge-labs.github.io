@@ -58,6 +58,12 @@ nav:
   - Getting Started:
       - Quickstart & Detailed Installation: getting-started.md
       - Trial Limits: guides/trial-limits.md
+  - AI Agent Integration:
+      - Overview: ai-agents/index.md
+      - Agent Quickstart: ai-agents/quickstart.md
+      - AI-Driven Strategy Exploration Workflow: ai-agents/exploration-workflow.md
+      - alpha-forge-mcp Reference: ai-agents/mcp-reference.md
+      - CLI Conventions for Agents: ai-agents/cli-conventions.md
   - Guides:
       - End-to-End Strategy Development Workflow: guides/end-to-end-workflow.md
       - Output Examples: guides/output-examples.md
@@ -65,7 +71,6 @@ nav:
       - Combine Portfolio Pine — Multi-Strategy: guides/combine-portfolio-pine.md
       - TradingView × alpha-strike Integration: guides/tradingview-alpha-strike.md
       - alpha-strike Setup Guide: guides/alpha-strike-setup.md
-      - AI-Driven Strategy Exploration Workflow: guides/ai-exploration-workflow.md
       - FRED Macro Data Guide: guides/macro-data.md
       - Use Cases by Goal:
           - Overview: usecases/index.md

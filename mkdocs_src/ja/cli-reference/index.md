@@ -42,7 +42,7 @@ alpha-forge data alt --help                # ネストされた補助グルー�
 
 `alpha-forge` はコーディングエージェント（Claude Code / Codex 等）や CI からの subprocess 利用を前提に設計されています（epic [#1083](https://github.com/ysakae/alpha-forge/issues/1083)）。
 
-- **非対話実行**: `FORGE_NONINTERACTIVE=1`（または `CI` / 非 TTY 検知）で確認プロンプトを排除します。破壊的操作は `--yes` が無いと終了コード `2` で停止します（ハング防止）。詳細は [AI 駆動の戦略探索ワークフロー › 非対話実行](../guides/ai-exploration-workflow.md#non-interactive) を参照。
+- **非対話実行**: `FORGE_NONINTERACTIVE=1`（または `CI` / 非 TTY 検知）で確認プロンプトを排除します。破壊的操作は `--yes` が無いと終了コード `2` で停止します（ハング防止）。詳細は [AI 駆動の戦略探索ワークフロー › 非対話実行](../ai-agents/exploration-workflow.md#non-interactive) を参照。
 - **`--json`**: 観測・参照系コマンド（`system config` / `live` / `journal` / `idea` / `analyze` 系など）は `--json` に対応します。stdout は純 JSON のみで、装飾・進捗は stderr へ分離されます。
 - **exit code**: `0`=成功（明示キャンセル含む） / `1`=not found・想定内の失敗（無人ループの停止判定に使用） / `2`=引数エラー・非対話実行で `--yes` 欠落。`--json` 時の not found は stdout に `{error, code, id}` を出して終了コード `1`。
 - **`compare` の 2 義**: `backtest compare` は新規バックテストを実行する重い処理、`journal compare` / `live compare` は保存済み結果の read-only 参照です。
@@ -51,7 +51,7 @@ alpha-forge data alt --help                # ネストされた補助グルー�
 
 - [はじめに](../getting-started.md) — 最初のバックテスト実行までのチュートリアル
 - [戦略テンプレート](../templates.md) — 同梱戦略の紹介
-- [AI 駆動の戦略探索ワークフロー](../guides/ai-exploration-workflow.md) — Claude Code / Codex × AlphaForge
+- [AI 駆動の戦略探索ワークフロー](../ai-agents/exploration-workflow.md) — Claude Code / Codex × AlphaForge
 
 ---
 

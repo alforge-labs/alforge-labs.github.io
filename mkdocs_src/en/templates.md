@@ -501,7 +501,7 @@ See [`alpha-forge live compare`](cli-reference/live.md#alpha-forge-live-compare)
 
 - [Getting Started](getting-started.md) — Start with a simple SMA crossover
 - [CLI Reference](cli-reference/index.md) — All `alpha-forge` command parameters
-- [AI-Driven Strategy Exploration Workflow](guides/ai-exploration-workflow.md) — Generate strategies with Claude Code / Codex
+- [AI-Driven Strategy Exploration Workflow](ai-agents/exploration-workflow.md) — Generate strategies with Claude Code / Codex
 
 ---
 

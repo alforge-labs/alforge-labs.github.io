@@ -42,7 +42,7 @@ alpha-forge data alt --help                # Subcommands of a nested auxiliary g
 
 `alpha-forge` is designed for subprocess usage from coding agents (Claude Code / Codex, etc.) and CI (epic [#1083](https://github.com/ysakae/alpha-forge/issues/1083)).
 
-- **Non-interactive execution**: `FORGE_NONINTERACTIVE=1` (or `CI` / non-TTY detection) removes confirmation prompts. Destructive operations stop with exit code `2` when `--yes` is missing (hang prevention). See [AI-Driven Strategy Exploration Workflow › Non-interactive execution](../guides/ai-exploration-workflow.md#non-interactive) for details.
+- **Non-interactive execution**: `FORGE_NONINTERACTIVE=1` (or `CI` / non-TTY detection) removes confirmation prompts. Destructive operations stop with exit code `2` when `--yes` is missing (hang prevention). See [AI-Driven Strategy Exploration Workflow › Non-interactive execution](../ai-agents/exploration-workflow.md#non-interactive) for details.
 - **`--json`**: observation / reference commands (`system config` / `live` / `journal` / `idea` / `analyze` groups, etc.) support `--json`. stdout contains pure JSON only; decoration and progress go to stderr.
 - **Exit codes**: `0` = success (including explicit cancel) / `1` = not found or expected failure (use this to stop unattended loops) / `2` = argument error or missing `--yes` in non-interactive execution. A not-found under `--json` emits `{error, code, id}` to stdout with exit code `1`.
 - **The two meanings of `compare`**: `backtest compare` runs new backtests (a heavy operation), while `journal compare` / `live compare` are read-only references to saved results.
@@ -51,7 +51,7 @@ alpha-forge data alt --help                # Subcommands of a nested auxiliary g
 
 - [Getting Started](../getting-started.md) — Tutorial covering installation through your first backtest
 - [Strategy Templates](../templates.md) — Bundled strategies overview
-- [AI-Driven Strategy Exploration Workflow](../guides/ai-exploration-workflow.md) — Claude Code / Codex × AlphaForge
+- [AI-Driven Strategy Exploration Workflow](../ai-agents/exploration-workflow.md) — Claude Code / Codex × AlphaForge
 
 ---
 

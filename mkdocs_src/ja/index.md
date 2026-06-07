@@ -4,6 +4,9 @@
 
 本ドキュメントでは、インストールから戦略開発、AI コーディングエージェントとの連携までを順を追って解説します。
 
+!!! tip "AI エージェントと使うなら"
+    Claude Code / Codex / Cursor から AlphaForge を操作する方法は [AI エージェント連携](ai-agents/index.md) セクションに集約しました。同梱スキル・MCP サーバ・非対話 CLI の 3 経路をまとめています。まずは [エージェントクイックスタート](ai-agents/quickstart.md) で、10 分でエージェント連携を試せます。
+
 ## AlphaForge が他と違う 2 つの強み
 
 ### 1. JSON 戦略 → ワンコマンドで Pine Script v6 → TradingView で実取引へ
@@ -27,7 +30,7 @@
 | 自動最適化 | **Optuna TPE + WFT が標準** | 弱い／手動が中心 | ライブラリ追加で実装 |
 | データ・鍵の所在 | **完全ローカル** | サーバ常駐 | ローカル |
 | 動作形態 | バイナリ CLI（数百MB / 1ファイル） | Docker / SaaS スタック | Python スクリプト |
-| AI エージェント連携 | Claude Code / Codex 用スキル同梱 | 一部対応 | 自前実装が必要 |
+| AI エージェント連携 | **スキル同梱 + MCP サーバ** | 一部対応 | 自前実装が必要 |
 | 実取引の経路 | **TradingView 経由**（取引所中立） | 取引所・ブローカー直接 | 自前で実装 |
 
 ## こんな方に向いています
@@ -44,7 +47,7 @@
 - [目的別ユースケース](usecases/index.md) — 自分の役割（TradingView ユーザー / Python 開発者 / クオンツ / 自動売買検討者 / AI エージェント利用者）から最適な次ページを選ぶ
 - [CLI リファレンス](cli-reference/index.md) — `alpha-forge` コマンドの全パラメータと出力例
 - [戦略テンプレート](templates.md) — HMM × BB × RSI などの組み合わせ戦略を実 JSON 付きで紹介
-- [AI 駆動の戦略探索ワークフロー](guides/ai-exploration-workflow.md) — Claude Code / Codex × AlphaForge による自律戦略開発の HOWTO
+- [AI 駆動の戦略探索ワークフロー](ai-agents/exploration-workflow.md) — Claude Code / Codex × AlphaForge による自律戦略開発の HOWTO（AI エージェント連携 セクション）
 - [利用規約と免責事項](legal/disclaimers.md) — 免責事項・EULA・プライバシーポリシー
 
 ## 関連リンク

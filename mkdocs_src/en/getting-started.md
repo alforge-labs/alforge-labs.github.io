@@ -5,6 +5,9 @@ A complete onboarding guide — from installing AlphaForge CLI to reading your f
 - The **~10-minute Trial walkthrough** (no Whop registration required) is at the top. Just install and start using the CLI immediately.
 - After that you'll find **detailed install instructions, paid-plan login (Lifetime / Annual / Monthly), uninstall, and troubleshooting**.
 
+!!! tip "Getting started from an AI agent"
+    Pairing AlphaForge with an AI agent such as Claude Code / Codex / Cursor? You can start from the [Agent Quickstart](ai-agents/quickstart.md). Installing AlphaForge itself still follows the steps on this page, so finish the install below first.
+
 !!! info "Glossary (terms used on this page)"
     | Term | Meaning |
     |---|---|
@@ -533,7 +536,7 @@ For other issues and detailed FAQ, see [`/en/install.html`](https://alforgelabs.
 - [Use Cases by Goal](usecases/index.md) — Pick the most relevant next page based on your role (TradingView user / Python developer / Quant / Auto-trading / AI agent user)
 - [CLI Reference](cli-reference/index.md) — Every `alpha-forge` command, parameters, and output format
 - [Strategy Templates](templates.md) — Compound strategies like HMM × BB × RSI
-- [AI-Driven Strategy Exploration Workflow](guides/ai-exploration-workflow.md) — Autonomous exploration with Claude Code / Codex × AlphaForge
+- [AI-Driven Strategy Exploration Workflow](ai-agents/exploration-workflow.md) — Autonomous exploration with Claude Code / Codex × AlphaForge
 
 ---
 

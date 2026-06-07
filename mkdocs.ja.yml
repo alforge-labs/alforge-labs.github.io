@@ -58,6 +58,12 @@ nav:
   - はじめに:
       - クイックスタートと詳細インストール: getting-started.md
       - Trial 制限: guides/trial-limits.md
+  - AI エージェント連携:
+      - 概要: ai-agents/index.md
+      - エージェントクイックスタート: ai-agents/quickstart.md
+      - AI 駆動の戦略探索ワークフロー: ai-agents/exploration-workflow.md
+      - alpha-forge-mcp リファレンス: ai-agents/mcp-reference.md
+      - エージェントから見た CLI 規約: ai-agents/cli-conventions.md
   - ガイド:
       - エンドツーエンド戦略開発ワークフロー: guides/end-to-end-workflow.md
       - 実行結果と成果物サンプル: guides/output-examples.md
@@ -65,7 +71,6 @@ nav:
       - Combine Portfolio Pine — 複数戦略統合: guides/combine-portfolio-pine.md
       - TradingView と alpha-strike の連携: guides/tradingview-alpha-strike.md
       - alpha-strike セットアップガイド: guides/alpha-strike-setup.md
-      - AI 駆動の戦略探索ワークフロー: guides/ai-exploration-workflow.md
       - FRED マクロデータ活用ガイド: guides/macro-data.md
       - 目的別ユースケース:
           - 概要: usecases/index.md

@@ -6,7 +6,7 @@ Claude Code・Codex などの AI コーディングエージェントを「頭�
     - **対象読者**: Claude Code / Codex などの AI コーディングエージェントを **既に使いこなしている** 中〜上級者。エージェントへのプロンプト記述・スラッシュコマンドの仕組みを理解していることが前提です。
     - **前提**: AlphaForge **バイナリ版 v0.5.4 以降**、または `alpha-trade` モノレポ開発環境（`alpha-forge` + `alpha-strategies`）。
     - **想定所要時間**: 初回セットアップは 10 分程度。探索ループ自体は長時間（数時間〜一晩）かかるため、夜間運転や無人実行を推奨します。
-    - **手動で CLI を 1 ステップずつ理解したい場合**: 先に [エンドツーエンド戦略開発ワークフロー](end-to-end-workflow.md) を読むことを推奨します。本ページは「自動化された AI 探索」を前提に書かれています。
+    - **手動で CLI を 1 ステップずつ理解したい場合**: 先に [エンドツーエンド戦略開発ワークフロー](../guides/end-to-end-workflow.md) を読むことを推奨します。本ページは「自動化された AI 探索」を前提に書かれています。
     - **バイナリ版ユーザー**: 下の「バイナリ版ユーザー向け最短セットアップ」を先に実施してください。モノレポ前提で書かれたコマンド例は、**バイナリ版では `alpha-forge`（PATH 通し済み）に読み替えて実行できます**。
 
 ## バイナリ版ユーザー向け最短セットアップ {#binary-user-setup}
@@ -58,7 +58,7 @@ AlphaForge は **すべての設定・戦略・実行が JSON / YAML / CLI で�
 
 | 目的 | 推奨フロー |
 |------|-----------|
-| AlphaForge の全ステップを理解したい | [エンドツーエンド戦略開発ワークフロー](end-to-end-workflow.md)（手動 CLI） |
+| AlphaForge の全ステップを理解したい | [エンドツーエンド戦略開発ワークフロー](../guides/end-to-end-workflow.md)（手動 CLI） |
 | 新しい指標・銘柄の組み合わせを素早く探索したい | 本ページ（AI 駆動の自律探索） |
 | すでに有望な戦略があり、詰めたい | Step 3 の [`/grid-tune`](#step-3-grid-tune) から始める |
 | 実運用中の戦略の乖離を監視したい | Step 4 の [`/tune-live-strategies`](#step-4-tune-live-strategies) |
@@ -171,6 +171,8 @@ AlphaForge は **すべての設定・戦略・実行が JSON / YAML / CLI で�
 # エージェント / CI から破壊的コマンドを安全に呼ぶ例
 FORGE_NONINTERACTIVE=1 alpha-forge optimize clean --older-than 30d --yes --json
 ```
+
+規約の全体像（JSON 出力・終了コード・system config を含む）は [エージェントから見た CLI 規約](cli-conventions.md) を参照してください。
 
 !!! note "EULA 自動同意は別の環境変数"
     初回起動時の EULA 同意プロンプトは `FORGE_NONINTERACTIVE` では自動同意されません。CI 等では `FORGE_ACCEPT_EULA=1` を併用してください（[はじめに](../getting-started.md) 参照）。
@@ -351,7 +353,7 @@ AI エージェント × AlphaForge の使い方は、**起点となる材料** 
 - `alpha-forge pine verify --check-mode metrics --auto-backtest --mcp-server-flavor vinicius --output reports/<id>/verify.md`
 - `alpha-forge journal report --with-chart --symbol <SYM> --interval D --output reports/<id>/journal.md`
 
-MCP server が起動していない・`tv_mcp.pine_verify.enabled: false` の goal ではこのステップはスキップされ、既存ループの挙動は変わりません。詳細は [TradingView Pine 連携ガイド](tradingview-pine-integration.md) を参照してください。
+MCP server が起動していない・`tv_mcp.pine_verify.enabled: false` の goal ではこのステップはスキップされ、既存ループの挙動は変わりません。詳細は [TradingView Pine 連携ガイド](../guides/tradingview-pine-integration.md) を参照してください。
 
 ### 冪等性のポイント
 
@@ -816,7 +818,7 @@ pre_filter:
 | `wft_sharpe_std` | WFT valid window の OOS Sharpe 母標準偏差 pstdev（issue #859）| backtest（WFT 注入） |
 | `positive_oos_windows_ratio` | WFT valid window のうち OOS Sharpe > 0 の比率（0〜1、issue #859）| backtest（WFT 注入） |
 
-「ほぼ確実に毎月プラス」を表現する例：
+月次プラス比率を高く求める条件の例（達成を保証するものではありません）：
 
 ```yaml
 target_metrics:
@@ -1005,7 +1007,7 @@ candidates:
 7. **WFT 検証**: `alpha-forge optimize walk-forward <symbol> --strategy <name>_optimized --windows 5`
 8. **合否判定**: WFT 全ウィンドウ平均 Sharpe が **元戦略の Sharpe を超えていれば合格**
     - 合格 → `alpha-forge journal verdict <name>_optimized <run_id> pass`
-    - 不合格 → `alpha-forge strategy delete <name>_optimized --force` + 元戦略の Journal に `note` 追加
+    - 不合格 → `alpha-forge strategy delete <name>_optimized --yes` + 元戦略の Journal に `note` 追加
 
 ### メモリ・OOM の目安
 
@@ -1144,7 +1146,7 @@ alpha-forge live compare hmm_bb_pipeline_macd_v1_optimized
 
 ## 関連ドキュメント
 
-- [エンドツーエンド戦略開発ワークフロー](end-to-end-workflow.md) — 手動 CLI による全ステップの詳細
+- [エンドツーエンド戦略開発ワークフロー](../guides/end-to-end-workflow.md) — 手動 CLI による全ステップの詳細
 - [はじめに](../getting-started.md) — 初回バックテストまでのチュートリアル
 - [CLI リファレンス](../cli-reference/index.md) — `alpha-forge` コマンドの全パラメータ
 - [戦略テンプレート](../templates.md) — HMM × BB × RSI 等の同梱戦略
