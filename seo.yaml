@@ -4,23 +4,23 @@ site:
   twitter_site: "@alforge_bot"
   robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
   published_date: "2024-07-01"
-  modified_date: "2026-05-01"
+  modified_date: "2026-06-07"
 
 pages:
   index:
     ja:
-      title: "Alforge Labs — 時系列バックテストフレームワーク"
-      description: "ソフトウェアエンジニア向けの高速時系列シミュレーション CLI。バックテスト・ベイズ最適化・ウォークフォワード検証を一元管理。Backtrader・vectorbt の代替。"
-      keywords: "バックテスト, アルゴリズム取引, 時系列シミュレーション, backtesting, CLI, Backtrader代替, vectorbt代替, ウォークフォワード検証, ベイズ最適化"
-      og_title: "Alforge Labs — バックテスト CLI フレームワーク"
-      og_description: "ノイズから、シグナルへ。高速時系列シミュレーション CLI でアルゴ戦略を検証・最適化。"
+      title: "Alforge Labs — AI エージェントで回すバックテストフレームワーク"
+      description: "Claude Code などの AI エージェントから操作できるエージェントネイティブなクオンツ CLI。バックテスト・ベイズ最適化・ウォークフォワード検証を同梱スキル・MCP サーバ・非対話 CLI で自律実行。Backtrader・vectorbt の代替。"
+      keywords: "バックテスト, AIエージェント, Claude Code, MCP, アルゴリズム取引, 時系列シミュレーション, backtesting, CLI, Backtrader代替, vectorbt代替, ウォークフォワード検証, ベイズ最適化"
+      og_title: "Alforge Labs — AI エージェントで回すバックテスト CLI"
+      og_description: "エージェントに、戦略開発を任せる。Claude Code から探索・最適化・ウォークフォワード検証・Pine Script 生成まで自律実行。"
       json_ld_type: home
     en:
-      title: "Alforge Labs — Time-Series Backtesting Framework"
-      description: "High-performance time-series simulation CLI for software engineers. Backtest, Bayesian optimization, and walk-forward validation in one tool. Backtrader & vectorbt alternative."
-      keywords: "backtesting, algorithmic trading, time series simulation, backtrader alternative, vectorbt alternative, walk-forward validation, Bayesian optimization, CLI, Python"
-      og_title: "Alforge Labs — Backtesting CLI Framework"
-      og_description: "From noise to signal. Backtest, optimize, and validate algorithmic trading strategies with a local CLI."
+      title: "Alforge Labs — The Agent-Native Backtesting Framework"
+      description: "An agent-native quant CLI operable from Claude Code and other AI agents. Backtest, Bayesian optimization, and walk-forward validation run autonomously via bundled skills, an MCP server, and a non-interactive CLI. Backtrader & vectorbt alternative."
+      keywords: "backtesting, AI agents, Claude Code, MCP, algorithmic trading, time series simulation, backtrader alternative, vectorbt alternative, walk-forward validation, Bayesian optimization, CLI, Python"
+      og_title: "Alforge Labs — The Agent-Native Backtesting CLI"
+      og_description: "Your AI agent runs the quant lab. Exploration, optimization, walk-forward validation, and Pine Script export — autonomously from Claude Code."
       json_ld_type: home
 
   install:

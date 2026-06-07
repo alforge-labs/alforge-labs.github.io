@@ -46,7 +46,7 @@ function Hero({ t, lang }) {
           <a href={`/${lang}/install.html`} className="btn-primary">
             {c.cta1}
           </a>
-          <a href="#pricing" className="btn-secondary">{c.cta2} →</a>
+          <a href="#ai-agents" className="btn-secondary">{c.cta2} →</a>
         </div>
         <div className="hero-stats">
           {stats.map((s, i) => (
@@ -56,6 +56,57 @@ function Hero({ t, lang }) {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── AI AGENT INTEGRATION ── */
+function AIAgentSection({ t, lang }) {
+  const c = t.aiAgents;
+  if (!c) return null;
+  const prefixMap = { user: '❯', tool: '$', agent: '⏺' };
+  return (
+    <section className="ai-agents reveal" id="ai-agents">
+      <div className="container">
+        <div className="sec-label">{c.label}</div>
+        <h2 className="sec-title" style={{ whiteSpace: 'pre-line' }}>{c.title}</h2>
+        <p className="ai-agents-subtitle">{c.subtitle}</p>
+        <div className="ai-agents-shell">
+          <div className="agent-chat">
+            <div className="agent-chat-bar">
+              <span className="agent-chat-dot"></span>
+              <span className="agent-chat-dot"></span>
+              <span className="agent-chat-dot"></span>
+              <span className="agent-chat-title">{c.chat.title}</span>
+            </div>
+            <div className="agent-chat-body">
+              {c.chat.lines.map((l, i) => (
+                <div key={i} className={`chat-line chat-${l.role}`}>
+                  <span className="chat-prefix">{prefixMap[l.role]}</span>
+                  <span className="chat-text">{l.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="agent-paths">
+            {c.paths.map((p, i) => (
+              <article key={i} className="agent-path-card">
+                <div className="agent-path-head">
+                  <span className="agent-path-name">{p.name}</span>
+                  <span className="agent-path-badge">{p.badge}</span>
+                </div>
+                <p className="agent-path-desc">{p.desc}</p>
+                <code className="agent-path-code">{p.code}</code>
+                <div className="card-tags">
+                  {p.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <p className="ai-agents-ecosystem">{c.ecosystem}</p>
+        <a className="btn-secondary" href={`/${lang}/docs/ai-agents/`}>{c.docsCta} →</a>
       </div>
     </section>
   );
@@ -589,4 +640,4 @@ function SystemFlow({ t, dark, lang }) {
 }
 
 /* ── EXPORT ── */
-Object.assign(window, { NavBar, Hero, AvailabilitySummary, TrialStart, Products, useChartColors, EquityChartSVG, BenchmarkTable, PerformanceChart, TrialBanner, ComparisonTable, Pricing, UseCases, PersonaUseCases, SystemFlow, LongTermValue, TrustSafety });
+Object.assign(window, { NavBar, Hero, AIAgentSection, AvailabilitySummary, TrialStart, Products, useChartColors, EquityChartSVG, BenchmarkTable, PerformanceChart, TrialBanner, ComparisonTable, Pricing, UseCases, PersonaUseCases, SystemFlow, LongTermValue, TrustSafety });
