@@ -134,7 +134,7 @@ trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `u
 ```text
 バックテストを実行中: SPY x sma_crossover_v1
 ⚠️ バックテスト完了  信号品質スコア: 0.38/1.0 （<0.4 は信頼度が低く参考値扱い）
-    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
+    → 詳細: https://alforgelabs.com/ja/docs/cli-reference/backtest/#signal-quality-score
 総リターン: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  期間: 187日  回復: 92日
@@ -147,12 +147,12 @@ PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
 
 ```text
 ⚠️  バックテスト完了  信号品質スコア: 0.43/1.0 （0.4–0.7 は要注意・追加検証推奨）
-    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
+    → 詳細: https://alforgelabs.com/ja/docs/cli-reference/backtest/#signal-quality-score
 ⚠️  警告: 取引数が不足しています (trades=27, 最低30推奨)
     → 取引数 30 件未満は統計的に偶然の影響を受けやすく、最適化や WFT で
       pre_filter 落ちする可能性があります。データ期間を広げる
       (`--start` で過去にさかのぼる) ことを推奨します。
-    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
+    → 詳細: https://alforgelabs.com/ja/docs/cli-reference/backtest/#signal-quality-score
 ```
 
 ### 信号品質スコアと最低取引数（F-302） {#signal-quality-score}
