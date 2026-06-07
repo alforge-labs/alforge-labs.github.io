@@ -13,7 +13,7 @@
 | MACD + RSI | モメンタムと過熱感の併用 | `SPY` | 可 |
 | トレンドフォロー | 明確な上昇トレンドへの追随 | `AAPL` | 可 |
 | 平均回帰 | レンジ内の行き過ぎから反発を狙う | `MSFT` | 可 |
-| FXペア向け | 主要通貨ペアの短中期検証 | `EURUSD` | 可 |
+| FXペア向け | 主要通貨ペアの短中期検証 | `EURUSD=X` | 可 |
 | インデックスETF向け | ETF横断で頑健な設定を探す | `SPY` | 可 |
 | 商品先物向け | 商品特有のトレンド/レンジを扱う | `CL=F` | 条件付き可 |
 
@@ -210,10 +210,10 @@ alpha-forge pine generate --strategy gallery_mean_reversion_v1
 | 項目 | 内容 |
 |---|---|
 | 目的 | 主要通貨ペアで短中期のトレンドと過熱感を検証する |
-| 向いている市場 | EURUSD, USDJPY など流動性の高いFXペア |
+| 向いている市場 | EURUSD=X, USDJPY=X など流動性の高いFXペア |
 | 戦略タイプ | トレンド + オシレーター |
 | 主要指標 | SMA, RSI, ATR |
-| 想定シンボル | `EURUSD`, `USDJPY` |
+| 想定シンボル | `EURUSD=X`, `USDJPY=X` |
 | Pine Script生成可否 | 可 |
 
 ### JSON要点スニペット
@@ -221,7 +221,7 @@ alpha-forge pine generate --strategy gallery_mean_reversion_v1
 ```json
 {
   "strategy_id": "gallery_fx_pair_v1",
-  "target_symbols": ["EURUSD"],
+  "target_symbols": ["EURUSD=X"],
   "asset_type": "fx",
   "indicators": [
     { "id": "sma_fast", "type": "SMA", "params": { "length": 20 } },
@@ -240,8 +240,8 @@ alpha-forge pine generate --strategy gallery_mean_reversion_v1
 ```bash
 alpha-forge strategy save data/strategies/gallery_fx_pair_v1.json
 alpha-forge strategy validate gallery_fx_pair_v1
-alpha-forge backtest run EURUSD --strategy gallery_fx_pair_v1 --json
-alpha-forge optimize run EURUSD --strategy gallery_fx_pair_v1 --metric sharpe_ratio --save
+alpha-forge backtest run EURUSD=X --strategy gallery_fx_pair_v1 --json
+alpha-forge optimize run EURUSD=X --strategy gallery_fx_pair_v1 --metric sharpe_ratio --save
 alpha-forge pine generate --strategy gallery_fx_pair_v1
 ```
 
@@ -251,7 +251,7 @@ FXはトレンドが短く反転しやすいため、平均保有期間とPFを�
 
 ### 改良ポイント
 
-USDJPYやGBPUSDでも同じ戦略を検証し、`alpha-forge optimize cross-symbol` でペア横断の頑健性を確認します。
+USDJPY=XやGBPUSD=Xでも同じ戦略を検証し、`alpha-forge optimize cross-symbol` でペア横断の頑健性を確認します。
 
 ## インデックスETF向け
 

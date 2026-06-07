@@ -77,7 +77,7 @@ The strength of this template is **managing three regimes within a single strate
   "strategy_id": "my_hmm_bb_rsi_v1",
   "name": "Multi-Asset HMM×BB+RSI v1 (QQQ)",
   "version": "1.0.0",
-  "description": "HMM 3-state regime filter × BB+RSI mean reversion. Bull(state=0): long on BB-lower + RSI oversold (leverage=3). Neutral(state=1): same condition (leverage=1.5). Bear(state=2): skip. Daily.",
+  "description": "HMM 3-state regime filter × BB+RSI mean reversion. Bull(state=0): long on BB-lower + RSI oversold (leverage=5). Neutral(state=1): same condition (leverage=3). Bear(state=2): skip. Daily.",
   "target_symbols": ["QQQ"],
   "asset_type": "stock",
   "timeframe": "1d",
@@ -260,6 +260,13 @@ The defining feature versus HMM × BB × RSI: `regime_config.states` lets you de
       }
     }
   },
+  "backtest_config": {
+    "regime_analysis": {
+      "method": "hmm",
+      "hmm_indicator_id": "regime",
+      "label_names": { "0": "Bull", "1": "Bear" }
+    }
+  },
   "optimizer_config": {
     "param_ranges": {
       "supertrend_val.multiplier": { "min": 2.0, "max": 4.0, "step": 0.5 },
@@ -295,8 +302,18 @@ The defining feature versus HMM × BB × RSI: `regime_config.states` lets you de
    trades: 27   win_rate: 51.9%   profit_factor: 1.82
    total_return: +88.3%   cagr: +8.4%   sharpe: 1.21
    max_drawdown: -22.1%   exposure: 31.5%
-   regime_breakdown: state=0 (Bull): 14 trades, sharpe 1.45  /  state=1 (Bear): 13 trades, sharpe 0.92
 ```
+
+Running a strategy that sets `backtest_config.regime_analysis` with `--regime` adds a per-regime performance block (numbers are illustrative):
+
+```text
+=== Per-Regime Performance ===
+  Bull      : Trades= 14 | Sharpe=  1.45 | WinRate= 57.1% | MDD= -12.30%
+  Bear      : Trades= 13 | Sharpe=  0.92 | WinRate= 46.2% | MDD= -22.10%
+```
+
+!!! note "Output structure"
+    With `--json`, the `regime_breakdown` key is returned as `{ "method", "description", "periods": [...], "aggregates": {...} }`. Each entry in `periods` holds `label / start / end / sharpe / total_trades` for a contiguous regime segment, and `aggregates` holds per-label averages (such as `sharpe_avg`).
 
 ### Customization tips
 
