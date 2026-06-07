@@ -8,7 +8,7 @@ AlphaForge operates on two tiers: the **Trial plan** (no Whop registration, inde
     - **Data acquisition**: `alpha-forge data fetch` / `alpha-forge data update` / `alpha-forge pine generate --with-training-data` / automatic external symbol fetching by strategies (`merge_external_symbols`)
     - **Evaluation engine entry**: `alpha-forge backtest run` / `alpha-forge optimize` (`run` / `grid` / `walk-forward` / `cross-symbol`)
     - **Optimization trial count**: `alpha-forge optimize run` / `cross-symbol` / `portfolio` / `multi-portfolio` / `walk-forward` / `grid`
-    - **Pine Script export (hard block)**: `alpha-forge pine generate` / `alpha-forge pine preview` (`alpha-forge pine import` is unaffected)
+    - **Pine Script export (hard block)**: `alpha-forge pine generate` / `alpha-forge pine preview` / `alpha-forge pine verify` (`alpha-forge pine import` is unaffected)
 
     Both fetch and evaluation share **2023-12-31** as the cap, and the optimization commands share **50 trials** as the cap. Pine Script export is **fully blocked** on the Trial plan.
 
@@ -83,9 +83,9 @@ Example `freemium_limit_notices` for the optimization trial cap:
 }
 ```
 
-#### Pine Script export (`alpha-forge pine generate` / `alpha-forge pine preview`)
+#### Pine Script export (`alpha-forge pine generate` / `alpha-forge pine preview` / `alpha-forge pine verify`)
 
-- The Trial plan **hard-blocks** Pine Script export. Both commands stop immediately—no file output, no stdout payload.
+- The Trial plan **hard-blocks** Pine Script export. These commands stop immediately—no file output, no stdout payload. `alpha-forge pine verify` is blocked as well because it generates Pine Script internally.
 - The exit code is `1`, accompanied by a red Panel and the purchase URL ([https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)).
 - Internally the structured notice uses `code = "free_tier_pine_export_blocked"` (`original_value` / `applied_value` are `null`), but `alpha-forge pine generate` / `pine preview` have no `--json` option, so the block is surfaced only via the red Panel and exit code `1`—there is no `freemium_limit_notices` JSON output.
 - `alpha-forge pine import` is an import-only feature and remains available on the Trial plan.

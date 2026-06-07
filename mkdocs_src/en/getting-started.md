@@ -133,11 +133,11 @@ alpha-forge data fetch SPY --period 5y
 ```
 
 ```
-データの取得を開始します: SPY (period=5y, interval=1d)
-SPY のデータを取得し保存しました (N lines)
+Fetching data: SPY (period=5y, interval=1d)
+Fetched and saved data for SPY (N lines)
 ```
 
-The data is saved to `data/historical/SPY_1d.parquet`. (The CLI prints the fetch progress in Japanese regardless of locale.) Running this step on its own also helps you isolate online-fetch failures (network issues, rate limits) before the backtest.
+The data is saved to `data/historical/SPY_1d.parquet`. Running this step on its own also helps you isolate online-fetch failures (network issues, rate limits) before the backtest.
 
 ### Step 3 — Register the strategy and run the backtest (~2 min)
 

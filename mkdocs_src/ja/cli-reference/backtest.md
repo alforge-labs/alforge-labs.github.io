@@ -133,7 +133,8 @@ trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `u
 
 ```text
 バックテストを実行中: SPY x sma_crossover_v1
-⚠️ バックテスト完了  信号品質スコア: 0.71/1.0 （≥0.7 は信頼できる水準）
+⚠️ バックテスト完了  信号品質スコア: 0.38/1.0 （<0.4 は信頼度が低く参考値扱い）
+    → 詳細: https://alforgelabs.com/ja/cli-reference/backtest.html#signal-quality-score
 総リターン: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  期間: 187日  回復: 92日
@@ -437,6 +438,8 @@ alpha-forge backtest compare <STRATEGY1> [STRATEGY2 ...] --symbol <SYM> [--symbo
 期間（`(2020-01-01 〜 現在)` のような表記）は `--start` / `--end` を指定したときのみヘッダに付きます。指定しない場合は戦略数のみが表示されます。
 
 ```text
+=== 戦略比較: SPY (2 戦略) ===
+
 ────────────────────────────────────────────────────────────
 指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
 ────────────────────────────────────────────────────────────

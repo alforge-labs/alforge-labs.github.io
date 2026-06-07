@@ -133,7 +133,8 @@ The leading icon is driven by whether the trade count is statistically sufficien
 
 ```text
 Running backtest: SPY x sma_crossover_v1
-⚠️ Backtest complete  Signal quality score: 0.71/1.0 (≥0.7 is reliable)
+⚠️ Backtest complete  Signal quality score: 0.38/1.0 (<0.4: low reliability, treat as reference only)
+    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
 Total Return: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  Duration: 187d  Recovery: 92d
@@ -437,6 +438,8 @@ The output uses a **one-row-per-metric** transposed layout. The first strategy y
 The period (e.g. `(2020-01-01 to present)`) is only added to the header when `--start` / `--end` are supplied; otherwise only the strategy count is shown.
 
 ```text
+=== Strategy Comparison: SPY (2 strategies) ===
+
 ────────────────────────────────────────────────────────────
 指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
 ────────────────────────────────────────────────────────────

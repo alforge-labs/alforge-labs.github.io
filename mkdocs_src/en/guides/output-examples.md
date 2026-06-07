@@ -155,6 +155,9 @@ Best params: {'fast_period': 12, 'slow_period': 50}
 DB saved: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 ```
 
+!!! warning "About the `Next:` hint in the sample"
+    The `Next:` line above reproduces the actual CLI output, but passing the displayed `--to-strategy sma_crossover_v1_optimized` verbatim registers a doubly-suffixed ID (`sma_crossover_v1_optimized_optimized`) — a known wording bug in the CLI hint. Pass the base ID without the suffix (`--to-strategy sma_crossover_v1`) as shown in the example below.
+
 Machine-readable output with `--json`:
 
 ```bash

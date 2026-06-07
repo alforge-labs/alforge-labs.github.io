@@ -308,12 +308,12 @@ Running a strategy that sets `backtest_config.regime_analysis` with `--regime` a
 
 ```text
 === Per-Regime Performance ===
-  Bull      : Trades= 14 | Sharpe=  1.45 | WinRate= 57.1% | MDD= -12.30%
-  Bear      : Trades= 13 | Sharpe=  0.92 | WinRate= 46.2% | MDD= -22.10%
+  Bull      : Trades= 14 | Sharpe=  1.45 | WinRate= 57.1% | MDD=  12.30%
+  Bear      : Trades= 13 | Sharpe=  0.92 | WinRate= 46.2% | MDD=  22.10%
 ```
 
 !!! note "Output structure"
-    With `--json`, the `regime_breakdown` key is returned as `{ "method", "description", "periods": [...], "aggregates": {...} }`. Each entry in `periods` holds `label / start / end / sharpe / total_trades` for a contiguous regime segment, and `aggregates` holds per-label averages (such as `sharpe_avg`).
+    With `--json`, the `regime_breakdown` key is returned as `{ "method", "description", "periods": [...], "aggregates": {...} }`. Each entry in `periods` holds fields such as `label / start / end / sharpe / total_trades` for a contiguous regime segment, and `aggregates` holds per-label averages (such as `sharpe_avg`).
 
 ### Customization tips
 

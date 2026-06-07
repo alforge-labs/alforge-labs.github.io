@@ -138,7 +138,7 @@ exploration agents can decide programmatically which criterion failed and by how
 
 | Field | Description |
 |-------|-------------|
-| `value` | Observed metric from the backtest. `monthly_volume_usd` is also computed, but when its threshold (`monthly_volume_usd_min`) is 0 or below it is treated as "not evaluated" — `passed` becomes `null` and a `note` is attached, while `value` itself is still computed |
+| `value` | Observed metric from the backtest. `monthly_volume_usd` is also computed, but when its threshold (`monthly_volume_usd_min`) is 0 or below it is treated as "not evaluated" — `passed` becomes `null` and a `note` is attached, while `value` itself is still computed. The `note` text is emitted in Japanese regardless of locale |
 | `threshold` | Threshold resolved from the `pre_filter` section of goals.yaml |
 | `passed` | Whether the criterion is met (`null` means not evaluated) |
 | `gap` | "value − threshold" (for `max_drawdown` it is "threshold − value"). Negative = shortfall, positive = headroom |

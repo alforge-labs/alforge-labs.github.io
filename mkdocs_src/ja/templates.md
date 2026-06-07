@@ -308,8 +308,8 @@ HMM 出力をキーに **レジームごとに別の戦略を適用** するパ�
 
 ```text
 === レジーム別パフォーマンス ===
-  Bull      : Trades= 14 | Sharpe=  1.45 | WinRate= 57.1% | MDD= -12.30%
-  Bear      : Trades= 13 | Sharpe=  0.92 | WinRate= 46.2% | MDD= -22.10%
+  Bull      : Trades= 14 | Sharpe=  1.45 | WinRate= 57.1% | MDD=  12.30%
+  Bear      : Trades= 13 | Sharpe=  0.92 | WinRate= 46.2% | MDD=  22.10%
 ```
 
 !!! note "出力構造について"

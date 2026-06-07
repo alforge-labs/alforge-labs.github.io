@@ -8,7 +8,7 @@ AlphaForge は **Trial プラン**（Whop 未登録、期限なし）と **有�
     - **データ取得**: `alpha-forge data fetch` / `alpha-forge data update` / `alpha-forge pine generate --with-training-data` / 戦略の外部シンボル自動取得（`merge_external_symbols`）
     - **評価エンジン入口**: `alpha-forge backtest run` / `alpha-forge optimize`（`run` / `grid` / `walk-forward` / `cross-symbol`）
     - **最適化 trial 数**: `alpha-forge optimize run` / `cross-symbol` / `portfolio` / `multi-portfolio` / `walk-forward` / `grid`
-    - **Pine Script エクスポート（ハードブロック）**: `alpha-forge pine generate` / `alpha-forge pine preview`（`alpha-forge pine import` は対象外）
+    - **Pine Script エクスポート（ハードブロック）**: `alpha-forge pine generate` / `alpha-forge pine preview` / `alpha-forge pine verify`（`alpha-forge pine import` は対象外）
 
     取得時にも評価時にも **2023-12-31** をキャップとして共有し、最適化系コマンドは **50 trials** をキャップとして共有しています。Pine Script エクスポートは Trial プランでは**完全にブロック**されます。
 
@@ -83,9 +83,9 @@ AlphaForge は **Trial プラン**（Whop 未登録、期限なし）と **有�
 }
 ```
 
-#### Pine Script エクスポート（`alpha-forge pine generate` / `alpha-forge pine preview`）
+#### Pine Script エクスポート（`alpha-forge pine generate` / `alpha-forge pine preview` / `alpha-forge pine verify`）
 
-- Trial プランでは **ハードブロック**：いずれのコマンドも実行直後に完全停止し、ファイル出力も標準出力も行われません。
+- Trial プランでは **ハードブロック**：いずれのコマンドも実行直後に完全停止し、ファイル出力も標準出力も行われません。`alpha-forge pine verify` も内部で Pine Script を生成するため同様にブロックされます。
 - 終了コードは `1` で、赤枠の Panel と購入ページ URL（[https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)）が表示されます。
 - 内部的な構造化通知の `code` は `free_tier_pine_export_blocked`（`original_value` / `applied_value` は `null`）ですが、`alpha-forge pine generate` / `pine preview` には `--json` オプションが無いため、ブロックは赤枠 Panel と exit 1 のみで通知され、`freemium_limit_notices` の JSON 出力は行われません。
 - `alpha-forge pine import` はインポート機能のため対象外で、Trial プランでも継続して利用できます。

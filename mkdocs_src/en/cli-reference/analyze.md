@@ -19,19 +19,19 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail]
 | `FILTER_NAME` | argument (optional) | - | Filter substring |
 | `--detail` | flag | false | Show parameter names, defaults, and descriptions |
 
-Sample output:
+Sample output (the category labels such as `移動平均` = moving average are emitted in Japanese regardless of locale):
 
 ```text
-Supported indicators (52):
+利用可能なインジケーター一覧（52件）:
 
-  [Moving Average]   ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
-  [Trend]            ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
-  [Oscillator]       CCI  MFI  MOM  ROC  RSI  STOCH  TRIX  WILLR
-  [Volatility]       ATR  BBANDS  KC
-  [Volume]           CMF  OBV  VWAP
-  [Pivot/Channel]    CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW
-  [Stats/ML]         CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
-  [Advanced]         ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
+  [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
+  [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
+  [オシレーター]  CCI  MFI  MOM  ROC  RSI  STOCH  TRIX  WILLR
+  [ボラティリティ]  ATR  BBANDS  KC
+  [出来高]  CMF  OBV  VWAP
+  [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW
+  [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
+  [高度な機能]  ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
 
 Details: alpha-forge analyze indicator show <TYPE>
 ```

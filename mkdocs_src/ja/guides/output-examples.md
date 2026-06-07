@@ -155,6 +155,9 @@ alpha-forge optimize run SPY --strategy sma_crossover_v1 --metric sharpe_ratio -
 DB 保存: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 ```
 
+!!! warning "サンプル中の「次のステップ」ヒントについて"
+    上記の `次のステップ:` 行は CLI の実出力をそのまま再現していますが、表示される `--to-strategy sma_crossover_v1_optimized` をそのまま渡すと、登録される ID が `sma_crossover_v1_optimized_optimized` と接尾辞二重付与になります（CLI ヒント文言の既知バグ）。実際には後述の例のように、接尾辞なしのベース ID（`--to-strategy sma_crossover_v1`）を指定してください。
+
 `--json` フラグで機械可読な形式での出力:
 
 ```bash
