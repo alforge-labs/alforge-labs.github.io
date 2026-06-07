@@ -157,10 +157,16 @@ PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
 #### 信号品質スコア（`signal_quality_score`, 0.0–1.0）
 
 ```python
-sample_size_score   = min(total_trades / 30, 1.0) * 0.4   # 40%
-win_rate_score      = min(win_rate_pct / 100, 1.0) * 0.3  # 30%
-profit_factor_score = min(profit_factor / 2.0, 1.0) * 0.3 # 30%
-signal_quality_score = sample_size_score + win_rate_score + profit_factor_score
+sharpe_score        = min(max(sharpe_ratio / 2.0, 0.0), 1.0)             # 30%
+profit_factor_score = min(max((profit_factor - 1.0) / 1.5, 0.0), 1.0)    # 20%（profit_factor が None のときは 0）
+win_rate_score      = max(0.0, (win_rate_pct - 50.0) / 30.0)             # 20%（勝率 50% 超過分のみ寄与）
+sample_size_score   = min(total_trades / 30, 1.0)                        # 30%
+signal_quality_score = (
+    0.30 * sharpe_score
+    + 0.20 * profit_factor_score
+    + 0.20 * win_rate_score
+    + 0.30 * sample_size_score
+)
 ```
 
 | スコア帯 | 判断 | CLI 表示 |
