@@ -11,6 +11,19 @@ AlphaForge is designed so that **all operations complete via CLI/JSON/YAML**, ma
 - Slash commands let you run the same workflow **idempotently, as many times as needed**
 - Enables **autonomous overnight exploration** independent of human working hours
 
+## Three Ways to Connect
+
+There are three main ways to drive AlphaForge from an agent. Pick whichever fits your use case.
+
+| Path | What it is | Best for |
+|------|------------|----------|
+| **Bundled skills** | `alpha-forge system init` drops slash commands and skills for Claude Code / Codex into your working directory | Running ready-made workflows (exploration, analysis, tuning) as-is |
+| **MCP server** | Launch the MCP server with `uvx alpha-forge-mcp` and call tools like `run_backtest` directly from MCP clients such as Claude Code / Cursor / Codex | Giving the agent AlphaForge as structured tools |
+| **Non-interactive CLI** | `FORGE_NONINTERACTIVE=1` + `--json` gives prompt-free runs, pure-JSON output, and a well-defined exit-code contract (0 = success / 1 = failure / 2 = argument error) | Calling AlphaForge as a subprocess from your own scripts or CI |
+
+!!! tip "Try it in 10 minutes"
+    Not sure where to start? The [Agent Quickstart](../ai-agents/quickstart.md) is the fastest path — you can try both the bundled skills and the MCP server in about 10 minutes.
+
 ## Key Slash Commands (Claude Code)
 
 | Command | Role |
@@ -23,6 +36,8 @@ AlphaForge is designed so that **all operations complete via CLI/JSON/YAML**, ma
 
 ## Full Documentation
 
-For the complete AI agent integration reference (recommended agent comparison, one-cycle example, loop operation notes), see:
+For the complete AI agent integration reference (setup for all three paths, recommended agent comparison, one-cycle example, loop operation notes), see:
 
-→ **[AI-Driven Strategy Exploration Workflow](../guides/ai-exploration-workflow.md)**
+- **[AI Agent Integration section](../ai-agents/index.md)** — The hub for bundled skills, the MCP server, and the non-interactive CLI
+- **[Agent Quickstart](../ai-agents/quickstart.md)** — Try agent integration in about 10 minutes
+- **[AI-Driven Strategy Exploration Workflow](../ai-agents/exploration-workflow.md)** — A how-to for autonomous exploration (recommended agent comparison, one-cycle example, loop operation notes)

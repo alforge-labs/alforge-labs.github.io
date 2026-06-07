@@ -230,8 +230,10 @@
     }
 
     .hero-h1 {
-      font-size: clamp(3rem, 7.5vw, 6.5rem);
-      font-weight: 700; letter-spacing: -0.04em; line-height: 1.0;
+      /* 日本語 H1「エージェントに、/戦略開発を任せる。」(9文字/行) が
+         モバイルでも折り返さないよう、旧 clamp(3rem,7.5vw,6.5rem) から縮小 */
+      font-size: clamp(2.1rem, 7vw, 6rem);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 1.05;
       color: var(--text);
       animation: fadeUp 0.7s var(--ease) 0.1s both;
     }
@@ -287,6 +289,78 @@
       font-size: 0.72rem; color: var(--text3); letter-spacing: 0.06em;
       text-transform: uppercase; font-family: var(--mono);
     }
+
+    /* ── AI AGENT INTEGRATION ── */
+    .ai-agents { padding: 6rem 0; border-bottom: 1px solid var(--border); }
+    .ai-agents-subtitle {
+      margin-top: 0.6rem; max-width: 680px;
+      color: var(--text2); font-size: 0.92rem; line-height: 1.8;
+    }
+    .ai-agents-shell {
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 1.25rem; margin-top: 2.5rem; align-items: start;
+    }
+    .agent-chat {
+      border: 1px solid var(--border); border-radius: var(--r);
+      background: var(--bg2); overflow: hidden;
+    }
+    .agent-chat-bar {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .agent-chat-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border-h); }
+    .agent-chat-title {
+      margin-left: 0.5rem; font-family: var(--mono); font-size: 0.68rem;
+      color: var(--text3); letter-spacing: 0.06em;
+    }
+    .agent-chat-body {
+      padding: 1.15rem 1.25rem; display: flex; flex-direction: column; gap: 0.7rem;
+    }
+    .chat-line {
+      display: flex; gap: 0.6rem;
+      font-family: var(--mono); font-size: 0.78rem; line-height: 1.65;
+    }
+    .chat-prefix { flex: none; }
+    .chat-user .chat-prefix { color: var(--accent); }
+    .chat-user .chat-text { color: var(--text); }
+    .chat-tool { padding-left: 1.2rem; }
+    .chat-tool .chat-prefix { color: var(--text3); }
+    .chat-tool .chat-text { color: var(--text3); word-break: break-all; }
+    .chat-agent .chat-prefix { color: var(--blue); }
+    .chat-agent .chat-text { color: var(--text2); }
+    .agent-paths {
+      display: grid; grid-template-columns: minmax(0, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--r); overflow: hidden;
+    }
+    .agent-path-card {
+      background: var(--surface); padding: 1.3rem 1.4rem;
+      display: flex; flex-direction: column; gap: 0.6rem;
+      transition: background 0.2s;
+    }
+    .agent-path-card:hover { background: var(--surface-h); }
+    .agent-path-head { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+    .agent-path-name { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .agent-path-badge {
+      font-family: var(--mono); font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 100px;
+      background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-glow);
+      white-space: nowrap;
+    }
+    .agent-path-desc { color: var(--text2); font-size: 0.84rem; line-height: 1.65; }
+    .agent-path-code {
+      display: block; font-family: var(--mono); font-size: 0.72rem;
+      color: var(--accent); background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.5rem 0.7rem; overflow-x: auto; white-space: nowrap;
+    }
+    .ai-agents-ecosystem {
+      margin-top: 1.5rem; max-width: 680px;
+      color: var(--text3); font-size: 0.84rem; line-height: 1.7;
+    }
+    .ai-agents .btn-secondary { margin-top: 1.25rem; }
 
     /* ── FREE START ── */
     .trial-start {
@@ -990,6 +1064,8 @@
 
     @media (max-width: 768px) {
       .products-grid { grid-template-columns: 1fr; }
+      .ai-agents { padding: 4.5rem 0; }
+      .ai-agents-shell { grid-template-columns: minmax(0, 1fr); }
       .pricing-grid { grid-template-columns: 1fr; }
       .availability-grid { grid-template-columns: 1fr; }
       .trust-safety { padding: 4.5rem 0; }

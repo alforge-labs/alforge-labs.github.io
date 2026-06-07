@@ -3,6 +3,7 @@
 const HEADER_COPY = {
   ja: {
     products: 'プロダクト',
+    aiAgents: 'AIエージェント',
     pricing: '料金',
     install: 'インストール',
     mkdocs: 'ドキュメント',
@@ -14,6 +15,7 @@ const HEADER_COPY = {
   },
   en: {
     products: 'Products',
+    aiAgents: 'AI Agents',
     pricing: 'Pricing',
     install: 'Install',
     mkdocs: 'Docs',
@@ -30,6 +32,7 @@ const _p = window.location.pathname;
 const _anchorBase = (_p === '/ja/' || _p === '/en/' || _p.endsWith('/index.html')) ? '' : 'index.html';
 
 const HEADER_LINKS = [
+  { key: 'aiAgents', href: _anchorBase + '#ai-agents' },
   { key: 'products', href: _anchorBase + '#products' },
   { key: 'pricing',  href: _anchorBase + '#pricing' },
   { key: 'install',  href: 'install.html' },

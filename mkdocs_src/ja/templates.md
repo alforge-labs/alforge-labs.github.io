@@ -501,7 +501,7 @@ alpha-forge live compare <STRATEGY_ID>
 
 - [はじめに](getting-started.md) — シンプルな SMA クロス戦略から始める
 - [CLI リファレンス](cli-reference/index.md) — `alpha-forge` コマンドの全パラメータ
-- [AI 駆動の戦略探索ワークフロー](guides/ai-exploration-workflow.md) — Claude Code / Codex で戦略を自動生成
+- [AI 駆動の戦略探索ワークフロー](ai-agents/exploration-workflow.md) — Claude Code / Codex で戦略を自動生成
 
 ---
 

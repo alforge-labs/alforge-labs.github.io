@@ -5,6 +5,9 @@ AlphaForge CLI のインストールから最初のバックテスト結果を�
 - **Whop 登録なしで完結する 約 10 分の Trial 体験**を冒頭に配置しています。インストール後すぐに Trial プランとして利用できます。
 - その後ろに、**詳細なインストール手順・有料プラン購入後の認証・アンインストール・トラブルシューティング**を載せています。
 
+!!! tip "AI エージェントから使い始める"
+    Claude Code / Codex / Cursor などの AI エージェントと組み合わせて使いたい場合は、[エージェントクイックスタート](ai-agents/quickstart.md) から始められます。AlphaForge のインストール自体は本ページの手順が前提となるため、先に下のステップでインストールを済ませてください。
+
 !!! info "用語集（このページで使う言葉）"
     | 用語 | 意味 |
     |---|---|
@@ -529,7 +532,7 @@ alpha-forge pine generate --strategy sma_cross_qs
 - [目的別ユースケース](usecases/index.md) — 自分の役割（TradingView ユーザー / Python 開発者 / クオント / 自動売買検討者 / AI エージェント利用者）から最適な次ページを選ぶ
 - [CLI リファレンス](cli-reference/index.md) — `alpha-forge` コマンドの全パラメータと出力形式
 - [戦略テンプレート](templates.md) — HMM × BB × RSI などの複合戦略例
-- [AI 駆動の戦略探索ワークフロー](guides/ai-exploration-workflow.md) — Claude Code / Codex × AlphaForge による自律探索
+- [AI 駆動の戦略探索ワークフロー](ai-agents/exploration-workflow.md) — Claude Code / Codex × AlphaForge による自律探索
 
 ---
 

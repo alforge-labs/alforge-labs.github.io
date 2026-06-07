@@ -19,11 +19,11 @@ window.COPY = {
     nav: { products: 'プロダクト', pricing: '料金', install: 'インストール', tutorial: 'チュートリアル', faq: 'FAQ', docs: 'ドキュメント', follow: 'フォロー' },
     hero: {
       tag: 'ベータ提供中',
-      h1a: 'ノイズから、',
-      h1b: 'シグナルへ。',
-      desc: 'バックテスト・ベイズ最適化・ウォークフォワード検証をひとつの CLI で完結。先物・株式・FX を問わず、統計的に再現可能な投資戦略を体系的に開発・証明する。',
+      h1a: 'エージェントに、',
+      h1b: '戦略開発を任せる。',
+      desc: 'Claude Code に「戦略を探して」と頼むだけ。AI エージェントがバックテスト・Optuna ベイズ最適化・ウォークフォワード検証・Pine Script v6 出力までを自律実行する、エージェントネイティブなクオンツ CLI。先物・株式・FX に対応。',
       cta1: '無料で試す',
-      cta2: 'プランを見る',
+      cta2: 'AI エージェントと使う',
     },
     trialStart: {
       label: 'Trial で開始',
@@ -45,10 +45,51 @@ window.COPY = {
       ],
     },
     heroStats: [
-      { val: 'AI 自律', accent: false, lbl: '戦略探索 × 検証 × Pine Script 生成' },
+      { val: 'MCP + スキル 8 種', accent: false, lbl: 'コマンド 5 + スキル 3・Claude Code / Codex 対応' },
       { val: 'Max DD ‑23%', accent: true, lbl: 'QQQ(‑35%)比で大幅縮小・リターンは同等（5年検証）' },
       { val: '2026夏', accent: false, lbl: '正式リリース目標' },
     ],
+    aiAgents: {
+      label: 'AI エージェント連携',
+      title: '「探して」と頼めば、\n検証済みの候補が返ってくる',
+      subtitle: 'AlphaForge は AI コーディングエージェントからの利用を前提に設計しています。同梱スキル・MCP サーバ・非対話 CLI の 3 つの接続経路を備え、戦略の探索からウォークフォワード検証・Pine Script 出力まで、エージェントに任せられます。',
+      chat: {
+        title: 'Claude Code — AlphaForge セッション',
+        lines: [
+          { role: 'user',  text: 'SPY で未試行の指標の組み合わせを探索して、ウォークフォワード検証に合格した戦略だけ残して' },
+          { role: 'agent', text: '/explore-strategies を起動して自律探索を開始します。' },
+          { role: 'tool',  text: 'alpha-forge backtest run SPY --strategy my_rsi_v1 --json' },
+          { role: 'tool',  text: 'alpha-forge optimize run SPY --strategy my_rsi_v1 --trials 50 --json' },
+          { role: 'tool',  text: 'alpha-forge optimize walk-forward SPY --strategy my_rsi_v1_optimized --json' },
+          { role: 'agent', text: '✓ OOS 5 窓すべて正リターン。戦略 JSON と Pine Script v6 を保存しました。' },
+        ],
+      },
+      paths: [
+        {
+          name: 'エージェントスキル',
+          badge: '同梱',
+          desc: 'alpha-forge system init が /explore-strategies など 5 つのスラッシュコマンドと 3 つのスキルを作業ディレクトリに展開。夜間の自律探索ループも Claude Code / Codex からすぐ回せます。',
+          code: 'alpha-forge system init',
+          tags: ['Claude Code', 'Codex', '/explore-strategies'],
+        },
+        {
+          name: 'MCP サーバ',
+          badge: 'Alpha',
+          desc: 'uvx alpha-forge-mcp で起動する OSS（Apache-2.0）の MCP サーバ。戦略一覧・バックテスト・最適化・Pine Script 生成を 7 つのツールとして公開します。',
+          code: 'claude mcp add --scope user alpha-forge -- uvx alpha-forge-mcp',
+          tags: ['Claude Code', 'Claude Desktop', 'Cursor'],
+        },
+        {
+          name: 'エージェントフレンドリー CLI',
+          badge: '標準',
+          desc: '全コマンド --json 対応・FORGE_NONINTERACTIVE=1 で確認プロンプトを排除・終了コード規約（0/1/2）。どんなエージェントからも、CLI を直接呼ぶだけで安全に連携できます。',
+          code: 'FORGE_NONINTERACTIVE=1 alpha-forge backtest run SPY --json',
+          tags: ['--json', 'exit 0/1/2', '非対話モード'],
+        },
+      ],
+      ecosystem: 'さらに alpha-visualizer の REST API でバックテスト結果を読み取り、alpha-strike の status API で運用状態を監視 — エコシステム全体がエージェントから操作できます。',
+      docsCta: 'AI エージェント連携ガイドを読む',
+    },
     availability: {
       label: '現在のステータス',
       title: '今すぐ使えるもの・\nこれから提供するもの',
@@ -74,7 +115,7 @@ window.COPY = {
           items: [
             'alpha-forge コア（Beta 版・購入して利用可能、v1.0 へ向け改善中）',
             'alpha-strike 自動執行サーバー（早期開発 / Dev）',
-            'Claude / Codex 連携スキル（/explore-strategies など）',
+            'AI エージェント連携 — 同梱スキル（/explore-strategies など）+ MCP サーバ（uvx alpha-forge-mcp・alpha 版）',
             'FRED / ALFRED マクロデータ provider（alpha-forge data alt fetch FRED: / backtest --regime-filter macro:）',
           ],
         },
@@ -188,7 +229,7 @@ window.COPY = {
     products: {
       label: 'プロダクト',
       title: '3つの層で構成される\n統合データ処理システム',
-      subtitle: 'forge で戦略を半自動開発・最適化、visualizer で結果を可視化・分析、strike が外部 Webhook をトリガーに自動執行。3 層で完結する戦略開発ループ。',
+      subtitle: 'forge で戦略を半自動開発・最適化、visualizer で結果を可視化・分析、strike が外部 Webhook をトリガーに自動執行。3 層すべてが --json CLI / REST API を備え、AI エージェントから操作できる戦略開発ループ。',
       items: [
         {
           id: 'forge',
@@ -197,7 +238,7 @@ window.COPY = {
           icon: '⚙',
           name: 'forge',
           role: 'シミュレーション・最適化エンジン',
-          desc: '投資戦略定義をvectorbtで高速シミュレーション。Optunaによるベイズ最適化・ウォークフォワード検証で過学習を防ぎ、Pine Script v6を自動生成。戦略・最適化結果・ジャーナルは JSON / SQLite で一元管理。Claude連携でパラメータを自律探索。',
+          desc: '投資戦略定義をvectorbtで高速シミュレーション。Optunaによるベイズ最適化・ウォークフォワード検証で過学習を防ぎ、Pine Script v6を自動生成。戦略・最適化結果・ジャーナルは JSON / SQLite で一元管理。同梱スキル + MCP サーバで AI エージェントが自律探索。',
           tags: ['Python', 'vectorbt', 'Optuna', 'SQLite', 'Pine Script'],
           accent: 'var(--blue)',
         },
@@ -208,8 +249,8 @@ window.COPY = {
           icon: '▦',
           name: 'visualizer',
           role: '可視化・分析ダッシュボード',
-          desc: 'forge のバックテスト・最適化結果を Web ブラウザで可視化する OSS ダッシュボード。Equity / Drawdown / WFO 合成カーブ、複数戦略の Pearson 相関、ライブ実績との diff をワンクリックで確認。forge 本体非依存で動作。',
-          tags: ['Python', 'React', 'SQLite', 'PyPI', 'MIT'],
+          desc: 'forge のバックテスト・最適化結果を Web ブラウザで可視化する OSS ダッシュボード。Equity / Drawdown / WFO 合成カーブ、複数戦略の Pearson 相関、ライブ実績との diff をワンクリックで確認。REST API でエージェントからも結果を読み取り可能。forge 本体非依存で動作。',
+          tags: ['Python', 'React', 'SQLite', 'PyPI', 'Apache-2.0'],
           accent: 'var(--accent)',
         },
         {
@@ -310,7 +351,7 @@ window.COPY = {
         { q: '対応するデータソースは？', a: 'yfinance（株式・ETF）、moomoo（株式・板情報）、OANDA（FX・CFD）、Dukascopy（FX 長期ヒストリカル）の 4 プロバイダーに対応しています。取得したデータはローカルに Parquet キャッシュとして保存されます。' },
         { q: '過学習（オーバーフィット）対策はどうしていますか？', a: 'Optuna TPE によるベイズ最適化とウォークフォワード分析（WFT）を標準搭載しています。`alpha-forge optimize run --split` で IS（学習期間）/ OOS（検証期間）のスコア差を一発で計測でき、過剰最適化の検出に使えます。' },
         { q: 'TradingView は必須ですか？', a: 'alpha-forge 単体での戦略開発・バックテスト・最適化・Pine Script 生成には TradingView は不要です。生成した Pine Script v6 を TradingView でアラート・自動売買に流したい場合や、alpha-strike による自動執行を組む場合のみ TradingView アカウントが必要になります。' },
-        { q: 'AI エージェントと組み合わせて使えますか？', a: 'Claude Code / Codex 用のスキル（`/explore-strategies` など）を同梱しています。夜間に未試行の指標 × 銘柄を自律探索するループや、戦略 JSON の自動生成・チューニングといったワークフローを CLI から直接呼び出せます。' },
+        { q: 'AI エージェントと組み合わせて使えますか？', a: 'はい、それが AlphaForge の中核ユースケースです。Claude Code / Codex 用のスキル（/explore-strategies など 5 コマンド + 3 スキル）を同梱するほか、MCP サーバ（uvx alpha-forge-mcp・alpha 版）経由で Claude Code / Claude Desktop / Cursor からも操作できます。CLI 自体も全コマンド --json 出力・非対話モード（FORGE_NONINTERACTIVE=1）・終了コード規約を備え、夜間の自律探索ループを安全に無人実行できます。' },
         { q: '複数 PC で使えますか？／アップデートは？', a: 'Trial・有料プランとも、個人利用の範囲で複数端末に対応します（honor system、詳細は EULA を参照）。Lifetime は常に最新バージョンを利用でき、v2 以降のメジャーアップグレードも追加料金はかかりません。' },
       ],
     },
@@ -357,6 +398,14 @@ window.COPY = {
       subtitle: 'バックグラウンドや目的に合わせた入口を選んでください。',
       personas: [
         {
+          icon: '✨',
+          label: 'AI Agent Users',
+          title: 'AIエージェント利用者',
+          desc: '同梱スキル + MCP サーバ + 非対話 CLI。Claude Code などのエージェントに、戦略の探索から検証・Pine Script 生成まで任せる非同期ワークフロー。',
+          link: '/ja/docs/usecases/ai-agents/',
+          linkLabel: '詳しく見る →',
+        },
+        {
           icon: '📊',
           label: 'TradingView Users',
           title: 'TradingViewユーザー',
@@ -386,14 +435,6 @@ window.COPY = {
           title: '自動売買検討者',
           desc: 'バックテスト→最適化→Pine Script生成→TradingViewアラート→Alpha Strike自動発注まで一貫した環境。',
           link: '/ja/docs/usecases/auto-trading/',
-          linkLabel: '詳しく見る →',
-        },
-        {
-          icon: '✨',
-          label: 'AI Agent Users',
-          title: 'AIエージェント利用者',
-          desc: 'Claude Codeなど AIエージェントと組み合わせて戦略探索を自動化。夜間に自律探索を回す非同期ワークフロー。',
-          link: '/ja/docs/usecases/ai-agents/',
           linkLabel: '詳しく見る →',
         },
         {
@@ -485,11 +526,11 @@ window.COPY = {
     nav: { products: 'Products', pricing: 'Pricing', install: 'Install', tutorial: 'Tutorial', faq: 'FAQ', docs: 'Docs', follow: 'Follow' },
     hero: {
       tag: 'In Beta',
-      h1a: 'From Noise',
-      h1b: 'to Signal.',
-      desc: 'Backtest, Bayesian optimization, and walk-forward validation — unified in a single CLI. Systematically develop and validate investment strategies with reproducible statistical edge across futures, equities, and FX.',
+      h1a: 'Your AI agent',
+      h1b: 'runs the quant lab.',
+      desc: 'Ask Claude Code to find you a strategy — and your agent autonomously runs backtests, Optuna Bayesian optimization, walk-forward validation, and Pine Script v6 export. An agent-native quant CLI for futures, equities, and FX.',
       cta1: 'Start Free',
-      cta2: 'See Plans',
+      cta2: 'Use with AI Agents',
     },
     trialStart: {
       label: 'Start on Trial',
@@ -511,10 +552,51 @@ window.COPY = {
       ],
     },
     heroStats: [
-      { val: 'AI-Driven', accent: false, lbl: 'Discovery × Validation × Pine Script' },
+      { val: 'MCP + 8 skills', accent: false, lbl: '5 commands + 3 skills · Claude Code / Codex' },
       { val: '‑23% Max DD', accent: true, lbl: 'vs QQQ ‑35%, comparable return (5yr backtest)' },
       { val: 'Summer 2026', accent: false, lbl: 'Target Release' },
     ],
+    aiAgents: {
+      label: 'AI Agent Integration',
+      title: 'Ask your agent to explore.\nGet validated candidates back.',
+      subtitle: 'AlphaForge is designed for AI coding agents as first-class users. Three integration paths ship out of the box — bundled skills, an MCP server, and a non-interactive CLI — so your agent can handle everything from exploration to walk-forward validation and Pine Script export.',
+      chat: {
+        title: 'Claude Code — AlphaForge session',
+        lines: [
+          { role: 'user',  text: 'Explore untried indicator combos on SPY and keep only strategies that pass walk-forward validation' },
+          { role: 'agent', text: 'Starting autonomous exploration via /explore-strategies.' },
+          { role: 'tool',  text: 'alpha-forge backtest run SPY --strategy my_rsi_v1 --json' },
+          { role: 'tool',  text: 'alpha-forge optimize run SPY --strategy my_rsi_v1 --trials 50 --json' },
+          { role: 'tool',  text: 'alpha-forge optimize walk-forward SPY --strategy my_rsi_v1_optimized --json' },
+          { role: 'agent', text: '✓ All 5 OOS windows positive. Strategy JSON and Pine Script v6 saved.' },
+        ],
+      },
+      paths: [
+        {
+          name: 'Agent Skills',
+          badge: 'Bundled',
+          desc: 'alpha-forge system init deploys 5 slash commands (/explore-strategies and more) plus 3 skills into your working directory. Overnight autonomous exploration loops run right from Claude Code or Codex.',
+          code: 'alpha-forge system init',
+          tags: ['Claude Code', 'Codex', '/explore-strategies'],
+        },
+        {
+          name: 'MCP Server',
+          badge: 'Alpha',
+          desc: 'An open-source (Apache-2.0) MCP server launched with uvx alpha-forge-mcp. Exposes strategy listing, backtesting, optimization, and Pine Script generation as 7 tools.',
+          code: 'claude mcp add --scope user alpha-forge -- uvx alpha-forge-mcp',
+          tags: ['Claude Code', 'Claude Desktop', 'Cursor'],
+        },
+        {
+          name: 'Agent-Friendly CLI',
+          badge: 'Built-in',
+          desc: 'Every command supports --json. FORGE_NONINTERACTIVE=1 removes confirmation prompts, and exit codes follow a strict 0/1/2 contract. Any agent can integrate by calling the CLI directly.',
+          code: 'FORGE_NONINTERACTIVE=1 alpha-forge backtest run SPY --json',
+          tags: ['--json', 'exit 0/1/2', 'non-interactive'],
+        },
+      ],
+      ecosystem: 'Beyond the core: agents read backtest results through the alpha-visualizer REST API and monitor live execution through the alpha-strike status API — the entire ecosystem is agent-operable.',
+      docsCta: 'Read the AI Agent Integration guide',
+    },
     availability: {
       label: 'Current Status',
       title: 'What you can use today\nand what is coming next',
@@ -540,7 +622,7 @@ window.COPY = {
           items: [
             'alpha-forge core (Beta — purchasable & usable, evolving toward v1.0)',
             'alpha-strike execution server (early development / Dev)',
-            'Claude / Codex agent skills (/explore-strategies, etc.)',
+            'AI agent integration — bundled skills (/explore-strategies, etc.) + MCP server (uvx alpha-forge-mcp, alpha)',
             'FRED / ALFRED macro data provider (alpha-forge data alt fetch FRED: / backtest --regime-filter macro:)',
           ],
         },
@@ -654,7 +736,7 @@ window.COPY = {
     products: {
       label: 'Products',
       title: 'Three layers.\nOne integrated system.',
-      subtitle: 'alpha-forge develops and optimizes strategies, visualizer renders the results, and strike auto-executes on external webhook signals — a complete three-layer loop.',
+      subtitle: 'alpha-forge develops and optimizes strategies, visualizer renders the results, and strike auto-executes on external webhook signals — a complete three-layer loop, with every layer operable by AI agents via --json CLI and REST APIs.',
       items: [
         {
           id: 'forge',
@@ -663,7 +745,7 @@ window.COPY = {
           icon: '⚙',
           name: 'forge',
           role: 'Simulation & Optimization Engine',
-          desc: 'Simulate investment strategies at high speed with vectorbt. Bayesian optimization via Optuna + walk-forward validation to prevent overfitting. Automatic Pine Script v6 generation. Strategies, optimization results, and journals are managed centrally as JSON/SQLite. Claude integration for autonomous parameter exploration.',
+          desc: 'Simulate investment strategies at high speed with vectorbt. Bayesian optimization via Optuna + walk-forward validation to prevent overfitting. Automatic Pine Script v6 generation. Strategies, optimization results, and journals are managed centrally as JSON/SQLite. Bundled skills + MCP server let AI agents explore autonomously.',
           tags: ['Python', 'vectorbt', 'Optuna', 'SQLite', 'Pine Script'],
           accent: 'var(--blue)',
         },
@@ -674,8 +756,8 @@ window.COPY = {
           icon: '▦',
           name: 'visualizer',
           role: 'Visualization & Analytics Dashboard',
-          desc: 'Open-source browser dashboard that visualizes alpha-forge backtest and optimization results. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff — all in one click. Runs independently of forge.',
-          tags: ['Python', 'React', 'SQLite', 'PyPI', 'MIT'],
+          desc: 'Open-source browser dashboard that visualizes alpha-forge backtest and optimization results. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff — all in one click. Agents can read results via its REST API. Runs independently of forge.',
+          tags: ['Python', 'React', 'SQLite', 'PyPI', 'Apache-2.0'],
           accent: 'var(--accent)',
         },
         {
@@ -740,7 +822,7 @@ window.COPY = {
         { q: 'Which data sources are supported?', a: 'yfinance (equities / ETFs), moomoo (equities with deeper order book), OANDA (FX / CFD), and Dukascopy (long-horizon FX historical) — four providers in total. All fetched data is cached locally as Parquet on your machine.' },
         { q: 'How does AlphaForge avoid overfitting?', a: 'Optuna TPE Bayesian optimization and Walk-Forward Test (WFT) are standard. Run `alpha-forge optimize run --split` to get in-sample and out-of-sample scores in one command — the gap between them is the primary overfitting signal.' },
         { q: 'Do I need TradingView?', a: 'No, not for strategy authoring, backtesting, optimization, or Pine Script generation — alpha-forge runs standalone. You only need TradingView if you want to deploy the generated Pine Script v6 for alerts/automation on TradingView, or if you wire alpha-strike for automated execution.' },
-        { q: 'Can I use it with AI coding agents?', a: 'Yes. Skills for Claude Code and Codex (e.g., `/explore-strategies`) are bundled, so you can run overnight autonomous loops that explore untried indicator × symbol combinations or auto-generate and tune strategy JSON from the CLI.' },
+        { q: 'Can I use it with AI coding agents?', a: 'Yes — that is the core use case. Skills for Claude Code and Codex (5 slash commands like /explore-strategies plus 3 skills) are bundled, and the MCP server (uvx alpha-forge-mcp, alpha) connects Claude Code, Claude Desktop, and Cursor directly. The CLI itself supports --json on every command, a non-interactive mode (FORGE_NONINTERACTIVE=1), and a strict exit-code contract, so overnight autonomous loops run safely unattended.' },
         { q: 'Can I use it on multiple machines? What about updates?', a: 'Both Trial and paid plans cover personal use on multiple devices on an honor-system basis (see the EULA for details). Lifetime always runs on the latest version, with no extra fee for major upgrades like v2.' },
       ],
     },
@@ -787,6 +869,14 @@ window.COPY = {
       subtitle: 'Choose the entry point that matches your background and goals.',
       personas: [
         {
+          icon: '✨',
+          label: 'AI Agent Users',
+          title: 'AI Agent Users',
+          desc: 'Bundled skills + MCP server + non-interactive CLI. Delegate exploration, validation, and Pine Script generation to Claude Code or any other agent in an async workflow.',
+          link: '/en/docs/usecases/ai-agents/',
+          linkLabel: 'Learn more →',
+        },
+        {
           icon: '📊',
           label: 'TradingView Users',
           title: 'TradingView Users',
@@ -816,14 +906,6 @@ window.COPY = {
           title: 'Automated Trading',
           desc: 'A complete pipeline: backtest → optimize → generate Pine Script → TradingView alert → Alpha Strike auto-execution.',
           link: '/en/docs/usecases/auto-trading/',
-          linkLabel: 'Learn more →',
-        },
-        {
-          icon: '✨',
-          label: 'AI Agent Users',
-          title: 'AI Agent Users',
-          desc: 'Combine with Claude Code or other AI agents to automate strategy exploration. Run autonomous overnight discovery loops without human intervention.',
-          link: '/en/docs/usecases/ai-agents/',
           linkLabel: 'Learn more →',
         },
         {

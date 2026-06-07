@@ -4,6 +4,9 @@
 
 This documentation walks through installation, strategy development, and integration with AI coding agents.
 
+!!! tip "Using AlphaForge with an AI agent"
+    Everything about driving AlphaForge from Claude Code / Codex / Cursor now lives in the [AI Agent Integration](ai-agents/index.md) section, which covers all three paths: bundled skills, the MCP server, and the non-interactive CLI. Start with the [Agent Quickstart](ai-agents/quickstart.md) to try agent integration in about 10 minutes.
+
 ## Two things that set AlphaForge apart
 
 ### 1. JSON strategy → one command → Pine Script v6 → live on TradingView
@@ -27,7 +30,7 @@ Write your strategy in JSON, then run `alpha-forge pine generate` to compile it 
 | Built-in optimization | **Optuna TPE + WFT as standard** | Weak or manual | Possible by adding libraries |
 | Data & keys location | **Fully local** | Server-resident | Local |
 | Runtime form | Binary CLI (a single file, a few hundred MB) | Docker / SaaS stack | Python scripts |
-| AI agent integration | Ships Claude Code / Codex skills | Partial | Roll your own |
+| AI agent integration | **Bundled skills + MCP server** | Partial | Roll your own |
 | Live execution path | **Through TradingView** (broker-neutral) | Direct exchange / broker | Roll your own |
 
 ## Who this is for
@@ -44,7 +47,7 @@ Write your strategy in JSON, then run `alpha-forge pine generate` to compile it 
 - [Use Cases by Goal](usecases/index.md) — Pick the most relevant next page based on your role (TradingView user / Python developer / Quant / Auto-trading / AI agent user)
 - [CLI Reference](cli-reference/index.md) — Every `alpha-forge` command with parameters and output examples
 - [Strategy Templates](templates.md) — Combination strategies like HMM × BB × RSI with concrete JSON
-- [AI-Driven Strategy Exploration Workflow](guides/ai-exploration-workflow.md) — A how-to for autonomous strategy development with Claude Code / Codex × AlphaForge
+- [AI-Driven Strategy Exploration Workflow](ai-agents/exploration-workflow.md) — A how-to for autonomous strategy development with Claude Code / Codex × AlphaForge (AI Agent Integration section)
 - [Legal & Disclaimers](legal/disclaimers.md) — Disclaimers, EULA, and Privacy Policy
 
 ## Related links
