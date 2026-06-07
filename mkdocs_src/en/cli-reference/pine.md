@@ -3,7 +3,7 @@
 Convert between strategy JSON and TradingView Pine Script v6.
 
 !!! warning "[Paid plans only] Pine Script export"
-    `alpha-forge pine generate` and `alpha-forge pine preview` are **available on the paid plans only (Lifetime / Annual / Monthly)**. Running them on the Trial plan displays a red Panel with a purchase URL ([https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)) and exits with code `1` — no file is written and no preview is printed. `alpha-forge pine import` (the import path) is unaffected and remains available on Trial. See the [Trial limits guide](../guides/trial-limits.md) for details.
+    `alpha-forge pine generate`, `alpha-forge pine preview`, and `alpha-forge pine verify` are **available on the paid plans only (Lifetime / Annual / Monthly)**. Running them on the Trial plan displays a red Panel with a purchase URL ([https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)) and exits with code `1` — no file is written and no preview is printed. `alpha-forge pine import` (the import path) is unaffected and remains available on Trial. See the [Trial limits guide](../guides/trial-limits.md) for details.
 
 ## alpha-forge pine generate `[Paid plans only]`
 
@@ -87,9 +87,9 @@ alpha-forge pine import <PINE_FILE> --id <STRATEGY_ID>
 
 On parse failure: `Error: failed to parse Pine Script - <details>` (writes to stderr).
 
-## alpha-forge pine verify
+## alpha-forge pine verify `[Paid plans only]`
 
-Verify the Pine Script generated from a strategy via a **TradingView MCP server** (issue #523). Beyond compile checks, it can compare the Strategy Tester aggregate metrics or the per-trade list against the matching alpha-forge backtest result.
+Verify the Pine Script generated from a strategy via a **TradingView MCP server** (issue #523). Beyond compile checks, it can compare the Strategy Tester aggregate metrics or the per-trade list against the matching alpha-forge backtest result. **Paid plans only (Lifetime / Annual / Monthly).** Because it generates Pine Script internally, running it on the Trial plan shows the same red Panel as generate / preview and exits with code `1` (the paywall fires before any `--check-mode` logic is reached).
 
 ```bash
 alpha-forge pine verify --strategy <ID> [--check-mode <MODE>] [--mcp-server <CMD>] [--mcp-server-flavor <tradesdontlie|vinicius>] [OPTIONS]

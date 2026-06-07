@@ -3,7 +3,7 @@
 戦略 JSON と TradingView Pine Script v6 を相互変換します。
 
 !!! warning "[有料プラン限定] Pine Script エクスポート"
-    `alpha-forge pine generate` と `alpha-forge pine preview` は **有料プラン（Lifetime / Annual / Monthly）でのみ利用できます**。Trial プランで実行すると赤枠 Panel と購入ページ URL（[https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)）が表示され、終了コード `1` で完全停止します。ファイル出力も標準出力もされません。`alpha-forge pine import`（インポート機能）は対象外で、Trial プランでも継続利用できます。詳しくは [Trial 制限](../guides/trial-limits.md) を参照してください。
+    `alpha-forge pine generate`・`alpha-forge pine preview`・`alpha-forge pine verify` は **有料プラン（Lifetime / Annual / Monthly）でのみ利用できます**。Trial プランで実行すると赤枠 Panel と購入ページ URL（[https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)）が表示され、終了コード `1` で完全停止します。ファイル出力も標準出力もされません。`alpha-forge pine import`（インポート機能）は対象外で、Trial プランでも継続利用できます。詳しくは [Trial 制限](../guides/trial-limits.md) を参照してください。
 
 ## alpha-forge pine generate `[有料プラン限定]`
 
@@ -87,9 +87,9 @@ alpha-forge pine import <PINE_FILE> --id <STRATEGY_ID>
 
 パース失敗時は `エラー: Pine Script のパースに失敗しました - <details>` を出して標準エラーへ。
 
-## alpha-forge pine verify
+## alpha-forge pine verify `[有料プラン限定]`
 
-戦略から生成した Pine Script を **TradingView MCP server** で検証します（issue #523）。コンパイルチェックに加えて、Strategy Tester の集計値や個別トレードを alpha-forge のバックテスト結果と突き合わせて差異を検出できます。
+戦略から生成した Pine Script を **TradingView MCP server** で検証します（issue #523）。コンパイルチェックに加えて、Strategy Tester の集計値や個別トレードを alpha-forge のバックテスト結果と突き合わせて差異を検出できます。**有料プラン（Lifetime / Annual / Monthly）限定**で、内部で Pine Script を生成するため Trial プランで実行すると generate / preview と同じ赤枠 Panel が表示され、終了コード `1` で停止します（`--check-mode` の判定に到達する前に paywall が発火します）。
 
 ```bash
 alpha-forge pine verify --strategy <ID> [--check-mode <MODE>] [--mcp-server <CMD>] [--mcp-server-flavor <tradesdontlie|vinicius>] [OPTIONS]

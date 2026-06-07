@@ -53,7 +53,7 @@ alpha-forge backtest run SPY --strategy sma_crossover_v1 --start 2019-01-01 --en
   "calmar_ratio": 0.32,
   "max_drawdown_pct": -16.80,
   "max_drawdown_duration_days": 187,
-  "max_drawdown_recovery_days": 92,
+  "recovery_days": 92,
   "profit_factor": 1.74,
   "win_rate_pct": 50.0,
   "total_trades": 14,
@@ -102,8 +102,8 @@ alpha-forge backtest chart sma_crossover_v1 --open
 ```
 
 ```text
-📊 チャートを表示するには `alpha-vis serve`（alpha-visualizer）を起動してください:
-   http://localhost:8000/?run_id=sma_crossover_v1_20260415_103021
+📊 チャートを表示するには `alpha-vis serve` を起動してください:
+   http://localhost:8000/?run_id=sma_crossover_v1
 ```
 
 ダッシュボード（`alpha-vis serve`）では以下のタブを確認できます:

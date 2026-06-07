@@ -108,6 +108,9 @@ bollinger_mr_v1 reports win rates of 41.18% (alpha) vs 41.41% (TV) — a mere 0.
 
 When cross-validating SL/TP strategies, `scripts/tv_cross_validate.py check` automatically switches the tolerance profile via `--tolerance-profile auto` (the default).
 
+!!! note "`scripts/tv_cross_validate.py` is source-repository only"
+    `scripts/tv_cross_validate.py` and the golden fixtures (`tests/fixtures/tv_golden/`) ship **only with the alpha-forge source repository — they are not bundled with the distributed binary**. If you are on the binary build, the commands in this section cannot be run as-is (run cross-validation from a development checkout of the alpha-forge source instead).
+
 ```bash
 # Run from the alpha-forge directory
 uv run python scripts/tv_cross_validate.py check \
