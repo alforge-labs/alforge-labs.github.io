@@ -134,7 +134,7 @@ The leading icon is driven by whether the trade count is statistically sufficien
 ```text
 Running backtest: SPY x sma_crossover_v1
 ⚠️ Backtest complete  Signal quality score: 0.38/1.0 (<0.4: low reliability, treat as reference only)
-    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 Total Return: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  Duration: 187d  Recovery: 92d
@@ -147,12 +147,12 @@ When the score or trade count fails the recommended thresholds, a warning and a 
 
 ```text
 ⚠️  Backtest complete  Signal quality score: 0.43/1.0 (0.4–0.7: caution, more validation suggested)
-    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 ⚠️  Warning: trade count is insufficient (trades=27, minimum 30 recommended)
     → Fewer than 30 trades is statistically noisy and may be filtered out by
       optimization / WFT pre_filter. Consider widening the data period (`--start`
       to go further back).
-    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 ```
 
 ### Signal Quality Score and Minimum Trades (F-302) {#signal-quality-score}

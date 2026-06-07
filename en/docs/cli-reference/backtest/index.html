@@ -4480,7 +4480,7 @@
 <p>The leading icon is driven by whether the trade count is statistically sufficient (<code>is_valid</code> = <code>total_trades &gt;= 30</code>): <code>✅</code> when sufficient, <code>⚠️</code> when not. The signal quality score line always carries a hint about how to read the score (<code>≥0.7</code> is reliable / <code>0.4–0.7</code> caution / <code>&lt;0.4</code> low reliability).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Running backtest: SPY x sma_crossover_v1
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>⚠️ Backtest complete  Signal quality score: 0.38/1.0 (&lt;0.4: low reliability, treat as reference only)
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Total Return: +52.30%  CAGR: 5.40%
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>MDD: -16.80%  Duration: 187d  Recovery: 92d
@@ -4490,12 +4490,12 @@
 </code></pre></div>
 <p>When the score or trade count fails the recommended thresholds, a warning and a one-line docs link are added (F-302):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>⚠️  Backtest complete  Signal quality score: 0.43/1.0 (0.4–0.7: caution, more validation suggested)
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>⚠️  Warning: trade count is insufficient (trades=27, minimum 30 recommended)
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    → Fewer than 30 trades is statistically noisy and may be filtered out by
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>      optimization / WFT pre_filter. Consider widening the data period (`--start`
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>      to go further back).
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    → Docs: https://alforgelabs.com/en/cli-reference/backtest.html#signal-quality-score
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 </code></pre></div>
 <h3 id="signal-quality-score">Signal Quality Score and Minimum Trades (F-302)<a class="headerlink" href="#signal-quality-score" title="Permanent link">&para;</a></h3>
 <h4 id="signal-quality-score-signal_quality_score-0010">Signal Quality Score (<code>signal_quality_score</code>, 0.0–1.0)<a class="headerlink" href="#signal-quality-score-signal_quality_score-0010" title="Permanent link">&para;</a></h4>
