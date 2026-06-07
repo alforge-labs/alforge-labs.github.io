@@ -103,6 +103,17 @@ Add the following patterns to `permissions.allow` in `.claude/settings.local.jso
 
 All paths are relative to `alpha-trade/` as the working root.
 
+!!! warning "Binary users: read these paths as relative to your working directory"
+    The allow patterns above assume the `alpha-trade` monorepo (`alpha-strategies/data/strategies/*.json`, `uv --directory alpha-forge run alpha-forge`). In the working directory you created under "Minimum setup for binary users" (e.g. `my-strategies/`), strategy JSON is written to `<working-dir>/data/strategies/`, and commands invoke the `alpha-forge` binary on your PATH directly. For the binary, substitute the following patterns:
+    ```json
+    "Write(data/strategies/*.json)",
+    "Bash(alpha-forge *)",
+    "Bash(FORGE_CONFIG=* alpha-forge *)",
+    "Bash(FORCE_COLOR=1 FORGE_CONFIG=* alpha-forge *)",
+    "Bash(rm data/strategies/*.json)"
+    ```
+    Add the git patterns (`git -C */alpha-strategies ...`) only if you keep your working directory under git, adjusting them to your repository path.
+
 | Pattern | What it authorizes |
 |---------|-------------------|
 | `Write(alpha-strategies/data/strategies/*.json)` | Writing strategy JSON files (one per strategy) |
@@ -203,7 +214,7 @@ Choose a starting point (pick one of 3 exploration scenarios)
   ↓
 Step 1: /explore-strategies [--goal <name>] [--runs N]
   └─ Auto backtest → optimize → WFT for each symbol × indicator combo
-     Pre-filter: Sharpe ≥ 1.0 AND MaxDD ≤ 25%
+     Pre-filter: Sharpe ≥ 1.0 AND MaxDD ≤ 30%
   ↓
 Step 2: /analyze-exploration
   └─ Aggregate all logs; output next recommended candidates to recommendations.yaml
@@ -242,8 +253,8 @@ AI agent × AlphaForge usage falls into three categories based on **what you're 
 
 **Typical flow**:
 
-1. Tell Claude Code: "Take `alpha-forge strategy show multi_asset_hmm_bb_rsi_v1_qqq` as the base and add MACD to create a derivative."
-2. The agent edits the JSON and creates `multi_asset_hmm_bb_rsi_macd_v1_qqq.json`
+1. Tell Claude Code: "Take `alpha-forge strategy show hmm_bb_pipeline_v1` (a bundled template) as the base and add MACD to create a derivative."
+2. The agent edits the JSON and creates `hmm_bb_pipeline_macd_v1.json`
 3. `alpha-forge strategy validate` → `alpha-forge strategy save` → `alpha-forge backtest run`
 4. If Sharpe improves, run `alpha-forge optimize run` to fine-tune
 
@@ -306,7 +317,7 @@ AI agent × AlphaForge usage falls into three categories based on **what you're 
 
 | Phase | Criterion |
 |-------|-----------|
-| Pre-filter | Sharpe ≥ 1.0 **AND** MaxDD ≤ 25% |
+| Pre-filter (pre_filter) | Sharpe ≥ 1.0 **AND** MaxDD ≤ 30% |
 | WFT final pass | All-window mean WFT Sharpe ≥ `target_metrics.sharpe_ratio` in `goals/<goal_name>/goals.yaml` |
 
 ### Optional: TradingView MCP attach for passing strategies (issue #582)
@@ -452,8 +463,11 @@ Short is mirrored (prev-bar BB upper break + current-bar bearish candle). Set th
 
 ```bash
 alpha-forge strategy scaffold --symbol GBPUSD=X --indicators BB,EMA,ADX \
-  --type mean-reversion --confirm-bars 2 --wick-ratio 1.0 --save
+  --type mean-reversion --confirm-bars 2 --wick-ratio 1.0 --allow-extreme --save
 ```
+
+!!! warning "Mind the indicator-count gate (issue #888) when using `--confirm-bars`"
+    `--indicators BB,EMA,ADX` auto-adds ATR (4 indicators), and `--confirm-bars` then adds a reversal-confirmation EXPR indicator, bringing the total to **5 indicators**. Five or more indicators produce overly tight AND conditions that flood no_signals / pre_filter_failed, so scaffold **aborts with exit 1** ("Indicator count 5 produces overly tight AND conditions… Use `--allow-extreme` to override intentionally."). Add `--allow-extreme`, as shown above, when you intend to try such a combination.
 
 Set `goals.yaml.scaffold_defaults.wick_ratio: 1.0` for a goal default. **Measured impact (GBPUSD BB+EMA+ADX 1h)**: confirm_bars=2 + wick_ratio=1.0 yields **trades 140→7 / MDD 87% → 8.84% / CAGR -55% → +3.40%** (MDD shrinks to 1/10, CAGR flips positive). For more trades, lower `wick_ratio` to ~0.5.
 
@@ -506,13 +520,13 @@ Defaults, units, and intent of the `risk_management` section emitted by `alpha-f
 
 | Field | scaffold default | Unit | Notes |
 |---|---|---|---|
-| `position_size_pct` | type-specific: mean-reversion=**15.0** / trend-following=**10.0** | % of equity | Fraction of equity per position (used in `fixed` mode) |
+| `position_size_pct` | type-specific: mean-reversion=**15.0** / trend-following=**50.0** (issue #949) | % of equity | Fraction of equity per position (used in `fixed` mode). trend-following assumes long-term holding, so #949 raised it from 10.0 to **50.0** |
 | `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` |
 | `risk_per_trade_pct` | 1.0 | % of equity / trade | Only used in `risk_based` mode (size = `risk_per_trade_pct ÷ stop_loss_pct`) |
 | `max_positions` | 1 | count | Max concurrent open positions |
 | `leverage` | 1.0 | multiplier | 0=no position, 1=unleveraged, >1=leveraged |
-| `stop_loss_pct` | `null` | % from entry price | `null`=no SL |
-| `take_profit_pct` | `null` | % from entry price | `null`=no TP |
+| `stop_loss_pct` | type-specific: mean-reversion=**2.0** (vol-tier default, issue #886) / trend-following=`null` | % from entry price | mean-reversion uses tier-specific defaults when `--vol-tier` is set, and 2.0 otherwise. `null`=no SL |
+| `take_profit_pct` | type-specific: mean-reversion=**4.0** (vol-tier default, issue #886) / trend-following=`null` | % from entry price | mean-reversion uses tier-specific defaults when `--vol-tier` is set, and 4.0 otherwise. `null`=no TP |
 | `trailing_stop_pct` | `null` | % drawdown from peak close (issue #765) | `null`=no trailing |
 | `commission_pct` | `null` | % per side, absolute | `null` **inherits `forge.yaml` `backtest.commission_pct`** (issue #766) |
 | `slippage_pct` | `null` | % per side, absolute | Same — inherits `backtest.slippage_pct` |
@@ -523,7 +537,7 @@ Defaults, units, and intent of the `risk_management` section emitted by `alpha-f
 
 #### Broker preset backtest defaults in forge.yaml
 
-Strategies with `commission_pct` / `slippage_pct` set to `null` inherit `forge.yaml` `backtest.commission_pct` / `slippage_pct`. The broker presets selectable from `alpha-forge init` (`src/alpha_forge/resources/config/*.yaml`) ship the following defaults:
+Strategies with `commission_pct` / `slippage_pct` set to `null` inherit `forge.yaml` `backtest.commission_pct` / `slippage_pct`. The broker presets selectable via `alpha-forge system init --template [commodities|crypto|default|fx|stocks]` (`src/alpha_forge/resources/config/*.yaml`) ship the following defaults:
 
 | Preset | `backtest.commission_pct` | `backtest.slippage_pct` | Intent |
 |---|---|---|---|
@@ -695,7 +709,7 @@ Adding `min_trades` to the `pre_filter` section of `goals.yaml` makes `alpha-for
 ```yaml
 pre_filter:
   sharpe_ratio:        ">= 1.0"
-  max_drawdown:        "<= 25%"
+  max_drawdown:        "<= 30%"
   min_trades:          ">= 15"          # issue #429: roughly half of target_metrics.min_trades is recommended
   monthly_volume_usd:  ">= 500000"
 ```
@@ -943,7 +957,7 @@ candidates:
     rationale: "HMM × BBANDS shows high avg Sharpe; QQQ has few trials; MACD adds novelty."
     basis_sharpe: 1.32
     basis_maxdd: 18.4
-    variant_of: multi_asset_hmm_bb_rsi_v1_qqq
+    variant_of: hmm_bb_pipeline_v1
 ```
 
 ---
@@ -1068,27 +1082,27 @@ alpha-forge idea add "Add MACD to QQQ HMM×BB×RSI" \
 # → WFT mean Sharpe=1.32 passes
 
 # 4. Run /grid-tune for exhaustive optimization
-> /grid-tune multi_asset_hmm_bb_rsi_macd_v1_qqq QQQ
+> /grid-tune hmm_bb_pipeline_macd_v1 QQQ
 # → Grid Top-1 → apply → WFT validation reaches 1.45
 # → Records pass via alpha-forge journal verdict
 
 # 5. Sensitivity / overfitting check
 alpha-forge optimize sensitivity \
-  /path/to/data/results/optimize_multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized_20260415_103021.json
+  /path/to/data/results/optimize_hmm_bb_pipeline_macd_v1_optimized_20260415_103021.json
 # → overall_robustness_score=0.82 (passes)
 
 # 6. Final approval in journal
-alpha-forge journal verdict multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized <run_id> pass
-alpha-forge journal note multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized "OOS pass + sensitivity 0.82. Live candidate."
+alpha-forge journal verdict hmm_bb_pipeline_macd_v1_optimized <run_id> pass
+alpha-forge journal note hmm_bb_pipeline_macd_v1_optimized "OOS pass + sensitivity 0.82. Live candidate."
 
 # 7. Generate Pine Script for TradingView
-alpha-forge pine generate --strategy multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized --with-training-data
+alpha-forge pine generate --strategy hmm_bb_pipeline_macd_v1_optimized --with-training-data
 
 # 8. Begin live operation (deploy execution engine to VPS — out of scope here)
 
 # 9. After a week, compare live vs backtest
-alpha-forge live import-events multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
-alpha-forge live compare multi_asset_hmm_bb_rsi_macd_v1_qqq_optimized
+alpha-forge live import-events hmm_bb_pipeline_macd_v1_optimized
+alpha-forge live compare hmm_bb_pipeline_macd_v1_optimized
 
 # 10. If drift is large, run /tune-live-strategies for auto re-tuning
 > /tune-live-strategies
