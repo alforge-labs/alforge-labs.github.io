@@ -39,28 +39,14 @@ AlphaForge は **Trial プラン**（Whop 未登録、期限なし）と **有�
 - `end` 引数（明示指定または `today` のフォールバック）が 2023-12-31 を超える場合、強制的に 2023-12-31 にキャップして取得します。
 - `alpha-forge data update` で保有最終日が 2023-12-31 以降のアイテムは「Trial プラン制限により」スキップされます。
 - CLI 通常出力には黄色の Panel で警告が表示され、有料プランでの解除誘導が表示されます。
-- `--json` 出力には `freemium_limit_notices` 構造化フィールドが含まれます（`code = "free_tier_data_fetch_clipped"`）。
+- `alpha-forge data fetch` / `data update` には `--json` オプションがありません。データ取得時の制限（`code = "free_tier_data_fetch_clipped"`）は黄色の Panel 警告としてのみ通知され、`freemium_limit_notices` の JSON 出力経路は持ちません。JSON で構造化通知を取得できるのは評価エンジン入口（`backtest run` / `optimize` 系）の `--json` 出力のみです。
 
 #### 評価エンジン入口（`alpha-forge backtest run` / `alpha-forge optimize`）
 - 入力データに 2023-12-31 より新しい行が含まれる場合、評価直前に自動で切り捨てられます。これは外部 CSV を直接持ち込んだ場合の保険として機能します（取得経路で既にカットされているはずのため通常は発動しません）。
 - CLI 通常出力には黄色の Panel で警告が表示されます。
 - `--json` 出力の `freemium_limit_notices` の `code` は `free_tier_evaluation_date_clipped`。
 
-取得時の `freemium_limit_notices` 例:
-```json
-{
-  "freemium_limit_notices": [
-    {
-      "code": "free_tier_data_fetch_clipped",
-      "message": "Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。",
-      "original_value": "2025-06-30",
-      "applied_value": "2023-12-31"
-    }
-  ]
-}
-```
-
-評価時の `freemium_limit_notices` 例:
+評価時の `freemium_limit_notices` 例（`backtest run` / `optimize` 系の `--json` 出力）:
 ```json
 {
   "freemium_limit_notices": [
@@ -101,7 +87,7 @@ AlphaForge は **Trial プラン**（Whop 未登録、期限なし）と **有�
 
 - Trial プランでは **ハードブロック**：いずれのコマンドも実行直後に完全停止し、ファイル出力も標準出力も行われません。
 - 終了コードは `1` で、赤枠の Panel と購入ページ URL（[https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)）が表示されます。
-- 構造化通知 `freemium_limit_notices` の `code` は `free_tier_pine_export_blocked`（`original_value` / `applied_value` は `null`）。
+- 内部的な構造化通知の `code` は `free_tier_pine_export_blocked`（`original_value` / `applied_value` は `null`）ですが、`alpha-forge pine generate` / `pine preview` には `--json` オプションが無いため、ブロックは赤枠 Panel と exit 1 のみで通知され、`freemium_limit_notices` の JSON 出力は行われません。
 - `alpha-forge pine import` はインポート機能のため対象外で、Trial プランでも継続して利用できます。
 
 Pine Script エクスポートのハードブロック表示例（Trial プラン・CLI）：
@@ -115,19 +101,7 @@ Pine Script エクスポートのハードブロック表示例（Trial プラ�
 ╰─────────────────────────────────────────────────────────╯
 ```
 
-Pine Script ハードブロック時の `freemium_limit_notices` 例:
-```json
-{
-  "freemium_limit_notices": [
-    {
-      "code": "free_tier_pine_export_blocked",
-      "message": "Pine Script エクスポートは有料プラン（Lifetime / Annual / Monthly）のみ利用できます。",
-      "original_value": null,
-      "applied_value": null
-    }
-  ]
-}
-```
+（Pine ハードブロックは上記の赤枠 Panel と exit 1 のみで通知され、`--json` での `freemium_limit_notices` 出力はありません。）
 
 ### 有料プラン（Lifetime / Annual / Monthly）
 

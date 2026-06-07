@@ -39,28 +39,14 @@ For pricing and the latest plan details, refer to the landing page. Lifetime, An
 - When the `end` argument (explicit or the `today` fallback) is later than 2023-12-31, the fetch is forcibly capped at 2023-12-31.
 - `alpha-forge data update` skips items whose latest cached date is 2023-12-31 or later, citing the Trial plan limit.
 - Regular CLI output shows a yellow Panel warning along with an upgrade prompt to a paid plan (Lifetime / Annual / Monthly).
-- `--json` output includes a structured `freemium_limit_notices` field (`code = "free_tier_data_fetch_clipped"`).
+- `alpha-forge data fetch` / `data update` do not have a `--json` option. The data-fetch limit (`code = "free_tier_data_fetch_clipped"`) is surfaced only as the yellow Panel warning; there is no `freemium_limit_notices` JSON output path for it. Structured notices are only available via the `--json` output of the evaluation engine entry points (`backtest run` / `optimize` family).
 
 #### Evaluation engine entry (`alpha-forge backtest run` / `alpha-forge optimize`)
 - If the input data contains rows newer than 2023-12-31, they are automatically truncated immediately before evaluation. This acts as a safety net when an external CSV is loaded directly (typically a no-op because the fetch path already cuts these off).
 - Regular CLI output shows a yellow Panel warning.
 - `--json` output uses `code = "free_tier_evaluation_date_clipped"`.
 
-Example `freemium_limit_notices` from the fetch path:
-```json
-{
-  "freemium_limit_notices": [
-    {
-      "code": "free_tier_data_fetch_clipped",
-      "message": "Trial plan only fetches data up to 2023-12-31. Purchase a paid plan (Lifetime / Annual / Monthly) to fetch newer data.",
-      "original_value": "2025-06-30",
-      "applied_value": "2023-12-31"
-    }
-  ]
-}
-```
-
-Example `freemium_limit_notices` from the evaluation path:
+Example `freemium_limit_notices` from the evaluation path (`--json` output of `backtest run` / `optimize` family):
 ```json
 {
   "freemium_limit_notices": [
@@ -101,7 +87,7 @@ Example `freemium_limit_notices` for the optimization trial cap:
 
 - The Trial plan **hard-blocks** Pine Script export. Both commands stop immediately—no file output, no stdout payload.
 - The exit code is `1`, accompanied by a red Panel and the purchase URL ([https://alforgelabs.com/en/index.html#pricing](https://alforgelabs.com/en/index.html#pricing)).
-- The structured notice `freemium_limit_notices` uses `code = "free_tier_pine_export_blocked"` (`original_value` / `applied_value` are `null`).
+- Internally the structured notice uses `code = "free_tier_pine_export_blocked"` (`original_value` / `applied_value` are `null`), but `alpha-forge pine generate` / `pine preview` have no `--json` option, so the block is surfaced only via the red Panel and exit code `1`—there is no `freemium_limit_notices` JSON output.
 - `alpha-forge pine import` is an import-only feature and remains available on the Trial plan.
 
 Example Pine Script hard-block display (Trial plan / CLI):
@@ -115,19 +101,7 @@ Example Pine Script hard-block display (Trial plan / CLI):
 ╰──────────────────────────────────────────────╯
 ```
 
-Example `freemium_limit_notices` for Pine Script hard block:
-```json
-{
-  "freemium_limit_notices": [
-    {
-      "code": "free_tier_pine_export_blocked",
-      "message": "Pine Script export is available for paid plans only (Lifetime / Annual / Monthly).",
-      "original_value": null,
-      "applied_value": null
-    }
-  ]
-}
-```
+(The Pine hard block is surfaced only via the red Panel and exit code `1` shown above; there is no `freemium_limit_notices` JSON output.)
 
 ### Paid plans (Lifetime / Annual / Monthly)
 
