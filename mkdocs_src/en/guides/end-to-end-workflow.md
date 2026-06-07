@@ -73,7 +73,7 @@ alpha-forge strategy save data/strategies/usdjpy_sma_v1.json
 ```
 
 !!! tip "Skip DB registration with `--strategy-file`"
-    Both `alpha-forge backtest run` and `alpha-forge optimize run` accept `--strategy-file <path>`, which loads JSON directly without DB registration — handy during rapid iteration.
+    `alpha-forge backtest run` accepts `--strategy-file <path>`, which loads JSON directly without DB registration — handy during rapid iteration.
 
 ## 3. Run a backtest
 
@@ -98,8 +98,9 @@ alpha-forge optimize run 'USDJPY=X' --strategy usdjpy_sma_v1 \
   --metric sharpe_ratio --trials 300 --save
 
 # Apply the saved result file (optimize_usdjpy_sma_v1_<timestamp>.json) as a new strategy
+# Pass the base ID (no suffix) to --to-strategy. The CLI appends _optimized automatically, registering usdjpy_sma_v1_optimized
 alpha-forge optimize apply data/results/optimize_usdjpy_sma_v1_<timestamp>.json \
-  --to-strategy usdjpy_sma_v1_optimized
+  --to-strategy usdjpy_sma_v1
 ```
 
 !!! note "When the best score is `-inf`"

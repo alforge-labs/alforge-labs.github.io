@@ -42,6 +42,9 @@ alertcondition(longSignal, title="Long Entry", message="long")
 - **Warning only**: the function is not yet registered in the signature DB. The command still succeeds (to avoid false positives).
 - Use `--no-validate` to bypass the validator in emergencies, but fixing the underlying strategy JSON or generator output is strongly preferred — Pine v6 syntax errors will block the script in TradingView anyway.
 
+!!! note "About the `_optimized` suffix"
+    The `sma_crossover_v1_optimized` ID used in the examples below is what the CLI registers automatically when you run `alpha-forge optimize apply <result.json> --to-strategy sma_crossover_v1`. If the base ID before `apply` is `<base>`, the registered optimized strategy ID becomes `<base>_optimized` (pass the bare base ID to `--to-strategy`, without the suffix).
+
 ```bash
 # Normal generation (validator runs automatically)
 alpha-forge pine generate --strategy sma_crossover_v1_optimized

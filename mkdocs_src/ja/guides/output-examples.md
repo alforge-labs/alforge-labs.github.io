@@ -171,8 +171,9 @@ alpha-forge optimize run SPY --strategy sma_crossover_v1 --metric sharpe_ratio -
 ### 最適化済みパラメータを戦略に適用
 
 ```bash
+# --to-strategy にはベース ID（接尾辞なし）を渡す。CLI が自動で _optimized を付与し、sma_crossover_v1_optimized が登録される
 alpha-forge optimize apply data/results/optimize_sma_crossover_v1_20260415_103021.json \
-  --to-strategy sma_crossover_v1_optimized
+  --to-strategy sma_crossover_v1
 ```
 
 ---

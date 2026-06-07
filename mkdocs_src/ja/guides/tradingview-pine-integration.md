@@ -42,6 +42,9 @@ alertcondition(longSignal, title="Long Entry", message="long")
 - **警告のみ**: DB 未登録の v6 関数を検出した場合は warning にとどまり、コマンドは正常終了します（false positive 抑止のため）。
 - 緊急バイパスが必要な場合は `--no-validate` フラグでスキップ可能ですが、TradingView 上で syntax error になる可能性が高いため、原則として戦略 JSON や生成器側の修正を優先してください。
 
+!!! note "`_optimized` 接尾辞について"
+    以下の例で使う `sma_crossover_v1_optimized` は、`alpha-forge optimize apply <result.json> --to-strategy sma_crossover_v1` を実行したときに CLI が自動で登録する ID です。`apply` 直前のベース ID が `<base>` なら、登録される最適化済み戦略 ID は `<base>_optimized` になります（`--to-strategy` には接尾辞なしのベース ID を渡してください）。
+
 ```bash
 # 通常の生成（validator 自動実行）
 alpha-forge pine generate --strategy sma_crossover_v1_optimized
