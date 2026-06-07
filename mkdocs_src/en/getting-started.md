@@ -81,7 +81,7 @@ alpha-forge system init
     From v0.12.0 you can pass a directory name, e.g. `alpha-forge system init quickstart && cd quickstart`, creating and initializing it in one command. A confirmation prompt also now guards against accidental deployment into unintended locations such as your home directory (pass `--yes` for non-interactive runs like CI).
 
 !!! info "`alpha-forge system init` is required"
-    Without `forge.yaml`, the strategy DB location, data store, and result output paths are unresolved, so the next `alpha-forge backtest run` will fail with `FileNotFoundError`. The default invocation (no `--force`) is sufficient for quickstart.
+    Without `forge.yaml`, the CLI falls back to its default config, auto-creates a `data/` directory, and—if no strategy or data is registered yet—stops with a friendly error message (no raw `FileNotFoundError` traceback). Running `system init` first pins the strategy DB location, data store, and result output paths and avoids deploying into an unintended location, so it is recommended to run it before the steps below. The default invocation (no `--force`) is sufficient for quickstart.
 
 !!! note "A one-time EULA acceptance prompt `[y/n]` appears on first run"
     The first time you run a main command (such as `alpha-forge system init` above), a summary of the End-User License Agreement (EULA) is shown along with a `[y/n]` acceptance prompt. **Enter `y`** and your acceptance is recorded under `~/.config/forge/`, so it won't appear again.
@@ -124,20 +124,20 @@ Save the following as `sma_cross.json` (the `_qs` suffix in `strategy_id` just m
 }
 ```
 
-### Step 2.5 — Fetch historical data (~1 min, optional)
+### Step 2.5 — Fetch historical data (~1 min, required)
 
-Explicitly fetching the historical data up front makes subsequent backtests and re-runs work offline more reliably (optional but recommended).
+Fetch the historical data the next backtest needs. `backtest run` does **not** auto-fetch data for the target symbol, so **if you skip this step the next backtest fails with `❌ データが見つかりません: SPY (1d)` (data not found)**.
 
 ```bash
 alpha-forge data fetch SPY --period 5y
 ```
 
 ```
-✅ Fetched historical data for SPY (1d): data/historical/SPY_1d.parquet
+データの取得を開始します: SPY (period=5y, interval=1d)
+SPY のデータを取得し保存しました (N lines)
 ```
 
-!!! note "The next `backtest run` will also auto-fetch if needed"
-    With `forge.yaml` in place, the next `alpha-forge backtest run` auto-fetches data **only when it is missing**. If you fetch up front here, the subsequent `backtest run` skips the download and starts faster. If you want to isolate online-fetch failures (network issues, rate limits) from backtest issues, run this step on its own first.
+The data is saved to `data/historical/SPY_1d.parquet`. (The CLI prints the fetch progress in Japanese regardless of locale.) Running this step on its own also helps you isolate online-fetch failures (network issues, rate limits) before the backtest.
 
 ### Step 3 — Register the strategy and run the backtest (~2 min)
 
@@ -163,8 +163,8 @@ alpha-forge backtest run SPY \
   --end 2023-12-31
 ```
 
-!!! note "Automatic data fetching"
-    With `forge.yaml` in place (because you ran `alpha-forge system init` in Step 2), the symbol's historical data is fetched automatically on first run. If you already fetched it in Step 2.5, the auto-fetch is skipped and this step runs faster. If the auto-fetch fails, run Step 2.5 manually and retry.
+!!! note "Historical data must be fetched first"
+    `backtest run` does not auto-fetch data for the target symbol. If you have not run `alpha-forge data fetch SPY --period 5y` in Step 2.5, the backtest stops with `❌ データが見つかりません: SPY (1d)` (data not found). If it stops, run Step 2.5 and retry.
 
 ### Step 4 — Read the results (~3 min)
 
@@ -192,11 +192,10 @@ Total Return: 4.74%   CAGR: 0.93%
 SR: 0.85   Sortino: -2.86   Calmar: 0.52
 MDD: 1.79%   Length: 71d   Recovery: 154d
 PF: 4.01   Win%: 35.7%   avgWin: 10.39%   avgLoss: -1.72%
-Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)
+Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
 Win-rate CI(90%): 17.8% - 54.8%
 📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
 DB save: run_id=<uuid>
-💾 Result file: data/results/optimize_sma_cross_qs_<timestamp>.json  ← only with --save
 ```
 
 A quick read of the key metrics is below. For the full metric list, see [Reading the Results in detail](#reading-the-results-detailed) or the [CLI Reference](cli-reference/index.md).
@@ -263,7 +262,7 @@ alpha-vis serve
 
     If you skip it, alpha-forge falls back to its built-in default ranges
     (`sma_fast.length=[5,25]` / `sma_slow.length=[20,60]`) and prints
-    `optimization params ... (using default ranges)` at startup. Declaring the
+    `Search params (built-in default ranges):` at startup. Declaring the
     block explicitly makes runs reproducible and lets you tune `min`/`max`/`step`
     by hand.
 
@@ -292,7 +291,7 @@ alpha-vis serve
 
 === "macOS / Linux"
 
-    Run the following command in your terminal. The installer extracts the latest binary bundle (`forge.dist`) into `~/.local/share/alpha-forge/` and symlinks the executable as `~/.local/bin/forge`.
+    Run the following command in your terminal. The installer extracts the latest binary bundle (`forge.dist`) into `~/.local/share/alpha-forge/` and symlinks the executable as `~/.local/bin/alpha-forge`.
 
     ```bash
     curl -sSL https://alforge-labs.github.io/install.sh | bash
@@ -402,7 +401,7 @@ Last verified   : 2026-05-13 11:45 UTC (13 min ago)
 Plan            : Paid (Lifetime)
 ```
 
-`Plan: Paid (Lifetime)` confirms a successful paid-plan activation. Due to an implementation holdover, the CLI also shows `Paid (Lifetime)` for Annual and Monthly subscribers (Whop OAuth treats all paid tiers as a single "customer" access level). Without Whop registration the plan field reads `Plan: Free (Trial)` (Trial mode).
+`Plan: Paid (Lifetime)` confirms a successful paid-plan activation. Due to an implementation holdover, the CLI also shows `Paid (Lifetime)` for Annual and Monthly subscribers (Whop OAuth treats all paid tiers as a single "customer" access level). Without Whop registration (i.e. on the Trial plan), the plan details above are not shown at all; instead the command prints only `[AlphaForge] Not logged in.` followed by `Run: alpha-forge system auth login`.
 
 ### 4. Confirm the unlock
 
@@ -508,15 +507,15 @@ The six metrics you'll look at first. For the full metric list, see the [CLI Ref
 | `command not found: forge` / `command not found: alpha-forge` | Open a new terminal or run `source ~/.bashrc` / `source ~/.zshrc`. If that doesn't help, confirm the binary exists with `ls ~/.local/bin/alpha-forge` and that `echo $PATH` includes `~/.local/bin`. |
 | (Windows) `alpha-forge: The term 'alpha-forge' is not recognized ...` | Close all open terminals and open a new one (new tabs of an already-running Windows Terminal do not pick up PATH changes). If it persists, check that `[Environment]::GetEnvironmentVariable('PATH','User')` contains `%LOCALAPPDATA%\Programs\alpha-forge` as a standalone entry; if it is missing or corrupted, re-run the installer (it repairs the entry automatically). |
 | First command shows a `[y/n]` prompt / `Aborted!` in non-interactive runs | A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter `y`. In non-interactive environments (CI, pipes, agents), set `FORGE_ACCEPT_EULA=1` to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under `~/.config/forge/` and won't appear again. |
-| `Strategy 'sma_cross_qs' not found` / `戦略 'sma_cross_qs' が見つかりません` | Run `alpha-forge strategy save sma_cross.json` first to register the strategy in the DB. Or pass the JSON directly via `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...`. |
-| `FileNotFoundError: data not found: SPY (1d)` / `No data found for SPY` | Auto-fetch only works when `forge.yaml` exists. Run `alpha-forge system init` (Step 2) first, or fetch manually with `alpha-forge data fetch SPY --period 5y` and retry. |
+| `❌ 未知のテンプレート名です: <id>。利用可能: ...` (unknown template name) / `戦略 'sma_cross_qs' が見つかりません` | Run `alpha-forge strategy save sma_cross.json` first to register the strategy in the DB. Or pass the JSON directly via `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...`. |
+| `❌ データが見つかりません: SPY (1d)` (data not found) | The target symbol's historical data has not been fetched. `backtest run` does not auto-fetch, so run Step 2.5 (`alpha-forge data fetch SPY --period 5y`) first. |
 | `Failed to fetch data: symbol=USDJPY` (404) | yfinance requires fixed suffixes per asset class: FX `USDJPY=X` / `EURUSD=X` / `GBPJPY=X`, futures `CL=F`, crypto `BTC-USD`. Quote symbols containing `=` (e.g., `'USDJPY=X'`). |
 | `forge.yaml not found` / `Config file not found` | No `forge.yaml` in the current directory. Run `alpha-forge system init` inside a project working directory, or set the `FORGE_CONFIG` environment variable (macOS/Linux: `FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...`; Windows PowerShell: run `$env:FORGE_CONFIG = "C:\path\to\forge.yaml"` first, then `alpha-forge ...`). |
 | Backtest reports `0 trades` | Either the strategy parameters are too strict for the entry conditions, or the data window is too short. Inspect parameters with `alpha-forge strategy show <id> --json`, extend data via `alpha-forge data fetch '<SYM>' --period 10y`, or try a different template such as `bbands_breakout_v1`. |
 | `Best score: -inf` / all optimization trials return `-inf` | Every trial returned NaN. Often the `optimizer_config.param_ranges` are too narrow or the data has too few trades. Widen the ranges, raise `--trials`, or switch `--metric` to e.g. `total_return`. |
 | WFT reports every window as `OOS 0 trades` / `skipped` | The data window is too short to produce trades inside each window. For FX / `1d` data, aim for 5+ years (~1,250 rows). Extend data with `alpha-forge data fetch '<SYM>' --period 5y`, or lower the partition count with `--windows 2`. |
 | `vis: serve: No such file or directory` / `vis: illegal option` | macOS ships a built-in `/usr/bin/vis` that wins on `$PATH`. Run with the absolute path `~/.local/bin/alpha-vis serve` (uv tool) or `~/.local/share/uv/tools/alpha-visualizer/bin/alpha-vis serve` (renamed to `alpha-vis` in v0.3.0+). |
-| `Trial plan: date clipped to 2023-12-31` | Expected behavior. Data beyond the Trial plan cap is automatically excluded. Purchase a paid plan (Lifetime / Annual / Monthly) to lift the cap. |
+| `Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。` (shown in Japanese regardless of locale) | Expected behavior. Data beyond the Trial plan cap is automatically excluded. Purchase a paid plan (Lifetime / Annual / Monthly) to lift the cap. |
 | `Credentials expired` / `Token expired` | Re-run `alpha-forge system auth login`. Verify your Whop membership is still active on [the Whop dashboard](https://whop.com/). |
 | Other authentication errors | Verify your network connection and rerun `alpha-forge system auth login`. Confirm your Whop membership is active. |
 | macOS security warning | System Settings → Privacy & Security → click "Open alpha-forge". |
