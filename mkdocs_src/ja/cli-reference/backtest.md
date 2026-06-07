@@ -414,6 +414,9 @@ alpha-forge backtest migrate [--dry-run] [--force]
 
 複数戦略を同一シンボル・同一期間で比較する。
 
+!!! warning "`compare` の 2 義: これは新規バックテストを実行する重い処理"
+    `backtest compare` は指定した複数戦略の**新規バックテストをその場で実行**して比較します（**重い処理**・副作用あり）。一方、[`journal compare`](journal.md#alpha-forge-journal-compare) / [`live compare`](live.md#alpha-forge-live-compare) は**保存済み**の run / summary を参照するだけの read-only 処理です。同名でもコスト・副作用が異なるため、エージェントが「compare は安全な参照」と一般化して意図せず長時間バックテストを起動しないよう注意してください。
+
 ### 構文
 
 ```bash

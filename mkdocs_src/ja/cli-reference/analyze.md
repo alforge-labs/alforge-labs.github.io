@@ -11,13 +11,14 @@
 対応指標の一覧を表示します。`FILTER_NAME` 指定で部分一致絞り込み（大文字小文字を区別しない）。
 
 ```bash
-alpha-forge analyze indicator list [FILTER_NAME] [--detail]
+alpha-forge analyze indicator list [FILTER_NAME] [--detail] [--json]
 ```
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `FILTER_NAME` | 引数（任意） | - | 指標名のフィルタ |
 | `--detail` | フラグ | false | 各指標のパラメータ・デフォルト値・説明を表示 |
+| `--json` | フラグ | false | 結果を JSON で出力（`{indicators: [...], count}`。`--detail` 併用で各要素に `params` を同梱） |
 
 サンプル出力：
 
@@ -41,12 +42,13 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail]
 指定指標の詳細（説明・パラメータ・出力・使用例）を表示します。
 
 ```bash
-alpha-forge analyze indicator show <INDICATOR_TYPE>
+alpha-forge analyze indicator show <INDICATOR_TYPE> [--json]
 ```
 
 | 名前 | 種別 | 説明 |
 |------|------|------|
 | `INDICATOR_TYPE` | 引数（必須） | 指標名（大文字小文字を区別しない） |
+| `--json` | フラグ | 指標定義を JSON で出力（`name` / `category` / `desc` / `params` / `available_features` / `output` / `notes` / `example`）。不在時は stdout に `{error, code: "indicator_not_found", id}` + 終了コード `1` |
 
 サンプル出力：
 
@@ -87,6 +89,7 @@ alpha-forge analyze pairs scan <SYM_A> <SYM_B> [OPTIONS]
 | `--method` | choice | `engle_granger` | コインテグレーション検定手法 |
 | `--pvalue` | float | `0.05` | コインテグレーションと判定する p 値閾値 |
 | `--interval` | オプション | `1d` | 時間足 |
+| `--json` | フラグ | false | 検定結果を JSON で出力（`{sym_a, sym_b, method, interval, pvalue_threshold, is_cointegrated, p_value, test_statistic, critical_values}`） |
 
 サンプル出力：
 
@@ -101,16 +104,17 @@ alpha-forge analyze pairs scan <SYM_A> <SYM_B> [OPTIONS]
 
 ## alpha-forge analyze pairs scan-all
 
-ウォッチリスト内の全ペアをスキャンします（最大 20 件まで表示）。
+ウォッチリスト内の全ペアをスキャンします（テキスト表示は最大 20 件まで）。
 
 ```bash
-alpha-forge analyze pairs scan-all --symbols-file <FILE> [--pvalue 0.05] [--interval 1d]
+alpha-forge analyze pairs scan-all --symbols-file <FILE> [--pvalue 0.05] [--interval 1d] [--json]
 ```
 
 | 名前 | 種別 | 説明 |
 |------|------|------|
 | `--symbols-file` | 必須（ファイル） | 銘柄リスト（行ごと 1 銘柄、`#` コメント可） |
 | `--pvalue` | float | p 値閾値（デフォルト 0.05） |
+| `--json` | フラグ | 結果を JSON で出力（`{interval, pvalue_threshold, pairs: [...], count, cointegrated_count}`）。テキスト表示の 20 件上限は `--json` では適用されず**全件**返します。進捗メッセージは `--json` の有無に関わらず標準エラーへ出力されます |
 
 ## alpha-forge analyze pairs build
 
@@ -127,6 +131,7 @@ alpha-forge analyze pairs build --sym-a <SYM> --sym-b <SYM> [OPTIONS]
 | `--interval` | オプション | `1d` | 時間足 |
 | `--log-prices` / `--no-log-prices` | フラグ | `--log-prices` | 対数価格でスプレッドを計算 |
 | `--output-id` | オプション | `<A>_<B>_spread` | 保存する `source_key` |
+| `--json` | フラグ | false | 結果を JSON で出力（`{sym_a, sym_b, interval, log_prices, source_key, hedge_ratio, half_life, n_rows}`）。進捗メッセージ（「ヘッジ比率を推定中...」等）は `--json` の有無に関わらず標準エラーへ出力 |
 
 サンプル出力：
 
@@ -190,8 +195,10 @@ parquet ファイルにはシンボル・タイムフレーム・特徴量列名
 利用可能な組み込み feature set を一覧表示します。
 
 ```bash
-alpha-forge analyze ml dataset feature-sets
+alpha-forge analyze ml dataset feature-sets [--json]
 ```
+
+`--json` 指定時は `{feature_sets: [{name, n_specs, specs: [...]}], count}` を純 JSON で出力します。
 
 **組み込み feature set**
 
@@ -264,8 +271,10 @@ alpha-forge analyze ml train ds.parquet --model random_forest_classifier --calib
 利用可能なモデル種別（分類 + 回帰）を一覧表示します。
 
 ```bash
-alpha-forge analyze ml models
+alpha-forge analyze ml models [--json]
 ```
+
+`--json` 指定時は `{classification: [...], regression: [...], count}` を純 JSON で出力します。
 
 ## alpha-forge analyze ml walk-forward
 
@@ -400,5 +409,17 @@ WFT は各ウィンドウで Optuna を N 回試行するため、同じ IS デ�
 **Pine Script との関係**
 
 `ML_SIGNAL` と同様、`ML_SIGNAL_WFT` も Pine Script には変換できません。`alpha-forge pine generate` 時には警告コメント付きで `<id> = true` として扱われます。
+
+---
+
+## `--json` の出力規約
+
+`analyze` 配下の参照系コマンド（`indicator list` / `indicator show` / `ml models` / `ml dataset feature-sets` / `pairs scan` / `pairs scan-all` / `pairs build`）は `--json` に対応します（MCP / パイプ用途・装飾なし）。
+
+- `--json` 指定時、stdout は**純 JSON のみ**で、装飾・ヘッダ・進捗・保存メッセージは標準エラーへ分離されます。
+- 一覧系は `{<plural>: [...], "count": n}` の envelope（データ不在でも空配列 + 終了コード `0`）。
+- `indicator show` の不在は **終了コード `1` を維持**しつつ、`--json` 時は stdout に `{error, code: "indicator_not_found", id}` を返します。
+- `pairs build` / `pairs scan-all` の進捗メッセージ（「ヘッジ比率を推定中...」「スキャン中...」等）は `--json` の有無に関わらず**標準エラー**へ出力され、stdout の純度を確保します。
+- `pairs scan-all` のテキスト表示にある 20 件上限は、`--json` では**適用されず全件**返されます。
 
 ---

@@ -149,6 +149,32 @@ AlphaForge は **すべての設定・戦略・実行が JSON / YAML / CLI で�
     "Bash(FORCE_COLOR=1 uv --directory alpha-forge run alpha-forge *)"
     ```
 
+### 非対話実行（`FORGE_NONINTERACTIVE`） {#non-interactive}
+
+`alpha-forge` の破壊的・上書き操作（`strategy delete` / `strategy purge` / `optimize run --apply` / `optimize grid` / `optimize clean` / `pine delete` / `pine clean` / `explore recommend prune` / `data tv-mcp cache-clean` / `self update` など）には確認プロンプトがあります。CI・パイプ・エージェント（subprocess）などの非対話環境では、これらのプロンプトでハングするおそれがあります。epic [#1083](https://github.com/ysakae/alpha-forge/issues/1083) で、エージェント / CI からの利用を前提とした非対話実行の規約が整理されました。
+
+- **環境変数で一括無効化**: `FORGE_NONINTERACTIVE=1`（`true` / `yes` / `on` も可）または `CI` を truthy に設定すると、すべての確認プロンプトを非対話モードに倒します。標準入力が TTY でない（パイプ・subprocess 実行）場合も自動的に同じ扱いになります。
+- **挙動**:
+    - 破壊的操作（削除・上書き）は `--yes` / `-y` が無いと **終了コード `2` で停止**します（黙ってハングしない）。各コマンドに `--yes` を付けるか、`--dry-run` で事前確認してください。
+    - 続行確認のような安全側の操作は、確認なしでそのまま続行します。
+- `--json` を指定したコマンドは、確認が必要な状況で `--yes` が無いと即座に終了コード `2` を返します（stdout の純 JSON を待ったままハングするのを防ぐため）。
+
+| 終了コード | 意味 |
+|-----------|------|
+| `0` | 成功（ユーザーによる明示キャンセルを含む） |
+| `1` | not found / 想定内の実行失敗（無人ループの停止判定に使う） |
+| `2` | 引数エラー・非対話実行で `--yes` 欠落 |
+
+`--json` 指定時、stdout は純 JSON のみで、装飾・進捗・警告は stderr へ分離されます。`--json` 時の not found は stdout に `{error, code, id}` を出して終了コード `1` を返します。
+
+```bash
+# エージェント / CI から破壊的コマンドを安全に呼ぶ例
+FORGE_NONINTERACTIVE=1 alpha-forge optimize clean --older-than 30d --yes --json
+```
+
+!!! note "EULA 自動同意は別の環境変数"
+    初回起動時の EULA 同意プロンプトは `FORGE_NONINTERACTIVE` では自動同意されません。CI 等では `FORGE_ACCEPT_EULA=1` を併用してください（[はじめに](../getting-started.md) 参照）。
+
 ### 1Password セッション切れの早期検出（無人運転） {#op-session-precheck}
 
 無人運転（夜間バッチ等）で `op` セッションが切れると、以降のすべての `op run` 配下コマンドが認証エラーで失敗します。`/explore-strategies` スキルは各ループ反復の冒頭で `alpha-forge system auth check op` を実行し、セッションが無効な場合は exit code 2 を返してループを停止します（[alpha-forge issue #411](https://github.com/ysakae/alpha-forge/issues/411)）。

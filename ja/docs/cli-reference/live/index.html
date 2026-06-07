@@ -3824,10 +3824,10 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--strategy-id</code></td>
+<td><code>--strategy</code></td>
 <td>オプション</td>
 <td>-</td>
-<td><code>strategy_id</code> で絞り込む</td>
+<td><code>strategy_id</code> で絞り込む（epic #1083 D で <code>--strategy-id</code> から改名）</td>
 </tr>
 <tr>
 <td><code>--event-type</code></td>
@@ -3847,6 +3847,12 @@
 <td><code>20</code></td>
 <td>表示件数</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{events: [...], count}</code>）</td>
+</tr>
 </tbody>
 </table>
 <h3 id="_8">サンプル出力<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
@@ -3859,7 +3865,7 @@
 <h2 id="alpha-forge-live-convert-check">alpha-forge live convert-check<a class="headerlink" href="#alpha-forge-live-convert-check" title="Permanent link">&para;</a></h2>
 <p>raw event を trade records に変換できる状態か（<code>fill</code> と <code>close</code> のペアが揃っているか等）を確認します。<code>import-events</code> の前段で実行することを推奨。</p>
 <h3 id="_9">構文<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>convert-check<span class="w"> </span><span class="o">[</span>--strategy-id<span class="w"> </span>&lt;ID&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>convert-check<span class="w"> </span><span class="o">[</span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="o">]</span>
 </code></pre></div>
 <h3 id="_10">引数とオプション<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <table>
@@ -3873,10 +3879,10 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--strategy-id</code></td>
+<td><code>--strategy</code></td>
 <td>オプション</td>
 <td>-</td>
-<td><code>strategy_id</code> で絞り込む</td>
+<td><code>strategy_id</code> で絞り込む（epic #1083 D で <code>--strategy-id</code> から改名）</td>
 </tr>
 </tbody>
 </table>
@@ -3953,7 +3959,7 @@
 <tr>
 <td><code>trade records を生成できませんでした: &lt;id&gt;</code></td>
 <td><code>fill</code> / <code>close</code> ペアが揃わない、event 不存在</td>
-<td><code>alpha-forge live convert-check --strategy-id &lt;id&gt;</code> で原因確認</td>
+<td><code>alpha-forge live convert-check --strategy &lt;id&gt;</code> で原因確認</td>
 </tr>
 </tbody>
 </table>
@@ -3998,9 +4004,15 @@
 <td>-</td>
 <td><code>exit_reason</code> で絞り込む</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{strategy_id, trades: [...], count}</code>）</td>
+</tr>
 </tbody>
 </table>
-<p>新しい取引から順に表示されます（<code>entry_at</code> 降順）。</p>
+<p>新しい取引から順に表示されます（<code>entry_at</code> 降順）。取引が 0 件でも戦略が存在すれば正常系として <code>--json</code> では <code>status: "no_trades_yet"</code> + 空 envelope（終了コード <code>0</code>）を返します。</p>
 <h3 id="_18">サンプル出力<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>=== live trades ===
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>entry_at             symbol     side        qty        entry         exit    net_pnl     ret%   hold_m exit_reason
@@ -4030,7 +4042,7 @@
 <h2 id="alpha-forge-live-summary">alpha-forge live summary<a class="headerlink" href="#alpha-forge-live-summary" title="Permanent link">&para;</a></h2>
 <p>戦略の live performance summary を表示します。サマリーが未生成の場合は trade records から自動構築します。</p>
 <h3 id="_20">構文<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>summary<span class="w"> </span>&lt;STRATEGY_ID&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>summary<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_21">引数とオプション<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
 <table>
@@ -4048,6 +4060,12 @@
 <td>引数（必須）</td>
 <td>-</td>
 <td>戦略 ID</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>StrategyLiveSummary</code> を dump。取引 0 件は <code>summary: null</code> + <code>status: "no_trades_yet"</code> で終了コード <code>0</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -4090,8 +4108,12 @@
 <h2 id="alpha-forge-live-compare">alpha-forge live compare<a class="headerlink" href="#alpha-forge-live-compare" title="Permanent link">&para;</a></h2>
 <p>最新 backtest run と live summary を比較表示し、ライブが想定通りに機能しているかを評価します。</p>
 <h3 id="_24">構文<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY_ID&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title"><code>compare</code> の 2 義</p>
+<p><code>live compare</code> は<strong>保存済み</strong>の最新 backtest run と live summary を参照するだけの <strong>read-only</strong> コマンドです（新規バックテストは実行しません）。新規にバックテストを実行して比較するのは別概念の重い処理 <a href="../backtest/#alpha-forge-backtest-compare"><code>backtest compare</code></a> です。</p>
+</div>
 <h3 id="_25">引数とオプション<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4108,6 +4130,12 @@
 <td>引数（必須）</td>
 <td>-</td>
 <td>戦略 ID</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{strategy_id, backtest_run, backtest: {...}, live: {...}}</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -4155,7 +4183,7 @@
 <h2 id="alpha-forge-live-doctor">alpha-forge live doctor<a class="headerlink" href="#alpha-forge-live-doctor" title="Permanent link">&para;</a></h2>
 <p>live trading analysis の導入状態を診断します。<code>STRATEGY_ID</code> を渡すと、その戦略について trades / summary の有無まで確認します。</p>
 <h3 id="_28">構文<a class="headerlink" href="#_28" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>doctor<span class="w"> </span><span class="o">[</span>STRATEGY_ID<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>doctor<span class="w"> </span><span class="o">[</span>STRATEGY_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_29">引数とオプション<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h3>
 <table>
@@ -4173,6 +4201,12 @@
 <td>引数（任意）</td>
 <td>-</td>
 <td>戦略 ID（指定で詳細チェック）</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>診断結果を JSON で出力（テキストと同一データ）</td>
 </tr>
 </tbody>
 </table>
@@ -4377,6 +4411,7 @@
 <li><strong><code>forge.yaml</code></strong>: 上記すべてのパスは <code>FORGE_CONFIG</code> が指す <code>forge.yaml</code> で決まる</li>
 <li><strong>VPS 連携</strong>: <code>sync-events</code> は <code>forge.yaml</code> の <code>remote.*</code> セクションを参照</li>
 <li><strong>終了コード</strong>: 通常 <code>0</code>、引数エラーは Click が <code>2</code>、設定不足や record 不存在は通常 <code>1</code></li>
+<li><strong><code>--json</code> の出力規約</strong>: <code>list</code> / <code>events</code> / <code>trades</code> / <code>summary</code> / <code>compare</code> / <code>doctor</code> は <code>--json</code> に対応します。<code>--json</code> 指定時、stdout は純 JSON のみで、装飾・進捗・保存メッセージは標準エラーへ分離されます。一覧系は <code>{&lt;plural&gt;: [...], "count": n}</code>（不在でも空配列 + 終了コード <code>0</code>）、単体参照系の not found は stdout に <code>{error, code, id}</code> の JSON を出して終了コード <code>1</code> を返します。</li>
 </ul>
 <hr />
 <!-- 同期元: `alpha-forge/src/alpha_forge/commands/live.py` の Click decorator、`alpha-forge/src/alpha_forge/live/store.py` の LiveStore、`alpha-forge/src/alpha_forge/live/formatter.py` の `format_*` 関数。alpha-forge 側で引数追加・設定キー変更があった場合、本ページも追従更新が必要。 -->

@@ -1703,6 +1703,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#usage-from-agents-ci-non-interactive-execution-json-exit-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage from agents / CI (non-interactive execution, --json, exit codes)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#related-documentation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2501,6 +2512,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#usage-from-agents-ci-non-interactive-execution-json-exit-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage from agents / CI (non-interactive execution, --json, exit codes)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#related-documentation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2565,8 +2587,8 @@
 <tr>
 <td><strong>optimize</strong></td>
 <td>Core</td>
-<td><code>run</code> <code>cross-symbol</code> <code>portfolio</code> <code>multi-portfolio</code> <code>walk-forward</code> <code>apply</code> <code>sensitivity</code> <code>history</code> <code>grid</code></td>
-<td>Parameter optimization (Bayesian, grid, walk-forward)</td>
+<td><code>run</code> <code>cross-symbol</code> <code>portfolio</code> <code>multi-portfolio</code> <code>walk-forward</code> <code>apply</code> <code>sensitivity</code> <code>history</code> <code>grid</code> <code>clean</code></td>
+<td>Parameter optimization (Bayesian, grid, walk-forward) and result cleanup</td>
 <td><a href="optimize/">optimize →</a></td>
 </tr>
 <tr>
@@ -2586,8 +2608,8 @@
 <tr>
 <td><strong>pine</strong></td>
 <td>Core</td>
-<td><code>generate</code> <code>preview</code> <code>verify</code> <code>import</code></td>
-<td>Convert between strategy JSON and TradingView Pine Script (<code>verify</code> validates syntax via TradingView MCP)</td>
+<td><code>generate</code> <code>preview</code> <code>verify</code> <code>import</code> <code>list</code> <code>delete</code> <code>clean</code></td>
+<td>Convert between strategy JSON and TradingView Pine Script (<code>verify</code> validates syntax via TradingView MCP); list / delete / clean generated <code>.pine</code> files</td>
 <td><a href="pine/">pine →</a></td>
 </tr>
 <tr>
@@ -2607,7 +2629,7 @@
 <tr>
 <td><strong>data</strong></td>
 <td>Core</td>
-<td><code>fetch</code> <code>list</code> <code>trend</code> <code>update</code> <code>alt {fetch,list,info}</code> <code>tv-mcp {chart,inspect,check}</code></td>
+<td><code>fetch</code> <code>list</code> <code>trend</code> <code>update</code> <code>alt {fetch,list,info}</code> <code>tv-mcp {chart,inspect,check,cache-clean}</code></td>
 <td>Historical / alternative / TradingView MCP data</td>
 <td><a href="data/">data →</a></td>
 </tr>
@@ -2621,8 +2643,8 @@
 <tr>
 <td><strong>system</strong></td>
 <td>Auxiliary</td>
-<td><code>init</code> <code>auth {login,logout,status}</code> <code>auth check op</code> <code>docs {list,show}</code></td>
-<td>Operational utilities (workspace init, Whop OAuth, bundled docs)</td>
+<td><code>init</code> <code>auth {login,logout,status}</code> <code>auth check op</code> <code>docs {list,show}</code> <code>config</code></td>
+<td>Operational utilities (workspace init, Whop OAuth, bundled docs, effective-config dump)</td>
 <td><a href="system/">system →</a></td>
 </tr>
 <tr>
@@ -2642,6 +2664,14 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>--help<span class="w">            </span><span class="c1"># Detailed parameters for a specific subcommand</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>--help<span class="w">                </span><span class="c1"># Subcommands of a nested auxiliary group</span>
 </code></pre></div>
+<h2 id="usage-from-agents-ci-non-interactive-execution-json-exit-codes">Usage from agents / CI (non-interactive execution, <code>--json</code>, exit codes)<a class="headerlink" href="#usage-from-agents-ci-non-interactive-execution-json-exit-codes" title="Permanent link">&para;</a></h2>
+<p><code>alpha-forge</code> is designed for subprocess usage from coding agents (Claude Code / Codex, etc.) and CI (epic <a href="https://github.com/ysakae/alpha-forge/issues/1083">#1083</a>).</p>
+<ul>
+<li><strong>Non-interactive execution</strong>: <code>FORGE_NONINTERACTIVE=1</code> (or <code>CI</code> / non-TTY detection) removes confirmation prompts. Destructive operations stop with exit code <code>2</code> when <code>--yes</code> is missing (hang prevention). See <a href="../guides/ai-exploration-workflow/#non-interactive">AI-Driven Strategy Exploration Workflow › Non-interactive execution</a> for details.</li>
+<li><strong><code>--json</code></strong>: observation / reference commands (<code>system config</code> / <code>live</code> / <code>journal</code> / <code>idea</code> / <code>analyze</code> groups, etc.) support <code>--json</code>. stdout contains pure JSON only; decoration and progress go to stderr.</li>
+<li><strong>Exit codes</strong>: <code>0</code> = success (including explicit cancel) / <code>1</code> = not found or expected failure (use this to stop unattended loops) / <code>2</code> = argument error or missing <code>--yes</code> in non-interactive execution. A not-found under <code>--json</code> emits <code>{error, code, id}</code> to stdout with exit code <code>1</code>.</li>
+<li><strong>The two meanings of <code>compare</code></strong>: <code>backtest compare</code> runs new backtests (a heavy operation), while <code>journal compare</code> / <code>live compare</code> are read-only references to saved results.</li>
+</ul>
 <h2 id="related-documentation">Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../getting-started/">Getting Started</a> — Tutorial covering installation through your first backtest</li>
@@ -2649,7 +2679,7 @@
 <li><a href="../guides/ai-exploration-workflow/">AI-Driven Strategy Exploration Workflow</a> — Claude Code / Codex × AlphaForge</li>
 </ul>
 <hr />
-<!-- Synced from: `alpha-forge/src/alpha_forge/cli.py` (_TOP_LEVEL_LAZY / _ANALYZE_LAZY / _SYSTEM_LAZY) and `commands/*.py` Click decorators. Keep this table in sync when CLI commands change. -->
+<!-- Synced from: `alpha-forge/src/alpha_forge/cli.py` (_TOP_LEVEL_LAZY / _ANALYZE_LAZY / _SYSTEM_LAZY) and `commands/*.py` Click decorators. Keep this table in sync when CLI commands change. Epic #1083 added system config / optimize clean / pine list,delete,clean / data tv-mcp cache-clean. -->
 
 
 

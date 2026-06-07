@@ -3493,10 +3493,27 @@
 <h2 id="alpha-forge-journal-list">alpha-forge journal list<a class="headerlink" href="#alpha-forge-journal-list" title="Permanent link">&para;</a></h2>
 <p>ジャーナルが存在する戦略の一覧を表示します。<code>config.strategies.path</code> 配下の SQLite DB（<code>strategies.db</code>）の <code>journal_entries</code> テーブルを走査します。</p>
 <h3 id="_2">構文<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>list
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_3">引数とオプション<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<p>なし。</p>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{journals: [...], count}</code>）</td>
+</tr>
+</tbody>
+</table>
 <h3 id="_4">サンプル出力<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>戦略ID                                  最終実行   実行数   スナップ  タグ
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>────────────────────────────────────────────────────────────────────────────────
@@ -3509,7 +3526,7 @@
 <h2 id="alpha-forge-journal-show">alpha-forge journal show<a class="headerlink" href="#alpha-forge-journal-show" title="Permanent link">&para;</a></h2>
 <p>戦略の全履歴を表示します：戦略定義スナップショット + 実行履歴（バックテスト・最適化など）+ タグ + メモ + ライブサマリ（live trading records があれば）。</p>
 <h3 id="_5">構文<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>show<span class="w"> </span>&lt;STRATEGY_ID&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>show<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_6">引数とオプション<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -3527,6 +3544,12 @@
 <td>引数（必須）</td>
 <td>-</td>
 <td>表示する戦略 ID</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>JournalEntry</code> を dump + <code>live_summary</code>。不在時は stdout に <code>{error, code, id}</code> + 終了コード <code>1</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -3571,7 +3594,7 @@
 <h2 id="alpha-forge-journal-runs">alpha-forge journal runs<a class="headerlink" href="#alpha-forge-journal-runs" title="Permanent link">&para;</a></h2>
 <p>実行結果をテーブル形式で一覧表示します。</p>
 <h3 id="_9">構文<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>runs<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--best<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>runs<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--best<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_10">引数とオプション<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <table>
@@ -3596,6 +3619,12 @@
 <td><code>date</code> 相当（未指定時）</td>
 <td>ソート基準。<code>sharpe_ratio</code> / <code>total_return_pct</code> / <code>max_drawdown_pct</code> / <code>win_rate_pct</code> / <code>date</code></td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{strategy_id, runs: [...], count}</code>。並び順はテキスト表示と一致）</td>
+</tr>
 </tbody>
 </table>
 <h3 id="_11">サンプル出力<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
@@ -3610,8 +3639,12 @@
 <hr />
 <h2 id="alpha-forge-journal-compare">alpha-forge journal compare<a class="headerlink" href="#alpha-forge-journal-compare" title="Permanent link">&para;</a></h2>
 <p>同一戦略の <strong>2 つの実行結果</strong> を並べて比較表示します。</p>
+<div class="admonition note">
+<p class="admonition-title"><code>compare</code> の 2 義</p>
+<p><code>journal compare</code> は<strong>保存済み</strong>の 2 つの run を参照するだけの <strong>read-only</strong> コマンドです（新規バックテストは実行しません）。新規にバックテストを実行して比較するのは別概念の重い処理 <a href="../backtest/#alpha-forge-backtest-compare"><code>backtest compare</code></a> です。</p>
+</div>
 <h3 id="_12">構文<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span>--run<span class="w"> </span>&lt;RUN_ID1&gt;<span class="w"> </span>--run<span class="w"> </span>&lt;RUN_ID2&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span>--run<span class="w"> </span>&lt;RUN_ID1&gt;<span class="w"> </span>--run<span class="w"> </span>&lt;RUN_ID2&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_13">引数とオプション<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
 <table>
@@ -3635,6 +3668,12 @@
 <td>複数指定可（必須、<strong>ちょうど 2 個</strong>）</td>
 <td>-</td>
 <td>比較する <code>run_id</code>（2 つ指定）</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{strategy_id, run_a: {...}, run_b: {...}}</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -3867,6 +3906,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">not found は終了コード <code>1</code>（epic #1083 D）</p>
+<p>存在しない <code>run_id</code> を渡した場合、以前は終了コード <code>0</code>（成功扱い）を返していましたが、Fail Loud 規約に合わせて <strong>not found = 終了コード <code>1</code></strong> に統一されました。無人ループはこの終了コードで判定できます。</p>
+</div>
 <hr />
 <h2 id="alpha-forge-journal-report">alpha-forge journal report<a class="headerlink" href="#alpha-forge-journal-report" title="Permanent link">&para;</a></h2>
 <p>ジャーナルの全履歴（スナップショット・実行履歴・タグ・メモ・判定）を <strong>Markdown レポート</strong> として出力します（issue #523 Phase 1.5d-γ）。<code>--with-chart</code> を併用すると、TradingView から取得した最新チャートの PNG をレポート末尾に埋め込めます。</p>
@@ -3926,6 +3969,12 @@
 <td>-</td>
 <td>チャート取得用 MCP サーバー（省略時 <code>forge.yaml</code> の <code>tv_mcp.chart_snapshot.endpoint</code>）</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>本文ではなく<strong>メタ情報</strong>を JSON で出力（<code>{strategy_id, output_path, saved, with_chart, chart_path, markdown}</code>。<code>--output</code> 省略時のみ <code>markdown</code> を payload に同梱）</td>
+</tr>
 </tbody>
 </table>
 <h3 id="_29">実行例<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h3>
@@ -3971,6 +4020,7 @@
 <li><strong>ライブ連携</strong>: <code>journal_path</code> の親ディレクトリ配下の <code>live/</code> から <code>LiveStore</code> を読み、<code>show</code> の表示に反映される</li>
 <li><strong><code>FORGE_CONFIG</code></strong>: 上記すべてのパスは環境変数 <code>FORGE_CONFIG</code> が指す <code>forge.yaml</code> で決まる</li>
 <li><strong>終了コード</strong>: 通常 <code>0</code>、引数エラーは Click が <code>2</code> を返す。<code>run_id</code> 不存在時は通常 <code>1</code>（標準エラーに出力して return）</li>
+<li><strong><code>--json</code> の出力規約</strong>: <code>list</code> / <code>runs</code> / <code>compare</code> / <code>show</code> / <code>report</code> は <code>--json</code> に対応します。<code>--json</code> 指定時、stdout は純 JSON のみ（装飾・保存メッセージは標準エラーへ）。一覧系は <code>{&lt;plural&gt;: [...], "count": n}</code>、<code>show</code> などの not found は stdout に <code>{error, code, id}</code> を出して終了コード <code>1</code>。</li>
 </ul>
 <hr />
 <!-- 同期元: `alpha-forge/src/alpha_forge/commands/journal.py` の Click decorator と `alpha-forge/src/alpha_forge/journal/formatter.py` の `format_*` 関数。alpha-forge 側で引数追加・整形ロジック変更があった場合、本ページも追従更新が必要。 -->

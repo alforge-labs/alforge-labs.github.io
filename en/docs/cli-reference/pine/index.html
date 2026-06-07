@@ -1949,6 +1949,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine delete
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine clean
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2535,6 +2568,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine delete
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine clean
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2989,6 +3055,106 @@
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
 </code></pre></div>
 <p>For the verification workflow walkthrough, see <a href="../../guides/tradingview-pine-integration/">Bringing Pine Scripts into TradingView</a>.</p>
+<hr />
+<h2 id="alpha-forge-pine-list">alpha-forge pine list<a class="headerlink" href="#alpha-forge-pine-list" title="Permanent link">&para;</a></h2>
+<p>A <strong>read-only</strong> command that lists the <code>*.pine</code> files already generated under <code>config.pinescript.output_path</code> (default <code>output/pinescript/</code>). It completes the read/delete lifecycle for generated artifacts. Available on the Trial plan.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>[{strategy_id, file, size_bytes, mtime}, ...]</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Shows each <code>.pine</code> file's <code>strategy_id</code> / file / size / modification time.</p>
+<h2 id="alpha-forge-pine-delete">alpha-forge pine delete<a class="headerlink" href="#alpha-forge-pine-delete" title="Permanent link">&para;</a></h2>
+<p>Delete one generated Pine Script (<code>.pine</code>) for the given <code>strategy_id</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>STRATEGY_ID</code></td>
+<td>argument (required)</td>
+<td>-</td>
+<td>The strategy ID to delete</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the confirmation prompt and delete</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Exits with code <code>1</code> (not found) if the target file does not exist.</li>
+<li>Because this is a destructive operation, in non-interactive environments (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY) it stops with exit code <code>2</code> unless <code>--yes</code> is given.</li>
+</ul>
+<h2 id="alpha-forge-pine-clean">alpha-forge pine clean<a class="headerlink" href="#alpha-forge-pine-clean" title="Permanent link">&para;</a></h2>
+<p>Tidy up <code>*.pine</code> files under <code>config.pinescript.output_path</code> by age (mtime) and delete them.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>clean<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--older-than</code></td>
+<td>option</td>
+<td>-</td>
+<td>Delete <code>.pine</code> files older than the given number of days (mtime, <code>30d</code> / <code>30</code> format)</td>
+</tr>
+<tr>
+<td><code>--dry-run</code></td>
+<td>flag</td>
+<td>false</td>
+<td>List the files that would be deleted and exit without deleting</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the confirmation prompt and delete</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{removed: [...], failed: [...], count, dry_run}</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Omitting <code>--older-than</code> stops with exit code <code>2</code> to <strong>prevent accidental wholesale deletion</strong>.</li>
+<li>Because this is destructive, it stops with exit code <code>2</code> in non-interactive environments unless <code>--yes</code> is given. <code>--yes</code> is also required when running with <code>--json</code>.</li>
+</ul>
 <hr />
 
 

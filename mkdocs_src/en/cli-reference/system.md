@@ -166,3 +166,64 @@ alpha-forge system docs show <NAME>
 Print the document content to stdout. Unknown names display the available list and exit with code `1`.
 
 ---
+
+## alpha-forge system config
+
+Dump the effective configuration (the current values of the `forge.yaml` that was actually loaded). This is an **observation-only (read-only)** command that shows which `forge.yaml` was loaded and what each key resolved to. It helps you isolate problems such as an unintended `FORGE_CONFIG` environment variable inheritance. Because it is read-only, it runs even with an expired license or without authentication.
+
+### Syntax
+
+```bash
+alpha-forge system config [KEY] [--json]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `KEY` | argument (optional) | - | Dotted key (e.g. `data.storage_path`). When given, prints only that single raw value |
+| `--json` | flag | false | Emit the result as JSON (machine-readable, for MCP / pipe usage) |
+
+- **`KEY` omitted (full dump)**: prints the absolute path of the loaded `forge.yaml` (or the search order if absent), the relevant environment-variable overrides (`FORGE_CONFIG` / `FORGE_LANG` / `FORGE_DEBUG` / `FORGE_NONINTERACTIVE`, etc.), and the resolved values of the major keys (`Path` values are resolved to absolute paths).
+- **`KEY` given**: prints a single value raw via a dotted key. Use it in scripts like `$(alpha-forge system config data.storage_path)`. A missing key prints an error to stderr and exits with code `1` (**Fail Loud**).
+- **Secret masking**: values whose key names match patterns such as `token` / `api_key` / `secret` / `password` / `access_key`, as well as `SecretStr` fields (`oanda.access_token` / `fred.api_key`), are masked with `***`.
+
+### Sample output (full dump)
+
+```text
+# Effective config file: /path/to/forge.yaml
+
+## Environment overrides
+FORGE_CONFIG=/path/to/forge.yaml
+FORGE_ACCEPT_EULA=1
+
+## Resolved config values
+data.storage_path = /path/to/data/historical
+data.providers.oanda.access_token = ***
+data.providers.fred.api_key = ***
+report.output_path = /path/to/output/results
+strategies.use_db = True
+...
+```
+
+### Sample output (`--json`)
+
+When `--json` is set, stdout contains pure JSON only (decoration and errors go to stderr).
+
+```json
+{
+  "config_path": "/path/to/forge.yaml",
+  "config_search_order": ["FORGE_CONFIG=/path/to/forge.yaml"],
+  "env_overrides": {"FORGE_CONFIG": "/path/to/forge.yaml"},
+  "config": {"data": {"providers": {"fred": {"api_key": "***"}}}}
+}
+```
+
+With a single key plus `--json`, the result is a `{key, value}` envelope.
+
+```bash
+alpha-forge system config strategies.use_db --json
+# => {"key": "strategies.use_db", "value": true}
+```
+
+---

@@ -4369,7 +4369,7 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <h2 id="alpha-forge-strategy-delete">alpha-forge strategy delete<a class="headerlink" href="#alpha-forge-strategy-delete" title="Permanent link">&para;</a></h2>
 <p>Delete a registered strategy from the DB / registry. With <code>--with-results</code>, also deletes related files (optimized strategy, backtest results, optimization results). Journal files are always kept.</p>
 <h3 id="synopsis_5">Synopsis<a class="headerlink" href="#synopsis_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_5">Arguments and options<a class="headerlink" href="#arguments-and-options_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -4389,10 +4389,10 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <td>Strategy ID to delete</td>
 </tr>
 <tr>
-<td><code>--force</code></td>
+<td><code>--yes</code> / <code>-y</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Skip confirmation prompt</td>
+<td>Skip confirmation prompt (renamed from <code>--force</code> in epic #1083 D)</td>
 </tr>
 <tr>
 <td><code>--with-results</code></td>
@@ -4402,6 +4402,7 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 </tr>
 </tbody>
 </table>
+<p>Because this is a destructive operation, in non-interactive environments (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY) it stops with exit code <code>2</code> unless <code>--yes</code> is given. Not-found returns exit code <code>1</code>.</p>
 <h3 id="files-removed-by-with-results">Files removed by <code>--with-results</code><a class="headerlink" href="#files-removed-by-with-results" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>strategies.path / &lt;id&gt;_optimized.json</code></li>
@@ -4442,15 +4443,15 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <tr>
 <td><code>Cancelled</code></td>
 <td>Declined the prompt</td>
-<td>Use <code>--force</code> or re-confirm</td>
+<td>Use <code>--yes</code> or re-confirm</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="alpha-forge-strategy-purge">alpha-forge strategy purge<a class="headerlink" href="#alpha-forge-strategy-purge" title="Permanent link">&para;</a></h2>
-<p>Purge the strategy JSON, related files (<code>_optimized.json</code>, <code>_report.json</code>, <code>optimize_&lt;id&gt;_*.json</code>), and DB entry <strong>in a single command</strong>. Replaces the previous three-step <code>rm &lt;strategy&gt;.json &amp;&amp; rm &lt;strategy&gt;_report.json &amp;&amp; alpha-forge strategy delete &lt;id&gt; --force</code> workflow. Journal files (<code>&lt;id&gt;.journal.json</code>) are preserved.</p>
+<p>Purge the strategy JSON, related files (<code>_optimized.json</code>, <code>_report.json</code>, <code>optimize_&lt;id&gt;_*.json</code>), and DB entry <strong>in a single command</strong>. Replaces the previous three-step <code>rm &lt;strategy&gt;.json &amp;&amp; rm &lt;strategy&gt;_report.json &amp;&amp; alpha-forge strategy delete &lt;id&gt; --yes</code> workflow. Journal files (<code>&lt;id&gt;.journal.json</code>) are preserved.</p>
 <h3 id="synopsis_6">Synopsis<a class="headerlink" href="#synopsis_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>purge<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>purge<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_6">Arguments and options<a class="headerlink" href="#arguments-and-options_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -4475,8 +4476,15 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <td>false</td>
 <td>Only list the files that would be deleted; do not actually delete them</td>
 </tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the confirmation prompt and purge (newly added in epic #1083 A; previously the command only had a confirmation prompt and could hang)</td>
+</tr>
 </tbody>
 </table>
+<p>Because this is a destructive operation, in non-interactive environments (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY) it stops with exit code <code>2</code> unless <code>--yes</code> is given. Not-found returns exit code <code>1</code>.</p>
 <h3 id="sample-output_6">Sample output<a class="headerlink" href="#sample-output_6" title="Permanent link">&para;</a></h3>
 <p><code>--dry-run</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>[dry-run] Targets:

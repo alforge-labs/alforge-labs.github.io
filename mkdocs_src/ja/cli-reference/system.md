@@ -166,3 +166,64 @@ alpha-forge system docs show <NAME>
 ドキュメントの内容を標準出力に表示します。未知の名前を指定すると利用可能リストとともにエラー表示し、終了コード `1`。
 
 ---
+
+## alpha-forge system config
+
+実効設定（実際に読み込まれた `forge.yaml` の現在値）をダンプします。どの `forge.yaml` が読み込まれ、各キーがどの値に解決されたかを確認できる**観測専用（read-only）**コマンドです。`FORGE_CONFIG` 環境変数の意図しない継承などを切り分けられます。読み取り専用のため、ライセンス切れ・未認証でも実行できます。
+
+### 構文
+
+```bash
+alpha-forge system config [KEY] [--json]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `KEY` | 引数（任意） | - | dotted key（例: `data.storage_path`）。指定すると単一値だけを生で出力 |
+| `--json` | フラグ | false | 結果を JSON で出力（機械可読・MCP / パイプ用途） |
+
+- **`KEY` 省略時（全体ダンプ）**: 読み込まれた `forge.yaml` の絶対パス（不在時は探索順）・関与した環境変数オーバーライド（`FORGE_CONFIG` / `FORGE_LANG` / `FORGE_DEBUG` / `FORGE_NONINTERACTIVE` 等）・解決済みの主要キー実値（`Path` は絶対パスへ解決）を表示します。
+- **`KEY` 指定時**: dotted key で単一値を生で出力します。`$(alpha-forge system config data.storage_path)` のようにスクリプトから利用できます。不在キーは標準エラーにエラーを出して終了コード `1`（**Fail Loud**）。
+- **秘匿マスク**: `token` / `api_key` / `secret` / `password` / `access_key` などのキー名パターンや `SecretStr` フィールド（`oanda.access_token` / `fred.api_key`）の値は `***` でマスクされます。
+
+### サンプル出力（全体ダンプ）
+
+```text
+# 実効設定ファイル: /path/to/forge.yaml
+
+## 環境変数オーバーライド
+FORGE_CONFIG=/path/to/forge.yaml
+FORGE_ACCEPT_EULA=1
+
+## 解決済み設定値
+data.storage_path = /path/to/data/historical
+data.providers.oanda.access_token = ***
+data.providers.fred.api_key = ***
+report.output_path = /path/to/output/results
+strategies.use_db = True
+...
+```
+
+### サンプル出力（`--json`）
+
+`--json` 指定時は stdout に純 JSON のみを出力します（装飾・エラーは標準エラーへ分離）。
+
+```json
+{
+  "config_path": "/path/to/forge.yaml",
+  "config_search_order": ["FORGE_CONFIG=/path/to/forge.yaml"],
+  "env_overrides": {"FORGE_CONFIG": "/path/to/forge.yaml"},
+  "config": {"data": {"providers": {"fred": {"api_key": "***"}}}}
+}
+```
+
+単一キー指定 + `--json` の場合は `{key, value}` の envelope を返します。
+
+```bash
+alpha-forge system config strategies.use_db --json
+# => {"key": "strategies.use_db", "value": true}
+```
+
+---

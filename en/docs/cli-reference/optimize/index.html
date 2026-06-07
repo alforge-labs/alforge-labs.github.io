@@ -2426,6 +2426,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-optimize-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge optimize clean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge optimize clean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Syntax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3667,6 +3717,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-optimize-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge optimize clean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge optimize clean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Syntax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3744,6 +3844,10 @@
 <tr>
 <td><a href="#alpha-forge-optimize-grid"><code>alpha-forge optimize grid</code></a></td>
 <td>Cartesian Grid Search over <code>optimizer_config.param_ranges</code></td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-optimize-clean"><code>alpha-forge optimize clean</code></a></td>
+<td>Tidy up saved optimization results (<code>optimize_*.json</code>) by age / strategy / generation</td>
 </tr>
 </tbody>
 </table>
@@ -4779,6 +4883,73 @@
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="alpha-forge-optimize-clean">alpha-forge optimize clean<a class="headerlink" href="#alpha-forge-optimize-clean" title="Permanent link">&para;</a></h2>
+<p>Tidy up the <code>optimize_*.json</code> files that accumulate under <code>config.report.output_path</code> (default <code>data/results/</code>) by age / strategy / generation and delete them. This cleanup command prevents result files from growing without bound during long-running loops such as <code>/explore-strategies --runs 0</code>.</p>
+<h3 id="syntax">Syntax<a class="headerlink" href="#syntax" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>clean<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<h3 id="arguments-and-options_8">Arguments and options<a class="headerlink" href="#arguments-and-options_8" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--older-than</code></td>
+<td>option</td>
+<td>-</td>
+<td>Delete results older than the given number of days (mtime, <code>30d</code> / <code>30</code> format)</td>
+</tr>
+<tr>
+<td><code>--strategy</code></td>
+<td>option</td>
+<td>-</td>
+<td>Target only a specific strategy's result files. Resolved by the <code>strategy</code> field inside each JSON (falls back to the filename when missing)</td>
+</tr>
+<tr>
+<td><code>--keep</code></td>
+<td>int (≥1)</td>
+<td>-</td>
+<td>Keep the latest N files (mtime descending) per strategy and delete older ones</td>
+</tr>
+<tr>
+<td><code>--dry-run</code></td>
+<td>flag</td>
+<td>false</td>
+<td>List the files that would be deleted and exit without deleting</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Skip the confirmation prompt and delete</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{removed: [...], failed: [...], count, dry_run}</code>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>If none of the filters (<code>--older-than</code> / <code>--strategy</code> / <code>--keep</code>) are given, the command stops with exit code <code>2</code> to <strong>prevent accidental wholesale deletion</strong>. Multiple conditions are combined with AND.</li>
+<li><code>--keep</code> retains the latest N files <strong>by mtime (modification time), not by metric</strong>.</li>
+<li>Because this is a destructive operation, in non-interactive environments (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY) it stops with exit code <code>2</code> unless <code>--yes</code> is given. <code>--yes</code> is also required when running with <code>--json</code>.</li>
+</ul>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># Delete results older than 30 days (preview first)</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>clean<span class="w"> </span>--older-than<span class="w"> </span>30d<span class="w"> </span>--dry-run
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="c1"># Keep only the latest 5 results per strategy and delete the rest (non-interactive)</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>clean<span class="w"> </span>--keep<span class="w"> </span><span class="m">5</span><span class="w"> </span>--yes
+</code></pre></div>
 <hr />
 <h2 id="common-behavior">Common behavior<a class="headerlink" href="#common-behavior" title="Permanent link">&para;</a></h2>
 <ul>

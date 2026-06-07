@@ -27,12 +27,14 @@
 ### 構文
 
 ```bash
-alpha-forge journal list
+alpha-forge journal list [--json]
 ```
 
 ### 引数とオプション
 
-なし。
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力（`{journals: [...], count}`） |
 
 ### サンプル出力
 
@@ -55,7 +57,7 @@ gc_hmm_macd_ema_v1           2026-04-01 09:20    5      1  -
 ### 構文
 
 ```bash
-alpha-forge journal show <STRATEGY_ID>
+alpha-forge journal show <STRATEGY_ID> [--json]
 ```
 
 ### 引数とオプション
@@ -63,6 +65,7 @@ alpha-forge journal show <STRATEGY_ID>
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 表示する戦略 ID |
+| `--json` | フラグ | false | 結果を JSON で出力（`JournalEntry` を dump + `live_summary`。不在時は stdout に `{error, code, id}` + 終了コード `1`） |
 
 ### サンプル出力
 
@@ -103,7 +106,7 @@ Notes:
 ### 構文
 
 ```bash
-alpha-forge journal runs <STRATEGY_ID> [--best <KEY>]
+alpha-forge journal runs <STRATEGY_ID> [--best <KEY>] [--json]
 ```
 
 ### 引数とオプション
@@ -112,6 +115,7 @@ alpha-forge journal runs <STRATEGY_ID> [--best <KEY>]
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 戦略 ID |
 | `--best` | choice | `date` 相当（未指定時） | ソート基準。`sharpe_ratio` / `total_return_pct` / `max_drawdown_pct` / `win_rate_pct` / `date` |
+| `--json` | フラグ | false | 結果を JSON で出力（`{strategy_id, runs: [...], count}`。並び順はテキスト表示と一致） |
 
 ### サンプル出力
 
@@ -132,10 +136,13 @@ run_20260415103021           2026-04-15 10:30 optimization    SPY         -     
 
 同一戦略の **2 つの実行結果** を並べて比較表示します。
 
+!!! note "`compare` の 2 義"
+    `journal compare` は**保存済み**の 2 つの run を参照するだけの **read-only** コマンドです（新規バックテストは実行しません）。新規にバックテストを実行して比較するのは別概念の重い処理 [`backtest compare`](backtest.md#alpha-forge-backtest-compare) です。
+
 ### 構文
 
 ```bash
-alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2>
+alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2> [--json]
 ```
 
 ### 引数とオプション
@@ -144,6 +151,7 @@ alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2>
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 戦略 ID |
 | `--run` | 複数指定可（必須、**ちょうど 2 個**） | - | 比較する `run_id`（2 つ指定） |
+| `--json` | フラグ | false | 結果を JSON で出力（`{strategy_id, run_a: {...}, run_b: {...}}`） |
 
 ### サンプル出力
 
@@ -288,6 +296,9 @@ alpha-forge journal verdict <STRATEGY_ID> <RUN_ID> <pass|fail|review>
 | `エラー: run_id が見つかりません - <id>` | 指定 `run_id` がジャーナルに存在しない | `alpha-forge journal runs <strategy_id>` で確認 |
 | Click: `Invalid value for 'VERDICT'` | `pass` / `fail` / `review` 以外を指定 | choice の値を使用 |
 
+!!! note "not found は終了コード `1`（epic #1083 D）"
+    存在しない `run_id` を渡した場合、以前は終了コード `0`（成功扱い）を返していましたが、Fail Loud 規約に合わせて **not found = 終了コード `1`** に統一されました。無人ループはこの終了コードで判定できます。
+
 ---
 
 ## alpha-forge journal report
@@ -311,6 +322,7 @@ alpha-forge journal report <STRATEGY_ID> [--output <FILE>] [--with-chart --outpu
 | `--interval` | オプション | - | チャート用 TV インターバル（例: `D`, `60`） |
 | `--mock` | フラグ | false | チャート取得を Mock MCP で行う（CI 用） |
 | `--mcp-server` | オプション | - | チャート取得用 MCP サーバー（省略時 `forge.yaml` の `tv_mcp.chart_snapshot.endpoint`） |
+| `--json` | フラグ | false | 本文ではなく**メタ情報**を JSON で出力（`{strategy_id, output_path, saved, with_chart, chart_path, markdown}`。`--output` 省略時のみ `markdown` を payload に同梱） |
 
 ### 実行例
 
@@ -340,6 +352,7 @@ alpha-forge journal report spy_sma_v1 --output reports/spy.md \
 - **ライブ連携**: `journal_path` の親ディレクトリ配下の `live/` から `LiveStore` を読み、`show` の表示に反映される
 - **`FORGE_CONFIG`**: 上記すべてのパスは環境変数 `FORGE_CONFIG` が指す `forge.yaml` で決まる
 - **終了コード**: 通常 `0`、引数エラーは Click が `2` を返す。`run_id` 不存在時は通常 `1`（標準エラーに出力して return）
+- **`--json` の出力規約**: `list` / `runs` / `compare` / `show` / `report` は `--json` に対応します。`--json` 指定時、stdout は純 JSON のみ（装飾・保存メッセージは標準エラーへ）。一覧系は `{<plural>: [...], "count": n}`、`show` などの not found は stdout に `{error, code, id}` を出して終了コード `1`。
 
 ---
 

@@ -149,6 +149,32 @@ All paths are relative to `alpha-trade/` as the working root.
     "Bash(FORCE_COLOR=1 uv --directory alpha-forge run alpha-forge *)"
     ```
 
+### Non-interactive execution (`FORGE_NONINTERACTIVE`) {#non-interactive}
+
+`alpha-forge`'s destructive / overwrite operations (`strategy delete` / `strategy purge` / `optimize run --apply` / `optimize grid` / `optimize clean` / `pine delete` / `pine clean` / `explore recommend prune` / `data tv-mcp cache-clean` / `self update`, etc.) have confirmation prompts. In non-interactive environments such as CI, pipes, and agents (subprocess), these prompts can hang. Epic [#1083](https://github.com/ysakae/alpha-forge/issues/1083) established the conventions for non-interactive execution aimed at agent / CI usage.
+
+- **Disable all prompts via env var**: setting `FORGE_NONINTERACTIVE=1` (`true` / `yes` / `on` also work) or a truthy `CI` flips all confirmation prompts into non-interactive mode. A non-TTY stdin (pipe / subprocess execution) is treated the same way automatically.
+- **Behavior**:
+    - Destructive operations (delete / overwrite) **stop with exit code `2`** unless `--yes` / `-y` is given (no silent hang). Pass `--yes` to each command, or preview with `--dry-run`.
+    - Safe "continue?"-style confirmations proceed without prompting.
+- Commands given `--json` immediately return exit code `2` when confirmation is required and `--yes` is missing (to avoid hanging while the caller waits for pure JSON on stdout).
+
+| Exit code | Meaning |
+|-----------|---------|
+| `0` | Success (including an explicit user cancel) |
+| `1` | not found / expected execution failure (use this to stop unattended loops) |
+| `2` | argument error / missing `--yes` in non-interactive execution |
+
+When `--json` is set, stdout contains pure JSON only; decoration, progress, and warnings go to stderr. A not-found under `--json` emits `{error, code, id}` to stdout with exit code `1`.
+
+```bash
+# Safely invoking a destructive command from an agent / CI
+FORGE_NONINTERACTIVE=1 alpha-forge optimize clean --older-than 30d --yes --json
+```
+
+!!! note "EULA auto-accept is a separate env var"
+    `FORGE_NONINTERACTIVE` does not auto-accept the first-run EULA prompt. In CI, combine it with `FORGE_ACCEPT_EULA=1` (see [Getting Started](../getting-started.md)).
+
 ### Detecting 1Password session expiry early (unattended runs) {#op-session-precheck}
 
 For unattended runs (overnight batches, etc.), an expired `op` session causes every subsequent `op run` invocation to fail with an authentication error. The `/explore-strategies` skill runs `alpha-forge system auth check op` at the start of each loop iteration and stops the loop with exit code 2 when the session is invalid ([alpha-forge issue #411](https://github.com/ysakae/alpha-forge/issues/411)).

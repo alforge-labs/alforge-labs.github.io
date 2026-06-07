@@ -426,6 +426,24 @@ alpha-forge data tv-mcp inspect data_get_ohlcv \
   --arg symbol=SPY --arg interval=D --arg bars=10
 ```
 
+## alpha-forge data tv-mcp cache-clean
+
+`alpha-forge data tv-mcp chart` が `config.tv_mcp.chart_snapshot.cache_path`（既定 `data/cache/charts/`）に日次キーで蓄積する PNG キャッシュを、期間（mtime 基準）で整理して削除します。
+
+```bash
+alpha-forge data tv-mcp cache-clean [OPTIONS]
+```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--older-than` | オプション | - | mtime が指定日数より古い PNG を削除（`30d` / `30` 書式） |
+| `--dry-run` | フラグ | false | 実際には削除せず、削除対象一覧を表示して終了 |
+| `--yes` / `-y` | フラグ | false | 確認プロンプトをスキップして削除 |
+| `--json` | フラグ | false | 結果を JSON で出力（`{removed: [...], failed: [...], count, dry_run}`） |
+
+- `--older-than` 未指定は **全消し事故防止のため終了コード `2`** で停止します。キャッシュ未作成時は 0 件で正常終了します。
+- 破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2`。`--json` 実行時も `--yes` が必須です。
+
 ---
 
 ## alpha-forge data alt

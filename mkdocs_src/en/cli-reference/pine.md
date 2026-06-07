@@ -148,3 +148,53 @@ alpha-forge pine verify --strategy spy_sma_v1 \
 For the verification workflow walkthrough, see [Bringing Pine Scripts into TradingView](../guides/tradingview-pine-integration.md).
 
 ---
+
+## alpha-forge pine list
+
+A **read-only** command that lists the `*.pine` files already generated under `config.pinescript.output_path` (default `output/pinescript/`). It completes the read/delete lifecycle for generated artifacts. Available on the Trial plan.
+
+```bash
+alpha-forge pine list [--json]
+```
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON (`[{strategy_id, file, size_bytes, mtime}, ...]`) |
+
+Shows each `.pine` file's `strategy_id` / file / size / modification time.
+
+## alpha-forge pine delete
+
+Delete one generated Pine Script (`.pine`) for the given `strategy_id`.
+
+```bash
+alpha-forge pine delete <STRATEGY_ID> [--yes]
+```
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `STRATEGY_ID` | argument (required) | - | The strategy ID to delete |
+| `--yes` / `-y` | flag | false | Skip the confirmation prompt and delete |
+
+- Exits with code `1` (not found) if the target file does not exist.
+- Because this is a destructive operation, in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) it stops with exit code `2` unless `--yes` is given.
+
+## alpha-forge pine clean
+
+Tidy up `*.pine` files under `config.pinescript.output_path` by age (mtime) and delete them.
+
+```bash
+alpha-forge pine clean [OPTIONS]
+```
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--older-than` | option | - | Delete `.pine` files older than the given number of days (mtime, `30d` / `30` format) |
+| `--dry-run` | flag | false | List the files that would be deleted and exit without deleting |
+| `--yes` / `-y` | flag | false | Skip the confirmation prompt and delete |
+| `--json` | flag | false | Emit the result as JSON (`{removed: [...], failed: [...], count, dry_run}`) |
+
+- Omitting `--older-than` stops with exit code `2` to **prevent accidental wholesale deletion**.
+- Because this is destructive, it stops with exit code `2` in non-interactive environments unless `--yes` is given. `--yes` is also required when running with `--json`.
+
+---

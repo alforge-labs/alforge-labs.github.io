@@ -2426,7 +2426,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-optimize-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge optimize clean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge optimize clean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -3667,7 +3717,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-optimize-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge optimize clean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge optimize clean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行例
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -3744,6 +3844,10 @@
 <tr>
 <td><a href="#alpha-forge-optimize-grid"><code>alpha-forge optimize grid</code></a></td>
 <td><code>optimizer_config.param_ranges</code> の網羅 Grid Search</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-optimize-clean"><code>alpha-forge optimize clean</code></a></td>
+<td>保存済み最適化結果（<code>optimize_*.json</code>）を期間 / 戦略 / 世代で整理して削除</td>
 </tr>
 </tbody>
 </table>
@@ -4781,7 +4885,74 @@
 </tbody>
 </table>
 <hr />
-<h2 id="_34">共通の挙動<a class="headerlink" href="#_34" title="Permanent link">&para;</a></h2>
+<h2 id="alpha-forge-optimize-clean">alpha-forge optimize clean<a class="headerlink" href="#alpha-forge-optimize-clean" title="Permanent link">&para;</a></h2>
+<p><code>config.report.output_path</code>（既定 <code>data/results/</code>）配下に蓄積する <code>optimize_*.json</code> を、期間 / 戦略 / 世代の条件で整理して削除します。<code>/explore-strategies --runs 0</code> のような長時間ループで結果ファイルが無制限に肥大化するのを防ぐための掃除コマンドです。</p>
+<h3 id="_34">構文<a class="headerlink" href="#_34" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>clean<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<h3 id="_35">引数とオプション<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--older-than</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>mtime が指定日数より古い結果を削除（<code>30d</code> / <code>30</code> 書式）</td>
+</tr>
+<tr>
+<td><code>--strategy</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>特定戦略の結果ファイルのみ対象。JSON 内 <code>strategy</code> フィールドを基準に解決（欠落時はファイル名から推定）</td>
+</tr>
+<tr>
+<td><code>--keep</code></td>
+<td>int(≥1)</td>
+<td>-</td>
+<td>戦略ごとに mtime 最新 N 件を保持し、それより古い結果を削除</td>
+</tr>
+<tr>
+<td><code>--dry-run</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>実際には削除せず、削除対象一覧を表示して終了</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>確認プロンプトをスキップして削除</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{removed: [...], failed: [...], count, dry_run}</code>）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>フィルタ（<code>--older-than</code> / <code>--strategy</code> / <code>--keep</code>）を 1 つも指定しない場合は <strong>全消し事故防止のため終了コード <code>2</code></strong> で停止します。複数条件は AND で適用されます。</li>
+<li><code>--keep</code> は <strong>metric ではなく mtime（更新日時）基準</strong>で「最新 N 件」を保持します。</li>
+<li>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止します。<code>--json</code> 実行時も <code>--yes</code> が必須です。</li>
+</ul>
+<h3 id="_36">実行例<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># 30 日より古い結果を削除（事前確認）</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>clean<span class="w"> </span>--older-than<span class="w"> </span>30d<span class="w"> </span>--dry-run
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="c1"># 戦略ごとに最新 5 件だけ残して古いものを削除（非対話）</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>clean<span class="w"> </span>--keep<span class="w"> </span><span class="m">5</span><span class="w"> </span>--yes
+</code></pre></div>
+<hr />
+<h2 id="_37">共通の挙動<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>保存先</strong>: <code>--save</code> 指定時、<code>config.report.output_path</code> 配下に <code>optimize_&lt;strategy&gt;_&lt;timestamp&gt;.json</code> 形式で保存。クロスシンボルは <code>optimize_cross_*</code>、ポートフォリオは <code>optimize_portfolio_*</code> などプレフィックスが変わります。</li>
 <li><strong>DB 保存</strong>: <code>alpha-forge optimize run</code> は <code>--save</code> の有無にかかわらず常時 <code>SQLiteOptimizationResultRepository</code> に記録します（<code>run_id</code> を返却）。</li>

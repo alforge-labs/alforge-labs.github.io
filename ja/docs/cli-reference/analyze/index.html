@@ -2234,6 +2234,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json の出力規約
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2755,6 +2766,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json の出力規約
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2778,7 +2800,7 @@
 <p><code>alpha-forge</code> がサポートするテクニカル指標 50+ のカタログ・詳細を参照します。</p>
 <h2 id="alpha-forge-analyze-indicator-list">alpha-forge analyze indicator list<a class="headerlink" href="#alpha-forge-analyze-indicator-list" title="Permanent link">&para;</a></h2>
 <p>対応指標の一覧を表示します。<code>FILTER_NAME</code> 指定で部分一致絞り込み（大文字小文字を区別しない）。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>FILTER_NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--detail<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>FILTER_NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--detail<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2802,6 +2824,12 @@
 <td>false</td>
 <td>各指標のパラメータ・デフォルト値・説明を表示</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{indicators: [...], count}</code>。<code>--detail</code> 併用で各要素に <code>params</code> を同梱）</td>
+</tr>
 </tbody>
 </table>
 <p>サンプル出力：</p>
@@ -2820,7 +2848,7 @@
 </code></pre></div>
 <h2 id="alpha-forge-analyze-indicator-show">alpha-forge analyze indicator show<a class="headerlink" href="#alpha-forge-analyze-indicator-show" title="Permanent link">&para;</a></h2>
 <p>指定指標の詳細（説明・パラメータ・出力・使用例）を表示します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>show<span class="w"> </span>&lt;INDICATOR_TYPE&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>show<span class="w"> </span>&lt;INDICATOR_TYPE&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2835,6 +2863,11 @@
 <td><code>INDICATOR_TYPE</code></td>
 <td>引数（必須）</td>
 <td>指標名（大文字小文字を区別しない）</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>指標定義を JSON で出力（<code>name</code> / <code>category</code> / <code>desc</code> / <code>params</code> / <code>available_features</code> / <code>output</code> / <code>notes</code> / <code>example</code>）。不在時は stdout に <code>{error, code: "indicator_not_found", id}</code> + 終了コード <code>1</code></td>
 </tr>
 </tbody>
 </table>
@@ -2894,6 +2927,12 @@
 <td><code>1d</code></td>
 <td>時間足</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>検定結果を JSON で出力（<code>{sym_a, sym_b, method, interval, pvalue_threshold, is_cointegrated, p_value, test_statistic, critical_values}</code>）</td>
+</tr>
 </tbody>
 </table>
 <p>サンプル出力：</p>
@@ -2905,8 +2944,8 @@
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  臨界値 5%: -2.8623
 </code></pre></div>
 <h2 id="alpha-forge-analyze-pairs-scan-all">alpha-forge analyze pairs scan-all<a class="headerlink" href="#alpha-forge-analyze-pairs-scan-all" title="Permanent link">&para;</a></h2>
-<p>ウォッチリスト内の全ペアをスキャンします（最大 20 件まで表示）。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span><span class="o">[</span>--pvalue<span class="w"> </span><span class="m">0</span>.05<span class="o">]</span><span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>1d<span class="o">]</span>
+<p>ウォッチリスト内の全ペアをスキャンします（テキスト表示は最大 20 件まで）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span><span class="o">[</span>--pvalue<span class="w"> </span><span class="m">0</span>.05<span class="o">]</span><span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>1d<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2926,6 +2965,11 @@
 <td><code>--pvalue</code></td>
 <td>float</td>
 <td>p 値閾値（デフォルト 0.05）</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>結果を JSON で出力（<code>{interval, pvalue_threshold, pairs: [...], count, cointegrated_count}</code>）。テキスト表示の 20 件上限は <code>--json</code> では適用されず<strong>全件</strong>返します。進捗メッセージは <code>--json</code> の有無に関わらず標準エラーへ出力されます</td>
 </tr>
 </tbody>
 </table>
@@ -2972,6 +3016,12 @@
 <td>オプション</td>
 <td><code>&lt;A&gt;_&lt;B&gt;_spread</code></td>
 <td>保存する <code>source_key</code></td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{sym_a, sym_b, interval, log_prices, source_key, hedge_ratio, half_life, n_rows}</code>）。進捗メッセージ（「ヘッジ比率を推定中...」等）は <code>--json</code> の有無に関わらず標準エラーへ出力</td>
 </tr>
 </tbody>
 </table>
@@ -3054,8 +3104,9 @@
 <p>parquet ファイルにはシンボル・タイムフレーム・特徴量列名・ラベル設定がメタデータとして同梱されるため、Phase 2 の学習側はファイル単独で再現可能な学習が行えます。</p>
 <h2 id="alpha-forge-analyze-ml-dataset-feature-sets">alpha-forge analyze ml dataset feature-sets<a class="headerlink" href="#alpha-forge-analyze-ml-dataset-feature-sets" title="Permanent link">&para;</a></h2>
 <p>利用可能な組み込み feature set を一覧表示します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>feature-sets
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>feature-sets<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
+<p><code>--json</code> 指定時は <code>{feature_sets: [{name, n_specs, specs: [...]}], count}</code> を純 JSON で出力します。</p>
 <p><strong>組み込み feature set</strong></p>
 <table>
 <thead>
@@ -3220,8 +3271,9 @@
 </ul>
 <h2 id="alpha-forge-analyze-ml-models">alpha-forge analyze ml models<a class="headerlink" href="#alpha-forge-analyze-ml-models" title="Permanent link">&para;</a></h2>
 <p>利用可能なモデル種別（分類 + 回帰）を一覧表示します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>models
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>models<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
+<p><code>--json</code> 指定時は <code>{classification: [...], regression: [...], count}</code> を純 JSON で出力します。</p>
 <h2 id="alpha-forge-analyze-ml-walk-forward">alpha-forge analyze ml walk-forward<a class="headerlink" href="#alpha-forge-analyze-ml-walk-forward" title="Permanent link">&para;</a></h2>
 <p>ML データセット parquet を N ウィンドウに分割し、各ウィンドウで独立に学習・評価して時系列安定性を検証します（issue #512 Phase 4）。モデル本体は保存しません（最終モデルは <code>alpha-forge analyze ml train</code> で別途学習）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>walk-forward<span class="w"> </span>&lt;DATASET.parquet&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -3498,6 +3550,16 @@
 <p>WFT は各ウィンドウで Optuna を N 回試行するため、同じ IS データに対して <code>_calc_ml_signal_wft</code> が N 回呼ばれます。再学習を避けるため本指標は <strong>コンテンツアドレス指定型のディスクキャッシュ</strong>（既定: <code>&lt;storage_path&gt;/../ml_models/wft_cache/</code>）を持ち、SHA-256 で <code>(feature_columns, label values, model_type, model_params, random_state)</code> をキー化して joblib を再利用します。同じ入力なら 2 回目以降はキャッシュヒットで即座に推論可能です。</p>
 <p><strong>Pine Script との関係</strong></p>
 <p><code>ML_SIGNAL</code> と同様、<code>ML_SIGNAL_WFT</code> も Pine Script には変換できません。<code>alpha-forge pine generate</code> 時には警告コメント付きで <code>&lt;id&gt; = true</code> として扱われます。</p>
+<hr />
+<h2 id="-json"><code>--json</code> の出力規約<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h2>
+<p><code>analyze</code> 配下の参照系コマンド（<code>indicator list</code> / <code>indicator show</code> / <code>ml models</code> / <code>ml dataset feature-sets</code> / <code>pairs scan</code> / <code>pairs scan-all</code> / <code>pairs build</code>）は <code>--json</code> に対応します（MCP / パイプ用途・装飾なし）。</p>
+<ul>
+<li><code>--json</code> 指定時、stdout は<strong>純 JSON のみ</strong>で、装飾・ヘッダ・進捗・保存メッセージは標準エラーへ分離されます。</li>
+<li>一覧系は <code>{&lt;plural&gt;: [...], "count": n}</code> の envelope（データ不在でも空配列 + 終了コード <code>0</code>）。</li>
+<li><code>indicator show</code> の不在は <strong>終了コード <code>1</code> を維持</strong>しつつ、<code>--json</code> 時は stdout に <code>{error, code: "indicator_not_found", id}</code> を返します。</li>
+<li><code>pairs build</code> / <code>pairs scan-all</code> の進捗メッセージ（「ヘッジ比率を推定中...」「スキャン中...」等）は <code>--json</code> の有無に関わらず<strong>標準エラー</strong>へ出力され、stdout の純度を確保します。</li>
+<li><code>pairs scan-all</code> のテキスト表示にある 20 件上限は、<code>--json</code> では<strong>適用されず全件</strong>返されます。</li>
+</ul>
 <hr />
 
 

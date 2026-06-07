@@ -2234,6 +2234,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#-json-output-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json output rules
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2755,6 +2766,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#-json-output-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json output rules
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2778,7 +2800,7 @@
 <p>Browse the catalog of 50+ technical indicators supported by <code>alpha-forge</code>.</p>
 <h2 id="alpha-forge-analyze-indicator-list">alpha-forge analyze indicator list<a class="headerlink" href="#alpha-forge-analyze-indicator-list" title="Permanent link">&para;</a></h2>
 <p>List supported indicators. With <code>FILTER_NAME</code>, filter by case-insensitive substring.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>FILTER_NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--detail<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>FILTER_NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--detail<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2802,6 +2824,12 @@
 <td>false</td>
 <td>Show parameter names, defaults, and descriptions</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{indicators: [...], count}</code>; with <code>--detail</code>, each element includes <code>params</code>)</td>
+</tr>
 </tbody>
 </table>
 <p>Sample output (the category labels such as <code>移動平均</code> = moving average are emitted in Japanese regardless of locale):</p>
@@ -2820,7 +2848,7 @@
 </code></pre></div>
 <h2 id="alpha-forge-analyze-indicator-show">alpha-forge analyze indicator show<a class="headerlink" href="#alpha-forge-analyze-indicator-show" title="Permanent link">&para;</a></h2>
 <p>Show detailed information for a specific indicator (description, parameters, output, example).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>show<span class="w"> </span>&lt;INDICATOR_TYPE&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>show<span class="w"> </span>&lt;INDICATOR_TYPE&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2835,6 +2863,11 @@
 <td><code>INDICATOR_TYPE</code></td>
 <td>argument (required)</td>
 <td>Indicator name (case-insensitive)</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>Emit the indicator definition as JSON (<code>name</code> / <code>category</code> / <code>desc</code> / <code>params</code> / <code>available_features</code> / <code>output</code> / <code>notes</code> / <code>example</code>); not-found returns <code>{error, code: "indicator_not_found", id}</code> to stdout with exit code <code>1</code></td>
 </tr>
 </tbody>
 </table>
@@ -2894,6 +2927,12 @@
 <td><code>1d</code></td>
 <td>Timeframe</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the test result as JSON (<code>{sym_a, sym_b, method, interval, pvalue_threshold, is_cointegrated, p_value, test_statistic, critical_values}</code>)</td>
+</tr>
 </tbody>
 </table>
 <p>Sample output:</p>
@@ -2905,8 +2944,8 @@
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  Critical 5%: -2.8623
 </code></pre></div>
 <h2 id="alpha-forge-analyze-pairs-scan-all">alpha-forge analyze pairs scan-all<a class="headerlink" href="#alpha-forge-analyze-pairs-scan-all" title="Permanent link">&para;</a></h2>
-<p>Scan all pairs in a watchlist (top 20 displayed).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span><span class="o">[</span>--pvalue<span class="w"> </span><span class="m">0</span>.05<span class="o">]</span><span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>1d<span class="o">]</span>
+<p>Scan all pairs in a watchlist (text output shows the top 20).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span><span class="o">[</span>--pvalue<span class="w"> </span><span class="m">0</span>.05<span class="o">]</span><span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>1d<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -2926,6 +2965,11 @@
 <td><code>--pvalue</code></td>
 <td>float</td>
 <td>p-value threshold (default 0.05)</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>Emit the result as JSON (<code>{interval, pvalue_threshold, pairs: [...], count, cointegrated_count}</code>). The 20-item cap of the text output does <strong>not</strong> apply to <code>--json</code>, which returns <strong>all</strong> pairs. Progress messages go to stderr regardless of <code>--json</code></td>
 </tr>
 </tbody>
 </table>
@@ -2972,6 +3016,12 @@
 <td>option</td>
 <td><code>&lt;A&gt;_&lt;B&gt;_spread</code></td>
 <td><code>source_key</code> to save</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{sym_a, sym_b, interval, log_prices, source_key, hedge_ratio, half_life, n_rows}</code>). Progress messages (e.g. "Estimating hedge ratio...") go to stderr regardless of <code>--json</code></td>
 </tr>
 </tbody>
 </table>
@@ -3054,8 +3104,9 @@
 <p>The parquet file embeds symbol / interval / feature columns / label config as metadata so Phase 2 training can reproduce the exact pipeline from the file alone.</p>
 <h2 id="alpha-forge-analyze-ml-dataset-feature-sets">alpha-forge analyze ml dataset feature-sets<a class="headerlink" href="#alpha-forge-analyze-ml-dataset-feature-sets" title="Permanent link">&para;</a></h2>
 <p>List available built-in feature sets.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>feature-sets
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>feature-sets<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
+<p>With <code>--json</code>, emits <code>{feature_sets: [{name, n_specs, specs: [...]}], count}</code> as pure JSON.</p>
 <p><strong>Built-in feature sets</strong></p>
 <table>
 <thead>
@@ -3220,8 +3271,9 @@
 </ul>
 <h2 id="alpha-forge-analyze-ml-models">alpha-forge analyze ml models<a class="headerlink" href="#alpha-forge-analyze-ml-models" title="Permanent link">&para;</a></h2>
 <p>List available model types (classification + regression).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>models
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>models<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
+<p>With <code>--json</code>, emits <code>{classification: [...], regression: [...], count}</code> as pure JSON.</p>
 <h2 id="alpha-forge-analyze-ml-walk-forward">alpha-forge analyze ml walk-forward<a class="headerlink" href="#alpha-forge-analyze-ml-walk-forward" title="Permanent link">&para;</a></h2>
 <p>Split a dataset into N windows and train + evaluate a fresh model in each window for time-series stability checks (issue #512 Phase 4). The model is <strong>not</strong> persisted — use <code>alpha-forge analyze ml train</code> to produce the final model.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>walk-forward<span class="w"> </span>&lt;DATASET.parquet&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -3498,6 +3550,16 @@
 <p>WFT runs Optuna N trials per window, calling <code>_calc_ml_signal_wft</code> N times on identical IS data. To avoid redundant retraining, this indicator uses a <strong>content-addressed disk cache</strong> (default: <code>&lt;storage_path&gt;/../ml_models/wft_cache/</code>), keying joblib artifacts by SHA-256 over <code>(feature_columns, label values, model_type, model_params, random_state)</code>. Subsequent calls with the same input hit the cache instantly.</p>
 <p><strong>Pine Script integration</strong></p>
 <p>Like <code>ML_SIGNAL</code>, <code>ML_SIGNAL_WFT</code> is not Pine Script-translatable. <code>alpha-forge pine generate</code> emits a warning comment and treats the signal as <code>&lt;id&gt; = true</code>.</p>
+<hr />
+<h2 id="-json-output-rules"><code>--json</code> output rules<a class="headerlink" href="#-json-output-rules" title="Permanent link">&para;</a></h2>
+<p>The reference-style commands under <code>analyze</code> (<code>indicator list</code> / <code>indicator show</code> / <code>ml models</code> / <code>ml dataset feature-sets</code> / <code>pairs scan</code> / <code>pairs scan-all</code> / <code>pairs build</code>) support <code>--json</code> (for MCP / pipe usage, no decoration).</p>
+<ul>
+<li>When <code>--json</code> is set, stdout contains <strong>pure JSON only</strong>; decoration, headers, progress, and save messages go to stderr.</li>
+<li>List commands return a <code>{&lt;plural&gt;: [...], "count": n}</code> envelope (empty array + exit code <code>0</code> even when absent).</li>
+<li><code>indicator show</code> keeps <strong>exit code <code>1</code></strong> on not-found, and with <code>--json</code> returns <code>{error, code: "indicator_not_found", id}</code> to stdout.</li>
+<li>Progress messages from <code>pairs build</code> / <code>pairs scan-all</code> (e.g. "Estimating hedge ratio...", "Scanning...") go to <strong>stderr</strong> regardless of <code>--json</code>, keeping stdout pure.</li>
+<li>The 20-item cap of the <code>pairs scan-all</code> text output does <strong>not</strong> apply to <code>--json</code>, which returns <strong>all</strong> pairs.</li>
+</ul>
 <hr />
 
 

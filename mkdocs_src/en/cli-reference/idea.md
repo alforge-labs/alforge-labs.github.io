@@ -24,7 +24,7 @@ Output: `Added: [<idea_id>] <title>`.
 List ideas.
 
 ```bash
-alpha-forge idea list [--status <STATUS>] [--tag <TAG>] [--strategy <ID>]
+alpha-forge idea list [--status <STATUS>] [--tag <TAG>] [--strategy <ID>] [--json]
 ```
 
 | Name | Kind | Description |
@@ -32,16 +32,21 @@ alpha-forge idea list [--status <STATUS>] [--tag <TAG>] [--strategy <ID>]
 | `--status` | choice | `backlog` / `in_progress` / `tested` / `archived` |
 | `--tag` | repeatable | Tag AND filter |
 | `--strategy` | option | Strategy ID filter |
+| `--json` | flag | Emit the result as JSON (`{ideas: [...], count}`) |
 
 ## alpha-forge idea show
 
 Show idea details.
 
 ```bash
-alpha-forge idea show <IDEA_ID>
+alpha-forge idea show <IDEA_ID> [--json]
 ```
 
-If not found: `Not found: <id>` and exit code `1`.
+| Name | Kind | Description |
+|------|------|-------------|
+| `--json` | flag | Emit the result as JSON (dumps `IdeaRecord`; not-found returns `{error, code, id}` to stdout with exit code `1`) |
+
+If not found: `Not found: <id>` and exit code `1` (a JSON error to stdout when `--json`).
 
 ## alpha-forge idea status
 
@@ -88,7 +93,7 @@ alpha-forge idea note <IDEA_ID> <TEXT>
 Full-text search ideas.
 
 ```bash
-alpha-forge idea search [QUERY] [--status <STATUS>] [--tag <TAG>]
+alpha-forge idea search [QUERY] [--status <STATUS>] [--tag <TAG>] [--json]
 ```
 
 | Name | Kind | Description |
@@ -96,5 +101,6 @@ alpha-forge idea search [QUERY] [--status <STATUS>] [--tag <TAG>]
 | `QUERY` | argument (optional) | Search query (matches title / description / notes) |
 | `--status` | choice | Status filter |
 | `--tag` | repeatable | Tag filter |
+| `--json` | flag | Emit the result as JSON (`{ideas: [...], count}`) |
 
 ---

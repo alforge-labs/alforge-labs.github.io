@@ -4555,7 +4555,7 @@
 <h2 id="alpha-forge-strategy-delete">alpha-forge strategy delete<a class="headerlink" href="#alpha-forge-strategy-delete" title="Permanent link">&para;</a></h2>
 <p>登録済み戦略を DB / レジストリから削除します。<code>--with-results</code> を付けると関連ファイル（最適化済み戦略・バックテスト結果・最適化結果 JSON）も一括削除します。Journal は保持されます。</p>
 <h3 id="_25">構文<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
 </code></pre></div>
 <h3 id="_26">引数とオプション<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
 <table>
@@ -4575,10 +4575,10 @@
 <td>削除する戦略 ID</td>
 </tr>
 <tr>
-<td><code>--force</code></td>
+<td><code>--yes</code> / <code>-y</code></td>
 <td>フラグ</td>
 <td>false</td>
-<td>確認プロンプトなしで削除</td>
+<td>確認プロンプトなしで削除（epic #1083 D で <code>--force</code> から改名）</td>
 </tr>
 <tr>
 <td><code>--with-results</code></td>
@@ -4588,6 +4588,7 @@
 </tr>
 </tbody>
 </table>
+<p>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止します。not found は終了コード <code>1</code>。</p>
 <h3 id="-with-results"><code>--with-results</code> で削除対象になるファイル<a class="headerlink" href="#-with-results" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>strategies.path / &lt;id&gt;_optimized.json</code></li>
@@ -4628,15 +4629,15 @@
 <tr>
 <td><code>キャンセルしました</code></td>
 <td>確認プロンプトで No</td>
-<td><code>--force</code> を付けるか、改めて承認</td>
+<td><code>--yes</code> を付けるか、改めて承認</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="alpha-forge-strategy-purge">alpha-forge strategy purge<a class="headerlink" href="#alpha-forge-strategy-purge" title="Permanent link">&para;</a></h2>
-<p>戦略 JSON・関連ファイル（<code>_optimized.json</code>、<code>_report.json</code>、<code>optimize_&lt;id&gt;_*.json</code>）・DB エントリを <strong>1 コマンドで完全削除</strong> します。従来の <code>rm &lt;strategy&gt;.json &amp;&amp; rm &lt;strategy&gt;_report.json &amp;&amp; alpha-forge strategy delete &lt;id&gt; --force</code> の 3 ステップが 1 コマンドになります。Journal ファイル（<code>&lt;id&gt;.journal.json</code>）は保持されます。</p>
+<p>戦略 JSON・関連ファイル（<code>_optimized.json</code>、<code>_report.json</code>、<code>optimize_&lt;id&gt;_*.json</code>）・DB エントリを <strong>1 コマンドで完全削除</strong> します。従来の <code>rm &lt;strategy&gt;.json &amp;&amp; rm &lt;strategy&gt;_report.json &amp;&amp; alpha-forge strategy delete &lt;id&gt; --yes</code> の 3 ステップが 1 コマンドになります。Journal ファイル（<code>&lt;id&gt;.journal.json</code>）は保持されます。</p>
 <h3 id="_29">構文<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>purge<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>purge<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </code></pre></div>
 <h3 id="_30">引数とオプション<a class="headerlink" href="#_30" title="Permanent link">&para;</a></h3>
 <table>
@@ -4661,8 +4662,15 @@
 <td>false</td>
 <td>削除対象ファイルの一覧表示のみ。実ファイルは削除しない</td>
 </tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>確認プロンプトなしで完全削除（epic #1083 A で新規追加。従来は確認プロンプトのみでハングしていた）</td>
+</tr>
 </tbody>
 </table>
+<p>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止します。not found は終了コード <code>1</code>。</p>
 <h3 id="_31">サンプル出力<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
 <p><code>--dry-run</code>：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>[dry-run] 削除対象:

@@ -4956,6 +4956,10 @@
 <hr />
 <h2 id="alpha-forge-backtest-compare">alpha-forge backtest compare<a class="headerlink" href="#alpha-forge-backtest-compare" title="Permanent link">&para;</a></h2>
 <p>Compare multiple strategies on the same symbol and period.</p>
+<div class="admonition warning">
+<p class="admonition-title">The two meanings of <code>compare</code>: this one runs new backtests (heavy)</p>
+<p><code>backtest compare</code> <strong>runs fresh backtests</strong> of the given strategies on the spot and compares them (a <strong>heavy operation</strong> with side effects). In contrast, <a href="../journal/#alpha-forge-journal-compare"><code>journal compare</code></a> / <a href="../live/#alpha-forge-live-compare"><code>live compare</code></a> are read-only and merely reference <strong>saved</strong> runs / summaries. Despite the shared verb, the cost and side effects differ — be careful not to let an agent generalize "compare is a safe reference" and unintentionally launch long-running backtests.</p>
+</div>
 <h3 id="synopsis_6">Synopsis<a class="headerlink" href="#synopsis_6" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY1&gt;<span class="w"> </span><span class="o">[</span>STRATEGY2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>

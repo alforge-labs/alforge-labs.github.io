@@ -326,7 +326,7 @@ strategies:
 ### 構文
 
 ```bash
-alpha-forge strategy delete <STRATEGY_ID> [--force] [--with-results]
+alpha-forge strategy delete <STRATEGY_ID> [--yes] [--with-results]
 ```
 
 ### 引数とオプション
@@ -334,8 +334,10 @@ alpha-forge strategy delete <STRATEGY_ID> [--force] [--with-results]
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 削除する戦略 ID |
-| `--force` | フラグ | false | 確認プロンプトなしで削除 |
+| `--yes` / `-y` | フラグ | false | 確認プロンプトなしで削除（epic #1083 D で `--force` から改名） |
 | `--with-results` | フラグ | false | 関連ファイル（`<id>_optimized.json`、`<id>_report.json`、`optimize_<id>_*.json`）も一括削除 |
+
+破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止します。not found は終了コード `1`。
 
 ### `--with-results` で削除対象になるファイル
 
@@ -371,18 +373,18 @@ alpha-forge strategy delete <STRATEGY_ID> [--force] [--with-results]
 | メッセージ | 原因 | 対処 |
 |----------|------|------|
 | `エラー: 戦略 '<id>' が見つかりません` | ID 不正 | `alpha-forge strategy list` で確認 |
-| `キャンセルしました` | 確認プロンプトで No | `--force` を付けるか、改めて承認 |
+| `キャンセルしました` | 確認プロンプトで No | `--yes` を付けるか、改めて承認 |
 
 ---
 
 ## alpha-forge strategy purge
 
-戦略 JSON・関連ファイル（`_optimized.json`、`_report.json`、`optimize_<id>_*.json`）・DB エントリを **1 コマンドで完全削除** します。従来の `rm <strategy>.json && rm <strategy>_report.json && alpha-forge strategy delete <id> --force` の 3 ステップが 1 コマンドになります。Journal ファイル（`<id>.journal.json`）は保持されます。
+戦略 JSON・関連ファイル（`_optimized.json`、`_report.json`、`optimize_<id>_*.json`）・DB エントリを **1 コマンドで完全削除** します。従来の `rm <strategy>.json && rm <strategy>_report.json && alpha-forge strategy delete <id> --yes` の 3 ステップが 1 コマンドになります。Journal ファイル（`<id>.journal.json`）は保持されます。
 
 ### 構文
 
 ```bash
-alpha-forge strategy purge <STRATEGY_ID> [--dry-run]
+alpha-forge strategy purge <STRATEGY_ID> [--dry-run] [--yes]
 ```
 
 ### 引数とオプション
@@ -391,6 +393,9 @@ alpha-forge strategy purge <STRATEGY_ID> [--dry-run]
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 完全削除する戦略 ID |
 | `--dry-run` | フラグ | false | 削除対象ファイルの一覧表示のみ。実ファイルは削除しない |
+| `--yes` / `-y` | フラグ | false | 確認プロンプトなしで完全削除（epic #1083 A で新規追加。従来は確認プロンプトのみでハングしていた） |
+
+破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止します。not found は終了コード `1`。
 
 ### サンプル出力
 

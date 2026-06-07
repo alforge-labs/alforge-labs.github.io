@@ -426,6 +426,24 @@ alpha-forge data tv-mcp inspect data_get_ohlcv \
   --arg symbol=SPY --arg interval=D --arg bars=10
 ```
 
+## alpha-forge data tv-mcp cache-clean
+
+Tidy up the PNG cache that `alpha-forge data tv-mcp chart` accumulates with daily keys under `config.tv_mcp.chart_snapshot.cache_path` (default `data/cache/charts/`), deleting entries by age (mtime).
+
+```bash
+alpha-forge data tv-mcp cache-clean [OPTIONS]
+```
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--older-than` | option | - | Delete PNGs older than the given number of days (mtime, `30d` / `30` format) |
+| `--dry-run` | flag | false | List the files that would be deleted and exit without deleting |
+| `--yes` / `-y` | flag | false | Skip the confirmation prompt and delete |
+| `--json` | flag | false | Emit the result as JSON (`{removed: [...], failed: [...], count, dry_run}`) |
+
+- Omitting `--older-than` stops with exit code `2` to **prevent accidental wholesale deletion**. When no cache exists yet, it exits cleanly with 0 entries.
+- Because this is destructive, it stops with exit code `2` in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) unless `--yes` is given. `--yes` is also required when running with `--json`.
+
 ---
 
 ## alpha-forge data alt

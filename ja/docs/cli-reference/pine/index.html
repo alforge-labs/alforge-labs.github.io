@@ -1949,6 +1949,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine delete
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine clean
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2535,6 +2568,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine list
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine delete
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-pine-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge pine clean
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2989,6 +3055,106 @@
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span>--output<span class="w"> </span>reports/verify_spy.md
 </code></pre></div>
 <p>検証ガイドの詳細は <a href="../../guides/tradingview-pine-integration/">TradingView との Pine Script 連携</a> を参照してください。</p>
+<hr />
+<h2 id="alpha-forge-pine-list">alpha-forge pine list<a class="headerlink" href="#alpha-forge-pine-list" title="Permanent link">&para;</a></h2>
+<p><code>config.pinescript.output_path</code>（既定 <code>output/pinescript/</code>）配下に生成済みの <code>*.pine</code> を一覧表示する <strong>read-only</strong> コマンドです。生成物の管理（R/D）を補完します。Trial プランでも利用できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>[{strategy_id, file, size_bytes, mtime}, ...]</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>各 <code>.pine</code> の <code>strategy_id</code> / ファイル / サイズ / 更新日時を表示します。</p>
+<h2 id="alpha-forge-pine-delete">alpha-forge pine delete<a class="headerlink" href="#alpha-forge-pine-delete" title="Permanent link">&para;</a></h2>
+<p>指定 <code>strategy_id</code> の生成済み Pine Script（<code>.pine</code>）を 1 件削除します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>STRATEGY_ID</code></td>
+<td>引数（必須）</td>
+<td>-</td>
+<td>削除対象の戦略 ID</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>確認プロンプトをスキップして削除</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>対象ファイルが存在しない場合は終了コード <code>1</code>（not found）。</li>
+<li>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止します。</li>
+</ul>
+<h2 id="alpha-forge-pine-clean">alpha-forge pine clean<a class="headerlink" href="#alpha-forge-pine-clean" title="Permanent link">&para;</a></h2>
+<p><code>config.pinescript.output_path</code> 配下の <code>*.pine</code> を期間（mtime 基準）で整理して削除します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>clean<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--older-than</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>mtime が指定日数より古い <code>.pine</code> を削除（<code>30d</code> / <code>30</code> 書式）</td>
+</tr>
+<tr>
+<td><code>--dry-run</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>実際には削除せず、削除対象一覧を表示して終了</td>
+</tr>
+<tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>確認プロンプトをスキップして削除</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{removed: [...], failed: [...], count, dry_run}</code>）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>--older-than</code> 未指定は <strong>全消し事故防止のため終了コード <code>2</code></strong> で停止します。</li>
+<li>破壊的操作のため、非対話環境で <code>--yes</code> が無いと終了コード <code>2</code>。<code>--json</code> 実行時も <code>--yes</code> が必須です。</li>
+</ul>
 <hr />
 
 

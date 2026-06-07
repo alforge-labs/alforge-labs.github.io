@@ -1703,6 +1703,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ci-jsonexit-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エージェント / CI からの利用（非対話実行・--json・exit code）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2501,6 +2512,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ci-jsonexit-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エージェント / CI からの利用（非対話実行・--json・exit code）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2565,8 +2587,8 @@
 <tr>
 <td><strong>optimize</strong></td>
 <td>コア</td>
-<td><code>run</code> <code>cross-symbol</code> <code>portfolio</code> <code>multi-portfolio</code> <code>walk-forward</code> <code>apply</code> <code>sensitivity</code> <code>history</code> <code>grid</code></td>
-<td>パラメータ最適化（ベイズ・グリッド・ウォークフォワード）</td>
+<td><code>run</code> <code>cross-symbol</code> <code>portfolio</code> <code>multi-portfolio</code> <code>walk-forward</code> <code>apply</code> <code>sensitivity</code> <code>history</code> <code>grid</code> <code>clean</code></td>
+<td>パラメータ最適化（ベイズ・グリッド・ウォークフォワード）・結果の掃除</td>
 <td><a href="optimize/">optimize →</a></td>
 </tr>
 <tr>
@@ -2586,8 +2608,8 @@
 <tr>
 <td><strong>pine</strong></td>
 <td>コア</td>
-<td><code>generate</code> <code>preview</code> <code>verify</code> <code>import</code></td>
-<td>戦略 JSON ↔ TradingView Pine Script 変換（<code>verify</code> は TradingView MCP で構文検証）</td>
+<td><code>generate</code> <code>preview</code> <code>verify</code> <code>import</code> <code>list</code> <code>delete</code> <code>clean</code></td>
+<td>戦略 JSON ↔ TradingView Pine Script 変換（<code>verify</code> は TradingView MCP で構文検証）・生成 <code>.pine</code> の一覧／削除／掃除</td>
 <td><a href="pine/">pine →</a></td>
 </tr>
 <tr>
@@ -2607,7 +2629,7 @@
 <tr>
 <td><strong>data</strong></td>
 <td>コア</td>
-<td><code>fetch</code> <code>list</code> <code>trend</code> <code>update</code> <code>alt {fetch,list,info}</code> <code>tv-mcp {chart,inspect,check}</code></td>
+<td><code>fetch</code> <code>list</code> <code>trend</code> <code>update</code> <code>alt {fetch,list,info}</code> <code>tv-mcp {chart,inspect,check,cache-clean}</code></td>
 <td>ヒストリカル・代替データ・TradingView MCP データ取得</td>
 <td><a href="data/">data →</a></td>
 </tr>
@@ -2621,8 +2643,8 @@
 <tr>
 <td><strong>system</strong></td>
 <td>補助</td>
-<td><code>init</code> <code>auth {login,logout,status}</code> <code>auth check op</code> <code>docs {list,show}</code></td>
-<td>運用ユーティリティ（ワークスペース初期化・Whop OAuth 認証・同梱ドキュメント）</td>
+<td><code>init</code> <code>auth {login,logout,status}</code> <code>auth check op</code> <code>docs {list,show}</code> <code>config</code></td>
+<td>運用ユーティリティ（ワークスペース初期化・Whop OAuth 認証・同梱ドキュメント・実効設定ダンプ）</td>
 <td><a href="system/">system →</a></td>
 </tr>
 <tr>
@@ -2642,6 +2664,14 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>--help<span class="w">            </span><span class="c1"># 個別サブコマンドのパラメータ詳細</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>--help<span class="w">                </span><span class="c1"># ネストされた補助グループのサブコマンド一覧</span>
 </code></pre></div>
+<h2 id="ci-jsonexit-code">エージェント / CI からの利用（非対話実行・<code>--json</code>・exit code）<a class="headerlink" href="#ci-jsonexit-code" title="Permanent link">&para;</a></h2>
+<p><code>alpha-forge</code> はコーディングエージェント（Claude Code / Codex 等）や CI からの subprocess 利用を前提に設計されています（epic <a href="https://github.com/ysakae/alpha-forge/issues/1083">#1083</a>）。</p>
+<ul>
+<li><strong>非対話実行</strong>: <code>FORGE_NONINTERACTIVE=1</code>（または <code>CI</code> / 非 TTY 検知）で確認プロンプトを排除します。破壊的操作は <code>--yes</code> が無いと終了コード <code>2</code> で停止します（ハング防止）。詳細は <a href="../guides/ai-exploration-workflow/#non-interactive">AI 駆動の戦略探索ワークフロー › 非対話実行</a> を参照。</li>
+<li><strong><code>--json</code></strong>: 観測・参照系コマンド（<code>system config</code> / <code>live</code> / <code>journal</code> / <code>idea</code> / <code>analyze</code> 系など）は <code>--json</code> に対応します。stdout は純 JSON のみで、装飾・進捗は stderr へ分離されます。</li>
+<li><strong>exit code</strong>: <code>0</code>=成功（明示キャンセル含む） / <code>1</code>=not found・想定内の失敗（無人ループの停止判定に使用） / <code>2</code>=引数エラー・非対話実行で <code>--yes</code> 欠落。<code>--json</code> 時の not found は stdout に <code>{error, code, id}</code> を出して終了コード <code>1</code>。</li>
+<li><strong><code>compare</code> の 2 義</strong>: <code>backtest compare</code> は新規バックテストを実行する重い処理、<code>journal compare</code> / <code>live compare</code> は保存済み結果の read-only 参照です。</li>
+</ul>
 <h2 id="_3">関連ドキュメント<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../getting-started/">はじめに</a> — 最初のバックテスト実行までのチュートリアル</li>
@@ -2649,7 +2679,7 @@
 <li><a href="../guides/ai-exploration-workflow/">AI 駆動の戦略探索ワークフロー</a> — Claude Code / Codex × AlphaForge</li>
 </ul>
 <hr />
-<!-- 同期元: `alpha-forge/src/alpha_forge/cli.py` の _TOP_LEVEL_LAZY / _ANALYZE_LAZY / _SYSTEM_LAZY と `commands/*.py` の Click decorator。サブコマンド追加時は本表も追従が必要。 -->
+<!-- 同期元: `alpha-forge/src/alpha_forge/cli.py` の _TOP_LEVEL_LAZY / _ANALYZE_LAZY / _SYSTEM_LAZY と `commands/*.py` の Click decorator。サブコマンド追加時は本表も追従が必要。epic #1083 で system config / optimize clean / pine list,delete,clean / data tv-mcp cache-clean を追加。 -->
 
 
 

@@ -24,7 +24,7 @@ alpha-forge idea add <TITLE> --type <new_strategy|improvement> [OPTIONS]
 アイデア一覧を表示します。
 
 ```bash
-alpha-forge idea list [--status <STATUS>] [--tag <TAG>] [--strategy <ID>]
+alpha-forge idea list [--status <STATUS>] [--tag <TAG>] [--strategy <ID>] [--json]
 ```
 
 | 名前 | 種別 | 説明 |
@@ -32,16 +32,21 @@ alpha-forge idea list [--status <STATUS>] [--tag <TAG>] [--strategy <ID>]
 | `--status` | choice | `backlog` / `in_progress` / `tested` / `archived` |
 | `--tag` | 複数指定可 | タグ AND フィルタ |
 | `--strategy` | オプション | 戦略 ID フィルタ |
+| `--json` | フラグ | 結果を JSON で出力（`{ideas: [...], count}`） |
 
 ## alpha-forge idea show
 
 アイデアの詳細を表示します。
 
 ```bash
-alpha-forge idea show <IDEA_ID>
+alpha-forge idea show <IDEA_ID> [--json]
 ```
 
-存在しない場合は `見つかりません: <id>` を出して終了コード `1`。
+| 名前 | 種別 | 説明 |
+|------|------|------|
+| `--json` | フラグ | 結果を JSON で出力（`IdeaRecord` を dump。不在時は stdout に `{error, code, id}` + 終了コード `1`） |
+
+存在しない場合は `見つかりません: <id>` を出して終了コード `1`（`--json` 時は stdout に JSON エラー）。
 
 ## alpha-forge idea status
 
@@ -88,7 +93,7 @@ alpha-forge idea note <IDEA_ID> <TEXT>
 アイデアを全文検索します。
 
 ```bash
-alpha-forge idea search [QUERY] [--status <STATUS>] [--tag <TAG>]
+alpha-forge idea search [QUERY] [--status <STATUS>] [--tag <TAG>] [--json]
 ```
 
 | 名前 | 種別 | 説明 |
@@ -96,5 +101,6 @@ alpha-forge idea search [QUERY] [--status <STATUS>] [--tag <TAG>]
 | `QUERY` | 引数（任意） | 検索クエリ（タイトル・説明・メモを対象） |
 | `--status` | choice | ステータスフィルタ |
 | `--tag` | 複数指定可 | タグフィルタ |
+| `--json` | フラグ | 結果を JSON で出力（`{ideas: [...], count}`） |
 
 ---
