@@ -42,14 +42,14 @@ pages:
   docs:
     ja:
       title: "ドキュメント — Alforge Labs"
-      description: "AlphaForge CLI 公式ドキュメント。主要 6 コマンドの早見表と全 7 グループ × 76 サブコマンドのカタログ。エンドツーエンド戦略開発ワークフロー、TradingView 連携ガイド、バックテスト・最適化・ウォークフォワード検証も網羅。"
+      description: "AlphaForge CLI 公式ドキュメント。主要 6 コマンドの早見表と全 12 グループ × 100 超のサブコマンドのカタログ。AI エージェント連携、エンドツーエンド戦略開発ワークフロー、TradingView 連携ガイド、バックテスト・最適化・ウォークフォワード検証も網羅。"
       keywords: "AlphaForge, ドキュメント, コマンドリファレンス, バックテスト, 最適化, 戦略開発ワークフロー, TradingView, CLI"
       og_title: "AlphaForge CLI ドキュメント"
       og_description: "主要 6 コマンドの早見表と全コマンドカタログ。エンドツーエンド戦略開発ワークフローと TradingView 連携ガイドは MkDocs ベースの公式 CLI リファレンスへ。"
       json_ld_type: breadcrumb
     en:
       title: "Documentation — Alforge Labs"
-      description: "AlphaForge CLI official docs. Quick reference for the six core commands and a full catalog of 7 groups × 76 subcommands. Also covers the end-to-end strategy development workflow, TradingView integration, and backtesting / optimization / walk-forward validation."
+      description: "AlphaForge CLI official docs. Quick reference for the six core commands and a full catalog of 12 groups × 100+ subcommands. Also covers AI agent integration, the end-to-end strategy development workflow, TradingView integration, and backtesting / optimization / walk-forward validation."
       keywords: "AlphaForge, documentation, command reference, backtesting, optimization, strategy workflow, TradingView, CLI"
       og_title: "AlphaForge CLI Documentation"
       og_description: "A quick reference for the six core commands and a full command catalog. The end-to-end strategy workflow and TradingView integration guides live in the MkDocs-based official CLI reference."

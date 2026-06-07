@@ -355,7 +355,8 @@
 
     .hero-stats {
       margin-top: 5rem;
-      display: flex; gap: 3rem; flex-wrap: wrap;
+      /* gap 3rem だと 3 stat + 長め lbl で折り返し余裕が 10px 未満になる（en で実害）ため縮小 */
+      display: flex; gap: 2.25rem; flex-wrap: wrap;
       padding-top: 2rem; border-top: 1px solid var(--border);
       animation: fadeUp 0.7s var(--ease) 0.4s both;
     }

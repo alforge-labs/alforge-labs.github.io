@@ -46,8 +46,8 @@ window.COPY = {
     },
     heroStats: [
       { val: 'MCP + スキル 8 種', accent: false, lbl: 'コマンド 5 + スキル 3・Claude Code / Codex 対応' },
-      { val: 'Max DD ‑23%', accent: true, lbl: 'QQQ(‑35%)比で大幅縮小・リターンは同等（5年検証）' },
-      { val: '2026夏', accent: false, lbl: '正式リリース目標' },
+      { val: '無人 24/7', accent: true, lbl: '指標 × 銘柄を夜間に自律探索（探索→最適化→検証）' },
+      { val: 'Trial 無料', accent: false, lbl: 'Whop 登録不要・期限なしで今すぐ試せる' },
     ],
     aiAgents: {
       label: 'AI エージェント連携',
@@ -552,9 +552,9 @@ window.COPY = {
       ],
     },
     heroStats: [
-      { val: 'MCP + 8 skills', accent: false, lbl: '5 commands + 3 skills · Claude Code / Codex' },
-      { val: '‑23% Max DD', accent: true, lbl: 'vs QQQ ‑35%, comparable return (5yr backtest)' },
-      { val: 'Summer 2026', accent: false, lbl: 'Target Release' },
+      { val: 'MCP + 8 skills', accent: false, lbl: '5 commands + 3 skills · Claude / Codex' },
+      { val: 'Unmanned 24/7', accent: true, lbl: 'Explore → optimize → validate overnight' },
+      { val: 'Free Trial', accent: false, lbl: 'No Whop signup, no expiry — start now' },
     ],
     aiAgents: {
       label: 'AI Agent Integration',
