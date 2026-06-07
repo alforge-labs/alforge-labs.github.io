@@ -120,6 +120,9 @@ alpha-forge pine generate \
 
 ## symbolic verify (issue [#975](https://github.com/ysakae/alpha-forge/issues/975)) {#symbolic-verify}
 
+!!! note "有料プラン限定"
+    `alpha-forge pine verify` は **有料プラン（Lifetime / Annual / Monthly）でのみ利用できます**。Trial プランでの制限は [Trial 制限](trial-limits.md) を参照してください。
+
 `alpha-forge pine verify --combine-strategies` で、生成 Pine と alpha-forge
 backtest combine が **同じ意図で動く** ことを TradingView を介さず
 symbolic に検証できます。

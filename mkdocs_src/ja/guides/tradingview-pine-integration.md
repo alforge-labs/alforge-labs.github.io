@@ -135,6 +135,9 @@ uv run python scripts/tv_cross_validate.py check \
 
 ## 5. Pine Script を MCP server で検証する（issue #523）
 
+!!! note "有料プラン限定"
+    `alpha-forge pine verify` は **有料プラン（Lifetime / Annual / Monthly）でのみ利用できます**。Trial プランでの制限は [Trial 制限](trial-limits.md) を参照してください。
+
 `alpha-forge pine verify` を使うと、生成した Pine Script を **TradingView Desktop + サードパーティ MCP server** に投げて検証できます。コンパイル可否だけでなく、Strategy Tester のメトリクスや個別トレードを alpha-forge のバックテストと比較し、Pine 変換の正確性を機械的に確認できます。
 
 ### 5.1 前提セットアップ

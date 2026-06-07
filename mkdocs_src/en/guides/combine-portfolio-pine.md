@@ -125,6 +125,9 @@ alpha-forge pine generate \
 
 ## symbolic verify (issue [#975](https://github.com/ysakae/alpha-forge/issues/975)) {#symbolic-verify}
 
+!!! note "Paid plans only"
+    `alpha-forge pine verify` is **available on paid plans (Lifetime / Annual / Monthly) only**. See [Trial limits](trial-limits.md) for Trial plan restrictions.
+
 `alpha-forge pine verify --combine-strategies` validates that the generated
 Pine and the alpha-forge backtest combine share the same intent — without
 talking to TradingView at all.

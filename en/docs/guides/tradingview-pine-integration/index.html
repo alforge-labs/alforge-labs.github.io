@@ -2990,6 +2990,10 @@
 <p><code>auto</code> selects <code>sl_tp</code> if any of <code>risk_management.stop_loss_pct</code> / <code>take_profit_pct</code> / <code>trailing_stop_pct</code> is set; otherwise <code>default</code>. You can force a profile with <code>--tolerance-profile {default,sl_tp}</code> or override individual fields with <code>--total-trades-rel-pct 200.0</code> etc.</p>
 <hr />
 <h2 id="5-verifying-the-pine-script-through-an-mcp-server-issue-523">5. Verifying the Pine Script through an MCP server (issue #523)<a class="headerlink" href="#5-verifying-the-pine-script-through-an-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Paid plans only</p>
+<p><code>alpha-forge pine verify</code> is <strong>available on paid plans (Lifetime / Annual / Monthly) only</strong>. See <a href="../trial-limits/">Trial limits</a> for Trial plan restrictions.</p>
+</div>
 <p><code>alpha-forge pine verify</code> ships the generated Pine Script to <strong>TradingView Desktop via a third-party MCP server</strong> for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.</p>
 <h3 id="51-prerequisites">5.1 Prerequisites<a class="headerlink" href="#51-prerequisites" title="Permanent link">&para;</a></h3>
 <ol>
