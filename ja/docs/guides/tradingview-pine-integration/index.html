@@ -2990,6 +2990,10 @@
 <p><code>auto</code> の判定は <code>risk_management.stop_loss_pct</code> / <code>take_profit_pct</code> / <code>trailing_stop_pct</code> のいずれかが設定されていれば <code>sl_tp</code> profile、無しなら <code>default</code> profile。明示指定 (<code>--tolerance-profile sl_tp</code> 等) と個別フラグ (<code>--total-trades-rel-pct 200.0</code> 等) で override も可能です。</p>
 <hr />
 <h2 id="5-pine-script-mcp-server-issue-523">5. Pine Script を MCP server で検証する（issue #523）<a class="headerlink" href="#5-pine-script-mcp-server-issue-523" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">有料プラン限定</p>
+<p><code>alpha-forge pine verify</code> は <strong>有料プラン（Lifetime / Annual / Monthly）でのみ利用できます</strong>。Trial プランでの制限は <a href="../trial-limits/">Trial 制限</a> を参照してください。</p>
+</div>
 <p><code>alpha-forge pine verify</code> を使うと、生成した Pine Script を <strong>TradingView Desktop + サードパーティ MCP server</strong> に投げて検証できます。コンパイル可否だけでなく、Strategy Tester のメトリクスや個別トレードを alpha-forge のバックテストと比較し、Pine 変換の正確性を機械的に確認できます。</p>
 <h3 id="51">5.1 前提セットアップ<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
 <ol>

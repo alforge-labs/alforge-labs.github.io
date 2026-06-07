@@ -135,6 +135,9 @@ uv run python scripts/tv_cross_validate.py check \
 
 ## 5. Verifying the Pine Script through an MCP server (issue #523)
 
+!!! note "Paid plans only"
+    `alpha-forge pine verify` is **available on paid plans (Lifetime / Annual / Monthly) only**. See [Trial limits](trial-limits.md) for Trial plan restrictions.
+
 `alpha-forge pine verify` ships the generated Pine Script to **TradingView Desktop via a third-party MCP server** for verification. Beyond compile checks, it can compare TV's Strategy Tester aggregate metrics or per-trade list against the matching alpha-forge backtest, surfacing translation errors mechanically.
 
 ### 5.1 Prerequisites
