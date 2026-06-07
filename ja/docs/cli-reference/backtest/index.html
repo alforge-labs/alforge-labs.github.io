@@ -4934,6 +4934,10 @@
 <hr />
 <h2 id="alpha-forge-backtest-compare">alpha-forge backtest compare<a class="headerlink" href="#alpha-forge-backtest-compare" title="Permanent link">&para;</a></h2>
 <p>複数戦略を同一シンボル・同一期間で比較する。</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>compare</code> の 2 義: これは新規バックテストを実行する重い処理</p>
+<p><code>backtest compare</code> は指定した複数戦略の<strong>新規バックテストをその場で実行</strong>して比較します（<strong>重い処理</strong>・副作用あり）。一方、<a href="../journal/#alpha-forge-journal-compare"><code>journal compare</code></a> / <a href="../live/#alpha-forge-live-compare"><code>live compare</code></a> は<strong>保存済み</strong>の run / summary を参照するだけの read-only 処理です。同名でもコスト・副作用が異なるため、エージェントが「compare は安全な参照」と一般化して意図せず長時間バックテストを起動しないよう注意してください。</p>
+</div>
 <h3 id="_26">構文<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY1&gt;<span class="w"> </span><span class="o">[</span>STRATEGY2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>

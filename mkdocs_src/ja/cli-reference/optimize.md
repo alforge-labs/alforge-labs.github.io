@@ -18,6 +18,7 @@
 | [`alpha-forge optimize sensitivity`](#alpha-forge-optimize-sensitivity) | 最適化済みパラメータの感度分析を行う |
 | [`alpha-forge optimize history`](#alpha-forge-optimize-history) | 過去の最適化結果をスコアボード形式で一覧表示 |
 | [`alpha-forge optimize grid`](#alpha-forge-optimize-grid) | `optimizer_config.param_ranges` の網羅 Grid Search |
+| [`alpha-forge optimize clean`](#alpha-forge-optimize-clean) | 保存済み最適化結果（`optimize_*.json`）を期間 / 戦略 / 世代で整理して削除 |
 
 ---
 
@@ -597,6 +598,43 @@ Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 | `param_ranges が空です` | `param_ranges` が空 dict | パラメータ範囲を 1 つ以上定義 |
 | `指定された --metric '<name>' が結果に含まれていません` | メトリクス名タイポ等 | `sharpe_ratio` などの実装値を使用 |
 | `制約を満たす trial がありません` | `--min-trades` / `--max-drawdown` で全除外 | 制約を緩和 |
+
+---
+
+## alpha-forge optimize clean
+
+`config.report.output_path`（既定 `data/results/`）配下に蓄積する `optimize_*.json` を、期間 / 戦略 / 世代の条件で整理して削除します。`/explore-strategies --runs 0` のような長時間ループで結果ファイルが無制限に肥大化するのを防ぐための掃除コマンドです。
+
+### 構文
+
+```bash
+alpha-forge optimize clean [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--older-than` | オプション | - | mtime が指定日数より古い結果を削除（`30d` / `30` 書式） |
+| `--strategy` | オプション | - | 特定戦略の結果ファイルのみ対象。JSON 内 `strategy` フィールドを基準に解決（欠落時はファイル名から推定） |
+| `--keep` | int(≥1) | - | 戦略ごとに mtime 最新 N 件を保持し、それより古い結果を削除 |
+| `--dry-run` | フラグ | false | 実際には削除せず、削除対象一覧を表示して終了 |
+| `--yes` / `-y` | フラグ | false | 確認プロンプトをスキップして削除 |
+| `--json` | フラグ | false | 結果を JSON で出力（`{removed: [...], failed: [...], count, dry_run}`） |
+
+- フィルタ（`--older-than` / `--strategy` / `--keep`）を 1 つも指定しない場合は **全消し事故防止のため終了コード `2`** で停止します。複数条件は AND で適用されます。
+- `--keep` は **metric ではなく mtime（更新日時）基準**で「最新 N 件」を保持します。
+- 破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止します。`--json` 実行時も `--yes` が必須です。
+
+### 実行例
+
+```bash
+# 30 日より古い結果を削除（事前確認）
+alpha-forge optimize clean --older-than 30d --dry-run
+
+# 戦略ごとに最新 5 件だけ残して古いものを削除（非対話）
+alpha-forge optimize clean --keep 5 --yes
+```
 
 ---
 

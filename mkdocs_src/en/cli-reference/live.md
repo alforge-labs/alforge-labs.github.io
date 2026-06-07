@@ -72,10 +72,11 @@ alpha-forge live events [OPTIONS]
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
-| `--strategy-id` | option | - | Filter by `strategy_id` |
+| `--strategy` | option | - | Filter by `strategy_id` (renamed from `--strategy-id` in epic #1083 D) |
 | `--event-type` | option | - | Filter by `event_type` (e.g., `fill`, `close`) |
 | `--broker` | option | - | Filter by `broker` |
 | `--limit` | int | `20` | Number of records to display |
+| `--json` | flag | false | Emit the result as JSON (`{events: [...], count}`) |
 
 ### Sample output
 
@@ -96,14 +97,14 @@ Check whether raw events can be converted to trade records (whether `fill` and `
 ### Synopsis
 
 ```bash
-alpha-forge live convert-check [--strategy-id <ID>]
+alpha-forge live convert-check [--strategy <ID>]
 ```
 
 ### Arguments and options
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
-| `--strategy-id` | option | - | Filter by `strategy_id` |
+| `--strategy` | option | - | Filter by `strategy_id` (renamed from `--strategy-id` in epic #1083 D) |
 
 ### Sample output
 
@@ -170,7 +171,7 @@ Only three fields are printed: `imported_trades` / `strategy_id` / `db_path` (no
 
 | Message | Cause | Fix |
 |---------|-------|-----|
-| `Failed to generate trade records: <id>` | Unmatched `fill` / `close` pairs or missing events | Diagnose with `alpha-forge live convert-check --strategy-id <id>` |
+| `Failed to generate trade records: <id>` | Unmatched `fill` / `close` pairs or missing events | Diagnose with `alpha-forge live convert-check --strategy <id>` |
 
 ---
 
@@ -192,8 +193,9 @@ alpha-forge live trades <STRATEGY_ID> [OPTIONS]
 | `--limit` | int | `50` | Number of records. `0` = show all |
 | `--side` | choice | - | Filter by `long` / `short` |
 | `--exit-reason` | option | - | Filter by `exit_reason` |
+| `--json` | flag | false | Emit the result as JSON (`{strategy_id, trades: [...], count}`) |
 
-Trades are sorted newest-first (`entry_at` descending).
+Trades are sorted newest-first (`entry_at` descending). When the strategy exists but has zero trades, `--json` returns `status: "no_trades_yet"` plus an empty envelope (exit code `0`), treating it as a normal case.
 
 ### Sample output
 
@@ -222,7 +224,7 @@ Show the live performance summary. If the summary has not yet been built, it is 
 ### Synopsis
 
 ```bash
-alpha-forge live summary <STRATEGY_ID>
+alpha-forge live summary <STRATEGY_ID> [--json]
 ```
 
 ### Arguments and options
@@ -230,6 +232,7 @@ alpha-forge live summary <STRATEGY_ID>
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID |
+| `--json` | flag | false | Emit the result as JSON (dumps `StrategyLiveSummary`; zero trades returns `summary: null` + `status: "no_trades_yet"` with exit code `0`) |
 
 ### Sample output
 
@@ -268,14 +271,18 @@ Compare the latest backtest run with the live summary side by side to evaluate w
 ### Synopsis
 
 ```bash
-alpha-forge live compare <STRATEGY_ID>
+alpha-forge live compare <STRATEGY_ID> [--json]
 ```
+
+!!! note "The two meanings of `compare`"
+    `live compare` is a **read-only** command that merely references the **saved** latest backtest run and live summary (it does not run a new backtest). Running a fresh backtest for comparison is the distinct, heavyweight [`backtest compare`](backtest.md#alpha-forge-backtest-compare).
 
 ### Arguments and options
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID |
+| `--json` | flag | false | Emit the result as JSON (`{strategy_id, backtest_run, backtest: {...}, live: {...}}`) |
 
 ### Sample output
 
@@ -315,7 +322,7 @@ Diagnose the setup status of live trading analysis. With `STRATEGY_ID`, also che
 ### Synopsis
 
 ```bash
-alpha-forge live doctor [STRATEGY_ID]
+alpha-forge live doctor [STRATEGY_ID] [--json]
 ```
 
 ### Arguments and options
@@ -323,6 +330,7 @@ alpha-forge live doctor [STRATEGY_ID]
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (optional) | - | Strategy ID (enables detailed checks) |
+| `--json` | flag | false | Emit the diagnostics as JSON (same data as the text output) |
 
 ### Sample output (no strategy ID)
 
@@ -486,6 +494,7 @@ The `Backtest` column appears only when `--compare` is passed. When no receipts 
 - **`forge.yaml`**: All paths above are determined by the `forge.yaml` referenced by the `FORGE_CONFIG` environment variable
 - **VPS integration**: `sync-events` reads the `remote.*` section of `forge.yaml`
 - **Exit codes**: `0` on success; argument errors return Click's `2`; missing config or records typically `1`
+- **`--json` output rules**: `list` / `events` / `trades` / `summary` / `compare` / `doctor` support `--json`. When `--json` is set, stdout contains pure JSON only; decoration, progress, and save messages go to stderr. List commands return `{<plural>: [...], "count": n}` (empty array + exit code `0` when absent), while single-record commands return a `{error, code, id}` JSON to stdout with exit code `1` on not-found.
 
 ---
 

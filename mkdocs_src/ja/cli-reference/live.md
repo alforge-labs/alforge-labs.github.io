@@ -72,10 +72,11 @@ alpha-forge live events [OPTIONS]
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
-| `--strategy-id` | オプション | - | `strategy_id` で絞り込む |
+| `--strategy` | オプション | - | `strategy_id` で絞り込む（epic #1083 D で `--strategy-id` から改名） |
 | `--event-type` | オプション | - | `event_type` で絞り込む（例: `fill`、`close`） |
 | `--broker` | オプション | - | `broker` で絞り込む |
 | `--limit` | int | `20` | 表示件数 |
+| `--json` | フラグ | false | 結果を JSON で出力（`{events: [...], count}`） |
 
 ### サンプル出力
 
@@ -96,14 +97,14 @@ raw event を trade records に変換できる状態か（`fill` と `close` の
 ### 構文
 
 ```bash
-alpha-forge live convert-check [--strategy-id <ID>]
+alpha-forge live convert-check [--strategy <ID>]
 ```
 
 ### 引数とオプション
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
-| `--strategy-id` | オプション | - | `strategy_id` で絞り込む |
+| `--strategy` | オプション | - | `strategy_id` で絞り込む（epic #1083 D で `--strategy-id` から改名） |
 
 ### サンプル出力
 
@@ -170,7 +171,7 @@ db_path           : data/results/backtest_results.db
 
 | メッセージ | 原因 | 対処 |
 |----------|------|------|
-| `trade records を生成できませんでした: <id>` | `fill` / `close` ペアが揃わない、event 不存在 | `alpha-forge live convert-check --strategy-id <id>` で原因確認 |
+| `trade records を生成できませんでした: <id>` | `fill` / `close` ペアが揃わない、event 不存在 | `alpha-forge live convert-check --strategy <id>` で原因確認 |
 
 ---
 
@@ -192,8 +193,9 @@ alpha-forge live trades <STRATEGY_ID> [OPTIONS]
 | `--limit` | int | `50` | 表示件数。`0` で全件 |
 | `--side` | choice | - | `long` / `short` で絞り込む |
 | `--exit-reason` | オプション | - | `exit_reason` で絞り込む |
+| `--json` | フラグ | false | 結果を JSON で出力（`{strategy_id, trades: [...], count}`） |
 
-新しい取引から順に表示されます（`entry_at` 降順）。
+新しい取引から順に表示されます（`entry_at` 降順）。取引が 0 件でも戦略が存在すれば正常系として `--json` では `status: "no_trades_yet"` + 空 envelope（終了コード `0`）を返します。
 
 ### サンプル出力
 
@@ -222,7 +224,7 @@ entry_at             symbol     side        qty        entry         exit    net
 ### 構文
 
 ```bash
-alpha-forge live summary <STRATEGY_ID>
+alpha-forge live summary <STRATEGY_ID> [--json]
 ```
 
 ### 引数とオプション
@@ -230,6 +232,7 @@ alpha-forge live summary <STRATEGY_ID>
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 戦略 ID |
+| `--json` | フラグ | false | 結果を JSON で出力（`StrategyLiveSummary` を dump。取引 0 件は `summary: null` + `status: "no_trades_yet"` で終了コード `0`） |
 
 ### サンプル出力
 
@@ -268,14 +271,18 @@ max_drawdown_pct : -4.20
 ### 構文
 
 ```bash
-alpha-forge live compare <STRATEGY_ID>
+alpha-forge live compare <STRATEGY_ID> [--json]
 ```
+
+!!! note "`compare` の 2 義"
+    `live compare` は**保存済み**の最新 backtest run と live summary を参照するだけの **read-only** コマンドです（新規バックテストは実行しません）。新規にバックテストを実行して比較するのは別概念の重い処理 [`backtest compare`](backtest.md#alpha-forge-backtest-compare) です。
 
 ### 引数とオプション
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 戦略 ID |
+| `--json` | フラグ | false | 結果を JSON で出力（`{strategy_id, backtest_run, backtest: {...}, live: {...}}`） |
 
 ### サンプル出力
 
@@ -315,7 +322,7 @@ live trading analysis の導入状態を診断します。`STRATEGY_ID` を渡�
 ### 構文
 
 ```bash
-alpha-forge live doctor [STRATEGY_ID]
+alpha-forge live doctor [STRATEGY_ID] [--json]
 ```
 
 ### 引数とオプション
@@ -323,6 +330,7 @@ alpha-forge live doctor [STRATEGY_ID]
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（任意） | - | 戦略 ID（指定で詳細チェック） |
+| `--json` | フラグ | false | 診断結果を JSON で出力（テキストと同一データ） |
 
 ### サンプル出力（戦略 ID なし）
 
@@ -463,6 +471,7 @@ alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1>,<ID2>[,...] [O
 - **`forge.yaml`**: 上記すべてのパスは `FORGE_CONFIG` が指す `forge.yaml` で決まる
 - **VPS 連携**: `sync-events` は `forge.yaml` の `remote.*` セクションを参照
 - **終了コード**: 通常 `0`、引数エラーは Click が `2`、設定不足や record 不存在は通常 `1`
+- **`--json` の出力規約**: `list` / `events` / `trades` / `summary` / `compare` / `doctor` は `--json` に対応します。`--json` 指定時、stdout は純 JSON のみで、装飾・進捗・保存メッセージは標準エラーへ分離されます。一覧系は `{<plural>: [...], "count": n}`（不在でも空配列 + 終了コード `0`）、単体参照系の not found は stdout に `{error, code, id}` の JSON を出して終了コード `1` を返します。
 
 ---
 

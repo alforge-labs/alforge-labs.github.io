@@ -11,13 +11,14 @@ Browse the catalog of 50+ technical indicators supported by `alpha-forge`.
 List supported indicators. With `FILTER_NAME`, filter by case-insensitive substring.
 
 ```bash
-alpha-forge analyze indicator list [FILTER_NAME] [--detail]
+alpha-forge analyze indicator list [FILTER_NAME] [--detail] [--json]
 ```
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `FILTER_NAME` | argument (optional) | - | Filter substring |
 | `--detail` | flag | false | Show parameter names, defaults, and descriptions |
+| `--json` | flag | false | Emit the result as JSON (`{indicators: [...], count}`; with `--detail`, each element includes `params`) |
 
 Sample output (the category labels such as `移動平均` = moving average are emitted in Japanese regardless of locale):
 
@@ -41,12 +42,13 @@ Details: alpha-forge analyze indicator show <TYPE>
 Show detailed information for a specific indicator (description, parameters, output, example).
 
 ```bash
-alpha-forge analyze indicator show <INDICATOR_TYPE>
+alpha-forge analyze indicator show <INDICATOR_TYPE> [--json]
 ```
 
 | Name | Kind | Description |
 |------|------|-------------|
 | `INDICATOR_TYPE` | argument (required) | Indicator name (case-insensitive) |
+| `--json` | flag | Emit the indicator definition as JSON (`name` / `category` / `desc` / `params` / `available_features` / `output` / `notes` / `example`); not-found returns `{error, code: "indicator_not_found", id}` to stdout with exit code `1` |
 
 Sample output:
 
@@ -87,6 +89,7 @@ alpha-forge analyze pairs scan <SYM_A> <SYM_B> [OPTIONS]
 | `--method` | choice | `engle_granger` | Cointegration test method |
 | `--pvalue` | float | `0.05` | p-value threshold for cointegration |
 | `--interval` | option | `1d` | Timeframe |
+| `--json` | flag | false | Emit the test result as JSON (`{sym_a, sym_b, method, interval, pvalue_threshold, is_cointegrated, p_value, test_statistic, critical_values}`) |
 
 Sample output:
 
@@ -101,16 +104,17 @@ Sample output:
 
 ## alpha-forge analyze pairs scan-all
 
-Scan all pairs in a watchlist (top 20 displayed).
+Scan all pairs in a watchlist (text output shows the top 20).
 
 ```bash
-alpha-forge analyze pairs scan-all --symbols-file <FILE> [--pvalue 0.05] [--interval 1d]
+alpha-forge analyze pairs scan-all --symbols-file <FILE> [--pvalue 0.05] [--interval 1d] [--json]
 ```
 
 | Name | Kind | Description |
 |------|------|-------------|
 | `--symbols-file` | required (file) | Symbol list (one per line; `#` comments allowed) |
 | `--pvalue` | float | p-value threshold (default 0.05) |
+| `--json` | flag | Emit the result as JSON (`{interval, pvalue_threshold, pairs: [...], count, cointegrated_count}`). The 20-item cap of the text output does **not** apply to `--json`, which returns **all** pairs. Progress messages go to stderr regardless of `--json` |
 
 ## alpha-forge analyze pairs build
 
@@ -127,6 +131,7 @@ alpha-forge analyze pairs build --sym-a <SYM> --sym-b <SYM> [OPTIONS]
 | `--interval` | option | `1d` | Timeframe |
 | `--log-prices` / `--no-log-prices` | flag | `--log-prices` | Use log prices for the spread |
 | `--output-id` | option | `<A>_<B>_spread` | `source_key` to save |
+| `--json` | flag | false | Emit the result as JSON (`{sym_a, sym_b, interval, log_prices, source_key, hedge_ratio, half_life, n_rows}`). Progress messages (e.g. "Estimating hedge ratio...") go to stderr regardless of `--json` |
 
 Sample output:
 
@@ -190,8 +195,10 @@ The parquet file embeds symbol / interval / feature columns / label config as me
 List available built-in feature sets.
 
 ```bash
-alpha-forge analyze ml dataset feature-sets
+alpha-forge analyze ml dataset feature-sets [--json]
 ```
+
+With `--json`, emits `{feature_sets: [{name, n_specs, specs: [...]}], count}` as pure JSON.
 
 **Built-in feature sets**
 
@@ -264,8 +271,10 @@ Specifying `--calibration` on a regression model emits a warning and is ignored 
 List available model types (classification + regression).
 
 ```bash
-alpha-forge analyze ml models
+alpha-forge analyze ml models [--json]
 ```
+
+With `--json`, emits `{classification: [...], regression: [...], count}` as pure JSON.
 
 ## alpha-forge analyze ml walk-forward
 
@@ -400,5 +409,17 @@ WFT runs Optuna N trials per window, calling `_calc_ml_signal_wft` N times on id
 **Pine Script integration**
 
 Like `ML_SIGNAL`, `ML_SIGNAL_WFT` is not Pine Script-translatable. `alpha-forge pine generate` emits a warning comment and treats the signal as `<id> = true`.
+
+---
+
+## `--json` output rules
+
+The reference-style commands under `analyze` (`indicator list` / `indicator show` / `ml models` / `ml dataset feature-sets` / `pairs scan` / `pairs scan-all` / `pairs build`) support `--json` (for MCP / pipe usage, no decoration).
+
+- When `--json` is set, stdout contains **pure JSON only**; decoration, headers, progress, and save messages go to stderr.
+- List commands return a `{<plural>: [...], "count": n}` envelope (empty array + exit code `0` even when absent).
+- `indicator show` keeps **exit code `1`** on not-found, and with `--json` returns `{error, code: "indicator_not_found", id}` to stdout.
+- Progress messages from `pairs build` / `pairs scan-all` (e.g. "Estimating hedge ratio...", "Scanning...") go to **stderr** regardless of `--json`, keeping stdout pure.
+- The 20-item cap of the `pairs scan-all` text output does **not** apply to `--json`, which returns **all** pairs.
 
 ---

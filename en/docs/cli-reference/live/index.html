@@ -3868,10 +3868,10 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--strategy-id</code></td>
+<td><code>--strategy</code></td>
 <td>option</td>
 <td>-</td>
-<td>Filter by <code>strategy_id</code></td>
+<td>Filter by <code>strategy_id</code> (renamed from <code>--strategy-id</code> in epic #1083 D)</td>
 </tr>
 <tr>
 <td><code>--event-type</code></td>
@@ -3891,6 +3891,12 @@
 <td><code>20</code></td>
 <td>Number of records to display</td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{events: [...], count}</code>)</td>
+</tr>
 </tbody>
 </table>
 <h3 id="sample-output_1">Sample output<a class="headerlink" href="#sample-output_1" title="Permanent link">&para;</a></h3>
@@ -3903,7 +3909,7 @@
 <h2 id="alpha-forge-live-convert-check">alpha-forge live convert-check<a class="headerlink" href="#alpha-forge-live-convert-check" title="Permanent link">&para;</a></h2>
 <p>Check whether raw events can be converted to trade records (whether <code>fill</code> and <code>close</code> pairs are matched, etc.). Recommended as a pre-step to <code>import-events</code>.</p>
 <h3 id="synopsis_2">Synopsis<a class="headerlink" href="#synopsis_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>convert-check<span class="w"> </span><span class="o">[</span>--strategy-id<span class="w"> </span>&lt;ID&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>convert-check<span class="w"> </span><span class="o">[</span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_2">Arguments and options<a class="headerlink" href="#arguments-and-options_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -3917,10 +3923,10 @@
 </thead>
 <tbody>
 <tr>
-<td><code>--strategy-id</code></td>
+<td><code>--strategy</code></td>
 <td>option</td>
 <td>-</td>
-<td>Filter by <code>strategy_id</code></td>
+<td>Filter by <code>strategy_id</code> (renamed from <code>--strategy-id</code> in epic #1083 D)</td>
 </tr>
 </tbody>
 </table>
@@ -3997,7 +4003,7 @@
 <tr>
 <td><code>Failed to generate trade records: &lt;id&gt;</code></td>
 <td>Unmatched <code>fill</code> / <code>close</code> pairs or missing events</td>
-<td>Diagnose with <code>alpha-forge live convert-check --strategy-id &lt;id&gt;</code></td>
+<td>Diagnose with <code>alpha-forge live convert-check --strategy &lt;id&gt;</code></td>
 </tr>
 </tbody>
 </table>
@@ -4042,9 +4048,15 @@
 <td>-</td>
 <td>Filter by <code>exit_reason</code></td>
 </tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{strategy_id, trades: [...], count}</code>)</td>
+</tr>
 </tbody>
 </table>
-<p>Trades are sorted newest-first (<code>entry_at</code> descending).</p>
+<p>Trades are sorted newest-first (<code>entry_at</code> descending). When the strategy exists but has zero trades, <code>--json</code> returns <code>status: "no_trades_yet"</code> plus an empty envelope (exit code <code>0</code>), treating it as a normal case.</p>
 <h3 id="sample-output_4">Sample output<a class="headerlink" href="#sample-output_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>=== live trades ===
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>entry_at             symbol     side        qty        entry         exit    net_pnl     ret%   hold_m exit_reason
@@ -4074,7 +4086,7 @@
 <h2 id="alpha-forge-live-summary">alpha-forge live summary<a class="headerlink" href="#alpha-forge-live-summary" title="Permanent link">&para;</a></h2>
 <p>Show the live performance summary. If the summary has not yet been built, it is constructed from trade records on the fly.</p>
 <h3 id="synopsis_5">Synopsis<a class="headerlink" href="#synopsis_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>summary<span class="w"> </span>&lt;STRATEGY_ID&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>summary<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_5">Arguments and options<a class="headerlink" href="#arguments-and-options_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -4092,6 +4104,12 @@
 <td>argument (required)</td>
 <td>-</td>
 <td>Strategy ID</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (dumps <code>StrategyLiveSummary</code>; zero trades returns <code>summary: null</code> + <code>status: "no_trades_yet"</code> with exit code <code>0</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -4134,8 +4152,12 @@
 <h2 id="alpha-forge-live-compare">alpha-forge live compare<a class="headerlink" href="#alpha-forge-live-compare" title="Permanent link">&para;</a></h2>
 <p>Compare the latest backtest run with the live summary side by side to evaluate whether live behavior matches expectations.</p>
 <h3 id="synopsis_6">Synopsis<a class="headerlink" href="#synopsis_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY_ID&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">The two meanings of <code>compare</code></p>
+<p><code>live compare</code> is a <strong>read-only</strong> command that merely references the <strong>saved</strong> latest backtest run and live summary (it does not run a new backtest). Running a fresh backtest for comparison is the distinct, heavyweight <a href="../backtest/#alpha-forge-backtest-compare"><code>backtest compare</code></a>.</p>
+</div>
 <h3 id="arguments-and-options_6">Arguments and options<a class="headerlink" href="#arguments-and-options_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4152,6 +4174,12 @@
 <td>argument (required)</td>
 <td>-</td>
 <td>Strategy ID</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{strategy_id, backtest_run, backtest: {...}, live: {...}}</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -4199,7 +4227,7 @@
 <h2 id="alpha-forge-live-doctor">alpha-forge live doctor<a class="headerlink" href="#alpha-forge-live-doctor" title="Permanent link">&para;</a></h2>
 <p>Diagnose the setup status of live trading analysis. With <code>STRATEGY_ID</code>, also checks trade and summary readiness for that strategy.</p>
 <h3 id="synopsis_7">Synopsis<a class="headerlink" href="#synopsis_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>doctor<span class="w"> </span><span class="o">[</span>STRATEGY_ID<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>doctor<span class="w"> </span><span class="o">[</span>STRATEGY_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_7">Arguments and options<a class="headerlink" href="#arguments-and-options_7" title="Permanent link">&para;</a></h3>
 <table>
@@ -4217,6 +4245,12 @@
 <td>argument (optional)</td>
 <td>-</td>
 <td>Strategy ID (enables detailed checks)</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the diagnostics as JSON (same data as the text output)</td>
 </tr>
 </tbody>
 </table>
@@ -4455,6 +4489,7 @@
 <li><strong><code>forge.yaml</code></strong>: All paths above are determined by the <code>forge.yaml</code> referenced by the <code>FORGE_CONFIG</code> environment variable</li>
 <li><strong>VPS integration</strong>: <code>sync-events</code> reads the <code>remote.*</code> section of <code>forge.yaml</code></li>
 <li><strong>Exit codes</strong>: <code>0</code> on success; argument errors return Click's <code>2</code>; missing config or records typically <code>1</code></li>
+<li><strong><code>--json</code> output rules</strong>: <code>list</code> / <code>events</code> / <code>trades</code> / <code>summary</code> / <code>compare</code> / <code>doctor</code> support <code>--json</code>. When <code>--json</code> is set, stdout contains pure JSON only; decoration, progress, and save messages go to stderr. List commands return <code>{&lt;plural&gt;: [...], "count": n}</code> (empty array + exit code <code>0</code> when absent), while single-record commands return a <code>{error, code, id}</code> JSON to stdout with exit code <code>1</code> on not-found.</li>
 </ul>
 <hr />
 <!-- Synced from: Click decorators in `alpha-forge/src/alpha_forge/commands/live.py`, `LiveStore` in `alpha-forge/src/alpha_forge/live/store.py`, and `format_*` functions in `alpha-forge/src/alpha_forge/live/formatter.py`. This page must be kept in sync when CLI arguments or configuration keys change. -->

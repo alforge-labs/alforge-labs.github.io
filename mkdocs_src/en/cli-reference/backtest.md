@@ -414,6 +414,9 @@ Done: 2 imported, 1 skipped
 
 Compare multiple strategies on the same symbol and period.
 
+!!! warning "The two meanings of `compare`: this one runs new backtests (heavy)"
+    `backtest compare` **runs fresh backtests** of the given strategies on the spot and compares them (a **heavy operation** with side effects). In contrast, [`journal compare`](journal.md#alpha-forge-journal-compare) / [`live compare`](live.md#alpha-forge-live-compare) are read-only and merely reference **saved** runs / summaries. Despite the shared verb, the cost and side effects differ — be careful not to let an agent generalize "compare is a safe reference" and unintentionally launch long-running backtests.
+
 ### Synopsis
 
 ```bash

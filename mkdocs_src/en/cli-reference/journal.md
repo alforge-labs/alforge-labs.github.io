@@ -27,12 +27,14 @@ List all strategies that have a journal. Walks the `journal_entries` table in th
 ### Synopsis
 
 ```bash
-alpha-forge journal list
+alpha-forge journal list [--json]
 ```
 
 ### Arguments and options
 
-None.
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON (`{journals: [...], count}`) |
 
 ### Sample output
 
@@ -55,7 +57,7 @@ Show a strategy's full history: definition snapshots, run history (backtests / o
 ### Synopsis
 
 ```bash
-alpha-forge journal show <STRATEGY_ID>
+alpha-forge journal show <STRATEGY_ID> [--json]
 ```
 
 ### Arguments and options
@@ -63,6 +65,7 @@ alpha-forge journal show <STRATEGY_ID>
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID to display |
+| `--json` | flag | false | Emit the result as JSON (dumps `JournalEntry` + `live_summary`; not-found returns `{error, code, id}` to stdout with exit code `1`) |
 
 ### Sample output
 
@@ -103,7 +106,7 @@ Show run results in a table.
 ### Synopsis
 
 ```bash
-alpha-forge journal runs <STRATEGY_ID> [--best <KEY>]
+alpha-forge journal runs <STRATEGY_ID> [--best <KEY>] [--json]
 ```
 
 ### Arguments and options
@@ -112,6 +115,7 @@ alpha-forge journal runs <STRATEGY_ID> [--best <KEY>]
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID |
 | `--best` | choice | (date-equivalent when omitted) | Sort key. `sharpe_ratio` / `total_return_pct` / `max_drawdown_pct` / `win_rate_pct` / `date` |
+| `--json` | flag | false | Emit the result as JSON (`{strategy_id, runs: [...], count}`; sort order matches the text output) |
 
 ### Sample output
 
@@ -132,10 +136,13 @@ Formatting is delegated to `format_runs_table(j, sort_by)`. The title line and t
 
 Compare **two run results** of the same strategy side by side.
 
+!!! note "The two meanings of `compare`"
+    `journal compare` is a **read-only** command that merely references **saved** runs (it does not run a new backtest). Running a fresh backtest for comparison is the distinct, heavyweight [`backtest compare`](backtest.md#alpha-forge-backtest-compare).
+
 ### Synopsis
 
 ```bash
-alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2>
+alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2> [--json]
 ```
 
 ### Arguments and options
@@ -144,6 +151,7 @@ alpha-forge journal compare <STRATEGY_ID> --run <RUN_ID1> --run <RUN_ID2>
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID |
 | `--run` | repeatable (required, **exactly 2**) | - | `run_id` to compare |
+| `--json` | flag | false | Emit the result as JSON (`{strategy_id, run_a: {...}, run_b: {...}}`) |
 
 ### Sample output
 
@@ -288,6 +296,9 @@ The verdict is reflected in `alpha-forge journal show` and `alpha-forge journal 
 | `Error: run_id not found - <id>` | Specified `run_id` does not exist in the journal | Verify with `alpha-forge journal runs <strategy_id>` |
 | Click: `Invalid value for 'VERDICT'` | Value other than `pass` / `fail` / `review` | Use one of the choices |
 
+!!! note "Not-found returns exit code `1` (epic #1083 D)"
+    Previously, passing a non-existent `run_id` returned exit code `0` (treated as success). To honor the Fail Loud convention, this is now unified to **not found = exit code `1`**, so unattended loops can detect it via the exit code.
+
 ---
 
 ## alpha-forge journal report
@@ -312,6 +323,7 @@ alpha-forge journal report <STRATEGY_ID> --output <FILE> --with-chart --symbol <
 | `--interval` | option | - | TV interval for the chart (e.g. `D`, `60`) |
 | `--mock` | flag | false | Use the mock MCP client for chart retrieval (CI) |
 | `--mcp-server` | option | - | MCP server endpoint for chart retrieval (defaults to `tv_mcp.chart_snapshot.endpoint` in `forge.yaml`) |
+| `--json` | flag | false | Emit **metadata** as JSON instead of the body (`{strategy_id, output_path, saved, with_chart, chart_path, markdown}`; `markdown` is included in the payload only when `--output` is omitted) |
 
 ### Examples
 
@@ -341,6 +353,7 @@ alpha-forge journal report spy_sma_v1 --output reports/spy.md \
 - **Live integration**: `LiveStore` reads from `<journal_path>/../live/` and feeds into `show`
 - **`FORGE_CONFIG`**: All paths above are determined by the `forge.yaml` referenced by the `FORGE_CONFIG` environment variable
 - **Exit codes**: `0` on success; argument errors return Click's `2`; `run_id` not found typically returns `1` (writes to stderr and returns)
+- **`--json` output rules**: `list` / `runs` / `compare` / `show` / `report` support `--json`. When `--json` is set, stdout contains pure JSON only (decoration and save messages go to stderr). List commands return `{<plural>: [...], "count": n}`, and single-record commands like `show` return `{error, code, id}` to stdout with exit code `1` on not-found.
 
 ---
 

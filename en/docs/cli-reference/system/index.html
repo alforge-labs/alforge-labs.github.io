@@ -2273,6 +2273,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-system-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge system config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge system config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Syntax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output-full-dump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output (full dump)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output (--json)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2777,6 +2838,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-system-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge system config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge system config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Syntax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output-full-dump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output (full dump)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output (--json)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2980,6 +3102,70 @@
 </tbody>
 </table>
 <p>Print the document content to stdout. Unknown names display the available list and exit with code <code>1</code>.</p>
+<hr />
+<h2 id="alpha-forge-system-config">alpha-forge system config<a class="headerlink" href="#alpha-forge-system-config" title="Permanent link">&para;</a></h2>
+<p>Dump the effective configuration (the current values of the <code>forge.yaml</code> that was actually loaded). This is an <strong>observation-only (read-only)</strong> command that shows which <code>forge.yaml</code> was loaded and what each key resolved to. It helps you isolate problems such as an unintended <code>FORGE_CONFIG</code> environment variable inheritance. Because it is read-only, it runs even with an expired license or without authentication.</p>
+<h3 id="syntax">Syntax<a class="headerlink" href="#syntax" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>config<span class="w"> </span><span class="o">[</span>KEY<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</code></pre></div>
+<h3 id="arguments-and-options">Arguments and options<a class="headerlink" href="#arguments-and-options" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KEY</code></td>
+<td>argument (optional)</td>
+<td>-</td>
+<td>Dotted key (e.g. <code>data.storage_path</code>). When given, prints only that single raw value</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (machine-readable, for MCP / pipe usage)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong><code>KEY</code> omitted (full dump)</strong>: prints the absolute path of the loaded <code>forge.yaml</code> (or the search order if absent), the relevant environment-variable overrides (<code>FORGE_CONFIG</code> / <code>FORGE_LANG</code> / <code>FORGE_DEBUG</code> / <code>FORGE_NONINTERACTIVE</code>, etc.), and the resolved values of the major keys (<code>Path</code> values are resolved to absolute paths).</li>
+<li><strong><code>KEY</code> given</strong>: prints a single value raw via a dotted key. Use it in scripts like <code>$(alpha-forge system config data.storage_path)</code>. A missing key prints an error to stderr and exits with code <code>1</code> (<strong>Fail Loud</strong>).</li>
+<li><strong>Secret masking</strong>: values whose key names match patterns such as <code>token</code> / <code>api_key</code> / <code>secret</code> / <code>password</code> / <code>access_key</code>, as well as <code>SecretStr</code> fields (<code>oanda.access_token</code> / <code>fred.api_key</code>), are masked with <code>***</code>.</li>
+</ul>
+<h3 id="sample-output-full-dump">Sample output (full dump)<a class="headerlink" href="#sample-output-full-dump" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># Effective config file: /path/to/forge.yaml
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>## Environment overrides
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>FORGE_CONFIG=/path/to/forge.yaml
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>FORGE_ACCEPT_EULA=1
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>## Resolved config values
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>data.storage_path = /path/to/data/historical
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>data.providers.oanda.access_token = ***
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>data.providers.fred.api_key = ***
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>report.output_path = /path/to/output/results
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>strategies.use_db = True
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>...
+</code></pre></div>
+<h3 id="sample-output-json">Sample output (<code>--json</code>)<a class="headerlink" href="#sample-output-json" title="Permanent link">&para;</a></h3>
+<p>When <code>--json</code> is set, stdout contains pure JSON only (decoration and errors go to stderr).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">&quot;config_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/path/to/forge.yaml&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">&quot;config_search_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;FORGE_CONFIG=/path/to/forge.yaml&quot;</span><span class="p">],</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">&quot;env_overrides&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;FORGE_CONFIG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/path/to/forge.yaml&quot;</span><span class="p">},</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;providers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;fred&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;api_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;***&quot;</span><span class="p">}}}}</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>With a single key plus <code>--json</code>, the result is a <code>{key, value}</code> envelope.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>config<span class="w"> </span>strategies.use_db<span class="w"> </span>--json
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># =&gt; {&quot;key&quot;: &quot;strategies.use_db&quot;, &quot;value&quot;: true}</span>
+</code></pre></div>
 <hr />
 
 

@@ -284,7 +284,7 @@ Delete a registered strategy from the DB / registry. With `--with-results`, also
 ### Synopsis
 
 ```bash
-alpha-forge strategy delete <STRATEGY_ID> [--force] [--with-results]
+alpha-forge strategy delete <STRATEGY_ID> [--yes] [--with-results]
 ```
 
 ### Arguments and options
@@ -292,8 +292,10 @@ alpha-forge strategy delete <STRATEGY_ID> [--force] [--with-results]
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID to delete |
-| `--force` | flag | false | Skip confirmation prompt |
+| `--yes` / `-y` | flag | false | Skip confirmation prompt (renamed from `--force` in epic #1083 D) |
 | `--with-results` | flag | false | Also delete related files (`<id>_optimized.json`, `<id>_report.json`, `optimize_<id>_*.json`) |
+
+Because this is a destructive operation, in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) it stops with exit code `2` unless `--yes` is given. Not-found returns exit code `1`.
 
 ### Files removed by `--with-results`
 
@@ -329,18 +331,18 @@ Files deleted: 3
 | Message | Cause | Fix |
 |---------|-------|-----|
 | `Error: strategy '<id>' not found` | Invalid ID | Verify with `alpha-forge strategy list` |
-| `Cancelled` | Declined the prompt | Use `--force` or re-confirm |
+| `Cancelled` | Declined the prompt | Use `--yes` or re-confirm |
 
 ---
 
 ## alpha-forge strategy purge
 
-Purge the strategy JSON, related files (`_optimized.json`, `_report.json`, `optimize_<id>_*.json`), and DB entry **in a single command**. Replaces the previous three-step `rm <strategy>.json && rm <strategy>_report.json && alpha-forge strategy delete <id> --force` workflow. Journal files (`<id>.journal.json`) are preserved.
+Purge the strategy JSON, related files (`_optimized.json`, `_report.json`, `optimize_<id>_*.json`), and DB entry **in a single command**. Replaces the previous three-step `rm <strategy>.json && rm <strategy>_report.json && alpha-forge strategy delete <id> --yes` workflow. Journal files (`<id>.journal.json`) are preserved.
 
 ### Synopsis
 
 ```bash
-alpha-forge strategy purge <STRATEGY_ID> [--dry-run]
+alpha-forge strategy purge <STRATEGY_ID> [--dry-run] [--yes]
 ```
 
 ### Arguments and options
@@ -349,6 +351,9 @@ alpha-forge strategy purge <STRATEGY_ID> [--dry-run]
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID to purge completely |
 | `--dry-run` | flag | false | Only list the files that would be deleted; do not actually delete them |
+| `--yes` / `-y` | flag | false | Skip the confirmation prompt and purge (newly added in epic #1083 A; previously the command only had a confirmation prompt and could hang) |
+
+Because this is a destructive operation, in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) it stops with exit code `2` unless `--yes` is given. Not-found returns exit code `1`.
 
 ### Sample output
 

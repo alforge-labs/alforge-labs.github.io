@@ -2273,6 +2273,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-system-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge system config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge system config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（全体ダンプ）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（--json）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2777,6 +2838,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alpha-forge-system-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge system config
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge system config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（全体ダンプ）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（--json）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2980,6 +3102,70 @@
 </tbody>
 </table>
 <p>ドキュメントの内容を標準出力に表示します。未知の名前を指定すると利用可能リストとともにエラー表示し、終了コード <code>1</code>。</p>
+<hr />
+<h2 id="alpha-forge-system-config">alpha-forge system config<a class="headerlink" href="#alpha-forge-system-config" title="Permanent link">&para;</a></h2>
+<p>実効設定（実際に読み込まれた <code>forge.yaml</code> の現在値）をダンプします。どの <code>forge.yaml</code> が読み込まれ、各キーがどの値に解決されたかを確認できる<strong>観測専用（read-only）</strong>コマンドです。<code>FORGE_CONFIG</code> 環境変数の意図しない継承などを切り分けられます。読み取り専用のため、ライセンス切れ・未認証でも実行できます。</p>
+<h3 id="_6">構文<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>config<span class="w"> </span><span class="o">[</span>KEY<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</code></pre></div>
+<h3 id="_7">引数とオプション<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KEY</code></td>
+<td>引数（任意）</td>
+<td>-</td>
+<td>dotted key（例: <code>data.storage_path</code>）。指定すると単一値だけを生で出力</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（機械可読・MCP / パイプ用途）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong><code>KEY</code> 省略時（全体ダンプ）</strong>: 読み込まれた <code>forge.yaml</code> の絶対パス（不在時は探索順）・関与した環境変数オーバーライド（<code>FORGE_CONFIG</code> / <code>FORGE_LANG</code> / <code>FORGE_DEBUG</code> / <code>FORGE_NONINTERACTIVE</code> 等）・解決済みの主要キー実値（<code>Path</code> は絶対パスへ解決）を表示します。</li>
+<li><strong><code>KEY</code> 指定時</strong>: dotted key で単一値を生で出力します。<code>$(alpha-forge system config data.storage_path)</code> のようにスクリプトから利用できます。不在キーは標準エラーにエラーを出して終了コード <code>1</code>（<strong>Fail Loud</strong>）。</li>
+<li><strong>秘匿マスク</strong>: <code>token</code> / <code>api_key</code> / <code>secret</code> / <code>password</code> / <code>access_key</code> などのキー名パターンや <code>SecretStr</code> フィールド（<code>oanda.access_token</code> / <code>fred.api_key</code>）の値は <code>***</code> でマスクされます。</li>
+</ul>
+<h3 id="_8">サンプル出力（全体ダンプ）<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># 実効設定ファイル: /path/to/forge.yaml
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>## 環境変数オーバーライド
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>FORGE_CONFIG=/path/to/forge.yaml
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>FORGE_ACCEPT_EULA=1
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>## 解決済み設定値
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>data.storage_path = /path/to/data/historical
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>data.providers.oanda.access_token = ***
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>data.providers.fred.api_key = ***
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>report.output_path = /path/to/output/results
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>strategies.use_db = True
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>...
+</code></pre></div>
+<h3 id="-json">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h3>
+<p><code>--json</code> 指定時は stdout に純 JSON のみを出力します（装飾・エラーは標準エラーへ分離）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">&quot;config_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/path/to/forge.yaml&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">&quot;config_search_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;FORGE_CONFIG=/path/to/forge.yaml&quot;</span><span class="p">],</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">&quot;env_overrides&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;FORGE_CONFIG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/path/to/forge.yaml&quot;</span><span class="p">},</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;providers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;fred&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;api_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;***&quot;</span><span class="p">}}}}</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>単一キー指定 + <code>--json</code> の場合は <code>{key, value}</code> の envelope を返します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>config<span class="w"> </span>strategies.use_db<span class="w"> </span>--json
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># =&gt; {&quot;key&quot;: &quot;strategies.use_db&quot;, &quot;value&quot;: true}</span>
+</code></pre></div>
 <hr />
 
 

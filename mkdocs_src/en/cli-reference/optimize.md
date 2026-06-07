@@ -18,6 +18,7 @@ Parameter search and sensitivity analysis: Bayesian optimization (Optuna), grid 
 | [`alpha-forge optimize sensitivity`](#alpha-forge-optimize-sensitivity) | Run sensitivity analysis on optimized parameters |
 | [`alpha-forge optimize history`](#alpha-forge-optimize-history) | List past optimization results in scoreboard format |
 | [`alpha-forge optimize grid`](#alpha-forge-optimize-grid) | Cartesian Grid Search over `optimizer_config.param_ranges` |
+| [`alpha-forge optimize clean`](#alpha-forge-optimize-clean) | Tidy up saved optimization results (`optimize_*.json`) by age / strategy / generation |
 
 ---
 
@@ -595,6 +596,43 @@ Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 | `param_ranges is empty` | `param_ranges` is an empty dict | Define at least one parameter range |
 | `Metric '<name>' is not present in results` | Metric typo or unsupported metric | Use a supported metric like `sharpe_ratio` |
 | `No trial satisfies the constraints` | All trials filtered out by `--min-trades` / `--max-drawdown` | Loosen constraints |
+
+---
+
+## alpha-forge optimize clean
+
+Tidy up the `optimize_*.json` files that accumulate under `config.report.output_path` (default `data/results/`) by age / strategy / generation and delete them. This cleanup command prevents result files from growing without bound during long-running loops such as `/explore-strategies --runs 0`.
+
+### Syntax
+
+```bash
+alpha-forge optimize clean [OPTIONS]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--older-than` | option | - | Delete results older than the given number of days (mtime, `30d` / `30` format) |
+| `--strategy` | option | - | Target only a specific strategy's result files. Resolved by the `strategy` field inside each JSON (falls back to the filename when missing) |
+| `--keep` | int (≥1) | - | Keep the latest N files (mtime descending) per strategy and delete older ones |
+| `--dry-run` | flag | false | List the files that would be deleted and exit without deleting |
+| `--yes` / `-y` | flag | false | Skip the confirmation prompt and delete |
+| `--json` | flag | false | Emit the result as JSON (`{removed: [...], failed: [...], count, dry_run}`) |
+
+- If none of the filters (`--older-than` / `--strategy` / `--keep`) are given, the command stops with exit code `2` to **prevent accidental wholesale deletion**. Multiple conditions are combined with AND.
+- `--keep` retains the latest N files **by mtime (modification time), not by metric**.
+- Because this is a destructive operation, in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) it stops with exit code `2` unless `--yes` is given. `--yes` is also required when running with `--json`.
+
+### Examples
+
+```bash
+# Delete results older than 30 days (preview first)
+alpha-forge optimize clean --older-than 30d --dry-run
+
+# Keep only the latest 5 results per strategy and delete the rest (non-interactive)
+alpha-forge optimize clean --keep 5 --yes
+```
 
 ---
 

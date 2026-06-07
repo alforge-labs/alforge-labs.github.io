@@ -148,3 +148,53 @@ alpha-forge pine verify --strategy spy_sma_v1 \
 検証ガイドの詳細は [TradingView との Pine Script 連携](../guides/tradingview-pine-integration.md) を参照してください。
 
 ---
+
+## alpha-forge pine list
+
+`config.pinescript.output_path`（既定 `output/pinescript/`）配下に生成済みの `*.pine` を一覧表示する **read-only** コマンドです。生成物の管理（R/D）を補完します。Trial プランでも利用できます。
+
+```bash
+alpha-forge pine list [--json]
+```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力（`[{strategy_id, file, size_bytes, mtime}, ...]`） |
+
+各 `.pine` の `strategy_id` / ファイル / サイズ / 更新日時を表示します。
+
+## alpha-forge pine delete
+
+指定 `strategy_id` の生成済み Pine Script（`.pine`）を 1 件削除します。
+
+```bash
+alpha-forge pine delete <STRATEGY_ID> [--yes]
+```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `STRATEGY_ID` | 引数（必須） | - | 削除対象の戦略 ID |
+| `--yes` / `-y` | フラグ | false | 確認プロンプトをスキップして削除 |
+
+- 対象ファイルが存在しない場合は終了コード `1`（not found）。
+- 破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止します。
+
+## alpha-forge pine clean
+
+`config.pinescript.output_path` 配下の `*.pine` を期間（mtime 基準）で整理して削除します。
+
+```bash
+alpha-forge pine clean [OPTIONS]
+```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--older-than` | オプション | - | mtime が指定日数より古い `.pine` を削除（`30d` / `30` 書式） |
+| `--dry-run` | フラグ | false | 実際には削除せず、削除対象一覧を表示して終了 |
+| `--yes` / `-y` | フラグ | false | 確認プロンプトをスキップして削除 |
+| `--json` | フラグ | false | 結果を JSON で出力（`{removed: [...], failed: [...], count, dry_run}`） |
+
+- `--older-than` 未指定は **全消し事故防止のため終了コード `2`** で停止します。
+- 破壊的操作のため、非対話環境で `--yes` が無いと終了コード `2`。`--json` 実行時も `--yes` が必須です。
+
+---
