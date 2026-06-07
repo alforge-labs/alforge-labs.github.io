@@ -5,6 +5,7 @@
 #   bash <(curl -sSL https://alforge-labs.github.io/install.sh) --dry-run
 #
 #   # 非対話で symlink 配置先を環境変数で指定（CI / Dockerfile 等向け）
+#   # INSTALL_DIR 指定時は ~/.zshrc 等への PATH 追記をスキップし手動追加を案内する。
 #   INSTALL_DIR=~/.local/bin bash <(curl -sSL https://alforge-labs.github.io/install.sh)
 #   INSTALL_DIR=/opt/forge/bin bash <(curl -sSL https://alforge-labs.github.io/install.sh)
 #
@@ -406,7 +407,13 @@ esac
 if [[ ":${PATH}:" != *":${BIN_DIR}:"* ]]; then
   PATH_LINE="export PATH=\"${BIN_DIR}:\${PATH}\""
 
-  if [ "${DRY_RUN}" = "false" ]; then
+  if [ -n "${INSTALL_DIR_FROM_ENV}" ]; then
+    # INSTALL_DIR を明示した非対話インストール（CI / Dockerfile 等）では
+    # ユーザーの rc を勝手に書き換えない。代わりに手動で PATH へ追加する案内のみ出す。
+    info "$(lang "INSTALL_DIR 指定のため rc への PATH 追記をスキップしました。次の行を PATH に追加してください：" \
+                  "Skipped writing to your shell rc because INSTALL_DIR was specified. Add the following to your PATH:")"
+    echo "    ${PATH_LINE}"
+  elif [ "${DRY_RUN}" = "false" ]; then
     if ! grep -qF "${BIN_DIR}" "${RC}" 2>/dev/null; then
       printf '\n# AlphaForge alpha-forge\n%s\n' "${PATH_LINE}" >> "${RC}"
       ok "$(lang "PATH を ${RC} に追記しました" "Added PATH entry to ${RC}")"
@@ -440,9 +447,19 @@ else
               "Dry run complete. Re-run without --dry-run to actually install.")"
 fi
 
-# ── 9. ライセンス認証の案内（alpha-forge system auth login）────────────
+# ── 9a. すぐ使い始める案内（Trial プラン / getting-started）────────────
+# Whop 認証なしでも Trial プランで即利用できる旨を最初に案内する（getting-started の主訴求）。
 echo ""
-echo "$(lang "次のステップ: ライセンス認証" "Next step: license activation")"
+echo "$(lang "次のステップ: すぐに使い始める" "Next step: start using right away")"
+echo "  $(lang "認証なしの Trial プランでそのまま使い始められます。" \
+                "You can start using it immediately on the no-auth Trial plan.")"
+echo "  $(lang "はじめ方ガイド" "Getting started guide"):"
+echo "      $(lang "https://alforge-labs.github.io/ja/docs/getting-started/" \
+                    "https://alforge-labs.github.io/en/docs/getting-started/")"
+
+# ── 9b. ライセンス認証の案内（alpha-forge system auth login）────────────
+echo ""
+echo "$(lang "有料プランを使う場合: ライセンス認証" "To use a paid plan: license activation")"
 echo "  $(lang "AlphaForge は Whop OAuth でライセンス認証を行います。" \
                 "AlphaForge uses Whop OAuth for license activation.")"
 echo "  $(lang "以下のコマンドを実行するとブラウザが開き、Whop で購入したアカウントで認証できます：" \
@@ -456,8 +473,10 @@ echo "      alpha-forge system auth status"
 # ── 10. シェルへの反映案内 ──────────────────────────────────────
 echo ""
 if [ "${DRY_RUN}" = "false" ]; then
-  # 現在のシェルから PATH を反映するための手順
-  if [[ ":${PATH}:" != *":${BIN_DIR}:"* ]]; then
+  # 現在のシェルから PATH を反映するための手順。
+  # INSTALL_DIR 明示時は rc を書き換えていないので source ${RC} は案内しない
+  # （PATH への追加手順はセクション 7 で既に案内済み）。
+  if [[ ":${PATH}:" != *":${BIN_DIR}:"* ]] && [ -z "${INSTALL_DIR_FROM_ENV}" ]; then
     echo "$(lang "PATH を現在のシェルに反映するには、次のいずれかを実行してください：" \
                   "To apply the new PATH to the current shell, run one of the following:")"
     echo "    source ${RC}"
