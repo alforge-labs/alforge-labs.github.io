@@ -2,7 +2,7 @@
 
 ## Installation & startup
 
-### `vis: command not found`
+### `alpha-vis: command not found`
 
 When installed via `uv tool install`, your shell must include uv's tool directory in `PATH`.
 
@@ -34,7 +34,7 @@ If you have never executed `alpha-forge backtest run`, `backtest_results.db` doe
 ### Port already in use
 
 ```
-[Errno 48] Address already in use: 0.0.0.0:8000
+ERROR:    [Errno 48] error while attempting to bind on address ('127.0.0.1', 8000): address already in use
 ```
 
 Pick another port or stop the conflicting process.

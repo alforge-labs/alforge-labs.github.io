@@ -2,7 +2,7 @@
 
 ## インストール・起動
 
-### `vis: command not found` が出る
+### `alpha-vis: command not found` が出る
 
 `uv tool install` でインストールした場合、シェルの PATH に uv のツールディレクトリが含まれている必要があります。
 
@@ -34,7 +34,7 @@ ls <path>/data/strategies/
 ### ポートが既に使用されている
 
 ```
-[Errno 48] Address already in use: 0.0.0.0:8000
+ERROR:    [Errno 48] error while attempting to bind on address ('127.0.0.1', 8000): address already in use
 ```
 
 別のポートを指定するか、既存プロセスを停止してください。
