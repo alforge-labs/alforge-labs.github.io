@@ -3884,9 +3884,10 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ベストパラメータ: {&#39;fast_period&#39;: 12, &#39;slow_period&#39;: 50}
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>💾 結果ファイル: data/results/optimize_my_v1_20260415_103021.json
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>   次のステップ: alpha-forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>DB 保存: run_id=opt_20260415_103021
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>DB 保存: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 </code></pre></div>
-<p><code>--save</code> を付けた場合、結果 JSON の絶対パスと次のステップ（<code>alpha-forge optimize apply ...</code>）が表示されます（F-401）。</p>
+<p><code>run_id</code> は <code>optimization_runs</code> テーブルに記録される UUID で、<code>opt_&lt;timestamp&gt;</code> 形式ではありません。</p>
+<p><code>--save</code> を付けた場合、結果ファイルのパス（<code>report.output_path</code> 基準。<code>FORGE_CONFIG</code> 経由なら絶対パス、既定設定では cwd 相対）と次のステップ（<code>alpha-forge optimize apply ...</code>）が表示されます（F-401）。</p>
 <p><code>--apply</code> 指定時（<code>my_v1_optimized</code> が未存在の場合は確認なしで作成）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>✅ ベストパラメータを &#39;my_v1_optimized&#39; として保存しました（元戦略 &#39;my_v1&#39; は変更されません）
 </code></pre></div>
@@ -3904,7 +3905,7 @@
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">&quot;sma_slow.length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="p">},</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&quot;param_ranges_source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;saved_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/abs/path/data/results/optimize_my_v1_20260415_103021.json&quot;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;saved_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/results/optimize_my_v1_20260415_103021.json&quot;</span>
 <a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </code></pre></div>
 <table>
@@ -3925,7 +3926,7 @@
 </tr>
 <tr>
 <td><code>saved_path</code></td>
-<td><code>--save</code> 指定時の結果ファイル絶対パス。<code>alpha-forge optimize apply</code> の引数にそのまま渡せる</td>
+<td><code>--save</code> 指定時の結果ファイルパス。<code>report.output_path</code> 基準で、<code>FORGE_CONFIG</code> 経由で起動した場合は絶対パス、既定設定（<code>FORGE_CONFIG</code> 未設定）では cwd 相対パスになります。<code>alpha-forge optimize apply</code> の引数にそのまま渡せます</td>
 </tr>
 </tbody>
 </table>
@@ -4369,6 +4370,10 @@
 <td><code>"oos_trades_zero"</code></td>
 <td>OOS 期間の取引数が 0（シグナルなし）</td>
 </tr>
+<tr>
+<td><code>"oos_trades_insufficient"</code></td>
+<td>OOS 期間の取引数が 1 件以上だが <code>min_oos_trades</code> 未満（<code>min_oos_trades &gt; 1</code> のときのみ。統計的に無効、#319）</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -4730,16 +4735,18 @@
 <a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>Failures: 0
 </code></pre></div>
 <h3 id="top-k">サンプル出力（完了後の Top-K テーブル）<a class="headerlink" href="#top-k" title="Permanent link">&para;</a></h3>
+<p>完了後は Rich 枠付きテーブルとして <code>Top-N by &lt;metric&gt;</code> のタイトルで Top-K が表示されます（戦略名 / シンボル / <code>metric=...</code> の見出し行は付きません）。列は <code>rank</code>、各パラメータキー（<code>&lt;指標id&gt;.&lt;param&gt;</code> 形式）、metric 列、続いて <code>max_drawdown_pct</code> / <code>total_trades</code> / <code>total_return_pct</code>（結果に含まれかつ metric 自身でないもの）です。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Grid size: 1500 trials (chunk_size=100, max_memory_mb=None)
 <a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 <a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>... (Rich ダッシュボード表示中) ...
 <a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>=== Grid Search Top-20: my_v1 / SPY (metric=sharpe_ratio) ===
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>fast_period  slow_period   sharpe_ratio   max_drawdown_pct   n_trades
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>-----------------------------------------------------------------------
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>         12           50           1.45              -16.8         18
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>         14           55           1.41              -17.2         16
-<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>         ...
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>                         Top-20 by sharpe_ratio
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>┏━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>┃ rank ┃ sma_fast.length ┃ sma_slow.length ┃ sharpe_ratio ┃ max_drawdown_pct ┃ total_trades ┃ total_return_pct ┃
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>┡━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>│    1 │              12 │              50 │       1.4500 │         -16.8000 │           18 │          52.3000 │
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>│    2 │              14 │              55 │       1.4100 │         -17.2000 │           16 │          48.1000 │
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>└──────┴─────────────────┴─────────────────┴──────────────┴──────────────────┴──────────────┴──────────────────┘
 </code></pre></div>
 <h3 id="_33">主なエラー<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h3>
 <table>

@@ -3491,18 +3491,20 @@
 </table>
 <hr />
 <h2 id="alpha-forge-journal-list">alpha-forge journal list<a class="headerlink" href="#alpha-forge-journal-list" title="Permanent link">&para;</a></h2>
-<p>List all strategies that have a journal. Walks <code>&lt;strategy_id&gt;.journal.json</code> files under <code>config.journal.journal_path</code>.</p>
+<p>List all strategies that have a journal. Walks the <code>journal_entries</code> table in the SQLite DB (<code>strategies.db</code>) under <code>config.strategies.path</code>.</p>
 <h3 id="synopsis">Synopsis<a class="headerlink" href="#synopsis" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>list
 </code></pre></div>
 <h3 id="arguments-and-options">Arguments and options<a class="headerlink" href="#arguments-and-options" title="Permanent link">&para;</a></h3>
 <p>None.</p>
 <h3 id="sample-output">Sample output<a class="headerlink" href="#sample-output" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>spy_sma_v1                  runs:14   tags: production, validated   verdict: pass
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qqq_hmm_macd_ema_rsi_v1     runs: 8   tags: experimental             verdict: review
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>gc_hmm_macd_ema_v1          runs: 5   tags: -                         verdict: -
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>戦略ID                                  最終実行   実行数   スナップ  タグ
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>spy_sma_v1                   2026-04-15 10:30   14      2  production, validated
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>qqq_hmm_macd_ema_rsi_v1      2026-04-12 18:05    8      1  experimental
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>gc_hmm_macd_ema_v1           2026-04-01 09:20    5      1  -
 </code></pre></div>
-<p>Formatting is delegated to <code>format_journal_list</code> in <code>journal/formatter.py</code>. When no journals exist, an empty result or guidance message is returned.</p>
+<p>Formatting is delegated to <code>format_journal_list</code> in <code>journal/formatter.py</code>. The header labels are emitted in Japanese; columns are strategy ID, last run (timestamp of the most recent run, <code>-</code> when none), run count, snapshot count, and tags. When no journals exist, the message "ジャーナルが登録されている戦略はありません。" is shown.</p>
 <hr />
 <h2 id="alpha-forge-journal-show">alpha-forge journal show<a class="headerlink" href="#alpha-forge-journal-show" title="Permanent link">&para;</a></h2>
 <p>Show a strategy's full history: definition snapshots, run history (backtests / optimizations / ...), tags, notes, and a live summary (when live trading records exist).</p>
@@ -3597,12 +3599,14 @@
 </tbody>
 </table>
 <h3 id="sample-output_2">Sample output<a class="headerlink" href="#sample-output_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>run_id                       type            sharpe   ret%    mdd%   win%   verdict
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>run_20260415103021           optimization      1.45    +52.3   -16.8   50.0   pass
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>run_20260410181522           backtest          0.92    +38.1   -15.6   58.3   review
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>run_20260401092030           backtest          0.78    +28.0   -18.2   45.7   -
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>=== spy_sma_v1 実行一覧 (3件) ===
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>run_id                                   日時           種別 symbol    Return   CAGR    SR Sortino    MDD  Win%    PF   取引  verdict
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>run_20260410181522           2026-04-10 18:15     backtest    SPY    +38.1%  +12.4%  0.92    1.31  -15.6% 58.3% 1.85   24  ✅ pass
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>run_20260401092030           2026-04-01 09:20     backtest    SPY    +28.0%   +9.7%  0.78    1.04  -18.2% 45.7% 1.42   31  🔍 review
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>run_20260415103021           2026-04-15 10:30 optimization    SPY         -       -     -       -       -     -    -    -  -
 </code></pre></div>
-<p>Formatting is delegated to <code>format_runs_table(j, sort_by)</code>.</p>
+<p>Formatting is delegated to <code>format_runs_table(j, sort_by)</code>. The title line and the <code>日時</code> (date) / <code>種別</code> (type) / <code>取引</code> (trades) header labels are emitted in Japanese. Columns are <code>run_id</code> / <code>日時</code> / <code>種別</code> / <code>symbol</code> / <code>Return</code> / <code>CAGR</code> / <code>SR</code> / <code>Sortino</code> / <code>MDD</code> / <code>Win%</code> / <code>PF</code> / <code>取引</code> / <code>verdict</code>. The <code>verdict</code> is shown with an emoji (<code>✅ pass</code> / <code>❌ fail</code> / <code>🔍 review</code> / <code>-</code> when none). For non-<code>backtest</code> types (e.g. <code>optimization</code>), the metric columns render as <code>-</code>.</p>
 <hr />
 <h2 id="alpha-forge-journal-compare">alpha-forge journal compare<a class="headerlink" href="#alpha-forge-journal-compare" title="Permanent link">&para;</a></h2>
 <p>Compare <strong>two run results</strong> of the same strategy side by side.</p>
@@ -3635,17 +3639,24 @@
 </tbody>
 </table>
 <h3 id="sample-output_3">Sample output<a class="headerlink" href="#sample-output_3" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>=== Compare runs of spy_sma_v1 ===
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Metric              run_20260415103021      run_20260410181522
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>type                optimization            backtest
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>sharpe_ratio        1.45                    0.92
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>total_return_pct    +52.3                   +38.1
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>max_drawdown_pct    -16.8                   -15.6
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>win_rate_pct        50.0                    58.3
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>verdict             pass                    review
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>=== spy_sma_v1: 実行比較 ===
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  A: run_20260415103021  (2026-04-15 10:30  SPY)
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  B: run_20260410181522  (2026-04-10 18:15  SPY)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>指標                                  A            B  差分
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>─────────────────────────────────────────────────────────────────
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  総リターン (%)                    52.30        38.10  -14.20
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  CAGR (%)                          16.80        12.40  -4.40
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  シャープレシオ                     1.45         0.92  -0.53
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  ソルティノレシオ                   2.01         1.31  -0.70
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>  最大ドローダウン (%)             -16.80       -15.60  +1.20
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>  勝率 (%)                          50.00        58.30  +8.30
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>  プロフィットファクター             2.10         1.85  -0.25
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>  取引数                            18.00        24.00  +6.00
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  平均保有日数                       3.20         2.80  -0.40
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  露出率 (%)                        62.00        58.00  -4.00
 </code></pre></div>
-<p>Formatting is delegated to <code>format_compare(j, run1, run2)</code>.</p>
+<p>Formatting is delegated to <code>format_compare(j, run1, run2)</code>. The metric labels (<code>指標</code> column) are emitted in Japanese. Columns are <code>指標</code> (metric) / <code>A</code> (first run) / <code>B</code> (second run) / <code>差分</code> (delta = B − A; colored, with max drawdown treated as lower-is-better). There are no <code>type</code> or <code>verdict</code> rows. The compared run IDs, timestamps, and symbols appear in the <code>A:</code> / <code>B:</code> lines right under the header.</p>
 <h3 id="common-errors_1">Common errors<a class="headerlink" href="#common-errors_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3708,9 +3719,9 @@
 <h3 id="sample-output_4">Sample output<a class="headerlink" href="#sample-output_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>✅ Tag &#39;production&#39; added: spy_sma_v1
 </code></pre></div>
-<p>When both flags are given:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>✅ Tag &#39;experimental&#39; removed: spy_sma_v1
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>✅ Tag &#39;production&#39; added: spy_sma_v1
+<p>When both flags are given, they are processed and printed in <strong>add-then-remove order</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>✅ Tag &#39;production&#39; added: spy_sma_v1
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>✅ Tag &#39;experimental&#39; removed: spy_sma_v1
 </code></pre></div>
 <h3 id="common-errors_2">Common errors<a class="headerlink" href="#common-errors_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -3956,7 +3967,7 @@
 <hr />
 <h2 id="common-behavior">Common behavior<a class="headerlink" href="#common-behavior" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Storage location</strong>: <code>config.journal.journal_path / &lt;strategy_id&gt;.journal.json</code></li>
+<li><strong>Storage location</strong>: a SQLite DB (<code>strategies.db</code>) under <code>config.strategies.path</code>. Journals are stored in the <code>journal_entries</code> / <code>journal_runs</code> / <code>journal_snapshots</code> tables (migrated from the legacy <code>&lt;strategy_id&gt;.journal.json</code> files to SQLite in v0.12.0)</li>
 <li><strong>Auto-recording</strong>: With <code>config.journal.auto_record</code> true, <code>alpha-forge strategy save</code> snapshots and <code>alpha-forge optimize run</code> records are added automatically</li>
 <li><strong>Live integration</strong>: <code>LiveStore</code> reads from <code>&lt;journal_path&gt;/../live/</code> and feeds into <code>show</code></li>
 <li><strong><code>FORGE_CONFIG</code></strong>: All paths above are determined by the <code>forge.yaml</code> referenced by the <code>FORGE_CONFIG</code> environment variable</li>

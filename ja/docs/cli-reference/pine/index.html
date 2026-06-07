@@ -1942,7 +1942,7 @@
   <a href="#alpha-forge-pine-verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        alpha-forge pine verify
+        alpha-forge pine verify [有料プラン限定]
       
     </span>
   </a>
@@ -2528,7 +2528,7 @@
   <a href="#alpha-forge-pine-verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        alpha-forge pine verify
+        alpha-forge pine verify [有料プラン限定]
       
     </span>
   </a>
@@ -2556,7 +2556,7 @@
 <p>戦略 JSON と TradingView Pine Script v6 を相互変換します。</p>
 <div class="admonition warning">
 <p class="admonition-title">[有料プラン限定] Pine Script エクスポート</p>
-<p><code>alpha-forge pine generate</code> と <code>alpha-forge pine preview</code> は <strong>有料プラン（Lifetime / Annual / Monthly）でのみ利用できます</strong>。Trial プランで実行すると赤枠 Panel と購入ページ URL（<a href="https://alforgelabs.com/en/index.html#pricing">https://alforgelabs.com/en/index.html#pricing</a>）が表示され、終了コード <code>1</code> で完全停止します。ファイル出力も標準出力もされません。<code>alpha-forge pine import</code>（インポート機能）は対象外で、Trial プランでも継続利用できます。詳しくは <a href="../../guides/trial-limits/">Trial 制限</a> を参照してください。</p>
+<p><code>alpha-forge pine generate</code>・<code>alpha-forge pine preview</code>・<code>alpha-forge pine verify</code> は <strong>有料プラン（Lifetime / Annual / Monthly）でのみ利用できます</strong>。Trial プランで実行すると赤枠 Panel と購入ページ URL（<a href="https://alforgelabs.com/en/index.html#pricing">https://alforgelabs.com/en/index.html#pricing</a>）が表示され、終了コード <code>1</code> で完全停止します。ファイル出力も標準出力もされません。<code>alpha-forge pine import</code>（インポート機能）は対象外で、Trial プランでも継続利用できます。詳しくは <a href="../../guides/trial-limits/">Trial 制限</a> を参照してください。</p>
 </div>
 <h2 id="alpha-forge-pine-generate">alpha-forge pine generate <code>[有料プラン限定]</code><a class="headerlink" href="#alpha-forge-pine-generate" title="Permanent link">&para;</a></h2>
 <p>戦略定義から Pine Script を生成し、<code>config.pinescript.output_path / &lt;strategy_id&gt;.pine</code> に保存します。<strong>有料プラン（Lifetime / Annual / Monthly）限定</strong>。</p>
@@ -2795,8 +2795,8 @@
 </tbody>
 </table>
 <p>パース失敗時は <code>エラー: Pine Script のパースに失敗しました - &lt;details&gt;</code> を出して標準エラーへ。</p>
-<h2 id="alpha-forge-pine-verify">alpha-forge pine verify<a class="headerlink" href="#alpha-forge-pine-verify" title="Permanent link">&para;</a></h2>
-<p>戦略から生成した Pine Script を <strong>TradingView MCP server</strong> で検証します（issue #523）。コンパイルチェックに加えて、Strategy Tester の集計値や個別トレードを alpha-forge のバックテスト結果と突き合わせて差異を検出できます。</p>
+<h2 id="alpha-forge-pine-verify">alpha-forge pine verify <code>[有料プラン限定]</code><a class="headerlink" href="#alpha-forge-pine-verify" title="Permanent link">&para;</a></h2>
+<p>戦略から生成した Pine Script を <strong>TradingView MCP server</strong> で検証します（issue #523）。コンパイルチェックに加えて、Strategy Tester の集計値や個別トレードを alpha-forge のバックテスト結果と突き合わせて差異を検出できます。<strong>有料プラン（Lifetime / Annual / Monthly）限定</strong>で、内部で Pine Script を生成するため Trial プランで実行すると generate / preview と同じ赤枠 Panel が表示され、終了コード <code>1</code> で停止します（<code>--check-mode</code> の判定に到達する前に paywall が発火します）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--check-mode<span class="w"> </span>&lt;MODE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server<span class="w"> </span>&lt;CMD&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server-flavor<span class="w"> </span>&lt;tradesdontlie<span class="p">|</span>vinicius&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <table>

@@ -2189,7 +2189,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        オプション
+        引数
       
     </span>
   </a>
@@ -2198,6 +2198,17 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        オプション
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         作成されるディレクトリ
@@ -2219,7 +2230,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         サンプル出力
@@ -2682,7 +2693,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        オプション
+        引数
       
     </span>
   </a>
@@ -2691,6 +2702,17 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        オプション
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         作成されるディレクトリ
@@ -2712,7 +2734,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         サンプル出力
@@ -2801,6 +2823,10 @@
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  実行: alpha-forge system auth login
 </code></pre></div>
 <p>開発スキップ環境変数（<code>ALPHA_FORGE_DEV_SKIP_LICENSE=1</code>）が有効な場合は <code>[AlphaForge] 開発スキップ中（EULA/認証は未完了）</code> を表示します。</p>
+<div class="admonition note">
+<p class="admonition-title"><code>ALPHA_FORGE_DEV_SKIP_LICENSE</code> はソース実行限定</p>
+<p>この開発スキップ表示は <strong>ソース実行（<code>uv run</code> など、<code>pyproject.toml</code> が存在する開発ツリー）でのみ有効</strong>です。配布バイナリ（リリース版）では <code>ALPHA_FORGE_DEV_SKIP_LICENSE=1</code> を設定しても常に無効となり、上記の <code>開発スキップ中</code> は表示されず、未認証時は通常どおり <code>[AlphaForge] ログイン情報がありません。</code> が表示されます（意図的な設計）。</p>
+</div>
 <h2 id="alpha-forge-system-auth-check-op">alpha-forge system auth check op<a class="headerlink" href="#alpha-forge-system-auth-check-op" title="Permanent link">&para;</a></h2>
 <p>1Password CLI（<code>op</code>）のセッション有効性を検証します。<code>.env.op</code> を併用するチームの CI フックで使用するためのもの（issue #411）。詳細は実装コメントを参照。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>check<span class="w"> </span>op<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
@@ -2810,9 +2836,28 @@
 <h2 id="alpha-forge-system-init">alpha-forge system init<a class="headerlink" href="#alpha-forge-system-init" title="Permanent link">&para;</a></h2>
 <p>作業ディレクトリを初期化します。<code>forge.yaml</code>、データディレクトリ、ドキュメント、AI アシスタント統合ファイルを作成。</p>
 <h2 id="_1">構文<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>DIRECTORY<span class="o">]</span>
 </code></pre></div>
-<h2 id="_2">オプション<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_2">引数<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DIRECTORY</code></td>
+<td>引数（任意）</td>
+<td>カレントディレクトリ</td>
+<td>指定したディレクトリを作成し、そこへ初期化ファイル一式を展開する</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">オプション<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2830,6 +2875,12 @@
 <td>既存ファイルを確認なしで上書き</td>
 </tr>
 <tr>
+<td><code>--yes</code> / <code>-y</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>展開先の確認プロンプトをスキップ（CI・AI エージェント等の非対話実行向け）</td>
+</tr>
+<tr>
 <td><code>--no-claude</code></td>
 <td>フラグ</td>
 <td>false</td>
@@ -2843,7 +2894,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_3">作成されるディレクトリ<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">作成されるディレクトリ<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>data/historical/</code>、<code>data/strategies/</code>、<code>data/results/</code>、<code>data/journal/</code>、<code>data/ideas/</code>、<code>output/pinescript/</code></li>
 </ul>
@@ -2870,7 +2921,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_4">サンプル出力<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">サンプル出力<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>AlphaForge: 作業ディレクトリを初期化します...
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>[1/4] 設定ファイル

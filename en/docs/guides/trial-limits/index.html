@@ -665,10 +665,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview" class="md-nav__link">
+  <a href="#pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview-alpha-forge-pine-verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Pine Script export (alpha-forge pine generate / alpha-forge pine preview)
+        Pine Script export (alpha-forge pine generate / alpha-forge pine preview / alpha-forge pine verify)
       
     </span>
   </a>
@@ -2627,10 +2627,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview" class="md-nav__link">
+  <a href="#pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview-alpha-forge-pine-verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Pine Script export (alpha-forge pine generate / alpha-forge pine preview)
+        Pine Script export (alpha-forge pine generate / alpha-forge pine preview / alpha-forge pine verify)
       
     </span>
   </a>
@@ -2706,7 +2706,7 @@
 <li><strong>Data acquisition</strong>: <code>alpha-forge data fetch</code> / <code>alpha-forge data update</code> / <code>alpha-forge pine generate --with-training-data</code> / automatic external symbol fetching by strategies (<code>merge_external_symbols</code>)</li>
 <li><strong>Evaluation engine entry</strong>: <code>alpha-forge backtest run</code> / <code>alpha-forge optimize</code> (<code>run</code> / <code>grid</code> / <code>walk-forward</code> / <code>cross-symbol</code>)</li>
 <li><strong>Optimization trial count</strong>: <code>alpha-forge optimize run</code> / <code>cross-symbol</code> / <code>portfolio</code> / <code>multi-portfolio</code> / <code>walk-forward</code> / <code>grid</code></li>
-<li><strong>Pine Script export (hard block)</strong>: <code>alpha-forge pine generate</code> / <code>alpha-forge pine preview</code> (<code>alpha-forge pine import</code> is unaffected)</li>
+<li><strong>Pine Script export (hard block)</strong>: <code>alpha-forge pine generate</code> / <code>alpha-forge pine preview</code> / <code>alpha-forge pine verify</code> (<code>alpha-forge pine import</code> is unaffected)</li>
 </ul>
 <p>Both fetch and evaluation share <strong>2023-12-31</strong> as the cap, and the optimization commands share <strong>50 trials</strong> as the cap. Pine Script export is <strong>fully blocked</strong> on the Trial plan.</p>
 </div>
@@ -2771,7 +2771,7 @@
 <li>When the <code>end</code> argument (explicit or the <code>today</code> fallback) is later than 2023-12-31, the fetch is forcibly capped at 2023-12-31.</li>
 <li><code>alpha-forge data update</code> skips items whose latest cached date is 2023-12-31 or later, citing the Trial plan limit.</li>
 <li>Regular CLI output shows a yellow Panel warning along with an upgrade prompt to a paid plan (Lifetime / Annual / Monthly).</li>
-<li><code>--json</code> output includes a structured <code>freemium_limit_notices</code> field (<code>code = "free_tier_data_fetch_clipped"</code>).</li>
+<li><code>alpha-forge data fetch</code> / <code>data update</code> do not have a <code>--json</code> option. The data-fetch limit (<code>code = "free_tier_data_fetch_clipped"</code>) is surfaced only as the yellow Panel warning; there is no <code>freemium_limit_notices</code> JSON output path for it. Structured notices are only available via the <code>--json</code> output of the evaluation engine entry points (<code>backtest run</code> / <code>optimize</code> family).</li>
 </ul>
 <h4 id="evaluation-engine-entry-alpha-forge-backtest-run-alpha-forge-optimize">Evaluation engine entry (<code>alpha-forge backtest run</code> / <code>alpha-forge optimize</code>)<a class="headerlink" href="#evaluation-engine-entry-alpha-forge-backtest-run-alpha-forge-optimize" title="Permanent link">&para;</a></h4>
 <ul>
@@ -2779,29 +2779,17 @@
 <li>Regular CLI output shows a yellow Panel warning.</li>
 <li><code>--json</code> output uses <code>code = "free_tier_evaluation_date_clipped"</code>.</li>
 </ul>
-<p>Example <code>freemium_limit_notices</code> from the fetch path:
+<p>Example <code>freemium_limit_notices</code> from the evaluation path (<code>--json</code> output of <code>backtest run</code> / <code>optimize</code> family):
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;freemium_limit_notices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;free_tier_data_fetch_clipped&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Trial plan only fetches data up to 2023-12-31. Purchase a paid plan (Lifetime / Annual / Monthly) to fetch newer data.&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;original_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;free_tier_evaluation_date_clipped&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Trial plan only evaluates data up to 2023-12-31. Purchase a paid plan (Lifetime / Annual / Monthly) to evaluate newer data.&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;original_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-15&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;applied_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-12-31&quot;</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="p">]</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
-</code></pre></div></p>
-<p>Example <code>freemium_limit_notices</code> from the evaluation path:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;freemium_limit_notices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;free_tier_evaluation_date_clipped&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Trial plan only evaluates data up to 2023-12-31. Purchase a paid plan (Lifetime / Annual / Monthly) to evaluate newer data.&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">&quot;original_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-15&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">&quot;applied_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-12-31&quot;</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
 </code></pre></div></p>
 <h4 id="optimization-trial-count-alpha-forge-optimize-family">Optimization trial count (<code>alpha-forge optimize</code> family)<a class="headerlink" href="#optimization-trial-count-alpha-forge-optimize-family" title="Permanent link">&para;</a></h4>
 <ul>
@@ -2814,45 +2802,34 @@
 <li><code>--json</code> output uses <code>code = "free_tier_optimization_trial_capped"</code>. For <code>grid</code>, the JSON additionally carries <code>total_trials</code> (combinatorial total) and <code>executed_trials</code> (executed = 50).</li>
 </ul>
 <p>Example <code>freemium_limit_notices</code> for the optimization trial cap:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;freemium_limit_notices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;free_tier_optimization_trial_capped&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Trial plan caps optimization trials at 50. Purchase a paid plan (Lifetime / Annual / Monthly) for unlimited optimization.&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">&quot;original_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">&quot;applied_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;freemium_limit_notices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;free_tier_optimization_trial_capped&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Trial plan caps optimization trials at 50. Purchase a paid plan (Lifetime / Annual / Monthly) for unlimited optimization.&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">&quot;original_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">&quot;applied_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
 </code></pre></div></p>
-<h4 id="pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview">Pine Script export (<code>alpha-forge pine generate</code> / <code>alpha-forge pine preview</code>)<a class="headerlink" href="#pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview" title="Permanent link">&para;</a></h4>
+<h4 id="pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview-alpha-forge-pine-verify">Pine Script export (<code>alpha-forge pine generate</code> / <code>alpha-forge pine preview</code> / <code>alpha-forge pine verify</code>)<a class="headerlink" href="#pine-script-export-alpha-forge-pine-generate-alpha-forge-pine-preview-alpha-forge-pine-verify" title="Permanent link">&para;</a></h4>
 <ul>
-<li>The Trial plan <strong>hard-blocks</strong> Pine Script export. Both commands stop immediately—no file output, no stdout payload.</li>
+<li>The Trial plan <strong>hard-blocks</strong> Pine Script export. These commands stop immediately—no file output, no stdout payload. <code>alpha-forge pine verify</code> is blocked as well because it generates Pine Script internally.</li>
 <li>The exit code is <code>1</code>, accompanied by a red Panel and the purchase URL (<a href="https://alforgelabs.com/en/index.html#pricing">https://alforgelabs.com/en/index.html#pricing</a>).</li>
-<li>The structured notice <code>freemium_limit_notices</code> uses <code>code = "free_tier_pine_export_blocked"</code> (<code>original_value</code> / <code>applied_value</code> are <code>null</code>).</li>
+<li>Internally the structured notice uses <code>code = "free_tier_pine_export_blocked"</code> (<code>original_value</code> / <code>applied_value</code> are <code>null</code>), but <code>alpha-forge pine generate</code> / <code>pine preview</code> have no <code>--json</code> option, so the block is surfaced only via the red Panel and exit code <code>1</code>—there is no <code>freemium_limit_notices</code> JSON output.</li>
 <li><code>alpha-forge pine import</code> is an import-only feature and remains available on the Trial plan.</li>
 </ul>
 <p>Example Pine Script hard-block display (Trial plan / CLI):
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>╭────────── 🔒 Premium-only feature ──────────╮
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│ Pine Script export is available for paid    │
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│ plans only (Lifetime / Annual / Monthly).   │
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│ Upgrade your license to seamlessly run on   │
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│ TradingView.                                 │
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│ Upgrade: https://alforgelabs.com/en/index.html#pricing │
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>╰──────────────────────────────────────────────╯
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>╭────────── 🔒 Premium-only feature ──────────╮
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│ Pine Script export is available for paid    │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│ plans only (Lifetime / Annual / Monthly).   │
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ Upgrade your license to seamlessly run on   │
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ TradingView.                                 │
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ Upgrade: https://alforgelabs.com/en/index.html#pricing │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>╰──────────────────────────────────────────────╯
 </code></pre></div></p>
-<p>Example <code>freemium_limit_notices</code> for Pine Script hard block:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;freemium_limit_notices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;free_tier_pine_export_blocked&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Pine Script export is available for paid plans only (Lifetime / Annual / Monthly).&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">&quot;original_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">      </span><span class="nt">&quot;applied_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">}</span>
-</code></pre></div></p>
+<p>(The Pine hard block is surfaced only via the red Panel and exit code <code>1</code> shown above; there is no <code>freemium_limit_notices</code> JSON output.)</p>
 <h3 id="paid-plans-lifetime-annual-monthly">Paid plans (Lifetime / Annual / Monthly)<a class="headerlink" href="#paid-plans-lifetime-annual-monthly" title="Permanent link">&para;</a></h3>
 <p>No limits trigger. The latest data, unlimited optimization trials, and full Pine Script export are all available. The output does not carry <code>freemium_limit_notices</code> warnings. Lifetime, Annual, and Monthly all unlock the same feature set.</p>
 <h2 id="how-to-remove-the-limits">How to remove the limits<a class="headerlink" href="#how-to-remove-the-limits" title="Permanent link">&para;</a></h2>

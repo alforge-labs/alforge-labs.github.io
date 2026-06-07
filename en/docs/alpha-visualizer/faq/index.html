@@ -1490,10 +1490,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#vis-command-not-found" class="md-nav__link">
+  <a href="#alpha-vis-command-not-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vis: command not found
+        alpha-vis: command not found
       
     </span>
   </a>
@@ -2702,10 +2702,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#vis-command-not-found" class="md-nav__link">
+  <a href="#alpha-vis-command-not-found" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vis: command not found
+        alpha-vis: command not found
       
     </span>
   </a>
@@ -2958,7 +2958,7 @@
 
 <h1 id="faq-troubleshooting">FAQ &amp; Troubleshooting<a class="headerlink" href="#faq-troubleshooting" title="Permanent link">&para;</a></h1>
 <h2 id="installation-startup">Installation &amp; startup<a class="headerlink" href="#installation-startup" title="Permanent link">&para;</a></h2>
-<h3 id="vis-command-not-found"><code>vis: command not found</code><a class="headerlink" href="#vis-command-not-found" title="Permanent link">&para;</a></h3>
+<h3 id="alpha-vis-command-not-found"><code>alpha-vis: command not found</code><a class="headerlink" href="#alpha-vis-command-not-found" title="Permanent link">&para;</a></h3>
 <p>When installed via <code>uv tool install</code>, your shell must include uv's tool directory in <code>PATH</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Check uv tool dir</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>dir
@@ -2979,7 +2979,7 @@
 </code></pre></div>
 <p>If you have never executed <code>alpha-forge backtest run</code>, <code>backtest_results.db</code> does not exist yet. Run at least one backtest before launching <code>alpha-vis serve</code>.</p>
 <h3 id="port-already-in-use">Port already in use<a class="headerlink" href="#port-already-in-use" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Errno 48] Address already in use: 0.0.0.0:8000
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ERROR:    [Errno 48] error while attempting to bind on address (&#39;127.0.0.1&#39;, 8000): address already in use
 </code></pre></div>
 <p>Pick another port or stop the conflicting process.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--port<span class="w"> </span><span class="m">9000</span>

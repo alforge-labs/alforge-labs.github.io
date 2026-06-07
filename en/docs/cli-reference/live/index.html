@@ -3894,12 +3894,11 @@
 </tbody>
 </table>
 <h3 id="sample-output_1">Sample output<a class="headerlink" href="#sample-output_1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>timestamp           strategy_id     broker      event_type   symbol   side   qty   price
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>2026-04-15 09:31    spy_sma_v1      ibkr        fill         SPY      long   100   452.30
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>2026-04-15 14:02    spy_sma_v1      ibkr        close        SPY      long   100   458.12
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>=== live events ===
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>2026-04-15T09:31:00+00:00 | fill | spy_sma_v1 | SPY | buy | filled | sig_0042
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>2026-04-15T14:02:00+00:00 | trade_closed | spy_sma_v1 | SPY | sell | closed | sig_0042
 </code></pre></div>
-<p>Formatting is delegated to <code>format_live_events</code>.</p>
+<p>Formatting is delegated to <code>format_live_events</code>. Each row is pipe (<code>|</code>) delimited in the order <code>timestamp</code> (ISO format) / <code>event_type</code> / <code>strategy_id</code> / <code>symbol</code> (<code>ticker</code>) / <code>side</code> (<code>action</code>) / <code>status</code> / <code>signal_id</code>. There are no <code>broker</code> / <code>qty</code> / <code>price</code> columns. You can still filter with <code>--broker</code>, but the <code>broker</code> value itself is not shown in the rows.</p>
 <hr />
 <h2 id="alpha-forge-live-convert-check">alpha-forge live convert-check<a class="headerlink" href="#alpha-forge-live-convert-check" title="Permanent link">&para;</a></h2>
 <p>Check whether raw events can be converted to trade records (whether <code>fill</code> and <code>close</code> pairs are matched, etc.). Recommended as a pre-step to <code>import-events</code>.</p>
@@ -3926,16 +3925,30 @@
 </tbody>
 </table>
 <h3 id="sample-output_2">Sample output<a class="headerlink" href="#sample-output_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>=== Conversion readiness ===
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>strategy_id              fill_events   close_events   matched   pending   status
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>spy_sma_v1                        18             16        16         2   partial
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>qqq_hmm_macd_ema_rsi_v1            8              8         8         0   ready
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>broken_v1                          5              0         0         5   missing close events
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>=== event conversion report ===
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>strategy_id                     : spy_sma_v1
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>total_events                    : 96
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>total_signals                   : 20
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>total_orders                    : 18
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>total_fills                     : 16
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>total_trade_closed              : 16
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>accepted_orders                 : 18
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>failed_orders                   : 0
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>live_events                     : 80
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>paper_events                    : 16
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>signals_without_orders          : 2
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>accepted_missing_strategy_meta  : 0
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>accepted_missing_snapshot_id    : 0
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>accepted_missing_fill_data      : 2
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>accepted_missing_close_data     : 2
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>fill_events_missing_trade_id    : 0
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>trade_closed_missing_pnl        : 0
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>conversion_ready                : yes
 </code></pre></div>
-<p>Formatting is delegated to <code>format_event_conversion_report</code>.</p>
+<p>Formatting is delegated to <code>format_event_conversion_report</code> (the <code>EventConversionReport</code> model). The header is <code>=== event conversion report ===</code> and each field is printed as <code>key : value</code>. <code>conversion_ready</code> is <code>yes</code> / <code>no</code>. When there are conversion blockers, a <code>blockers :</code> section and the list follow at the end. There are no <code>matched</code> / <code>pending</code> / <code>status</code> (ready/partial/missing) columns.</p>
 <hr />
 <h2 id="alpha-forge-live-import-events">alpha-forge live import-events<a class="headerlink" href="#alpha-forge-live-import-events" title="Permanent link">&para;</a></h2>
-<p>Generate trade records from <code>fill</code> / <code>close</code> events and save them as <code>&lt;live_path&gt;/trades/&lt;strategy_id&gt;.json</code> and <code>&lt;live_path&gt;/summaries/&lt;strategy_id&gt;.json</code>.</p>
+<p>Generate trade records from <code>fill</code> / <code>close</code> events and save them to a SQLite DB (<code>backtest_results.db</code> under <code>config.report.output_path</code>). Trades and summaries were migrated from JSON files to SQLite in v0.12.0; no JSON is written to <code>&lt;live_path&gt;/trades/</code> or <code>&lt;live_path&gt;/summaries/</code>.</p>
 <h3 id="synopsis_3">Synopsis<a class="headerlink" href="#synopsis_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;STRATEGY_ID&gt;
 </code></pre></div>
@@ -3962,15 +3975,15 @@
 <ul>
 <li>Event logs for the <code>strategy_id</code> must exist under <code>&lt;live_path&gt;/events/</code> (fetched via <code>alpha-forge live sync-events</code>, or placed manually)</li>
 <li>Each entry must have a <strong>paired <code>fill</code> event and <code>close</code> event</strong></li>
-<li>Verify with <a href="#alpha-forge-live-convert-check"><code>alpha-forge live convert-check</code></a> first that the status is <code>ready</code> (or <code>partial</code> within tolerance)</li>
-<li>Running once per <code>strategy_id</code> produces <code>&lt;strategy_id&gt;.json</code> (re-runs overwrite)</li>
+<li>Verify with <a href="#alpha-forge-live-convert-check"><code>alpha-forge live convert-check</code></a> first that <code>conversion_ready : yes</code></li>
+<li>Running once per <code>strategy_id</code> persists the trade records to SQLite (re-runs overwrite)</li>
 </ul>
 <h3 id="sample-output_3">Sample output<a class="headerlink" href="#sample-output_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>imported_trades   : 16
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>strategy_id       : spy_sma_v1
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>trades_file       : data/live/trades/spy_sma_v1.json
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>summary_file      : data/live/summaries/spy_sma_v1.json
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>db_path           : data/results/backtest_results.db
 </code></pre></div>
+<p>Only three fields are printed: <code>imported_trades</code> / <code>strategy_id</code> / <code>db_path</code> (no <code>trades_file</code> / <code>summary_file</code>). The trade records are stored in the SQLite DB referenced by <code>db_path</code>.</p>
 <h3 id="common-errors">Common errors<a class="headerlink" href="#common-errors" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4033,12 +4046,13 @@
 </table>
 <p>Trades are sorted newest-first (<code>entry_at</code> descending).</p>
 <h3 id="sample-output_4">Sample output<a class="headerlink" href="#sample-output_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>trade_id  side    entry_at              exit_at               qty   pnl_pct   exit_reason
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>t_0042    long    2026-04-15 09:31      2026-04-15 14:02      100   +1.29%    take_profit
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>t_0041    long    2026-04-12 10:05      2026-04-12 15:48      100   -0.42%    stop_loss
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>=== live trades ===
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>entry_at             symbol     side        qty        entry         exit    net_pnl     ret%   hold_m exit_reason
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>2026-04-15 09:31     SPY        long     100.00     452.3000     458.1200    +582.00   +1.29%      271 take_profit
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>2026-04-12 10:05     SPY        long     100.00     451.0000     449.1000    -190.00   -0.42%      343 stop_loss
 </code></pre></div>
-<p>Formatting is delegated to <code>format_live_trades</code>.</p>
+<p>Formatting is delegated to <code>format_live_trades</code>. Columns are <code>entry_at</code> / <code>symbol</code> / <code>side</code> / <code>qty</code> / <code>entry</code> / <code>exit</code> / <code>net_pnl</code> / <code>ret%</code> / <code>hold_m</code> (holding minutes) / <code>exit_reason</code>. There are no <code>trade_id</code> or <code>exit_at</code> columns.</p>
 <h3 id="common-errors_1">Common errors<a class="headerlink" href="#common-errors_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4051,7 +4065,7 @@
 <tbody>
 <tr>
 <td><code>No live trade records found: &lt;id&gt;</code></td>
-<td><code>&lt;live_path&gt;/trades/&lt;id&gt;.json</code> does not exist</td>
+<td>No trade records for the strategy in SQLite</td>
 <td>Generate via <code>alpha-forge live import-events &lt;id&gt;</code></td>
 </tr>
 </tbody>
@@ -4082,17 +4096,23 @@
 </tbody>
 </table>
 <h3 id="sample-output_5">Sample output<a class="headerlink" href="#sample-output_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>=== spy_sma_v1 / Live Summary ===
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>trades            : 16
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>win_rate          : 56.3%
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>total_pnl_pct     : +8.42%
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>avg_win_pct       : +1.85%
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>avg_loss_pct      : -1.12%
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>max_drawdown_pct  : -4.20%
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>sharpe_ratio      : 1.32
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>period            : 2026-03-01 → 2026-04-15
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>=== spy_sma_v1 live summary ===
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>version          : v1.1.0
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>snapshot_id      : snap_20260415
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>broker           : ibkr
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>symbols          : SPY
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>total_trades     : 16
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>win_rate_pct     : 56.25
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>gross_pnl        : 1280.00
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>net_pnl          : 1184.50
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>profit_factor    : 1.92
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>avg_win          : 185.30
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>avg_loss         : -112.40
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>avg_slippage_bps : 1.80
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>total_commission : 95.50
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>max_drawdown_pct : -4.20
 </code></pre></div>
-<p>Formatting is delegated to <code>format_live_summary</code>.</p>
+<p>Formatting is delegated to <code>format_live_summary</code> (the <code>StrategyLiveSummary</code> model). Fields are <code>version</code> / <code>snapshot_id</code> / <code>broker</code> / <code>symbols</code> / <code>total_trades</code> / <code>win_rate_pct</code> / <code>gross_pnl</code> / <code>net_pnl</code> / <code>profit_factor</code> / <code>avg_win</code> / <code>avg_loss</code> / <code>avg_slippage_bps</code> / <code>total_commission</code> / <code>max_drawdown_pct</code>. There is no <code>total_pnl_pct</code>, <code>sharpe_ratio</code>, or <code>period</code>. <code>avg_win</code> / <code>avg_loss</code> are absolute amounts (P/L in the position currency), not percentages.</p>
 <h3 id="common-errors_2">Common errors<a class="headerlink" href="#common-errors_2" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4136,16 +4156,23 @@
 </tbody>
 </table>
 <h3 id="sample-output_6">Sample output<a class="headerlink" href="#sample-output_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>=== spy_sma_v1: Backtest vs Live ===
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>Metric             Backtest (run_20260410)    Live (2026-03-01 → 2026-04-15)    Diff
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>trades             18                          16                                 -2
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>win_rate_pct       58.3                        56.3                              -2.0
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>total_return_pct   +12.4                       +8.42                             -3.98
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>sharpe_ratio       1.45                        1.32                              -0.13
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>max_drawdown_pct   -3.80                       -4.20                             -0.40
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>=== spy_sma_v1 live vs backtest ===
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>backtest_run     : run_20260410181522
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>backtest_symbol  : SPY
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>live_symbols     : SPY
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>snapshot_id      : snap_20260415
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>metric                 backtest         live         delta
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>──────────────────────────────────────────────────────────────
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>total_trades                 18           16           -2
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>win_rate_pct              58.30%       56.25%       -2.05%
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>profit_factor              2.10         1.92        -0.18
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>total_return_pct         +12.40%            -            -
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>max_drawdown_pct          -3.80%       -4.20%       -0.40%
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>net_pnl                       -      1184.50            -
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>avg_slippage_bps              -         1.80            -
 </code></pre></div>
-<p>Formatting is delegated to <code>format_live_compare</code>.</p>
+<p>Formatting is delegated to <code>format_live_compare</code>. The header is <code>=== &lt;id&gt; live vs backtest ===</code>, followed by <code>backtest_run</code> / <code>backtest_symbol</code> / <code>live_symbols</code> / <code>snapshot_id</code> metadata lines and then a <code>metric</code> / <code>backtest</code> / <code>live</code> / <code>delta</code> table. The rows are <code>total_trades</code> / <code>win_rate_pct</code> / <code>profit_factor</code> / <code>total_return_pct</code> / <code>max_drawdown_pct</code> / <code>net_pnl</code> / <code>avg_slippage_bps</code>. There is no <code>sharpe_ratio</code> row. Metrics available only on the backtest side (<code>total_return_pct</code>) or only on the live side (<code>net_pnl</code> / <code>avg_slippage_bps</code>) render <code>-</code> on the missing side.</p>
 <h3 id="common-errors_3">Common errors<a class="headerlink" href="#common-errors_3" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4197,23 +4224,25 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>=== live trading doctor ===
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>live_path       : data/live
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>events_path     : data/live/events
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>trades_path     : data/live/trades
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>summaries_path  : data/live/summaries
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>events_exists   : yes
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>event_files     : 24
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>hint            : pass a strategy_id to validate trades/summary readiness
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>db_path         : data/results/backtest_results.db
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>events_exists   : yes
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>event_files     : 24
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>hint            : pass a strategy_id to validate trades/summary readiness
 </code></pre></div>
+<p>There are no <code>trades_path</code> / <code>summaries_path</code> lines. Because trades and summaries are stored in SQLite (the <code>backtest_results.db</code> referenced by <code>db_path</code>), <code>db_path</code> is shown instead.</p>
 <h3 id="sample-output-with-strategy-id">Sample output (with strategy ID)<a class="headerlink" href="#sample-output-with-strategy-id" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>=== live trading doctor ===
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>live_path       : data/live
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>...
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>event_files     : 24
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>strategy_id     : spy_sma_v1
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>trades_exists   : yes
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>summary_exists  : yes
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>rollout_status  : ready
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>events_path     : data/live/events
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>db_path         : data/results/backtest_results.db
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>events_exists   : yes
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>event_files     : 24
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>strategy_id     : spy_sma_v1
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>trades_exists   : yes
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>summary_exists  : yes
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>rollout_status  : ready
 </code></pre></div>
-<p><code>rollout_status</code> is <code>ready</code> when <code>events_exists</code> is true, <code>event_files &gt; 0</code>, and either <code>trades_exists</code> or <code>summary_exists</code> is true; otherwise <code>incomplete</code>.</p>
+<p>When trades exist but the summary has not been built, it is constructed on the spot and a <code>summary_built : yes</code> line is added. <code>rollout_status</code> is <code>ready</code> when <code>events_exists</code> is true, <code>event_files &gt; 0</code>, and either <code>trades_exists</code> or <code>summary_exists</code> is true; otherwise <code>incomplete</code>.</p>
 <hr />
 <h2 id="alpha-forge-live-sync-events">alpha-forge live sync-events<a class="headerlink" href="#alpha-forge-live-sync-events" title="Permanent link">&para;</a></h2>
 <p>Sync event logs from VPS to local via rsync.</p>
@@ -4418,14 +4447,13 @@
 <hr />
 <h2 id="common-behavior">Common behavior<a class="headerlink" href="#common-behavior" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Storage location</strong>: under <code>&lt;journal_path&gt;/../live/</code> (subdirectories <code>events/</code>, <code>trades/</code>, <code>summaries/</code>)</li>
-<li><strong><code>forge.yaml</code></strong>: All paths above are determined by the <code>forge.yaml</code> referenced by the <code>FORGE_CONFIG</code> environment variable</li>
-<li><strong>VPS integration</strong>: <code>sync-events</code> reads the <code>remote.*</code> section of <code>forge.yaml</code></li>
-<li><strong>Detailed specs</strong>: For data model and rollout procedure, see the alpha-forge repo<ul>
-<li><code>alpha-forge/docs/live-trading-data-model.md</code></li>
-<li><code>alpha-forge/docs/live-trading-rollout.md</code></li>
+<li><strong>Storage location</strong>:<ul>
+<li>raw event logs: <code>&lt;journal_path&gt;/../live/events/</code> (JSON on the filesystem)</li>
+<li>trade records / summary: a SQLite DB (<code>backtest_results.db</code> under <code>config.report.output_path</code>). Migrated from JSON files in <code>trades/</code> / <code>summaries/</code> to SQLite in v0.12.0</li>
 </ul>
 </li>
+<li><strong><code>forge.yaml</code></strong>: All paths above are determined by the <code>forge.yaml</code> referenced by the <code>FORGE_CONFIG</code> environment variable</li>
+<li><strong>VPS integration</strong>: <code>sync-events</code> reads the <code>remote.*</code> section of <code>forge.yaml</code></li>
 <li><strong>Exit codes</strong>: <code>0</code> on success; argument errors return Click's <code>2</code>; missing config or records typically <code>1</code></li>
 </ul>
 <hr />

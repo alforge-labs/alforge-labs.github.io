@@ -606,7 +606,7 @@
   <a href="#25-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・任意）
+        ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・必須）
       
     </span>
   </a>
@@ -2712,7 +2712,7 @@
   <a href="#25-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・任意）
+        ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・必須）
       
     </span>
   </a>
@@ -3029,7 +3029,7 @@
 </div>
 <div class="admonition info">
 <p class="admonition-title"><code>alpha-forge system init</code> を必ず実行してください</p>
-<p><code>forge.yaml</code> が無いと戦略の DB 登録先・データ保存先・結果ファイル出力先が確定せず、後段の <code>alpha-forge backtest run</code> が <code>FileNotFoundError</code> で失敗します。クイックスタートでは <code>--force</code> 不要。</p>
+<p><code>forge.yaml</code> が無いとデフォルト設定にフォールバックして <code>data/</code> を自動生成し、戦略・データ未登録の場合は友好的なエラーメッセージで停止します（raw な <code>FileNotFoundError</code> トレースは出ません）。<code>forge.yaml</code> で戦略の DB 登録先・データ保存先・結果ファイル出力先を明示しておくと意図しない場所への展開を避けられるため、クイックスタートでは先に実行しておくことを推奨します。<code>--force</code> は不要です。</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">初回のみ EULA 同意プロンプト <code>[y/n]</code> が表示されます</p>
@@ -3069,16 +3069,14 @@
 <a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="p">}</span>
 </code></pre></div>
-<h3 id="25-1">ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・任意）<a class="headerlink" href="#25-1" title="Permanent link">&para;</a></h3>
-<p>明示的にヒストリカルデータを取得しておくと、後続のバックテストや再実行がオフラインでも安定します（任意ステップですが推奨）。</p>
+<h3 id="25-1">ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・必須）<a class="headerlink" href="#25-1" title="Permanent link">&para;</a></h3>
+<p>次のバックテストに必要なヒストリカルデータを取得します。<code>backtest run</code> は対象シンボルのデータを自動取得しないため、<strong>このステップを先に実行しないと次のバックテストが <code>❌ データが見つかりません: SPY (1d)</code> で失敗します</strong>。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--period<span class="w"> </span>5y
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>✅ SPY (1d) のヒストリカルデータを取得しました: data/historical/SPY_1d.parquet
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>データの取得を開始します: SPY (period=5y, interval=1d)
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>SPY のデータを取得し保存しました (N lines)
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">次ステップの <code>backtest run</code> 内部でも自動取得は走ります</p>
-<p><code>forge.yaml</code> がある状態であれば、次の <code>alpha-forge backtest run</code> は <strong>未取得の場合のみ</strong> データを自動取得します。本ステップでデータを取得済みなら、次の <code>backtest run</code> は取得をスキップして高速に走ります。<code>yfinance</code> 等のオンライン取得に失敗するケース（ネットワーク不調・レート制限）を切り分けて先に解消したい場合は、本ステップを単独で実行してください。</p>
-</div>
+<p>データは <code>data/historical/SPY_1d.parquet</code> に保存されます。<code>yfinance</code> 等のオンライン取得に失敗するケース（ネットワーク不調・レート制限）はこのステップで切り分けられます。</p>
 <h3 id="3-2">ステップ 3 — 戦略を登録してバックテストを実行する（約 2 分）<a class="headerlink" href="#3-2" title="Permanent link">&para;</a></h3>
 <p>ステップ 2 で書いた <code>sma_cross.json</code> を AlphaForge に登録します（戦略 DB に保存）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>save<span class="w"> </span>sma_cross.json
@@ -3096,8 +3094,8 @@
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>--end<span class="w"> </span><span class="m">2023</span>-12-31
 </code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">データの自動取得</p>
-<p><code>forge.yaml</code> がある（= ステップ 2 で <code>alpha-forge system init</code> を実行した）状態であれば、初回実行時に対象シンボルのデータが自動的に取得されます。ステップ 2.5 で先取りで取得済みであれば、ここでの自動取得はスキップされて高速に走ります。失敗した場合はステップ 2.5 を手動で実行してから再試行してください。</p>
+<p class="admonition-title">事前にヒストリカルデータが必要です</p>
+<p><code>backtest run</code> は対象シンボルのデータを自動取得しません。ステップ 2.5 で <code>alpha-forge data fetch SPY --period 5y</code> を済ませていない場合は <code>❌ データが見つかりません: SPY (1d)</code> で停止します。停止したらステップ 2.5 を実行してから再試行してください。</p>
 </div>
 <h3 id="4-3">ステップ 4 — 結果を読む（約 3 分）<a class="headerlink" href="#4-3" title="Permanent link">&para;</a></h3>
 <p>実行が完了すると以下のような出力が表示されます。</p>
@@ -3121,11 +3119,10 @@ yfinance 側のデータ補正・配当再投資ロジックも更新される�
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>SR: 0.85  Sortino: -2.86  Calmar: 0.52
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>MDD: 1.79%  期間: 71日  回復: 154日
 <a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>PF: 4.01  Win%: 35.7%  avg勝: 10.39%  avg負: -1.72%
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)  連勝: 4  連敗: 6
 <a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>勝率CI(90%): 17.8% - 54.8%
 <a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>📊 チャートは `alpha-vis serve` で確認できます（結果ID: sma_cross_qs_report）
 <a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>DB 保存: run_id=&lt;uuid&gt;
-<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>💾 結果ファイル: data/results/optimize_sma_cross_qs_&lt;timestamp&gt;.json  ← --save 指定時のみ
 </code></pre></div>
 <p>主要指標の見方は次のとおりです。指標の詳細な目安は本ページ後半の「結果の見方（詳細）」セクション、全指標一覧は <a href="../cli-reference/">CLI リファレンス</a> を参照してください。</p>
 <table>
@@ -3252,8 +3249,8 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">}</span>
 </code></pre></div>
 <p>省略した場合は alpha-forge が内蔵デフォルト範囲 (<code>sma_fast.length=[5,25]</code> /
-<code>sma_slow.length=[20,60]</code>) を使って探索します（起動時に <code>探索パラメータ ...
-（既定範囲を使用）</code> と表示されます）。明示すれば再現性が高まり、<code>min</code>/<code>max</code>/<code>step</code>
+<code>sma_slow.length=[20,60]</code>) を使って探索します（起動時に
+<code>探索パラメータ（内蔵デフォルト範囲）:</code> と表示されます）。明示すれば再現性が高まり、<code>min</code>/<code>max</code>/<code>step</code>
 を編集すれば探索範囲を自分で制御できます。</p>
 </div>
 <h3 id="_2">ここまでできたら次のステップへ<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
@@ -3303,7 +3300,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">macOS / Linux</label><label for="__tabbed_2_2">Windows</label><label for="__tabbed_2_3">手動インストール</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>ターミナルで以下のコマンドを実行してください。インストーラーが最新バイナリ（<code>forge.dist</code> 一式）を <code>~/.local/share/alpha-forge/</code> に展開し、実行ファイル <code>alpha-forge</code> への symlink を <code>~/.local/bin/forge</code> に作成します。</p>
+<p>ターミナルで以下のコマンドを実行してください。インストーラーが最新バイナリ（<code>forge.dist</code> 一式）を <code>~/.local/share/alpha-forge/</code> に展開し、実行ファイル <code>alpha-forge</code> への symlink を <code>~/.local/bin/alpha-forge</code> に作成します。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 </code></pre></div>
 <p>実行中、デフォルトの <code>~/.local/bin</code>（ユーザー領域・sudo 不要）に加えて、<code>システム共通の /usr/local/bin にインストールしますか？（sudo が必要） [y/N]:</code> と尋ねられます。Enter または <code>n</code> でデフォルト、<code>y</code> で <code>/usr/local/bin</code> を選択できます（後者は sudo を要求します）。</p>
@@ -3389,7 +3386,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>最終検証        : 2026-05-13 11:45 UTC（13 分前）
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>プラン          : 有料 (Lifetime)
 </code></pre></div>
-<p>「プラン: 有料 (Lifetime)」と表示されれば有料プラン（Lifetime / Annual / Monthly のいずれか）で利用可能です。なお、現在の CLI 表示は内部実装の歴史的経緯で Annual / Monthly を購入したユーザーにも <code>有料 (Lifetime)</code> と表示されます（Whop OAuth 上はいずれも customer 扱いのため区別していません）。Whop 未登録 / 未購入時は <code>プラン: 無料 (Trial)</code> 相当の表示になります。</p>
+<p>「プラン: 有料 (Lifetime)」と表示されれば有料プラン（Lifetime / Annual / Monthly のいずれか）で利用可能です。なお、現在の CLI 表示は内部実装の歴史的経緯で Annual / Monthly を購入したユーザーにも <code>有料 (Lifetime)</code> と表示されます（Whop OAuth 上はいずれも customer 扱いのため区別していません）。Whop 未登録 / 未認証（= Trial プラン）の場合は上記のプラン情報は表示されず、<code>[AlphaForge] ログイン情報がありません。</code> と <code>実行: alpha-forge system auth login</code> の案内のみが表示されます。</p>
 <h3 id="4">4. ロック解除の確認<a class="headerlink" href="#4" title="Permanent link">&para;</a></h3>
 <p>有料プラン限定機能（Pine Script エクスポート）が動くことを確認します。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_cross_qs
@@ -3517,12 +3514,12 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <td>初回のみ EULA 同意プロンプトが表示されます。対話端末では <code>y</code> を入力してください。CI・パイプ・エージェントなどの非対話環境では環境変数 <code>FORGE_ACCEPT_EULA=1</code> を設定すると初回 EULA に自動同意して続行できます（対応バージョン以降）。同意状態は <code>~/.config/forge/</code> に記録され次回以降は出ません。</td>
 </tr>
 <tr>
-<td><code>戦略 'sma_cross_qs' が見つかりません</code> / <code>Strategy not found</code></td>
+<td><code>❌ 未知のテンプレート名です: &lt;id&gt;。利用可能: ...</code> / <code>戦略 'sma_cross_qs' が見つかりません</code></td>
 <td><code>alpha-forge strategy save sma_cross.json</code> を先に実行して戦略 DB に登録してください。または <code>alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...</code> のように <code>--strategy-file</code> で JSON を直接指定できます。</td>
 </tr>
 <tr>
-<td><code>FileNotFoundError: データが見つかりません: SPY (1d)</code> / <code>No data found for SPY</code></td>
-<td><code>alpha-forge system init</code> を実行していない / <code>forge.yaml</code> が無いと自動取得が動きません。ステップ 2 の <code>alpha-forge system init</code> を先に実行するか、<code>alpha-forge data fetch SPY --period 5y</code> を手動で先に実行してください。</td>
+<td><code>❌ データが見つかりません: SPY (1d)</code> / <code>No data found for SPY</code></td>
+<td>対象シンボルのヒストリカルデータが未取得です。<code>backtest run</code> はデータを自動取得しないため、ステップ 2.5 の <code>alpha-forge data fetch SPY --period 5y</code> を先に実行してください。</td>
 </tr>
 <tr>
 <td><code>データが取得できませんでした: symbol=USDJPY</code> 等 FX で 404</td>
@@ -3549,7 +3546,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <td>macOS には標準コマンド <code>/usr/bin/vis</code> があり、<code>$PATH</code> の並びによってはこちらが優先されます。<code>~/.local/bin/alpha-vis serve</code>（uv tool）または <code>~/.local/share/uv/tools/alpha-visualizer/bin/alpha-vis serve</code> のように絶対パスで起動してください（v0.3.0 以降は <code>alpha-vis</code> コマンドに改名済み）。</td>
 </tr>
 <tr>
-<td><code>Trial plan: date clipped to 2023-12-31</code></td>
+<td><code>Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。</code></td>
 <td>仕様どおりの動作です。Trial プランの上限日以降のデータは自動的に除外されます。 有料プラン（Lifetime / Annual / Monthly）購入後は制限解除されます。</td>
 </tr>
 <tr>

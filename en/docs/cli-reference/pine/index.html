@@ -1939,10 +1939,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#alpha-forge-pine-verify" class="md-nav__link">
+  <a href="#alpha-forge-pine-verify-paid-plans-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        alpha-forge pine verify
+        alpha-forge pine verify [Paid plans only]
       
     </span>
   </a>
@@ -2525,10 +2525,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#alpha-forge-pine-verify" class="md-nav__link">
+  <a href="#alpha-forge-pine-verify-paid-plans-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        alpha-forge pine verify
+        alpha-forge pine verify [Paid plans only]
       
     </span>
   </a>
@@ -2556,7 +2556,7 @@
 <p>Convert between strategy JSON and TradingView Pine Script v6.</p>
 <div class="admonition warning">
 <p class="admonition-title">[Paid plans only] Pine Script export</p>
-<p><code>alpha-forge pine generate</code> and <code>alpha-forge pine preview</code> are <strong>available on the paid plans only (Lifetime / Annual / Monthly)</strong>. Running them on the Trial plan displays a red Panel with a purchase URL (<a href="https://alforgelabs.com/en/index.html#pricing">https://alforgelabs.com/en/index.html#pricing</a>) and exits with code <code>1</code> — no file is written and no preview is printed. <code>alpha-forge pine import</code> (the import path) is unaffected and remains available on Trial. See the <a href="../../guides/trial-limits/">Trial limits guide</a> for details.</p>
+<p><code>alpha-forge pine generate</code>, <code>alpha-forge pine preview</code>, and <code>alpha-forge pine verify</code> are <strong>available on the paid plans only (Lifetime / Annual / Monthly)</strong>. Running them on the Trial plan displays a red Panel with a purchase URL (<a href="https://alforgelabs.com/en/index.html#pricing">https://alforgelabs.com/en/index.html#pricing</a>) and exits with code <code>1</code> — no file is written and no preview is printed. <code>alpha-forge pine import</code> (the import path) is unaffected and remains available on Trial. See the <a href="../../guides/trial-limits/">Trial limits guide</a> for details.</p>
 </div>
 <h2 id="alpha-forge-pine-generate-paid-plans-only">alpha-forge pine generate <code>[Paid plans only]</code><a class="headerlink" href="#alpha-forge-pine-generate-paid-plans-only" title="Permanent link">&para;</a></h2>
 <p>Generate Pine Script from a strategy definition and write it to <code>config.pinescript.output_path / &lt;strategy_id&gt;.pine</code>. <strong>Paid plans only (Lifetime / Annual / Monthly).</strong></p>
@@ -2795,8 +2795,8 @@
 </tbody>
 </table>
 <p>On parse failure: <code>Error: failed to parse Pine Script - &lt;details&gt;</code> (writes to stderr).</p>
-<h2 id="alpha-forge-pine-verify">alpha-forge pine verify<a class="headerlink" href="#alpha-forge-pine-verify" title="Permanent link">&para;</a></h2>
-<p>Verify the Pine Script generated from a strategy via a <strong>TradingView MCP server</strong> (issue #523). Beyond compile checks, it can compare the Strategy Tester aggregate metrics or the per-trade list against the matching alpha-forge backtest result.</p>
+<h2 id="alpha-forge-pine-verify-paid-plans-only">alpha-forge pine verify <code>[Paid plans only]</code><a class="headerlink" href="#alpha-forge-pine-verify-paid-plans-only" title="Permanent link">&para;</a></h2>
+<p>Verify the Pine Script generated from a strategy via a <strong>TradingView MCP server</strong> (issue #523). Beyond compile checks, it can compare the Strategy Tester aggregate metrics or the per-trade list against the matching alpha-forge backtest result. <strong>Paid plans only (Lifetime / Annual / Monthly).</strong> Because it generates Pine Script internally, running it on the Trial plan shows the same red Panel as generate / preview and exits with code <code>1</code> (the paywall fires before any <code>--check-mode</code> logic is reached).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>verify<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--check-mode<span class="w"> </span>&lt;MODE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server<span class="w"> </span>&lt;CMD&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server-flavor<span class="w"> </span>&lt;tradesdontlie<span class="p">|</span>vinicius&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <table>

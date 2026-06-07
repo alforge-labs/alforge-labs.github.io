@@ -4187,13 +4187,13 @@
 <tbody>
 <tr>
 <td>未知のテンプレート名</td>
-<td><code>ValueError: 未知のテンプレート名です: &lt;name&gt;。利用可能: ...</code> を送出</td>
+<td><code>❌ 未知のテンプレート名です: &lt;name&gt;。利用可能: ...</code> を stderr に出力し、登録・JSON 指定の案内ブロックを添えて終了コード <code>1</code> で停止（raw な <code>ValueError:</code> トレースバックは出ません）</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="alpha-forge-strategy-scaffold">alpha-forge strategy scaffold<a class="headerlink" href="#alpha-forge-strategy-scaffold" title="Permanent link">&para;</a></h2>
-<p>シンボル・インジケータ・タイプから戦略 JSON を <strong>生成</strong> します。組み込みテンプレートに依存せず、指定したインジケータ群と戦略タイプ（逆張り／順張り／buy-and-hold オーバーレイ）から条件・リスク管理を自動構築します。<code>--save</code> を付ければそのまま戦略レジストリへ登録され、付けなければ JSON を出力します。<code>/explore-strategies</code> の戦略生成主経路です。</p>
+<p>シンボル・インジケータ・タイプから戦略 JSON を <strong>生成</strong> します。組み込みテンプレートに依存せず、指定したインジケータ群と戦略タイプ（逆張り／順張り／buy-and-hold オーバーレイ）から条件・リスク管理を自動構築します。出力先として <code>--output</code>（ファイル書き出し）か <code>--save</code>（戦略レジストリへ登録）の <strong>いずれかが必須</strong> です。どちらも指定しないと <code>エラー: --output または --save のいずれかを指定してください</code> を出して終了コード <code>1</code> で停止します（標準出力への JSON 出力は行いません）。<code>/explore-strategies</code> の戦略生成主経路です。</p>
 <h3 id="_10">構文<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>scaffold<span class="w"> </span>--symbol<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--indicators<span class="w"> </span>&lt;CSV&gt;<span class="w"> </span>--type<span class="w"> </span>&lt;TYPE&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -4830,23 +4830,32 @@
 <a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>      → 高相関の条件を片方除去するか、独立性のある別条件に置き換えてください
 </code></pre></div>
 <h3 id="-json">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h3>
+<p>静的チェックは <code>static_checks</code>、<code>--symbol</code> 指定時の動的チェックは <code>dynamic_checks</code> のネスト構造で返されます（<code>--symbol</code> 未指定時は <code>dynamic_checks</code> 自体が出力されません）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_v1&quot;</span><span class="p">,</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span><span class="nt">&quot;static_errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;E_INDICATOR_REF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;suggestion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span><span class="nt">&quot;static_warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">  </span><span class="nt">&quot;signal_stats&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY&quot;</span><span class="p">,</span>
-<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">    </span><span class="nt">&quot;period&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1y&quot;</span><span class="p">,</span>
-<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">    </span><span class="nt">&quot;total_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">252</span><span class="p">,</span>
-<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">    </span><span class="nt">&quot;entry_signal_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span>
-<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">    </span><span class="err">...</span>
-<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">  </span><span class="nt">&quot;dynamic_warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span>
-<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">  </span><span class="nt">&quot;correlations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
-<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="p">}</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_v1&quot;</span><span class="p">,</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span><span class="nt">&quot;static_checks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;E_INDICATOR_REF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;suggestion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="p">],</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">  </span><span class="nt">&quot;dynamic_checks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">    </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY&quot;</span><span class="p">,</span>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">    </span><span class="nt">&quot;period&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1y&quot;</span><span class="p">,</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">    </span><span class="nt">&quot;total_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">252</span><span class="p">,</span>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">    </span><span class="nt">&quot;entry_signal_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">    </span><span class="nt">&quot;signal_rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.8</span><span class="p">,</span>
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">    </span><span class="nt">&quot;leaf_conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rsi &lt; 30&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;true_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;total_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">252</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;true_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">7.1</span><span class="p">}</span>
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a><span class="w">    </span><span class="p">],</span>
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a><span class="w">    </span><span class="nt">&quot;hmm_regime_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="w">    </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;W_LOW_SIGNALS&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;warning&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;suggestion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a><span class="w">    </span><span class="p">],</span>
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a><span class="w">    </span><span class="nt">&quot;correlations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="_36">終了コード<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
 <ul>
@@ -4973,13 +4982,14 @@
 </tbody>
 </table>
 <h3 id="_41">サンプル出力（テキスト）<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>ビルトイン cost preset: 4 件
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>ビルトイン cost preset: 11 件
 <a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>──────────────────────────────────────────────────────────────────────────────
 <a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>  binance-spot-vip0
 <a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>    commission=0.1%  slippage=0.05%
 <a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>    ...
 <a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>    source: ...
 </code></pre></div>
+<p>件数は同梱プリセット（binance / coinbase / ibkr / kraken / moomoo / oanda 系）の追加により変動します。最新の一覧はコマンドを実行して確認してください。</p>
 <h3 id="-json_1">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="p">{</span>
 <a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">  </span><span class="nt">&quot;binance-spot-vip0&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -4997,7 +5007,7 @@
 <li><strong>保存先</strong>: <code>config.strategies.path</code>（戦略 JSON）、<code>config.report.output_path</code>（バックテスト・最適化結果）、<code>config.journal.journal_path</code>（ジャーナル）。</li>
 <li><strong>Journal 連携</strong>: <code>config.journal.auto_record</code> が true の場合、<code>save</code> 実行時に Journal スナップショットが自動記録される。</li>
 <li><strong><code>FORGE_CONFIG</code></strong>: 上記すべてのパスは環境変数 <code>FORGE_CONFIG</code> が指す <code>forge.yaml</code> で決まる。</li>
-<li><strong>終了コード</strong>: 通常 <code>0</code>、<code>validate</code> でエラー検出時 <code>1</code>、エラー出力（ファイル不存在など）は通常 <code>1</code>、引数エラーは Click が <code>2</code> を返す。</li>
+<li><strong>終了コード</strong>: 通常 <code>0</code>、<code>validate</code> でエラー検出時 <code>1</code>、エラー出力（ファイル不存在など）は通常 <code>1</code>、引数エラーは Click が <code>2</code> を返す。なお戦略・リソースが存在しないケース（<code>strategy show &lt;未存在ID&gt;</code> など）は、スクリプトが <code>json.load(stdout)</code> で落ちないよう意図的に終了コード <code>2</code> で統一されています（issue #782）。</li>
 </ul>
 <hr />
 <!-- 同期元: `alpha-forge/src/alpha_forge/commands/strategy.py` の Click decorator と `alpha-forge/src/alpha_forge/strategy/templates.py` の `_TEMPLATE_REGISTRY`。alpha-forge 側で引数追加・テンプレート追加があった場合、本ページも追従更新が必要。 -->

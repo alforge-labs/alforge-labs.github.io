@@ -3491,18 +3491,20 @@
 </table>
 <hr />
 <h2 id="alpha-forge-journal-list">alpha-forge journal list<a class="headerlink" href="#alpha-forge-journal-list" title="Permanent link">&para;</a></h2>
-<p>ジャーナルが存在する戦略の一覧を表示します。<code>config.journal.journal_path</code> 配下の <code>&lt;strategy_id&gt;.journal.json</code> を走査します。</p>
+<p>ジャーナルが存在する戦略の一覧を表示します。<code>config.strategies.path</code> 配下の SQLite DB（<code>strategies.db</code>）の <code>journal_entries</code> テーブルを走査します。</p>
 <h3 id="_2">構文<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>journal<span class="w"> </span>list
 </code></pre></div>
 <h3 id="_3">引数とオプション<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>なし。</p>
 <h3 id="_4">サンプル出力<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>spy_sma_v1                  runs:14   tags: production, validated   verdict: pass
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>qqq_hmm_macd_ema_rsi_v1     runs: 8   tags: experimental             verdict: review
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>gc_hmm_macd_ema_v1          runs: 5   tags: -                         verdict: -
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>戦略ID                                  最終実行   実行数   スナップ  タグ
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>spy_sma_v1                   2026-04-15 10:30   14      2  production, validated
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>qqq_hmm_macd_ema_rsi_v1      2026-04-12 18:05    8      1  experimental
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>gc_hmm_macd_ema_v1           2026-04-01 09:20    5      1  -
 </code></pre></div>
-<p>整形は <code>journal/formatter.py</code> の <code>format_journal_list</code> に依存し、ジャーナルがない場合は空または案内メッセージを返します。</p>
+<p>整形は <code>journal/formatter.py</code> の <code>format_journal_list</code> に依存します。各行は <code>戦略ID</code> / <code>最終実行</code>（最新 run の日時。run がなければ <code>-</code>）/ <code>実行数</code> / <code>スナップ</code>（スナップショット数）/ <code>タグ</code> で構成されます。ジャーナルが 1 件もない場合は「ジャーナルが登録されている戦略はありません。」と表示されます。</p>
 <hr />
 <h2 id="alpha-forge-journal-show">alpha-forge journal show<a class="headerlink" href="#alpha-forge-journal-show" title="Permanent link">&para;</a></h2>
 <p>戦略の全履歴を表示します：戦略定義スナップショット + 実行履歴（バックテスト・最適化など）+ タグ + メモ + ライブサマリ（live trading records があれば）。</p>
@@ -3597,12 +3599,14 @@
 </tbody>
 </table>
 <h3 id="_11">サンプル出力<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>run_id                       type            sharpe   ret%    mdd%   win%   verdict
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>run_20260415103021           optimization      1.45    +52.3   -16.8   50.0   pass
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>run_20260410181522           backtest          0.92    +38.1   -15.6   58.3   review
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>run_20260401092030           backtest          0.78    +28.0   -18.2   45.7   -
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>=== spy_sma_v1 実行一覧 (3件) ===
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>run_id                                   日時           種別 symbol    Return   CAGR    SR Sortino    MDD  Win%    PF   取引  verdict
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>run_20260410181522           2026-04-10 18:15     backtest    SPY    +38.1%  +12.4%  0.92    1.31  -15.6% 58.3% 1.85   24  ✅ pass
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>run_20260401092030           2026-04-01 09:20     backtest    SPY    +28.0%   +9.7%  0.78    1.04  -18.2% 45.7% 1.42   31  🔍 review
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>run_20260415103021           2026-04-15 10:30 optimization    SPY         -       -     -       -       -     -    -    -  -
 </code></pre></div>
-<p>整形は <code>format_runs_table(j, sort_by)</code> に依存します。</p>
+<p>整形は <code>format_runs_table(j, sort_by)</code> に依存します。列は <code>run_id</code> / <code>日時</code> / <code>種別</code> / <code>symbol</code> / <code>Return</code> / <code>CAGR</code> / <code>SR</code> / <code>Sortino</code> / <code>MDD</code> / <code>Win%</code> / <code>PF</code> / <code>取引</code> / <code>verdict</code>。<code>verdict</code> は <code>✅ pass</code> / <code>❌ fail</code> / <code>🔍 review</code> / <code>-</code>（未判定）の絵文字付きで表示されます。<code>backtest</code> 以外の種別（<code>optimization</code> など）はメトリクス各列が <code>-</code> になります。</p>
 <hr />
 <h2 id="alpha-forge-journal-compare">alpha-forge journal compare<a class="headerlink" href="#alpha-forge-journal-compare" title="Permanent link">&para;</a></h2>
 <p>同一戦略の <strong>2 つの実行結果</strong> を並べて比較表示します。</p>
@@ -3635,17 +3639,24 @@
 </tbody>
 </table>
 <h3 id="_14">サンプル出力<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>=== Compare runs of spy_sma_v1 ===
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Metric              run_20260415103021      run_20260410181522
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>type                optimization            backtest
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>sharpe_ratio        1.45                    0.92
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>total_return_pct    +52.3                   +38.1
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>max_drawdown_pct    -16.8                   -15.6
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>win_rate_pct        50.0                    58.3
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>verdict             pass                    review
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>=== spy_sma_v1: 実行比較 ===
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  A: run_20260415103021  (2026-04-15 10:30  SPY)
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  B: run_20260410181522  (2026-04-10 18:15  SPY)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>指標                                  A            B  差分
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>─────────────────────────────────────────────────────────────────
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  総リターン (%)                    52.30        38.10  -14.20
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  CAGR (%)                          16.80        12.40  -4.40
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  シャープレシオ                     1.45         0.92  -0.53
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  ソルティノレシオ                   2.01         1.31  -0.70
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>  最大ドローダウン (%)             -16.80       -15.60  +1.20
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>  勝率 (%)                          50.00        58.30  +8.30
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>  プロフィットファクター             2.10         1.85  -0.25
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>  取引数                            18.00        24.00  +6.00
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  平均保有日数                       3.20         2.80  -0.40
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  露出率 (%)                        62.00        58.00  -4.00
 </code></pre></div>
-<p>整形は <code>format_compare(j, run1, run2)</code> に依存します。</p>
+<p>整形は <code>format_compare(j, run1, run2)</code> に依存します。列は <code>指標</code>（日本語ラベル）/ <code>A</code>（1 つ目の run）/ <code>B</code>（2 つ目の run）/ <code>差分</code>（B − A、最大ドローダウンのみ小さいほど良いとして色付け）。<code>type</code> 行・<code>verdict</code> 行は表示されません。比較対象の run_id・日時・symbol はヘッダー直下の <code>A:</code> / <code>B:</code> 行に表示されます。</p>
 <h3 id="_15">主なエラー<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3708,9 +3719,9 @@
 <h3 id="_18">サンプル出力<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>✅ タグ &#39;production&#39; を追加しました: spy_sma_v1
 </code></pre></div>
-<p><code>--add</code> と <code>--remove</code> を同時指定した場合：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>✅ タグ &#39;experimental&#39; を削除しました: spy_sma_v1
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>✅ タグ &#39;production&#39; を追加しました: spy_sma_v1
+<p><code>--add</code> と <code>--remove</code> を同時指定した場合、<strong>追加 → 削除の順</strong> で処理・出力されます：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>✅ タグ &#39;production&#39; を追加しました: spy_sma_v1
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>✅ タグ &#39;experimental&#39; を削除しました: spy_sma_v1
 </code></pre></div>
 <h3 id="_19">主なエラー<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
 <table>
@@ -3955,7 +3966,7 @@
 <hr />
 <h2 id="_31">共通の挙動<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>保存先</strong>: <code>config.journal.journal_path / &lt;strategy_id&gt;.journal.json</code></li>
+<li><strong>保存先</strong>: <code>config.strategies.path</code> 配下の SQLite DB（<code>strategies.db</code>）。ジャーナルは <code>journal_entries</code> / <code>journal_runs</code> / <code>journal_snapshots</code> テーブルに保存される（v0.12.0 で旧 <code>&lt;strategy_id&gt;.journal.json</code> から SQLite へ移行済み）</li>
 <li><strong>自動記録</strong>: <code>config.journal.auto_record</code> が true なら、<code>alpha-forge strategy save</code> のスナップショット、<code>alpha-forge optimize run</code> の実行記録などが自動でジャーナルへ追加される</li>
 <li><strong>ライブ連携</strong>: <code>journal_path</code> の親ディレクトリ配下の <code>live/</code> から <code>LiveStore</code> を読み、<code>show</code> の表示に反映される</li>
 <li><strong><code>FORGE_CONFIG</code></strong>: 上記すべてのパスは環境変数 <code>FORGE_CONFIG</code> が指す <code>forge.yaml</code> で決まる</li>

@@ -2621,12 +2621,12 @@
 </table>
 <h2 id="translate-discretionary-rules-into-declarative-json">Translate Discretionary Rules Into Declarative JSON<a class="headerlink" href="#translate-discretionary-rules-into-declarative-json" title="Permanent link">&para;</a></h2>
 <p>If your discretionary rule is "buy when the 20-day MA crosses up and RSI(14) &lt; 30, stop out at 2× ATR," you can declare this directly in an AlphaForge strategy JSON.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Start from a template</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>create<span class="w"> </span>my_playbook<span class="w"> </span>--template<span class="w"> </span>ma_rsi_atr
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Start from a basic template (RSI mean reversion)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>create<span class="w"> </span>--template<span class="w"> </span>rsi_reversion_v1<span class="w"> </span>--out<span class="w"> </span>my_playbook.json
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Edit the strategy JSON to match your discretionary rules:</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">#   - Entry conditions (MA period, RSI threshold)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">#   - Exit conditions (ATR multiple, take-profit width)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">#   - Exit conditions (add an ATR indicator to set the stop multiple and take-profit width)</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">#   - Sizing (fraction of account balance)</span>
 </code></pre></div>
 <p>For logic beyond what plain JSON expresses (composite conditions, regime detection), see the HMM and multi-timeframe examples in Strategy Templates.</p>
@@ -2636,7 +2636,7 @@
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>my_playbook
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 2. Walk-forward to evaluate only with information available beforehand</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>walk-forward<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>my_playbook<span class="w"> </span>--folds<span class="w"> </span><span class="m">5</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>optimize<span class="w"> </span>walk-forward<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>my_playbook<span class="w"> </span>--windows<span class="w"> </span><span class="m">5</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># 3. Compare against your actual discretionary record</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1">#    - Systematic backtest Sharpe: 1.10</span>
@@ -2654,8 +2654,8 @@
 </code></pre></div>
 <p>You can let AlphaForge raise alerts for the patterns you "always miss," while keeping the execution decision in your own hands. There's no full-automation prerequisite, so the psychological migration cost stays low.</p>
 <h2 id="first-steps">First Steps<a class="headerlink" href="#first-steps" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 1. Start from a simple MA + RSI template</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>create<span class="w"> </span>my_playbook<span class="w"> </span>--template<span class="w"> </span>ma_rsi_atr
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 1. Start from a simple RSI mean-reversion template (add MA and ATR by editing the JSON)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>create<span class="w"> </span>--template<span class="w"> </span>rsi_reversion_v1<span class="w"> </span>--out<span class="w"> </span>my_playbook.json
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 2. Fetch 5 years of historical data</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>QQQ<span class="w"> </span>--period<span class="w"> </span>5y
