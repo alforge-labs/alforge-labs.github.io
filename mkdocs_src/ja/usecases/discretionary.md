@@ -15,12 +15,12 @@
 裁量で「20 日移動平均と RSI(14)<30 が交差したら買う、ATR の 2 倍で損切り」というルールを使っている場合、これをそのまま AlphaForge の戦略 JSON として宣言できます。
 
 ```bash
-# テンプレートから出発
-alpha-forge strategy create my_playbook --template ma_rsi_atr
+# 基本テンプレート（RSI 逆張り）から出発
+alpha-forge strategy create --template rsi_reversion_v1 --out my_playbook.json
 
 # 戦略 JSON を編集して、自分の裁量ルールに調整
 #   - エントリー条件（移動平均期間・RSI 閾値）
-#   - エグジット条件（ATR 倍率・利確幅）
+#   - エグジット条件（ATR 指標を追加して損切り倍率・利確幅を設定）
 #   - サイジング（口座残高に対する割合）
 ```
 
@@ -35,7 +35,7 @@ JSON で書ききれない高度なロジック（複合条件・レジーム判
 alpha-forge backtest run QQQ --strategy my_playbook
 
 # 2. ウォークフォワードで「事前に判断可能だった」期間のみで評価
-alpha-forge optimize walk-forward QQQ --strategy my_playbook --folds 5
+alpha-forge optimize walk-forward QQQ --strategy my_playbook --windows 5
 
 # 3. 実際の裁量結果と比較
 #    - システム化バックテスト Sharpe: 1.10
@@ -62,8 +62,8 @@ alpha-forge optimize walk-forward QQQ --strategy my_playbook --folds 5
 ## はじめの一歩
 
 ```bash
-# 1. シンプルな MA + RSI テンプレートからスタート
-alpha-forge strategy create my_playbook --template ma_rsi_atr
+# 1. シンプルな RSI 逆張りテンプレートからスタート（MA・ATR は JSON 編集で追加）
+alpha-forge strategy create --template rsi_reversion_v1 --out my_playbook.json
 
 # 2. 過去 5 年分のデータを取得
 alpha-forge data fetch QQQ --period 5y

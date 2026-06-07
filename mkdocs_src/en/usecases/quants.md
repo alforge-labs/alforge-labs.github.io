@@ -16,7 +16,7 @@ For quantitative analysts and researchers who prioritize statistical rigor and w
 
 ```bash
 # 1. Declare hypothesis in JSON
-alpha-forge strategy create regime_test --template hmm_bb_rsi
+alpha-forge strategy create --template hmm_bb_pipeline_v1 --out regime_test.json
 
 # 2. Grid search over the parameters declared in the strategy JSON
 # (the grid is defined by optimizer_config.param_ranges in regime_test's JSON)
@@ -31,12 +31,12 @@ alpha-forge journal note regime_test "HMM period sensitivity analysis"
 
 ## Evaluating Overfitting Risk
 
-AlphaForge provides walk-forward testing (WFT) as a standard feature. A large IS/OOS performance degradation suggests overfitting.
+AlphaForge provides walk-forward testing (WFT) as a standard feature. The output is a table listing each window's IS Score and OOS Score; a large drop from IS to OOS suggests overfitting (compute the degradation yourself from IS/OOS).
 
 ```
-IS Period  OOS Period  Sharpe(IS)  Sharpe(OOS)  Degradation
-2020-22    2023        1.8         1.4          22%  ← acceptable
-2020-22    2023        2.5         0.3          88%  ← likely overfit
+Window     IS Score   OOS Score  Best Params
+1            1.8000     1.4000    {...}   ← small drop, acceptable
+2            2.5000     0.3000    {...}   ← large drop, likely overfit
 ```
 
 ## Related Docs

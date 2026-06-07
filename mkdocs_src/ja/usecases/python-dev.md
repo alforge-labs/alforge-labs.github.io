@@ -16,10 +16,10 @@ Pythonでデータ分析や戦略ロジックを書いており、AlphaForgeのC
 alpha-forge backtest run QQQ --strategy my_strategy --json | python analyze.py
 
 # Optuna最適化（Sharpe比を最大化）
-alpha-forge optimize run QQQ --strategy my_strategy --trials 200 --objective sharpe
+alpha-forge optimize run QQQ --strategy my_strategy --trials 200 --metric sharpe_ratio
 
 # ウォークフォワード検証
-alpha-forge optimize walk-forward QQQ --strategy my_strategy --folds 5
+alpha-forge optimize walk-forward QQQ --strategy my_strategy --windows 5
 ```
 
 ## JSONとして戦略を管理する
@@ -28,14 +28,25 @@ AlphaForgeの戦略はJSONファイルで定義します。Gitで管理し、差
 
 ```json
 {
-  "name": "my_strategy",
+  "strategy_id": "my_strategy",
+  "name": "My Strategy",
+  "target_symbols": ["QQQ"],
   "indicators": [
-    { "id": "rsi", "period": 14 },
-    { "id": "bbands", "period": 20 }
+    { "id": "rsi", "type": "RSI", "params": { "length": 14 } },
+    { "id": "bb_lower", "type": "BBANDS", "params": { "length": 20, "std": 2.0, "line": "lower" } }
   ],
-  "entry": { "rsi_lt": 30, "price_lt_lower_band": true },
-  "exit": { "rsi_gt": 70 },
-  "risk": { "max_position_size": 0.1 }
+  "entry_conditions": {
+    "long": { "logic": "AND", "conditions": [
+      { "left": "rsi", "op": "<", "right": 30 },
+      { "left": "close", "op": "<", "right": "bb_lower" }
+    ] }
+  },
+  "exit_conditions": {
+    "long": { "logic": "OR", "conditions": [
+      { "left": "rsi", "op": ">", "right": 70 }
+    ] }
+  },
+  "risk_management": { "position_size_pct": 100.0 }
 }
 ```
 

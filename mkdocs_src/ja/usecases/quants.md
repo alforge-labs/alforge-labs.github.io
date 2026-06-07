@@ -16,7 +16,7 @@
 
 ```bash
 # 1. 仮説をJSONで宣言
-alpha-forge strategy create regime_test --template hmm_bb_rsi
+alpha-forge strategy create --template hmm_bb_pipeline_v1 --out regime_test.json
 
 # 2. パラメータ空間を戦略 JSON の optimizer_config.param_ranges で宣言し、
 #    グリッドサーチで網羅探索する
@@ -32,12 +32,12 @@ alpha-forge journal note regime_test "HMM期間別の感度分析"
 
 ## 過学習リスクの評価
 
-AlphaForgeはウォークフォワードテスト（WFT）を標準で提供します。IS/OOS比率の劣化が大きい場合はオーバーフィットの可能性が高いと判断できます。
+AlphaForgeはウォークフォワードテスト（WFT）を標準で提供します。出力は各ウィンドウの IS Score と OOS Score を並べた表で、IS から OOS への低下が大きい場合はオーバーフィットの可能性が高いと判断できます（劣化率は IS/OOS から各自で算出します）。
 
 ```
-IS期間   OOS期間   Sharpe(IS)  Sharpe(OOS)  劣化率
-2020-22  2023      1.8         1.4          22%  ← 許容範囲
-2020-22  2023      2.5         0.3          88%  ← 過学習疑い
+Window     IS Score   OOS Score  ベストパラメータ
+1            1.8000     1.4000    {...}   ← 低下が小さく許容範囲
+2            2.5000     0.3000    {...}   ← 大幅に低下し過学習疑い
 ```
 
 ## 関連ドキュメント
