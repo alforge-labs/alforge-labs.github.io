@@ -57,7 +57,9 @@ If `forge.yaml` lives directly under `<forge-dir>`, it is loaded automatically. 
 
 | Variable | Purpose |
 |---|---|
-| `FORGE_CONFIG` | Equivalent to `--forge-config` (CLI flag wins on conflict) |
+| `FORGE_CONFIG` | Fallback path to `forge.yaml`, consulted only when `--forge-config` is not given and `<forge-dir>/forge.yaml` does not exist |
+
+The resolution order is `--forge-config` > `<forge-dir>/forge.yaml` > `FORGE_CONFIG` (since v0.7.2). If the project opened via `--forge-dir` contains a `forge.yaml`, it always wins — a stale `export FORGE_CONFIG` in your shell can no longer silently point the dashboard at a different project. When the `FORGE_CONFIG` fallback is used, the startup log shows which file was picked.
 
 For CI scenarios, you can clear it: `env FORGE_CONFIG= alpha-vis serve ...`.
 

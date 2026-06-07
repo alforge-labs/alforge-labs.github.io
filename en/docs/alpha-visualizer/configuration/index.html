@@ -2741,10 +2741,11 @@
 <tbody>
 <tr>
 <td><code>FORGE_CONFIG</code></td>
-<td>Equivalent to <code>--forge-config</code> (CLI flag wins on conflict)</td>
+<td>Fallback path to <code>forge.yaml</code>, consulted only when <code>--forge-config</code> is not given and <code>&lt;forge-dir&gt;/forge.yaml</code> does not exist</td>
 </tr>
 </tbody>
 </table>
+<p>The resolution order is <code>--forge-config</code> &gt; <code>&lt;forge-dir&gt;/forge.yaml</code> &gt; <code>FORGE_CONFIG</code> (since v0.7.2). If the project opened via <code>--forge-dir</code> contains a <code>forge.yaml</code>, it always wins — a stale <code>export FORGE_CONFIG</code> in your shell can no longer silently point the dashboard at a different project. When the <code>FORGE_CONFIG</code> fallback is used, the startup log shows which file was picked.</p>
 <p>For CI scenarios, you can clear it: <code>env FORGE_CONFIG= alpha-vis serve ...</code>.</p>
 <h2 id="notes-for-remote-public-deployment">Notes for remote / public deployment<a class="headerlink" href="#notes-for-remote-public-deployment" title="Permanent link">&para;</a></h2>
 <p>When running with <code>--host 0.0.0.0</code>:</p>

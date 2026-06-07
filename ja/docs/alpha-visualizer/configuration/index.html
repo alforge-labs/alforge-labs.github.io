@@ -2741,10 +2741,11 @@
 <tbody>
 <tr>
 <td><code>FORGE_CONFIG</code></td>
-<td><code>--forge-config</code> と同等の指定（CLI 引数の方が優先）</td>
+<td><code>--forge-config</code> 未指定かつ <code>&lt;forge-dir&gt;/forge.yaml</code> が無いときのフォールバックとして参照される forge.yaml のパス</td>
 </tr>
 </tbody>
 </table>
+<p>優先順位は <code>--forge-config</code> &gt; <code>&lt;forge-dir&gt;/forge.yaml</code> &gt; <code>FORGE_CONFIG</code> です（v0.7.2 以降）。<code>--forge-dir</code> で開いたプロジェクトに <code>forge.yaml</code> があれば常にそちらが使われるため、シェルに <code>export FORGE_CONFIG</code> が残っていても別プロジェクトのデータを読むことはありません。フォールバックとして <code>FORGE_CONFIG</code> が採用された場合は、起動ログに採用元が表示されます。</p>
 <p>CI などで明示的にクリアしたい場合は <code>env FORGE_CONFIG= alpha-vis serve ...</code> のように空に設定できます。</p>
 <h2 id="_3">リモート公開時の注意<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p><code>--host 0.0.0.0</code> で外部ネットワークに公開する場合：</p>
