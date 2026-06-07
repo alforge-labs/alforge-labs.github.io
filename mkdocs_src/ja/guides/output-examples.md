@@ -150,8 +150,9 @@ alpha-forge optimize run SPY --strategy sma_crossover_v1 --metric sharpe_ratio -
 ✅ 最適化完了
 ベストスコア (sharpe_ratio): 1.32
 ベストパラメータ: {'fast_period': 12, 'slow_period': 50}
-DB 保存: run_id=opt_20260415_103021
-✅ 最適化結果を保存しました: data/results/optimize_sma_crossover_v1_20260415_103021.json
+💾 結果ファイル: data/results/optimize_sma_crossover_v1_20260415_103021.json
+   次のステップ: alpha-forge optimize apply data/results/optimize_sma_crossover_v1_20260415_103021.json --to-strategy sma_crossover_v1_optimized
+DB 保存: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 ```
 
 `--json` フラグで機械可読な形式での出力:
@@ -185,7 +186,9 @@ alpha-forge strategy validate sma_crossover_v1
 ```
 
 ```text
-✅ 戦略 JSON のフォーマットが正常です: sma_crossover_v1
+戦略: sma_crossover_v1  [OK]
+
+✓ 問題は検出されませんでした
 ```
 
 ---

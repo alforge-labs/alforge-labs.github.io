@@ -84,7 +84,7 @@ alpha-forge backtest run AAPL --strategy sma_crossover_v1 --trades-csv trades.cs
 | `entry_reason` | One-line summary of strategy entry conditions (shared across trades in Phase 1) |
 | `exit_reason` | `strategy_exit` placeholder (Phase 2 will distinguish SL/TP/trailing) |
 
-Even with zero trades, the header row is still written so that `sort` / `uniq` / `diff` pipelines do not break on empty stdout. Use `--debug` in combination to also stream signal-evaluation / mask / metrics DEBUG logs to stderr (only `alpha_forge.*` loggers are raised).
+Even with zero trades, the header row is still written so that `sort` / `uniq` / `diff` pipelines do not break on empty stdout. `--debug` raises the `alpha_forge.*` loggers to DEBUG level, but a backtest that completes normally emits almost no additional DEBUG output (most detailed logs are for diagnosing exceptions). Detailed logs appear on stderr in error paths such as data-fetch failures or signal-evaluation errors.
 
 ### Benchmark selection logic (F-304) {#benchmark-selection}
 
@@ -129,9 +129,11 @@ The progress bar is rendered on **stderr**, so combining it with `--json` keeps 
 
 ### Sample output (text)
 
+The leading icon is driven by whether the trade count is statistically sufficient (`is_valid` = `total_trades >= 30`): `✅` when sufficient, `⚠️` when not. The signal quality score line always carries a hint about how to read the score (`≥0.7` is reliable / `0.4–0.7` caution / `<0.4` low reliability).
+
 ```text
 Running backtest: SPY x sma_crossover_v1
-✅ Backtest complete  Signal quality score: 0.78/1.0
+⚠️ Backtest complete  Signal quality score: 0.71/1.0 (≥0.7 is reliable)
 Total Return: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  Duration: 187d  Recovery: 92d
@@ -430,13 +432,22 @@ alpha-forge backtest compare <STRATEGY1> [STRATEGY2 ...] --symbol <SYM> [--symbo
 
 ### Sample output (text table)
 
-```text
-=== Strategy Comparison: SPY (2020-01-01 to present) (3 strategies) ===
+The output uses a **one-row-per-metric** transposed layout. The first strategy you pass is the "baseline" (`基準:`); for each subsequent strategy the difference from the baseline is shown in the `Delta` column (`✅` = improvement / `❌` = regression). The final line shows the `Winner` (most improvements; ties broken by Sharpe Ratio). The header column labels are emitted in Japanese (`指標` = metric, `基準:` = baseline) regardless of locale.
 
-Strategy        Return    CAGR  Sharpe     MDD   Win%      PF  Trades
-spy_sma_v1     +52.3%   5.40    0.92  -16.8%   50%   1.74      14
-spy_macd_v1    +38.1%   4.20    1.18  -15.6%   58%   1.92      12
-spy_rsi_v1     +12.4%   1.50    0.45  -22.1%   42%   1.08      24
+The period (e.g. `(2020-01-01 to present)`) is only added to the header when `--start` / `--end` are supplied; otherwise only the strategy count is shown.
+
+```text
+────────────────────────────────────────────────────────────
+指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
+────────────────────────────────────────────────────────────
+Sharpe Ratio                       0.92            1.18          +0.26 ✅
+Total Return %                    52.30%          38.10%         -14.2% ❌
+CAGR %                             5.40%           4.20%          -1.2% ❌
+Max Drawdown %                   -16.80%         -15.60%          +1.2% ✅
+Win Rate %                        50.00%          58.00%          +8.0% ✅
+Profit Factor                      1.74            1.92          +0.18 ✅
+────────────────────────────────────────────────────────────
+Winner: sma_cross_qs (4/6 metrics)
 ```
 
 ### Common errors
@@ -550,14 +561,16 @@ alpha-forge backtest chart [RESULT_ID] [--open] [--compare <ID> ...]
 ### Sample output
 
 ```text
-📊 To view charts, start `alpha-vis serve` (alpha-visualizer):
-   http://localhost:8000/?run_id=spy_sma_v1_20260415_103021
+📊 To view charts, start `alpha-vis serve`:
+   http://localhost:8000/?run_id=spy_sma_v1
 ```
+
+`?run_id=` contains the `RESULT_ID` you passed verbatim (pass a `strategy_id` and you get that `strategy_id`; pass a specific `run_id` and you get that `run_id`).
 
 When comparing strategies:
 
 ```text
-📊 To view charts, start `alpha-vis serve` (alpha-visualizer):
+📊 To view charts, start `alpha-vis serve`:
    http://localhost:8000/?ids=sma_crossover,rsi_reversion
 ```
 
@@ -611,7 +624,8 @@ If 0 signals, `⚠️  No signals generated` is printed.
 | Message | Cause | Fix |
 |---------|-------|-----|
 | `Invalid period format: <value>` | Bad `--period` | Use `5y`, `6m`, `30d` style |
-| `Error: No data for <SYM> (period: <p>).` | Data missing | `alpha-forge data fetch <SYM>` |
+| `Error: No data for <SYM> (period: <p>).` | Data exists but no rows fall within the period | Widen `--period`, or re-fetch with `alpha-forge data fetch <SYM>` |
+| `⚠️  1d data not found. Falling back to 1d data.` + `❌ データが見つかりません: <SYM> (1d)` + a data-fetch hint | The parquet file itself was never fetched | `alpha-forge data fetch <SYM>` |
 
 ---
 

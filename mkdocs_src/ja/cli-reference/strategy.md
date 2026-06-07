@@ -137,13 +137,13 @@ AlphaForge は「ユーザー自身が戦略を作って育てる」プロダク
 
 | 状況 | 動作 |
 |------|------|
-| 未知のテンプレート名 | `ValueError: 未知のテンプレート名です: <name>。利用可能: ...` を送出 |
+| 未知のテンプレート名 | `❌ 未知のテンプレート名です: <name>。利用可能: ...` を stderr に出力し、登録・JSON 指定の案内ブロックを添えて終了コード `1` で停止（raw な `ValueError:` トレースバックは出ません） |
 
 ---
 
 ## alpha-forge strategy scaffold
 
-シンボル・インジケータ・タイプから戦略 JSON を **生成** します。組み込みテンプレートに依存せず、指定したインジケータ群と戦略タイプ（逆張り／順張り／buy-and-hold オーバーレイ）から条件・リスク管理を自動構築します。`--save` を付ければそのまま戦略レジストリへ登録され、付けなければ JSON を出力します。`/explore-strategies` の戦略生成主経路です。
+シンボル・インジケータ・タイプから戦略 JSON を **生成** します。組み込みテンプレートに依存せず、指定したインジケータ群と戦略タイプ（逆張り／順張り／buy-and-hold オーバーレイ）から条件・リスク管理を自動構築します。出力先として `--output`（ファイル書き出し）か `--save`（戦略レジストリへ登録）の **いずれかが必須** です。どちらも指定しないと `エラー: --output または --save のいずれかを指定してください` を出して終了コード `1` で停止します（標準出力への JSON 出力は行いません）。`/explore-strategies` の戦略生成主経路です。
 
 ### 構文
 
@@ -514,23 +514,33 @@ alpha-forge strategy validate <STRATEGY_ID|FILE.json> [OPTIONS]
 
 ### サンプル出力（`--json`）
 
+静的チェックは `static_checks`、`--symbol` 指定時の動的チェックは `dynamic_checks` のネスト構造で返されます（`--symbol` 未指定時は `dynamic_checks` 自体が出力されません）。
+
 ```json
 {
-  "strategy_id": "my_v1",
   "ok": false,
-  "static_errors": [
-    {"code": "E_INDICATOR_REF", "message": "...", "suggestion": "..."}
-  ],
-  "static_warnings": [],
-  "signal_stats": {
+  "strategy_id": "my_v1",
+  "static_checks": {
+    "errors": [
+      {"code": "E_INDICATOR_REF", "severity": "error", "message": "...", "suggestion": "..."}
+    ],
+    "warnings": []
+  },
+  "dynamic_checks": {
     "symbol": "SPY",
     "period": "1y",
     "total_days": 252,
     "entry_signal_days": 12,
-    ...
-  },
-  "dynamic_warnings": [...],
-  "correlations": [...]
+    "signal_rate_pct": 4.8,
+    "leaf_conditions": [
+      {"description": "rsi < 30", "true_days": 18, "total_days": 252, "true_pct": 7.1}
+    ],
+    "hmm_regime_days": null,
+    "warnings": [
+      {"code": "W_LOW_SIGNALS", "severity": "warning", "message": "...", "suggestion": "..."}
+    ],
+    "correlations": []
+  }
 }
 ```
 
@@ -615,13 +625,15 @@ alpha-forge strategy cost-presets [--json]
 ### サンプル出力（テキスト）
 
 ```text
-ビルトイン cost preset: 4 件
+ビルトイン cost preset: 11 件
 ──────────────────────────────────────────────────────────────────────────────
   binance-spot-vip0
     commission=0.1%  slippage=0.05%
     ...
     source: ...
 ```
+
+件数は同梱プリセット（binance / coinbase / ibkr / kraken / moomoo / oanda 系）の追加により変動します。最新の一覧はコマンドを実行して確認してください。
 
 ### サンプル出力（`--json`）
 
@@ -644,7 +656,7 @@ alpha-forge strategy cost-presets [--json]
 - **保存先**: `config.strategies.path`（戦略 JSON）、`config.report.output_path`（バックテスト・最適化結果）、`config.journal.journal_path`（ジャーナル）。
 - **Journal 連携**: `config.journal.auto_record` が true の場合、`save` 実行時に Journal スナップショットが自動記録される。
 - **`FORGE_CONFIG`**: 上記すべてのパスは環境変数 `FORGE_CONFIG` が指す `forge.yaml` で決まる。
-- **終了コード**: 通常 `0`、`validate` でエラー検出時 `1`、エラー出力（ファイル不存在など）は通常 `1`、引数エラーは Click が `2` を返す。
+- **終了コード**: 通常 `0`、`validate` でエラー検出時 `1`、エラー出力（ファイル不存在など）は通常 `1`、引数エラーは Click が `2` を返す。なお戦略・リソースが存在しないケース（`strategy show <未存在ID>` など）は、スクリプトが `json.load(stdout)` で落ちないよう意図的に終了コード `2` で統一されています（issue #782）。
 
 ---
 

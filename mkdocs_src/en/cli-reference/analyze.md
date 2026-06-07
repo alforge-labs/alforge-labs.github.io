@@ -53,17 +53,16 @@ Sample output:
 ```text
 SMA — Simple Moving Average
 
-Category: Trend
+Category: 移動平均
 
 Parameters:
   Name                 Type     Default                Description
-  length              int      14                    Period
-  source              str      close                 Source column
+  length              int      20                    Period
 
 Output: scalar time series
 
 Example (JSON):
-  {"id": "sma_20", "type": "SMA", "params": {"length": 20}, "source": "close"}
+  {"id": "sma_20", "type": "SMA", "params": {"length": 20}}
 ```
 
 Unknown indicator names print `Error: '<TYPE>' is not a recognized indicator.` and exit with code `1`.

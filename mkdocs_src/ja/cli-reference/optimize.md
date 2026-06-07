@@ -84,10 +84,12 @@ alpha-forge optimize run <SYMBOL> --strategy <ID> [OPTIONS]
 ベストパラメータ: {'fast_period': 12, 'slow_period': 50}
 💾 結果ファイル: data/results/optimize_my_v1_20260415_103021.json
    次のステップ: alpha-forge optimize apply data/results/optimize_my_v1_20260415_103021.json --to-strategy my_v1_optimized
-DB 保存: run_id=opt_20260415_103021
+DB 保存: run_id=828cba05-7d4e-4f1a-9b2c-1a2b3c4d5e6f
 ```
 
-`--save` を付けた場合、結果 JSON の絶対パスと次のステップ（`alpha-forge optimize apply ...`）が表示されます（F-401）。
+`run_id` は `optimization_runs` テーブルに記録される UUID で、`opt_<timestamp>` 形式ではありません。
+
+`--save` を付けた場合、結果ファイルのパス（`report.output_path` 基準。`FORGE_CONFIG` 経由なら絶対パス、既定設定では cwd 相対）と次のステップ（`alpha-forge optimize apply ...`）が表示されます（F-401）。
 
 `--apply` 指定時（`my_v1_optimized` が未存在の場合は確認なしで作成）：
 
@@ -114,7 +116,7 @@ DB 保存: run_id=opt_20260415_103021
     "sma_slow.length": { "min": 20, "max": 60, "step": 5 }
   },
   "param_ranges_source": "default",
-  "saved_path": "/abs/path/data/results/optimize_my_v1_20260415_103021.json"
+  "saved_path": "data/results/optimize_my_v1_20260415_103021.json"
 }
 ```
 
@@ -122,7 +124,7 @@ DB 保存: run_id=opt_20260415_103021
 |----------|------|
 | `param_ranges_effective` | 実際に探索された range 辞書（戦略 JSON 由来または内蔵デフォルト） |
 | `param_ranges_source` | `"strategy"`（戦略 JSON 由来）または `"default"`（内蔵デフォルト） |
-| `saved_path` | `--save` 指定時の結果ファイル絶対パス。`alpha-forge optimize apply` の引数にそのまま渡せる |
+| `saved_path` | `--save` 指定時の結果ファイルパス。`report.output_path` 基準で、`FORGE_CONFIG` 経由で起動した場合は絶対パス、既定設定（`FORGE_CONFIG` 未設定）では cwd 相対パスになります。`alpha-forge optimize apply` の引数にそのまま渡せます |
 
 ### 主なエラー
 
@@ -367,6 +369,7 @@ WFT の `--json` 出力には、ウィンドウ単位のフィールドに加え
 | `"is_trades_insufficient"` | IS 期間の取引数が `--min-window-trades` 未満（取引頻度不足） |
 | `"oos_metric_invalid"` | OOS メトリクスが `±∞` または NaN（シグナル品質の問題） |
 | `"oos_trades_zero"` | OOS 期間の取引数が 0（シグナルなし） |
+| `"oos_trades_insufficient"` | OOS 期間の取引数が 1 件以上だが `min_oos_trades` 未満（`min_oos_trades > 1` のときのみ。統計的に無効、#319） |
 
 ---
 
@@ -570,17 +573,20 @@ Failures: 0
 
 ### サンプル出力（完了後の Top-K テーブル）
 
+完了後は Rich 枠付きテーブルとして `Top-N by <metric>` のタイトルで Top-K が表示されます（戦略名 / シンボル / `metric=...` の見出し行は付きません）。列は `rank`、各パラメータキー（`<指標id>.<param>` 形式）、metric 列、続いて `max_drawdown_pct` / `total_trades` / `total_return_pct`（結果に含まれかつ metric 自身でないもの）です。
+
 ```text
 Grid size: 1500 trials (chunk_size=100, max_memory_mb=None)
 Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 ... (Rich ダッシュボード表示中) ...
 
-=== Grid Search Top-20: my_v1 / SPY (metric=sharpe_ratio) ===
-fast_period  slow_period   sharpe_ratio   max_drawdown_pct   n_trades
------------------------------------------------------------------------
-         12           50           1.45              -16.8         18
-         14           55           1.41              -17.2         16
-         ...
+                         Top-20 by sharpe_ratio
+┏━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┓
+┃ rank ┃ sma_fast.length ┃ sma_slow.length ┃ sharpe_ratio ┃ max_drawdown_pct ┃ total_trades ┃ total_return_pct ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━┩
+│    1 │              12 │              50 │       1.4500 │         -16.8000 │           18 │          52.3000 │
+│    2 │              14 │              55 │       1.4100 │         -17.2000 │           16 │          48.1000 │
+└──────┴─────────────────┴─────────────────┴──────────────┴──────────────────┴──────────────┴──────────────────┘
 ```
 
 ### 主なエラー

@@ -53,17 +53,16 @@ alpha-forge analyze indicator show <INDICATOR_TYPE>
 ```text
 SMA — Simple Moving Average
 
-カテゴリー: トレンド
+カテゴリー: 移動平均
 
 パラメーター:
   名前                 型       デフォルト              説明
-  length              int      14                    期間
-  source              str      close                 ソース列
+  length              int      20                    期間
 
 出力: スカラー時系列
 
 使用例 (JSON):
-  {"id": "sma_20", "type": "SMA", "params": {"length": 20}, "source": "close"}
+  {"id": "sma_20", "type": "SMA", "params": {"length": 20}}
 ```
 
 未知の指標名を指定すると `エラー: '<TYPE>' は認識されないインジケーターです。` を出して終了コード `1`。
