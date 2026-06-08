@@ -581,8 +581,11 @@ op item get "alpha-strike" --vault AlphaTrade --fields WEBHOOK_PASSPHRASE --reve
 echo "ticker AAPL runaway: investigating" | sudo tee /etc/alpha-strike/MAINTENANCE
 
 # 確認（自宅 IP からの POST が 503 になる、WAF rule を一時 OFF にして検証）
+# ※ body の必須フィールド（broker/asset_class/action/ticker 等）が欠けると、
+#   kill switch 判定より先にリクエストボディ検証（422）が走るため、完全なペイロードで検証する。
 curl -i https://strike.yourdomain.com/webhook \
-  -X POST -H "Content-Type: application/json" -d '{"passphrase":"x"}'
+  -X POST -H "Content-Type: application/json" \
+  -d '{"passphrase":"x","broker":"moomoo","asset_class":"US","action":"buy","ticker":"US.AAPL","quantity":1,"run_mode":"paper"}'
 # → 503 maintenance: ticker AAPL runaway: investigating
 
 # 解除

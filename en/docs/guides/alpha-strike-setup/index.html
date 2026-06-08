@@ -4376,12 +4376,15 @@ combination <strong>before connecting to OpenD</strong> and raises <code>ValueEr
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ticker AAPL runaway: investigating&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/alpha-strike/MAINTENANCE
 <a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="c1"># Verify (temporarily disable the WAF rule to test from your home IP)</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>curl<span class="w"> </span>-i<span class="w"> </span>https://strike.yourdomain.com/webhook<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;x&quot;}&#39;</span>
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="c1"># → 503 maintenance: ticker AAPL runaway: investigating</span>
-<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>
-<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="c1"># Deactivate</span>
-<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>sudo<span class="w"> </span>rm<span class="w"> </span>/etc/alpha-strike/MAINTENANCE
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="c1"># Note: if required body fields (broker/asset_class/action/ticker, etc.) are missing,</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="c1">#   request-body validation (422) runs before the kill switch, so use a complete payload.</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>curl<span class="w"> </span>-i<span class="w"> </span>https://strike.yourdomain.com/webhook<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">  </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;passphrase&quot;:&quot;x&quot;,&quot;broker&quot;:&quot;moomoo&quot;,&quot;asset_class&quot;:&quot;US&quot;,&quot;action&quot;:&quot;buy&quot;,&quot;ticker&quot;:&quot;US.AAPL&quot;,&quot;quantity&quot;:1,&quot;run_mode&quot;:&quot;paper&quot;}&#39;</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="c1"># → 503 maintenance: ticker AAPL runaway: investigating</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="c1"># Deactivate</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>sudo<span class="w"> </span>rm<span class="w"> </span>/etc/alpha-strike/MAINTENANCE
 </code></pre></div>
 <blockquote>
 <p><strong>Note</strong>: <code>/health</code> still returns 200 during maintenance (so external health checks / the Cloudflare Tunnel stay alive). The kill switch is checked <strong>before</strong> the passphrase, so failed passphrase attempts during maintenance are not logged.</p>

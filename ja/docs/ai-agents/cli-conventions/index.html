@@ -2848,11 +2848,11 @@
 <li><strong>not found エラー</strong>: 対象が見つからない場合は stdout に <code>{"error": "...", "code": "...", "id": "..."}</code> を出力し、終了コード <code>1</code> を返します。</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 戦略一覧から ID だけを抜き出す（stdout は純 JSON なのでそのまま jq に渡せる）</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>list<span class="w"> </span>--json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.strategies[].id&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>list<span class="w"> </span>--json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.strategies[].strategy_id&#39;</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 存在しない戦略を指定した例（stdout はエラー JSON、終了コードは 1）</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>get<span class="w"> </span>does_not_exist<span class="w"> </span>--json
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># stdout: {&quot;error&quot;: &quot;strategy not found&quot;, &quot;code&quot;: &quot;strategy_not_found&quot;, &quot;id&quot;: &quot;does_not_exist&quot;}</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>show<span class="w"> </span>does_not_exist<span class="w"> </span>--json
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># stdout: {&quot;error&quot;: &quot;戦略 &#39;does_not_exist&#39; が見つかりません&quot;, &quot;code&quot;: &quot;strategy_not_found&quot;, &quot;id&quot;: &quot;does_not_exist&quot;}</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit: </span><span class="nv">$?</span><span class="s2">&quot;</span><span class="w">   </span><span class="c1"># 1</span>
 </code></pre></div>
 <div class="admonition tip">

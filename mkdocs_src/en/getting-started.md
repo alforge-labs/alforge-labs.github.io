@@ -132,11 +132,11 @@ Save the following as `sma_cross.json` (the `_qs` suffix in `strategy_id` just m
 Fetch the historical data the next backtest needs. `backtest run` does **not** auto-fetch data for the target symbol, so **if you skip this step the next backtest fails with `❌ データが見つかりません: SPY (1d)` (data not found)**.
 
 ```bash
-alpha-forge data fetch SPY --period 5y
+alpha-forge data fetch SPY --period 10y
 ```
 
 ```
-Fetching data: SPY (period=5y, interval=1d)
+Fetching data: SPY (period=10y, interval=1d)
 Fetched and saved data for SPY (N lines)
 ```
 
@@ -167,7 +167,7 @@ alpha-forge backtest run SPY \
 ```
 
 !!! note "Historical data must be fetched first"
-    `backtest run` does not auto-fetch data for the target symbol. If you have not run `alpha-forge data fetch SPY --period 5y` in Step 2.5, the backtest stops with `❌ データが見つかりません: SPY (1d)` (data not found). If it stops, run Step 2.5 and retry.
+    `backtest run` does not auto-fetch data for the target symbol. If you have not run `alpha-forge data fetch SPY --period 10y` in Step 2.5, the backtest stops with `❌ データが見つかりません: SPY (1d)` (data not found). If it stops, run Step 2.5 and retry.
 
 ### Step 4 — Read the results (~3 min)
 
@@ -511,12 +511,12 @@ The six metrics you'll look at first. For the full metric list, see the [CLI Ref
 | (Windows) `alpha-forge: The term 'alpha-forge' is not recognized ...` | Close all open terminals and open a new one (new tabs of an already-running Windows Terminal do not pick up PATH changes). If it persists, check that `[Environment]::GetEnvironmentVariable('PATH','User')` contains `%LOCALAPPDATA%\Programs\alpha-forge` as a standalone entry; if it is missing or corrupted, re-run the installer (it repairs the entry automatically). |
 | First command shows a `[y/n]` prompt / `Aborted!` in non-interactive runs | A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter `y`. In non-interactive environments (CI, pipes, agents), set `FORGE_ACCEPT_EULA=1` to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under `~/.config/forge/` and won't appear again. |
 | `❌ 未知のテンプレート名です: <id>。利用可能: ...` (unknown template name) / `戦略 'sma_cross_qs' が見つかりません` | Run `alpha-forge strategy save sma_cross.json` first to register the strategy in the DB. Or pass the JSON directly via `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...`. |
-| `❌ データが見つかりません: SPY (1d)` (data not found) | The target symbol's historical data has not been fetched. `backtest run` does not auto-fetch, so run Step 2.5 (`alpha-forge data fetch SPY --period 5y`) first. |
+| `❌ データが見つかりません: SPY (1d)` (data not found) | The target symbol's historical data has not been fetched. `backtest run` does not auto-fetch, so run Step 2.5 (`alpha-forge data fetch SPY --period 10y`) first. |
 | `Failed to fetch data: symbol=USDJPY` (404) | yfinance requires fixed suffixes per asset class: FX `USDJPY=X` / `EURUSD=X` / `GBPJPY=X`, futures `CL=F`, crypto `BTC-USD`. Quote symbols containing `=` (e.g., `'USDJPY=X'`). |
 | `forge.yaml not found` / `Config file not found` | No `forge.yaml` in the current directory. Run `alpha-forge system init` inside a project working directory, or set the `FORGE_CONFIG` environment variable (macOS/Linux: `FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...`; Windows PowerShell: run `$env:FORGE_CONFIG = "C:\path\to\forge.yaml"` first, then `alpha-forge ...`). |
 | Backtest reports `0 trades` | Either the strategy parameters are too strict for the entry conditions, or the data window is too short. Inspect parameters with `alpha-forge strategy show <id> --json`, extend data via `alpha-forge data fetch '<SYM>' --period 10y`, or try a different template such as `bbands_breakout_v1`. |
 | `Best score: -inf` / all optimization trials return `-inf` | Every trial returned NaN. Often the `optimizer_config.param_ranges` are too narrow or the data has too few trades. Widen the ranges, raise `--trials`, or switch `--metric` to e.g. `total_return`. |
-| WFT reports every window as `OOS 0 trades` / `skipped` | The data window is too short to produce trades inside each window. For FX / `1d` data, aim for 5+ years (~1,250 rows). Extend data with `alpha-forge data fetch '<SYM>' --period 5y`, or lower the partition count with `--windows 2`. |
+| WFT reports every window as `OOS 0 trades` / `skipped` | The data window is too short to produce trades inside each window. For FX / `1d` data, aim for 5+ years (~1,250 rows). Extend data with `alpha-forge data fetch '<SYM>' --period 10y`, or lower the partition count with `--windows 2`. |
 | `vis: serve: No such file or directory` / `vis: illegal option` | macOS ships a built-in `/usr/bin/vis` that wins on `$PATH`. Run with the absolute path `~/.local/bin/alpha-vis serve` (uv tool) or `~/.local/share/uv/tools/alpha-visualizer/bin/alpha-vis serve` (renamed to `alpha-vis` in v0.3.0+). |
 | `Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。` (shown in Japanese regardless of locale) | Expected behavior. Data beyond the Trial plan cap is automatically excluded. Purchase a paid plan (Lifetime / Annual / Monthly) to lift the cap. |
 | `Credentials expired` / `Token expired` | Re-run `alpha-forge system auth login`. Verify your Whop membership is still active on [the Whop dashboard](https://whop.com/). |

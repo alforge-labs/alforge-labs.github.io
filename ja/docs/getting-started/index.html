@@ -3266,9 +3266,9 @@
 </code></pre></div>
 <h3 id="25-1">ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・必須）<a class="headerlink" href="#25-1" title="Permanent link">&para;</a></h3>
 <p>次のバックテストに必要なヒストリカルデータを取得します。<code>backtest run</code> は対象シンボルのデータを自動取得しないため、<strong>このステップを先に実行しないと次のバックテストが <code>❌ データが見つかりません: SPY (1d)</code> で失敗します</strong>。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--period<span class="w"> </span>5y
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--period<span class="w"> </span>10y
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>データの取得を開始します: SPY (period=5y, interval=1d)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>データの取得を開始します: SPY (period=10y, interval=1d)
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>SPY のデータを取得し保存しました (N lines)
 </code></pre></div>
 <p>データは <code>data/historical/SPY_1d.parquet</code> に保存されます。<code>yfinance</code> 等のオンライン取得に失敗するケース（ネットワーク不調・レート制限）はこのステップで切り分けられます。</p>
@@ -3290,7 +3290,7 @@
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">事前にヒストリカルデータが必要です</p>
-<p><code>backtest run</code> は対象シンボルのデータを自動取得しません。ステップ 2.5 で <code>alpha-forge data fetch SPY --period 5y</code> を済ませていない場合は <code>❌ データが見つかりません: SPY (1d)</code> で停止します。停止したらステップ 2.5 を実行してから再試行してください。</p>
+<p><code>backtest run</code> は対象シンボルのデータを自動取得しません。ステップ 2.5 で <code>alpha-forge data fetch SPY --period 10y</code> を済ませていない場合は <code>❌ データが見つかりません: SPY (1d)</code> で停止します。停止したらステップ 2.5 を実行してから再試行してください。</p>
 </div>
 <h3 id="4-3">ステップ 4 — 結果を読む（約 3 分）<a class="headerlink" href="#4-3" title="Permanent link">&para;</a></h3>
 <p>実行が完了すると以下のような出力が表示されます。</p>
@@ -3714,7 +3714,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 </tr>
 <tr>
 <td><code>❌ データが見つかりません: SPY (1d)</code> / <code>No data found for SPY</code></td>
-<td>対象シンボルのヒストリカルデータが未取得です。<code>backtest run</code> はデータを自動取得しないため、ステップ 2.5 の <code>alpha-forge data fetch SPY --period 5y</code> を先に実行してください。</td>
+<td>対象シンボルのヒストリカルデータが未取得です。<code>backtest run</code> はデータを自動取得しないため、ステップ 2.5 の <code>alpha-forge data fetch SPY --period 10y</code> を先に実行してください。</td>
 </tr>
 <tr>
 <td><code>データが取得できませんでした: symbol=USDJPY</code> 等 FX で 404</td>
@@ -3734,7 +3734,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 </tr>
 <tr>
 <td>WFT が全ウィンドウ「OOS 0 件」「skipped」</td>
-<td>データ期間が短いと各ウィンドウで取引が発生せずスキップされます。FX / 1d データなら 5 年（約 1,250 行）以上を推奨。<code>alpha-forge data fetch '&lt;SYM&gt;' --period 5y</code> で長期データを揃えるか <code>--windows 2</code> で粗くしてください。</td>
+<td>データ期間が短いと各ウィンドウで取引が発生せずスキップされます。FX / 1d データなら 5 年（約 1,250 行）以上を推奨。<code>alpha-forge data fetch '&lt;SYM&gt;' --period 10y</code> で長期データを揃えるか <code>--windows 2</code> で粗くしてください。</td>
 </tr>
 <tr>
 <td><code>vis: serve: No such file or directory</code> / <code>vis: illegal option</code></td>
