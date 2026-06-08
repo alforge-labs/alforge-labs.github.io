@@ -50,13 +50,13 @@ Commands passed `--json` follow these conventions so agents can parse them relia
 
 ```bash
 # Extract just the IDs from the strategy list (stdout is pure JSON, so it pipes straight into jq)
-alpha-forge strategy list --json | jq -r '.strategies[].id'
+alpha-forge strategy list --json | jq -r '.strategies[].strategy_id'
 ```
 
 ```bash
 # Requesting a strategy that doesn't exist (stdout is an error JSON, exit code 1)
-alpha-forge strategy get does_not_exist --json
-# stdout: {"error": "strategy not found", "code": "strategy_not_found", "id": "does_not_exist"}
+alpha-forge strategy show does_not_exist --json
+# stdout: {"error": "strategy 'does_not_exist' not found", "code": "strategy_not_found", "id": "does_not_exist"}
 echo "exit: $?"   # 1
 ```
 
