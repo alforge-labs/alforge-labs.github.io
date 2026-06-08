@@ -2418,6 +2418,39 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0130-2026-06-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.13.0 — 2026-06-08
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0120-2026-06-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.12.0 — 2026-06-04
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0110-2026-06-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.11.0 — 2026-06-02
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0100-2026-05-30" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2722,6 +2755,39 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0130-2026-06-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.13.0 — 2026-06-08
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0120-2026-06-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.12.0 — 2026-06-04
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0110-2026-06-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.11.0 — 2026-06-02
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0100-2026-05-30" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2844,6 +2910,33 @@
 <p>This page is a <strong>user-facing summary</strong>. Internal refactors, tests, CI, and documentation chores that do not affect usage are omitted. Update to the latest version with <code>alpha-forge self update</code>.</p>
 </div>
 <hr />
+<h2 id="v0130-2026-06-08">v0.13.0 — 2026-06-08<a class="headerlink" href="#v0130-2026-06-08" title="Permanent link">&para;</a></h2>
+<p>Substantially strengthened unattended use from AI agents / CI: eliminated confirmation-prompt hangs, broadened <code>--json</code> coverage, and unified exit codes. Many bug fixes as well.</p>
+<ul>
+<li><strong>AI agent / CI integration</strong>: Added <code>system config</code> to observe the effective configuration. Extended <code>--json</code> output to the <code>analyze</code> / <code>live</code> / <code>journal</code> / <code>idea</code> groups. Unified the exit-code convention (<code>0</code>=success / <code>1</code>=not found or expected failure / <code>2</code>=argument error) across all commands so unattended loops run safely.</li>
+<li><strong>Non-interactive execution</strong>: <code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY detection eliminates confirmation-prompt hangs. Destructive operations now stop with exit code <code>2</code> unless <code>--yes</code> is given.</li>
+<li><strong>Cleanup commands</strong>: Added <code>optimize clean</code> / <code>pine list</code>・<code>delete</code>・<code>clean</code> / <code>data tv-mcp cache-clean</code>.</li>
+<li><strong><code>self update</code> now supports Windows</strong>. The combine Pine webhook payload now includes <code>target_qty</code> (alpha-strike integration).</li>
+<li><strong>Fixes</strong>: <code>backtest --regime</code> now shows per-regime performance as a label aggregate (<code>--json</code> stays pure JSON). Fixed monte-carlo on saved results, auto journal recording, empty-overwrite protection in <code>data fetch</code>, and more.</li>
+<li>⚠️ <strong>Breaking changes</strong>: Renamed <code>strategy delete</code>'s <code>--force</code> to <code>--yes</code>/<code>-y</code>, and <code>--strategy-id</code> to <code>--strategy</code> for <code>explore log</code> / <code>live events</code> / <code>live convert-check</code> (no compatibility aliases). Many commands that returned <code>exit 0</code> on error now exit non-zero. Review your scripts / CI branching.</li>
+</ul>
+<h2 id="v0120-2026-06-04">v0.12.0 — 2026-06-04<a class="headerlink" href="#v0120-2026-06-04" title="Permanent link">&para;</a></h2>
+<p>Built out the Windows distribution pipeline and improved the first-run setup experience.</p>
+<ul>
+<li><strong><code>system init</code> improvements</strong>: Added a <code>DIRECTORY</code> argument so creation and initialization complete in one command. Added a confirmation prompt against accidental expansion into unintended locations (e.g. directly under home).</li>
+<li><strong>Windows build pipeline</strong>: Automatic builds on tag push with clcache acceleration, and clang-cl to avoid MSVC heap exhaustion.</li>
+<li><strong>Auth</strong>: Guides users to the Whop purchase page URL when no license is present.</li>
+<li>Unified the CLI name to <code>alpha-forge</code> (resolved rename gaps in docs and messages).</li>
+</ul>
+<h2 id="v0110-2026-06-02">v0.11.0 — 2026-06-02<a class="headerlink" href="#v0110-2026-06-02" title="Permanent link">&para;</a></h2>
+<p>Added FRED macro-data integration and macro-regime support.</p>
+<ul>
+<li><strong>FRED macro-data integration</strong>: Added a macro-data provider (strict vintage look-ahead merge), a macro regime classifier, and <code>EXTERNAL_SERIES</code> ML features.</li>
+<li><strong>Macro event blackout</strong>: Halts entries around FOMC / NFP / CPI. <code>backtest run --regime-filter</code> gates entries by macro regime.</li>
+<li><strong><code>FORGE_ACCEPT_EULA</code></strong>: Accept the first-run EULA non-interactively (for CI).</li>
+<li>Added <code>--json</code> to <code>strategy list</code> / <code>backtest list</code>. Made the walk-forward OOS aggregation method configurable.</li>
+<li><strong>Fixes</strong>: Warn instead of silently ignoring <code>--leverage</code> in buy-hold-overlay, bundle <code>v6_signatures.yaml</code> into the distribution binary, and hardened the authentication flow.</li>
+</ul>
 <h2 id="v0100-2026-05-30">v0.10.0 — 2026-05-30<a class="headerlink" href="#v0100-2026-05-30" title="Permanent link">&para;</a></h2>
 <p>Strengthened live (paper-trading) integration and portfolio-level live aggregation.</p>
 <ul>

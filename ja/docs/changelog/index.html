@@ -2418,6 +2418,39 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0130-2026-06-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.13.0 — 2026-06-08
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0120-2026-06-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.12.0 — 2026-06-04
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0110-2026-06-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.11.0 — 2026-06-02
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0100-2026-05-30" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2722,6 +2755,39 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0130-2026-06-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.13.0 — 2026-06-08
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0120-2026-06-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.12.0 — 2026-06-04
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0110-2026-06-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.11.0 — 2026-06-02
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0100-2026-05-30" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2844,6 +2910,33 @@
 <p>本ページは<strong>ユーザー向けの要約</strong>です。内部リファクタリング・テスト・CI・ドキュメント整備など、利用に直接影響しない変更は省略しています。最新版へは <code>alpha-forge self update</code> で更新できます。</p>
 </div>
 <hr />
+<h2 id="v0130-2026-06-08">v0.13.0 — 2026-06-08<a class="headerlink" href="#v0130-2026-06-08" title="Permanent link">&para;</a></h2>
+<p>AI エージェント / CI からの無人利用を全面強化し、確認プロンプトのハング解消・<code>--json</code> 網羅・終了コード統一を実現しました。バグ修正も多数。</p>
+<ul>
+<li><strong>AI エージェント / CI 連携</strong>: <code>system config</code> で実効設定を観測できるように。<code>analyze</code> / <code>live</code> / <code>journal</code> / <code>idea</code> グループへ <code>--json</code> 出力を拡大。終了コード規約（<code>0</code>=成功 / <code>1</code>=not found・想定内失敗 / <code>2</code>=引数エラー）を全コマンドで統一し、無人ループを安全に回せます。</li>
+<li><strong>非対話実行基盤</strong>: <code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY 検知で確認プロンプトのハングを解消。破壊的操作は <code>--yes</code> が無いと終了コード <code>2</code> で安全停止します。</li>
+<li><strong>生成物の掃除コマンド</strong>: <code>optimize clean</code> / <code>pine list</code>・<code>delete</code>・<code>clean</code> / <code>data tv-mcp cache-clean</code> を新設。</li>
+<li><strong><code>self update</code> が Windows 対応</strong>。combine Pine の Webhook ペイロードに <code>target_qty</code> を併送（alpha-strike 連携）。</li>
+<li><strong>修正</strong>: <code>backtest --regime</code> のレジーム別表示をラベル集約に変更（<code>--json</code> は純 JSON のみ）。保存済み結果への monte-carlo・自動ジャーナル記録・<code>data fetch</code> の空上書き防止など多数。</li>
+<li>⚠️ <strong>破壊的変更</strong>: <code>strategy delete</code> の <code>--force</code> を <code>--yes</code>/<code>-y</code> に、<code>explore log</code> / <code>live events</code> / <code>live convert-check</code> の <code>--strategy-id</code> を <code>--strategy</code> に改名（互換 alias なし）。エラー時に <code>exit 0</code> だった多くのコマンドが非ゼロ終了に統一されました。スクリプト / CI の分岐を見直してください。</li>
+</ul>
+<h2 id="v0120-2026-06-04">v0.12.0 — 2026-06-04<a class="headerlink" href="#v0120-2026-06-04" title="Permanent link">&para;</a></h2>
+<p>Windows 配布基盤の整備と初回セットアップ体験を改善しました。</p>
+<ul>
+<li><strong><code>system init</code> の改善</strong>: <code>DIRECTORY</code> 引数を追加し、ディレクトリ作成と初期化を 1 コマンドで完結。ホーム直下など意図しない場所への誤展開には確認プロンプトを表示。</li>
+<li><strong>Windows ビルド基盤</strong>: tag push での自動ビルドと clcache 高速化、clang-cl による MSVC ヒープ枯渇の回避。</li>
+<li><strong>認証</strong>: ライセンス未購入時に Whop 販売ページ URL を案内。</li>
+<li>CLI 名を <code>alpha-forge</code> に統一（ドキュメント・文言の rename 漏れを解消）。</li>
+</ul>
+<h2 id="v0110-2026-06-02">v0.11.0 — 2026-06-02<a class="headerlink" href="#v0110-2026-06-02" title="Permanent link">&para;</a></h2>
+<p>FRED マクロデータ統合とマクロレジーム対応を追加しました。</p>
+<ul>
+<li><strong>FRED マクロデータ統合</strong>: マクロデータ provider（vintage look-ahead 厳密マージ）、マクロ regime classifier、<code>EXTERNAL_SERIES</code> ML 特徴量を追加。</li>
+<li><strong>マクロイベント・ブラックアウト</strong>: FOMC / NFP / CPI 前後のエントリー停止。<code>backtest run --regime-filter</code> でマクロ regime によるエントリー gating。</li>
+<li><strong><code>FORGE_ACCEPT_EULA</code></strong>: 初回 EULA を非対話で accept（CI 向け）。</li>
+<li><code>strategy list</code> / <code>backtest list</code> に <code>--json</code> を追加。walk-forward の OOS 集約方法を設定可能に。</li>
+<li><strong>修正</strong>: buy-hold-overlay の <code>--leverage</code> 黙殺を警告化、配布バイナリへの <code>v6_signatures.yaml</code> 同梱、認証フローのセキュリティ強化。</li>
+</ul>
 <h2 id="v0100-2026-05-30">v0.10.0 — 2026-05-30<a class="headerlink" href="#v0100-2026-05-30" title="Permanent link">&para;</a></h2>
 <p>実運用（ペーパートレード）連携と複数戦略ポートフォリオのライブ集計を強化しました。</p>
 <ul>

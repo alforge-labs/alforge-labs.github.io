@@ -12,6 +12,36 @@ A user-facing summary of notable changes in each public AlphaForge CLI release. 
 
 ---
 
+## v0.13.0 — 2026-06-08
+
+Substantially strengthened unattended use from AI agents / CI: eliminated confirmation-prompt hangs, broadened `--json` coverage, and unified exit codes. Many bug fixes as well.
+
+- **AI agent / CI integration**: Added `system config` to observe the effective configuration. Extended `--json` output to the `analyze` / `live` / `journal` / `idea` groups. Unified the exit-code convention (`0`=success / `1`=not found or expected failure / `2`=argument error) across all commands so unattended loops run safely.
+- **Non-interactive execution**: `FORGE_NONINTERACTIVE` / `CI` / non-TTY detection eliminates confirmation-prompt hangs. Destructive operations now stop with exit code `2` unless `--yes` is given.
+- **Cleanup commands**: Added `optimize clean` / `pine list`・`delete`・`clean` / `data tv-mcp cache-clean`.
+- **`self update` now supports Windows**. The combine Pine webhook payload now includes `target_qty` (alpha-strike integration).
+- **Fixes**: `backtest --regime` now shows per-regime performance as a label aggregate (`--json` stays pure JSON). Fixed monte-carlo on saved results, auto journal recording, empty-overwrite protection in `data fetch`, and more.
+- ⚠️ **Breaking changes**: Renamed `strategy delete`'s `--force` to `--yes`/`-y`, and `--strategy-id` to `--strategy` for `explore log` / `live events` / `live convert-check` (no compatibility aliases). Many commands that returned `exit 0` on error now exit non-zero. Review your scripts / CI branching.
+
+## v0.12.0 — 2026-06-04
+
+Built out the Windows distribution pipeline and improved the first-run setup experience.
+
+- **`system init` improvements**: Added a `DIRECTORY` argument so creation and initialization complete in one command. Added a confirmation prompt against accidental expansion into unintended locations (e.g. directly under home).
+- **Windows build pipeline**: Automatic builds on tag push with clcache acceleration, and clang-cl to avoid MSVC heap exhaustion.
+- **Auth**: Guides users to the Whop purchase page URL when no license is present.
+- Unified the CLI name to `alpha-forge` (resolved rename gaps in docs and messages).
+
+## v0.11.0 — 2026-06-02
+
+Added FRED macro-data integration and macro-regime support.
+
+- **FRED macro-data integration**: Added a macro-data provider (strict vintage look-ahead merge), a macro regime classifier, and `EXTERNAL_SERIES` ML features.
+- **Macro event blackout**: Halts entries around FOMC / NFP / CPI. `backtest run --regime-filter` gates entries by macro regime.
+- **`FORGE_ACCEPT_EULA`**: Accept the first-run EULA non-interactively (for CI).
+- Added `--json` to `strategy list` / `backtest list`. Made the walk-forward OOS aggregation method configurable.
+- **Fixes**: Warn instead of silently ignoring `--leverage` in buy-hold-overlay, bundle `v6_signatures.yaml` into the distribution binary, and hardened the authentication flow.
+
 ## v0.10.0 — 2026-05-30
 
 Strengthened live (paper-trading) integration and portfolio-level live aggregation.
