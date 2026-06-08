@@ -2848,11 +2848,11 @@
 <li><strong>not-found error</strong>: when the target is missing, stdout carries <code>{"error": "...", "code": "...", "id": "..."}</code> and the command returns exit code <code>1</code>.</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Extract just the IDs from the strategy list (stdout is pure JSON, so it pipes straight into jq)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>list<span class="w"> </span>--json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.strategies[].id&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>list<span class="w"> </span>--json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.strategies[].strategy_id&#39;</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Requesting a strategy that doesn&#39;t exist (stdout is an error JSON, exit code 1)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>get<span class="w"> </span>does_not_exist<span class="w"> </span>--json
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># stdout: {&quot;error&quot;: &quot;strategy not found&quot;, &quot;code&quot;: &quot;strategy_not_found&quot;, &quot;id&quot;: &quot;does_not_exist&quot;}</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>show<span class="w"> </span>does_not_exist<span class="w"> </span>--json
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># stdout: {&quot;error&quot;: &quot;strategy &#39;does_not_exist&#39; not found&quot;, &quot;code&quot;: &quot;strategy_not_found&quot;, &quot;id&quot;: &quot;does_not_exist&quot;}</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;exit: </span><span class="nv">$?</span><span class="s2">&quot;</span><span class="w">   </span><span class="c1"># 1</span>
 </code></pre></div>
 <div class="admonition tip">
