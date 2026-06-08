@@ -132,11 +132,11 @@ alpha-forge system init
 次のバックテストに必要なヒストリカルデータを取得します。`backtest run` は対象シンボルのデータを自動取得しないため、**このステップを先に実行しないと次のバックテストが `❌ データが見つかりません: SPY (1d)` で失敗します**。
 
 ```bash
-alpha-forge data fetch SPY --period 5y
+alpha-forge data fetch SPY --period 10y
 ```
 
 ```
-データの取得を開始します: SPY (period=5y, interval=1d)
+データの取得を開始します: SPY (period=10y, interval=1d)
 SPY のデータを取得し保存しました (N lines)
 ```
 
@@ -167,7 +167,7 @@ alpha-forge backtest run SPY \
 ```
 
 !!! note "事前にヒストリカルデータが必要です"
-    `backtest run` は対象シンボルのデータを自動取得しません。ステップ 2.5 で `alpha-forge data fetch SPY --period 5y` を済ませていない場合は `❌ データが見つかりません: SPY (1d)` で停止します。停止したらステップ 2.5 を実行してから再試行してください。
+    `backtest run` は対象シンボルのデータを自動取得しません。ステップ 2.5 で `alpha-forge data fetch SPY --period 10y` を済ませていない場合は `❌ データが見つかりません: SPY (1d)` で停止します。停止したらステップ 2.5 を実行してから再試行してください。
 
 ### ステップ 4 — 結果を読む（約 3 分）
 
@@ -507,12 +507,12 @@ alpha-forge pine generate --strategy sma_cross_qs
 | （Windows）`alpha-forge: The term 'alpha-forge' is not recognized ...` | 開いているターミナルをすべて閉じてから新しく開き直してください（起動済みの Windows Terminal の新しいタブには PATH が反映されません）。それでも出る場合は `[Environment]::GetEnvironmentVariable('PATH','User')` に `%LOCALAPPDATA%\Programs\alpha-forge` が独立したエントリとして含まれるか確認し、含まれない・壊れている場合はインストーラーを再実行してください（自動修復されます）。 |
 | 初回コマンドで `[y/n]` プロンプトが出る / 非対話実行で `Aborted!` | 初回のみ EULA 同意プロンプトが表示されます。対話端末では `y` を入力してください。CI・パイプ・エージェントなどの非対話環境では環境変数 `FORGE_ACCEPT_EULA=1` を設定すると初回 EULA に自動同意して続行できます（対応バージョン以降）。同意状態は `~/.config/forge/` に記録され次回以降は出ません。 |
 | `❌ 未知のテンプレート名です: <id>。利用可能: ...` / `戦略 'sma_cross_qs' が見つかりません` | `alpha-forge strategy save sma_cross.json` を先に実行して戦略 DB に登録してください。または `alpha-forge backtest run SPY --strategy-file sma_cross.json --start ...` のように `--strategy-file` で JSON を直接指定できます。 |
-| `❌ データが見つかりません: SPY (1d)` / `No data found for SPY` | 対象シンボルのヒストリカルデータが未取得です。`backtest run` はデータを自動取得しないため、ステップ 2.5 の `alpha-forge data fetch SPY --period 5y` を先に実行してください。 |
+| `❌ データが見つかりません: SPY (1d)` / `No data found for SPY` | 対象シンボルのヒストリカルデータが未取得です。`backtest run` はデータを自動取得しないため、ステップ 2.5 の `alpha-forge data fetch SPY --period 10y` を先に実行してください。 |
 | `データが取得できませんでした: symbol=USDJPY` 等 FX で 404 | yfinance では FX シンボルに `=X` サフィックスが必須です（例: `USDJPY=X`, `EURUSD=X`, `GBPJPY=X`）。先物は `CL=F` のような `=F`、暗号資産は `BTC-USD` のような形式です。 |
 | `forge.yaml が見つかりません` / `Config file not found` | カレントディレクトリに `forge.yaml` がありません。プロジェクト作業ディレクトリで `alpha-forge system init` を実行するか、環境変数 `FORGE_CONFIG` で指定してください（macOS/Linux: `FORGE_CONFIG=/path/to/forge.yaml alpha-forge ...`、Windows PowerShell: `$env:FORGE_CONFIG = "C:\path\to\forge.yaml"` を実行してから `alpha-forge ...`）。 |
 | バックテスト結果が「取引数 0 件」 | 戦略パラメータが厳しすぎてエントリー条件を満たさない / データ期間が短すぎる、のどちらかが原因です。`alpha-forge strategy show <id> --json` でパラメータ確認、`alpha-forge data fetch '<SYM>' --period 10y` でデータ拡張、または `bbands_breakout_v1` など別テンプレートを試してください。 |
 | `Best score: -inf` / 最適化結果がすべて `-inf` | 全 trial が NaN を返した状態です。`optimizer_config.param_ranges` の範囲が狭い・取引数が極端に少ない等が原因。範囲を広げるか `--trials` を増やす、`--metric` を `total_return` 等に変えて試してください。 |
-| WFT が全ウィンドウ「OOS 0 件」「skipped」 | データ期間が短いと各ウィンドウで取引が発生せずスキップされます。FX / 1d データなら 5 年（約 1,250 行）以上を推奨。`alpha-forge data fetch '<SYM>' --period 5y` で長期データを揃えるか `--windows 2` で粗くしてください。 |
+| WFT が全ウィンドウ「OOS 0 件」「skipped」 | データ期間が短いと各ウィンドウで取引が発生せずスキップされます。FX / 1d データなら 5 年（約 1,250 行）以上を推奨。`alpha-forge data fetch '<SYM>' --period 10y` で長期データを揃えるか `--windows 2` で粗くしてください。 |
 | `vis: serve: No such file or directory` / `vis: illegal option` | macOS には標準コマンド `/usr/bin/vis` があり、`$PATH` の並びによってはこちらが優先されます。`~/.local/bin/alpha-vis serve`（uv tool）または `~/.local/share/uv/tools/alpha-visualizer/bin/alpha-vis serve` のように絶対パスで起動してください（v0.3.0 以降は `alpha-vis` コマンドに改名済み）。 |
 | `Trialプランでは2023-12-31までのデータのみ取得できます。最新データを取得するには有料プラン（Lifetime / Annual / Monthly）が必要です。` | 仕様どおりの動作です。Trial プランの上限日以降のデータは自動的に除外されます。 有料プラン（Lifetime / Annual / Monthly）購入後は制限解除されます。 |
 | `認証情報の有効期限が切れています` / `Token expired` | `alpha-forge system auth login` で再認証してください。Whop 側でメンバーシップが失効していないか [マイページ](https://whop.com/) で確認してください。 |
