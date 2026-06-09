@@ -4172,22 +4172,23 @@
 <a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="s"># over-sell ガード（既定 ON）。実保有を超える SELL は実保有まで clamp、</span>
 <a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="s"># 建玉ゼロは skip し、moomoo の &quot;Not enough positions&quot; を防ぐ。</span>
 <a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="s"># 無効化する場合のみ設定: MOOMOO_SELL_POSITION_GUARD=0</span>
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="s"># 米国市場の成行注文の有効期限（既定 GTC）。日足アラートは市場クローズ後に</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="s"># REAL の米国市場の成行注文の有効期限（既定 GTC）。日足アラートは市場クローズ後に</span>
 <a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="s"># 届くため、GTC で翌営業日寄付に持ち越して約定させる（DAY だと約定せず失効）。</span>
 <a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="s"># 旧挙動に戻す場合のみ設定: MOOMOO_TIME_IN_FORCE=DAY</span>
-<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="s"># target_qty による closed-loop 数量解決（既定 ON、v0.7.0+）。payload の</span>
-<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="s"># target_qty（目標絶対保有量）と実保有の差分から発注数量・方向を再解決する。</span>
-<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="s"># 旧 delta 解釈に戻す場合のみ設定: MOOMOO_TARGET_QTY_RECONCILE=0</span>
-<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="s"># GTC 注文の翌営業日約定をイベントログへ反映する遅延再照合（既定 ON、v0.7.1+）。</span>
-<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="s"># 間隔調整は PENDING_RECONCILE_INTERVAL_SECONDS=600、</span>
-<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="s"># 無効化する場合のみ設定: PENDING_RECONCILE_ENABLED=0</span>
-<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a>
-<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="s"># OANDA を使う場合のみ</span>
-<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
-<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
-<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="s"># OANDA_ENV=PRACTICE</span>
-<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="s">EOF</span>
-<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="s"># ※ SIMULATE（ペーパー）は moomoo 10.7 が GTC を拒否するため本設定に関わらず常に DAY。</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="s"># target_qty による closed-loop 数量解決（既定 ON、v0.7.0+）。payload の</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="s"># target_qty（目標絶対保有量）と実保有の差分から発注数量・方向を再解決する。</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="s"># 旧 delta 解釈に戻す場合のみ設定: MOOMOO_TARGET_QTY_RECONCILE=0</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="s"># GTC 注文の翌営業日約定をイベントログへ反映する遅延再照合（既定 ON、v0.7.1+）。</span>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="s"># 間隔調整は PENDING_RECONCILE_INTERVAL_SECONDS=600、</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="s"># 無効化する場合のみ設定: PENDING_RECONCILE_ENABLED=0</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="s"># OANDA を使う場合のみ</span>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="s"># OANDA_ENV=PRACTICE</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="s">EOF</span>
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
 </code></pre></div>
 <p><code>WEBHOOK_PASSPHRASE</code> は 1Password にも保管しておきます（後で TradingView の Message JSON に貼り付ける）。</p>
 <h3 id="6-3-systemd">6-3. systemd ユニット<a class="headerlink" href="#6-3-systemd" title="Permanent link">&para;</a></h3>

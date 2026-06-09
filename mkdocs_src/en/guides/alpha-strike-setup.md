@@ -317,10 +317,11 @@ MOOMOO_TRADE_ENV=SIMULATE
 # Over-sell guard (default ON): clamps a SELL to the actual position,
 # skips it when no position is held — prevents moomoo "Not enough positions".
 # Set MOOMOO_SELL_POSITION_GUARD=0 only to disable.
-# Time-in-force for US-market MARKET orders (default GTC). Daily alerts arrive
-# after the market close, so GTC carries them over to the next session's open
-# (with DAY they would expire unfilled).
+# Time-in-force for REAL US-market MARKET orders (default GTC). Daily alerts
+# arrive after the market close, so GTC carries them over to the next session's
+# open (with DAY they would expire unfilled).
 # Set MOOMOO_TIME_IN_FORCE=DAY only to restore the legacy behavior.
+# Note: SIMULATE (paper) always uses DAY regardless, as moomoo 10.7 rejects GTC for paper.
 # Closed-loop quantity resolution via target_qty (default ON, v0.7.0+).
 # Re-resolves the order side/quantity from the difference between the
 # payload's target_qty (absolute target holding) and the actual position.

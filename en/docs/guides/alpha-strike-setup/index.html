@@ -4104,24 +4104,25 @@
 <a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="s"># Over-sell guard (default ON): clamps a SELL to the actual position,</span>
 <a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="s"># skips it when no position is held — prevents moomoo &quot;Not enough positions&quot;.</span>
 <a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="s"># Set MOOMOO_SELL_POSITION_GUARD=0 only to disable.</span>
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="s"># Time-in-force for US-market MARKET orders (default GTC). Daily alerts arrive</span>
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="s"># after the market close, so GTC carries them over to the next session&#39;s open</span>
-<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="s"># (with DAY they would expire unfilled).</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="s"># Time-in-force for REAL US-market MARKET orders (default GTC). Daily alerts</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="s"># arrive after the market close, so GTC carries them over to the next session&#39;s</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="s"># open (with DAY they would expire unfilled).</span>
 <a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="s"># Set MOOMOO_TIME_IN_FORCE=DAY only to restore the legacy behavior.</span>
-<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="s"># Closed-loop quantity resolution via target_qty (default ON, v0.7.0+).</span>
-<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="s"># Re-resolves the order side/quantity from the difference between the</span>
-<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="s"># payload&#39;s target_qty (absolute target holding) and the actual position.</span>
-<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="s"># Set MOOMOO_TARGET_QTY_RECONCILE=0 only to restore the legacy delta mode.</span>
-<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="s"># Delayed re-reconciliation that reflects next-day GTC fills into the event</span>
-<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="s"># log (default ON, v0.7.1+). Tune with PENDING_RECONCILE_INTERVAL_SECONDS=600.</span>
-<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="s"># Set PENDING_RECONCILE_ENABLED=0 only to disable.</span>
-<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>
-<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="s"># OANDA (optional)</span>
-<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
-<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
-<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="s"># OANDA_ENV=PRACTICE</span>
-<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="s">EOF</span>
-<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="s"># Note: SIMULATE (paper) always uses DAY regardless, as moomoo 10.7 rejects GTC for paper.</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="s"># Closed-loop quantity resolution via target_qty (default ON, v0.7.0+).</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="s"># Re-resolves the order side/quantity from the difference between the</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="s"># payload&#39;s target_qty (absolute target holding) and the actual position.</span>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="s"># Set MOOMOO_TARGET_QTY_RECONCILE=0 only to restore the legacy delta mode.</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="s"># Delayed re-reconciliation that reflects next-day GTC fills into the event</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="s"># log (default ON, v0.7.1+). Tune with PENDING_RECONCILE_INTERVAL_SECONDS=600.</span>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="s"># Set PENDING_RECONCILE_ENABLED=0 only to disable.</span>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a>
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="s"># OANDA (optional)</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="s"># OANDA_ENV=PRACTICE</span>
+<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="s">EOF</span>
+<a id="__codelineno-15-32" name="__codelineno-15-32" href="#__codelineno-15-32"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
 </code></pre></div>
 <p>Also store the <code>WEBHOOK_PASSPHRASE</code> in 1Password — you will paste the same value into TradingView's alert Message JSON later.</p>
 <h3 id="6-3-systemd-unit">6-3. systemd unit<a class="headerlink" href="#6-3-systemd-unit" title="Permanent link">&para;</a></h3>

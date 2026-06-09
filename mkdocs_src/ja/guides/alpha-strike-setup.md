@@ -324,9 +324,10 @@ MOOMOO_TRADE_ENV=SIMULATE
 # over-sell ガード（既定 ON）。実保有を超える SELL は実保有まで clamp、
 # 建玉ゼロは skip し、moomoo の "Not enough positions" を防ぐ。
 # 無効化する場合のみ設定: MOOMOO_SELL_POSITION_GUARD=0
-# 米国市場の成行注文の有効期限（既定 GTC）。日足アラートは市場クローズ後に
+# REAL の米国市場の成行注文の有効期限（既定 GTC）。日足アラートは市場クローズ後に
 # 届くため、GTC で翌営業日寄付に持ち越して約定させる（DAY だと約定せず失効）。
 # 旧挙動に戻す場合のみ設定: MOOMOO_TIME_IN_FORCE=DAY
+# ※ SIMULATE（ペーパー）は moomoo 10.7 が GTC を拒否するため本設定に関わらず常に DAY。
 # target_qty による closed-loop 数量解決（既定 ON、v0.7.0+）。payload の
 # target_qty（目標絶対保有量）と実保有の差分から発注数量・方向を再解決する。
 # 旧 delta 解釈に戻す場合のみ設定: MOOMOO_TARGET_QTY_RECONCILE=0
