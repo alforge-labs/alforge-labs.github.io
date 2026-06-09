@@ -562,8 +562,11 @@ The **first action** when an incident is detected. The service stays up but `/we
 echo "ticker AAPL runaway: investigating" | sudo tee /etc/alpha-strike/MAINTENANCE
 
 # Verify (temporarily disable the WAF rule to test from your home IP)
+# Note: if required body fields (broker/asset_class/action/ticker, etc.) are missing,
+#   request-body validation (422) runs before the kill switch, so use a complete payload.
 curl -i https://strike.yourdomain.com/webhook \
-  -X POST -H "Content-Type: application/json" -d '{"passphrase":"x"}'
+  -X POST -H "Content-Type: application/json" \
+  -d '{"passphrase":"x","broker":"moomoo","asset_class":"US","action":"buy","ticker":"US.AAPL","quantity":1,"run_mode":"paper"}'
 # → 503 maintenance: ticker AAPL runaway: investigating
 
 # Deactivate

@@ -50,13 +50,13 @@ echo "exit: $?"   # 2 = 非対話実行で --yes 欠落
 
 ```bash
 # 戦略一覧から ID だけを抜き出す（stdout は純 JSON なのでそのまま jq に渡せる）
-alpha-forge strategy list --json | jq -r '.strategies[].id'
+alpha-forge strategy list --json | jq -r '.strategies[].strategy_id'
 ```
 
 ```bash
 # 存在しない戦略を指定した例（stdout はエラー JSON、終了コードは 1）
-alpha-forge strategy get does_not_exist --json
-# stdout: {"error": "strategy not found", "code": "strategy_not_found", "id": "does_not_exist"}
+alpha-forge strategy show does_not_exist --json
+# stdout: {"error": "戦略 'does_not_exist' が見つかりません", "code": "strategy_not_found", "id": "does_not_exist"}
 echo "exit: $?"   # 1
 ```
 

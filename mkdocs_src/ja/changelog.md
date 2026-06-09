@@ -12,6 +12,36 @@ AlphaForge CLI の公開リリースごとの主な変更点をまとめてい�
 
 ---
 
+## v0.13.0 — 2026-06-08
+
+AI エージェント / CI からの無人利用を全面強化し、確認プロンプトのハング解消・`--json` 網羅・終了コード統一を実現しました。バグ修正も多数。
+
+- **AI エージェント / CI 連携**: `system config` で実効設定を観測できるように。`analyze` / `live` / `journal` / `idea` グループへ `--json` 出力を拡大。終了コード規約（`0`=成功 / `1`=not found・想定内失敗 / `2`=引数エラー）を全コマンドで統一し、無人ループを安全に回せます。
+- **非対話実行基盤**: `FORGE_NONINTERACTIVE` / `CI` / 非 TTY 検知で確認プロンプトのハングを解消。破壊的操作は `--yes` が無いと終了コード `2` で安全停止します。
+- **生成物の掃除コマンド**: `optimize clean` / `pine list`・`delete`・`clean` / `data tv-mcp cache-clean` を新設。
+- **`self update` が Windows 対応**。combine Pine の Webhook ペイロードに `target_qty` を併送（alpha-strike 連携）。
+- **修正**: `backtest --regime` のレジーム別表示をラベル集約に変更（`--json` は純 JSON のみ）。保存済み結果への monte-carlo・自動ジャーナル記録・`data fetch` の空上書き防止など多数。
+- ⚠️ **破壊的変更**: `strategy delete` の `--force` を `--yes`/`-y` に、`explore log` / `live events` / `live convert-check` の `--strategy-id` を `--strategy` に改名（互換 alias なし）。エラー時に `exit 0` だった多くのコマンドが非ゼロ終了に統一されました。スクリプト / CI の分岐を見直してください。
+
+## v0.12.0 — 2026-06-04
+
+Windows 配布基盤の整備と初回セットアップ体験を改善しました。
+
+- **`system init` の改善**: `DIRECTORY` 引数を追加し、ディレクトリ作成と初期化を 1 コマンドで完結。ホーム直下など意図しない場所への誤展開には確認プロンプトを表示。
+- **Windows ビルド基盤**: tag push での自動ビルドと clcache 高速化、clang-cl による MSVC ヒープ枯渇の回避。
+- **認証**: ライセンス未購入時に Whop 販売ページ URL を案内。
+- CLI 名を `alpha-forge` に統一（ドキュメント・文言の rename 漏れを解消）。
+
+## v0.11.0 — 2026-06-02
+
+FRED マクロデータ統合とマクロレジーム対応を追加しました。
+
+- **FRED マクロデータ統合**: マクロデータ provider（vintage look-ahead 厳密マージ）、マクロ regime classifier、`EXTERNAL_SERIES` ML 特徴量を追加。
+- **マクロイベント・ブラックアウト**: FOMC / NFP / CPI 前後のエントリー停止。`backtest run --regime-filter` でマクロ regime によるエントリー gating。
+- **`FORGE_ACCEPT_EULA`**: 初回 EULA を非対話で accept（CI 向け）。
+- `strategy list` / `backtest list` に `--json` を追加。walk-forward の OOS 集約方法を設定可能に。
+- **修正**: buy-hold-overlay の `--leverage` 黙殺を警告化、配布バイナリへの `v6_signatures.yaml` 同梱、認証フローのセキュリティ強化。
+
 ## v0.10.0 — 2026-05-30
 
 実運用（ペーパートレード）連携と複数戦略ポートフォリオのライブ集計を強化しました。
