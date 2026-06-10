@@ -328,6 +328,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # 届くため、GTC で翌営業日寄付に持ち越して約定させる（DAY だと約定せず失効）。
 # 旧挙動に戻す場合のみ設定: MOOMOO_TIME_IN_FORCE=DAY
 # ※ SIMULATE（ペーパー）は moomoo 10.7 が GTC を拒否するため本設定に関わらず常に DAY。
+# ※ SIMULATE のクローズ後着シグナルは DAY 失効するため、carry-over (#89) が次の市場
+#   オープンで自動再発注して約定させる（既定 ON）。無効化は CARRYOVER_ENABLED=0、
+#   間隔は CARRYOVER_RESUBMIT_INTERVAL_SECONDS=300、有効期限は CARRYOVER_LOOKBACK_HOURS=48。
 # target_qty による closed-loop 数量解決（既定 ON、v0.7.0+）。payload の
 # target_qty（目標絶対保有量）と実保有の差分から発注数量・方向を再解決する。
 # 旧 delta 解釈に戻す場合のみ設定: MOOMOO_TARGET_QTY_RECONCILE=0
