@@ -322,6 +322,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # open (with DAY they would expire unfilled).
 # Set MOOMOO_TIME_IN_FORCE=DAY only to restore the legacy behavior.
 # Note: SIMULATE (paper) always uses DAY regardless, as moomoo 10.7 rejects GTC for paper.
+# Note: SIMULATE after-close signals (which expire as DAY) are re-submitted at the next
+#   market open by carry-over (#89, default ON). Disable with CARRYOVER_ENABLED=0; tune
+#   CARRYOVER_RESUBMIT_INTERVAL_SECONDS=300 / CARRYOVER_LOOKBACK_HOURS=48.
 # Closed-loop quantity resolution via target_qty (default ON, v0.7.0+).
 # Re-resolves the order side/quantity from the difference between the
 # payload's target_qty (absolute target holding) and the actual position.
