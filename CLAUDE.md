@@ -67,6 +67,13 @@ uv run mkdocs build -f mkdocs.en.yml
 
 を実行して `ja/docs/` / `en/docs/` を再生成すること。
 
+### 5. 新規 React コンポーネントは window に登録する
+
+`homepage-components.jsx` / `site-header.jsx` で定義したコンポーネントは、ファイル末尾の
+`Object.assign(window, { ... })` に必ず追加すること。各 JSX は独立した script として
+ロードされるため、登録を忘れると `app.jsx` から undefined 参照になり**ページ全体が白画面**になる
+（過去に2回発生）。検証は本番と同一の babel transpile + headless ブラウザでの実描画で行うこと。
+
 ---
 
 ## ファイル構成
