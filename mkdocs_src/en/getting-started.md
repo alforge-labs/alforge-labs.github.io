@@ -195,6 +195,7 @@ Total Return: 4.74%   CAGR: 0.93%
 SR: 0.85   Sortino: -2.86   Calmar: 0.52
 MDD: 1.79%   Length: 71d   Recovery: 154d
 PF: 4.01   Win%: 35.7%   avgWin: 10.39%   avgLoss: -1.72%
+Kelly: 0.25  Payoff: 6.04  Expectancy: 2.60%/trade  GPR: 0.31  Ulcer: 0.0079  Recovery: 2.65
 Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
 Win-rate CI(90%): 17.8% - 54.8%
 📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
@@ -223,6 +224,7 @@ A quick read of the key metrics is below. For the full metric list, see [Reading
     | **Length / Recovery** | Drawdown duration / Recovery | Days from MDD peak to trough / from trough back to a new peak. Longer recovery means longer capital lock-up. |
     | **avgWin / avgLoss** | Avg Win / Avg Loss | Average winning trade % and average losing trade %. `avgWin ÷ |avgLoss|` is the payoff ratio; **≥2.0** is healthy for trend-following. |
     | **AvgHold / Max** | Avg Hold / Max Hold | Average and maximum position-holding length in days. Compare with the timeframe (1d, 1h, etc.) — large divergences from the strategy's intended horizon are a red flag. |
+    | **Kelly / Payoff / Expectancy / GPR / Ulcer / Recovery** | Kelly Criterion / Payoff Ratio / Expectancy / Gain-Pain Ratio / Ulcer Index / Recovery Factor | Extended trade-quality metrics. Kelly is the theoretically optimal position fraction (negative = no edge), payoff is `avgWin ÷ |avgLoss|`, expectancy is the expected return per trade, and recovery is `total return ÷ |MDD|`. Shown as N/A when the denominator is undefined. See the [CLI Reference](cli-reference/backtest.md) for details. |
     | **Win streak / Loss streak** | Max consecutive wins / losses | Longest winning / losing run. Long losing streaks raise the psychological cost of running the strategy live. |
     | **Win-rate CI(90%)** | Win Rate 90% CI | 90% confidence interval for the win rate. A wide CI (e.g. `17.8% – 54.8%`) means too few trades to pin down the true win rate; **30+ trades** narrows it considerably. |
 

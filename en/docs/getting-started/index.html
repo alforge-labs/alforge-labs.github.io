@@ -3316,10 +3316,11 @@ The CLI label table below maps Japanese CLI labels to conventional English metri
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>SR: 0.85   Sortino: -2.86   Calmar: 0.52
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>MDD: 1.79%   Length: 71d   Recovery: 154d
 <a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>PF: 4.01   Win%: 35.7%   avgWin: 10.39%   avgLoss: -1.72%
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>Win-rate CI(90%): 17.8% - 54.8%
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>DB save: run_id=&lt;uuid&gt;
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>Kelly: 0.25  Payoff: 6.04  Expectancy: 2.60%/trade  GPR: 0.31  Ulcer: 0.0079  Recovery: 2.65
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>Win-rate CI(90%): 17.8% - 54.8%
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>DB save: run_id=&lt;uuid&gt;
 </code></pre></div>
 <p>A quick read of the key metrics is below. For the full metric list, see <a href="#reading-the-results-detailed">Reading the Results in detail</a> or the <a href="../cli-reference/">CLI Reference</a>.</p>
 <table>
@@ -3404,6 +3405,11 @@ The CLI label table below maps Japanese CLI labels to conventional English metri
 <td><strong>AvgHold / Max</strong></td>
 <td>Avg Hold / Max Hold</td>
 <td>Average and maximum position-holding length in days. Compare with the timeframe (1d, 1h, etc.) — large divergences from the strategy's intended horizon are a red flag.</td>
+</tr>
+<tr>
+<td><strong>Kelly / Payoff / Expectancy / GPR / Ulcer / Recovery</strong></td>
+<td>Kelly Criterion / Payoff Ratio / Expectancy / Gain-Pain Ratio / Ulcer Index / Recovery Factor</td>
+<td>Extended trade-quality metrics. Kelly is the theoretically optimal position fraction (negative = no edge), payoff is <code>avgWin ÷ |avgLoss|</code>, expectancy is the expected return per trade, and recovery is <code>total return ÷ |MDD|</code>. Shown as N/A when the denominator is undefined. See the <a href="../cli-reference/backtest/">CLI Reference</a> for details.</td>
 </tr>
 <tr>
 <td><strong>Win streak / Loss streak</strong></td>
