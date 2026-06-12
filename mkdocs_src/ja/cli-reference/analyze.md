@@ -23,12 +23,13 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail] [--json]
 サンプル出力：
 
 ```text
-利用可能なインジケーター一覧（52件）:
+利用可能なインジケーター一覧（56件）:
 
   [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
   [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
-  [オシレーター]  CCI  MFI  MOM  ROC  RSI  STOCH  TRIX  WILLR
-  [ボラティリティ]  ATR  BBANDS  KC
+  [モメンタム]  AROON  TSI
+  [オシレーター]  CCI  CMO  MFI  MOM  PERCENTRANK  ROC  RSI  STOCH  TRIX  WILLR
+  [ボラティリティ]  ATR  BBANDS  KC  STDDEV
   [出来高]  CMF  OBV  VWAP
   [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW
   [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
