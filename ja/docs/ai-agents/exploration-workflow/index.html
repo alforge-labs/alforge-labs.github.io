@@ -4622,7 +4622,7 @@ git 関連パターン（<code>git -C */alpha-strategies ...</code>）は、作�
 <td><code>position_sizing_method</code></td>
 <td><code>"fixed"</code></td>
 <td>—</td>
-<td><code>fixed</code> / <code>risk_based</code> / <code>signal_strength</code></td>
+<td><code>fixed</code> / <code>risk_based</code> / <code>signal_strength</code> / <code>kelly</code>（事前統計から Kelly 基準で静的算出。<code>kelly_win_rate_pct</code>・<code>kelly_payoff_ratio</code> 必須、<code>kelly_fraction</code> 既定 0.5） / <code>vol_target</code>（目標 vol ÷ 実現 vol でバーごとに動的算出。<code>vol_target_annual_pct</code> 必須、<code>vol_lookback_bars</code> 既定 20、<code>vol_max_size_pct</code> 既定 100）</td>
 </tr>
 <tr>
 <td><code>risk_per_trade_pct</code></td>

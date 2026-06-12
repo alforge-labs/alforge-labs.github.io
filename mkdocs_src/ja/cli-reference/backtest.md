@@ -11,6 +11,7 @@
 |---------|------|
 | [`alpha-forge backtest run`](#alpha-forge-backtest-run) | バックテストを実行する |
 | [`alpha-forge backtest batch`](#alpha-forge-backtest-batch) | 複数の戦略 JSON を並列バックテストする |
+| [`alpha-forge backtest timeframes`](#alpha-forge-backtest-timeframes) | 同一戦略を複数タイムフレームで一括バックテストして比較する |
 | [`alpha-forge backtest diagnose`](#alpha-forge-backtest-diagnose) | 戦略のパフォーマンス問題を自動診断する |
 | [`alpha-forge backtest list`](#alpha-forge-backtest-list) | 保存済みのバックテスト結果一覧を表示する |
 | [`alpha-forge backtest report`](#alpha-forge-backtest-report) | 保存済みのバックテスト結果を表示する |
@@ -139,9 +140,12 @@ trade が 0 件でもヘッダ行だけは書き出されるため、`sort` / `u
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  期間: 187日  回復: 92日
 PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
+Kelly: 0.21  Payoff: 1.75  期待値: 0.90%/回  GPR: 0.42  Ulcer: 0.0480  回復係数: 3.11
 取引数: 14  平均保有: 28.5日(28bar)  最大: 65.0日(65bar)  連勝: 4  連敗: 3
 勝率CI(90%): 35.2% - 64.8%
 ```
+
+`Kelly:` 行はトレード品質の拡張メトリクスです。Kelly 基準（理論最適ポジション比率）・Payoff Ratio（平均勝ち ÷ |平均負け|）・期待値（1 トレードあたり期待リターン）・Gain/Pain Ratio・Ulcer Index・Recovery Factor（総リターン ÷ |最大 DD|）を表示します。`--json` では `kelly_criterion` / `payoff_ratio` / `expectancy_pct` / `expected_daily_return_pct`（monthly / yearly も同様）/ `ulcer_index` / `serenity_index` / `gain_to_pain_ratio` / `recovery_factor` キーで取得でき、分母が定義できない場合（全勝・ドローダウンなし等）は `null` になります。
 
 スコアや取引数が条件を満たさない場合は警告と docs URL 1 行誘導が付きます（F-302）：
 
@@ -263,6 +267,53 @@ alpha-forge backtest batch <SYMBOL> (--strategy-file <FILE> ... | --strategy-dir
 |----------|------|------|
 | `--strategy-file か --strategy-dir のいずれかを指定してください` | 両方未指定 | どちらか一方を指定 |
 | `🔴 <id>: ERROR - <理由>` | 個別戦略のロード/実行失敗 | エラーメッセージに従い修正 |
+
+---
+
+## alpha-forge backtest timeframes
+
+同一戦略を複数のタイムフレームで一括バックテストし、比較表を出力する（タイムフレームスイープ）。戦略 JSON の `timeframe` を各タイムフレームに上書きしながら、interval ごとの保存済みデータ（`<SYMBOL>_<interval>.parquet`）で新規バックテストを実行する。
+
+### 構文
+
+```bash
+alpha-forge backtest timeframes <SYMBOL> (--strategy <name> | --strategy-file <path>) [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `SYMBOL` | 引数（必須） | - | 銘柄シンボル |
+| `--strategy` | 排他・いずれか必須 | - | 保存済み戦略名 |
+| `--strategy-file` | 排他・いずれか必須 | - | 戦略 JSON ファイルパス |
+| `--timeframes` | オプション | `1h,4h,1d` | 対象タイムフレームのカンマ区切りリスト（重複は一意化） |
+| `--start` / `--end` | オプション | - | バックテスト期間（YYYY-MM-DD） |
+| `--json` | フラグ | false | 結果を JSON 形式で出力 |
+
+### 出力例
+
+```text
+=== タイムフレーム比較: AAPL × sma_crossover_v1 ===
+TF       Sharpe   Return%     MDD%      PF    Win%  Trades    Bars
+──────────────────────────────────────────────────────────────────
+1h     （データなし）
+4h         1.12    +38.40    12.10    1.62    54.2      48    4380
+1d   ★     1.45    +52.30    16.80    1.74    50.0      14     730
+
+ベスト: 1d (Sharpe=1.45)
+データなし: 1h（data fetch --interval <tf> で取得してください）
+```
+
+対象 interval のデータが無い場合は **1d にフォールバックせず** `no_data` として行と末尾サマリーの両方に明示する。`--json` は `{"symbol", "strategy_id", "timeframes": [...], "count", "best_timeframe", "missing_timeframes"}` の envelope を返す（各要素は `timeframe` / `status` / `bars` / `metrics`）。
+
+### 主なエラー
+
+| メッセージ | 原因 | 対処 |
+|----------|------|------|
+| `--strategy または --strategy-file のいずれかを指定してください` | 両方未指定/両方指定 | どちらか一方を指定 |
+| 全タイムフレームが `no_data` | 対象 interval のデータ未取得 | `alpha-forge data fetch <SYMBOL> --interval <tf>` で取得（exit code 1） |
+| 日付形式不正 | `--start`/`--end` が YYYY-MM-DD でない | 形式を修正（exit code 2） |
 
 ---
 

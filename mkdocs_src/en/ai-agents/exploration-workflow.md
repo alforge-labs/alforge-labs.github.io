@@ -549,7 +549,7 @@ Defaults, units, and intent of the `risk_management` section emitted by `alpha-f
 | Field | scaffold default | Unit | Notes |
 |---|---|---|---|
 | `position_size_pct` | type-specific: mean-reversion=**15.0** / trend-following=**50.0** (issue #949) | % of equity | Fraction of equity per position (used in `fixed` mode). trend-following assumes long-term holding, so #949 raised it from 10.0 to **50.0** |
-| `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` |
+| `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` / `kelly` (static size from prior stats via the Kelly criterion; requires `kelly_win_rate_pct` and `kelly_payoff_ratio`, `kelly_fraction` defaults to 0.5) / `vol_target` (per-bar dynamic size = target vol ÷ realized vol; requires `vol_target_annual_pct`, `vol_lookback_bars` defaults to 20, `vol_max_size_pct` defaults to 100) |
 | `risk_per_trade_pct` | 1.0 | % of equity / trade | Only used in `risk_based` mode (size = `risk_per_trade_pct ÷ stop_loss_pct`) |
 | `max_positions` | 1 | count | Max concurrent open positions |
 | `leverage` | 1.0 | multiplier | 0=no position, 1=unleveraged, >1=leveraged |

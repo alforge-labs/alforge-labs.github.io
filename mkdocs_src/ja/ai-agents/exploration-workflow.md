@@ -547,7 +547,7 @@ alpha-forge strategy scaffold ... \
 | フィールド | scaffold default | 単位 | 説明 |
 |---|---|---|---|
 | `position_size_pct` | type 別: mean-reversion=**15.0** / trend-following=**50.0**（issue #949） | % of equity | 1 ポジションが equity に占める比率（`fixed` モード時に使用）。trend-following は long-term holding 前提のため #949 で 10.0 → **50.0** に引き上げ |
-| `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` |
+| `position_sizing_method` | `"fixed"` | — | `fixed` / `risk_based` / `signal_strength` / `kelly`（事前統計から Kelly 基準で静的算出。`kelly_win_rate_pct`・`kelly_payoff_ratio` 必須、`kelly_fraction` 既定 0.5） / `vol_target`（目標 vol ÷ 実現 vol でバーごとに動的算出。`vol_target_annual_pct` 必須、`vol_lookback_bars` 既定 20、`vol_max_size_pct` 既定 100） |
 | `risk_per_trade_pct` | 1.0 | % of equity / trade | `risk_based` モード時のみ使用（`risk_per_trade_pct ÷ stop_loss_pct` でサイズ算出） |
 | `max_positions` | 1 | 件 | 同時保有可能なポジション数 |
 | `leverage` | 1.0 | 倍 | 0=ノーポジ、1=等倍、>1=レバレッジ |

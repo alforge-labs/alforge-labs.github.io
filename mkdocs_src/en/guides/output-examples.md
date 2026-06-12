@@ -24,6 +24,7 @@ Total return: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  Duration: 187d  Recovery: 92d
 PF: 1.74  Win%: 50.0%  avg win: 4.20%  avg loss: -2.40%
+Kelly: 0.21  Payoff: 1.75  Expectancy: 0.90%/trade  GPR: 0.42  Ulcer: 0.0480  Recovery: 3.11
 Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)  Win streak: 4  Loss streak: 3
 Win rate CI(90%): 35.2% - 64.8%
 ```
