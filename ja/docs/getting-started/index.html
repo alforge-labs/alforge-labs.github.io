@@ -3314,10 +3314,11 @@ yfinance 側のデータ補正・配当再投資ロジックも更新される�
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>SR: 0.85  Sortino: -2.86  Calmar: 0.52
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>MDD: 1.79%  期間: 71日  回復: 154日
 <a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>PF: 4.01  Win%: 35.7%  avg勝: 10.39%  avg負: -1.72%
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)  連勝: 4  連敗: 6
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>勝率CI(90%): 17.8% - 54.8%
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>📊 チャートは `alpha-vis serve` で確認できます（結果ID: sma_cross_qs_report）
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>DB 保存: run_id=&lt;uuid&gt;
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>Kelly: 0.25  Payoff: 6.04  期待値: 2.60%/回  GPR: 0.31  Ulcer: 0.0079  回復係数: 2.65
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)  連勝: 4  連敗: 6
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>勝率CI(90%): 17.8% - 54.8%
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>📊 チャートは `alpha-vis serve` で確認できます（結果ID: sma_cross_qs_report）
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>DB 保存: run_id=&lt;uuid&gt;
 </code></pre></div>
 <p>主要指標の見方は次のとおりです。指標の詳細な目安は本ページ後半の「結果の見方（詳細）」セクション、全指標一覧は <a href="../cli-reference/">CLI リファレンス</a> を参照してください。</p>
 <table>
@@ -3402,6 +3403,11 @@ yfinance 側のデータ補正・配当再投資ロジックも更新される�
 <td><strong>平均保有 / 最大</strong></td>
 <td>Avg Hold / Max Hold</td>
 <td>平均ポジション保有日数とその最大値。timeframe (1d 等) に応じてオーダーが変わるので、<strong>戦略想定の保有期間と乖離していないか</strong>を確認。</td>
+</tr>
+<tr>
+<td><strong>Kelly / Payoff / 期待値 / GPR / Ulcer / 回復係数</strong></td>
+<td>Kelly Criterion / Payoff Ratio / Expectancy / Gain-Pain Ratio / Ulcer Index / Recovery Factor</td>
+<td>トレード品質の拡張指標。Kelly は理論最適ポジション比率（負値はエッジなし）、Payoff は <code>avg勝 ÷ |avg負|</code>、期待値は 1 トレードあたり期待リターン、回復係数は <code>総リターン ÷ |MDD|</code>。分母が定義できない場合は N/A 表示。詳細は <a href="../cli-reference/backtest/">CLI リファレンス</a> 参照。</td>
 </tr>
 <tr>
 <td><strong>連勝 / 連敗</strong></td>

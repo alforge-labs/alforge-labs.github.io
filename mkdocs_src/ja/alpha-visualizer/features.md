@@ -52,7 +52,7 @@ URL クエリで `selectedId` / `compareIds` が同期されるため、特定�
 
 ![Optimize 画面](assets/optimize.png){ loading=lazy }
 
-- Grid サーチのパラメータ空間ヒートマップ
+- パラメータ vs 指標の散布図と、パラメータ 2 軸 × 指標のヒートマップをタブで切替（X/Y 軸パラメータと対象メトリクスを選択。セル色＝該当パラメータ組み合わせのメトリクス平均、ホバーでパラメータ組・平均値・trial 件数を表示）
 - Walk-Forward Test の合成エクイティカーブ
 - 各ウィンドウのパフォーマンス推移
 

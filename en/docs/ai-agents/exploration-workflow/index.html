@@ -4624,7 +4624,7 @@ Add the git patterns (<code>git -C */alpha-strategies ...</code>) only if you ke
 <td><code>position_sizing_method</code></td>
 <td><code>"fixed"</code></td>
 <td>—</td>
-<td><code>fixed</code> / <code>risk_based</code> / <code>signal_strength</code></td>
+<td><code>fixed</code> / <code>risk_based</code> / <code>signal_strength</code> / <code>kelly</code> (static size from prior stats via the Kelly criterion; requires <code>kelly_win_rate_pct</code> and <code>kelly_payoff_ratio</code>, <code>kelly_fraction</code> defaults to 0.5) / <code>vol_target</code> (per-bar dynamic size = target vol ÷ realized vol; requires <code>vol_target_annual_pct</code>, <code>vol_lookback_bars</code> defaults to 20, <code>vol_max_size_pct</code> defaults to 100)</td>
 </tr>
 <tr>
 <td><code>risk_per_trade_pct</code></td>

@@ -52,7 +52,7 @@ Visualize optimization results.
 
 ![Optimize view](assets/optimize.png){ loading=lazy }
 
-- Parameter-space heatmap for grid search
+- Scatter plot (parameter vs. metric) and a two-parameter × metric heatmap, switchable via tabs (pick the X/Y parameters and the target metric; cell color = mean metric value for that parameter combination, hover shows the parameter pair, mean, and trial count)
 - Walk-Forward Test composite equity curve
 - Per-window performance trajectory
 

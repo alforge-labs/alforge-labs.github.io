@@ -11,6 +11,7 @@ Run backtests and analyze results. Provides single-strategy runs, parallel batch
 |---------|-------------|
 | [`alpha-forge backtest run`](#alpha-forge-backtest-run) | Run a backtest for the given symbol and strategy |
 | [`alpha-forge backtest batch`](#alpha-forge-backtest-batch) | Run parallel backtests for multiple strategy JSON files |
+| [`alpha-forge backtest timeframes`](#alpha-forge-backtest-timeframes) | Backtest the same strategy across multiple timeframes and compare |
 | [`alpha-forge backtest diagnose`](#alpha-forge-backtest-diagnose) | Automatically diagnose performance issues in a strategy |
 | [`alpha-forge backtest list`](#alpha-forge-backtest-list) | Show saved backtest results |
 | [`alpha-forge backtest report`](#alpha-forge-backtest-report) | Display a saved backtest result |
@@ -139,9 +140,12 @@ Total Return: +52.30%  CAGR: 5.40%
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  Duration: 187d  Recovery: 92d
 PF: 1.74  Win%: 50.0%  avg_win: 4.20%  avg_loss: -2.40%
+Kelly: 0.21  Payoff: 1.75  Expectancy: 0.90%/trade  GPR: 0.42  Ulcer: 0.0480  Recovery: 3.11
 Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)  Win streak: 4  Loss streak: 3
 Win rate CI(90%): 35.2% - 64.8%
 ```
+
+The `Kelly:` line shows extended trade-quality metrics: the Kelly criterion (theoretically optimal position fraction), payoff ratio (average win ÷ |average loss|), expectancy (expected return per trade), Gain/Pain ratio, Ulcer Index, and recovery factor (total return ÷ |max drawdown|). With `--json` these are available as `kelly_criterion` / `payoff_ratio` / `expectancy_pct` / `expected_daily_return_pct` (and monthly / yearly) / `ulcer_index` / `serenity_index` / `gain_to_pain_ratio` / `recovery_factor`; values are `null` when the denominator is undefined (e.g. no losing trades, no drawdown).
 
 When the score or trade count fails the recommended thresholds, a warning and a one-line docs link are added (F-302):
 
@@ -263,6 +267,53 @@ Passed strategies: 2/4
 |---------|-------|-----|
 | `Specify either --strategy-file or --strategy-dir` | Neither given | Provide one of them |
 | `🔴 <id>: ERROR - <reason>` | Per-strategy load/run failure | Address the message |
+
+---
+
+## alpha-forge backtest timeframes
+
+Backtest the same strategy across multiple timeframes and print a comparison table (timeframe sweep). The strategy's `timeframe` field is overridden per run, using the stored per-interval data (`<SYMBOL>_<interval>.parquet`).
+
+### Syntax
+
+```bash
+alpha-forge backtest timeframes <SYMBOL> (--strategy <name> | --strategy-file <path>) [OPTIONS]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `SYMBOL` | Argument (required) | - | Ticker symbol |
+| `--strategy` | One of the two required | - | Saved strategy name |
+| `--strategy-file` | One of the two required | - | Path to a strategy JSON file |
+| `--timeframes` | Option | `1h,4h,1d` | Comma-separated list of timeframes (duplicates are de-duplicated) |
+| `--start` / `--end` | Option | - | Backtest period (YYYY-MM-DD) |
+| `--json` | Flag | false | Emit results as JSON |
+
+### Example output
+
+```text
+=== Timeframe Comparison: AAPL × sma_crossover_v1 ===
+TF       Sharpe   Return%     MDD%      PF    Win%  Trades    Bars
+──────────────────────────────────────────────────────────────────
+1h     (no data)
+4h         1.12    +38.40    12.10    1.62    54.2      48    4380
+1d   ★     1.45    +52.30    16.80    1.74    50.0      14     730
+
+Best: 1d (Sharpe=1.45)
+No data: 1h (run `data fetch --interval <tf>` to populate)
+```
+
+When data for an interval is missing, the command does **not** fall back to 1d data; the row and the trailing summary both report it explicitly. `--json` returns a `{"symbol", "strategy_id", "timeframes": [...], "count", "best_timeframe", "missing_timeframes"}` envelope (each entry has `timeframe` / `status` / `bars` / `metrics`).
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| Specify either `--strategy` or `--strategy-file` | Neither or both given | Provide exactly one |
+| All timeframes report `no_data` | Per-interval data not fetched | Run `alpha-forge data fetch <SYMBOL> --interval <tf>` (exit code 1) |
+| Invalid date format | `--start`/`--end` not YYYY-MM-DD | Fix the format (exit code 2) |
 
 ---
 

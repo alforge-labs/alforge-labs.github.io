@@ -193,6 +193,7 @@ alpha-forge backtest run SPY \
 SR: 0.85  Sortino: -2.86  Calmar: 0.52
 MDD: 1.79%  期間: 71日  回復: 154日
 PF: 4.01  Win%: 35.7%  avg勝: 10.39%  avg負: -1.72%
+Kelly: 0.25  Payoff: 6.04  期待値: 2.60%/回  GPR: 0.31  Ulcer: 0.0079  回復係数: 2.65
 取引数: 15  平均保有: 56.8日(57bar)  最大: 218.0日(218bar)  連勝: 4  連敗: 6
 勝率CI(90%): 17.8% - 54.8%
 📊 チャートは `alpha-vis serve` で確認できます（結果ID: sma_cross_qs_report）
@@ -221,6 +222,7 @@ DB 保存: run_id=<uuid>
     | **期間 / 回復** | Drawdown duration / Recovery | MDD のピークから底までの日数 / 底からピーク再到達までの日数。回復が長いほど資金拘束期間が伸びる。 |
     | **avg勝 / avg負** | Avg Win / Avg Loss | 平均利益（勝ちトレードの平均%）と平均損失（負けトレードの平均%）。`avg勝 ÷ |avg負|` がペイオフ比で、**2.0 以上**ならトレンドフォロー型として健全。 |
     | **平均保有 / 最大** | Avg Hold / Max Hold | 平均ポジション保有日数とその最大値。timeframe (1d 等) に応じてオーダーが変わるので、**戦略想定の保有期間と乖離していないか**を確認。 |
+    | **Kelly / Payoff / 期待値 / GPR / Ulcer / 回復係数** | Kelly Criterion / Payoff Ratio / Expectancy / Gain-Pain Ratio / Ulcer Index / Recovery Factor | トレード品質の拡張指標。Kelly は理論最適ポジション比率（負値はエッジなし）、Payoff は `avg勝 ÷ |avg負|`、期待値は 1 トレードあたり期待リターン、回復係数は `総リターン ÷ |MDD|`。分母が定義できない場合は N/A 表示。詳細は [CLI リファレンス](cli-reference/backtest.md) 参照。 |
     | **連勝 / 連敗** | Max Consecutive Wins / Losses | 連続勝ち / 連続負けの最大長。連敗が長いほど運用中の心理負荷が高い。 |
     | **勝率CI(90%)** | Win Rate CI (90%) | 勝率の 90% 信頼区間。CI 幅が広い（例: `17.8% – 54.8%`）ほど取引数が少なく、本当の勝率を絞り込めていない証拠。**取引数 30 件以上**で CI 幅が縮む。 |
 

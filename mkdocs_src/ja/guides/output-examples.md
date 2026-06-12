@@ -24,6 +24,7 @@ alpha-forge backtest run SPY --strategy sma_crossover_v1 --start 2019-01-01 --en
 SR: 0.92  Sortino: 1.15  Calmar: 0.32
 MDD: -16.80%  期間: 187日  回復: 92日
 PF: 1.74  Win%: 50.0%  avg勝: 4.20%  avg負: -2.40%
+Kelly: 0.21  Payoff: 1.75  期待値: 0.90%/回  GPR: 0.42  Ulcer: 0.0480  回復係数: 3.11
 取引数: 14  平均保有: 28.5日(28bar)  最大: 65.0日(65bar)  連勝: 4  連敗: 3
 勝率CI(90%): 35.2% - 64.8%
 ```
