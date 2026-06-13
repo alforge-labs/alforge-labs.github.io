@@ -4769,7 +4769,7 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <td><code>--indicators</code></td>
 <td>required</td>
 <td>-</td>
-<td>Comma-separated indicators: <code>BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH</code> (a mean-reversion + single EMA/SMA trend filter on FX/commodity tends to signal-starve; alternatives are emitted as a stderr <code>WARNING</code>, issue #830)</td>
+<td>Comma-separated indicators: <code>BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH,AROON,LINEAR_REG,PV_CORR,UP_RATIO,CMO,ROLLING_QUANTILE</code>. Alpha158-derived indicators are type-restricted (AROON/LINEAR_REG/PV_CORR/UP_RATIO: trend-following only; CMO/ROLLING_QUANTILE: mean-reversion only; incompatible types raise ValueError) (a mean-reversion + single EMA/SMA trend filter on FX/commodity tends to signal-starve; alternatives are emitted as a stderr <code>WARNING</code>, issue #830)</td>
 </tr>
 <tr>
 <td><code>--type</code></td>

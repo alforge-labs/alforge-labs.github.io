@@ -4409,7 +4409,7 @@
 <td><code>--indicators</code></td>
 <td>必須</td>
 <td>-</td>
-<td>使用インジケータ（カンマ区切り）: <code>BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH</code>。mean-reversion + 単一 EMA/SMA トレンドフィルタ + FX/コモディティの組み合わせは signal-starve しやすく、生成時に stderr WARNING で代替案を案内（issue #830）</td>
+<td>使用インジケータ（カンマ区切り）: <code>BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH,AROON,LINEAR_REG,PV_CORR,UP_RATIO,CMO,ROLLING_QUANTILE</code>。Alpha158 由来指標は type 限定（AROON/LINEAR_REG/PV_CORR/UP_RATIO=trend-following 専用、CMO/ROLLING_QUANTILE=mean-reversion 専用。不適合 type は ValueError）。mean-reversion + 単一 EMA/SMA トレンドフィルタ + FX/コモディティの組み合わせは signal-starve しやすく、生成時に stderr WARNING で代替案を案内（issue #830）</td>
 </tr>
 <tr>
 <td><code>--type</code></td>
