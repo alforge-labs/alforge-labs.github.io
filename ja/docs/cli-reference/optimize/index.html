@@ -5064,6 +5064,11 @@
 <td>パラメータ範囲を 1 つ以上定義</td>
 </tr>
 <tr>
+<td><code>optimizer_config.param_ranges に解決できないキーがあります</code>（exit 2）</td>
+<td><code>param_ranges</code> のキーが指標 ID 等に解決できない（<code>indicators[0].params.length</code> のようなインデックス形式は非対応）</td>
+<td><code>&lt;indicator_id&gt;.&lt;param&gt;</code>（例: <code>aroon.length</code>）/ <code>risk.&lt;field&gt;</code> 形式に修正</td>
+</tr>
+<tr>
 <td><code>指定された --metric '&lt;name&gt;' が結果に含まれていません</code></td>
 <td>メトリクス名タイポ等</td>
 <td><code>sharpe_ratio</code> などの実装値を使用</td>

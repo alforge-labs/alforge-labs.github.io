@@ -596,6 +596,7 @@ Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 |----------|------|------|
 | `optimizer_config が定義されていません` | 戦略 JSON に `optimizer_config` 無し | 戦略 JSON に `optimizer_config.param_ranges` を追加 |
 | `param_ranges が空です` | `param_ranges` が空 dict | パラメータ範囲を 1 つ以上定義 |
+| `optimizer_config.param_ranges に解決できないキーがあります`（exit 2） | `param_ranges` のキーが指標 ID 等に解決できない（`indicators[0].params.length` のようなインデックス形式は非対応） | `<indicator_id>.<param>`（例: `aroon.length`）/ `risk.<field>` 形式に修正 |
 | `指定された --metric '<name>' が結果に含まれていません` | メトリクス名タイポ等 | `sharpe_ratio` などの実装値を使用 |
 | `制約を満たす trial がありません` | `--min-trades` / `--max-drawdown` で全除外 | 制約を緩和 |
 

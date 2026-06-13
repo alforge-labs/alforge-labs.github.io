@@ -594,6 +594,7 @@ Grid size 12000 exceeds --max-trials 10000. Continue? [y/N]: y
 |---------|-------|-----|
 | `optimizer_config not defined` | Strategy JSON has no `optimizer_config` | Add `optimizer_config.param_ranges` |
 | `param_ranges is empty` | `param_ranges` is an empty dict | Define at least one parameter range |
+| `optimizer_config.param_ranges contains unresolvable keys` (exit 2) | A `param_ranges` key cannot be resolved against the strategy (index forms like `indicators[0].params.length` are unsupported) | Use `<indicator_id>.<param>` (e.g. `aroon.length`) / `risk.<field>` form |
 | `Metric '<name>' is not present in results` | Metric typo or unsupported metric | Use a supported metric like `sharpe_ratio` |
 | `No trial satisfies the constraints` | All trials filtered out by `--min-trades` / `--max-drawdown` | Loosen constraints |
 
