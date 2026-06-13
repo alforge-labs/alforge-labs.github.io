@@ -5063,6 +5063,11 @@
 <td>Define at least one parameter range</td>
 </tr>
 <tr>
+<td><code>optimizer_config.param_ranges contains unresolvable keys</code> (exit 2)</td>
+<td>A <code>param_ranges</code> key cannot be resolved against the strategy (index forms like <code>indicators[0].params.length</code> are unsupported)</td>
+<td>Use <code>&lt;indicator_id&gt;.&lt;param&gt;</code> (e.g. <code>aroon.length</code>) / <code>risk.&lt;field&gt;</code> form</td>
+</tr>
+<tr>
 <td><code>Metric '&lt;name&gt;' is not present in results</code></td>
 <td>Metric typo or unsupported metric</td>
 <td>Use a supported metric like <code>sharpe_ratio</code></td>
