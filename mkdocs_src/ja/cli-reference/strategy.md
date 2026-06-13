@@ -156,7 +156,7 @@ alpha-forge strategy scaffold --symbol <SYMBOL> --indicators <CSV> --type <TYPE>
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `--symbol` | 必須 | - | 対象シンボル（例: `GC=F`, `AAPL`） |
-| `--indicators` | 必須 | - | 使用インジケータ（カンマ区切り）: `BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH`。mean-reversion + 単一 EMA/SMA トレンドフィルタ + FX/コモディティの組み合わせは signal-starve しやすく、生成時に stderr WARNING で代替案を案内（issue #830） |
+| `--indicators` | 必須 | - | 使用インジケータ（カンマ区切り）: `BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH,AROON,LINEAR_REG,PV_CORR,UP_RATIO,CMO,ROLLING_QUANTILE`。Alpha158 由来指標は type 限定（AROON/LINEAR_REG/PV_CORR/UP_RATIO=trend-following 専用、CMO/ROLLING_QUANTILE=mean-reversion 専用。不適合 type は ValueError）。mean-reversion + 単一 EMA/SMA トレンドフィルタ + FX/コモディティの組み合わせは signal-starve しやすく、生成時に stderr WARNING で代替案を案内（issue #830） |
 | `--type` | 必須（`mean-reversion` / `trend-following` / `buy-hold-overlay`） | - | 戦略タイプ |
 | `--strategy-id` | オプション | 自動生成 | 生成戦略の `strategy_id` |
 | `--output` | オプション | - | 出力 JSON ファイルパス |
