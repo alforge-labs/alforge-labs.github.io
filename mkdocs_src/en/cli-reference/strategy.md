@@ -416,7 +416,7 @@ alpha-forge strategy scaffold --symbol <SYMBOL> --indicators <CSV> --type <TYPE>
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `--symbol` | required | - | Target symbol (e.g. `GC=F`, `AAPL`) |
-| `--indicators` | required | - | Comma-separated indicators: `BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH` (a mean-reversion + single EMA/SMA trend filter on FX/commodity tends to signal-starve; alternatives are emitted as a stderr `WARNING`, issue #830) |
+| `--indicators` | required | - | Comma-separated indicators: `BB,SMA,HMM,RSI,EMA,ADX,MACD,ATR,SUPERTREND,STOCH,AROON,LINEAR_REG,PV_CORR,UP_RATIO,CMO,ROLLING_QUANTILE`. Alpha158-derived indicators are type-restricted (AROON/LINEAR_REG/PV_CORR/UP_RATIO: trend-following only; CMO/ROLLING_QUANTILE: mean-reversion only; incompatible types raise ValueError) (a mean-reversion + single EMA/SMA trend filter on FX/commodity tends to signal-starve; alternatives are emitted as a stderr `WARNING`, issue #830) |
 | `--type` | required | - | `mean-reversion` \| `trend-following` \| `buy-hold-overlay` |
 | `--strategy-id` | optional | auto-generated | `strategy_id` for the generated JSON |
 | `--output` | optional | - | Output JSON file path |
