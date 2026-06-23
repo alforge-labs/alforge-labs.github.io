@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4560,7 +4588,7 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <h2 id="alpha-forge-strategy-delete">alpha-forge strategy delete<a class="headerlink" href="#alpha-forge-strategy-delete" title="Permanent link">&para;</a></h2>
 <p>Delete a registered strategy from the DB / registry. With <code>--with-results</code>, also deletes related files (optimized strategy, backtest results, optimization results). Journal files are always kept.</p>
 <h3 id="synopsis_5">Synopsis<a class="headerlink" href="#synopsis_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_5">Arguments and options<a class="headerlink" href="#arguments-and-options_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -4580,6 +4608,12 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 <td>Strategy ID to delete</td>
 </tr>
 <tr>
+<td><code>--dry-run</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Show what would be deleted and exit without deleting anything (closes the destructive-guard asymmetry, issue #1178)</td>
+</tr>
+<tr>
 <td><code>--yes</code> / <code>-y</code></td>
 <td>flag</td>
 <td>false</td>
@@ -4594,6 +4628,7 @@ which collided with the built-in template on <code>alpha-forge strategy save</co
 </tbody>
 </table>
 <p>Because this is a destructive operation, in non-interactive environments (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY) it stops with exit code <code>2</code> unless <code>--yes</code> is given. Not-found returns exit code <code>1</code>.</p>
+<p>With <code>--dry-run</code>, the command lists what would be deleted (including related files when <code>--with-results</code> is set) and exits with code <code>0</code> without deleting anything. Useful for verifying the target before a real deletion.</p>
 <h3 id="files-removed-by-with-results">Files removed by <code>--with-results</code><a class="headerlink" href="#files-removed-by-with-results" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>strategies.path / &lt;id&gt;_optimized.json</code></li>

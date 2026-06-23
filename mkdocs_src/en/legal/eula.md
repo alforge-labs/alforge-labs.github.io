@@ -132,7 +132,14 @@ Any dispute arising out of or relating to this Agreement shall be brought exclus
 
 11.6 **Updates.** Licensor may update this Agreement from time to time. Continued use of the Software after notice of an update constitutes acceptance of the updated terms. The acceptance prompt may re-display when the Agreement version changes.
 
-11.7 **Notices.** Notices to Licensor shall be sent to the contact address published in the Software's documentation or release notes.
+11.7 **Notices.** Legal notices, support requests, and license inquiries to Licensor shall be directed to the following channels:
+
+- Product website: [https://alforgelabs.com/](https://alforgelabs.com/)
+- Issue tracking (bug reports / feature requests): [https://github.com/ysakae/alpha-forge/issues](https://github.com/ysakae/alpha-forge/issues)
+
+11.8 **Privacy and Telemetry.** The Software does **not** transmit usage statistics, behavioral analytics, or any telemetry to Licensor or any third party. Your strategy data, trading history, and API keys remain local to your machine. The Software accesses the network only for explicit, user-initiated operations: (a) fetching historical market data from the data providers you select; (b) checking for or downloading updates when you run `alpha-forge self version` or `alpha-forge self update`; and (c) license verification with the licensing provider (Whop). The update check is performed only when you run the corresponding command; the Software does not silently poll for updates at startup.
+
+11.9 **Support.** Support is provided on a best-effort basis through the channels listed in Section 11.7. Nothing in this Section creates any warranty or service-level commitment, which are governed by Sections 6 and 7.
 
 ---
 

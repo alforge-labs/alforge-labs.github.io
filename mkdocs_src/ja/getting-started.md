@@ -366,6 +366,35 @@ alpha-vis serve
 
 ---
 
+## シェル補完（任意）
+
+`alpha-forge` の操作を高速化するため、シェル補完を有効化できます（Click による動的生成）。有効化用の環境変数は **`_ALPHA_FORGE_COMPLETE`** です（issue #1166）。
+
+=== "bash"
+
+    ```bash
+    # ~/.bashrc に追記
+    eval "$(_ALPHA_FORGE_COMPLETE=bash_source alpha-forge)"
+    ```
+
+=== "zsh"
+
+    ```bash
+    # ~/.zshrc に追記
+    eval "$(_ALPHA_FORGE_COMPLETE=zsh_source alpha-forge)"
+    ```
+
+=== "fish"
+
+    ```bash
+    # ~/.config/fish/completions/alpha-forge.fish に追記
+    _ALPHA_FORGE_COMPLETE=fish_source alpha-forge | source
+    ```
+
+設定後、`alpha-forge <TAB>` でトップレベルコマンドが、`alpha-forge analyze <TAB>` / `alpha-forge system <TAB>` / `alpha-forge data <TAB>` で各サブコマンドが補完されます。
+
+---
+
 ## 有料プラン購入後の認証
 
 AlphaForge は **Trial プランでは Whop 登録不要** で、インストール後そのまま動きます。**有料プラン（Lifetime / Annual / Monthly のいずれか）を購入した場合のみ** Whop アカウントによる OAuth 2.0 PKCE 認証を行い、データ日付制限・最適化試行数・Pine Script エクスポートのロックを解除します。

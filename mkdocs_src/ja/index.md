@@ -50,6 +50,9 @@
 - [AI 駆動の戦略探索ワークフロー](ai-agents/exploration-workflow.md) — Claude Code / Codex × AlphaForge による自律戦略開発の HOWTO（AI エージェント連携 セクション）
 - [利用規約と免責事項](legal/disclaimers.md) — 免責事項・EULA・プライバシーポリシー
 
+!!! info "プライバシー — テレメトリ非送信"
+    AlphaForge は **使用統計・行動ログなどのテレメトリを一切外部へ送信しません**。戦略データ・取引履歴・API キーはすべてローカルに留まります。ネットワークへアクセスするのはユーザーが明示的に開始した操作（データ取得 / `self version`・`self update` の更新確認 / Whop ライセンス認証）に限られます。詳細は [EULA](legal/eula.md) のプライバシーとテレメトリの節を参照してください。
+
 ## 関連リンク
 
 - [Alforge Labs 公式サイト](https://alforgelabs.com/ja/index.html) — 製品紹介とインストールガイド

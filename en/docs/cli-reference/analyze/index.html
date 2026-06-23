@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3023,21 +3051,26 @@
 </tr>
 </tbody>
 </table>
-<p>Sample output (the category labels such as <code>移動平均</code> = moving average are emitted in Japanese regardless of locale):</p>
+<p>Sample output (the category labels such as <code>移動平均</code> = moving average are emitted in Japanese regardless of locale; each indicator now carries a Pine-conversion legend, issue #1165):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>利用可能なインジケーター一覧（60件）:
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  [モメンタム]  AROON  TSI
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  [オシレーター]  CCI  CMO  MFI  MOM  PERCENTRANK  ROC  RSI  STOCH  TRIX  UP_RATIO  WILLR
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  [ボラティリティ]  ATR  BBANDS  KC  STDDEV
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  [出来高]  CMF  OBV  PV_CORR  VWAP  WVMA
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW  ROLLING_QUANTILE
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  [高度な機能]  ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>Details: alpha-forge analyze indicator show &lt;TYPE&gt;
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>凡例: ✓=Pine 変換対応 / ✗=Pine 非対応（pine generate で na・エントリーしない）
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  [移動平均]  ALMA✓  DEMA✓  EMA✓  HMA✓  KAMA✗  RMA✓  SMA✓  TEMA✓  VWMA✓  WMA✓
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  [トレンド]  ADX✓  ICHIMOKU✗  MACD✓  RANGE_FILTER✗  SAR✓  SUPERTREND✓  SUPERTREND_DIR✗
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  [モメンタム]  AROON✓  TSI✓
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  [オシレーター]  CCI✓  CMO✓  MFI✓  MOM✓  PERCENTRANK✓  ROC✓  RSI✓  STOCH✓  TRIX✗  UP_RATIO✓  WILLR✓
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  [ボラティリティ]  ATR✓  BBANDS✓  KC✗  STDDEV✓
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  [出来高]  CMF✗  OBV✓  PV_CORR✓  VWAP✓  WVMA✓
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  [ピボット/チャネル]  CHANDELIER✗  DONCHIAN✓  PIVOTHIGH✗  PIVOTLOW✗  ROLLING_QUANTILE✓
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  [統計/ML]  CORRELATION✗  HALFLIFE✗  HMM✗  LINEAR_REG✓  OU_HALFLIFE✗  OU_ZSCORE✗  REGIME_RULE✗  SEASONAL✓  ZSCORE✓
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  [高度な機能]  ALTDATA✗  EXPR✓  FFILL✗  GRID_SIGNAL✗  ML_SIGNAL✗  ML_SIGNAL_WFT✗  PRICE✓
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>Details: alpha-forge analyze indicator show &lt;TYPE&gt;
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Expanded native Pine conversion (issue #1165)</p>
+<p>GA added native Pine v6 (<code>ta.*</code>) conversion for 10 indicators — <strong>CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE</strong> — and introduced the <code>pine_supported</code> flag (<code>✓</code> / <code>✗</code>) shown above. When a strategy containing a <code>✗</code> indicator is passed to <code>alpha-forge pine generate</code>, that indicator is treated as <code>na</code> (no entry) and a warning comment is inserted into the Pine output. The <code>--json</code> output adds a boolean <code>pine_supported</code> field to each indicator.</p>
+</div>
 <h2 id="alpha-forge-analyze-indicator-show">alpha-forge analyze indicator show<a class="headerlink" href="#alpha-forge-analyze-indicator-show" title="Permanent link">&para;</a></h2>
 <p>Show detailed information for a specific indicator (description, parameters, output, example).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>indicator<span class="w"> </span>show<span class="w"> </span>&lt;INDICATOR_TYPE&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
@@ -3059,31 +3092,49 @@
 <tr>
 <td><code>--json</code></td>
 <td>flag</td>
-<td>Emit the indicator definition as JSON (<code>name</code> / <code>category</code> / <code>desc</code> / <code>params</code> / <code>available_features</code> / <code>output</code> / <code>notes</code> / <code>example</code>); not-found returns <code>{error, code: "indicator_not_found", id}</code> to stdout with exit code <code>1</code></td>
+<td>Emit the indicator definition as JSON (<code>name</code> / <code>category</code> / <code>desc</code> / <code>params</code> / <code>available_features</code> / <code>output</code> / <code>notes</code> / <code>example</code> / <code>pine_supported</code>); not-found returns <code>{error, code: "indicator_not_found", id}</code> to stdout with exit code <code>1</code></td>
 </tr>
 </tbody>
 </table>
+<p>The detail view also reports <strong>Pine conversion support</strong> (<code>Pine 変換: 対応 / 非対応</code>), available as the boolean <code>pine_supported</code> in <code>--json</code> (issue #1165).</p>
 <p>Sample output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>SMA — Simple Moving Average
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>RSI — Relative Strength Index
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Category: 移動平均
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Category: オシレーター
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>Parameters:
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  Name                 Type     Default                Description
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  length              int      20                    Period
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  length              int      14                    Period
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>Output: scalar time series
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>Example (JSON):
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>  {&quot;id&quot;: &quot;sma_20&quot;, &quot;type&quot;: &quot;SMA&quot;, &quot;params&quot;: {&quot;length&quot;: 20}}
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>Output: float — RSI value (0–100)
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>Pine 変換: 対応（ta.* へネイティブ変換）
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>Example (JSON):
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>  {&quot;id&quot;: &quot;rsi_14&quot;, &quot;type&quot;: &quot;RSI&quot;, &quot;params&quot;: {&quot;length&quot;: 14}}
 </code></pre></div>
 <p>Unknown indicator names print <code>Error: '&lt;TYPE&gt;' is not a recognized indicator.</code> and exit with code <code>1</code>.</p>
 <hr />
 <h2 id="alpha-forge-analyze-pairs">alpha-forge analyze pairs<a class="headerlink" href="#alpha-forge-analyze-pairs" title="Permanent link">&para;</a></h2>
 <p>Cointegration tests and spread series for pair trading. Uses the Engle–Granger test from <code>statsmodels</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">Positioned as a research tool (issue #1177)</p>
+<p><code>analyze pairs</code> is a <strong>research tool for discovering and validating</strong> pair-trading candidates. The workflow is: find statistically cointegrated pairs with <code>scan</code> / <code>scan-all</code>, then <code>build</code> their spread series into the <code>alt_data</code> store, and reference that spread from a strategy JSON via the <code>ALTDATA</code> indicator. <code>pairs</code> itself neither places orders nor runs backtests — it is a preprocessing / feature-generation stage for building strategies.</p>
+<p><strong>Typical workflow (combined with ALTDATA)</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 1) Discover candidate pairs via statistical tests</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>watchlist.txt<span class="w"> </span>--pvalue<span class="w"> </span><span class="m">0</span>.05
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 2) Build the spread series for a promising pair and store it in alt_data</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>build<span class="w"> </span>--sym-a<span class="w"> </span>SPY<span class="w"> </span>--sym-b<span class="w"> </span>QQQ<span class="w"> </span>--output-id<span class="w"> </span>SPY_QQQ_spread
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># 3) Reference the spread as an ALTDATA indicator in a strategy JSON (mean-reversion)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1">#    e.g. {&quot;id&quot;: &quot;spread&quot;, &quot;type&quot;: &quot;ALTDATA&quot;,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1">#          &quot;params&quot;: {&quot;source_key&quot;: &quot;SPY_QQQ_spread&quot;, &quot;column&quot;: &quot;spread&quot;}}</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>SPY<span class="w"> </span>--strategy<span class="w"> </span>spy_qqq_spread_meanrev_v1
+</code></pre></div>
+</div>
 <h2 id="alpha-forge-analyze-pairs-scan">alpha-forge analyze pairs scan<a class="headerlink" href="#alpha-forge-analyze-pairs-scan" title="Permanent link">&para;</a></h2>
 <p>Run a cointegration test on two symbols.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan<span class="w"> </span>&lt;SYM_A&gt;<span class="w"> </span>&lt;SYM_B&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan<span class="w"> </span>&lt;SYM_A&gt;<span class="w"> </span>&lt;SYM_B&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3128,16 +3179,16 @@
 </tbody>
 </table>
 <p>Sample output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>✅ Cointegrated
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Pair       : SPY / QQQ
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  p_value    : 0.012345
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  Threshold  : 0.05
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  Test stat  : -3.5421
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  Critical 5%: -2.8623
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>✅ Cointegrated
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  Pair       : SPY / QQQ
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  p_value    : 0.012345
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  Threshold  : 0.05
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  Test stat  : -3.5421
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  Critical 5%: -2.8623
 </code></pre></div>
 <h2 id="alpha-forge-analyze-pairs-scan-all">alpha-forge analyze pairs scan-all<a class="headerlink" href="#alpha-forge-analyze-pairs-scan-all" title="Permanent link">&para;</a></h2>
 <p>Scan all pairs in a watchlist (text output shows the top 20).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span><span class="o">[</span>--pvalue<span class="w"> </span><span class="m">0</span>.05<span class="o">]</span><span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>1d<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>scan-all<span class="w"> </span>--symbols-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span><span class="o">[</span>--pvalue<span class="w"> </span><span class="m">0</span>.05<span class="o">]</span><span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>1d<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3167,7 +3218,7 @@
 </table>
 <h2 id="alpha-forge-analyze-pairs-build">alpha-forge analyze pairs build<a class="headerlink" href="#alpha-forge-analyze-pairs-build" title="Permanent link">&para;</a></h2>
 <p>Compute spread series and save to the <code>alt_data</code> store (referenceable from strategy JSON via <code>ALTDATA</code>).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>build<span class="w"> </span>--sym-a<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>--sym-b<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>pairs<span class="w"> </span>build<span class="w"> </span>--sym-a<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>--sym-b<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3218,25 +3269,29 @@
 </tbody>
 </table>
 <p>Sample output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Estimating hedge ratio... (SPY / QQQ)
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  Hedge ratio: 0.823145
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  OU half-life: 12.4 days
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  Data points: 1530
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>✅ Spread saved: source_key=&#39;SPY_QQQ_spread&#39;
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>   How to reference in strategy JSON:
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>   {&quot;id&quot;: &quot;spread&quot;, &quot;type&quot;: &quot;ALTDATA&quot;, &quot;params&quot;: {&quot;source_key&quot;: &quot;SPY_QQQ_spread&quot;, &quot;column&quot;: &quot;spread&quot;}}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Estimating hedge ratio... (SPY / QQQ)
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  Hedge ratio: 0.823145
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  OU half-life: 12.4 days
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  Data points: 1530
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>✅ Spread saved: source_key=&#39;SPY_QQQ_spread&#39;
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>   How to reference in strategy JSON:
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>   {&quot;id&quot;: &quot;spread&quot;, &quot;type&quot;: &quot;ALTDATA&quot;, &quot;params&quot;: {&quot;source_key&quot;: &quot;SPY_QQQ_spread&quot;, &quot;column&quot;: &quot;spread&quot;}}
 </code></pre></div>
 <p>When there is no mean reversion, the half-life is shown as <code>N/A (no mean reversion)</code>.</p>
 <hr />
 <h2 id="alpha-forge-analyze-ml">alpha-forge analyze ml<a class="headerlink" href="#alpha-forge-analyze-ml" title="Permanent link">&para;</a></h2>
 <p>Machine-learning dataset, model training, and walk-forward validation commands (issue #512 Phase 1-2, 4). Trained joblib models can be referenced from the existing <code>ML_SIGNAL</code> indicator via <code>model_path</code> for inference.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>ML_SIGNAL</code> leak caveat — prefer <code>ML_SIGNAL_WFT</code> for production (issue #1186)</p>
+<p>Referencing a pretrained joblib model from the <code>ML_SIGNAL</code> indicator causes a <strong>look-ahead leak</strong> when the OOS period of <code>alpha-forge optimize walk-forward</code> overlaps the training period, which inflates backtest results. For WFT-consistent production use, use the <strong><code>ML_SIGNAL_WFT</code> indicator</strong> (see the dedicated section lower on this page), which self-trains inside the evaluation context and structurally eliminates the leak. Keep <code>ML_SIGNAL</code> for research / validation where you can guarantee the OOS never overlaps the training window.</p>
+</div>
 <h2 id="alpha-forge-analyze-ml-dataset-build">alpha-forge analyze ml dataset build<a class="headerlink" href="#alpha-forge-analyze-ml-dataset-build" title="Permanent link">&para;</a></h2>
 <p>Build a feature+forward-return-label parquet dataset from stored OHLCV.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--feature-set<span class="w"> </span>default_v1<span class="w"> </span>--label<span class="w"> </span>binary:24:0.005<span class="w"> </span>--interval<span class="w"> </span>1h
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--label<span class="w"> </span>ternary:24:0.005
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--label<span class="w"> </span>regression:5
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--label<span class="w"> </span>binary:24:0.005<span class="w"> </span>--json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--feature-set<span class="w"> </span>default_v1<span class="w"> </span>--label<span class="w"> </span>binary:24:0.005<span class="w"> </span>--interval<span class="w"> </span>1h
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--label<span class="w"> </span>ternary:24:0.005
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--label<span class="w"> </span>regression:5
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>build<span class="w"> </span><span class="nv">EURUSD</span><span class="o">=</span>X<span class="w"> </span>--label<span class="w"> </span>binary:24:0.005<span class="w"> </span>--json
 </code></pre></div>
 <p><strong>Key options</strong></p>
 <table>
@@ -3296,7 +3351,7 @@
 <p>The parquet file embeds symbol / interval / feature columns / label config as metadata so Phase 2 training can reproduce the exact pipeline from the file alone.</p>
 <h2 id="alpha-forge-analyze-ml-dataset-feature-sets">alpha-forge analyze ml dataset feature-sets<a class="headerlink" href="#alpha-forge-analyze-ml-dataset-feature-sets" title="Permanent link">&para;</a></h2>
 <p>List available built-in feature sets.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>feature-sets<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>dataset<span class="w"> </span>feature-sets<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <p>With <code>--json</code>, emits <code>{feature_sets: [{name, n_specs, specs: [...]}], count}</code> as pure JSON.</p>
 <p><strong>Built-in feature sets</strong></p>
@@ -3328,7 +3383,7 @@
 </table>
 <h2 id="alpha-forge-analyze-ml-train">alpha-forge analyze ml train<a class="headerlink" href="#alpha-forge-analyze-ml-train" title="Permanent link">&para;</a></h2>
 <p>Train a model from a Phase 1 dataset parquet and save joblib + metrics.json (issue #512 Phase 2).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>train<span class="w"> </span>&lt;DATASET.parquet&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>train<span class="w"> </span>&lt;DATASET.parquet&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <p><strong>Key options</strong></p>
 <table>
@@ -3453,7 +3508,7 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>train<span class="w"> </span>ds.parquet<span class="w"> </span>--model<span class="w"> </span>random_forest_classifier<span class="w"> </span>--calibration<span class="w"> </span>isotonic
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>train<span class="w"> </span>ds.parquet<span class="w"> </span>--model<span class="w"> </span>random_forest_classifier<span class="w"> </span>--calibration<span class="w"> </span>isotonic
 </code></pre></div>
 <p>Specifying <code>--calibration</code> on a regression model emits a warning and is ignored (base model is used). Calibrated joblib models work as is from the <code>ML_SIGNAL</code> / <code>ML_SIGNAL_WFT</code> indicators (sklearn-compatible API).</p>
 <p><strong>Storage format</strong></p>
@@ -3463,12 +3518,12 @@
 </ul>
 <h2 id="alpha-forge-analyze-ml-models">alpha-forge analyze ml models<a class="headerlink" href="#alpha-forge-analyze-ml-models" title="Permanent link">&para;</a></h2>
 <p>List available model types (classification + regression).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>models<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>models<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <p>With <code>--json</code>, emits <code>{classification: [...], regression: [...], count}</code> as pure JSON.</p>
 <h2 id="alpha-forge-analyze-ml-walk-forward">alpha-forge analyze ml walk-forward<a class="headerlink" href="#alpha-forge-analyze-ml-walk-forward" title="Permanent link">&para;</a></h2>
 <p>Split a dataset into N windows and train + evaluate a fresh model in each window for time-series stability checks (issue #512 Phase 4). The model is <strong>not</strong> persisted — use <code>alpha-forge analyze ml train</code> to produce the final model.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>walk-forward<span class="w"> </span>&lt;DATASET.parquet&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>analyze<span class="w"> </span>ml<span class="w"> </span>walk-forward<span class="w"> </span>&lt;DATASET.parquet&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <p><strong>Key options</strong></p>
 <table>
@@ -3553,7 +3608,7 @@
 </tbody>
 </table>
 <p>The text output also prints a one-line summary right after the aggregate block:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>proba_dispersion: max=0.568 p90=0.412 p95=0.456 share&gt;=0.55=0.54% share&gt;=0.60=0.12%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>proba_dispersion: max=0.568 p90=0.412 p95=0.456 share&gt;=0.55=0.54% share&gt;=0.60=0.12%
 </code></pre></div>
 <p><strong>How to read it</strong>: A near-zero <code>share&gt;=0.55</code> means an <code>ml_long_prob &gt;= 0.55</code> entry filter never fires — lower the threshold to 0.45–0.50, calibrate the model with <code>--calibration</code>, or revise the label spec (for example, symmetrize the <code>triple_barrier</code> ratio). Regression tasks have no <code>predict_proba</code>, so these keys are omitted.</p>
 <p><strong>Screening verdict and recommendations (issue #565)</strong></p>
@@ -3622,26 +3677,26 @@
 <p>Referencing a <code>alpha-forge analyze ml train</code> joblib via the <code>ML_SIGNAL</code> indicator causes <strong>look-ahead leak</strong> in <code>alpha-forge optimize walk-forward</code> whenever the OOS overlaps the model's training period (confirmed in issue #512 Phase 4 verification). The new <code>ML_SIGNAL_WFT</code> indicator resolves this structurally.</p>
 <p><code>ML_SIGNAL_WFT</code> is <strong>a self-contained indicator that trains on the first <code>train_ratio</code> of the input df and predicts over the whole df</strong>. The WFT engine itself is unchanged. Predictions over the training segment are forced to NaN, so only the test segment ever drives trade decisions.</p>
 <p><strong>Strategy JSON example</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ml_long_prob&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ML_SIGNAL_WFT&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">    </span><span class="nt">&quot;model_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gradient_boosting_classifier&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">    </span><span class="nt">&quot;model_params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;n_estimators&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_depth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">},</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">    </span><span class="nt">&quot;features&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LAG&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;periods&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">]},</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PCT_CHANGE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;periods&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ROLLING_MEAN&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;window&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">}</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">    </span><span class="p">],</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;binary:24:0.005&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">    </span><span class="nt">&quot;train_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">    </span><span class="nt">&quot;min_train_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">    </span><span class="nt">&quot;random_state&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
-<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">    </span><span class="nt">&quot;output&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;proba&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">    </span><span class="nt">&quot;proba_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="w">    </span><span class="nt">&quot;threshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
-<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ml_long_prob&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ML_SIGNAL_WFT&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="nt">&quot;model_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gradient_boosting_classifier&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="nt">&quot;model_params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;n_estimators&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_depth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">},</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="nt">&quot;features&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LAG&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;periods&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">]},</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PCT_CHANGE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;periods&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ROLLING_MEAN&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;window&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">}</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="p">],</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">    </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;binary:24:0.005&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">    </span><span class="nt">&quot;train_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="w">    </span><span class="nt">&quot;min_train_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="w">    </span><span class="nt">&quot;random_state&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="w">    </span><span class="nt">&quot;output&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;proba&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="w">    </span><span class="nt">&quot;proba_class&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="w">    </span><span class="nt">&quot;threshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="p">}</span>
 </code></pre></div>
 <p><strong>Key parameters</strong></p>
 <table>

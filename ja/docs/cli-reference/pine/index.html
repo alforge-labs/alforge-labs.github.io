@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2945,6 +2973,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition tip">
+<p class="admonition-title">Pine 変換対応指標（<code>pine_supported</code>、issue #1165）</p>
+<p>GA で定番 10 指標（<strong>CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE</strong>）を Pine v6 ネイティブ（<code>ta.*</code>）変換に対応させました。各指標が Pine に変換できるかは <code>alpha-forge analyze indicator list</code>（凡例 <code>✓</code> / <code>✗</code>）や <code>alpha-forge analyze indicator show &lt;TYPE&gt;</code>（<code>Pine 変換:</code> 行・<code>--json</code> の <code>pine_supported</code>）で確認できます。<code>✗</code> の指標（<code>HMM</code> / <code>ALTDATA</code> / <code>ML_SIGNAL</code> 等）を含む戦略を <code>generate</code> すると、該当指標は <code>na</code>（エントリーしない）として扱われ、警告コメントが Pine に挿入されます。</p>
+</div>
 <p>サンプル出力（有料プラン）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>✅ Pine Script が保存されました: output/pinescript/spy_sma_v1.pine
 </code></pre></div>
@@ -3272,7 +3304,7 @@
 <p>各 <code>.pine</code> の <code>strategy_id</code> / ファイル / サイズ / 更新日時を表示します。</p>
 <h2 id="alpha-forge-pine-delete">alpha-forge pine delete<a class="headerlink" href="#alpha-forge-pine-delete" title="Permanent link">&para;</a></h2>
 <p>指定 <code>strategy_id</code> の生成済み Pine Script（<code>.pine</code>）を 1 件削除します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3291,6 +3323,12 @@
 <td>削除対象の戦略 ID</td>
 </tr>
 <tr>
+<td><code>--dry-run</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>実際には削除せず、削除対象を表示して終了する（破壊系ガードの非対称解消、issue #1178）</td>
+</tr>
+<tr>
 <td><code>--yes</code> / <code>-y</code></td>
 <td>フラグ</td>
 <td>false</td>
@@ -3301,6 +3339,7 @@
 <ul>
 <li>対象ファイルが存在しない場合は終了コード <code>1</code>（not found）。</li>
 <li>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止します。</li>
+<li><code>--dry-run</code> を付けると、削除せずに対象ファイルを表示して終了コード <code>0</code> で終わります。<code>pine clean</code> と揃え、<code>strategy delete</code> とも対称な挙動です。</li>
 </ul>
 <h2 id="alpha-forge-pine-clean">alpha-forge pine clean<a class="headerlink" href="#alpha-forge-pine-clean" title="Permanent link">&para;</a></h2>
 <p><code>config.pinescript.output_path</code> 配下の <code>*.pine</code> を期間（mtime 基準）で整理して削除します。</p>

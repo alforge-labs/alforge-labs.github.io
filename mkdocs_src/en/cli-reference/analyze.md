@@ -20,23 +20,27 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail] [--json]
 | `--detail` | flag | false | Show parameter names, defaults, and descriptions |
 | `--json` | flag | false | Emit the result as JSON (`{indicators: [...], count}`; with `--detail`, each element includes `params`) |
 
-Sample output (the category labels such as `移動平均` = moving average are emitted in Japanese regardless of locale):
+Sample output (the category labels such as `移動平均` = moving average are emitted in Japanese regardless of locale; each indicator now carries a Pine-conversion legend, issue #1165):
 
 ```text
 利用可能なインジケーター一覧（60件）:
+凡例: ✓=Pine 変換対応 / ✗=Pine 非対応（pine generate で na・エントリーしない）
 
-  [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
-  [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
-  [モメンタム]  AROON  TSI
-  [オシレーター]  CCI  CMO  MFI  MOM  PERCENTRANK  ROC  RSI  STOCH  TRIX  UP_RATIO  WILLR
-  [ボラティリティ]  ATR  BBANDS  KC  STDDEV
-  [出来高]  CMF  OBV  PV_CORR  VWAP  WVMA
-  [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW  ROLLING_QUANTILE
-  [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
-  [高度な機能]  ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
+  [移動平均]  ALMA✓  DEMA✓  EMA✓  HMA✓  KAMA✗  RMA✓  SMA✓  TEMA✓  VWMA✓  WMA✓
+  [トレンド]  ADX✓  ICHIMOKU✗  MACD✓  RANGE_FILTER✗  SAR✓  SUPERTREND✓  SUPERTREND_DIR✗
+  [モメンタム]  AROON✓  TSI✓
+  [オシレーター]  CCI✓  CMO✓  MFI✓  MOM✓  PERCENTRANK✓  ROC✓  RSI✓  STOCH✓  TRIX✗  UP_RATIO✓  WILLR✓
+  [ボラティリティ]  ATR✓  BBANDS✓  KC✗  STDDEV✓
+  [出来高]  CMF✗  OBV✓  PV_CORR✓  VWAP✓  WVMA✓
+  [ピボット/チャネル]  CHANDELIER✗  DONCHIAN✓  PIVOTHIGH✗  PIVOTLOW✗  ROLLING_QUANTILE✓
+  [統計/ML]  CORRELATION✗  HALFLIFE✗  HMM✗  LINEAR_REG✓  OU_HALFLIFE✗  OU_ZSCORE✗  REGIME_RULE✗  SEASONAL✓  ZSCORE✓
+  [高度な機能]  ALTDATA✗  EXPR✓  FFILL✗  GRID_SIGNAL✗  ML_SIGNAL✗  ML_SIGNAL_WFT✗  PRICE✓
 
 Details: alpha-forge analyze indicator show <TYPE>
 ```
+
+!!! tip "Expanded native Pine conversion (issue #1165)"
+    GA added native Pine v6 (`ta.*`) conversion for 10 indicators — **CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE** — and introduced the `pine_supported` flag (`✓` / `✗`) shown above. When a strategy containing a `✗` indicator is passed to `alpha-forge pine generate`, that indicator is treated as `na` (no entry) and a warning comment is inserted into the Pine output. The `--json` output adds a boolean `pine_supported` field to each indicator.
 
 ## alpha-forge analyze indicator show
 
@@ -49,23 +53,26 @@ alpha-forge analyze indicator show <INDICATOR_TYPE> [--json]
 | Name | Kind | Description |
 |------|------|-------------|
 | `INDICATOR_TYPE` | argument (required) | Indicator name (case-insensitive) |
-| `--json` | flag | Emit the indicator definition as JSON (`name` / `category` / `desc` / `params` / `available_features` / `output` / `notes` / `example`); not-found returns `{error, code: "indicator_not_found", id}` to stdout with exit code `1` |
+| `--json` | flag | Emit the indicator definition as JSON (`name` / `category` / `desc` / `params` / `available_features` / `output` / `notes` / `example` / `pine_supported`); not-found returns `{error, code: "indicator_not_found", id}` to stdout with exit code `1` |
+
+The detail view also reports **Pine conversion support** (`Pine 変換: 対応 / 非対応`), available as the boolean `pine_supported` in `--json` (issue #1165).
 
 Sample output:
 
 ```text
-SMA — Simple Moving Average
+RSI — Relative Strength Index
 
-Category: 移動平均
+Category: オシレーター
 
 Parameters:
   Name                 Type     Default                Description
-  length              int      20                    Period
+  length              int      14                    Period
 
-Output: scalar time series
+Output: float — RSI value (0–100)
+Pine 変換: 対応（ta.* へネイティブ変換）
 
 Example (JSON):
-  {"id": "sma_20", "type": "SMA", "params": {"length": 20}}
+  {"id": "rsi_14", "type": "RSI", "params": {"length": 14}}
 ```
 
 Unknown indicator names print `Error: '<TYPE>' is not a recognized indicator.` and exit with code `1`.
@@ -75,6 +82,24 @@ Unknown indicator names print `Error: '<TYPE>' is not a recognized indicator.` a
 ## alpha-forge analyze pairs
 
 Cointegration tests and spread series for pair trading. Uses the Engle–Granger test from `statsmodels`.
+
+!!! info "Positioned as a research tool (issue #1177)"
+    `analyze pairs` is a **research tool for discovering and validating** pair-trading candidates. The workflow is: find statistically cointegrated pairs with `scan` / `scan-all`, then `build` their spread series into the `alt_data` store, and reference that spread from a strategy JSON via the `ALTDATA` indicator. `pairs` itself neither places orders nor runs backtests — it is a preprocessing / feature-generation stage for building strategies.
+
+    **Typical workflow (combined with ALTDATA)**:
+
+    ```bash
+    # 1) Discover candidate pairs via statistical tests
+    alpha-forge analyze pairs scan-all --symbols-file watchlist.txt --pvalue 0.05
+
+    # 2) Build the spread series for a promising pair and store it in alt_data
+    alpha-forge analyze pairs build --sym-a SPY --sym-b QQQ --output-id SPY_QQQ_spread
+
+    # 3) Reference the spread as an ALTDATA indicator in a strategy JSON (mean-reversion)
+    #    e.g. {"id": "spread", "type": "ALTDATA",
+    #          "params": {"source_key": "SPY_QQQ_spread", "column": "spread"}}
+    alpha-forge backtest run SPY --strategy spy_qqq_spread_meanrev_v1
+    ```
 
 ## alpha-forge analyze pairs scan
 
@@ -154,6 +179,9 @@ When there is no mean reversion, the half-life is shown as `N/A (no mean reversi
 ## alpha-forge analyze ml
 
 Machine-learning dataset, model training, and walk-forward validation commands (issue #512 Phase 1-2, 4). Trained joblib models can be referenced from the existing `ML_SIGNAL` indicator via `model_path` for inference.
+
+!!! warning "`ML_SIGNAL` leak caveat — prefer `ML_SIGNAL_WFT` for production (issue #1186)"
+    Referencing a pretrained joblib model from the `ML_SIGNAL` indicator causes a **look-ahead leak** when the OOS period of `alpha-forge optimize walk-forward` overlaps the training period, which inflates backtest results. For WFT-consistent production use, use the **`ML_SIGNAL_WFT` indicator** (see the dedicated section lower on this page), which self-trains inside the evaluation context and structurally eliminates the leak. Keep `ML_SIGNAL` for research / validation where you can guarantee the OOS never overlaps the training window.
 
 ## alpha-forge analyze ml dataset build
 

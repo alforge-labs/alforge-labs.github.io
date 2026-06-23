@@ -35,6 +35,9 @@ alpha-forge pine generate --strategy <ID> [--with-training-data]
 | `--no-validate` | フラグ | false | Pine v6 シグネチャ DB ベースの post-generate validator をスキップ（緊急避難用、issue #786） |
 | `--backtest-period` | オプション | - | Pine 出力に期間フィルタを焼き込む（形式 `YYYY-MM-DD:YYYY-MM-DD`、issue #823） |
 
+!!! tip "Pine 変換対応指標（`pine_supported`、issue #1165）"
+    GA で定番 10 指標（**CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE**）を Pine v6 ネイティブ（`ta.*`）変換に対応させました。各指標が Pine に変換できるかは `alpha-forge analyze indicator list`（凡例 `✓` / `✗`）や `alpha-forge analyze indicator show <TYPE>`（`Pine 変換:` 行・`--json` の `pine_supported`）で確認できます。`✗` の指標（`HMM` / `ALTDATA` / `ML_SIGNAL` 等）を含む戦略を `generate` すると、該当指標は `na`（エントリーしない）として扱われ、警告コメントが Pine に挿入されます。
+
 サンプル出力（有料プラン）：
 
 ```text
@@ -168,16 +171,18 @@ alpha-forge pine list [--json]
 指定 `strategy_id` の生成済み Pine Script（`.pine`）を 1 件削除します。
 
 ```bash
-alpha-forge pine delete <STRATEGY_ID> [--yes]
+alpha-forge pine delete <STRATEGY_ID> [--dry-run] [--yes]
 ```
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 削除対象の戦略 ID |
+| `--dry-run` | フラグ | false | 実際には削除せず、削除対象を表示して終了する（破壊系ガードの非対称解消、issue #1178） |
 | `--yes` / `-y` | フラグ | false | 確認プロンプトをスキップして削除 |
 
 - 対象ファイルが存在しない場合は終了コード `1`（not found）。
 - 破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止します。
+- `--dry-run` を付けると、削除せずに対象ファイルを表示して終了コード `0` で終わります。`pine clean` と揃え、`strategy delete` とも対称な挙動です。
 
 ## alpha-forge pine clean
 

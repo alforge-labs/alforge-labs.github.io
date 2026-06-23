@@ -72,6 +72,7 @@ nav:
       - TradingView と alpha-strike の連携: guides/tradingview-alpha-strike.md
       - alpha-strike セットアップガイド: guides/alpha-strike-setup.md
       - FRED マクロデータ活用ガイド: guides/macro-data.md
+      - 用語集: guides/glossary.md
       - 目的別ユースケース:
           - 概要: usecases/index.md
           - TradingViewユーザー: usecases/tradingview.md

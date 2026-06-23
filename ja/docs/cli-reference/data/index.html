@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2308,6 +2336,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（--json）
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2359,7 +2398,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-json" class="md-nav__link">
+  <a href="#-json_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         サンプル出力（--json）
@@ -2424,6 +2463,17 @@
     <span class="md-ellipsis">
       
         サンプル出力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（--json）
       
     </span>
   </a>
@@ -3198,6 +3248,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（--json）
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3249,7 +3310,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-json" class="md-nav__link">
+  <a href="#-json_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         サンプル出力（--json）
@@ -3314,6 +3375,17 @@
     <span class="md-ellipsis">
       
         サンプル出力
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプル出力（--json）
       
     </span>
   </a>
@@ -3673,10 +3745,28 @@
 <h2 id="alpha-forge-data-list">alpha-forge data list<a class="headerlink" href="#alpha-forge-data-list" title="Permanent link">&para;</a></h2>
 <p>保存済みデータセットの一覧を表示します。</p>
 <h3 id="_7">構文<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>list
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_8">引数とオプション<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>なし。</p>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で標準出力する（機械可読・MCP / パイプ用途）（issue #1176）</td>
+</tr>
+</tbody>
+</table>
+<p><code>--json</code> 指定時は stdout に純 JSON を出力します（装飾・進捗は stderr へ分離）。</p>
 <h3 id="_9">サンプル出力<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>保存済みデータ件数: 3
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>- SPY (1d): 2018-01-02 から 2025-12-31 (2014 rows)
@@ -3686,11 +3776,22 @@
 <p>データが 1 件もない場合：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>保存済みデータ件数: 0
 </code></pre></div>
+<h3 id="-json">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">&quot;datasets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2018-01-02&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2014</span><span class="p">},</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;QQQ&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2018-01-02&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2014</span><span class="p">},</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDJPY=X&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1530</span><span class="p">}</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Exit code</strong>: <code>0</code>=成功、<code>1</code>=not found / 実行失敗、<code>2</code>=引数エラー。</p>
 <hr />
 <h2 id="alpha-forge-data-trend">alpha-forge data trend<a class="headerlink" href="#alpha-forge-data-trend" title="Permanent link">&para;</a></h2>
 <p>保存済みデータから市場トレンドシグナル（強気・弱気・中立など）を生成します。<code>--symbols</code> 未指定時は <code>DEFAULT_TREND_SYMBOLS</code>（主要日米セット）を使用。</p>
 <h3 id="_10">構文<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>trend<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>trend<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_11">引数とオプション<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
@@ -3738,34 +3839,34 @@
 <p><code>--symbols</code> と <code>--watchlist</code> の両方を指定した場合、<code>--watchlist</code> が優先されます。</p>
 <h3 id="_12">サンプル出力（テキスト）<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
 <p>各行は <code>&lt;シンボル&gt;: &lt;ラベル&gt; - &lt;サマリ&gt;</code> 形式です。ラベルは日本語（<code>上昇トレンド</code> / <code>下降トレンド</code> / <code>回復基調</code> / <code>失速気味</code> / <code>中立</code>）で、サマリには 20 日騰落率が添えられます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>SPY: 上昇トレンド - SPY は 上昇トレンド です（20日騰落率 +5.23%）
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>QQQ: 上昇トレンド - QQQ は 上昇トレンド です（20日騰落率 +7.81%）
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>^N225: 中立 - ^N225 は 中立 です（20日騰落率 +0.42%）
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>USDJPY=X: 下降トレンド - USDJPY=X は 下降トレンド です（20日騰落率 -2.10%）
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>SPY: 上昇トレンド - SPY は 上昇トレンド です（20日騰落率 +5.23%）
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>QQQ: 上昇トレンド - QQQ は 上昇トレンド です（20日騰落率 +7.81%）
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>^N225: 中立 - ^N225 は 中立 です（20日騰落率 +0.42%）
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>USDJPY=X: 下降トレンド - USDJPY=X は 下降トレンド です（20日騰落率 -2.10%）
 </code></pre></div>
-<h3 id="-json">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h3>
+<h3 id="-json_1">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json_1" title="Permanent link">&para;</a></h3>
 <p>JSON では <code>trend</code>（英小文字 enum: <code>bullish</code> / <code>bearish</code> / <code>recovery</code> / <code>weakening</code> / <code>neutral</code>）と <code>label</code>（日本語表示名）の 2 フィールドに加え、<code>close</code> / <code>pct_1d</code> / <code>pct_5d</code> / <code>pct_20d</code> / <code>sma20</code> / <code>sma50</code> / <code>sma200</code> を返します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alpha-forge:data:trend&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;as_of&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;signals&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">      </span><span class="nt">&quot;as_of&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">      </span><span class="nt">&quot;close&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">512.34</span><span class="p">,</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">      </span><span class="nt">&quot;pct_1d&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.31</span><span class="p">,</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">      </span><span class="nt">&quot;pct_5d&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.42</span><span class="p">,</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">      </span><span class="nt">&quot;pct_20d&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.23</span><span class="p">,</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">      </span><span class="nt">&quot;sma20&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">498.10</span><span class="p">,</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">      </span><span class="nt">&quot;sma50&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">480.55</span><span class="p">,</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">      </span><span class="nt">&quot;sma200&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">455.02</span><span class="p">,</span>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">      </span><span class="nt">&quot;trend&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bullish&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;上昇トレンド&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">      </span><span class="nt">&quot;summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY は 上昇トレンド です（20日騰落率 +5.23%）&quot;</span>
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alpha-forge:data:trend&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;as_of&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;signals&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">      </span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">      </span><span class="nt">&quot;as_of&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-31&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">      </span><span class="nt">&quot;close&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">512.34</span><span class="p">,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">      </span><span class="nt">&quot;pct_1d&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.31</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">      </span><span class="nt">&quot;pct_5d&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.42</span><span class="p">,</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">      </span><span class="nt">&quot;pct_20d&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.23</span><span class="p">,</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">      </span><span class="nt">&quot;sma20&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">498.10</span><span class="p">,</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">      </span><span class="nt">&quot;sma50&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">480.55</span><span class="p">,</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">      </span><span class="nt">&quot;sma200&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">455.02</span><span class="p">,</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">      </span><span class="nt">&quot;trend&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bullish&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;上昇トレンド&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">      </span><span class="nt">&quot;summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY は 上昇トレンド です（20日騰落率 +5.23%）&quot;</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="_13">主なエラー<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
 <table>
@@ -3788,21 +3889,52 @@
 <h2 id="alpha-forge-data-update">alpha-forge data update<a class="headerlink" href="#alpha-forge-data-update" title="Permanent link">&para;</a></h2>
 <p><code>alpha-forge data list</code> で見えるすべての保存済みデータについて、最終取得日から <strong>本日まで差分取得</strong> します。既に最新のデータはスキップ。</p>
 <h3 id="_14">構文<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>update
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>update<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_15">引数とオプション<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
-<p>なし。</p>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で標準出力する（機械可読・MCP / パイプ用途）（issue #1176）</td>
+</tr>
+</tbody>
+</table>
+<p><code>--json</code> 指定時は stdout に純 JSON を出力します（装飾・進捗は stderr へ分離）。</p>
 <h3 id="_16">サンプル出力<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>全 3 件のデータ更新を開始します...
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  [Update] SPY (1d) を 2025-12-15 から現在まで取得します...
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    - 12 行のデータを追加・更新しました。
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>  [Skip] QQQ (1d): すでに最新 (2025-12-31) です。
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>  [Update] USDJPY=X (1d) を 2025-12-20 から現在まで取得します...
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    - 新しいデータはありませんでした。
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>1 件のデータを更新完了しました。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>全 3 件のデータ更新を開始します...
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  [Update] SPY (1d) を 2025-12-15 から現在まで取得します...
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    - 12 行のデータを追加・更新しました。
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>  [Skip] QQQ (1d): すでに最新 (2025-12-31) です。
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>  [Update] USDJPY=X (1d) を 2025-12-20 から現在まで取得します...
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    - 新しいデータはありませんでした。
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>1 件のデータを更新完了しました。
 </code></pre></div>
+<h3 id="-json_2">サンプル出力（<code>--json</code>）<a class="headerlink" href="#-json_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">&quot;updated&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">&quot;skipped&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SPY&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;updated&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;added_rows&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">},</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;QQQ&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;skipped&quot;</span><span class="p">},</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;symbol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;USDJPY=X&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no_new_data&quot;</span><span class="p">}</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Exit code</strong>: <code>0</code>=成功、<code>1</code>=not found / 実行失敗、<code>2</code>=引数エラー。</p>
 <p>データが 1 件もない場合：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>保存済みのデータがありません。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>保存済みのデータがありません。
 </code></pre></div>
 <h3 id="_17">主なエラー<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
 <table>
@@ -3898,18 +4030,18 @@
 <ul>
 <li><strong>設定例</strong>（<code>forge.yaml</code>）:</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">data</span><span class="p">:</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">providers</span><span class="p">:</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="nt">stock_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">     </span><span class="c1"># 株 / ETF を tv_mcp で取得</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nt">fx_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">        </span><span class="c1"># FX も tv_mcp で取得</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">enable_fallback</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">      </span><span class="c1"># tv_mcp 失敗時 yfinance へフォールバック</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="nt">tv_mcp</span><span class="p">:</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">             </span><span class="c1"># 空文字なら環境変数 FORGE_TV_MCP_ENDPOINT を使用（issue #689）。</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">                               </span><span class="c1"># `~` / `$HOME` を含むパスはそのまま書ける（例: &quot;node ~/opt/tv-mcp/server.js&quot;）</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">      </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tradesdontlie</span><span class="w">    </span><span class="c1"># OHLCV 用途なら tradesdontlie で OK</span>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">      </span><span class="nt">max_bars_per_call</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w">   </span><span class="c1"># MCP 上限</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">      </span><span class="nt">max_chunks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200</span><span class="w">          </span><span class="c1"># 範囲スライド時のチャンク上限</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">      </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">providers</span><span class="p">:</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nt">stock_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">     </span><span class="c1"># 株 / ETF を tv_mcp で取得</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="nt">fx_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">        </span><span class="c1"># FX も tv_mcp で取得</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nt">enable_fallback</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">      </span><span class="c1"># tv_mcp 失敗時 yfinance へフォールバック</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nt">tv_mcp</span><span class="p">:</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">             </span><span class="c1"># 空文字なら環境変数 FORGE_TV_MCP_ENDPOINT を使用（issue #689）。</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">                               </span><span class="c1"># `~` / `$HOME` を含むパスはそのまま書ける（例: &quot;node ~/opt/tv-mcp/server.js&quot;）</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">      </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tradesdontlie</span><span class="w">    </span><span class="c1"># OHLCV 用途なら tradesdontlie で OK</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">      </span><span class="nt">max_bars_per_call</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w">   </span><span class="c1"># MCP 上限</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">      </span><span class="nt">max_chunks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200</span><span class="w">          </span><span class="c1"># 範囲スライド時のチャンク上限</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">      </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">endpoint の解決優先順位（issue #689）</p>
@@ -3921,29 +4053,29 @@
 <p>複数マシン・CI で <code>forge.yaml</code> を共有する場合は <code>endpoint: ""</code> のままコミットし、<code>FORGE_TV_MCP_ENDPOINT</code> を環境ごとに設定する運用がおすすめです。</p>
 </div>
 <p>実行例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># CLI で endpoint を直接指定して fetch</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># 環境変数で endpoint を渡す（~ / $HOME も展開される）</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nv">FORGE_TV_MCP_ENDPOINT</span><span class="o">=</span><span class="s2">&quot;node ~/opt/tv-mcp/server.js&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>USDJPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="c1"># forge.yaml の設定を利用（CLI から endpoint を省略）</span>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>USDJPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># CLI で endpoint を直接指定して fetch</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span><span class="w"> </span>--period<span class="w"> </span>max
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># 環境変数で endpoint を渡す（~ / $HOME も展開される）</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nv">FORGE_TV_MCP_ENDPOINT</span><span class="o">=</span><span class="s2">&quot;node ~/opt/tv-mcp/server.js&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>USDJPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1"># forge.yaml の設定を利用（CLI から endpoint を省略）</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>USDJPY<span class="w"> </span>--provider<span class="w"> </span>tv_mcp<span class="w"> </span>--period<span class="w"> </span>20y<span class="w"> </span>--interval<span class="w"> </span>1d
 </code></pre></div>
 <h4 id="alpha-forge-data-tv-mcp-checkissue-674">サブコマンド: <code>alpha-forge data tv-mcp check</code>（issue #674）<a class="headerlink" href="#alpha-forge-data-tv-mcp-checkissue-674" title="Permanent link">&para;</a></h4>
 <p>TV MCP データ取得サーバーの起動・接続を検証します。<code>/explore-strategies</code> スキルが、<code>goals.yaml</code> の <code>exploration.data_provider_override.{stock|fx}: tv_mcp</code> 設定された goal の冒頭で自動実行します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># 既定（symbol=BATS:SPY で疎通確認）</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># JSON 出力（自動化スクリプト向け）</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check<span class="w"> </span>--json
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># シンボルを変更（FX 用）</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check<span class="w"> </span>--symbol<span class="w"> </span>OANDA:USDJPY
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1"># CLI で endpoint を直接指定</span>
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check<span class="w"> </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 既定（symbol=BATS:SPY で疎通確認）</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># JSON 出力（自動化スクリプト向け）</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check<span class="w"> </span>--json
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># シンボルを変更（FX 用）</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check<span class="w"> </span>--symbol<span class="w"> </span>OANDA:USDJPY
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># CLI で endpoint を直接指定</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>check<span class="w"> </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3974,23 +4106,23 @@
 <p><strong>Exit code</strong>: <code>0</code>=セッション有効、<code>2</code>=endpoint 未設定 / TV Desktop 未起動 / MCP server 接続失敗。<code>/explore-strategies</code> スキルが exit 2 を検出すると、<code>&lt;goal_dir&gt;/explored_log.md</code> に「TV MCP 認証エラーで停止」を記録してループを停止します（自動起動・再試行は行いません）。</p>
 <h3 id="auto-issue-583-phase-15e-"><code>auto</code> ルーティング（issue #583 Phase 1.5e-δ）<a class="headerlink" href="#auto-issue-583-phase-15e-" title="Permanent link">&para;</a></h3>
 <p><code>stock_provider</code> / <code>fx_provider</code> に <code>auto</code> を指定すると、シンボルから判定したアセット種別ごとに <code>auto_routing</code> テーブルから provider を解決します。<code>alpha-forge data fetch &lt;SYM&gt;</code> を実行するたびに別 provider を選びたい運用に便利です。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">data</span><span class="p">:</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">providers</span><span class="p">:</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="nt">stock_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="nt">fx_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">    </span><span class="nt">auto_routing</span><span class="p">:</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">      </span><span class="nt">stock</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">      </span><span class="c1"># 米株 / 日本株は TV MCP（長期データ）</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">      </span><span class="nt">etf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">      </span><span class="nt">fx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oanda</span><span class="w">          </span><span class="c1"># FX は OANDA</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">      </span><span class="nt">commodity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yfinance</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">      </span><span class="nt">crypto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yfinance</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">      </span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yfinance</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="nt">tv_mcp</span><span class="p">:</span>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">      </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tradesdontlie</span>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="w">    </span><span class="nt">oanda</span><span class="p">:</span>
-<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">      </span><span class="nt">access_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OANDA_ACCESS_TOKEN}</span>
-<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">      </span><span class="nt">account_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OANDA_ACCOUNT_ID}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">data</span><span class="p">:</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">providers</span><span class="p">:</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="nt">stock_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="nt">fx_provider</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="nt">auto_routing</span><span class="p">:</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">      </span><span class="nt">stock</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span><span class="w">      </span><span class="c1"># 米株 / 日本株は TV MCP（長期データ）</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">      </span><span class="nt">etf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tv_mcp</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">      </span><span class="nt">fx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oanda</span><span class="w">          </span><span class="c1"># FX は OANDA</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">      </span><span class="nt">commodity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yfinance</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">      </span><span class="nt">crypto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yfinance</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">      </span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yfinance</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">    </span><span class="nt">tv_mcp</span><span class="p">:</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node</span><span class="nv"> </span><span class="s">/opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">      </span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tradesdontlie</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">    </span><span class="nt">oanda</span><span class="p">:</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">      </span><span class="nt">access_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OANDA_ACCESS_TOKEN}</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">      </span><span class="nt">account_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OANDA_ACCOUNT_ID}</span>
 </code></pre></div>
 <p>アセット種別の判定は <code>alpha_forge.data.symbols.detect_asset_type</code> を利用：</p>
 <table>
@@ -4065,7 +4197,7 @@
 <p>TradingView MCP server を介したチャート取得・任意ツール呼び出しを行うコマンドグループ（issue #523）。</p>
 <h2 id="alpha-forge-data-tv-mcp-chart">alpha-forge data tv-mcp chart<a class="headerlink" href="#alpha-forge-data-tv-mcp-chart" title="Permanent link">&para;</a></h2>
 <p>TradingView チャートのスナップショット PNG を取得します（Phase 1.5d）。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>chart<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>D<span class="o">]</span><span class="w"> </span><span class="o">[</span>--width<span class="w"> </span>W<span class="o">]</span><span class="w"> </span><span class="o">[</span>--height<span class="w"> </span>H<span class="o">]</span><span class="w"> </span><span class="o">[</span>--theme<span class="w"> </span>light<span class="p">|</span>dark<span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;PNG&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server<span class="w"> </span>&lt;CMD&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>chart<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">[</span>--interval<span class="w"> </span>D<span class="o">]</span><span class="w"> </span><span class="o">[</span>--width<span class="w"> </span>W<span class="o">]</span><span class="w"> </span><span class="o">[</span>--height<span class="w"> </span>H<span class="o">]</span><span class="w"> </span><span class="o">[</span>--theme<span class="w"> </span>light<span class="p">|</span>dark<span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;PNG&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server<span class="w"> </span>&lt;CMD&gt;<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4140,12 +4272,12 @@
 </tbody>
 </table>
 <p>実行例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>chart<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span>--output<span class="w"> </span>charts/spy_d.png<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;python /opt/tv-mcp-chart/server.py&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>chart<span class="w"> </span>SPY<span class="w"> </span>--interval<span class="w"> </span>D<span class="w"> </span>--output<span class="w"> </span>charts/spy_d.png<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;python /opt/tv-mcp-chart/server.py&quot;</span>
 </code></pre></div>
 <h2 id="alpha-forge-data-tv-mcp-inspect">alpha-forge data tv-mcp inspect<a class="headerlink" href="#alpha-forge-data-tv-mcp-inspect" title="Permanent link">&para;</a></h2>
 <p>任意の MCP tool を呼び出して JSON でレスポンスを表示します（Phase 1.5c-α）。新しい MCP server の挙動確認や、サポートされているツール一覧の探索に使います。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>inspect<span class="w"> </span>&lt;TOOL_NAME&gt;<span class="w"> </span><span class="o">[</span>--server-type<span class="w"> </span>pine<span class="p">|</span>chart<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server<span class="w"> </span>&lt;CMD&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--arg<span class="w"> </span><span class="nv">key</span><span class="o">=</span>value<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--args-json<span class="w"> </span><span class="s1">&#39;{...}&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;JSON&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pretty<span class="p">|</span>--compact<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>inspect<span class="w"> </span>&lt;TOOL_NAME&gt;<span class="w"> </span><span class="o">[</span>--server-type<span class="w"> </span>pine<span class="p">|</span>chart<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mcp-server<span class="w"> </span>&lt;CMD&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--arg<span class="w"> </span><span class="nv">key</span><span class="o">=</span>value<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--args-json<span class="w"> </span><span class="s1">&#39;{...}&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;JSON&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pretty<span class="p">|</span>--compact<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4208,17 +4340,17 @@
 </tbody>
 </table>
 <p>実行例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># tool 一覧（実装に依存）</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>inspect<span class="w"> </span>list_tools<span class="w"> </span>--server-type<span class="w"> </span>pine<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
-<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="c1"># data_get_ohlcv を試す</span>
-<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>inspect<span class="w"> </span>data_get_ohlcv<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span>--arg<span class="w"> </span><span class="nv">symbol</span><span class="o">=</span>SPY<span class="w"> </span>--arg<span class="w"> </span><span class="nv">interval</span><span class="o">=</span>D<span class="w"> </span>--arg<span class="w"> </span><span class="nv">bars</span><span class="o">=</span><span class="m">10</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># tool 一覧（実装に依存）</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>inspect<span class="w"> </span>list_tools<span class="w"> </span>--server-type<span class="w"> </span>pine<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">  </span>--mcp-server<span class="w"> </span><span class="s2">&quot;node /opt/tv-mcp/server.js&quot;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="c1"># data_get_ohlcv を試す</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>inspect<span class="w"> </span>data_get_ohlcv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">  </span>--arg<span class="w"> </span><span class="nv">symbol</span><span class="o">=</span>SPY<span class="w"> </span>--arg<span class="w"> </span><span class="nv">interval</span><span class="o">=</span>D<span class="w"> </span>--arg<span class="w"> </span><span class="nv">bars</span><span class="o">=</span><span class="m">10</span>
 </code></pre></div>
 <h2 id="alpha-forge-data-tv-mcp-cache-clean">alpha-forge data tv-mcp cache-clean<a class="headerlink" href="#alpha-forge-data-tv-mcp-cache-clean" title="Permanent link">&para;</a></h2>
 <p><code>alpha-forge data tv-mcp chart</code> が <code>config.tv_mcp.chart_snapshot.cache_path</code>（既定 <code>data/cache/charts/</code>）に日次キーで蓄積する PNG キャッシュを、期間（mtime 基準）で整理して削除します。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>cache-clean<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>tv-mcp<span class="w"> </span>cache-clean<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4264,7 +4396,7 @@
 <h2 id="alpha-forge-data-alt">alpha-forge data alt<a class="headerlink" href="#alpha-forge-data-alt" title="Permanent link">&para;</a></h2>
 <p>代替データ（センチメント、マクロ指標等）の取得・管理。<code>config.data.alt_storage_path</code> 配下に保存され、戦略 JSON では <code>ALTDATA</code> 指標タイプで参照できます。</p>
 <h2 id="alpha-forge-data-alt-fetch">alpha-forge data alt fetch<a class="headerlink" href="#alpha-forge-data-alt-fetch" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--start<span class="w"> </span>&lt;YYYY-MM-DD&gt;<span class="w"> </span>--end<span class="w"> </span>&lt;YYYY-MM-DD&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--start<span class="w"> </span>&lt;YYYY-MM-DD&gt;<span class="w"> </span>--end<span class="w"> </span>&lt;YYYY-MM-DD&gt;
 </code></pre></div>
 <table>
 <thead>
@@ -4294,19 +4426,19 @@
 </table>
 <p>出力: <code>✅ &lt;SOURCE_KEY&gt;: &lt;N&gt;行を保存しました</code>。プロバイダー未登録時は <code>ClickException</code>。</p>
 <h2 id="alpha-forge-data-alt-list">alpha-forge data alt list<a class="headerlink" href="#alpha-forge-data-alt-list" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
 </code></pre></div>
 <p>サンプル出力：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>保存済み代替データ件数: 2
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>保存済み代替データ件数: 2
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
 </code></pre></div>
 <p>保存済みの代替データが無い場合は次の 1 行のみを出力して終了コード <code>0</code> で終わります。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>保存済みの代替データはありません。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>保存済みの代替データはありません。
 </code></pre></div>
 <h2 id="alpha-forge-data-alt-info">alpha-forge data alt info<a class="headerlink" href="#alpha-forge-data-alt-info" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
 </code></pre></div>
 <p>ソースキー、時間足、行数、開始日・終了日、カラム、ファイルパス、ファイルサイズを表示。データ未取得時は <code>ClickException</code>。</p>
 <hr />

@@ -1,6 +1,6 @@
 # alpha-forge system
 
-Operational utilities: workspace initialization, Whop OAuth authentication, and bundled documentation access.
+Operational utilities: workspace initialization, Whop OAuth authentication, bundled documentation access, environment diagnostics, and data-path listing.
 
 ## alpha-forge system auth
 
@@ -225,5 +225,95 @@ With a single key plus `--json`, the result is a `{key, value}` envelope.
 alpha-forge system config strategies.use_db --json
 # => {"key": "strategies.use_db", "value": true}
 ```
+
+---
+
+## alpha-forge system paths
+
+Lists **every data location as a resolved absolute path** — strategy JSON, backtest results, journal, ideas, Pine Script, and historical data (issue #1180). It is an observation-only (read-only) command that serves as the starting point for backups and migrations, and it runs even when the license has expired or you are unauthenticated. Each artifact location is governed by the corresponding `*_path` key in `forge.yaml`, with relative paths resolved against the directory that contains `forge.yaml`.
+
+### Synopsis
+
+```bash
+# Human-readable list (also prints the effective forge.yaml)
+alpha-forge system paths
+
+# Machine-readable ({"paths": {...}} envelope). For scripts / MCP
+alpha-forge system paths --json
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON (machine-readable; MCP / pipe use) |
+
+### Locations listed
+
+| Key | Contents | Default path (relative to forge.yaml) |
+|-----|----------|---------------------------------------|
+| `strategies` | Strategy JSON (including optimized) | `./data/strategies` |
+| `historical` | Historical price data (Parquet) | `./data/historical` |
+| `results` | Backtest / optimization results | `./data/results` |
+| `journal` | Strategy journal | `./data/journal` |
+| `ideas` | Investment ideas | `./data/ideas` |
+| `pinescript` | Generated Pine Script | `./output/pinescript` |
+| `alt_storage` | Alternative data (sentiment, etc.) | `./data/alternative` |
+| `config` | Absolute path of the effective `forge.yaml` | (value of `FORGE_CONFIG`) |
+
+> By default, strategies, journal, and backtest results are stored in SQLite DBs (`strategies.db` / `backtest_results.db`). These live under the `strategies` / `results` directories, so copying the directories backs up the DBs as well.
+
+### Backup and migration
+
+The simplest, most reliable backup is to **copy the entire workspace directory** that `FORGE_CONFIG` points to. You do not need to track individual artifact paths.
+
+```bash
+# Locate the workspace root (the directory holding forge.yaml)
+WS=$(dirname "$FORGE_CONFIG")
+
+# Incremental backup with rsync
+rsync -a --delete "$WS"/ /path/to/backup/workspace/
+```
+
+To migrate to a new machine, drop the copied workspace directory in place and point `FORGE_CONFIG` at its `forge.yaml`; strategies, results, and journals carry over as-is. Switching `FORGE_CONFIG` also lets you keep separate workspaces (e.g. production vs. experiments) without mixing them.
+
+**Exit code**: `0`=success.
+
+---
+
+## alpha-forge system doctor
+
+Collects **environment information in a single command** for support requests and bug reports (issue #1170). It bundles the CLI version, OS / Python, license state, the `forge.yaml` that is actually loaded, the presence of key data directories, and the crash log location into one output. **No network access is performed** (license state is derived solely from locally cached credentials; the Whop API is never called). It is exempt from the auth check so it remains runnable even when authentication has expired or the config is broken.
+
+### Synopsis
+
+```bash
+# Human-readable diagnostic report
+alpha-forge system doctor
+
+# Structured output (version / platform / license / config / paths / logs envelope; stdout is pure JSON)
+alpha-forge system doctor --json
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON (machine-readable; MCP / pipe use) |
+
+### Main fields emitted
+
+| Section | Contents |
+|---------|----------|
+| `version` | alpha-forge CLI version |
+| `platform` | OS (`system` / `release` / `machine`) and Python (`python_version` / `python_implementation`) |
+| `license` | Plan type (`plan`: `free` / `paid` / `dev` / `unknown`), whether `credentials.json` is present (`authenticated`), and whether the offline grace period has lapsed into degraded mode (`offline_degraded`) |
+| `config` | Absolute path of the `forge.yaml` actually loaded (`config_path`) and the search order (`config_search_order`) |
+| `paths` | Absolute path and existence (`exists`) of each `strategies` / `historical` / `results` / `journal` / `ideas` / `pinescript` directory |
+| `logs` | Path where the uncaught-exception crash log (`forge-crash.log`) is written |
+
+When filing a bug report, attach the output of `alpha-forge system doctor --json` to speed up environment triage.
+
+**Exit code**: `0`=success.
 
 ---

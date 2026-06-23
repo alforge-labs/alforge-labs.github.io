@@ -326,7 +326,7 @@ Windows       ████████████████░░░░░░
 Mean OOS: 0.5899   Best window: #2 (1.0307)   Failures: 0
 ```
 
-All progress bars and dashboards are rendered on **stderr**. Even with `--json`, the dashboard is shown when stderr is a TTY, while stdout stays as pure JSON. When stderr is not a TTY (CI, pipes, redirected files), the dashboard is automatically suppressed — useful when you want CI logs to stay quiet.
+All progress bars and dashboards are rendered on **stderr**. Even with `--json`, the dashboard is shown when stderr is a TTY, while stdout stays as pure JSON. When stderr is not a TTY (CI, pipes, redirected files), the dashboard is automatically suppressed (issue #1190) — useful when you want CI logs to stay quiet. In non-TTY environments each window completion is instead emitted as a one-line plain-text log (`[Window k/N] OOS=... trades=...`) on stderr, so progress is never lost.
 
 ### Sample output
 
