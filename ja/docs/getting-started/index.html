@@ -3274,7 +3274,7 @@
 </div>
 <div class="admonition info">
 <p class="admonition-title"><code>alpha-forge system init</code> を必ず実行してください</p>
-<p><code>forge.yaml</code> が無いとデフォルト設定にフォールバックして <code>data/</code> を自動生成し、戦略・データ未登録の場合は友好的なエラーメッセージで停止します（raw な <code>FileNotFoundError</code> トレースは出ません）。<code>forge.yaml</code> で戦略の DB 登録先・データ保存先・結果ファイル出力先を明示しておくと意図しない場所への展開を避けられるため、クイックスタートでは先に実行しておくことを推奨します。<code>--force</code> は不要です。</p>
+<p><code>forge.yaml</code> が無いとデフォルト設定にフォールバックして <code>data/</code> を自動生成し、戦略・データ未登録の場合は友好的なエラーメッセージで停止します（raw な <code>FileNotFoundError</code> トレースは出ません）。<code>forge.yaml</code> で戦略の DB 登録先・データ保存先・結果ファイル出力先を明示しておくと意図しない場所への展開を避けられるため、クイックスタートでは先に実行しておくことを推奨します。<code>--force</code> は不要です。なお、環境変数 <code>FORGE_CONFIG</code> 未設定かつカレントディレクトリに <code>config/default.yaml</code> も無い状態では、組み込みデフォルト設定で動作する旨の WARNING を表示したうえで続行します（issue #1184）。意図した保存先で動かすには <code>alpha-forge system init</code> を実行するか <code>FORGE_CONFIG</code> で <code>forge.yaml</code> を明示してください。</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">初回のみ EULA 同意プロンプト <code>[y/n]</code> が表示されます</p>

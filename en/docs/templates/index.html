@@ -3419,6 +3419,10 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>}
 </code></pre></div>
 <p><img alt="Strategy JSON Schema Structure" src="../assets/illustrations/templates/strategy-json-schema-tree.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">About <code>schema_version</code> (schema generation, issue #1175)</p>
+<p>A strategy JSON may carry an integer <code>schema_version</code> that denotes the schema generation for product management (distinct from the free-form user <code>version</code> field). It is checked on load, and <strong>JSON with a <code>schema_version</code> newer than the current CLI is rejected with an explicit error</strong>, prompting you to update the CLI. Older versions or no version at all (including existing JSON without a <code>schema_version</code> key) are read with backward compatibility, so you do not need to add it manually.</p>
+</div>
 <p>Key concepts:</p>
 <ul>
 <li><strong><code>indicators[].lock_on_entry: true</code></strong> — Freeze the value at the entry bar (used for SL/TP prices)</li>

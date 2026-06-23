@@ -3766,6 +3766,10 @@
 </tbody>
 </table>
 <p>バグ報告の際は <code>alpha-forge system doctor --json</code> の出力を添付すると、環境の切り分けが早くなります。</p>
+<div class="admonition tip">
+<p class="admonition-title">未捕捉エラー時の crash ログ（issue #1169）</p>
+<p><code>--debug</code> を付けていない通常実行で未捕捉の例外が発生した場合でも、そのトレースだけは OS 標準のユーザーログディレクトリに <code>forge-crash.log</code> として常時記録されます（macOS / Linux は <code>platformdirs</code> のユーザーログディレクトリ、フォールバックは <code>~/.local/state/alpha-forge/logs</code>、Windows は <code>%LOCALAPPDATA%\alpha-forge\logs</code>）。コンソール出力は汚さず、<code>--json</code> 実行中も安全です。バグ報告の際はこのファイルを添付すると原因の特定が早くなります。記録先パスは上記 <code>logs</code> フィールド（<code>system doctor</code>）でも確認できます。</p>
+</div>
 <p><strong>Exit code</strong>: <code>0</code>=成功。</p>
 <hr />
 

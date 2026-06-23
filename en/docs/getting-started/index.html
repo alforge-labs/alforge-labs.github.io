@@ -3274,7 +3274,7 @@
 </div>
 <div class="admonition info">
 <p class="admonition-title"><code>alpha-forge system init</code> is required</p>
-<p>Without <code>forge.yaml</code>, the CLI falls back to its default config, auto-creates a <code>data/</code> directory, and—if no strategy or data is registered yet—stops with a friendly error message (no raw <code>FileNotFoundError</code> traceback). Running <code>system init</code> first pins the strategy DB location, data store, and result output paths and avoids deploying into an unintended location, so it is recommended to run it before the steps below. The default invocation (no <code>--force</code>) is sufficient for quickstart.</p>
+<p>Without <code>forge.yaml</code>, the CLI falls back to its default config, auto-creates a <code>data/</code> directory, and—if no strategy or data is registered yet—stops with a friendly error message (no raw <code>FileNotFoundError</code> traceback). Running <code>system init</code> first pins the strategy DB location, data store, and result output paths and avoids deploying into an unintended location, so it is recommended to run it before the steps below. The default invocation (no <code>--force</code>) is sufficient for quickstart. Note that when <code>FORGE_CONFIG</code> is unset <em>and</em> there is no <code>config/default.yaml</code> in the current directory, the CLI proceeds on the built-in default config after printing a WARNING (issue #1184); run <code>alpha-forge system init</code> or point <code>FORGE_CONFIG</code> at your <code>forge.yaml</code> to run against the intended locations.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">A one-time EULA acceptance prompt <code>[y/n]</code> appears on first run</p>

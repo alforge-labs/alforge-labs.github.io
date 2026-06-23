@@ -270,6 +270,9 @@ No stored data found.
 | **Dukascopy** | Long-history FX | None (CSV download) | Decades | `1d`, `1h`, `5m` |
 | **tv_mcp** | Anything visible on TradingView (stocks, ETFs, FX, futures, crypto, etc.) | Requires TradingView Desktop launched with `--remote-debugging-port=9222` and a running MCP server | TradingView's own (decades on `1d`, 10+ years on `1h`) | TradingView interval names (`D`, `60`, `5`, etc.) — input is normalized internally |
 
+!!! warning "Very long-range × intraday OANDA fetches can be truncated by the page cap (issue #1183)"
+    OANDA fetches up to 5000 candles per request and pages internally, but the number of pages is capped. For combinations that need more pages than the cap — e.g. **very long-range × intraday** intervals (such as several years of `M5`) — the fetch may stop partway through the requested range. When that happens, alpha-forge emits a `OANDA: page cap (... pages × ... candles) reached, only fetched part of the requested range` WARNING. To reach further back, consider the `dukascopy` provider for long-history FX.
+
 ### TradingView MCP provider (`tv_mcp`, issue #576)
 
 `--provider tv_mcp` pulls OHLCV through an MCP server attached to TradingView Desktop. This is mainly useful when you need history beyond yfinance's ~5y limit.

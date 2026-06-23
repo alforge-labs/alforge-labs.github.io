@@ -270,6 +270,9 @@ alpha-forge data update [--json]
 | **Dukascopy** | FX 超長期 | 不要（CSV ダウンロード） | 数十年 | `1d`、`1h`、`5m` |
 | **tv_mcp** | TradingView 上で表示できる全銘柄（株・ETF・FX・先物・暗号通貨等） | 要 TradingView Desktop（`--remote-debugging-port=9222`）+ MCP server 起動 | TradingView 仕様（`1d` で数十年、`1h` で十年以上が可能） | TradingView の interval 表記（`D`、`60`、`5` 等）に正規化される |
 
+!!! warning "OANDA の長期 × 分足取得はページ上限で途中までになる（issue #1183）"
+    OANDA は 1 リクエスト最大 5000 件のページを内部で繰り返し取得しますが、ページ取得回数には上限があります。**非常に長期 × 分足**（例: 数年分の `M5`）のように必要ページ数が上限を超える組み合わせでは、要求期間の途中までしか取得できないことがあります。その際は `OANDA: ページ取得上限 ... に達したため、要求期間の途中までしか取得できていません` という WARNING が出力されます。さらに遡る場合は FX 超長期向けの `dukascopy` プロバイダーの利用を検討してください。
+
 ### TradingView MCP プロバイダー（`tv_mcp`、issue #576）
 
 `--provider tv_mcp` を指定すると、TradingView Desktop に接続した MCP server から OHLCV を取得します。yfinance の period 上限（`5y` 程度）を超える長期データの取得を主目的としています。

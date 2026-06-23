@@ -41,6 +41,9 @@ Every strategy follows the same Pydantic schema. Indicator details are available
 
 ![Strategy JSON Schema Structure](assets/illustrations/templates/strategy-json-schema-tree.png)
 
+!!! note "About `schema_version` (schema generation, issue #1175)"
+    A strategy JSON may carry an integer `schema_version` that denotes the schema generation for product management (distinct from the free-form user `version` field). It is checked on load, and **JSON with a `schema_version` newer than the current CLI is rejected with an explicit error**, prompting you to update the CLI. Older versions or no version at all (including existing JSON without a `schema_version` key) are read with backward compatibility, so you do not need to add it manually.
+
 Key concepts:
 
 - **`indicators[].lock_on_entry: true`** — Freeze the value at the entry bar (used for SL/TP prices)

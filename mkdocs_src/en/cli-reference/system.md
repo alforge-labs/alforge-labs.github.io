@@ -314,6 +314,9 @@ alpha-forge system doctor --json
 
 When filing a bug report, attach the output of `alpha-forge system doctor --json` to speed up environment triage.
 
+!!! tip "Crash log for uncaught errors (issue #1169)"
+    Even on a normal run (without `--debug`), when an uncaught exception occurs its traceback is always recorded as `forge-crash.log` in the OS-standard user log directory (the `platformdirs` user log directory on macOS / Linux, falling back to `~/.local/state/alpha-forge/logs`; `%LOCALAPPDATA%\alpha-forge\logs` on Windows). It does not pollute console output and is safe during `--json` runs. Attaching this file to a bug report makes root-cause triage faster. The path is also reported in the `logs` field of `system doctor` above.
+
 **Exit code**: `0`=success.
 
 ---

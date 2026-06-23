@@ -314,6 +314,9 @@ alpha-forge system doctor --json
 
 バグ報告の際は `alpha-forge system doctor --json` の出力を添付すると、環境の切り分けが早くなります。
 
+!!! tip "未捕捉エラー時の crash ログ（issue #1169）"
+    `--debug` を付けていない通常実行で未捕捉の例外が発生した場合でも、そのトレースだけは OS 標準のユーザーログディレクトリに `forge-crash.log` として常時記録されます（macOS / Linux は `platformdirs` のユーザーログディレクトリ、フォールバックは `~/.local/state/alpha-forge/logs`、Windows は `%LOCALAPPDATA%\alpha-forge\logs`）。コンソール出力は汚さず、`--json` 実行中も安全です。バグ報告の際はこのファイルを添付すると原因の特定が早くなります。記録先パスは上記 `logs` フィールド（`system doctor`）でも確認できます。
+
 **Exit code**: `0`=成功。
 
 ---

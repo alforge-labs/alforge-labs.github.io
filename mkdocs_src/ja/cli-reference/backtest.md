@@ -147,6 +147,9 @@ Kelly: 0.21  Payoff: 1.75  期待値: 0.90%/回  GPR: 0.42  Ulcer: 0.0480  回�
 
 `Kelly:` 行はトレード品質の拡張メトリクスです。Kelly 基準（理論最適ポジション比率）・Payoff Ratio（平均勝ち ÷ |平均負け|）・期待値（1 トレードあたり期待リターン）・Gain/Pain Ratio・Ulcer Index・Recovery Factor（総リターン ÷ |最大 DD|）を表示します。`--json` では `kelly_criterion` / `payoff_ratio` / `expectancy_pct` / `expected_daily_return_pct`（monthly / yearly も同様）/ `ulcer_index` / `serenity_index` / `gain_to_pain_ratio` / `recovery_factor` キーで取得でき、分母が定義できない場合（全勝・ドローダウンなし等）は `null` になります。
 
+!!! note "金額系メトリクスは USD 建て前提（issue #1191）"
+    取引量（turnover）やコスト系の金額メトリクスは **USD 建てを前提** に計算されます。非 USD 建ての口座・銘柄であっても為替換算は行われないため、表示される金額の単位は USD として解釈してください。リターン率・Sharpe・勝率などの比率系メトリクスは通貨に依存しません。
+
 スコアや取引数が条件を満たさない場合は警告と docs URL 1 行誘導が付きます（F-302）：
 
 ```text

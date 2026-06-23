@@ -41,6 +41,9 @@ AlphaForge は **「ユーザー自身が戦略を作って育てる」開発・
 
 ![Strategy JSON スキーマ構造](assets/illustrations/templates/strategy-json-schema-tree.png)
 
+!!! note "`schema_version`（スキーマ世代）について（issue #1175）"
+    戦略 JSON には、製品管理用にスキーマの世代を表す整数 `schema_version` を持たせられます（ユーザー任意の表記である `version` とは別物）。ロード時に照合され、**現行 CLI より新しい `schema_version` を持つ JSON は明示的なエラーで拒否され**、CLI の更新を促します。旧バージョンや未指定（`schema_version` キーが無い既存 JSON を含む）は後方互換で読み込まれるため、手動で付与する必要はありません。
+
 主要概念の詳細：
 
 - **`indicators[].lock_on_entry: true`** — エントリーバーの値で固定（SL/TP 価格用）
