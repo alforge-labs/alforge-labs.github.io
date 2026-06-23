@@ -147,6 +147,9 @@ Win rate CI(90%): 35.2% - 64.8%
 
 The `Kelly:` line shows extended trade-quality metrics: the Kelly criterion (theoretically optimal position fraction), payoff ratio (average win ÷ |average loss|), expectancy (expected return per trade), Gain/Pain ratio, Ulcer Index, and recovery factor (total return ÷ |max drawdown|). With `--json` these are available as `kelly_criterion` / `payoff_ratio` / `expectancy_pct` / `expected_daily_return_pct` (and monthly / yearly) / `ulcer_index` / `serenity_index` / `gain_to_pain_ratio` / `recovery_factor`; values are `null` when the denominator is undefined (e.g. no losing trades, no drawdown).
 
+!!! note "Monetary metrics assume USD (issue #1191)"
+    Turnover and cost-related monetary metrics are computed **assuming a USD base**. No FX conversion is applied for non-USD accounts or symbols, so interpret the reported monetary amounts as USD. Ratio metrics such as return percentage, Sharpe, and win rate are currency-independent.
+
 When the score or trade count fails the recommended thresholds, a warning and a one-line docs link are added (F-302):
 
 ```text

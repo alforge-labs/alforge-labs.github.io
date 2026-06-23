@@ -4835,6 +4835,10 @@
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>Win rate CI(90%): 35.2% - 64.8%
 </code></pre></div>
 <p>The <code>Kelly:</code> line shows extended trade-quality metrics: the Kelly criterion (theoretically optimal position fraction), payoff ratio (average win ÷ |average loss|), expectancy (expected return per trade), Gain/Pain ratio, Ulcer Index, and recovery factor (total return ÷ |max drawdown|). With <code>--json</code> these are available as <code>kelly_criterion</code> / <code>payoff_ratio</code> / <code>expectancy_pct</code> / <code>expected_daily_return_pct</code> (and monthly / yearly) / <code>ulcer_index</code> / <code>serenity_index</code> / <code>gain_to_pain_ratio</code> / <code>recovery_factor</code>; values are <code>null</code> when the denominator is undefined (e.g. no losing trades, no drawdown).</p>
+<div class="admonition note">
+<p class="admonition-title">Monetary metrics assume USD (issue #1191)</p>
+<p>Turnover and cost-related monetary metrics are computed <strong>assuming a USD base</strong>. No FX conversion is applied for non-USD accounts or symbols, so interpret the reported monetary amounts as USD. Ratio metrics such as return percentage, Sharpe, and win rate are currency-independent.</p>
+</div>
 <p>When the score or trade count fails the recommended thresholds, a warning and a one-line docs link are added (F-302):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>⚠️  Backtest complete  Signal quality score: 0.43/1.0 (0.4–0.7: caution, more validation suggested)
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score

@@ -4009,6 +4009,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">Very long-range × intraday OANDA fetches can be truncated by the page cap (issue #1183)</p>
+<p>OANDA fetches up to 5000 candles per request and pages internally, but the number of pages is capped. For combinations that need more pages than the cap — e.g. <strong>very long-range × intraday</strong> intervals (such as several years of <code>M5</code>) — the fetch may stop partway through the requested range. When that happens, alpha-forge emits a <code>OANDA: page cap (... pages × ... candles) reached, only fetched part of the requested range</code> WARNING. To reach further back, consider the <code>dukascopy</code> provider for long-history FX.</p>
+</div>
 <h3 id="tradingview-mcp-provider-tv_mcp-issue-576">TradingView MCP provider (<code>tv_mcp</code>, issue #576)<a class="headerlink" href="#tradingview-mcp-provider-tv_mcp-issue-576" title="Permanent link">&para;</a></h3>
 <p><code>--provider tv_mcp</code> pulls OHLCV through an MCP server attached to TradingView Desktop. This is mainly useful when you need history beyond yfinance's ~5y limit.</p>
 <ul>

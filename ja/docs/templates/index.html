@@ -3419,6 +3419,10 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>}
 </code></pre></div>
 <p><img alt="Strategy JSON スキーマ構造" src="../assets/illustrations/templates/strategy-json-schema-tree.png" /></p>
+<div class="admonition note">
+<p class="admonition-title"><code>schema_version</code>（スキーマ世代）について（issue #1175）</p>
+<p>戦略 JSON には、製品管理用にスキーマの世代を表す整数 <code>schema_version</code> を持たせられます（ユーザー任意の表記である <code>version</code> とは別物）。ロード時に照合され、<strong>現行 CLI より新しい <code>schema_version</code> を持つ JSON は明示的なエラーで拒否され</strong>、CLI の更新を促します。旧バージョンや未指定（<code>schema_version</code> キーが無い既存 JSON を含む）は後方互換で読み込まれるため、手動で付与する必要はありません。</p>
+</div>
 <p>主要概念の詳細：</p>
 <ul>
 <li><strong><code>indicators[].lock_on_entry: true</code></strong> — エントリーバーの値で固定（SL/TP 価格用）</li>

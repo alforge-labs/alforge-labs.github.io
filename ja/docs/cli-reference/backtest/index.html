@@ -4813,6 +4813,10 @@
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>勝率CI(90%): 35.2% - 64.8%
 </code></pre></div>
 <p><code>Kelly:</code> 行はトレード品質の拡張メトリクスです。Kelly 基準（理論最適ポジション比率）・Payoff Ratio（平均勝ち ÷ |平均負け|）・期待値（1 トレードあたり期待リターン）・Gain/Pain Ratio・Ulcer Index・Recovery Factor（総リターン ÷ |最大 DD|）を表示します。<code>--json</code> では <code>kelly_criterion</code> / <code>payoff_ratio</code> / <code>expectancy_pct</code> / <code>expected_daily_return_pct</code>（monthly / yearly も同様）/ <code>ulcer_index</code> / <code>serenity_index</code> / <code>gain_to_pain_ratio</code> / <code>recovery_factor</code> キーで取得でき、分母が定義できない場合（全勝・ドローダウンなし等）は <code>null</code> になります。</p>
+<div class="admonition note">
+<p class="admonition-title">金額系メトリクスは USD 建て前提（issue #1191）</p>
+<p>取引量（turnover）やコスト系の金額メトリクスは <strong>USD 建てを前提</strong> に計算されます。非 USD 建ての口座・銘柄であっても為替換算は行われないため、表示される金額の単位は USD として解釈してください。リターン率・Sharpe・勝率などの比率系メトリクスは通貨に依存しません。</p>
+</div>
 <p>スコアや取引数が条件を満たさない場合は警告と docs URL 1 行誘導が付きます（F-302）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>⚠️  バックテスト完了  信号品質スコア: 0.43/1.0 （0.4–0.7 は要注意・追加検証推奨）
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    → 詳細: https://alforgelabs.com/ja/docs/cli-reference/backtest/#signal-quality-score
