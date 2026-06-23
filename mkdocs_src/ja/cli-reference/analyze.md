@@ -20,23 +20,27 @@ alpha-forge analyze indicator list [FILTER_NAME] [--detail] [--json]
 | `--detail` | フラグ | false | 各指標のパラメータ・デフォルト値・説明を表示 |
 | `--json` | フラグ | false | 結果を JSON で出力（`{indicators: [...], count}`。`--detail` 併用で各要素に `params` を同梱） |
 
-サンプル出力：
+サンプル出力（各指標に Pine 変換可否の凡例が付きます。issue #1165）：
 
 ```text
 利用可能なインジケーター一覧（60件）:
+凡例: ✓=Pine 変換対応 / ✗=Pine 非対応（pine generate で na・エントリーしない）
 
-  [移動平均]  ALMA  DEMA  EMA  HMA  KAMA  RMA  SMA  TEMA  VWMA  WMA
-  [トレンド]  ADX  ICHIMOKU  MACD  RANGE_FILTER  SAR  SUPERTREND  SUPERTREND_DIR
-  [モメンタム]  AROON  TSI
-  [オシレーター]  CCI  CMO  MFI  MOM  PERCENTRANK  ROC  RSI  STOCH  TRIX  UP_RATIO  WILLR
-  [ボラティリティ]  ATR  BBANDS  KC  STDDEV
-  [出来高]  CMF  OBV  PV_CORR  VWAP  WVMA
-  [ピボット/チャネル]  CHANDELIER  DONCHIAN  PIVOTHIGH  PIVOTLOW  ROLLING_QUANTILE
-  [統計/ML]  CORRELATION  HALFLIFE  HMM  LINEAR_REG  OU_HALFLIFE  OU_ZSCORE  REGIME_RULE  SEASONAL  ZSCORE
-  [高度な機能]  ALTDATA  EXPR  FFILL  GRID_SIGNAL  ML_SIGNAL  ML_SIGNAL_WFT  PRICE
+  [移動平均]  ALMA✓  DEMA✓  EMA✓  HMA✓  KAMA✗  RMA✓  SMA✓  TEMA✓  VWMA✓  WMA✓
+  [トレンド]  ADX✓  ICHIMOKU✗  MACD✓  RANGE_FILTER✗  SAR✓  SUPERTREND✓  SUPERTREND_DIR✗
+  [モメンタム]  AROON✓  TSI✓
+  [オシレーター]  CCI✓  CMO✓  MFI✓  MOM✓  PERCENTRANK✓  ROC✓  RSI✓  STOCH✓  TRIX✗  UP_RATIO✓  WILLR✓
+  [ボラティリティ]  ATR✓  BBANDS✓  KC✗  STDDEV✓
+  [出来高]  CMF✗  OBV✓  PV_CORR✓  VWAP✓  WVMA✓
+  [ピボット/チャネル]  CHANDELIER✗  DONCHIAN✓  PIVOTHIGH✗  PIVOTLOW✗  ROLLING_QUANTILE✓
+  [統計/ML]  CORRELATION✗  HALFLIFE✗  HMM✗  LINEAR_REG✓  OU_HALFLIFE✗  OU_ZSCORE✗  REGIME_RULE✗  SEASONAL✓  ZSCORE✓
+  [高度な機能]  ALTDATA✗  EXPR✓  FFILL✗  GRID_SIGNAL✗  ML_SIGNAL✗  ML_SIGNAL_WFT✗  PRICE✓
 
 詳細: alpha-forge analyze indicator show <TYPE>
 ```
+
+!!! tip "Pine ネイティブ変換の拡充（issue #1165）"
+    GA で **CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE** の 10 指標を Pine v6 ネイティブ（`ta.*`）変換に対応させ、上記一覧に `✓` / `✗` の `pine_supported` フラグを追加しました。`✗` の指標を含む戦略を `alpha-forge pine generate` すると、該当指標は `na`（エントリーしない）として扱われ、警告コメントが Pine に挿入されます。`--json` 出力では各指標に `pine_supported` 真偽値フィールドが付きます。
 
 ## alpha-forge analyze indicator show
 
@@ -49,23 +53,26 @@ alpha-forge analyze indicator show <INDICATOR_TYPE> [--json]
 | 名前 | 種別 | 説明 |
 |------|------|------|
 | `INDICATOR_TYPE` | 引数（必須） | 指標名（大文字小文字を区別しない） |
-| `--json` | フラグ | 指標定義を JSON で出力（`name` / `category` / `desc` / `params` / `available_features` / `output` / `notes` / `example`）。不在時は stdout に `{error, code: "indicator_not_found", id}` + 終了コード `1` |
+| `--json` | フラグ | 指標定義を JSON で出力（`name` / `category` / `desc` / `params` / `available_features` / `output` / `notes` / `example` / `pine_supported`）。不在時は stdout に `{error, code: "indicator_not_found", id}` + 終了コード `1` |
+
+詳細表示には **Pine 変換可否**（`Pine 変換: 対応 / 非対応`）も含まれます（issue #1165）。`--json` では `pine_supported` の真偽値で取得できます。
 
 サンプル出力：
 
 ```text
-SMA — Simple Moving Average
+RSI — 相対力指数（Relative Strength Index）
 
-カテゴリー: 移動平均
+カテゴリー: オシレーター
 
 パラメーター:
   名前                 型       デフォルト              説明
-  length              int      20                    期間
+  length              int      14                    計算期間
 
-出力: スカラー時系列
+出力: float — RSI 値（0〜100）
+Pine 変換: 対応（ta.* へネイティブ変換）
 
 使用例 (JSON):
-  {"id": "sma_20", "type": "SMA", "params": {"length": 20}}
+  {"id": "rsi_14", "type": "RSI", "params": {"length": 14}}
 ```
 
 未知の指標名を指定すると `エラー: '<TYPE>' は認識されないインジケーターです。` を出して終了コード `1`。
@@ -74,7 +81,25 @@ SMA — Simple Moving Average
 
 ## alpha-forge analyze pairs
 
-ペアトレード戦略のためのコインテグレーション検定とスプレッド構築。`statsmodels` ベースの Engle–Granger 検定を使用。
+ペアトレード戦略のためのコインテグレーション検定とスプレッド構築。`statsmodels` ベースの Engle–Granger 検定を使用します。
+
+!!! info "位置づけは「研究ツール」（issue #1177）"
+    `analyze pairs` は、ペアトレード候補を**探索・検証するための研究ツール**です。`scan` / `scan-all` で統計的にコインテグレーションが認められるペアを発見し、`build` でそのスプレッド系列を `alt_data` ストアに保存して、戦略 JSON の `ALTDATA` 指標から参照する、という流れで運用します。`pairs` 自体は発注やバックテストを行いません — あくまで戦略を組み立てるための前処理・特徴量生成段階です。
+
+    **典型的な運用フロー（ALTDATA との連携）**:
+
+    ```bash
+    # 1) 候補ペアを統計検定で発見
+    alpha-forge analyze pairs scan-all --symbols-file watchlist.txt --pvalue 0.05
+
+    # 2) 有望ペアのスプレッド系列を構築して alt_data に保存
+    alpha-forge analyze pairs build --sym-a SPY --sym-b QQQ --output-id SPY_QQQ_spread
+
+    # 3) 戦略 JSON でスプレッドを ALTDATA 指標として参照し、平均回帰戦略を組む
+    #    例: {"id": "spread", "type": "ALTDATA",
+    #         "params": {"source_key": "SPY_QQQ_spread", "column": "spread"}}
+    alpha-forge backtest run SPY --strategy spy_qqq_spread_meanrev_v1
+    ```
 
 ## alpha-forge analyze pairs scan
 
@@ -154,6 +179,9 @@ alpha-forge analyze pairs build --sym-a <SYM> --sym-b <SYM> [OPTIONS]
 ## alpha-forge analyze ml
 
 機械学習モデル用のデータセット作成・モデル学習・walk-forward 検証コマンド群です（issue #512 Phase 1-2, 4）。学習済み joblib モデルは既存の `ML_SIGNAL` 指標から `model_path` 指定で推論に利用できます。
+
+!!! warning "`ML_SIGNAL` のリーク注意 — 本番運用は `ML_SIGNAL_WFT` を推奨（issue #1186）"
+    事前学習済み joblib モデルを `ML_SIGNAL` 指標から参照すると、`alpha-forge optimize walk-forward` の OOS 期間が学習期間と重複した場合に **look-ahead leak（先読みリーク）** が発生し、バックテスト成績が過大評価されます。WFT 整合の本番運用では、評価コンテキスト内で自己学習してリークを構造的に排除する **`ML_SIGNAL_WFT` 指標**（本ページ下部の専用セクション参照）を使用してください。`ML_SIGNAL` は「OOS が学習期間と重複しない」ことを保証できる研究・検証用途に留めるのが安全です。
 
 ## alpha-forge analyze ml dataset build
 

@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2945,6 +2973,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition tip">
+<p class="admonition-title">Pine-convertible indicators (<code>pine_supported</code>, issue #1165)</p>
+<p>GA added native Pine v6 (<code>ta.*</code>) conversion for 10 popular indicators (<strong>CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE</strong>). Whether a given indicator can be converted to Pine is shown by <code>alpha-forge analyze indicator list</code> (the <code>✓</code> / <code>✗</code> legend) and <code>alpha-forge analyze indicator show &lt;TYPE&gt;</code> (the <code>Pine 変換:</code> line / the <code>pine_supported</code> field in <code>--json</code>). When you <code>generate</code> a strategy containing a <code>✗</code> indicator (<code>HMM</code> / <code>ALTDATA</code> / <code>ML_SIGNAL</code>, etc.), that indicator is treated as <code>na</code> (no entry) and a warning comment is inserted into the Pine output.</p>
+</div>
 <p>Sample output (paid plan):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>✅ Pine Script saved: output/pinescript/spy_sma_v1.pine
 </code></pre></div>
@@ -3272,7 +3304,7 @@
 <p>Shows each <code>.pine</code> file's <code>strategy_id</code> / file / size / modification time.</p>
 <h2 id="alpha-forge-pine-delete">alpha-forge pine delete<a class="headerlink" href="#alpha-forge-pine-delete" title="Permanent link">&para;</a></h2>
 <p>Delete one generated Pine Script (<code>.pine</code>) for the given <code>strategy_id</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3291,6 +3323,12 @@
 <td>The strategy ID to delete</td>
 </tr>
 <tr>
+<td><code>--dry-run</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Show what would be deleted and exit without deleting anything (closes the destructive-guard asymmetry, issue #1178)</td>
+</tr>
+<tr>
 <td><code>--yes</code> / <code>-y</code></td>
 <td>flag</td>
 <td>false</td>
@@ -3301,6 +3339,7 @@
 <ul>
 <li>Exits with code <code>1</code> (not found) if the target file does not exist.</li>
 <li>Because this is a destructive operation, in non-interactive environments (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY) it stops with exit code <code>2</code> unless <code>--yes</code> is given.</li>
+<li>With <code>--dry-run</code>, the target file is shown without being deleted and the command exits with code <code>0</code> — matching <code>pine clean</code> and symmetric with <code>strategy delete</code>.</li>
 </ul>
 <h2 id="alpha-forge-pine-clean">alpha-forge pine clean<a class="headerlink" href="#alpha-forge-pine-clean" title="Permanent link">&para;</a></h2>
 <p>Tidy up <code>*.pine</code> files under <code>config.pinescript.output_path</code> by age (mtime) and delete them.</p>

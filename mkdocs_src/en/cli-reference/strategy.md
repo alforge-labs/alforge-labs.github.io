@@ -284,7 +284,7 @@ Delete a registered strategy from the DB / registry. With `--with-results`, also
 ### Synopsis
 
 ```bash
-alpha-forge strategy delete <STRATEGY_ID> [--yes] [--with-results]
+alpha-forge strategy delete <STRATEGY_ID> [--dry-run] [--yes] [--with-results]
 ```
 
 ### Arguments and options
@@ -292,10 +292,13 @@ alpha-forge strategy delete <STRATEGY_ID> [--yes] [--with-results]
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | Strategy ID to delete |
+| `--dry-run` | flag | false | Show what would be deleted and exit without deleting anything (closes the destructive-guard asymmetry, issue #1178) |
 | `--yes` / `-y` | flag | false | Skip confirmation prompt (renamed from `--force` in epic #1083 D) |
 | `--with-results` | flag | false | Also delete related files (`<id>_optimized.json`, `<id>_report.json`, `optimize_<id>_*.json`) |
 
 Because this is a destructive operation, in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) it stops with exit code `2` unless `--yes` is given. Not-found returns exit code `1`.
+
+With `--dry-run`, the command lists what would be deleted (including related files when `--with-results` is set) and exits with code `0` without deleting anything. Useful for verifying the target before a real deletion.
 
 ### Files removed by `--with-results`
 

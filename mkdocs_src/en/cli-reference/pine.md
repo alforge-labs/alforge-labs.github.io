@@ -35,6 +35,9 @@ alpha-forge pine generate --strategy <ID> [--with-training-data]
 | `--no-validate` | flag | false | Skip the Pine v6 signature-DB post-generate validator (emergency bypass, issue #786) |
 | `--backtest-period` | option | - | Bake a period filter into the Pine output (format `YYYY-MM-DD:YYYY-MM-DD`, issue #823) |
 
+!!! tip "Pine-convertible indicators (`pine_supported`, issue #1165)"
+    GA added native Pine v6 (`ta.*`) conversion for 10 popular indicators (**CCI / OBV / HMA / VWMA / RMA / ALMA / TSI / DEMA / TEMA / ZSCORE**). Whether a given indicator can be converted to Pine is shown by `alpha-forge analyze indicator list` (the `✓` / `✗` legend) and `alpha-forge analyze indicator show <TYPE>` (the `Pine 変換:` line / the `pine_supported` field in `--json`). When you `generate` a strategy containing a `✗` indicator (`HMM` / `ALTDATA` / `ML_SIGNAL`, etc.), that indicator is treated as `na` (no entry) and a warning comment is inserted into the Pine output.
+
 Sample output (paid plan):
 
 ```text
@@ -168,16 +171,18 @@ Shows each `.pine` file's `strategy_id` / file / size / modification time.
 Delete one generated Pine Script (`.pine`) for the given `strategy_id`.
 
 ```bash
-alpha-forge pine delete <STRATEGY_ID> [--yes]
+alpha-forge pine delete <STRATEGY_ID> [--dry-run] [--yes]
 ```
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_ID` | argument (required) | - | The strategy ID to delete |
+| `--dry-run` | flag | false | Show what would be deleted and exit without deleting anything (closes the destructive-guard asymmetry, issue #1178) |
 | `--yes` / `-y` | flag | false | Skip the confirmation prompt and delete |
 
 - Exits with code `1` (not found) if the target file does not exist.
 - Because this is a destructive operation, in non-interactive environments (`FORGE_NONINTERACTIVE` / `CI` / non-TTY) it stops with exit code `2` unless `--yes` is given.
+- With `--dry-run`, the target file is shown without being deleted and the command exits with code `0` — matching `pine clean` and symmetric with `strategy delete`.
 
 ## alpha-forge pine clean
 

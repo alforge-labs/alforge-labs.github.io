@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4746,7 +4774,7 @@
 <h2 id="alpha-forge-strategy-delete">alpha-forge strategy delete<a class="headerlink" href="#alpha-forge-strategy-delete" title="Permanent link">&para;</a></h2>
 <p>登録済み戦略を DB / レジストリから削除します。<code>--with-results</code> を付けると関連ファイル（最適化済み戦略・バックテスト結果・最適化結果 JSON）も一括削除します。Journal は保持されます。</p>
 <h3 id="_25">構文<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>delete<span class="w"> </span>&lt;STRATEGY_ID&gt;<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--with-results<span class="o">]</span>
 </code></pre></div>
 <h3 id="_26">引数とオプション<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
 <table>
@@ -4766,6 +4794,12 @@
 <td>削除する戦略 ID</td>
 </tr>
 <tr>
+<td><code>--dry-run</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>実際には削除せず、削除対象を表示して終了する（破壊系ガードの非対称解消、issue #1178）</td>
+</tr>
+<tr>
 <td><code>--yes</code> / <code>-y</code></td>
 <td>フラグ</td>
 <td>false</td>
@@ -4780,6 +4814,7 @@
 </tbody>
 </table>
 <p>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止します。not found は終了コード <code>1</code>。</p>
+<p><code>--dry-run</code> を付けると、何も削除せずに削除対象（<code>--with-results</code> 指定時は関連ファイルも）を一覧表示して終了コード <code>0</code> で終わります。本番削除の前に対象を確認するのに有効です。</p>
 <h3 id="-with-results"><code>--with-results</code> で削除対象になるファイル<a class="headerlink" href="#-with-results" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>strategies.path / &lt;id&gt;_optimized.json</code></li>

@@ -1,6 +1,6 @@
 # alpha-forge system
 
-ワークスペース初期化・Whop OAuth 認証・同梱ドキュメント参照などの運用ユーティリティ群です。
+ワークスペース初期化・Whop OAuth 認証・同梱ドキュメント参照・環境診断・データ保存先一覧などの運用ユーティリティ群です。
 
 ## alpha-forge system auth
 
@@ -225,5 +225,95 @@ strategies.use_db = True
 alpha-forge system config strategies.use_db --json
 # => {"key": "strategies.use_db", "value": true}
 ```
+
+---
+
+## alpha-forge system paths
+
+戦略 JSON・バックテスト結果・ジャーナル・アイデア・Pine Script・ヒストリカルデータなど、**全データ保存先を解決済みの絶対パスで一覧**します（issue #1180）。バックアップ・移行の起点となる観測専用（read-only）コマンドで、ライセンス切れ・未認証でも実行できます。各成果物の保存先は `forge.yaml` の各 `*_path` キーで決まり、相対パスは `forge.yaml` のあるディレクトリ基準で解決されます。
+
+### 構文
+
+```bash
+# 人間向け一覧（実効 forge.yaml も併記）
+alpha-forge system paths
+
+# 機械可読（{"paths": {...}} envelope）。スクリプト・MCP 用途
+alpha-forge system paths --json
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力（機械可読・MCP / パイプ用途） |
+
+### 一覧される保存先
+
+| キー | 内容 | 既定パス（forge.yaml 基準の相対） |
+|------|------|----------------------------------|
+| `strategies` | 戦略 JSON（最適化済みを含む） | `./data/strategies` |
+| `historical` | ヒストリカル価格データ（Parquet） | `./data/historical` |
+| `results` | バックテスト・最適化の結果 | `./data/results` |
+| `journal` | 戦略ジャーナル | `./data/journal` |
+| `ideas` | 投資アイデア | `./data/ideas` |
+| `pinescript` | 生成された Pine Script | `./output/pinescript` |
+| `alt_storage` | 代替データ（センチメント等） | `./data/alternative` |
+| `config` | 実効 `forge.yaml` の絶対パス | （`FORGE_CONFIG` の値） |
+
+> 既定では戦略・ジャーナル・バックテスト結果は SQLite DB（`strategies.db` / `backtest_results.db`）に保存されます。これらも `strategies` / `results` ディレクトリ配下に置かれるため、ディレクトリ単位でコピーすれば DB ごとバックアップされます。
+
+### バックアップ・移行
+
+`FORGE_CONFIG` が指す **workspace ディレクトリを丸ごとコピー**するのが最も簡単で確実なバックアップ手段です。個々の成果物パスを追う必要はありません。
+
+```bash
+# workspace のルート（forge.yaml のあるディレクトリ）を確認
+WS=$(dirname "$FORGE_CONFIG")
+
+# rsync で差分バックアップする例
+rsync -a --delete "$WS"/ /path/to/backup/workspace/
+```
+
+新しいマシンへ移行する場合は、コピーした workspace ディレクトリを置いて `FORGE_CONFIG` をその `forge.yaml` に向けるだけで、戦略・結果・ジャーナルがそのまま引き継がれます。`FORGE_CONFIG` を切り替えれば、実運用用・実験用などの workspace を混ざらないよう併用できます。
+
+**Exit code**: `0`=成功。
+
+---
+
+## alpha-forge system doctor
+
+サポート問い合わせやバグ報告のときに、**環境情報を 1 コマンドでまとめて収集**します（issue #1170）。CLI バージョン・OS / Python・ライセンス状態・読み込まれる `forge.yaml`・主要データディレクトリの有無・crash ログの場所を 1 つの出力にまとめます。**実ネットワークアクセスは行いません**（ライセンス状態はローカルキャッシュした認証情報のみから判定し、Whop API は呼び出しません）。認証が切れていても・設定が壊れていても実行できるよう、認証チェックの対象外です。
+
+### 構文
+
+```bash
+# 人間向けの診断レポート
+alpha-forge system doctor
+
+# 構造化出力（version / platform / license / config / paths / logs の envelope。stdout は純 JSON）
+alpha-forge system doctor --json
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力（機械可読・MCP / パイプ用途） |
+
+### 出力される主なフィールド
+
+| セクション | 内容 |
+|-----------|------|
+| `version` | alpha-forge の CLI バージョン |
+| `platform` | OS（`system` / `release` / `machine`）・Python（`python_version` / `python_implementation`） |
+| `license` | プラン種別（`plan`: `free` / `paid` / `dev` / `unknown`）・`credentials.json` の有無（`authenticated`）・オフライン猶予切れデグレード中か（`offline_degraded`） |
+| `config` | 実際に読み込まれる `forge.yaml` の絶対パス（`config_path`）と探索順（`config_search_order`） |
+| `paths` | `strategies` / `historical` / `results` / `journal` / `ideas` / `pinescript` 各ディレクトリの絶対パスと存在有無（`exists`） |
+| `logs` | 未捕捉例外の crash ログ（`forge-crash.log`）の記録先パス |
+
+バグ報告の際は `alpha-forge system doctor --json` の出力を添付すると、環境の切り分けが早くなります。
+
+**Exit code**: `0`=成功。
 
 ---

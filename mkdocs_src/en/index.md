@@ -50,6 +50,9 @@ Write your strategy in JSON, then run `alpha-forge pine generate` to compile it 
 - [AI-Driven Strategy Exploration Workflow](ai-agents/exploration-workflow.md) — A how-to for autonomous strategy development with Claude Code / Codex × AlphaForge (AI Agent Integration section)
 - [Legal & Disclaimers](legal/disclaimers.md) — Disclaimers, EULA, and Privacy Policy
 
+!!! info "Privacy — no telemetry"
+    AlphaForge sends **no telemetry** — no usage statistics or behavioral logs — to any external party. Your strategy data, trading history, and API keys all stay local. The Software accesses the network only for user-initiated operations (data fetching / update checks via `self version` & `self update` / Whop license verification). See the Privacy and Telemetry section of the [EULA](legal/eula.md) for details.
+
 ## Related links
 
 - [Alforge Labs official site](https://alforgelabs.com/en/index.html) — Product overview and install guide

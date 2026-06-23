@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4590,7 +4618,7 @@
 <a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>╰────────────────────────────────────────────────────────────────────╯
 <a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>Mean OOS: 0.5899   Best window: #2 (1.0307)   Failures: 0
 </code></pre></div>
-<p>All progress bars and dashboards are rendered on <strong>stderr</strong>. Even with <code>--json</code>, the dashboard is shown when stderr is a TTY, while stdout stays as pure JSON. When stderr is not a TTY (CI, pipes, redirected files), the dashboard is automatically suppressed — useful when you want CI logs to stay quiet.</p>
+<p>All progress bars and dashboards are rendered on <strong>stderr</strong>. Even with <code>--json</code>, the dashboard is shown when stderr is a TTY, while stdout stays as pure JSON. When stderr is not a TTY (CI, pipes, redirected files), the dashboard is automatically suppressed (issue #1190) — useful when you want CI logs to stay quiet. In non-TTY environments each window completion is instead emitted as a one-line plain-text log (<code>[Window k/N] OOS=... trades=...</code>) on stderr, so progress is never lost.</p>
 <h3 id="sample-output_3">Sample output<a class="headerlink" href="#sample-output_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Running walk-forward optimization: SPY x sma_v1 (5 windows)
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>✅ Walk-forward complete

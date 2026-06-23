@@ -84,12 +84,16 @@ List all stored datasets.
 ### Synopsis
 
 ```bash
-alpha-forge data list
+alpha-forge data list [--json]
 ```
 
 ### Arguments and options
 
-None.
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON on stdout (machine-readable; MCP / pipe use) (issue #1176) |
+
+When `--json` is passed, pure JSON is written to stdout (decoration and progress go to stderr).
 
 ### Sample output
 
@@ -105,6 +109,21 @@ When no data is stored:
 ```text
 Stored data count: 0
 ```
+
+### Sample output (`--json`)
+
+```json
+{
+  "count": 3,
+  "datasets": [
+    {"symbol": "SPY", "interval": "1d", "start": "2018-01-02", "end": "2025-12-31", "rows": 2014},
+    {"symbol": "QQQ", "interval": "1d", "start": "2018-01-02", "end": "2025-12-31", "rows": 2014},
+    {"symbol": "USDJPY=X", "interval": "1d", "start": "2020-01-01", "end": "2025-12-31", "rows": 1530}
+  ]
+}
+```
+
+**Exit code**: `0`=success, `1`=not found / failure, `2`=argument error.
 
 ---
 
@@ -184,12 +203,16 @@ For every dataset visible via `alpha-forge data list`, fetch the **incremental d
 ### Synopsis
 
 ```bash
-alpha-forge data update
+alpha-forge data update [--json]
 ```
 
 ### Arguments and options
 
-None.
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON on stdout (machine-readable; MCP / pipe use) (issue #1176) |
+
+When `--json` is passed, pure JSON is written to stdout (decoration and progress go to stderr).
 
 ### Sample output
 
@@ -202,6 +225,23 @@ Starting update for 3 datasets...
     - No new data available.
 Update complete: 1 datasets updated.
 ```
+
+### Sample output (`--json`)
+
+```json
+{
+  "total": 3,
+  "updated": 1,
+  "skipped": 1,
+  "items": [
+    {"symbol": "SPY", "interval": "1d", "status": "updated", "added_rows": 12},
+    {"symbol": "QQQ", "interval": "1d", "status": "skipped"},
+    {"symbol": "USDJPY=X", "interval": "1d", "status": "no_new_data"}
+  ]
+}
+```
+
+**Exit code**: `0`=success, `1`=not found / failure, `2`=argument error.
 
 When no data is stored:
 

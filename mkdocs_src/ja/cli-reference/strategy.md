@@ -326,7 +326,7 @@ strategies:
 ### 構文
 
 ```bash
-alpha-forge strategy delete <STRATEGY_ID> [--yes] [--with-results]
+alpha-forge strategy delete <STRATEGY_ID> [--dry-run] [--yes] [--with-results]
 ```
 
 ### 引数とオプション
@@ -334,10 +334,13 @@ alpha-forge strategy delete <STRATEGY_ID> [--yes] [--with-results]
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_ID` | 引数（必須） | - | 削除する戦略 ID |
+| `--dry-run` | フラグ | false | 実際には削除せず、削除対象を表示して終了する（破壊系ガードの非対称解消、issue #1178） |
 | `--yes` / `-y` | フラグ | false | 確認プロンプトなしで削除（epic #1083 D で `--force` から改名） |
 | `--with-results` | フラグ | false | 関連ファイル（`<id>_optimized.json`、`<id>_report.json`、`optimize_<id>_*.json`）も一括削除 |
 
 破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止します。not found は終了コード `1`。
+
+`--dry-run` を付けると、何も削除せずに削除対象（`--with-results` 指定時は関連ファイルも）を一覧表示して終了コード `0` で終わります。本番削除の前に対象を確認するのに有効です。
 
 ### `--with-results` で削除対象になるファイル
 

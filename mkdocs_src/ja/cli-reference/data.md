@@ -84,12 +84,16 @@ SPY のデータを取得し保存しました (1258 lines)
 ### 構文
 
 ```bash
-alpha-forge data list
+alpha-forge data list [--json]
 ```
 
 ### 引数とオプション
 
-なし。
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で標準出力する（機械可読・MCP / パイプ用途）（issue #1176） |
+
+`--json` 指定時は stdout に純 JSON を出力します（装飾・進捗は stderr へ分離）。
 
 ### サンプル出力
 
@@ -105,6 +109,21 @@ alpha-forge data list
 ```text
 保存済みデータ件数: 0
 ```
+
+### サンプル出力（`--json`）
+
+```json
+{
+  "count": 3,
+  "datasets": [
+    {"symbol": "SPY", "interval": "1d", "start": "2018-01-02", "end": "2025-12-31", "rows": 2014},
+    {"symbol": "QQQ", "interval": "1d", "start": "2018-01-02", "end": "2025-12-31", "rows": 2014},
+    {"symbol": "USDJPY=X", "interval": "1d", "start": "2020-01-01", "end": "2025-12-31", "rows": 1530}
+  ]
+}
+```
+
+**Exit code**: `0`=成功、`1`=not found / 実行失敗、`2`=引数エラー。
 
 ---
 
@@ -184,12 +203,16 @@ JSON では `trend`（英小文字 enum: `bullish` / `bearish` / `recovery` / `w
 ### 構文
 
 ```bash
-alpha-forge data update
+alpha-forge data update [--json]
 ```
 
 ### 引数とオプション
 
-なし。
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で標準出力する（機械可読・MCP / パイプ用途）（issue #1176） |
+
+`--json` 指定時は stdout に純 JSON を出力します（装飾・進捗は stderr へ分離）。
 
 ### サンプル出力
 
@@ -202,6 +225,23 @@ alpha-forge data update
     - 新しいデータはありませんでした。
 1 件のデータを更新完了しました。
 ```
+
+### サンプル出力（`--json`）
+
+```json
+{
+  "total": 3,
+  "updated": 1,
+  "skipped": 1,
+  "items": [
+    {"symbol": "SPY", "interval": "1d", "status": "updated", "added_rows": 12},
+    {"symbol": "QQQ", "interval": "1d", "status": "skipped"},
+    {"symbol": "USDJPY=X", "interval": "1d", "status": "no_new_data"}
+  ]
+}
+```
+
+**Exit code**: `0`=成功、`1`=not found / 実行失敗、`2`=引数エラー。
 
 データが 1 件もない場合：
 

@@ -1033,6 +1033,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../guides/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用語集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1047,10 +1075,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1068,8 +1096,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4590,7 +4618,7 @@
 <a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>╰────────────────────────────────────────────────────────────────────╯
 <a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>Mean OOS: 0.5899   Best window: #2 (1.0307)   Failures: 0
 </code></pre></div>
-<p>プログレスバーとダッシュボードはすべて <strong>stderr</strong> に描画されます。<code>--json</code> を指定しても stderr が TTY であれば進捗が表示され、stdout の純粋な JSON 出力は維持されます。stderr が非 TTY（CI、パイプ、ファイルへリダイレクト）の場合は自動で抑制されます。CI で確実に静音化したい場合はこの挙動が利用できます。</p>
+<p>プログレスバーとダッシュボードはすべて <strong>stderr</strong> に描画されます。<code>--json</code> を指定しても stderr が TTY であれば進捗が表示され、stdout の純粋な JSON 出力は維持されます。stderr が非 TTY（CI、パイプ、ファイルへリダイレクト）の場合は自動で抑制されます（issue #1190）。CI で確実に静音化したい場合はこの挙動が利用できます。非 TTY 環境では各ウィンドウの完了が 1 行ずつ平文ログ（<code>[Window k/N] OOS=... trades=...</code>）として stderr に出力され、進捗が消えてしまうことはありません。</p>
 <h3 id="_20">サンプル出力<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>ウォークフォワード最適化を実行中: SPY x sma_v1 (5ウィンドウ)
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>✅ ウォークフォワード完了
