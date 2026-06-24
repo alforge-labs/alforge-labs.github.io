@@ -168,6 +168,9 @@ OANDA instrument を直接指定したい場合は `asset_class` に `"RAW"` 等
 
 ## 4. Pine v6 から完全な JSON を生成する
 
+!!! tip "手書き不要: `alpha-forge pine generate --with-webhook`"
+    以下は手書きの参考例ですが、`alpha-forge pine generate --strategy <id> --with-webhook` を使えばこの `passphrase` input・`make_payload()`・`alert()` ブロックが自動で配線済みの Pine が出力されます（[Pine 反映ガイド](tradingview-pine-integration.md) 参照）。
+
 ```pinescript
 //@version=6
 strategy("alpha-strike webhook demo", overlay=true)

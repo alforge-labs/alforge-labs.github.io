@@ -3525,6 +3525,10 @@ raises a <code>ValueError</code> with this message:</p>
 </div>
 <hr />
 <h2 id="4-building-full-json-in-pine-v6">4. Building full JSON in Pine v6<a class="headerlink" href="#4-building-full-json-in-pine-v6" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">No hand-editing: <code>alpha-forge pine generate --with-webhook</code></p>
+<p>The snippet below is a hand-written reference, but <code>alpha-forge pine generate --strategy &lt;id&gt; --with-webhook</code> emits Pine with this <code>passphrase</code> input, <code>make_payload()</code>, and <code>alert()</code> blocks already wired in (see the <a href="../tradingview-pine-integration/">Pine integration guide</a>).</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>//@version=6
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>strategy(&quot;alpha-strike webhook demo&quot;, overlay=true)
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>

@@ -145,6 +145,9 @@ AlphaForge は「ユーザー自身が戦略を作って育てる」プロダク
 
 シンボル・インジケータ・タイプから戦略 JSON を **生成** します。組み込みテンプレートに依存せず、指定したインジケータ群と戦略タイプ（逆張り／順張り／buy-and-hold オーバーレイ）から条件・リスク管理を自動構築します。出力先として `--output`（ファイル書き出し）か `--save`（戦略レジストリへ登録）の **いずれかが必須** です。どちらも指定しないと `エラー: --output または --save のいずれかを指定してください` を出して終了コード `1` で停止します（標準出力への JSON 出力は行いません）。`/explore-strategies` の戦略生成主経路です。
 
+!!! tip "指標カタログ（機械可読）"
+    `--indicators` に指定できる指標と、各指標の `params`（name / default / type）・記述例・Pine 変換可否は [`alpha-forge analyze indicator list --json`](analyze.md#alpha-forge-analyze-indicator-list) / [`alpha-forge analyze indicator show <NAME> --json`](analyze.md#alpha-forge-analyze-indicator-show) で確認できます。戦略 JSON を手書きする際の `type` 名・パラメータ名・既定値の権威ソースです。
+
 ### 構文
 
 ```bash
