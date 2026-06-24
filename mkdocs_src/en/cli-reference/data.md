@@ -511,7 +511,12 @@ Output: `✅ <SOURCE_KEY>: saved <N> rows`. Unregistered providers raise `ClickE
 
 ```bash
 alpha-forge data alt list
+alpha-forge data alt list --json   # machine-readable (for MCP / pipe use, issue #1225)
 ```
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Output JSON (machine-readable, for MCP / pipe use, issue #1225; decorations and progress go to stderr) |
 
 Sample output:
 
@@ -528,13 +533,21 @@ When no alternative data has been stored, the command prints a single line and e
 No stored alternative data found.
 ```
 
+With `--json`, only pure JSON is written to stdout. **Exit code**: `0` = success, `1` = not found / execution failure, `2` = argument error.
+
 ## alpha-forge data alt info
 
 ```bash
 alpha-forge data alt info <SOURCE_KEY>
+alpha-forge data alt info <SOURCE_KEY> --json   # machine-readable (for MCP / pipe use, issue #1225)
 ```
 
-Shows source key, interval, row count, start / end dates, columns, file path, and file size. If data is missing, raises `ClickException`.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `SOURCE_KEY` | argument (required) | - | Data source key to inspect |
+| `--json` | flag | false | Output JSON (machine-readable, for MCP / pipe use, issue #1225) |
+
+Shows source key, interval, row count, start / end dates, columns, file path, and file size. If data is missing, raises `ClickException`. With `--json`, only pure JSON is written to stdout (part of the `--json` coverage for read-only commands, issue #1225).
 
 ---
 

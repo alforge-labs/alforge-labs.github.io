@@ -291,7 +291,7 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--windows` | int | `5` | ウィンドウ数 |
 | `--min-window-trades` | int | - | IS 期間の取引数が N 件未満のウィンドウをスキップして平均から除外する。シグナル発生回数が少ない戦略でウィンドウ全体が `-∞` に陥るのを防ぐ |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
-| `--goal` | オプション | - | ゴール名（例: `default`, `stocks`）。`goals.yaml` の `pre_filter` 閾値を読み、`--json` 出力に `pre_filter` / `pre_filter_pass` を追加する。指定時は `goals.yaml` の `wft.aggregation_method`（OOS 集約方法 `mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）と `wft.trimmed_pct` も読み込み、`pre_filter_pass` 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は `forge.yaml` の `default_goal` をフォールバック） |
+| `--goal` | オプション | - | ゴール名（例: `default`, `stocks`）。`goals.yaml` の `pre_filter` 閾値を読み込む。指定時は `goals.yaml` の `wft.aggregation_method`（OOS 集約方法 `mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）と `wft.trimmed_pct` も読み込み、`pre_filter_pass` 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は `forge.yaml` の `default_goal` をフォールバック）。**`--goal` を省略しても `--json` 出力には既定閾値で `pre_filter` / `pre_filter_pass` が必ず付きます**（issue #1237、`backtest run` と契約統一） |
 | `--sharpe-min` | float | `--goal` か `1.0` | `pre_filter_pass` 判定の Sharpe 下限（集約後の OOS Sharpe がこの値以上で `true`） |
 | `--max-dd` | float | `--goal` か `25.0` | `pre_filter_pass` の MaxDD 上限（%）。`--json` 出力の `pre_filter.max_dd_max` に反映 |
 
@@ -362,7 +362,7 @@ WFT の `--json` 出力には、ウィンドウ単位のフィールドに加え
 
 `skip_reason` は探索エージェントがウィンドウ無効の原因を判別するために使えます。
 
-さらに `--goal`（または `--sharpe-min` / `--max-dd`）を指定すると、`--json` 出力に `pre_filter`（`sharpe_min` / `max_dd_max` / `min_trades` / `goal`）と `pre_filter_pass`（集約 OOS Sharpe が `sharpe_min` 以上かの判定）が追加されます。OOS 集約方法は `goals.yaml` の `wft.aggregation_method`（`mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）で切り替えられます。
+`--json` 出力には `pre_filter`（`sharpe_min` / `max_dd_max` / `min_trades` / `goal`）と `pre_filter_pass`（集約 OOS Sharpe が `sharpe_min` 以上かの判定）が**既定で**含まれます（issue #1237）。以前は `--goal` 指定時のみ付与されていましたが、`backtest run` / `backtest monte-carlo` と合否判定の有無・命名を揃えるため、`--goal` を省略しても既定閾値（Sharpe `1.0` / MaxDD `25.0`）で必ず付くようになりました。`--goal`（または `--sharpe-min` / `--max-dd`）で閾値を上書きできます。OOS 集約方法は `goals.yaml` の `wft.aggregation_method`（`mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）で切り替えられます。
 
 | 値 | 意味 |
 |----|------|

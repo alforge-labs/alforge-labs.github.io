@@ -4606,7 +4606,7 @@
 <td><code>--goal</code></td>
 <td>option</td>
 <td>-</td>
-<td>Goal name (e.g. <code>default</code>, <code>stocks</code>). Includes <code>goals.yaml</code> <code>pre_filter</code> thresholds in the JSON output; when set, the goal's WFT settings (including the OOS aggregation method <code>mean</code> / <code>median</code> / <code>trimmed_mean</code>, #947) are also applied</td>
+<td>Goal name (e.g. <code>default</code>, <code>stocks</code>). Reads the <code>goals.yaml</code> <code>pre_filter</code> thresholds; when set, the goal's WFT settings (including the OOS aggregation method <code>mean</code> / <code>median</code> / <code>trimmed_mean</code>, #947) are also applied. <strong>Even without <code>--goal</code>, the <code>--json</code> output always carries <code>pre_filter</code> / <code>pre_filter_pass</code> using default thresholds</strong> (issue #1237, contract aligned with <code>backtest run</code>)</td>
 </tr>
 <tr>
 <td><code>--sharpe-min</code></td>
@@ -4726,6 +4726,7 @@
 </tr>
 </tbody>
 </table>
+<p>The <code>--json</code> output <strong>includes <code>pre_filter</code> (<code>sharpe_min</code> / <code>max_dd_max</code> / <code>min_trades</code> / <code>goal</code>) and <code>pre_filter_pass</code> (whether the aggregated OOS Sharpe is at or above <code>sharpe_min</code>) by default</strong> (issue #1237). Previously the verdict was added only with <code>--goal</code>; it now appears even without <code>--goal</code> using default thresholds (Sharpe <code>1.0</code> / MaxDD <code>25.0</code>) so the presence and naming of the pass/fail decision match <code>backtest run</code> / <code>backtest monte-carlo</code>. Override the thresholds with <code>--goal</code> (or <code>--sharpe-min</code> / <code>--max-dd</code>). The OOS aggregation method is switched via <code>goals.yaml</code> <code>wft.aggregation_method</code> (<code>mean</code> / <code>median</code> / <code>trimmed_mean</code>, default <code>mean</code>, issue #947).</p>
 <hr />
 <h2 id="alpha-forge-optimize-apply">alpha-forge optimize apply<a class="headerlink" href="#alpha-forge-optimize-apply" title="Permanent link">&para;</a></h2>
 <p>Read a result JSON saved by <code>alpha-forge optimize run</code> and apply <code>best_params</code> to the strategy, saving as <strong><code>&lt;id&gt;_optimized</code></strong>.</p>

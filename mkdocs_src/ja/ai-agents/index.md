@@ -50,10 +50,10 @@ AlphaForge 単体だけでなく、可視化（alpha-visualizer）・運用監�
 
 1. **[クイックスタート](quickstart.md)** — 同梱スキルまたは MCP を使って、約 10 分でエージェント連携を体験します。
 2. **[探索ワークフロー](exploration-workflow.md)** — `/explore-strategies` による本格的な自律探索の流れと注意点を学びます。
-3. **[MCP リファレンス](mcp-reference.md)** — alpha-forge-mcp が提供する 7 つのツールとエラー規約のリファレンスです。
+3. **[MCP リファレンス](mcp-reference.md)** — alpha-forge-mcp が提供する 18 のツール・リソース・プロンプトとエラー envelope のリファレンスです。
 4. **[CLI 規約](cli-conventions.md)** — `--json` 出力・非対話モード・終了コードなど、エージェント連携の土台となる規約をまとめています。
 
 関連ページ: [はじめに（インストール）](../getting-started.md) / [AI エージェント利用者向けユースケース](../usecases/ai-agents.md) / [CLI リファレンス](../cli-reference/index.md)
 
 !!! note "alpha-forge-mcp は alpha 版です"
-    alpha-forge-mcp は現在 **alpha（プレリリース）版**（PyPI `alpha-forge-mcp` v0.1.0a4）です。提供ツールの名前・引数・戻り値などの契約は今後変更される可能性があります。本番ワークフローに組み込む際はバージョンを固定し、更新時はツール契約の差分を確認してください。
+    alpha-forge-mcp は現在 **alpha（プレリリース）版**（PyPI `alpha-forge-mcp` v0.1.0a5）です。提供ツールの名前・引数・戻り値などの契約は今後変更される可能性があります。本番ワークフローに組み込む際はバージョンを固定し、更新時はツール契約の差分を確認してください。

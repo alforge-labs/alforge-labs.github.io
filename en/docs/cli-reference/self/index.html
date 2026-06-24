@@ -2816,13 +2816,33 @@
 <h2 id="alpha-forge-self-version">alpha-forge self version<a class="headerlink" href="#alpha-forge-self-version" title="Permanent link">&para;</a></h2>
 <p>Show the current version alongside the latest release from the distribution repo (<code>alforge-labs/alforge-labs.github.io</code>). The <code>self</code> group skips Whop authentication, so it works regardless of login state.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>version
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>version<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Output JSON (machine-readable, for MCP / pipe use, issue #1225)</td>
+</tr>
+</tbody>
+</table>
 <p>Sample output:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Current version: 0.3.1
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Latest release  : 0.4.0  (https://github.com/alforge-labs/alforge-labs.github.io/releases/tag/v0.4.0)
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>A new version is available: 0.4.0
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>To upgrade: alpha-forge self update
 </code></pre></div>
+<p>With <code>--json</code>, only pure JSON is written to stdout (decorations go to stderr). As part of the <code>--json</code> coverage for read-only commands (issue #1225), agents / MCP can read the version programmatically — the same as <code>system auth status</code> / <code>system docs list</code> / <code>data alt list</code> / <code>data alt info</code>.</p>
 <h2 id="alpha-forge-self-update">alpha-forge self update<a class="headerlink" href="#alpha-forge-self-update" title="Permanent link">&para;</a></h2>
 <p>Update the alpha-forge binary to the latest release. Downloads with SHA256 verification, then atomically swaps <code>forge.dist</code> and keeps the previous binary as <code>forge.dist.bak-&lt;unix_ts&gt;</code> (latest 2 generations).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w">                  </span><span class="c1"># interactive prompt [y/N]</span>

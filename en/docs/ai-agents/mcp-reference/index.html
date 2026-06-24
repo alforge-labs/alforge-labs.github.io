@@ -846,6 +846,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Tool reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#server-instructions-long-running-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server instructions &amp; long-running jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -873,6 +890,28 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2853,6 +2892,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Tool reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#server-instructions-long-running-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server instructions &amp; long-running jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2880,6 +2936,28 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2926,7 +3004,7 @@
 <p><strong>alpha-forge-mcp</strong> is an open-source (Apache-2.0) stdio server that exposes the alpha-forge CLI to AI agents over the <a href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a>. Any MCP 1.0+ client — Claude Code, Cursor, Codex, and others — can invoke backtests, optimizations, and Pine Script generation as first-class tools.</p>
 <div class="admonition warning">
 <p class="admonition-title">Alpha release (pre-release)</p>
-<p>The current published version is <strong>v0.1.0a4 (alpha / pre-release)</strong>. The tool contract (tool names, arguments, return shapes) may change. If you need stability in production, pin the version and review the differences against this tool reference whenever you upgrade.</p>
+<p>The current published version is <strong>v0.1.0a5 (alpha / pre-release)</strong>. The tool contract (tool names, arguments, return shapes) may change. If you need stability in production, pin the version and review the differences against this tool reference whenever you upgrade.</p>
 </div>
 <hr />
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
@@ -2997,7 +3075,7 @@
 </div>
 <hr />
 <h2 id="tool-reference">Tool reference<a class="headerlink" href="#tool-reference" title="Permanent link">&para;</a></h2>
-<p>There are 7 tools. Each runs the corresponding alpha-forge CLI command under the hood with <code>shell=False</code> (identifiers are validated first).</p>
+<p>There are 18 tools. Each runs the corresponding alpha-forge CLI command under the hood with <code>shell=False</code> (identifiers are validated first). Each tool's description states its prerequisite (e.g., <code>run_backtest</code> needs <code>fetch_data</code> first) and follow-up so an agent can chain calls correctly.</p>
 <table>
 <thead>
 <tr>
@@ -3011,54 +3089,132 @@
 <tr>
 <td><code>list_strategies</code></td>
 <td>(none)</td>
-<td>List of strategies</td>
+<td>List of registered strategies</td>
 <td><code>alpha-forge strategy list --json</code></td>
 </tr>
 <tr>
 <td><code>get_strategy</code></td>
 <td><code>strategy_id</code></td>
-<td>Details for one strategy</td>
+<td>Full JSON of one strategy</td>
 <td><code>alpha-forge strategy show &lt;id&gt; --json</code></td>
 </tr>
 <tr>
 <td><code>list_results</code></td>
 <td><code>strategy_id?</code> (optional)</td>
-<td>Backtest results (optionally filtered by strategy)</td>
+<td>Saved backtest results (optionally filtered)</td>
 <td><code>alpha-forge backtest list [--strategy &lt;id&gt;] --json</code></td>
 </tr>
 <tr>
 <td><code>get_result</code></td>
 <td><code>result_id</code></td>
-<td>Details for one result</td>
+<td>Metrics &amp; trades of one result</td>
 <td><code>alpha-forge backtest report &lt;result_id&gt; --json</code></td>
 </tr>
 <tr>
 <td><code>run_backtest</code></td>
 <td><code>symbol</code>, <code>strategy_id</code>, <code>start?</code>, <code>end?</code></td>
 <td>Backtest run result</td>
-<td><code>alpha-forge backtest run &lt;symbol&gt; --strategy &lt;id&gt; --json</code></td>
+<td><code>alpha-forge backtest run &lt;symbol&gt; --strategy &lt;id&gt; [--start] [--end] --json</code></td>
 </tr>
 <tr>
 <td><code>run_optimize</code></td>
 <td><code>symbol</code>, <code>strategy_id</code>, <code>metric?</code>, <code>trials?</code></td>
-<td>Optimization (Optuna TPE) result</td>
-<td><code>alpha-forge optimize run &lt;symbol&gt; --strategy &lt;id&gt; --json</code></td>
+<td>Optimization (Optuna TPE) result; saves by default</td>
+<td><code>alpha-forge optimize run &lt;symbol&gt; --strategy &lt;id&gt; [--metric] [--trials] [--save] --json</code></td>
+</tr>
+<tr>
+<td><code>apply_optimization</code></td>
+<td><code>result_file</code>, <code>strategy_id</code></td>
+<td>Applies an optimization result to a strategy (<code>&lt;id&gt;_optimized</code>)</td>
+<td><code>alpha-forge optimize apply &lt;result_file&gt; --to-strategy &lt;id&gt; --yes</code></td>
+</tr>
+<tr>
+<td><code>run_walk_forward</code></td>
+<td><code>symbol</code>, <code>strategy_id</code>, <code>windows?</code>, <code>metric?</code></td>
+<td>Walk-forward (out-of-sample) optimization</td>
+<td><code>alpha-forge optimize walk-forward &lt;symbol&gt; --strategy &lt;id&gt; [--windows] [--metric] --json</code></td>
+</tr>
+<tr>
+<td><code>run_monte_carlo</code></td>
+<td><code>result_id</code>, <code>simulations?</code></td>
+<td>Monte Carlo from a saved result</td>
+<td><code>alpha-forge backtest monte-carlo &lt;result_id&gt; [--simulations] --json</code></td>
+</tr>
+<tr>
+<td><code>fetch_data</code></td>
+<td><code>symbol</code>, <code>period?</code></td>
+<td>Fetch &amp; cache historical OHLCV (prereq for <code>run_backtest</code>)</td>
+<td><code>alpha-forge data fetch &lt;symbol&gt; [--period]</code></td>
+</tr>
+<tr>
+<td><code>save_strategy</code></td>
+<td>strategy-definition JSON <strong>body</strong></td>
+<td>Register a strategy from its JSON body</td>
+<td><code>alpha-forge strategy save &lt;tmpfile&gt;</code></td>
 </tr>
 <tr>
 <td><code>generate_pinescript</code></td>
 <td><code>strategy_id</code>, <code>with_webhook?</code></td>
-<td>Pine Script for TradingView</td>
+<td>Pine Script v6 source</td>
 <td><code>alpha-forge pine preview --strategy &lt;id&gt; [--with-webhook]</code></td>
+</tr>
+<tr>
+<td><code>forge_status</code></td>
+<td>(none)</td>
+<td>Capabilities / prerequisites (doctor + version); never fails</td>
+<td><code>alpha-forge system doctor --json</code></td>
+</tr>
+<tr>
+<td><code>list_journals</code></td>
+<td>(none)</td>
+<td>Strategies that have a journal</td>
+<td><code>alpha-forge journal list --json</code></td>
+</tr>
+<tr>
+<td><code>get_journal</code></td>
+<td><code>strategy_id</code></td>
+<td>Full journal (snapshots, runs, tags, notes)</td>
+<td><code>alpha-forge journal show &lt;strategy_id&gt; --json</code></td>
+</tr>
+<tr>
+<td><code>exploration_status</code></td>
+<td><code>goal?</code></td>
+<td>Strategy-exploration coverage map (explored vs. untried)</td>
+<td><code>alpha-forge explore status [--goal] --json</code></td>
+</tr>
+<tr>
+<td><code>get_indicator</code></td>
+<td><code>name</code></td>
+<td>Metadata for one technical indicator</td>
+<td><code>alpha-forge analyze indicator show &lt;name&gt; --json</code></td>
 </tr>
 </tbody>
 </table>
+<p>A few tool-specific notes:</p>
+<ul>
+<li><code>save_strategy</code> takes the strategy-definition <strong>JSON body</strong> as a string (not a file path, which is more agent-friendly); it is written to a temp file before <code>strategy save</code>.</li>
+<li><code>fetch_data</code> exposes only <code>period</code> because the CLI has no <code>--start</code> / <code>--end</code>.</li>
+<li><code>forge_status</code> is read-only and <strong>never fails</strong> when the binary is missing — it returns <code>binary_found: false</code> so a client can triage prerequisites before doing anything else.</li>
+<li><code>run_optimize</code> saves the result by default (<code>save=true</code>) so its <code>saved_path</code> can be passed to <code>apply_optimization</code>, which applies the optimized parameters and saves <code>&lt;strategy_id&gt;_optimized</code> non-interactively (<code>--yes</code>).</li>
+<li><code>get_indicator</code> returns indicator <strong>metadata</strong> only (description, parameters, output) — there is no compute-over-symbol command, so it does not calculate the indicator on price data.</li>
+<li>journal / explore reads are exposed read-first; write-oriented and ml / pairs commands are not exposed yet.</li>
+</ul>
 <div class="admonition info">
-<p class="admonition-title">Return shapes follow the CLI's <code>--json</code></p>
-<p>Each tool returns the <code>--json</code> output of its corresponding CLI command verbatim. The conventions carry over too: list envelopes (<code>{"&lt;plural&gt;": [...], "count": n}</code>) and structured not-found errors (<code>{"error": ..., "code": ..., "id": ...}</code>). See the <a href="../cli-conventions/">CLI Conventions</a> for details.</p>
+<p class="admonition-title"><code>metric</code> is a constrained enum</p>
+<p>The <code>metric</code> argument of <code>run_optimize</code> / <code>run_walk_forward</code> is a constrained <strong>enum</strong> so clients pick a valid optimization target without guessing: <code>sharpe_ratio</code> (default), <code>sortino_ratio</code>, <code>calmar_ratio</code>, <code>total_return_pct</code>, <code>cagr_pct</code>, <code>profit_factor</code>, <code>win_rate_pct</code>, <code>expectancy_pct</code>, <code>omega_ratio</code>.</p>
 </div>
+<h3 id="server-instructions-long-running-jobs">Server instructions &amp; long-running jobs<a class="headerlink" href="#server-instructions-long-running-jobs" title="Permanent link">&para;</a></h3>
+<p>The server advertises <code>instructions</code> (surfaced in the MCP <code>initialize</code> response) describing the end-to-end workflow — <code>forge_status</code> → <code>fetch_data</code> → <code>run_backtest</code> → <code>run_optimize</code> → <code>run_walk_forward</code> → <code>apply_optimization</code> → <code>generate_pinescript</code> — so an agent knows which tools to call and in what order.</p>
+<p>The run / fetch / save / apply tools are long-running (<code>run_backtest</code> up to 300 s, <code>run_optimize</code> / <code>run_walk_forward</code> up to 600 s, others bounded by the default timeout). They report <strong>progress</strong> to capable clients via MCP progress notifications (a <code>start</code> → <code>complete</code> bracket; the underlying <code>alpha-forge</code> subprocess does not expose intermediate progress) and run the blocking call off the event loop so the server stays responsive. On expiry the tool returns the <code>timeout</code> error code, which is safe to retry.</p>
+<p>All tools carry MCP <strong>tool annotations</strong> (<code>readOnlyHint</code> for the read tools; <code>openWorldHint</code> for the run / write tools — <code>run_backtest</code> / <code>run_optimize</code> / <code>run_walk_forward</code> / <code>run_monte_carlo</code>, plus <code>fetch_data</code>, <code>save_strategy</code>, and <code>apply_optimization</code>) and return <strong>structured output</strong> (<code>structuredContent</code> with an object <code>outputSchema</code>) alongside the text result.</p>
 <hr />
 <h2 id="error-reference">Error reference<a class="headerlink" href="#error-reference" title="Permanent link">&para;</a></h2>
-<p>When a tool call fails, you get a structured error with a <code>code</code>. In addition to the server's own codes, forge's structured errors (e.g., <code>strategy_not_found</code>, <code>authentication_required</code>) are passed through unchanged.</p>
+<p>Every tool returns a uniform <strong>error envelope</strong> as its (always-successful) result rather than raising, so an agent can branch on the failure category mechanically instead of parsing free text:</p>
+<ul>
+<li>Success: <code>{"ok": true, "data": { ...alpha-forge JSON... }, "error": null}</code></li>
+<li>Failure: <code>{"ok": false, "data": null, "error": {"code": "&lt;category&gt;", "message": "&lt;human readable&gt;", "detail": null}}</code></li>
+</ul>
+<p><code>error.code</code> is the machine-readable failure category. The <code>outputSchema</code> reflects this <code>ok</code> / <code>data</code> / <code>error</code> shape.</p>
 <table>
 <thead>
 <tr>
@@ -3069,19 +3225,29 @@
 </thead>
 <tbody>
 <tr>
-<td><code>timeout</code></td>
-<td>Execution exceeded the time limit</td>
-<td>Split the work or lower <code>trials</code> (defaults below)</td>
+<td><code>forge_not_found</code></td>
+<td>The alpha-forge binary could not be located</td>
+<td>Put it on <code>PATH</code>, or set <code>ALPHA_FORGE_BIN</code> to the executable</td>
 </tr>
 <tr>
-<td><code>execution_failed</code></td>
-<td>The CLI exited with an error (exit code ≠ 0)</td>
-<td>Read the error message; suspect bad arguments or missing data</td>
+<td><code>authentication_required</code></td>
+<td>Not authenticated</td>
+<td>Run <code>alpha-forge system auth login</code></td>
 </tr>
 <tr>
 <td><code>freemium_blocked</code></td>
-<td>A feature unavailable on the Trial plan (e.g., Pine Script generation)</td>
-<td>Consider upgrading to a paid plan</td>
+<td>A premium-only feature on the Trial plan (e.g., Pine Script generation)</td>
+<td>Stop / consider upgrading to a paid plan</td>
+</tr>
+<tr>
+<td><code>strategy_not_found</code></td>
+<td>No strategy exists for the given ID</td>
+<td>Confirm the correct ID with <code>list_strategies</code></td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>Execution exceeded the time limit</td>
+<td>Safe to retry; or split the work / lower <code>trials</code> (defaults below)</td>
 </tr>
 <tr>
 <td><code>bad_output</code></td>
@@ -3089,24 +3255,9 @@
 <td>Check version alignment between alpha-forge and alpha-forge-mcp</td>
 </tr>
 <tr>
-<td><code>invalid_argument</code></td>
-<td>An argument is invalid (e.g., identifier validation failed)</td>
-<td>Review values such as <code>strategy_id</code></td>
-</tr>
-<tr>
-<td><code>forge_not_found</code></td>
-<td>The alpha-forge binary could not be located</td>
-<td>Put it on <code>PATH</code>, or set <code>ALPHA_FORGE_BIN</code> to the executable</td>
-</tr>
-<tr>
-<td><code>strategy_not_found</code> (passthrough)</td>
-<td>No strategy exists for the given ID</td>
-<td>Confirm the correct ID with <code>list_strategies</code></td>
-</tr>
-<tr>
-<td><code>authentication_required</code> (passthrough)</td>
-<td>Not authenticated</td>
-<td>Run <code>alpha-forge system auth login</code></td>
+<td><code>execution_failed</code></td>
+<td>The CLI exited with an error (exit code ≠ 0)</td>
+<td>Read the message; suspect bad arguments or missing data</td>
 </tr>
 </tbody>
 </table>
@@ -3128,7 +3279,7 @@
 <td>300 seconds</td>
 </tr>
 <tr>
-<td><code>run_optimize</code></td>
+<td><code>run_optimize</code> / <code>run_walk_forward</code></td>
 <td>600 seconds</td>
 </tr>
 </tbody>
@@ -3137,6 +3288,59 @@
 <p class="admonition-title">Security</p>
 <p>Subprocesses run with <code>shell=False</code>, and identifiers such as symbols and strategy IDs are validated before being passed to the CLI. The design minimizes shell-injection risk.</p>
 </div>
+<hr />
+<h2 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h2>
+<p>Read-only data is also exposed as MCP <strong>resources</strong>, so clients such as Claude Code can reference them by <code>@</code>-mention without an explicit tool call. They delegate to the same alpha-forge commands as the read tools and return <code>application/json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Resource URI</th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>forge://strategies</code></td>
+<td>All registered strategies</td>
+</tr>
+<tr>
+<td><code>forge://strategy/{strategy_id}</code></td>
+<td>One strategy definition</td>
+</tr>
+<tr>
+<td><code>forge://results</code></td>
+<td>All saved backtest results</td>
+</tr>
+<tr>
+<td><code>forge://result/{result_id}</code></td>
+<td>Metrics &amp; trades of one result</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prompts">Prompts<a class="headerlink" href="#prompts" title="Permanent link">&para;</a></h2>
+<p>Reusable workflows are exposed as MCP <strong>prompts</strong> (surfaced as <code>/mcp__alpha-forge__&lt;name&gt;</code> slash commands in Claude Code):</p>
+<table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>Arguments</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backtest_and_review</code></td>
+<td><code>strategy_id</code>, <code>symbol</code></td>
+<td>Run a backtest, then review the key metrics and red flags</td>
+</tr>
+<tr>
+<td><code>optimize_and_verify</code></td>
+<td><code>strategy_id</code>, <code>symbol</code></td>
+<td>Optimize with Optuna, then check the result for overfitting</td>
+</tr>
+</tbody>
+</table>
+<p>Streamable HTTP transport, RBAC, rate limiting, and audit logging are planned for a later release.</p>
 <hr />
 <h2 id="when-to-use-mcp-vs-the-cli-directly">When to use MCP vs. the CLI directly<a class="headerlink" href="#when-to-use-mcp-vs-the-cli-directly" title="Permanent link">&para;</a></h2>
 <p>MCP and direct CLI use aren't mutually exclusive — pick the one that fits the goal.</p>
@@ -3151,7 +3355,7 @@
 <tbody>
 <tr>
 <td>Surface area</td>
-<td>Limited to 7 tools (safe by contract)</td>
+<td>A curated 18-tool set + resources / prompts (safe by contract)</td>
 <td>Access to every command</td>
 </tr>
 <tr>

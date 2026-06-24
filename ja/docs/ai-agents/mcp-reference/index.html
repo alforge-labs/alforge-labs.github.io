@@ -846,6 +846,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ツールリファレンス">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サーバ instructions と長時間ジョブ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -877,6 +894,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        リソース
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        プロンプト
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cli" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -888,7 +927,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         リンク
@@ -2853,6 +2892,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ツールリファレンス">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サーバ instructions と長時間ジョブ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2884,6 +2940,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        リソース
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        プロンプト
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cli" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2895,7 +2973,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         リンク
@@ -2926,7 +3004,7 @@
 <p><strong>alpha-forge-mcp</strong> は、alpha-forge CLI を <a href="https://modelcontextprotocol.io/">MCP（Model Context Protocol）</a> で AI エージェントに公開する OSS（Apache-2.0）の stdio サーバです。Claude Code・Cursor・Codex など MCP 1.0+ 対応クライアントから、バックテスト・最適化・Pine Script 生成といった操作を「ツール」として呼び出せます。</p>
 <div class="admonition warning">
 <p class="admonition-title">alpha 版（pre-release）</p>
-<p>現在の公開バージョンは <strong>v0.1.0a4（alpha / pre-release）</strong> です。ツール契約（ツール名・引数・戻り値）は今後変更される可能性があります。本番運用で固定したい場合はバージョンをピン留めし、アップグレード時はこのページのツールリファレンスとの差分を確認してください。</p>
+<p>現在の公開バージョンは <strong>v0.1.0a5（alpha / pre-release）</strong> です。ツール契約（ツール名・引数・戻り値）は今後変更される可能性があります。本番運用で固定したい場合はバージョンをピン留めし、アップグレード時はこのページのツールリファレンスとの差分を確認してください。</p>
 </div>
 <hr />
 <h2 id="_1">前提条件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -2997,7 +3075,7 @@
 </div>
 <hr />
 <h2 id="_5">ツールリファレンス<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>提供ツールは 7 種です。各ツールは対応する alpha-forge CLI コマンドを内部で <code>shell=False</code> で実行します（識別子はバリデーション済み）。</p>
+<p>提供ツールは 18 種です。各ツールは対応する alpha-forge CLI コマンドを内部で <code>shell=False</code> で実行します（識別子はバリデーション済み）。各ツールの説明には前提（例: <code>run_backtest</code> は先に <code>fetch_data</code> が必要）と後続のヒントが記載されており、エージェントが正しい順序で呼び出せます。</p>
 <table>
 <thead>
 <tr>
@@ -3011,13 +3089,13 @@
 <tr>
 <td><code>list_strategies</code></td>
 <td>（なし）</td>
-<td>戦略一覧</td>
+<td>登録済み戦略一覧</td>
 <td><code>alpha-forge strategy list --json</code></td>
 </tr>
 <tr>
 <td><code>get_strategy</code></td>
 <td><code>strategy_id</code></td>
-<td>指定戦略の詳細</td>
+<td>指定戦略の詳細（フル JSON）</td>
 <td><code>alpha-forge strategy show &lt;id&gt; --json</code></td>
 </tr>
 <tr>
@@ -3029,36 +3107,114 @@
 <tr>
 <td><code>get_result</code></td>
 <td><code>result_id</code></td>
-<td>指定結果の詳細</td>
+<td>指定結果の指標・トレード</td>
 <td><code>alpha-forge backtest report &lt;result_id&gt; --json</code></td>
 </tr>
 <tr>
 <td><code>run_backtest</code></td>
 <td><code>symbol</code>, <code>strategy_id</code>, <code>start?</code>, <code>end?</code></td>
 <td>バックテスト実行結果</td>
-<td><code>alpha-forge backtest run &lt;symbol&gt; --strategy &lt;id&gt; --json</code></td>
+<td><code>alpha-forge backtest run &lt;symbol&gt; --strategy &lt;id&gt; [--start] [--end] --json</code></td>
 </tr>
 <tr>
 <td><code>run_optimize</code></td>
 <td><code>symbol</code>, <code>strategy_id</code>, <code>metric?</code>, <code>trials?</code></td>
-<td>最適化（Optuna TPE）結果</td>
-<td><code>alpha-forge optimize run &lt;symbol&gt; --strategy &lt;id&gt; --json</code></td>
+<td>最適化（Optuna TPE）結果。既定で保存</td>
+<td><code>alpha-forge optimize run &lt;symbol&gt; --strategy &lt;id&gt; [--metric] [--trials] [--save] --json</code></td>
+</tr>
+<tr>
+<td><code>apply_optimization</code></td>
+<td><code>result_file</code>, <code>strategy_id</code></td>
+<td>最適化結果を戦略に適用し <code>&lt;id&gt;_optimized</code> を保存</td>
+<td><code>alpha-forge optimize apply &lt;result_file&gt; --to-strategy &lt;id&gt; --yes</code></td>
+</tr>
+<tr>
+<td><code>run_walk_forward</code></td>
+<td><code>symbol</code>, <code>strategy_id</code>, <code>windows?</code>, <code>metric?</code></td>
+<td>ウォークフォワード（OOS）最適化</td>
+<td><code>alpha-forge optimize walk-forward &lt;symbol&gt; --strategy &lt;id&gt; [--windows] [--metric] --json</code></td>
+</tr>
+<tr>
+<td><code>run_monte_carlo</code></td>
+<td><code>result_id</code>, <code>simulations?</code></td>
+<td>保存済み結果からモンテカルロ</td>
+<td><code>alpha-forge backtest monte-carlo &lt;result_id&gt; [--simulations] --json</code></td>
+</tr>
+<tr>
+<td><code>fetch_data</code></td>
+<td><code>symbol</code>, <code>period?</code></td>
+<td>ヒストリカル OHLCV を取得・キャッシュ（<code>run_backtest</code> の前提）</td>
+<td><code>alpha-forge data fetch &lt;symbol&gt; [--period]</code></td>
+</tr>
+<tr>
+<td><code>save_strategy</code></td>
+<td>戦略定義 JSON <strong>本文</strong></td>
+<td>JSON 本文から戦略を登録</td>
+<td><code>alpha-forge strategy save &lt;tmpfile&gt;</code></td>
 </tr>
 <tr>
 <td><code>generate_pinescript</code></td>
 <td><code>strategy_id</code>, <code>with_webhook?</code></td>
-<td>TradingView 向け Pine Script</td>
+<td>Pine Script v6 ソース</td>
 <td><code>alpha-forge pine preview --strategy &lt;id&gt; [--with-webhook]</code></td>
+</tr>
+<tr>
+<td><code>forge_status</code></td>
+<td>（なし）</td>
+<td>能力 / 前提条件（doctor + version）。失敗しない</td>
+<td><code>alpha-forge system doctor --json</code></td>
+</tr>
+<tr>
+<td><code>list_journals</code></td>
+<td>（なし）</td>
+<td>ジャーナルを持つ戦略一覧</td>
+<td><code>alpha-forge journal list --json</code></td>
+</tr>
+<tr>
+<td><code>get_journal</code></td>
+<td><code>strategy_id</code></td>
+<td>戦略のフルジャーナル（snapshot / run / tag / note）</td>
+<td><code>alpha-forge journal show &lt;strategy_id&gt; --json</code></td>
+</tr>
+<tr>
+<td><code>exploration_status</code></td>
+<td><code>goal?</code></td>
+<td>戦略探索のカバレッジマップ（試行済み vs 未試行）</td>
+<td><code>alpha-forge explore status [--goal] --json</code></td>
+</tr>
+<tr>
+<td><code>get_indicator</code></td>
+<td><code>name</code></td>
+<td>指定テクニカル指標のメタデータ</td>
+<td><code>alpha-forge analyze indicator show &lt;name&gt; --json</code></td>
 </tr>
 </tbody>
 </table>
+<p>ツール固有の補足：</p>
+<ul>
+<li><code>save_strategy</code> はファイルパスではなく戦略定義の <strong>JSON 本文</strong> を文字列で受け取り（エージェントフレンドリー）、一時ファイルに書き出してから <code>strategy save</code> を実行します。</li>
+<li><code>fetch_data</code> は CLI に <code>--start</code> / <code>--end</code> が無いため <code>period</code> のみを公開します。</li>
+<li><code>forge_status</code> は read-only で、バイナリが無くても<strong>失敗しません</strong>。<code>binary_found: false</code> を返すため、クライアントは何かを実行する前に前提条件を切り分けられます。</li>
+<li><code>run_optimize</code> は既定で結果を保存（<code>save=true</code>）するため、その <code>saved_path</code> を <code>apply_optimization</code> に渡せます。<code>apply_optimization</code> は最適化パラメータを適用し、非対話（<code>--yes</code>）で <code>&lt;strategy_id&gt;_optimized</code> を保存します。</li>
+<li><code>get_indicator</code> は指標の<strong>メタデータのみ</strong>（説明・パラメータ・出力）を返します。価格データ上で指標を計算するコマンドは無いため、シンボルに対する計算は行いません。</li>
+<li>ジャーナル / 探索の読み取りは read-first で公開。書き込み系・ml / pairs 系コマンドは未公開です。</li>
+</ul>
 <div class="admonition info">
-<p class="admonition-title">戻り値は CLI の <code>--json</code> を踏襲</p>
-<p>各ツールの戻り値は、対応する CLI コマンドの <code>--json</code> 出力をそのまま返します。一覧系の envelope（<code>{"&lt;複数形&gt;": [...], "count": n}</code>）や not found 時の構造化エラー（<code>{"error": ..., "code": ..., "id": ...}</code>）といった規約も CLI と共通です。詳細は <a href="../cli-conventions/">CLI 規約</a> を参照してください。</p>
+<p class="admonition-title"><code>metric</code> は制約付き enum</p>
+<p><code>run_optimize</code> / <code>run_walk_forward</code> の <code>metric</code> 引数は制約付き <strong>enum</strong> で、クライアントが推測なしで有効な最適化対象を選べます: <code>sharpe_ratio</code>（既定）・<code>sortino_ratio</code>・<code>calmar_ratio</code>・<code>total_return_pct</code>・<code>cagr_pct</code>・<code>profit_factor</code>・<code>win_rate_pct</code>・<code>expectancy_pct</code>・<code>omega_ratio</code>。</p>
 </div>
+<h3 id="instructions">サーバ instructions と長時間ジョブ<a class="headerlink" href="#instructions" title="Permanent link">&para;</a></h3>
+<p>サーバは <code>instructions</code>（MCP <code>initialize</code> レスポンスで提示）を広告し、エンドツーエンドのワークフロー（<code>forge_status</code> → <code>fetch_data</code> → <code>run_backtest</code> → <code>run_optimize</code> → <code>run_walk_forward</code> → <code>apply_optimization</code> → <code>generate_pinescript</code>）を記述します。エージェントはどのツールをどの順で呼ぶべきか把握できます。</p>
+<p>run / fetch / save / apply 系は長時間ジョブです（<code>run_backtest</code> 最大 300 秒、<code>run_optimize</code> / <code>run_walk_forward</code> 最大 600 秒、その他は既定タイムアウト）。対応クライアントには MCP progress 通知で <strong>進捗</strong>を報告し（<code>start</code> → <code>complete</code> のブラケット。内部の <code>alpha-forge</code> サブプロセスは中間進捗を出さない）、ブロッキング呼び出しをイベントループ外で実行してサーバの応答性を保ちます。タイムアウト時は <code>timeout</code> エラーコードを返し、リトライ可能です。</p>
+<p>すべてのツールは MCP <strong>tool annotation</strong>（read 系には <code>readOnlyHint</code>、run / write 系には <code>openWorldHint</code> — <code>run_backtest</code> / <code>run_optimize</code> / <code>run_walk_forward</code> / <code>run_monte_carlo</code>・<code>fetch_data</code>・<code>save_strategy</code>・<code>apply_optimization</code>）を持ち、テキスト結果に加えて <strong>structured output</strong>（オブジェクト <code>outputSchema</code> を伴う <code>structuredContent</code>）を返します。</p>
 <hr />
 <h2 id="_6">エラーリファレンス<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>ツール呼び出しが失敗した場合、<code>code</code> 付きの構造化エラーが返ります。サーバ独自の code に加え、forge 側の構造化エラー（<code>strategy_not_found</code>・<code>authentication_required</code> 等）はそのまま passthrough されます。</p>
+<p>各ツールは例外を投げる代わりに、（常に成功扱いの）結果として統一された <strong>error envelope</strong> を返します。エージェントは自由文をパースせず、失敗カテゴリで機械的に分岐できます。</p>
+<ul>
+<li>成功: <code>{"ok": true, "data": { ...alpha-forge JSON... }, "error": null}</code></li>
+<li>失敗: <code>{"ok": false, "data": null, "error": {"code": "&lt;category&gt;", "message": "&lt;human readable&gt;", "detail": null}}</code></li>
+</ul>
+<p><code>error.code</code> は機械可読の失敗カテゴリです。<code>outputSchema</code> もこの <code>ok</code> / <code>data</code> / <code>error</code> 形状を反映します。</p>
 <table>
 <thead>
 <tr>
@@ -3069,19 +3225,29 @@
 </thead>
 <tbody>
 <tr>
-<td><code>timeout</code></td>
-<td>実行が制限時間を超過</td>
-<td>処理を分割するか、<code>trials</code> を減らす（既定値は下表参照）</td>
+<td><code>forge_not_found</code></td>
+<td>alpha-forge バイナリが見つからない</td>
+<td><code>PATH</code> を通すか、環境変数 <code>ALPHA_FORGE_BIN</code> で実行ファイルを明示</td>
 </tr>
 <tr>
-<td><code>execution_failed</code></td>
-<td>CLI がエラー終了（exit code ≠ 0）</td>
-<td>エラーメッセージを確認。引数・データ不足を疑う</td>
+<td><code>authentication_required</code></td>
+<td>未認証</td>
+<td><code>alpha-forge system auth login</code> を実行</td>
 </tr>
 <tr>
 <td><code>freemium_blocked</code></td>
 <td>Trial プランで利用不可の機能（Pine Script 生成等）</td>
-<td>有料プランへのアップグレードを検討</td>
+<td>停止 / 有料プランへのアップグレードを検討</td>
+</tr>
+<tr>
+<td><code>strategy_not_found</code></td>
+<td>指定 ID の戦略が存在しない</td>
+<td><code>list_strategies</code> で正しい ID を確認</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>実行が制限時間を超過</td>
+<td>リトライ可能。または処理を分割 / <code>trials</code> を減らす（既定値は下表）</td>
 </tr>
 <tr>
 <td><code>bad_output</code></td>
@@ -3089,24 +3255,9 @@
 <td>alpha-forge と alpha-forge-mcp のバージョン整合を確認</td>
 </tr>
 <tr>
-<td><code>invalid_argument</code></td>
-<td>引数が不正（識別子バリデーション失敗等）</td>
-<td><code>strategy_id</code> 等の値を見直す</td>
-</tr>
-<tr>
-<td><code>forge_not_found</code></td>
-<td>alpha-forge バイナリが見つからない</td>
-<td><code>PATH</code> を通すか、環境変数 <code>ALPHA_FORGE_BIN</code> で実行ファイルを明示</td>
-</tr>
-<tr>
-<td><code>strategy_not_found</code>（passthrough）</td>
-<td>指定 ID の戦略が存在しない</td>
-<td><code>list_strategies</code> で正しい ID を確認</td>
-</tr>
-<tr>
-<td><code>authentication_required</code>（passthrough）</td>
-<td>未認証</td>
-<td><code>alpha-forge system auth login</code> を実行</td>
+<td><code>execution_failed</code></td>
+<td>CLI がエラー終了（exit code ≠ 0）</td>
+<td>エラーメッセージを確認。引数・データ不足を疑う</td>
 </tr>
 </tbody>
 </table>
@@ -3128,7 +3279,7 @@
 <td>300 秒</td>
 </tr>
 <tr>
-<td><code>run_optimize</code></td>
+<td><code>run_optimize</code> / <code>run_walk_forward</code></td>
 <td>600 秒</td>
 </tr>
 </tbody>
@@ -3137,6 +3288,59 @@
 <p class="admonition-title">セキュリティ</p>
 <p>サブプロセス実行は <code>shell=False</code> で行い、シンボルや戦略 ID といった識別子はバリデーションを通してから CLI に渡します。シェルインジェクションのリスクを抑える設計です。</p>
 </div>
+<hr />
+<h2 id="_8">リソース<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>read-only データは MCP <strong>リソース</strong>としても公開され、Claude Code などのクライアントは明示的なツール呼び出しなしに <code>@</code> メンションで参照できます。read 系ツールと同じ alpha-forge コマンドに委譲し、<code>application/json</code> を返します。</p>
+<table>
+<thead>
+<tr>
+<th>リソース URI</th>
+<th>ペイロード</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>forge://strategies</code></td>
+<td>登録済み戦略すべて</td>
+</tr>
+<tr>
+<td><code>forge://strategy/{strategy_id}</code></td>
+<td>1 戦略の定義</td>
+</tr>
+<tr>
+<td><code>forge://results</code></td>
+<td>保存済みバックテスト結果すべて</td>
+</tr>
+<tr>
+<td><code>forge://result/{result_id}</code></td>
+<td>1 結果の指標・トレード</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">プロンプト<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>再利用可能なワークフローは MCP <strong>プロンプト</strong>として公開されます（Claude Code では <code>/mcp__alpha-forge__&lt;name&gt;</code> スラッシュコマンドとして表示）。</p>
+<table>
+<thead>
+<tr>
+<th>プロンプト</th>
+<th>引数</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backtest_and_review</code></td>
+<td><code>strategy_id</code>, <code>symbol</code></td>
+<td>バックテスト実行後、主要指標と注意点をレビュー</td>
+</tr>
+<tr>
+<td><code>optimize_and_verify</code></td>
+<td><code>strategy_id</code>, <code>symbol</code></td>
+<td>Optuna 最適化後、過学習の兆候をチェック</td>
+</tr>
+</tbody>
+</table>
+<p>Streamable HTTP トランスポート・RBAC・レート制限・監査ログは将来のリリースで対応予定です。</p>
 <hr />
 <h2 id="cli">CLI 直接実行との使い分け<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h2>
 <p>MCP と CLI 直接実行は排他ではなく、目的に応じて使い分けます。</p>
@@ -3151,7 +3355,7 @@
 <tbody>
 <tr>
 <td>公開範囲</td>
-<td>7 ツールに限定（ツール契約として安全）</td>
+<td>厳選された 18 ツール ＋ リソース / プロンプト（ツール契約として安全）</td>
 <td>全コマンドにアクセス可能</td>
 </tr>
 <tr>
@@ -3171,7 +3375,7 @@
 <li><strong>CLI 直接が向くケース</strong>: <code>/explore-strategies</code> のような自律探索ワークフローを組む、全コマンド・全オプションを使いたい場合。CLI のスキルと組み合わせる前提です。詳細は <a href="../">AI エージェント連携の概要</a> と <a href="../cli-conventions/">CLI 規約</a> を参照してください。</li>
 </ul>
 <hr />
-<h2 id="_8">リンク<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_10">リンク<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>GitHub リポジトリ</strong>: <a href="https://github.com/alforge-labs/alpha-forge-mcp">alforge-labs/alpha-forge-mcp</a></li>
 <li><strong>PyPI</strong>: <code>alpha-forge-mcp</code></li>

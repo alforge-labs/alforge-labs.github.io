@@ -2816,13 +2816,33 @@
 <h2 id="alpha-forge-self-version">alpha-forge self version<a class="headerlink" href="#alpha-forge-self-version" title="Permanent link">&para;</a></h2>
 <p>現在のバージョンと配布リポジトリ（<code>alforge-labs/alforge-labs.github.io</code>）の最新リリースを表示します。<code>self</code> 配下は Whop 認証チェックをスキップするため、ログイン状態に関係なく実行できます。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>version
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>version<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力する（機械可読・MCP / パイプ用途、issue #1225）</td>
+</tr>
+</tbody>
+</table>
 <p>サンプル出力：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>現在のバージョン: 0.3.1
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>最新リリース   : 0.4.0  (https://github.com/alforge-labs/alforge-labs.github.io/releases/tag/v0.4.0)
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>新しいバージョンが利用可能です: 0.4.0 (available)
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>アップデート: alpha-forge self update
 </code></pre></div>
+<p><code>--json</code> 指定時は stdout に純 JSON のみを出力します（装飾は stderr へ分離）。read-only コマンドの <code>--json</code> 網羅（issue #1225）の一環で、<code>system auth status</code> / <code>system docs list</code> / <code>data alt list</code> / <code>data alt info</code> と同様にエージェント / MCP からバージョンを機械判定できます。</p>
 <h2 id="alpha-forge-self-update">alpha-forge self update<a class="headerlink" href="#alpha-forge-self-update" title="Permanent link">&para;</a></h2>
 <p>alpha-forge バイナリを最新版に更新します。GitHub Releases から SHA256 検証付きでダウンロード → アトミックに <code>forge.dist</code> を差し替え → 旧バイナリを <code>forge.dist.bak-&lt;unix_ts&gt;</code> として最新 2 世代まで保持します。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update<span class="w">                 </span><span class="c1"># プロンプトで確認 [y/N]</span>

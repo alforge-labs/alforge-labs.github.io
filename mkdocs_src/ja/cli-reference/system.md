@@ -32,7 +32,10 @@ alpha-forge system auth logout
 
 ```bash
 alpha-forge system auth status
+alpha-forge system auth status --json   # 機械可読（MCP / パイプ用途、issue #1225）
 ```
+
+`--json` を付けると認証状態を構造化 JSON で取得できます（read-only コマンドの `--json` 網羅、issue #1225）。
 
 サンプル出力：
 
@@ -102,7 +105,10 @@ alpha-forge system init [OPTIONS] [DIRECTORY]
 |--------|------|
 | `.claude/skills/` | Claude Code スキル（forge-backtest, forge-analyze, forge-data） |
 | `.claude/commands/` | Claude Code スラッシュコマンド（explore-strategies, grid-tune 他 4 件） |
-| `.agents/skills/` | Codex スキル（explore-strategies, grid-tune 他 4 件） |
+| `.agents/skills/` | Codex スキル（explore-strategies, grid-tune ほか・forge-* スキルを含む） |
+| `AGENTS.md`（作業ディレクトリ直下） | Cursor / Windsurf / 汎用エージェント向けの足場ファイル（issue #1230）。CLI 基本ワークフローと配備済みスキルへの導線を日英併記で記述。多くのコーディングエージェントが読む汎用 `AGENTS.md` 規約に従う |
+
+`AGENTS.md` は Claude Code / Codex 以外（Cursor・Windsurf・GitHub Copilot など）のエージェントでも、init 直後に「alpha-forge をどう駆動するか」の文脈を受け取れるようにするための最小足場です（issue #1230）。`--no-claude` を付けた場合でも、ドキュメント類とともにスキップされます。
 
 ## サンプル出力
 
@@ -121,6 +127,7 @@ AlphaForge: 作業ディレクトリを初期化します...
 [3/4] ドキュメントファイル
   ✓ docs/quick-start.ja.md
   ✓ docs/user-guide.ja.md
+  ✓ AGENTS.md
   ...
 
 [4/4] AI アシスタント統合ファイル
@@ -131,13 +138,25 @@ AlphaForge: 作業ディレクトリを初期化します...
   ✓ .agents/skills/grid-tune/SKILL.md
   ...
 
-完了: 26 件を作成, 0 件をスキップ
+完了: 32 件を作成, 0 件をスキップ
 
 次のステップ:
   1. forge.yaml を編集して設定をカスタマイズしてください
   2. 以下を ~/.zshrc / ~/.bashrc に追加してください:
      export FORGE_CONFIG=/path/to/forge.yaml
+  3. クイックスタート: docs/quick-start.ja.md を参照
+
+エージェントスキル / コマンド（init で展開済み）:
+  - Claude Code: スラッシュコマンド /explore-strategies・/analyze-exploration・
+                 /update-market-data・/tune-live-strategies・/grid-tune
+      forge-backtest / forge-analyze / forge-data スキルも .claude/skills/ に展開済み
+  - Codex: .agents/skills/ に同名スキル（explore-strategies・forge-backtest ほか）
+  - 汎用エージェント（Cursor / Windsurf 等）: 作業ディレクトリ直下の AGENTS.md を参照
+  - 同梱資産の一覧: alpha-forge system docs list
 ```
+
+!!! tip "展開したスキル / コマンドの発見性（issue #1229）"
+    `system init` の完了案内には、展開したエージェントスキル / コマンド（Claude Code の `/explore-strategies` 等、Codex の同名スキル、汎用エージェント向けの `AGENTS.md`）の一覧と起動法が表示されます。配備済みの自律探索 / グリッド / チューニングスキルにエージェント・人間の双方が気づけるようにするためです。同梱資産の機械可読インデックスは [`alpha-forge system docs list`](#alpha-forge-system-docs-list)（`--json` 対応）で取得できます。
 
 ---
 
@@ -149,9 +168,10 @@ AlphaForge: 作業ディレクトリを初期化します...
 
 ```bash
 alpha-forge system docs list
+alpha-forge system docs list --json   # 機械可読（MCP / パイプ用途、issue #1225）
 ```
 
-利用可能な同梱ドキュメントの一覧を表示します。`✓` / `✗` でファイル存在を表します。
+利用可能な同梱ドキュメントの一覧を表示します。`✓` / `✗` でファイル存在を表します。`--json` を付けると機械可読な同梱資産インデックスとして取得でき（read-only コマンドの `--json` 網羅、issue #1225）、エージェントが配備済みドキュメント・スキル・コマンドを発見する導線になります（issue #1229）。
 
 ## alpha-forge system docs show
 
@@ -164,6 +184,50 @@ alpha-forge system docs show <NAME>
 | `NAME` | 引数（必須） | ドキュメント名（`alpha-forge system docs list` で確認） |
 
 ドキュメントの内容を標準出力に表示します。未知の名前を指定すると利用可能リストとともにエラー表示し、終了コード `1`。
+
+---
+
+## alpha-forge system describe
+
+全コマンドの**機械可読カタログ**（各葉コマンドのパス・オプション・型・`--json` 対応可否）を出力します（issue #1223）。エージェント / MCP 向けの **capability discovery** 用コマンドで、read-only かつネットワークアクセスを行いません。「どのコマンドがあり、どのオプションを取り、`--json` を持つか」を実行時に列挙できるため、エージェントが利用可能なコマンドセットを動的に把握できます。
+
+### 構文
+
+```bash
+alpha-forge system describe [--json]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力（機械可読・MCP / パイプ用途。`--json` 指定時は stdout に純 JSON のみ） |
+
+### サンプル出力（`--json`）
+
+`{"commands": [...], "count": n}` の envelope を返します。各要素は `command`（葉コマンド名）・`path`（フルパス）・`options`（`name` / `type` / `help` の配列）・`json_supported`（`--json` を持つか）を含みます。
+
+```json
+{
+  "commands": [
+    {
+      "command": "run",
+      "path": "backtest run",
+      "options": [
+        {"name": "--strategy", "type": "text", "help": "戦略名（--strategy-file と排他）"},
+        {"name": "--json", "type": "boolean", "help": "結果をJSON形式で標準出力する"}
+      ],
+      "json_supported": true
+    }
+  ],
+  "count": 115
+}
+```
+
+!!! tip "役割分担"
+    `system describe --json` が「**どのコマンドに `--json` があるか**」、[`--json` 出力リファレンス](../ai-agents/json-output-reference.md) が「**各コマンドの `--json` が返すフィールドの意味**」を担います。
+
+**Exit code**: `0`=成功。
 
 ---
 

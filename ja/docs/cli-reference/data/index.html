@@ -4459,7 +4459,26 @@
 <p>出力: <code>✅ &lt;SOURCE_KEY&gt;: &lt;N&gt;行を保存しました</code>。プロバイダー未登録時は <code>ClickException</code>。</p>
 <h2 id="alpha-forge-data-alt-list">alpha-forge data alt list<a class="headerlink" href="#alpha-forge-data-alt-list" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力する（機械可読・MCP / パイプ用途、issue #1225。装飾・進捗は stderr へ分離）</td>
+</tr>
+</tbody>
+</table>
 <p>サンプル出力：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>保存済み代替データ件数: 2
 <a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
@@ -4469,10 +4488,36 @@
 <p>保存済みの代替データが無い場合は次の 1 行のみを出力して終了コード <code>0</code> で終わります。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>保存済みの代替データはありません。
 </code></pre></div>
+<p><code>--json</code> 指定時は stdout に純 JSON のみを出力します。<strong>Exit code</strong>: <code>0</code>=成功, <code>1</code>=not found / 実行失敗, <code>2</code>=引数エラー。</p>
 <h2 id="alpha-forge-data-alt-info">alpha-forge data alt info<a class="headerlink" href="#alpha-forge-data-alt-info" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
 </code></pre></div>
-<p>ソースキー、時間足、行数、開始日・終了日、カラム、ファイルパス、ファイルサイズを表示。データ未取得時は <code>ClickException</code>。</p>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SOURCE_KEY</code></td>
+<td>引数（必須）</td>
+<td>-</td>
+<td>詳細を表示するデータソースキー</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力する（機械可読・MCP / パイプ用途、issue #1225）</td>
+</tr>
+</tbody>
+</table>
+<p>ソースキー、時間足、行数、開始日・終了日、カラム、ファイルパス、ファイルサイズを表示。データ未取得時は <code>ClickException</code>。<code>--json</code> 指定時は stdout に純 JSON のみを出力します（read-only コマンドの <code>--json</code> 網羅、issue #1225）。</p>
 <hr />
 <h2 id="_20">共通の挙動<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h2>
 <ul>

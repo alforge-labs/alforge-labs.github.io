@@ -511,7 +511,12 @@ alpha-forge data alt fetch <SOURCE_KEY> --start <YYYY-MM-DD> --end <YYYY-MM-DD>
 
 ```bash
 alpha-forge data alt list
+alpha-forge data alt list --json   # 機械可読（MCP / パイプ用途、issue #1225）
 ```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力する（機械可読・MCP / パイプ用途、issue #1225。装飾・進捗は stderr へ分離） |
 
 サンプル出力：
 
@@ -528,13 +533,21 @@ vix_termstructure         1d          1530   2020-01-01   2025-12-31
 保存済みの代替データはありません。
 ```
 
+`--json` 指定時は stdout に純 JSON のみを出力します。**Exit code**: `0`=成功, `1`=not found / 実行失敗, `2`=引数エラー。
+
 ## alpha-forge data alt info
 
 ```bash
 alpha-forge data alt info <SOURCE_KEY>
+alpha-forge data alt info <SOURCE_KEY> --json   # 機械可読（MCP / パイプ用途、issue #1225）
 ```
 
-ソースキー、時間足、行数、開始日・終了日、カラム、ファイルパス、ファイルサイズを表示。データ未取得時は `ClickException`。
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `SOURCE_KEY` | 引数（必須） | - | 詳細を表示するデータソースキー |
+| `--json` | フラグ | false | 結果を JSON で出力する（機械可読・MCP / パイプ用途、issue #1225） |
+
+ソースキー、時間足、行数、開始日・終了日、カラム、ファイルパス、ファイルサイズを表示。データ未取得時は `ClickException`。`--json` 指定時は stdout に純 JSON のみを出力します（read-only コマンドの `--json` 網羅、issue #1225）。
 
 ---
 

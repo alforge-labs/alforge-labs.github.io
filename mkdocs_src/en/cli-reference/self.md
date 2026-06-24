@@ -8,7 +8,12 @@ Show the current version alongside the latest release from the distribution repo
 
 ```bash
 alpha-forge self version
+alpha-forge self version --json   # machine-readable (for MCP / pipe use, issue #1225)
 ```
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Output JSON (machine-readable, for MCP / pipe use, issue #1225) |
 
 Sample output:
 
@@ -18,6 +23,8 @@ Latest release  : 0.4.0  (https://github.com/alforge-labs/alforge-labs.github.io
 A new version is available: 0.4.0
 To upgrade: alpha-forge self update
 ```
+
+With `--json`, only pure JSON is written to stdout (decorations go to stderr). As part of the `--json` coverage for read-only commands (issue #1225), agents / MCP can read the version programmatically — the same as `system auth status` / `system docs list` / `data alt list` / `data alt info`.
 
 ## alpha-forge self update
 

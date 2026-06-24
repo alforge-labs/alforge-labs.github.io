@@ -12,7 +12,7 @@
 
 | グループ | 種別 | サブコマンド | 説明 | 詳細 |
 |---|---|---|---|---|
-| **strategy** | コア | `list` `create` `save` `show` `migrate` `delete` `purge` `validate` `signals` `scaffold` `cost-presets` | 戦略 JSON の作成・登録・管理 | [strategy →](strategy.md) |
+| **strategy** | コア | `list` `templates` `create` `save` `show` `migrate` `delete` `purge` `validate` `signals` `scaffold` `cost-presets` | 戦略 JSON の作成・登録・管理 | [strategy →](strategy.md) |
 | **backtest** | コア | `run` `batch` `combine` `diagnose` `list` `report` `migrate` `compare` `portfolio` `chart` `monte-carlo` `signal-count` | バックテストの実行・結果分析 | [backtest →](backtest.md) |
 | **optimize** | コア | `run` `cross-symbol` `portfolio` `multi-portfolio` `walk-forward` `apply` `sensitivity` `history` `grid` `clean` | パラメータ最適化（ベイズ・グリッド・ウォークフォワード）・結果の掃除 | [optimize →](optimize.md) |
 | **explore** | コア | `run` `import` `log` `status` `health` `diagnose` `recommend {show,prune}` `coverage {update,build,show}` `result show` | 自律探索ループ（バックテスト → 最適化 → WFT） | [explore →](explore.md) |
@@ -22,7 +22,7 @@
 | **idea** | コア | `add` `list` `show` `status` `link` `tag` `note` `search` | 投資アイデアの管理・検索 | [idea →](idea.md) |
 | **data** | コア | `fetch` `list` `trend` `update` `alt {fetch,list,info}` `tv-mcp {chart,inspect,check,cache-clean}` | ヒストリカル・代替データ・TradingView MCP データ取得 | [data →](data.md) |
 | **analyze** | 補助 | `indicator {list,show}` `ml {train,models,walk-forward}` `ml dataset {build,feature-sets}` `pairs {scan,scan-all,build}` | 戦略分析の補助ツール群（テクニカル指標 / 機械学習 / ペアトレード） | [analyze →](analyze.md) |
-| **system** | 補助 | `init` `auth {login,logout,status}` `auth check op` `docs {list,show}` `config` | 運用ユーティリティ（ワークスペース初期化・Whop OAuth 認証・同梱ドキュメント・実効設定ダンプ） | [system →](system.md) |
+| **system** | 補助 | `init` `auth {login,logout,status}` `auth check op` `docs {list,show}` `describe` `config` `paths` `doctor` | 運用ユーティリティ（ワークスペース初期化・Whop OAuth 認証・同梱ドキュメント・機械可読カタログ・実効設定ダンプ・環境診断） | [system →](system.md) |
 | **self** | メタ | `version` `update` | `alpha-forge` バイナリ自身の操作（バージョン確認・自己更新） | [self →](self.md) |
 
 `{a,b,c}` 表記は同じ親グループ配下の選択肢を示します。たとえば `data alt {fetch,list,info}` は `alpha-forge data alt fetch` / `alpha-forge data alt list` / `alpha-forge data alt info` の 3 サブコマンドを表します。

@@ -32,7 +32,10 @@ Show current authentication status.
 
 ```bash
 alpha-forge system auth status
+alpha-forge system auth status --json   # machine-readable (for MCP / pipe use, issue #1225)
 ```
+
+With `--json`, the authentication status is returned as structured JSON (part of the `--json` coverage for read-only commands, issue #1225).
 
 Sample output:
 
@@ -102,7 +105,10 @@ alpha-forge system init [OPTIONS] [DIRECTORY]
 |-------------|----------|
 | `.claude/skills/` | Claude Code skills (forge-backtest, forge-analyze, forge-data) |
 | `.claude/commands/` | Claude Code slash commands (explore-strategies, grid-tune, and 4 more) |
-| `.agents/skills/` | Codex skills (explore-strategies, grid-tune, and 4 more) |
+| `.agents/skills/` | Codex skills (explore-strategies, grid-tune, and more — including the forge-* skills) |
+| `AGENTS.md` (working-directory root) | A scaffold file for Cursor / Windsurf / generic agents (issue #1230). Describes the core CLI workflow and links to the deployed skills, in both English and Japanese, following the generic `AGENTS.md` convention many coding agents read |
+
+`AGENTS.md` is a minimal scaffold so agents other than Claude Code / Codex (Cursor, Windsurf, GitHub Copilot, etc.) receive the "how to drive alpha-forge" context right after init (issue #1230). It is skipped along with the docs when `--no-claude` is passed.
 
 ## Sample output
 
@@ -121,6 +127,7 @@ AlphaForge: Initializing working directory...
 [3/4] Documentation files
   ✓ docs/quick-start.en.md
   ✓ docs/user-guide.en.md
+  ✓ AGENTS.md
   ...
 
 [4/4] AI assistant integration files
@@ -131,13 +138,25 @@ AlphaForge: Initializing working directory...
   ✓ .agents/skills/grid-tune/SKILL.md
   ...
 
-Done: 26 created, 0 skipped
+Done: 32 created, 0 skipped
 
 Next steps:
   1. Edit forge.yaml to customize your settings
   2. Add the following to ~/.zshrc / ~/.bashrc:
      export FORGE_CONFIG=/path/to/forge.yaml
+  3. Quick start: see docs/quick-start.en.md
+
+Agent skills / commands (deployed by init):
+  - Claude Code: slash commands /explore-strategies, /analyze-exploration,
+                 /update-market-data, /tune-live-strategies, /grid-tune
+      forge-backtest / forge-analyze / forge-data skills are also under .claude/skills/
+  - Codex: same-named skills under .agents/skills/ (explore-strategies, forge-backtest, etc.)
+  - Generic agents (Cursor / Windsurf, etc.): see AGENTS.md at the working-directory root
+  - List of bundled assets: alpha-forge system docs list
 ```
+
+!!! tip "Discoverability of deployed skills / commands (issue #1229)"
+    The `system init` completion summary lists the deployed agent skills / commands (Claude Code's `/explore-strategies` etc., Codex's same-named skills, and the `AGENTS.md` for generic agents) and how to invoke them, so both agents and humans notice the autonomous exploration / grid / tuning skills already in place. The machine-readable index of bundled assets is available via [`alpha-forge system docs list`](#alpha-forge-system-docs-list) (which supports `--json`).
 
 ---
 
@@ -149,9 +168,10 @@ Browse the documentation, skills, and command references bundled with `alpha-for
 
 ```bash
 alpha-forge system docs list
+alpha-forge system docs list --json   # machine-readable (for MCP / pipe use, issue #1225)
 ```
 
-List available bundled documents. `✓` / `✗` indicates whether each file exists.
+List available bundled documents. `✓` / `✗` indicates whether each file exists. With `--json` it serves as a machine-readable index of bundled assets (part of the `--json` coverage for read-only commands, issue #1225), giving agents a discovery path for deployed docs, skills, and commands (issue #1229).
 
 ## alpha-forge system docs show
 
@@ -164,6 +184,50 @@ alpha-forge system docs show <NAME>
 | `NAME` | argument (required) | Document name (find with `alpha-forge system docs list`) |
 
 Print the document content to stdout. Unknown names display the available list and exit with code `1`.
+
+---
+
+## alpha-forge system describe
+
+Emit a **machine-readable catalog of every command** (each leaf command's path, options, types, and `--json` support) (issue #1223). This is a **capability discovery** command for agents / MCP; it is read-only and performs no network access. Because it enumerates "which commands exist, which options they take, and which support `--json`" at runtime, agents can discover the available command set dynamically.
+
+### Synopsis
+
+```bash
+alpha-forge system describe [--json]
+```
+
+### Arguments and options
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Output JSON (machine-readable, for MCP / pipe use; with `--json`, only pure JSON goes to stdout) |
+
+### Sample output (`--json`)
+
+Returns a `{"commands": [...], "count": n}` envelope. Each entry includes `command` (leaf name), `path` (full path), `options` (array of `name` / `type` / `help`), and `json_supported` (whether it has `--json`).
+
+```json
+{
+  "commands": [
+    {
+      "command": "run",
+      "path": "backtest run",
+      "options": [
+        {"name": "--strategy", "type": "text", "help": "Strategy name (mutually exclusive with --strategy-file)"},
+        {"name": "--json", "type": "boolean", "help": "Output the result as JSON to stdout"}
+      ],
+      "json_supported": true
+    }
+  ],
+  "count": 115
+}
+```
+
+!!! tip "Division of responsibility"
+    `system describe --json` answers "**which commands have `--json`**", while the [`--json` output reference](../ai-agents/json-output-reference.md) answers "**what fields each command's `--json` returns**".
+
+**Exit code**: `0` = success.
 
 ---
 

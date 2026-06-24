@@ -10,6 +10,7 @@ Create, register, validate, and manage strategy JSON definitions. Covers scaffol
 | Command | Description |
 |---------|-------------|
 | [`alpha-forge strategy list`](#alpha-forge-strategy-list) | List all registered strategies |
+| [`alpha-forge strategy templates`](#alpha-forge-strategy-templates) | List built-in strategy templates (name + description) |
 | [`alpha-forge strategy create`](#alpha-forge-strategy-create) | Create a JSON file from a built-in template |
 | [`alpha-forge strategy scaffold`](#alpha-forge-strategy-scaffold) | Scaffold a strategy from a symbol, indicators, and a strategy type |
 | [`alpha-forge strategy save`](#alpha-forge-strategy-save) | Register a custom strategy from a JSON file |
@@ -54,6 +55,50 @@ When no strategies are registered:
 ```text
 No registered strategies found.
 ```
+
+---
+
+## alpha-forge strategy templates
+
+List the built-in strategy templates (name + description) (issue #1238). A **read-only** command for discovering the template names you can pass to `alpha-forge strategy create --template <NAME>`, along with a short summary of each. Passing an invalid name to `--template` (see below) also points you to this command.
+
+### Synopsis
+
+```bash
+alpha-forge strategy templates [--json]
+```
+
+### Arguments and options
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Output JSON (machine-readable, for MCP / pipe use; decorations and progress go to stderr) |
+
+### Sample output (text)
+
+The bundled template descriptions are emitted in Japanese (the CLI does not localize them):
+
+```text
+Built-in strategy templates: 7
+  sma_crossover_v1       短期SMAと長期SMAのクロスオーバー戦略
+  rsi_reversion_v1       RSIの売られすぎ/買われすぎを利用した逆張り戦略
+  macd_crossover_v1      MACDラインとシグナルラインのクロスオーバー戦略
+  ...
+```
+
+### Sample output (`--json`)
+
+```json
+{
+  "templates": [
+    {"name": "sma_crossover_v1", "description": "短期SMAと長期SMAのクロスオーバー戦略"},
+    {"name": "rsi_reversion_v1", "description": "RSIの売られすぎ/買われすぎを利用した逆張り戦略"}
+  ],
+  "count": 7
+}
+```
+
+For the breakdown of the bundled templates (4 basic + 1 range + 2 reference = 7 total), see the "Available templates" table under [`alpha-forge strategy create`](#alpha-forge-strategy-create). **Exit code**: `0` = success.
 
 ---
 
@@ -136,7 +181,7 @@ For a complete walkthrough see the *Strategy JSON Editing* section in [end-to-en
 
 | Situation | Behavior |
 |-----------|----------|
-| Unknown template name | Prints `❌ Unknown template name: <name>. Available: ...` to stderr along with a guidance block (save / specify JSON), then exits with code `1` (no raw `ValueError:` traceback) |
+| Unknown template name | Prints `Unknown template name: '<name>'. Available: ...` with the list of available templates and how to discover them (run `alpha-forge strategy templates` for names + descriptions), then exits with **code `2`** (an invalid option value is an argument error, handled via `click.UsageError`; no raw `ValueError:` traceback, issue #1238) |
 
 ---
 
