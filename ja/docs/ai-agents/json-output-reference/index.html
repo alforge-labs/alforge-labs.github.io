@@ -12,13 +12,13 @@
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/ja/docs/usecases/auto-trading/">
+        <link rel="canonical" href="https://alforgelabs.com/ja/docs/ai-agents/json-output-reference/">
       
       
-        <link rel="prev" href="../quants/">
+        <link rel="prev" href="../cli-conventions/">
       
       
-        <link rel="next" href="../ai-agents/">
+        <link rel="next" href="../../guides/end-to-end-workflow/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>自動売買検討者 - AlphaForge ドキュメント</title>
+        <title>--json 出力リファレンス - AlphaForge ドキュメント</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#-json" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              自動売買検討者
+              --json 出力リファレンス
             
           </span>
         </div>
@@ -268,11 +268,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../ai-agents/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -288,12 +290,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../../guides/end-to-end-workflow/" class="md-tabs__link">
           
   
@@ -584,26 +584,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -621,7 +626,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -639,7 +644,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-agents/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -667,7 +672,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-agents/quickstart/" class="md-nav__link">
+      <a href="../quickstart/" class="md-nav__link">
         
   
   
@@ -695,7 +700,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-agents/exploration-workflow/" class="md-nav__link">
+      <a href="../exploration-workflow/" class="md-nav__link">
         
   
   
@@ -723,7 +728,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-agents/mcp-reference/" class="md-nav__link">
+      <a href="../mcp-reference/" class="md-nav__link">
         
   
   
@@ -751,7 +756,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-agents/cli-conventions/" class="md-nav__link">
+      <a href="../cli-conventions/" class="md-nav__link">
         
   
   
@@ -776,10 +781,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../ai-agents/json-output-reference/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    --json 出力リファレンス
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -795,6 +827,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#envelope-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        envelope の 3 系統
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema_version-forge_version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        schema_version / forge_version
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="schema_version / forge_version">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        増分ルール（いつ bump するか）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backtest-run-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest run --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimize-walk-forward-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        optimize walk-forward --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backtest-monte-carlo-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest monte-carlo --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一覧系の envelope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エラー出力
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連リンク
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -811,31 +968,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -853,7 +1005,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1092,31 +1244,26 @@
                 
   
   
-    
   
   
-  
     
     
     
     
       
       
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -1134,7 +1281,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1152,7 +1299,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../usecases/" class="md-nav__link">
         
   
   
@@ -1180,7 +1327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tradingview/" class="md-nav__link">
+      <a href="../../usecases/tradingview/" class="md-nav__link">
         
   
   
@@ -1208,7 +1355,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../python-dev/" class="md-nav__link">
+      <a href="../../usecases/python-dev/" class="md-nav__link">
         
   
   
@@ -1236,7 +1383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../quants/" class="md-nav__link">
+      <a href="../../usecases/quants/" class="md-nav__link">
         
   
   
@@ -1261,37 +1408,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    自動売買検討者
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../usecases/auto-trading/" class="md-nav__link">
         
   
   
@@ -1307,81 +1427,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目次">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目次
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        エンドツーエンドのシステム構成
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        各コンポーネントの役割
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        実運用前のチェックリスト
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        はじめの一歩
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        関連ドキュメント
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1394,7 +1439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/" class="md-nav__link">
+      <a href="../../usecases/ai-agents/" class="md-nav__link">
         
   
   
@@ -1422,7 +1467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../discretionary/" class="md-nav__link">
+      <a href="../../usecases/discretionary/" class="md-nav__link">
         
   
   
@@ -1450,7 +1495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../comparison/" class="md-nav__link">
+      <a href="../../usecases/comparison/" class="md-nav__link">
         
   
   
@@ -2744,54 +2789,104 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#envelope-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        envelope の 3 系統
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema_version-forge_version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        schema_version / forge_version
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="schema_version / forge_version">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        増分ルール（いつ bump するか）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backtest-run-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest run --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimize-walk-forward-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        optimize walk-forward --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backtest-monte-carlo-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest monte-carlo --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envelope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一覧系の envelope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エラー出力
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        エンドツーエンドのシステム構成
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        各コンポーネントの役割
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        実運用前のチェックリスト
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        はじめの一歩
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        関連ドキュメント
+        関連リンク
       
     </span>
   </a>
@@ -2815,75 +2910,336 @@
 
 
 
-<h1 id="_1">自動売買検討者向け<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>バックテストで有望な戦略を見つけた後、実際の自動発注まで一貫した環境を構築したい方向けです。</p>
-<h2 id="_2">エンドツーエンドのシステム構成<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p><img alt="AlphaForge自動売買パイプライン全体アーキテクチャ図" src="../../assets/illustrations/auto-trading/auto-trading-pipeline-architecture-ja.png" /></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>AlphaForge（戦略開発・検証）
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>      ↓  Pine Script生成
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>TradingView（アラート発火）
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      ↓  Webhook
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Alpha Strike（発注処理）
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      ↓
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>証券会社API（実際の注文）
-</code></pre></div>
-<h2 id="_3">各コンポーネントの役割<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h1 id="-json"><code>--json</code> 出力リファレンス<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h1>
+<p>このページは alpha-forge CLI の <code>--json</code> 出力の <strong>契約（スキーマ）リファレンス</strong>です。エージェントや MCP・パイプから出力をパースする際の安定した参照点として、主要コマンドのトップレベルフィールド・型・envelope 規約と、<code>schema_version</code> / <code>forge_version</code> の意味および増分ルールを定めます。</p>
+<p>stdout 純度・envelope・終了コードの規約そのものは <a href="../cli-conventions/">エージェントから見た CLI 規約</a> を参照してください。本ページはそこに「実際に出るフィールドの一覧」を補完します。</p>
+<div class="admonition tip">
+<p class="admonition-title">実行時カタログ</p>
+<p>全コマンドの <strong>機械可読カタログ</strong>（どのコマンドが <code>--json</code> を持つか・各オプションの型）は <code>alpha-forge system describe --json</code> で取得できます。本ページが「<code>--json</code> が返すフィールドの意味」、<code>system describe --json</code> が「どのコマンドに <code>--json</code> があるか」という役割分担です。</p>
+</div>
+<hr />
+<h2 id="envelope-3">envelope の 3 系統<a class="headerlink" href="#envelope-3" title="Permanent link">&para;</a></h2>
+<p>出力形状はコマンドの性質ごとに 3 系統に分かれます。</p>
+<ul>
+<li><strong>一覧系</strong>（<code>list</code> / <code>scan-all</code> 等）: <code>{"&lt;複数形&gt;": [...], "count": n}</code> の envelope。データ不在でも空配列 + 終了コード <code>0</code>。</li>
+<li><strong>単一実行系</strong>（<code>backtest run</code> / <code>optimize walk-forward</code> / <code>backtest monte-carlo</code> 等）: envelope を持たない <strong>生のオブジェクト</strong>（トップレベルに指標やメタフィールドが並ぶ）。</li>
+<li><strong>エラー</strong>: <code>{"error": ..., "code": ..., "id": ...}</code> の 3 キー固定（本ページ下部の「エラー出力」を参照）。</li>
+</ul>
+<p>パーセント表記のフィールド（<code>*_pct</code>）は <strong>既にパーセント単位の数値</strong>です（例: <code>17.39</code> は +17.39%）。追加で 100 倍しないこと。</p>
+<hr />
+<h2 id="schema_version-forge_version"><code>schema_version</code> / <code>forge_version</code><a class="headerlink" href="#schema_version-forge_version" title="Permanent link">&para;</a></h2>
+<p><code>backtest run --json</code> の出力には次の 2 つのメタフィールドが含まれます。</p>
 <table>
 <thead>
 <tr>
-<th>コンポーネント</th>
-<th>役割</th>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>AlphaForge</strong></td>
-<td>戦略のバックテスト・最適化・ウォークフォワード検証</td>
+<td><code>schema_version</code></td>
+<td>int</td>
+<td><strong>CLI 出力 JSON のスキーマ世代</strong>。現在 <code>1</code>。下記の増分ルールに従って bump する</td>
 </tr>
 <tr>
-<td><strong>Pine Script</strong></td>
-<td>TradingViewでのリアルタイムシグナル生成</td>
-</tr>
-<tr>
-<td><strong>TradingViewアラート</strong></td>
-<td>シグナル発火時にWebhookを送信</td>
-</tr>
-<tr>
-<td><strong>Alpha Strike</strong></td>
-<td>Webhookを受信して証券会社APIに発注</td>
+<td><code>forge_version</code></td>
+<td>string</td>
+<td>この出力を生成した alpha-forge のバージョン（例 <code>"0.15.0"</code>）</td>
 </tr>
 </tbody>
 </table>
-<h2 id="_4">実運用前のチェックリスト<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p><img alt="自動売買リスク管理3段階ゲート図" src="../../assets/illustrations/auto-trading/auto-trading-risk-gate-ja.png" /></p>
-<div class="admonition warning">
-<p class="admonition-title">本番稼働前に必ず確認</p>
-<ul>
-<li>[ ] ウォークフォワード検証でIS/OOS劣化率が許容範囲内（目安：50%以下）</li>
-<li>[ ] 最大ドローダウンが許容できる水準か確認</li>
-<li>[ ] 証拠金・ポジションサイズのリスク管理設定を確認</li>
-<li>[ ] 小さいサイズでのペーパートレード期間を設ける</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">戦略 JSON 側の schema_version とは別物</p>
+<p>ここでの <code>schema_version</code> は <strong>CLI 出力 JSON の契約世代</strong>であり、戦略 JSON ファイル側の <code>schema_version</code>（<code>strategy show --json</code> で見える戦略定義のスキーマ世代）とは別概念です。</p>
 </div>
-<h2 id="_5">はじめの一歩<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1. バックテストで戦略を確定</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>my_strategy
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 2. Pine Scriptを生成</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>my_strategy
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># 3. TradingViewにインポートしてアラート設定</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># （TradingView UIで実施）</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># 4. Alpha Strike経由で発注テスト</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># （Alpha Strike設定ガイドを参照）</span>
+<h3 id="bump">増分ルール（いつ bump するか）<a class="headerlink" href="#bump" title="Permanent link">&para;</a></h3>
+<p><code>schema_version</code> は <strong>互換性を壊す変更</strong>を入れたときにのみ +1 します。</p>
+<table>
+<thead>
+<tr>
+<th>変更内容</th>
+<th>bump するか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>既存フィールドの <strong>削除</strong> / <strong>改名</strong></td>
+<td><strong>する</strong></td>
+</tr>
+<tr>
+<td>既存フィールドの <strong>型変更</strong> / <strong>意味変更</strong></td>
+<td><strong>する</strong></td>
+</tr>
+<tr>
+<td><strong>新規フィールドの追加</strong>（既存は不変）</td>
+<td><strong>しない</strong>（追加は後方互換）</td>
+</tr>
+<tr>
+<td>envelope 形状の変更</td>
+<td><strong>する</strong></td>
+</tr>
+<tr>
+<td>表示整形のみ（compact ↔ indent・キー順）</td>
+<td><strong>しない</strong></td>
+</tr>
+</tbody>
+</table>
+<p>原則は <strong>「追加は互換・削除/改名/型変更/意味変更は非互換」</strong>。<code>forge_version</code> は毎リリースで自然に進むため、「いつ変わったか」の追跡は <code>forge_version</code>、「消費側コードを直す必要があるか」の判断は <code>schema_version</code> で行えます。</p>
+<hr />
+<h2 id="backtest-run-json"><code>backtest run --json</code><a class="headerlink" href="#backtest-run-json" title="Permanent link">&para;</a></h2>
+<p>envelope なしの生オブジェクトで、メトリクスがトップレベルに並びます（実測で 60+ フィールド）。ここでは契約に関わる主要フィールドのみを示します。</p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>出力条件</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema_version</code></td>
+<td>int</td>
+<td>常に</td>
+<td>CLI 出力スキーマ世代</td>
+</tr>
+<tr>
+<td><code>forge_version</code></td>
+<td>string</td>
+<td>常に</td>
+<td>生成元バージョン</td>
+</tr>
+<tr>
+<td><code>warnings</code></td>
+<td>array</td>
+<td>常に</td>
+<td>実行時の注意（少トレード等）</td>
+</tr>
+<tr>
+<td><code>freemium_limit_notices</code></td>
+<td>array</td>
+<td>常に</td>
+<td>Trial 制限通知（<code>code</code> を含む）</td>
+</tr>
+<tr>
+<td><code>run_id</code></td>
+<td>string</td>
+<td>実 run があるとき</td>
+<td>run の識別子</td>
+</tr>
+<tr>
+<td><code>result_id</code></td>
+<td>string</td>
+<td>結果保存があるとき</td>
+<td>保存済み結果の識別子</td>
+</tr>
+<tr>
+<td><code>pre_filter_pass</code></td>
+<td>bool</td>
+<td>pre-filter 評価時</td>
+<td>事前フィルタを通過したか</td>
+</tr>
+<tr>
+<td><code>pre_filter</code></td>
+<td>object</td>
+<td>pre-filter 評価時</td>
+<td>適用閾値（<code>sharpe_min</code> / <code>max_dd_max</code> / <code>monthly_volume_usd_min</code> / <code>min_trades</code> / <code>goal</code>）</td>
+</tr>
+<tr>
+<td><code>criteria_check</code></td>
+<td>object</td>
+<td>合否基準があるとき</td>
+<td>合否 verdict（本体にマージ）</td>
+</tr>
+<tr>
+<td><code>next_step</code></td>
+<td>array</td>
+<td>次アクション提示時</td>
+<td>次コマンド候補（文字列配列）</td>
+</tr>
+</tbody>
+</table>
+<p><code>--split</code> を付けると IS/OOS 比較メタが追加されます: <code>out_of_sample_metrics</code>（OOS メトリクス）・<code>overfitting_score</code>・<code>overfitting_risk</code>・<code>walk_forward_summary</code>（<code>is_sharpe</code> / <code>oos_sharpe</code> / <code>is_return_pct</code> / <code>oos_return_pct</code> / <code>overfitting_score</code> / <code>overfitting_risk</code>）。</p>
+<p><code>--summary</code> を付けると per-trade / per-bar 等の重い配列を除外した軽量 JSON になります（メタフィールドの契約は不変）。</p>
+<hr />
+<h2 id="optimize-walk-forward-json"><code>optimize walk-forward --json</code><a class="headerlink" href="#optimize-walk-forward-json" title="Permanent link">&para;</a></h2>
+<p>envelope なしの生オブジェクト。</p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>strategy</code> / <code>metric</code></td>
+<td>string</td>
+<td>対象銘柄・戦略 ID・最適化メトリクス</td>
+</tr>
+<tr>
+<td><code>windows</code></td>
+<td>array</td>
+<td>ウィンドウごとの結果（IS/OOS メトリクス・<code>skip_reason</code> 等）</td>
+</tr>
+<tr>
+<td><code>is_valid_windows</code> / <code>valid_oos_windows</code> / <code>total_windows</code> / <code>skipped_windows</code></td>
+<td>int</td>
+<td>各種ウィンドウ数</td>
+</tr>
+<tr>
+<td><code>all_is_invalid</code></td>
+<td>bool</td>
+<td>全ウィンドウで IS 最適化が失敗したか</td>
+</tr>
+<tr>
+<td><code>freemium_limit_notices</code></td>
+<td>array</td>
+<td>Trial 制限通知</td>
+</tr>
+<tr>
+<td><code>pre_filter_pass</code></td>
+<td>bool | null</td>
+<td>平均 OOS メトリクスが閾値以上か（判定不能なら <code>null</code>）</td>
+</tr>
+<tr>
+<td><code>pre_filter</code></td>
+<td>object</td>
+<td>適用閾値（<code>sharpe_min</code> / <code>max_dd_max</code> / <code>min_trades</code> / <code>goal</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><code>pre_filter_pass</code> / <code>pre_filter</code> は <code>--goal</code> を省略しても既定閾値で必ず載り、<code>backtest run</code> と命名・契約を揃えています。</p>
+<hr />
+<h2 id="backtest-monte-carlo-json"><code>backtest monte-carlo --json</code><a class="headerlink" href="#backtest-monte-carlo-json" title="Permanent link">&para;</a></h2>
+<p>保存済みバックテスト結果のトレード履歴からモンテカルロシミュレーションを実行します。envelope なしの生オブジェクト。</p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initial_capital</code></td>
+<td>number</td>
+<td>初期資産</td>
+</tr>
+<tr>
+<td><code>simulations_run</code></td>
+<td>int</td>
+<td>試行回数</td>
+</tr>
+<tr>
+<td><code>mean_final_equity</code> / <code>median_final_equity</code> / <code>worst_final_equity</code> / <code>best_final_equity</code></td>
+<td>number</td>
+<td>最終資産の統計</td>
+</tr>
+<tr>
+<td><code>mean_max_drawdown_pct</code> / <code>max_drawdown_95pct</code></td>
+<td>number</td>
+<td>最大ドローダウン（平均・95 パーセンタイル）</td>
+</tr>
+<tr>
+<td><code>ruin_probability_pct</code></td>
+<td>number</td>
+<td>破産確率（%）</td>
+</tr>
+<tr>
+<td><code>pre_filter_pass</code></td>
+<td>bool | null</td>
+<td>破産確率が既定閾値（5%）以下か</td>
+</tr>
+<tr>
+<td><code>pre_filter</code></td>
+<td>object</td>
+<td><code>max_ruin_pct</code>（既定 5.0）</td>
+</tr>
+</tbody>
+</table>
+<p>有効なトレードが 10 件未満の場合は stderr にエラーを出して終了コード <code>1</code> になります（純 JSON は出ません）。</p>
+<hr />
+<h2 id="envelope">一覧系の envelope<a class="headerlink" href="#envelope" title="Permanent link">&para;</a></h2>
+<p>一覧・スキャン系は <code>{"&lt;複数形&gt;": [...], "count": n}</code> を返します。データ不在でも空配列 + 終了コード <code>0</code> です。</p>
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>envelope キー</th>
+<th>要素の主なキー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>strategy list --json</code></td>
+<td><code>strategies</code> / <code>count</code></td>
+<td><code>strategy_id</code> / <code>name</code> / <code>version</code> / <code>asset_type</code> / <code>timeframe</code> / <code>tags</code> / <code>notes</code> / <code>created_at</code> / <code>updated_at</code></td>
+</tr>
+<tr>
+<td><code>backtest list --json</code></td>
+<td><code>results</code> / <code>count</code></td>
+<td>保存済み結果の行（<code>strategy_id</code> / <code>symbol</code> / 主要メトリクス）</td>
+</tr>
+<tr>
+<td><code>analyze indicator list --json</code></td>
+<td><code>indicators</code> / <code>count</code></td>
+<td><code>name</code> / <code>category</code>（<code>--detail</code> で <code>params</code> も）</td>
+</tr>
+<tr>
+<td><code>analyze pairs scan-all --json</code></td>
+<td><code>pairs</code> / <code>count</code></td>
+<td>共和分検定結果（加えて <code>cointegrated_count</code>）</td>
+</tr>
+<tr>
+<td><code>system describe --json</code></td>
+<td><code>commands</code> / <code>count</code></td>
+<td><code>command</code> / <code>path</code> / <code>options</code> / <code>json_supported</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_1">エラー出力<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>存在しない ID を渡した等の not found 系エラーは、<code>--json</code> 指定時に stdout へ次の 3 キー固定の JSON を出し、終了コード <code>1</code> で終了します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;戦略 &#39;does_not_exist&#39; が見つかりません&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;strategy_not_found&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;does_not_exist&quot;</span><span class="p">}</span>
 </code></pre></div>
-<h2 id="_6">関連ドキュメント<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error</code></td>
+<td>string</td>
+<td>ローカライズ済みメッセージ</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>機械判定用の安定コード（例 <code>strategy_not_found</code>）</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>string</td>
+<td>見つからなかったリソース ID</td>
+</tr>
+</tbody>
+</table>
+<p><code>--json</code> を付けない場合は stderr に 1 行のメッセージを出して終了コード <code>1</code>（stdout は空）。引数エラー（Click <code>UsageError</code>）は終了コード <code>2</code> です。</p>
+<hr />
+<h2 id="_2">関連リンク<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../guides/tradingview-alpha-strike/">TradingView × Alpha Strike 統合ガイド</a> — Webhookから発注までの接続方法</li>
-<li><a href="../../guides/tradingview-pine-integration/">TradingView × Pine Script 統合ガイド</a> — Pine Script生成と調整方法</li>
-<li><a href="../../guides/end-to-end-workflow/">エンドツーエンド戦略開発ワークフロー</a> — 開発から発注までの全体像</li>
-<li><a href="../../guides/trial-limits/">Trial 制限について</a> — Trial プランでできること・できないこと</li>
+<li><a href="../cli-conventions/">エージェントから見た CLI 規約</a> — stdout 純度・envelope・終了コードの規約</li>
+<li><a href="../mcp-reference/">alpha-forge-mcp リファレンス</a> — MCP 経由での利用</li>
 </ul>
 
 
@@ -2920,7 +3276,7 @@
       <nav class="md-footer__inner md-grid" aria-label="フッター" >
         
           
-          <a href="../quants/" class="md-footer__link md-footer__link--prev" aria-label="前: クオンツ・研究者">
+          <a href="../cli-conventions/" class="md-footer__link md-footer__link--prev" aria-label="前: エージェントから見た CLI 規約">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2930,20 +3286,20 @@
                 前
               </span>
               <div class="md-ellipsis">
-                クオンツ・研究者
+                エージェントから見た CLI 規約
               </div>
             </div>
           </a>
         
         
           
-          <a href="../ai-agents/" class="md-footer__link md-footer__link--next" aria-label="次: AIエージェント利用者">
+          <a href="../../guides/end-to-end-workflow/" class="md-footer__link md-footer__link--next" aria-label="次: エンドツーエンド戦略開発ワークフロー">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 次
               </span>
               <div class="md-ellipsis">
-                AIエージェント利用者
+                エンドツーエンド戦略開発ワークフロー
               </div>
             </div>
             <div class="md-footer__button md-icon">

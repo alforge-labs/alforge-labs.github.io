@@ -64,6 +64,7 @@ nav:
       - AI-Driven Strategy Exploration Workflow: ai-agents/exploration-workflow.md
       - alpha-forge-mcp Reference: ai-agents/mcp-reference.md
       - CLI Conventions for Agents: ai-agents/cli-conventions.md
+      - --json Output Reference: ai-agents/json-output-reference.md
   - Guides:
       - End-to-End Strategy Development Workflow: guides/end-to-end-workflow.md
       - Output Examples: guides/output-examples.md
