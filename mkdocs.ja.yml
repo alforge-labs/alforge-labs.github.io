@@ -64,6 +64,7 @@ nav:
       - AI 駆動の戦略探索ワークフロー: ai-agents/exploration-workflow.md
       - alpha-forge-mcp リファレンス: ai-agents/mcp-reference.md
       - エージェントから見た CLI 規約: ai-agents/cli-conventions.md
+      - --json 出力リファレンス: ai-agents/json-output-reference.md
   - ガイド:
       - エンドツーエンド戦略開発ワークフロー: guides/end-to-end-workflow.md
       - 実行結果と成果物サンプル: guides/output-examples.md

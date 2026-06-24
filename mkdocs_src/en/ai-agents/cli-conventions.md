@@ -63,6 +63,8 @@ echo "exit: $?"   # 1
 !!! tip "Progress bars vs. JSON"
     Backtest and optimization progress bars are written to stderr. Capturing `--json` output into a variable will never get the JSON corrupted by progress noise.
 
+For the per-command `--json` output field list, types, and the meaning and increment rules of `schema_version`, see the [`--json` output reference](./json-output-reference.md).
+
 ---
 
 ## Exit-code contract
