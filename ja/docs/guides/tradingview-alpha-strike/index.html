@@ -3558,6 +3558,10 @@ crypto order を送ると moomoo SDK が <code>the type of environment param is 
 </div>
 <hr />
 <h2 id="4-pine-v6-json">4. Pine v6 から完全な JSON を生成する<a class="headerlink" href="#4-pine-v6-json" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">手書き不要: <code>alpha-forge pine generate --with-webhook</code></p>
+<p>以下は手書きの参考例ですが、<code>alpha-forge pine generate --strategy &lt;id&gt; --with-webhook</code> を使えばこの <code>passphrase</code> input・<code>make_payload()</code>・<code>alert()</code> ブロックが自動で配線済みの Pine が出力されます（<a href="../tradingview-pine-integration/">Pine 反映ガイド</a> 参照）。</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>//@version=6
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>strategy(&quot;alpha-strike webhook demo&quot;, overlay=true)
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>

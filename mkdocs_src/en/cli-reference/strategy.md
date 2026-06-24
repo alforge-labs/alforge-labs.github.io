@@ -408,6 +408,9 @@ Use `purge` to wipe a strategy completely; use `delete --with-results` when you 
 
 Generate a ready-to-use strategy JSON from a symbol, a set of indicators, and a strategy type. Unlike `create` (which copies a built-in template you must edit), `scaffold` builds the indicators, entry/exit conditions, and risk-management block for you. You must specify **one of** `--output` (write to a file) or `--save` (register in the strategy registry) as the destination; if neither is given the command prints `Error: specify --output and/or --save` and exits with code `1` (it does not print JSON to stdout). This is the primary strategy-generation entrypoint used by the `/explore-strategies` workflow.
 
+!!! tip "Indicator catalog (machine-readable)"
+    The indicators accepted by `--indicators`, along with each one's `params` (name / default / type), example, and Pine-conversion support, are queryable via [`alpha-forge analyze indicator list --json`](analyze.md#alpha-forge-analyze-indicator-list) / [`alpha-forge analyze indicator show <NAME> --json`](analyze.md#alpha-forge-analyze-indicator-show). This is the authoritative source for `type` names, parameter names, and defaults when hand-writing a strategy JSON.
+
 ### Synopsis
 
 ```bash

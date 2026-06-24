@@ -170,6 +170,9 @@ Use `asset_class:"RAW"` to pass an instrument through unchanged.
 
 ## 4. Building full JSON in Pine v6
 
+!!! tip "No hand-editing: `alpha-forge pine generate --with-webhook`"
+    The snippet below is a hand-written reference, but `alpha-forge pine generate --strategy <id> --with-webhook` emits Pine with this `passphrase` input, `make_payload()`, and `alert()` blocks already wired in (see the [Pine integration guide](tradingview-pine-integration.md)).
+
 ```pinescript
 //@version=6
 strategy("alpha-strike webhook demo", overlay=true)

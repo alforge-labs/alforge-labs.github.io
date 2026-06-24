@@ -2,6 +2,9 @@
 
 `alpha-forge pine generate` で生成した `.pine` ファイルを TradingView に貼り付けてアラートを設定します。
 
+!!! tip "発注連携まで一気に: `--with-webhook`"
+    alpha-strike への自動発注まで繋ぐ場合は `alpha-forge pine generate --strategy <id> --with-webhook` で生成してください。`input.string`（`passphrase=REPLACE_ME` / `confirm=true`）+ `make_payload()` + `alert()` が配線済みの Pine が出力され、手書きで `alert()` を組む必要がなくなります。下記アラート手順で **Message 欄を空のまま** Webhook URL を指定するだけで発注ブリッジが完成します（ペイロード仕様・受信側設定は [TradingView と alpha-strike の連携](tradingview-alpha-strike.md)）。
+
 ## 1. Pine エディタを開く
 
 TradingView でチャートを開き、画面下部の「Pine エディタ」タブをクリックします。
