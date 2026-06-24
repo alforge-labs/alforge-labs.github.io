@@ -4459,7 +4459,26 @@
 <p>Output: <code>✅ &lt;SOURCE_KEY&gt;: saved &lt;N&gt; rows</code>. Unregistered providers raise <code>ClickException</code>.</p>
 <h2 id="alpha-forge-data-alt-list">alpha-forge data alt list<a class="headerlink" href="#alpha-forge-data-alt-list" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Output JSON (machine-readable, for MCP / pipe use, issue #1225; decorations and progress go to stderr)</td>
+</tr>
+</tbody>
+</table>
 <p>Sample output:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>Stored alternative data count: 2
 <a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
@@ -4469,10 +4488,36 @@
 <p>When no alternative data has been stored, the command prints a single line and exits with code <code>0</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>No stored alternative data found.
 </code></pre></div>
+<p>With <code>--json</code>, only pure JSON is written to stdout. <strong>Exit code</strong>: <code>0</code> = success, <code>1</code> = not found / execution failure, <code>2</code> = argument error.</p>
 <h2 id="alpha-forge-data-alt-info">alpha-forge data alt info<a class="headerlink" href="#alpha-forge-data-alt-info" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
-<p>Shows source key, interval, row count, start / end dates, columns, file path, and file size. If data is missing, raises <code>ClickException</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SOURCE_KEY</code></td>
+<td>argument (required)</td>
+<td>-</td>
+<td>Data source key to inspect</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Output JSON (machine-readable, for MCP / pipe use, issue #1225)</td>
+</tr>
+</tbody>
+</table>
+<p>Shows source key, interval, row count, start / end dates, columns, file path, and file size. If data is missing, raises <code>ClickException</code>. With <code>--json</code>, only pure JSON is written to stdout (part of the <code>--json</code> coverage for read-only commands, issue #1225).</p>
 <hr />
 <h2 id="common-behavior">Common behavior<a class="headerlink" href="#common-behavior" title="Permanent link">&para;</a></h2>
 <ul>

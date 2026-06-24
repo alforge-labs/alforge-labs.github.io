@@ -8,7 +8,12 @@ alpha-forge バイナリ自身を更新・確認するためのコマンド群�
 
 ```bash
 alpha-forge self version
+alpha-forge self version --json   # 機械可読（MCP / パイプ用途、issue #1225）
 ```
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力する（機械可読・MCP / パイプ用途、issue #1225） |
 
 サンプル出力：
 
@@ -18,6 +23,8 @@ alpha-forge self version
 新しいバージョンが利用可能です: 0.4.0 (available)
 アップデート: alpha-forge self update
 ```
+
+`--json` 指定時は stdout に純 JSON のみを出力します（装飾は stderr へ分離）。read-only コマンドの `--json` 網羅（issue #1225）の一環で、`system auth status` / `system docs list` / `data alt list` / `data alt info` と同様にエージェント / MCP からバージョンを機械判定できます。
 
 ## alpha-forge self update
 

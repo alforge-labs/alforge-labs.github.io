@@ -10,6 +10,7 @@
 | コマンド | 説明 |
 |---------|------|
 | [`alpha-forge strategy list`](#alpha-forge-strategy-list) | 登録済み戦略の一覧を表示する |
+| [`alpha-forge strategy templates`](#alpha-forge-strategy-templates) | 組み込み戦略テンプレートの一覧（名前＋説明）を表示する |
 | [`alpha-forge strategy create`](#alpha-forge-strategy-create) | 組み込みテンプレートから JSON ファイルを作成する |
 | [`alpha-forge strategy scaffold`](#alpha-forge-strategy-scaffold) | シンボル・インジケータ・タイプから戦略をスキャフォールドする |
 | [`alpha-forge strategy save`](#alpha-forge-strategy-save) | JSON ファイルからカスタム戦略を登録する |
@@ -54,6 +55,48 @@ gc_hmm_macd_ema_v1                       GC HMM × MACD × EMA v1         1.0.0 
 ```text
 登録済み戦略はありません。
 ```
+
+---
+
+## alpha-forge strategy templates
+
+組み込み戦略テンプレートの一覧（名前＋説明）を表示します（issue #1238）。`alpha-forge strategy create --template <NAME>` に渡せるテンプレート名と、各テンプレートの概要を確認するための **read-only** なコマンドです。`--template` に不正な名前を渡したときのエラー（後述）からも、このコマンドが案内されます。
+
+### 構文
+
+```bash
+alpha-forge strategy templates [--json]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力する（機械可読・MCP / パイプ用途。装飾・進捗は stderr へ分離） |
+
+### サンプル出力（テキスト）
+
+```text
+組み込み戦略テンプレート: 7 件
+  sma_crossover_v1       短期SMAと長期SMAのクロスオーバー戦略
+  rsi_reversion_v1       RSIの売られすぎ/買われすぎを利用した逆張り戦略
+  macd_crossover_v1      MACDラインとシグナルラインのクロスオーバー戦略
+  ...
+```
+
+### サンプル出力（`--json`）
+
+```json
+{
+  "templates": [
+    {"name": "sma_crossover_v1", "description": "短期SMAと長期SMAのクロスオーバー戦略"},
+    {"name": "rsi_reversion_v1", "description": "RSIの売られすぎ/買われすぎを利用した逆張り戦略"}
+  ],
+  "count": 7
+}
+```
+
+同梱テンプレートの内訳（基本 4 + レンジ 1 + リファレンス 2 = 計 7 件）は、[`alpha-forge strategy create`](#alpha-forge-strategy-create) の「利用可能なテンプレート」表を参照してください。**Exit code**: `0`=成功。
 
 ---
 
@@ -137,7 +180,7 @@ AlphaForge は「ユーザー自身が戦略を作って育てる」プロダク
 
 | 状況 | 動作 |
 |------|------|
-| 未知のテンプレート名 | `❌ 未知のテンプレート名です: <name>。利用可能: ...` を stderr に出力し、登録・JSON 指定の案内ブロックを添えて終了コード `1` で停止（raw な `ValueError:` トレースバックは出ません） |
+| 未知のテンプレート名 | `未知のテンプレート名です: '<name>'。利用可能: ...` を案内し、利用可能なテンプレート一覧と取得手段（`alpha-forge strategy templates` で一覧と説明を確認）を添えて **終了コード `2`** で停止（不正なオプション値 = 引数エラーとして `click.UsageError` で処理。raw な `ValueError:` トレースバックは出ません。issue #1238） |
 
 ---
 

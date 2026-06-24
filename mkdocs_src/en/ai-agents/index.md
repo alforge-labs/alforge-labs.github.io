@@ -50,10 +50,10 @@ If you're new here, reading top to bottom is the recommended path.
 
 1. **[Quickstart](quickstart.md)** — Experience agent integration in about 10 minutes using the bundled skills or MCP.
 2. **[Exploration workflow](exploration-workflow.md)** — Learn the full flow and caveats of serious autonomous exploration with `/explore-strategies`.
-3. **[MCP reference](mcp-reference.md)** — A reference for the seven tools and error contract provided by alpha-forge-mcp.
+3. **[MCP reference](mcp-reference.md)** — A reference for the 18 tools, resources, and prompts plus the error envelope provided by alpha-forge-mcp.
 4. **[CLI conventions](cli-conventions.md)** — A summary of the `--json` output, non-interactive mode, exit codes, and other conventions that form the foundation of agent integration.
 
 Related pages: [Getting started (install)](../getting-started.md) / [AI agent users use case](../usecases/ai-agents.md) / [CLI reference](../cli-reference/index.md)
 
 !!! note "alpha-forge-mcp is an alpha release"
-    alpha-forge-mcp is currently an **alpha (pre-release)** version (PyPI `alpha-forge-mcp` v0.1.0a4). The contract for the tools it provides—names, arguments, return values—may change. When embedding it in a production workflow, pin the version and review the tool-contract diff on each update.
+    alpha-forge-mcp is currently an **alpha (pre-release)** version (PyPI `alpha-forge-mcp` v0.1.0a5). The contract for the tools it provides—names, arguments, return values—may change. When embedding it in a production workflow, pin the version and review the tool-contract diff on each update.

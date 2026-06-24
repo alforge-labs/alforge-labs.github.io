@@ -291,7 +291,7 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--windows` | int | `5` | Number of windows |
 | `--min-window-trades` | int | - | Skip windows whose IS trade count is below N and exclude them from the mean. Useful for low-frequency strategies that would otherwise drop entire windows to `-∞` |
 | `--json` | flag | false | Output results as JSON |
-| `--goal` | option | - | Goal name (e.g. `default`, `stocks`). Includes `goals.yaml` `pre_filter` thresholds in the JSON output; when set, the goal's WFT settings (including the OOS aggregation method `mean` / `median` / `trimmed_mean`, #947) are also applied |
+| `--goal` | option | - | Goal name (e.g. `default`, `stocks`). Reads the `goals.yaml` `pre_filter` thresholds; when set, the goal's WFT settings (including the OOS aggregation method `mean` / `median` / `trimmed_mean`, #947) are also applied. **Even without `--goal`, the `--json` output always carries `pre_filter` / `pre_filter_pass` using default thresholds** (issue #1237, contract aligned with `backtest run`) |
 | `--sharpe-min` | float | `--goal` value or `1.0` | Minimum Sharpe ratio for the `pre_filter_pass` decision |
 | `--max-dd` | float | `--goal` value or `25.0` | Max drawdown limit (%) for the `pre_filter_pass` decision |
 
@@ -369,6 +369,8 @@ In addition to per-window fields, the `--json` output includes summary fields de
 | `"oos_metric_invalid"` | OOS metric was `±∞` or NaN (signal-quality issue) |
 | `"oos_trades_zero"` | OOS-period trade count was 0 (no signal) |
 | `"oos_trades_insufficient"` | OOS-period trade count was at least 1 but below `min_oos_trades` (only when `min_oos_trades > 1`; statistically invalid, #319) |
+
+The `--json` output **includes `pre_filter` (`sharpe_min` / `max_dd_max` / `min_trades` / `goal`) and `pre_filter_pass` (whether the aggregated OOS Sharpe is at or above `sharpe_min`) by default** (issue #1237). Previously the verdict was added only with `--goal`; it now appears even without `--goal` using default thresholds (Sharpe `1.0` / MaxDD `25.0`) so the presence and naming of the pass/fail decision match `backtest run` / `backtest monte-carlo`. Override the thresholds with `--goal` (or `--sharpe-min` / `--max-dd`). The OOS aggregation method is switched via `goals.yaml` `wft.aggregation_method` (`mean` / `median` / `trimmed_mean`, default `mean`, issue #947).
 
 ---
 

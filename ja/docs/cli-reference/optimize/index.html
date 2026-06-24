@@ -4606,7 +4606,7 @@
 <td><code>--goal</code></td>
 <td>オプション</td>
 <td>-</td>
-<td>ゴール名（例: <code>default</code>, <code>stocks</code>）。<code>goals.yaml</code> の <code>pre_filter</code> 閾値を読み、<code>--json</code> 出力に <code>pre_filter</code> / <code>pre_filter_pass</code> を追加する。指定時は <code>goals.yaml</code> の <code>wft.aggregation_method</code>（OOS 集約方法 <code>mean</code> / <code>median</code> / <code>trimmed_mean</code>、既定 <code>mean</code>、issue #947）と <code>wft.trimmed_pct</code> も読み込み、<code>pre_filter_pass</code> 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は <code>forge.yaml</code> の <code>default_goal</code> をフォールバック）</td>
+<td>ゴール名（例: <code>default</code>, <code>stocks</code>）。<code>goals.yaml</code> の <code>pre_filter</code> 閾値を読み込む。指定時は <code>goals.yaml</code> の <code>wft.aggregation_method</code>（OOS 集約方法 <code>mean</code> / <code>median</code> / <code>trimmed_mean</code>、既定 <code>mean</code>、issue #947）と <code>wft.trimmed_pct</code> も読み込み、<code>pre_filter_pass</code> 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は <code>forge.yaml</code> の <code>default_goal</code> をフォールバック）。<strong><code>--goal</code> を省略しても <code>--json</code> 出力には既定閾値で <code>pre_filter</code> / <code>pre_filter_pass</code> が必ず付きます</strong>（issue #1237、<code>backtest run</code> と契約統一）</td>
 </tr>
 <tr>
 <td><code>--sharpe-min</code></td>
@@ -4696,7 +4696,7 @@
 </tbody>
 </table>
 <p><code>skip_reason</code> は探索エージェントがウィンドウ無効の原因を判別するために使えます。</p>
-<p>さらに <code>--goal</code>（または <code>--sharpe-min</code> / <code>--max-dd</code>）を指定すると、<code>--json</code> 出力に <code>pre_filter</code>（<code>sharpe_min</code> / <code>max_dd_max</code> / <code>min_trades</code> / <code>goal</code>）と <code>pre_filter_pass</code>（集約 OOS Sharpe が <code>sharpe_min</code> 以上かの判定）が追加されます。OOS 集約方法は <code>goals.yaml</code> の <code>wft.aggregation_method</code>（<code>mean</code> / <code>median</code> / <code>trimmed_mean</code>、既定 <code>mean</code>、issue #947）で切り替えられます。</p>
+<p><code>--json</code> 出力には <code>pre_filter</code>（<code>sharpe_min</code> / <code>max_dd_max</code> / <code>min_trades</code> / <code>goal</code>）と <code>pre_filter_pass</code>（集約 OOS Sharpe が <code>sharpe_min</code> 以上かの判定）が<strong>既定で</strong>含まれます（issue #1237）。以前は <code>--goal</code> 指定時のみ付与されていましたが、<code>backtest run</code> / <code>backtest monte-carlo</code> と合否判定の有無・命名を揃えるため、<code>--goal</code> を省略しても既定閾値（Sharpe <code>1.0</code> / MaxDD <code>25.0</code>）で必ず付くようになりました。<code>--goal</code>（または <code>--sharpe-min</code> / <code>--max-dd</code>）で閾値を上書きできます。OOS 集約方法は <code>goals.yaml</code> の <code>wft.aggregation_method</code>（<code>mean</code> / <code>median</code> / <code>trimmed_mean</code>、既定 <code>mean</code>、issue #947）で切り替えられます。</p>
 <table>
 <thead>
 <tr>

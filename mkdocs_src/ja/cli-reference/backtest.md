@@ -43,6 +43,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--strategy` | オプション | - | 戦略 ID（`--strategy-file` と排他） |
 | `--strategy-file` | オプション | - | 戦略 JSON ファイルパス（DB 登録不要） |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+| `--summary` | フラグ | false | （`--json` と併用）重い配列（`trades` / `monthly_returns` / `annual_returns` / `equity_curve`）を除外し、スカラ指標＋verdict だけの軽量 JSON を出力する（issue #1224、エージェント / MCP のトークン節約用。[詳細](#json-summary)） |
 | `--start` | オプション | - | 開始日 `YYYY-MM-DD` |
 | `--end` | オプション | - | 終了日 `YYYY-MM-DD` |
 | `--split` | フラグ | false | イン/アウトサンプル分割（[詳細](#is-oos-split)） |
@@ -212,9 +213,25 @@ signal_quality_score = (
   "total_trades": 14,
   "pre_filter_pass": false,
   "pre_filter": { "sharpe_min": 1.0, "max_dd_max": 25.0 },
+  "next_step": [
+    "次: alpha-forge optimize run SPY --strategy sma_crossover_v1 --save",
+    "  または: alpha-forge pine generate --strategy sma_crossover_v1"
+  ],
   "warnings": []
 }
 ```
+
+`next_step`（issue #1234）は、バックテスト成功時に「次に実行すべきコマンド候補」を文字列配列で返します。エージェントが scaffold → save → backtest → optimize / pine というワークフロー順を自力で推測せずに辿れるようにするためのヒントです。テキスト出力時は末尾に同等の案内行が表示されます。
+
+### `--summary` で軽量 JSON を返す（issue #1224） {#json-summary}
+
+`backtest run --json --summary` を指定すると、`trades` / `monthly_returns` / `annual_returns` / `equity_curve` といった**重い配列を除外**し、スカラ指標＋verdict（`pre_filter_pass` / `pre_filter`）＋`next_step` だけの軽量 JSON を返します。エージェント / MCP 経由でトークン消費を抑えたいときに使います。除外されるのは配列フィールドのみで、上記メタフィールドの契約は不変です。
+
+```bash
+alpha-forge backtest run SPY --strategy sma_crossover_v1 --json --summary
+```
+
+トップレベルのフィールド契約は [`--json` 出力リファレンス](../ai-agents/json-output-reference.md#backtest-run-json) も参照してください。
 
 ### 主なエラー
 
@@ -716,6 +733,27 @@ alpha-forge backtest monte-carlo <RESULT_ID> [--simulations 1000] [--json]
 95%最大MDD:  31.20%
 破産確率:    0.40%
 ```
+
+### 出力例（`--json`） {#monte-carlo-json}
+
+`--json` 指定時は、統計値に加えて `backtest run` / `optimize walk-forward` と命名・契約を揃えた既定 verdict（`pre_filter_pass` / `pre_filter`）を **`--goal` なしでも必ず**含めます（issue #1237）。判定は「破産確率（`ruin_probability_pct`）が既定閾値 `5.0%` 以下か」です。
+
+```json
+{
+  "initial_capital": 10000,
+  "simulations_run": 1000,
+  "mean_final_equity": 14820,
+  "worst_final_equity": 7340,
+  "best_final_equity": 23150,
+  "mean_max_drawdown_pct": 18.40,
+  "max_drawdown_95pct": 31.20,
+  "ruin_probability_pct": 0.40,
+  "pre_filter_pass": true,
+  "pre_filter": { "max_ruin_pct": 5.0 }
+}
+```
+
+トップレベルのフィールド契約は [`--json` 出力リファレンス](../ai-agents/json-output-reference.md#backtest-monte-carlo-json) も参照してください。
 
 ### 主なエラー
 

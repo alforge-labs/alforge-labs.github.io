@@ -43,6 +43,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--strategy` | option | - | Strategy ID (mutually exclusive with `--strategy-file`) |
 | `--strategy-file` | option | - | Path to a strategy JSON file (no DB registration required) |
 | `--json` | flag | false | Output results as JSON to stdout |
+| `--summary` | flag | false | (With `--json`) Exclude heavy arrays (`trades` / `monthly_returns` / `annual_returns` / `equity_curve`) and emit a lightweight JSON of scalar metrics + verdict only (issue #1224, to save tokens for agents / MCP; [details](#json-summary)) |
 | `--start` | option | - | Start date `YYYY-MM-DD` |
 | `--end` | option | - | End date `YYYY-MM-DD` |
 | `--split` | flag | false | Split into in-sample / out-of-sample periods ([details](#is-oos-split)) |
@@ -212,9 +213,25 @@ signal_quality_score = (
   "total_trades": 14,
   "pre_filter_pass": false,
   "pre_filter": { "sharpe_min": 1.0, "max_dd_max": 25.0 },
+  "next_step": [
+    "Next: alpha-forge optimize run SPY --strategy sma_crossover_v1 --save",
+    "  or: alpha-forge pine generate --strategy sma_crossover_v1"
+  ],
   "warnings": []
 }
 ```
+
+`next_step` (issue #1234) returns the recommended next commands as a string array on a successful backtest, so an agent can follow the scaffold → save → backtest → optimize / pine order without inferring it. The text output prints an equivalent guidance line at the end.
+
+### Lightweight JSON with `--summary` (issue #1224) {#json-summary}
+
+`backtest run --json --summary` **excludes heavy arrays** (`trades` / `monthly_returns` / `annual_returns` / `equity_curve`) and returns a lightweight JSON of scalar metrics + verdict (`pre_filter_pass` / `pre_filter`) + `next_step` only. Use it to cut token usage over agents / MCP. Only the array fields are dropped; the meta-field contract above is unchanged.
+
+```bash
+alpha-forge backtest run SPY --strategy sma_crossover_v1 --json --summary
+```
+
+See also the top-level field contract in the [`--json` output reference](../ai-agents/json-output-reference.md#backtest-run-json).
 
 ### Common errors
 
@@ -721,6 +738,27 @@ Mean max MDD: 18.40%
 95% max MDD:  31.20%
 Ruin probability: 0.40%
 ```
+
+### Sample output (`--json`) {#monte-carlo-json}
+
+With `--json`, in addition to the statistics, a default verdict (`pre_filter_pass` / `pre_filter`) is **always included even without `--goal`**, with naming and contract aligned with `backtest run` / `optimize walk-forward` (issue #1237). The verdict checks whether the ruin probability (`ruin_probability_pct`) is at or below the default threshold of `5.0%`.
+
+```json
+{
+  "initial_capital": 10000,
+  "simulations_run": 1000,
+  "mean_final_equity": 14820,
+  "worst_final_equity": 7340,
+  "best_final_equity": 23150,
+  "mean_max_drawdown_pct": 18.40,
+  "max_drawdown_95pct": 31.20,
+  "ruin_probability_pct": 0.40,
+  "pre_filter_pass": true,
+  "pre_filter": { "max_ruin_pct": 5.0 }
+}
+```
+
+See also the top-level field contract in the [`--json` output reference](../ai-agents/json-output-reference.md#backtest-monte-carlo-json).
 
 ### Common errors
 
