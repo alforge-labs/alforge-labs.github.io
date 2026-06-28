@@ -75,6 +75,15 @@ If you see output like `AlphaForge, version <X.Y.Z>`, you're ready. For manual i
 
 Create a `quickstart/` directory and run `alpha-forge system init` to bootstrap it. This drops in `forge.yaml` (configuring strategy/data/result paths) plus subdirectories like `data/`.
 
+!!! tip "Fastest path: `alpha-forge demo` runs init-through-backtest in one command"
+    Instead of running each step by hand, a single command performs initialization, a backtest on the bundled DEMO data, the result summary, and the visualization hint all at once (no network or login required).
+
+    ```bash
+    alpha-forge demo
+    ```
+
+    It creates `./alpha-forge-demo`, backtests `demo_sma_cross` on the bundled DEMO synthetic data, and prints the result summary plus the next action (visualize with `alpha-vis serve`). If you want to understand each step, follow the manual steps below (`alpha-forge demo` automates all of them).
+
 ```bash
 mkdir quickstart && cd quickstart
 alpha-forge system init
