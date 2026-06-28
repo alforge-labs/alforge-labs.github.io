@@ -424,6 +424,8 @@ try {
         Write-Host (L "  ✓ alpha-forge は現在のセッションの PATH 上にあります" "  ✓ alpha-forge is on PATH in the current session")
     } else {
         Write-Host (L "  ✗ 新しいターミナルで有効になります（User PATH を更新済み）" "  ✗ Effective in a new terminal (User PATH updated)")
+        Write-Host (L "    今すぐこのセッションで使うには: `$env:PATH = `"`$env:PATH;$INSTALL_ROOT`"" `
+                      "    To use it in this session now: `$env:PATH = `"`$env:PATH;$INSTALL_ROOT`"")
     }
     Write-Host (L "  詳細診断（PATH/データ/設定の確認と解決コマンド）: alpha-forge system doctor" `
                   "  Full diagnostics (PATH/data/config + fix commands): alpha-forge system doctor")
