@@ -84,12 +84,27 @@ alpha-forge system init
     From v0.12.0 you can pass a directory name, e.g. `alpha-forge system init quickstart && cd quickstart`, creating and initializing it in one command. A confirmation prompt also now guards against accidental deployment into unintended locations such as your home directory (pass `--yes` for non-interactive runs like CI).
 
 !!! info "`alpha-forge system init` is required"
-    Without `forge.yaml`, the CLI falls back to its default config, auto-creates a `data/` directory, and—if no strategy or data is registered yet—stops with a friendly error message (no raw `FileNotFoundError` traceback). Running `system init` first pins the strategy DB location, data store, and result output paths and avoids deploying into an unintended location, so it is recommended to run it before the steps below. The default invocation (no `--force`) is sufficient for quickstart. Note that when `FORGE_CONFIG` is unset *and* there is no `config/default.yaml` in the current directory, the CLI proceeds on the built-in default config after printing a WARNING (issue #1184); run `alpha-forge system init` or point `FORGE_CONFIG` at your `forge.yaml` to run against the intended locations.
+    Without `forge.yaml`, the CLI falls back to its default config, auto-creates a `data/` directory, and—if no strategy or data is registered yet—stops with a friendly error message (no raw `FileNotFoundError` traceback). Running `system init` first pins the strategy DB location, data store, and result output paths and avoids deploying into an unintended location, so it is recommended to run it before the steps below. The default invocation (no `--force`) is sufficient for quickstart. Note that when `FORGE_CONFIG` is unset *and* there is no `config/default.yaml` in the current directory, the CLI proceeds on the built-in default config after printing a WARNING (issue #1184); run `alpha-forge system init` or point `FORGE_CONFIG` at your `forge.yaml` to run against the intended locations. In addition, `system init` automatically deploys **bundled synthetic learning data (`data/historical/DEMO_1d.parquet`) and the `demo_sma_cross` strategy (`data/strategies/demo_sma_cross.json`)** alongside the config. Pass `--no-sample` to skip this deployment.
 
 !!! note "A one-time EULA acceptance prompt `[y/n]` appears on first run"
     The first time you run a main command (such as `alpha-forge system init` above), a summary of the End-User License Agreement (EULA) is shown along with a `[y/n]` acceptance prompt. **Enter `y`** and your acceptance is recorded under `~/.config/forge/`, so it won't appear again.
 
     In **non-interactive environments** (CI, pipes, agents) you can't type `y`, so the command stops with `Aborted!`. In that case, set the environment variable `FORGE_ACCEPT_EULA=1` (`true` / `yes` / `on` also work) to auto-accept the EULA on first run and continue (available in a recent version onward).
+
+#### Zero-fetch instant result — run the DEMO backtest now
+
+`alpha-forge system init` automatically deploys **bundled synthetic learning data and a demo strategy** alongside the config, so you can run a backtest immediately — no data fetch, no network access needed.
+
+```bash
+alpha-forge backtest run DEMO --strategy demo_sma_cross
+```
+
+`DEMO` is not a real market ticker. It is **synthetic deterministic OHLCV data** designed to stay within the Trial plan's date range, pre-deployed at `data/historical/DEMO_1d.parquet`. The paired demo strategy is at `data/strategies/demo_sma_cross.json` (strategy ID: `demo_sma_cross`). Use it to verify your install and get an instant first result.
+
+!!! note "Suppress the bundled sample with `--no-sample`"
+    `alpha-forge system init --no-sample` skips deploying the DEMO data (`DEMO_1d.parquet`) and the `demo_sma_cross` strategy.
+
+The steps below use a real-market symbol (SPY) to show the typical workflow.
 
 Save the following as `sma_cross.json` (the `_qs` suffix in `strategy_id` just marks it as the quickstart strategy — feel free to use any ID).
 
@@ -127,9 +142,9 @@ Save the following as `sma_cross.json` (the `_qs` suffix in `strategy_id` just m
 }
 ```
 
-### Step 2.5 — Fetch historical data (~1 min, required)
+### Step 2.5 — Fetch historical data for real-market symbols (~1 min)
 
-Fetch the historical data the next backtest needs. `backtest run` does **not** auto-fetch data for the target symbol, so **if you skip this step the next backtest fails with `❌ データが見つかりません: SPY (1d)` (data not found)**.
+Unlike `DEMO`, real-market symbols such as SPY require a data fetch before backtesting. `backtest run` does **not** auto-fetch data for the target symbol, so **if you skip this step the next backtest fails with `❌ データが見つかりません: SPY (1d)` (data not found)**.
 
 ```bash
 alpha-forge data fetch SPY --period 10y
