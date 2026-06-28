@@ -3859,6 +3859,10 @@ by hand.</p>
 </thead>
 <tbody>
 <tr>
+<td>Something seems off (PATH / data / config)</td>
+<td>Run <code>alpha-forge system doctor</code> first. It reports the status of your PATH, data directories, and config file, and lists the exact <strong>next command</strong> to run — e.g. <code>alpha-forge system init</code> if uninitialized, or <code>alpha-forge demo</code> to try the bundled data.</td>
+</tr>
+<tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
 <td>Open a new terminal or run <code>source ~/.bashrc</code> / <code>source ~/.zshrc</code>. If that doesn't help, confirm the binary exists with <code>ls ~/.local/bin/alpha-forge</code> and that <code>echo $PATH</code> includes <code>~/.local/bin</code>.</td>
 </tr>

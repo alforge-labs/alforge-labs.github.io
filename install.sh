@@ -447,6 +447,22 @@ else
               "Dry run complete. Re-run without --dry-run to actually install.")"
 fi
 
+# ── 8b. 環境チェックサマリ（A3: install 後の環境診断導線）─────────────
+# doctor をインライン実行すると EULA プロンプト（curl|bash でハング）と 2 回目の
+# コールドスタートを招くため、ここでは自前の軽量チェックと `system doctor` への
+# 案内のみを出す（詳細診断はユーザーが任意のタイミングで実行する）。
+echo ""
+echo "$(lang "環境チェック:" "Environment check:")"
+if [[ ":${PATH}:" == *":${BIN_DIR}:"* ]]; then
+  echo "  $(lang "✓ alpha-forge は現在のシェルの PATH 上にあります" \
+                "✓ alpha-forge is on PATH in the current shell")"
+else
+  echo "  $(lang "✗ 現在のシェルからは未到達。次を実行してください: source ${RC}（または新しいターミナルを開く）" \
+                "✗ Not reachable in the current shell. Run: source ${RC} (or open a new terminal)")"
+fi
+echo "  $(lang "詳細診断（PATH/データ/設定の確認と解決コマンド）: alpha-forge system doctor" \
+              "Full diagnostics (PATH/data/config + fix commands): alpha-forge system doctor")"
+
 # ── 9a. すぐ使い始める案内（Trial プラン / getting-started）────────────
 # Whop 認証なしでも Trial プランで即利用できる旨を最初に案内する（getting-started の主訴求）。
 echo ""

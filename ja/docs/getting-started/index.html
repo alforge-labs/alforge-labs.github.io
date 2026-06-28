@@ -3855,6 +3855,10 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 </thead>
 <tbody>
 <tr>
+<td>環境がうまく動かない（PATH / データ / 設定）</td>
+<td>まず <code>alpha-forge system doctor</code> を実行してください。PATH・データディレクトリ・設定ファイルの状態を診断し、未初期化なら <code>alpha-forge system init</code>、同梱データで試すなら <code>alpha-forge demo</code> といった<strong>次に打つコマンド</strong>を併記します。</td>
+</tr>
+<tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
 <td>新しいターミナルを開くか、<code>source ~/.bashrc</code> / <code>source ~/.zshrc</code> を実行してください。それでも出る場合は <code>ls ~/.local/bin/alpha-forge</code> でバイナリの存在を確認し、<code>echo $PATH</code> に <code>~/.local/bin</code> が含まれているか確認してください。</td>
 </tr>
