@@ -75,6 +75,15 @@ Check for updates: alpha-forge self version
 
 `quickstart/` ディレクトリを作成して `alpha-forge system init` で初期化します。`forge.yaml`（戦略・データ・結果の保存先設定）と `data/` 等のサブディレクトリが配置されます。
 
+!!! tip "最速: `alpha-forge demo` の 1 コマンドで初期化〜バックテストまで一気に"
+    手順を 1 つずつ実行する代わりに、次の 1 コマンドだけで初期化・同梱 DEMO データのバックテスト・結果サマリ・可視化案内までをまとめて実行できます（ネットワーク接続・ログイン不要）。
+
+    ```bash
+    alpha-forge demo
+    ```
+
+    `./alpha-forge-demo` を作成し、同梱の DEMO 合成データで `demo_sma_cross` をバックテストして、結果サマリと次アクション（`alpha-vis serve` での可視化）まで表示します。各ステップの中身を理解したい場合は以下の手順を順に進めてください（`alpha-forge demo` はこれらをまとめて自動実行します）。
+
 ```bash
 mkdir quickstart && cd quickstart
 alpha-forge system init
