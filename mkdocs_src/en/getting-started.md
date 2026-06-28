@@ -562,6 +562,7 @@ The six metrics you'll look at first. For the full metric list, see the [CLI Ref
 
 | Symptom | Cause & Fix |
 |---------|-------------|
+| Something seems off (PATH / data / config) | Run `alpha-forge system doctor` first. It reports the status of your PATH, data directories, and config file, and lists the exact **next command** to run — e.g. `alpha-forge system init` if uninitialized, or `alpha-forge demo` to try the bundled data. |
 | `command not found: forge` / `command not found: alpha-forge` | Open a new terminal or run `source ~/.bashrc` / `source ~/.zshrc`. If that doesn't help, confirm the binary exists with `ls ~/.local/bin/alpha-forge` and that `echo $PATH` includes `~/.local/bin`. |
 | (Windows) `alpha-forge: The term 'alpha-forge' is not recognized ...` | Close all open terminals and open a new one (new tabs of an already-running Windows Terminal do not pick up PATH changes). If it persists, check that `[Environment]::GetEnvironmentVariable('PATH','User')` contains `%LOCALAPPDATA%\Programs\alpha-forge` as a standalone entry; if it is missing or corrupted, re-run the installer (it repairs the entry automatically). |
 | First command shows a `[y/n]` prompt / `Aborted!` in non-interactive runs | A one-time EULA acceptance prompt appears on first run. In an interactive terminal, enter `y`. In non-interactive environments (CI, pipes, agents), set `FORGE_ACCEPT_EULA=1` to auto-accept the EULA on first run and continue (available in a recent version onward). Acceptance is recorded under `~/.config/forge/` and won't appear again. |

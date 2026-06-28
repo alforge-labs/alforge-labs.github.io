@@ -415,6 +415,19 @@ try {
         Write-Host ("    " + (L "新しいターミナルを開いて再試行してください" "Open a new terminal and retry") + ": alpha-forge --version")
     }
 
+    # ── 6b. 環境チェック／次のアクション（A3: install 後の環境診断導線）──────
+    # doctor はインライン実行しない（初回 EULA プロンプト・追加コールドスタート回避）。
+    # 自前の軽量チェックと `system doctor` への案内のみを出す。
+    Write-Host ""
+    Write-Host (L "環境チェック:" "Environment check:")
+    if ($env:PATH -like "*$INSTALL_ROOT*") {
+        Write-Host (L "  ✓ alpha-forge は現在のセッションの PATH 上にあります" "  ✓ alpha-forge is on PATH in the current session")
+    } else {
+        Write-Host (L "  ✗ 新しいターミナルで有効になります（User PATH を更新済み）" "  ✗ Effective in a new terminal (User PATH updated)")
+    }
+    Write-Host (L "  詳細診断（PATH/データ/設定の確認と解決コマンド）: alpha-forge system doctor" `
+                  "  Full diagnostics (PATH/data/config + fix commands): alpha-forge system doctor")
+
     # ── 7. 認証案内 ─────────────────────────────────────────────────
     Write-Host ""
     Write-Host (L "次のステップ: ライセンス認証" "Next step: license activation")
