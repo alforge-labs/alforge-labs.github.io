@@ -3864,7 +3864,7 @@ by hand.</p>
 </tr>
 <tr>
 <td><code>command not found: forge</code> / <code>command not found: alpha-forge</code></td>
-<td>Open a new terminal or run <code>source ~/.bashrc</code> / <code>source ~/.zshrc</code>. If that doesn't help, confirm the binary exists with <code>ls ~/.local/bin/alpha-forge</code> and that <code>echo $PATH</code> includes <code>~/.local/bin</code>.</td>
+<td>To <strong>use it right away in the current shell</strong> (instead of opening a new terminal), run <code>export PATH="$HOME/.local/bin:$PATH"</code> (Windows PowerShell: <code>$env:PATH = "$env:PATH;$env:LOCALAPPDATA\Programs\alpha-forge"</code>). The installer already appended the permanent entry to <code>~/.bashrc</code> / <code>~/.zshrc</code>, so <code>source ~/.bashrc</code> / <code>source ~/.zshrc</code> or a new terminal also work. If it still fails, confirm the binary exists with <code>ls ~/.local/bin/alpha-forge</code> and that <code>echo $PATH</code> includes <code>~/.local/bin</code>.</td>
 </tr>
 <tr>
 <td>(Windows) <code>alpha-forge: The term 'alpha-forge' is not recognized ...</code></td>

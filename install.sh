@@ -457,8 +457,8 @@ if [[ ":${PATH}:" == *":${BIN_DIR}:"* ]]; then
   echo "  $(lang "✓ alpha-forge は現在のシェルの PATH 上にあります" \
                 "✓ alpha-forge is on PATH in the current shell")"
 else
-  echo "  $(lang "✗ 現在のシェルからは未到達。次を実行してください: source ${RC}（または新しいターミナルを開く）" \
-                "✗ Not reachable in the current shell. Run: source ${RC} (or open a new terminal)")"
+  echo "  $(lang "✗ 現在のシェルでは未反映。今すぐ有効化（あと1行）: export PATH=\"${BIN_DIR}:\$PATH\"" \
+                "✗ Not active in this shell yet. Activate now (one line): export PATH=\"${BIN_DIR}:\$PATH\"")"
 fi
 echo "  $(lang "詳細診断（PATH/データ/設定の確認と解決コマンド）: alpha-forge system doctor" \
               "Full diagnostics (PATH/data/config + fix commands): alpha-forge system doctor")"
@@ -493,14 +493,14 @@ if [ "${DRY_RUN}" = "false" ]; then
   # INSTALL_DIR 明示時は rc を書き換えていないので source ${RC} は案内しない
   # （PATH への追加手順はセクション 7 で既に案内済み）。
   if [[ ":${PATH}:" != *":${BIN_DIR}:"* ]] && [ -z "${INSTALL_DIR_FROM_ENV}" ]; then
-    echo "$(lang "PATH を現在のシェルに反映するには、次のいずれかを実行してください：" \
-                  "To apply the new PATH to the current shell, run one of the following:")"
-    echo "    source ${RC}"
+    echo "$(lang "PATH を現在のシェルに反映するには、次のいずれか（上ほど手軽）：" \
+                  "To apply the new PATH to the current shell (top = easiest):")"
+    echo "    export PATH=\"${BIN_DIR}:\$PATH\"   $(lang "# 今すぐ有効（このシェル限定）" "# active now (this shell only)")"
+    echo "    exec ${SHELL}                       $(lang "# シェルを再起動して rc を読み直す" "# restart the shell to reload rc")"
+    echo "    source ${RC}                        $(lang "# rc を読み直す" "# reload rc")"
     case "${SHELL_NAME}" in
-      zsh)  echo "    $(lang "# または: rehash (zsh のコマンドハッシュをクリア)" \
-                              "# or: rehash (clear zsh command hash)")" ;;
-      bash) echo "    $(lang "# または: hash -r (bash のコマンドハッシュをクリア)" \
-                              "# or: hash -r (clear bash command hash)")" ;;
+      zsh)  echo "    rehash                              $(lang "# zsh のコマンドハッシュをクリア" "# clear zsh command hash")" ;;
+      bash) echo "    hash -r                             $(lang "# bash のコマンドハッシュをクリア" "# clear bash command hash")" ;;
     esac
     echo "    $(lang "# または新しいターミナルを開く" "# or open a new terminal")"
   else
