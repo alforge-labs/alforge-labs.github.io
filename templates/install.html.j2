@@ -74,10 +74,20 @@
       <p>
         インストール直後から Trial プランで <code>alpha-forge backtest run</code> / <code>alpha-forge optimize run</code> / <code>alpha-forge optimize walk-forward</code> 等が動きます。Trial の制限はデータ上限 2023-12-31・最適化 50 trials・Pine Script 生成不可の 3 点のみで、それ以外は有料プランと同じ機能を試せます。
       </p>
-      <pre><code># 例: いきなりバックテストを動かす（Trial プラン・Whop 登録不要）
-alpha-forge system init                 # 作業ディレクトリ初期化
+      <pre><code># 例: 同梱 DEMO データで一発バックテスト（Trial プラン・Whop 登録不要・データ取得不要）
+alpha-forge demo                        # init＋DEMO バックテスト＋結果＋可視化案内を一括
+# 実データで試す場合:
 alpha-forge data fetch SPY --period 5y  # 2023-12-31 までのデータを自動取得
 alpha-forge backtest run SPY --strategy sma_crossover_v1</code></pre>
+
+      <h3 class="sub-heading">AI エージェントに丸投げ（貼るだけプロンプト）</h3>
+      <p>Claude Code / Cursor / Codex などの AI エージェントに次のプロンプトをそのまま貼り付けると、インストールから初回バックテストまでを自動で実行します（無料 Trial・ログイン不要）。</p>
+      <pre><code>AlphaForge（バックテスト用 CLI）をインストールして、最初のバックテストまで実行して：
+1. インストーラを実行（mac/Linux）: curl -sSL https://alforge-labs.github.io/install.sh | bash
+   （Windows PowerShell の場合: irm https://alforge-labs.github.io/install.ps1 | iex）
+2. alpha-forge demo を実行（同梱 DEMO データで初期化＋バックテストを一発実行）
+3. 出力された結果サマリ（Sharpe・総リターン・取引数）を要約して報告して
+AlphaForge は無料 Trial（ログイン不要）で動く。詰まったら alpha-forge system doctor を実行して。</code></pre>
 
       <h2 class="section-heading">有料プラン（任意） — Whop でログイン認証</h2>
       <p>
@@ -266,10 +276,20 @@ WEBHOOK_PASSPHRASE=your-secret alpha-strike</code></pre>
       <p>
         Once installed, the Trial plan lets you immediately run <code>alpha-forge backtest run</code>, <code>alpha-forge optimize run</code>, <code>alpha-forge optimize walk-forward</code>, and more. The only Trial limits are: data capped at 2023-12-31, optimization capped at 50 trials, and no Pine Script export — everything else mirrors the paid plans.
       </p>
-      <pre><code># Example: run a backtest right away (Trial plan, no Whop registration)
-alpha-forge system init                 # initialize a working directory
+      <pre><code># Example: one-shot backtest on bundled DEMO data (Trial plan, no Whop registration, no data fetch)
+alpha-forge demo                        # init + DEMO backtest + result + visualization hint, all at once
+# To try real data:
 alpha-forge data fetch SPY --period 5y  # auto-fetch data up to 2023-12-31
 alpha-forge backtest run SPY --strategy sma_crossover_v1</code></pre>
+
+      <h3 class="sub-heading">Hand it to an AI agent (paste-ready prompt)</h3>
+      <p>Paste the following prompt into an AI agent (Claude Code / Cursor / Codex, ...) and it will install and run your first backtest automatically (free Trial, no login).</p>
+      <pre><code>Install AlphaForge (a backtesting CLI) and run my first backtest:
+1. Run the installer (mac/Linux): curl -sSL https://alforge-labs.github.io/install.sh | bash
+   (Windows PowerShell: irm https://alforge-labs.github.io/install.ps1 | iex)
+2. Run `alpha-forge demo` (initializes and runs a backtest on bundled DEMO data in one shot)
+3. Summarize the printed result (Sharpe, total return, number of trades)
+AlphaForge runs on the free Trial (no login). If anything fails, run `alpha-forge system doctor`.</code></pre>
 
       <h2 class="section-heading">Paid plans (optional) — Sign in with Whop</h2>
       <p>
