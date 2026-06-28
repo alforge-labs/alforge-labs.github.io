@@ -84,12 +84,27 @@ alpha-forge system init
     v0.12.0 以降は `alpha-forge system init quickstart && cd quickstart` のようにディレクトリ名を指定でき、作成と初期化が 1 コマンドで完了します。あわせて、ホームディレクトリ直下など意図しない場所への誤展開には確認プロンプトが表示されるようになりました（CI 等の非対話実行では `--yes` を指定）。
 
 !!! info "`alpha-forge system init` を必ず実行してください"
-    `forge.yaml` が無いとデフォルト設定にフォールバックして `data/` を自動生成し、戦略・データ未登録の場合は友好的なエラーメッセージで停止します（raw な `FileNotFoundError` トレースは出ません）。`forge.yaml` で戦略の DB 登録先・データ保存先・結果ファイル出力先を明示しておくと意図しない場所への展開を避けられるため、クイックスタートでは先に実行しておくことを推奨します。`--force` は不要です。なお、環境変数 `FORGE_CONFIG` 未設定かつカレントディレクトリに `config/default.yaml` も無い状態では、組み込みデフォルト設定で動作する旨の WARNING を表示したうえで続行します（issue #1184）。意図した保存先で動かすには `alpha-forge system init` を実行するか `FORGE_CONFIG` で `forge.yaml` を明示してください。
+    `forge.yaml` が無いとデフォルト設定にフォールバックして `data/` を自動生成し、戦略・データ未登録の場合は友好的なエラーメッセージで停止します（raw な `FileNotFoundError` トレースは出ません）。`forge.yaml` で戦略の DB 登録先・データ保存先・結果ファイル出力先を明示しておくと意図しない場所への展開を避けられるため、クイックスタートでは先に実行しておくことを推奨します。`--force` は不要です。なお、環境変数 `FORGE_CONFIG` 未設定かつカレントディレクトリに `config/default.yaml` も無い状態では、組み込みデフォルト設定で動作する旨の WARNING を表示したうえで続行します（issue #1184）。意図した保存先で動かすには `alpha-forge system init` を実行するか `FORGE_CONFIG` で `forge.yaml` を明示してください。また、`system init` は `forge.yaml` やディレクトリ構造に加え、**合成学習データ（`data/historical/DEMO_1d.parquet`）と `demo_sma_cross` 戦略（`data/strategies/demo_sma_cross.json`）も自動配置**します。`--no-sample` を指定するとこれらの配置をスキップできます。
 
 !!! note "初回のみ EULA 同意プロンプト `[y/n]` が表示されます"
     最初に主要コマンド（上記 `alpha-forge system init` など）を実行すると、初回だけエンドユーザー使用許諾契約（EULA）の要約が表示され、`[y/n]` の同意プロンプトが出ます。**`y` を入力**すると同意状態が `~/.config/forge/` に記録され、次回以降は表示されません。
 
     CI・パイプ・エージェントなどの**非対話環境**では `y` を入力できず `Aborted!` で停止します。その場合は環境変数 `FORGE_ACCEPT_EULA=1`（`true` / `yes` / `on` も可）を設定すると、初回 EULA に自動同意して続行できます（対応バージョン以降）。
+
+#### データ取得不要で即実行 — DEMO バックテスト
+
+`alpha-forge system init` は、ディレクトリ構造に加え **合成学習データと DEMO 戦略**を自動配置するため、データ取得もデータ登録作業もなしに、そのままバックテストを実行できます。
+
+```bash
+alpha-forge backtest run DEMO --strategy demo_sma_cross
+```
+
+`DEMO` は実際の市場ティッカーではなく、Trial プランの日付範囲内で動作するよう設計された**合成決定論的 OHLCV データ**です（`data/historical/DEMO_1d.parquet` に配置済み）。専用のデモ戦略（`data/strategies/demo_sma_cross.json`、strategy ID: `demo_sma_cross`）も同梱されており、ネットワーク接続なしに即座に最初の結果を確認できます。
+
+!!! note "`--no-sample` で DEMO データを省略する"
+    `alpha-forge system init --no-sample` を指定すると、DEMO データ（`DEMO_1d.parquet`）と `demo_sma_cross` 戦略の自動配置をスキップします。
+
+以降のステップでは、実市場シンボル（SPY など）を使った典型的なワークフローを説明します。
 
 `sma_cross.json` という名前で以下を保存します（`strategy_id` の `_qs` 接尾辞は quickstart の目印で、任意の ID に変更して構いません）。
 
@@ -127,9 +142,9 @@ alpha-forge system init
 }
 ```
 
-### ステップ 2.5 — ヒストリカルデータを取得する（約 1 分・必須）
+### ステップ 2.5 — 実市場シンボルのヒストリカルデータを取得する（約 1 分）
 
-次のバックテストに必要なヒストリカルデータを取得します。`backtest run` は対象シンボルのデータを自動取得しないため、**このステップを先に実行しないと次のバックテストが `❌ データが見つかりません: SPY (1d)` で失敗します**。
+`DEMO` 以外の実市場シンボル（SPY など）でバックテストする場合は、事前にデータ取得が必要です。`backtest run` は対象シンボルのデータを自動取得しないため、**このステップを先に実行しないと次のバックテストが `❌ データが見つかりません: SPY (1d)` で失敗します**。
 
 ```bash
 alpha-forge data fetch SPY --period 10y
