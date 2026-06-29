@@ -52,6 +52,18 @@ A complete onboarding guide — from installing AlphaForge CLI to reading your f
 
     After installation, **open a new terminal** before continuing.
 
+=== "uv / PyPI (optional)"
+
+    If you have uv / Python, you can install from PyPI too (currently macOS Apple Silicon; more platforms coming). It provides the `alpha-forge` command.
+
+    ```bash
+    # Try without installing
+    uvx alpha-forge-launcher demo
+    # Persistent install (the alpha-forge command becomes available)
+    uv tool install alpha-forge-launcher   # or: pip install alpha-forge-launcher
+    alpha-forge --version
+    ```
+
 Verify the installation.
 
 ```bash
