@@ -52,6 +52,18 @@ AlphaForge CLI のインストールから最初のバックテスト結果を�
 
     インストール後、**新しいターミナルを開いてから**次に進んでください。
 
+=== "uv / PyPI（任意）"
+
+    uv / Python 環境があれば PyPI 経由でも導入できます（現在 macOS Apple Silicon 対応・他プラットフォームは順次拡大）。インストール後は `alpha-forge` コマンドを提供します。
+
+    ```bash
+    # インストール不要で試す
+    uvx alpha-forge-launcher demo
+    # 永続インストール（以後 alpha-forge コマンドが使える）
+    uv tool install alpha-forge-launcher   # または: pip install alpha-forge-launcher
+    alpha-forge --version
+    ```
+
 インストールを確認します。
 
 ```bash

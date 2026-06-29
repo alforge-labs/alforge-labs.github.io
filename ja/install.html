@@ -116,6 +116,14 @@
         <pre><code>irm https://alforge-labs.github.io/install.ps1 | iex</code></pre>
       </div>
 
+      <h3 class="sub-heading">uv / PyPI 経由（任意）</h3>
+      <p style="margin-top: 0.5rem;">uv / Python 環境があれば PyPI からも導入できます（現在 macOS Apple Silicon 対応・他プラットフォームは順次拡大）。インストール後は <code>alpha-forge</code> コマンドを提供します。</p>
+      <pre><code># インストール不要で試す
+uvx alpha-forge-launcher demo
+# 永続インストール（以後 alpha-forge コマンドが使える）
+uv tool install alpha-forge-launcher   # または: pip install alpha-forge-launcher
+alpha-forge --version</code></pre>
+
       <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text2);">
         インストーラを使わず手動で配置したい場合は、
         <a href="https://github.com/alforge-labs/alforge-labs.github.io/releases/latest" target="_blank" rel="noopener">GitHub Releases（最新版）</a>

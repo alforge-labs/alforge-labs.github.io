@@ -116,6 +116,14 @@
         <pre><code>irm https://alforge-labs.github.io/install.ps1 | iex</code></pre>
       </div>
 
+      <h3 class="sub-heading">Via uv / PyPI (optional)</h3>
+      <p style="margin-top: 0.5rem;">If you have uv / Python, you can install from PyPI too (currently macOS Apple Silicon; more platforms coming). It provides the <code>alpha-forge</code> command.</p>
+      <pre><code># Try without installing
+uvx alpha-forge-launcher demo
+# Persistent install (the alpha-forge command becomes available)
+uv tool install alpha-forge-launcher   # or: pip install alpha-forge-launcher
+alpha-forge --version</code></pre>
+
       <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text2);">
         Prefer a manual setup? Download the latest per-platform binaries directly from
         <a href="https://github.com/alforge-labs/alforge-labs.github.io/releases/latest" target="_blank" rel="noopener">GitHub Releases (latest)</a>.
