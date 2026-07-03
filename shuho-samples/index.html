@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>shuho 生成サンプル — 実プロジェクト 12 週分の週報(無修正)</title>
+<meta name="description" content="GitHub の活動履歴から shuho が自動生成した週報 12 本。生成直後・無修正のまま公開しています。" />
+<style>
+  :root {
+    --paper: #FBFAF7; --sheet: #FFFFFF; --ink: #1C232B; --ink-soft: #4A5561;
+    --ai: #1F4A6E; --ai-wash: #EEF3F6; --shu: #B3402A; --rule: #D9D7CF;
+    --serif: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
+    --sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.9; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 24px; border-bottom: 1px solid var(--rule); }
+  .topbar a { color: var(--ink-soft); text-decoration: none; font-size: 13px; }
+  .topbar a:hover, .topbar a:focus-visible { color: var(--ai); }
+  .topbar .brand { font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em; }
+
+  .frame { max-width: 1080px; margin: 0 auto; padding: 0 24px 96px; }
+
+  header.hero { padding: 64px 0 40px; border-bottom: 1px solid var(--rule); position: relative; }
+  .hero .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--ai); }
+  .hero h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(26px, 4.2vw, 40px); line-height: 1.5; margin: 14px 0 18px; max-width: 21em; }
+  .hero p.lede { color: var(--ink-soft); max-width: 44em; font-size: 15px; }
+  .hero .facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 22px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); }
+  .hero .facts b { color: var(--ink); font-weight: 600; }
+
+  .stamp { position: absolute; right: 0; top: 58px; width: 92px; height: 92px; border: 2.5px solid var(--shu); border-radius: 50%; color: var(--shu); display: grid; place-content: center; text-align: center; font-family: var(--serif); font-size: 13.5px; line-height: 1.55; letter-spacing: 0.1em; transform: rotate(6deg); opacity: 0.88; }
+
+  .layout { display: grid; grid-template-columns: 168px 1fr; gap: 40px; padding-top: 40px; }
+
+  nav.weeks { position: sticky; top: 24px; align-self: start; }
+  nav.weeks .weeks-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-soft); margin-bottom: 10px; }
+  .wk { display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 4px; text-decoration: none; }
+  .wk-date { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .wk-bar { display: block; height: 8px; background: transparent; }
+  .wk-bar i { display: block; height: 100%; background: var(--rule); border-radius: 1px; transition: background 0.2s; }
+  .wk:hover .wk-bar i, .wk:focus-visible .wk-bar i { background: var(--ai); }
+  .wk.active { background: var(--ai-wash); }
+  .wk.active .wk-date { color: var(--ai); font-weight: 700; }
+  .wk.active .wk-bar i { background: var(--ai); }
+  nav.weeks .weeks-note { margin-top: 12px; font-size: 11px; color: var(--ink-soft); line-height: 1.6; }
+
+  .report { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .report-meta { display: flex; gap: 16px; align-items: baseline; font-family: var(--mono); font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
+  .report-no { color: var(--ai); font-weight: 700; }
+  .report-chars { margin-left: auto; }
+  .sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 3px; padding: 40px 44px; box-shadow: 0 1px 2px rgba(28,35,43,0.04); }
+  .sheet h1 { font-family: var(--serif); font-weight: 600; font-size: 21px; line-height: 1.6; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+  .sheet h2 { font-size: 14.5px; font-weight: 700; margin: 26px 0 8px; padding-left: 10px; border-left: 3px solid var(--ai); }
+  .sheet ul { padding-left: 1.4em; }
+  .sheet li { margin: 6px 0; font-size: 14.5px; }
+  .sheet p { font-size: 14.5px; margin: 6px 0; }
+
+  footer { border-top: 1px solid var(--rule); margin-top: 24px; padding-top: 28px; font-size: 13px; color: var(--ink-soft); }
+  footer a { color: var(--ai); }
+
+  :focus-visible { outline: 2px solid var(--ai); outline-offset: 2px; }
+
+  @media (max-width: 760px) {
+    .layout { display: block; }
+    nav.weeks { position: static; margin-bottom: 28px; }
+    nav.weeks .wk-list { display: flex; overflow-x: auto; gap: 2px; padding-bottom: 6px; }
+    .wk { grid-template-columns: auto; text-align: center; min-width: 56px; }
+    .wk-bar { display: none; }
+    .stamp { position: static; transform: rotate(6deg); margin-top: 20px; }
+    .sheet { padding: 26px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="/" >← alforgelabs.com</a>
+  <span class="brand">alforge labs / shuho</span>
+</div>
+<div class="frame">
+  <header class="hero">
+    <div class="eyebrow">SHUHO — GENERATED SAMPLES</div>
+    <h1>ある個人開発プロジェクト、12 週分の週報。<br />すべて生成直後・無修正。</h1>
+    <p class="lede">GitHub の活動履歴(コミット・Pull Request・Issue のタイトルと本文のみ。コードや diff は送信しません)から、shuho が自動生成した週報のサンプルです。品質を判断いただけるよう、手直しを一切せずそのまま公開しています。</p>
+    <div class="facts">
+      <span>期間 <b>2026-04-13 〜 07-05</b></span>
+      <span>収集元 <b>180 commits / PR 約130</b></span>
+      <span>生成時間 <b>約1分/本</b></span>
+    </div>
+    <div class="stamp" aria-label="生成直後・無修正の原文であることを示す印">生成直後<br />無修正</div>
+  </header>
+
+  <div class="layout">
+    <nav class="weeks" aria-label="週の一覧">
+      <div class="weeks-label">WEEKS ▸ 文書量</div>
+      <div class="wk-list">
+      <a class="wk" href="#w0413"><span class="wk-date">04-13</span><span class="wk-bar"><i style="width:21%"></i></span></a>
+      <a class="wk" href="#w0420"><span class="wk-date">04-20</span><span class="wk-bar"><i style="width:20%"></i></span></a>
+      <a class="wk" href="#w0427"><span class="wk-date">04-27</span><span class="wk-bar"><i style="width:26%"></i></span></a>
+      <a class="wk" href="#w0504"><span class="wk-date">05-04</span><span class="wk-bar"><i style="width:21%"></i></span></a>
+      <a class="wk" href="#w0511"><span class="wk-date">05-11</span><span class="wk-bar"><i style="width:38%"></i></span></a>
+      <a class="wk" href="#w0518"><span class="wk-date">05-18</span><span class="wk-bar"><i style="width:24%"></i></span></a>
+      <a class="wk" href="#w0525"><span class="wk-date">05-25</span><span class="wk-bar"><i style="width:13%"></i></span></a>
+      <a class="wk" href="#w0601"><span class="wk-date">06-01</span><span class="wk-bar"><i style="width:26%"></i></span></a>
+      <a class="wk" href="#w0608"><span class="wk-date">06-08</span><span class="wk-bar"><i style="width:24%"></i></span></a>
+      <a class="wk" href="#w0615"><span class="wk-date">06-15</span><span class="wk-bar"><i style="width:15%"></i></span></a>
+      <a class="wk" href="#w0622"><span class="wk-date">06-22</span><span class="wk-bar"><i style="width:25%"></i></span></a>
+      <a class="wk" href="#w0629"><span class="wk-date">06-29</span><span class="wk-bar"><i style="width:100%"></i></span></a>
+      </div>
+      <p class="weeks-note">バーは各週報の文字量。活動が少ない週は短く、多い週は長く — 生成も活動量に正直です。</p>
+    </nav>
+
+    <main>
+    <article class="report" id="w0413">
+      <div class="report-meta"><span class="report-no">第1週</span><span class="report-range">4/13〜4/19</span><span class="report-chars">612 字</span></div>
+      <div class="sheet">
+<h1>週次報告(4/13〜4/19)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>自動取引システム「alpha-trade」の開発基盤を新規に立ち上げ、プロジェクト全体の管理体制および説明資料(README 等)を整備いたしました。</li>
+<li>投資戦略を自動的に探索・検証する仕組みを強化いたしました。1日に複数回の探索や連続実行が可能となったほか、これまでの探索結果を集計・分析し、次に試すべき候補を提案する機能も新たに追加しております。</li>
+<li>市場の価格データを最新の状態へ一括更新する機能を追加し、日々のデータ管理の手間を削減いたしました。</li>
+<li>SNS(X、旧 Twitter)での情報発信を支援する仕組みを整備いたしました。作業履歴から投稿文の下書きを自動作成する機能を新設し、投稿機能についても新しい管理方式への対応を完了しております。</li>
+<li>AI を活用した開発支援ツールを安全かつ効率的に利用するための作業ガイドを作成し、確認・承認を経て反映いたしました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>公式ホームページの運用実績(パフォーマンス)紹介セクションの改善に着手しております。現在、改善内容の設計書および実装計画の作成まで完了している状況です。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>作成済みの設計書に基づき、ホームページの運用実績紹介セクションの改善を実装いたします。(要編集)</li>
+<li>投資戦略の自動探索を継続して実行し、結果の分析と戦略候補の絞り込みを進めます。(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0420">
+      <div class="report-meta"><span class="report-no">第2週</span><span class="report-range">4/20〜4/26</span><span class="report-chars">584 字</span></div>
+      <div class="sheet">
+<h1>週次報告(4/20〜4/26)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>X(旧Twitter)への自動投稿ツールについて、新しく追加された機能(連続投稿・予約投稿・画像付き投稿・長文投稿・英語と日本語を組み合わせた文面形式など)に対応するよう操作手順書を全面的に更新し、内容の確認と反映を完了しました。</li>
+<li>製品の販売開始に向けた準備として、AlphaForge・AlphaStrike の販売化計画を策定し、購入者の利用権(ライセンス)を管理する仕組みと、配布用プログラムを自動で作成する仕組みについて、それぞれ設計書と実施計画を作成しました。</li>
+<li>投資戦略を自動で探索する機能について、不要になった戦略データを削除する処理が正しく動作しない問題を修正しました。</li>
+<li>開発品質を維持するためのルール整備として、設計の基本方針と、変更内容を確認・承認してから反映する作業手順を文書化しました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>パスワードなどの機密情報を保存しているファイルの保護強化(暗号化、または専用の管理ツールから安全に取得する方式への変更)について、対応方法を検討しています。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>機密情報の保護強化について、方式を決定し対応を実施(要編集)</li>
+<li>利用権(ライセンス)管理の仕組みの開発に着手(要編集)</li>
+<li>配布用プログラムを自動作成する仕組みの構築に着手(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0427">
+      <div class="report-meta"><span class="report-no">第3週</span><span class="report-range">4/27〜5/3</span><span class="report-chars">778 字</span></div>
+      <div class="sheet">
+<h1>週次報告(4/27〜5/3)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>投資戦略の自動探索機能を拡張しました。株式・商品・暗号資産といったテーマごとに探索の目標を分けて管理し、複数のテーマを並行して探索できる仕組みを導入したほか、過去に検証済みの組み合わせを自動で判別して重複した検証を省くようにし、探索の効率を高めました。</li>
+<li>自動探索の信頼性を改善しました。有望な戦略を誤って候補から外してしまう判定の不具合や、作業手順書と実際のシステムの動きのずれを複数修正し、あわせて戦略の種類ごとに適切な損切り方式を選ぶための指針を整備しました。</li>
+<li>機密情報の管理方法を強化しました。これまでファイルに保存していた認証情報(各種サービスのパスワードや接続用の鍵)を、専用のパスワード管理ツール(1Password)から安全に取得する方式へ全面的に切り替えました。</li>
+<li>輸出管理関連の法令(外為法など)への対応として、システム内で利用している暗号技術の利用状況を点検する仕組みを整備し、初回の点検報告書を作成しました。</li>
+<li>開発・運用ルールの文書化を進めました。関連する資料の更新漏れを防ぐための確認ルールや、無人運転中にシステムが停止した場合の対応方針(自動での応急対応を認める条件)を明文化し、今後の運用の安定性を高めました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>今回強化した自動探索機能を用いて、投資戦略の探索と検証の実運転を継続しています。</li>
+<li>人手を介さない長時間の自動運転に向けて、運転中に見つかった課題の洗い出しと手順への反映を順次進めています。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>複数テーマでの戦略探索を継続し、有望な戦略候補を絞り込みます(要編集)</li>
+<li>無人運転の安定化に向けて、残っている課題への対応を進めます(要編集)</li>
+<li>これまでの探索結果を分析し、次の探索方針を見直します(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0504">
+      <div class="report-meta"><span class="report-no">第4週</span><span class="report-range">5/4〜5/10</span><span class="report-chars">613 字</span></div>
+      <div class="sheet">
+<h1>週次報告(5/4〜5/10)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>投資戦略を自動で探索する機能について、無人でも安全に運転できるよう、実行前にシステムの稼働状態を自動点検し、異常を検知した場合には処理を安全に停止する仕組みの手順を整備しました。</li>
+<li>探索の途中で問題が発生した場合の対応手順を拡充しました。問題の種類に応じて対処方法を切り替えられるようになり、原因の確認から復旧までの流れが明確になりました。</li>
+<li>長時間の無人実行を開始する前に、ログイン状態(認証)を自動で確認するステップを追加しました。実行の途中で認証切れにより停止してしまうトラブルを未然に防ぐためのものです。</li>
+<li>探索結果の記録方法をひとつのデータベースに一元化する変更に合わせて、関連する手順書・説明文を一括で更新し、記載内容の食い違いを解消しました。</li>
+<li>これまで手作業が必要だった調整作業がシステム側で自動化されたことに伴い、不要になった手順を削除し、手順書全体をより簡潔で分かりやすい内容に整理しました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>現時点で仕掛かり中の作業はありません。今週着手した変更はすべて完了し、レビューを経て本体へ反映済みです。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>自動探索機能の手順書について、基盤システム側の機能追加に合わせた継続的な更新(要編集)</li>
+<li>無人実行に向けた設定の整備と動作確認(要編集)</li>
+<li>自動探索機能を実際に運用しながらの検証・改善(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0511">
+      <div class="report-meta"><span class="report-no">第5週</span><span class="report-range">5/11〜5/17</span><span class="report-chars">1,140 字</span></div>
+      <div class="sheet">
+<h1>週次報告(5/11〜5/17)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>**X(旧Twitter)自動投稿システムを24時間稼働のクラウドサーバーへ移設しました。** これまで手元のパソコン上で動かしていた自動投稿の仕組みを、常時稼働するクラウドサーバー(Oracle Cloud の無償枠)へ移し、パソコンの電源状態に左右されず安定して投稿できる体制を整えました。</li>
+<li>**クラウドサーバーの自動確保と監視通知の仕組みを構築しました。** 人気が高く確保が難しい無償サーバー枠を、確保できるまで自動で申請し続ける仕組みを用意しました。あわせて、確保の成否や稼働状況を定期的にスマートフォンへ通知するようにし、無人運用中の異常停止にすぐ気づける状態にしました。</li>
+<li>**手元のパソコンとクラウドサーバー間で投稿データを安全に同期する仕組みを整備しました。** 投稿の下書き作成は手元で行い、実際の投稿はサーバー側が担う運用のため、双方のデータのやり取りを自動化し、作業の取りこぼしを防げるようにしました。</li>
+<li>**開発を支援するAIアシスタント向けの作業手順書を一斉に最新化しました。** システムの新機能に合わせて手順書を更新し、複数の配布先で内容の食い違いが生じないよう整合を取りました。あわせて、重複していた開発ルール文書の統合・整理も行い、保守しやすくしました。</li>
+<li>**外部の共有部品(ライブラリ)の取り込みに関するセキュリティ対策を強化しました。** 公開されて間もない部品を自動的には取り込まない設定を導入し、悪意ある部品の混入(いわゆるサプライチェーン攻撃)への備えを高めました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>クラウドサーバー移設後の安定稼働の確認を継続しています。問題がないことを確認でき次第、旧環境(手元のパソコン側)に残っている自動実行設定を撤去する予定です。</li>
+<li>サーバーの初期構築を行う自動処理の改良を進めています(非公開の保管場所からプログラムを取得する際の認証対応や、構築記録の取り扱い改善)。</li>
+<li>認証情報(パスワードに相当する鍵情報)の保管方法を見直し、より安全な管理方式へ切り替える対応を進めています。</li>
+<li>YouTube 動画の自動生成・自動投稿の仕組みづくりに向けて、利用可能な技術やサービスの調査・検討を行っています。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>クラウドサーバーの安定稼働を一定期間確認したうえで、旧環境の自動実行設定を整理します(要編集)</li>
+<li>サーバー初期構築の自動処理を改良し、再構築や引っ越しを容易にします(要編集)</li>
+<li>認証情報の保管方法の見直しを完了させ、安全性を高めます(要編集)</li>
+<li>YouTube 動画自動生成の実現方法について検討を進め、方針をご報告できる状態にします(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0518">
+      <div class="report-meta"><span class="report-no">第6週</span><span class="report-range">5/18〜5/24</span><span class="report-chars">698 字</span></div>
+      <div class="sheet">
+<h1>週次報告(5/18〜5/24)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>自動投稿システムの認証情報(パスワードに相当する情報)が読み取られやすい形で保管されていた問題を解消し、手元の環境とクラウド上のサーバーで安全かつ統一された管理方法に切り替えました。</li>
+<li>クラウド上のサーバーへシステムを配備する際、処理が長時間に及ぶと途中で中断してしまう不具合を解消し、配備作業を安定して完了できるようにしました。</li>
+<li>X(旧 Twitter)の分析データについて、集計側にデータが届かない不備を 2 件修正するとともに、これまで複数手順が必要だった取り込み作業を 1 回の操作で完了できるように改善しました。あわせて、週次の運用レポートが手元で確認できなかった同期漏れも修正しています。</li>
+<li>投資戦略を自動で探索する仕組みについて、これまでの検証で成果が出にくいと判明した組み合わせを避けるための判断ルールや選定手順を作業ガイドに反映し、探索の無駄打ちを減らして効率を高めました。</li>
+<li>市場のトレンド・競合サービス・話題のキーワードを即座に調査できる支援ツールを 3 種類追加し、日々の情報収集を効率化しました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<p>今週着手した作業はすべて完了しており、来週へ持ち越しとなる作業は現時点でありません。</p>
+<h2>来週の予定</h2>
+<ul>
+<li>整備した作業ガイドに基づき、投資戦略の自動探索を継続して実施し、結果を評価します。(要編集)</li>
+<li>今週修正した分析データの取り込み・集計フローが、次回の週次集計で正常に機能するかを確認します。(要編集)</li>
+<li>追加した調査支援ツールを活用し、市場動向・競合サービスの調査を進めます。(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0525">
+      <div class="report-meta"><span class="report-no">第7週</span><span class="report-range">5/25〜5/31</span><span class="report-chars">374 字</span></div>
+      <div class="sheet">
+<h1>週次報告(5/25〜5/31)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>投資戦略を自動で探索する仕組みの作業ガイドに、新しい探索段階「複合探索(複数の条件を組み合わせて、より有望な戦略を見つけ出す手法)」を追加し、内容の確認を経て正式に反映しました。</li>
+<li>上記の作業ガイドは複数の AI 支援環境から参照されるため、環境間で内容に食い違いが生じないよう、対象となる 2 つの参照先を揃えて更新しました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>今回の作業ガイド更新は 2 段階のうち前半が完了した状態であり、関連する基盤システム側への同内容の反映(後半)が残っています。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>基盤システム側への作業ガイド反映(後半)を完了させ、すべての参照先で内容を統一します。(要編集)</li>
+<li>追加した「複合探索」の段階を実際の戦略探索で運用し、効果を確認します。(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0601">
+      <div class="report-meta"><span class="report-no">第8週</span><span class="report-range">6/1〜6/7</span><span class="report-chars">759 字</span></div>
+      <div class="sheet">
+<h1>週次報告(6/1〜6/7)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>**データ収集停止の懸念に対する実地調査と原因の修正**: 「一部データの収集が5月末から止まっているのではないか」という課題について、サーバー上で直接調査を行いました。その結果、データ収集自体は毎日正常に稼働していることを確認できました。実際の原因は、サーバーから手元の環境へ一部のデータを取り寄せる対象の設定漏れと、環境の違いによるコピー処理の不具合でしたので、両方を修正し、反映を完了しました。</li>
+<li>**基本ドキュメントの記載を現行のツール名称へ統一**: システムの操作ツールの名称変更に伴い、主要な説明資料に旧名称のまま残っていた記載(48行分)を現行の名称に修正しました。従来は資料の記載どおりに操作しても実行できない状態だったため、これを解消しています。</li>
+<li>**自動探索機能の手順書に残っていた旧名称の修正**: 投資戦略を自動で探索する機能の手順書にも旧名称の記載が残っていたため、現行の名称に修正し、反映を完了しました。</li>
+<li>**操作手順書を最新のシステム仕様に追随**: システム本体側で操作方法の一部(削除操作の確認方法など)が変更されたことを受け、関連する手順書を最新の仕様に合わせて更新し、反映を完了しました。</li>
+</ul>
+<p>いずれの作業も、内容の確認(レビュー)を経て本体への反映まで完了しております。</p>
+<h2>進行中の作業</h2>
+<p>今週時点で対応中の未完了作業はありません。今週着手した作業はすべて完了・反映済みです。</p>
+<h2>来週の予定</h2>
+<ul>
+<li>名称変更への対応が他の資料や手順書にも漏れなく行き渡っているかの最終確認(要編集)</li>
+<li>データ取り寄せ処理の修正後、収集・同期が安定して動作しているかの経過観察(要編集)</li>
+<li>次に取り組む開発テーマの選定と着手(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0608">
+      <div class="report-meta"><span class="report-no">第9週</span><span class="report-range">6/8〜6/14</span><span class="report-chars">699 字</span></div>
+      <div class="sheet">
+<h1>週次報告(6/8〜6/14)alpha-trade 進捗記録</h1>
+<h2>今週の成果</h2>
+<ul>
+<li>**SNS(X)自動投稿システムのデータ管理方式を刷新しました。** 手元の端末とサーバーの双方からデータを更新する従来の方式では、更新のタイミングによってデータの食い違いが発生する恐れがあったため、サーバー側で一元的に管理する安全な方式へ移行しました。</li>
+<li>**開発品質を自動で検査する仕組みを導入しました。** プログラムを修正した際に、記述ルール違反や不具合の兆候を自動的に検査・指摘する仕組みを整備し、品質確認の抜け漏れを防げるようにしました。</li>
+<li>**開発支援AIに与える作業手順書の食い違いを一括で解消しました。** 同じ内容を複数の場所で管理している手順書について、これまでの更新の過程で生じていた内容のずれを全数点検し、修復しました。</li>
+<li>**投資戦略の自動探索機能に関する手順書を最新化しました。** 新たに利用可能となった6種類のテクニカル指標(相場分析用の計算式)の説明を追加したほか、探索が途中で停止した場合の再開手順も明文化しました。</li>
+<li>**システム全体の資料を整備しました。** システム構成図に新しい構成要素2件を追記したほか、投稿管理ツールの新機能に合わせて操作説明を更新しました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<p>今週着手した作業はすべて完了しており、週末時点で持ち越しとなっている未完了の作業はありません。</p>
+<h2>来週の予定</h2>
+<ul>
+<li>投資戦略の自動探索の継続実行と、探索結果の分析(要編集)</li>
+<li>今週導入した品質自動検査の運用状況の確認と調整(要編集)</li>
+<li>SNS自動投稿システムの新しいデータ管理方式での安定稼働の確認(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0615">
+      <div class="report-meta"><span class="report-no">第10週</span><span class="report-range">6/15〜6/21</span><span class="report-chars">446 字</span></div>
+      <div class="sheet">
+<h1>週次報告(6/15〜6/21)alpha-trade 進捗記録</h1>
+<p>いつもお世話になっております。今週の進捗をご報告いたします。</p>
+<h2>今週の成果</h2>
+<ul>
+<li>模擬取引(実際の資金を使わないテスト運用)の状況をまとめて確認できる仕組みを新たに追加し、システム本体への反映まで完了いたしました。</li>
+<li>これまで手作業で行っていた確認作業(取引データの取り込み、売買記録の集計、稼働状況の確認、健全性のチェック)を一連の手順として標準化し、確認漏れの防止と作業時間の短縮を図りました。</li>
+<li>上記の仕組みは複数の開発支援環境から共通して利用できるよう整備し、今後の日常的な運用確認に活用できる状態になっております。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>今週末時点で対応中の未完了作業はございません。今週着手した内容はすべて完了・反映済みです。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>今回追加した確認の仕組みを用いて、模擬取引の運用状況を定期的にチェックしてまいります。(要編集)</li>
+<li>確認結果をもとに、運用上の課題や改善点の洗い出しを進める予定です。(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0622">
+      <div class="report-meta"><span class="report-no">第11週</span><span class="report-range">6/22〜6/28</span><span class="report-chars">755 字</span></div>
+      <div class="sheet">
+<h1>週次報告(6/22〜6/28)alpha-trade 進捗記録</h1>
+<p>いつもお世話になっております。今週の進捗をご報告いたします。</p>
+<h2>今週の成果</h2>
+<ul>
+<li>無料版を初めてお使いになる方が、つまずかずに使い始められるようにするための「利用開始ハードル低減」の全体戦略を策定し、施策の全体像と実行順序を文書として確定いたしました。</li>
+<li>導入時のつまずきを減らす6つの施策(お試し用サンプルデータの同梱、動作をすぐ体験できる一発実行機能、導入後の環境チェック機能、導入手順での設定漏れの解消、エラー発生時に次の対処方法を自動で案内する仕組み、AI アシスタントに貼るだけで導入が完了する案内文)について、それぞれ設計書と作業計画を作成し、レビューを経て確定いたしました。</li>
+<li>新規利用者の獲得につながる2つの施策(無料公開中の関連ツールから本体製品へのご案内表示、および Python 環境の方向けの簡易インストール手段)についても、設計書と作業計画を作成し確定いたしました。</li>
+<li>開発環境の整理を行い、作業中に生成される一時ファイルなどが変更履歴の管理対象に混ざらないよう設定を整備いたしました。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>今週末時点で対応中の未完了作業はございません。今週着手した戦略・設計・計画の文書化は、すべてレビューを完了し反映済みです。</li>
+<li>今週確定した各施策は、今後、実際の機能として組み込む実装段階へ順次移行いたします。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>今週確定した設計に基づき、利用開始のハードルを下げる各施策の実装(実際の機能追加)を順次進める予定です。(要編集)</li>
+<li>簡易インストール手段の一般公開に向けた最終準備を進める予定です。(要編集)</li>
+<li>実装内容に合わせて、利用者向けの公開ドキュメント(導入手順のご案内ページ)を更新する予定です。(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+      </div>
+    </article>
+    <article class="report" id="w0629">
+      <div class="report-meta"><span class="report-no">第12週</span><span class="report-range">6/29〜7/5</span><span class="report-chars">2,966 字</span></div>
+      <div class="sheet">
+<h1>週次報告(6/29〜7/5)alpha-trade 進捗記録</h1>
+<p>いつもお世話になっております。今週の進捗をご報告いたします。</p>
+<h2>今週の成果</h2>
+<ul>
+<li>主力製品 AlphaForge の新しいバージョン(v0.17.0)を一般公開いたしました。公開作業の過程で見つかった公開手順の不具合も修正済みです。</li>
+<li>先週確定した設計に基づき、Python 環境をお使いの方向けの簡易インストール手段(alpha-forge-launcher)の実装を完了し、Python の公式配布サイト(PyPI)にて一般公開いたしました。不正なファイルの混入を防ぐ安全対策の強化や、今後の更新を自動で公開できる仕組みの整備も併せて実施しております。</li>
+<li>無料公開中の関連ツール3種(発注連携ツール・結果可視化ツール・AI 連携ツール)に、起動時に主力製品のご案内を表示する機能を追加いたしました。うち AI 連携ツールは、この機能を含む新しい版として公開済みです。</li>
+<li>公式サイトの導入案内ページを拡充し、「AI アシスタントに貼るだけで導入が完了する案内文」と、導入後すぐに動作を体験できるお試し実行の導線を追加いたしました。簡易インストール手段のご案内も同ページに反映しております。</li>
+<li>SNS(X)の自動広報ボットの運用改善を行いました。外部サービスの利用量を自動監視する仕組みの導入と情報取得コストの削減、話題性の高い投稿と交流する機能の強化、手動で行った返信を週次の実績集計に正しく反映する仕組みの追加、動作確認で見つかった不具合1件の修正を実施いたしました。あわせて、関連ツールが利用する外部部品の定期更新を13件適用しております。</li>
+</ul>
+<h2>進行中の作業</h2>
+<ul>
+<li>SNS(X)のデータ取得サービスについて、料金プラン見直し(従量課金への移行影響)の検討を進めております。今週導入した自動計測により実際の利用量データを収集中で、データが揃い次第、費用方針を確定いたします。</li>
+<li>上記のほか、対応途中で未反映の変更はございません。今週着手した作業はすべて確認を終え、反映済みです。</li>
+</ul>
+<h2>来週の予定</h2>
+<ul>
+<li>利用量の計測データをもとに、SNS(X)データ取得サービスの契約プラン(費用)の方針を確定する予定です。(要編集)</li>
+<li>今週公開した新バージョンおよび簡易インストール手段について、利用状況の確認と不具合への対応を行う予定です。(要編集)</li>
+<li>利用開始のハードルを下げる取り組みの第2弾として、追加施策の要否判断と着手準備を進める予定です。(要編集)</li>
+</ul>
+<h2>連絡・相談事項</h2>
+<h2>活動記録(今週の実データ)</h2>
+<p>### コミット</p>
+<ul>
+<li>alpha-forge: 2件(6/29 #1281、7/3 #1282)</li>
+<li>alpha-strike: 7件(6/29 — 機能追加 #110、依存部品更新 6件)</li>
+<li>alpha-bot: 9件(7/2 — #599、#602〜#609)</li>
+<li>alpha-visualizer: 8件(6/29 — 機能追加 #275、依存部品更新 7件)</li>
+<li>alpha-forge-mcp: 4件(6/29 — #43〜#46)</li>
+<li>alforge-labs.github.io(公式サイト): 3件(6/29 — #411、#412、統計スナップショット自動更新)</li>
+<li>alpha-forge-launcher(今週新設): 6件(6/29 — 初期実装から公開設定まで、タグ v0.1.0 で PyPI 公開)</li>
+<li>alpha-trade(親リポジトリ): 4件(6/29 — #126〜#129)</li>
+</ul>
+<p>### マージされた Pull Request(完了した作業)</p>
+<ul>
+<li>alpha-forge #1281: 配布版 AGENTS.md に貼るだけプロンプトと DEMO 即実行ワークフローを追加(A6)(6/29)</li>
+<li>alpha-forge #1282: release.yml の workflow_dispatch upload 判定を boolean 比較に修正(7/3)</li>
+<li>alpha-strike #110: 起動時に AlphaForge への送客 CTA を表示(C3)(6/29)</li>
+<li>alpha-strike #104〜#108・#111: 依存部品の定期更新 6件(6/29)</li>
+<li>alpha-visualizer #275: serve 起動バナーに AlphaForge への送客 CTA を追加(C3)(6/29)</li>
+<li>alpha-visualizer #251〜#256・#276: 依存部品の定期更新 7件(6/29)</li>
+<li>alpha-forge-mcp #43: 起動時に AlphaForge への送客 CTA を stderr へ表示(C3)(6/29)</li>
+<li>alpha-forge-mcp #44〜#46: v0.1.0a7 公開および README バッジ追加・バージョン同期(6/29)</li>
+<li>alforge-labs.github.io #411: install ページに AI エージェント貼るだけプロンプトと DEMO 即実行を追加(A6)(6/29)</li>
+<li>alforge-labs.github.io #412: install ページ・getting-started に uvx / PyPI(alpha-forge-launcher)導線を追加(6/29)</li>
+<li>alpha-trade #126〜#129: A6・C3・C1 の設計仕様と実装計画の文書追加、.gitignore 整備(6/29)</li>
+<li>alpha-bot #599: ネイティブ X Trends(WOEID)を discover_trends の一次データ源に追加(7/2)</li>
+<li>alpha-bot #602: recent search の既定 max_results を 30→20 に削減(取得コスト抑制)(7/2)</li>
+<li>alpha-bot #603: X API usage tripwire 監視(usage-check コマンド)を追加(7/2)</li>
+<li>alpha-bot #604: 品質フィルタの時刻依存で youtube 候補テストが恒久失敗する不具合を修正(7/2)</li>
+<li>alpha-bot #605: usage-check の定期実行組込みと --all-accounts 対応(7/2)</li>
+<li>alpha-bot #606: japan_curator daily-engage に topical/バイラル候補を追加(quota 分割)(7/2)</li>
+<li>alpha-bot #607・#608: research-scan への利用量実測計装の追加と、実測値の #597 への自動記録(7/2)</li>
+<li>alpha-bot #609: Web Intent 返信を X 照合し weekly-review に実返信を計上(7/2)</li>
+</ul>
+<p>### クローズした Issue(解決した課題)</p>
+<ul>
+<li>alpha-bot #598: ネイティブ X Trends(WOEID)を trends 調査の一次データ源に追加(7/2)</li>
+<li>alpha-bot #600: youtube 候補テストが本流で決定論的に失敗する不具合(7/2)</li>
+<li>alpha-bot #601: 月次 X API 利用量の tripwire 監視(上限の一定割合超過で警告)(7/2)</li>
+</ul>
+<p>### 進行中の Pull Request(未マージ)</p>
+<p>(なし)</p>
+<p>### 進行中の Issue(未解決)</p>
+<ul>
+<li>alpha-bot #597: 現行 X API 契約ティアの確認(pay-per-use 移行影響・調査ループのコスト方針)— 今週導入した自動計測で実測データを収集中</li>
+</ul>
+<p>### 実施したレビュー</p>
+<p>(なし)</p>
+      </div>
+    </article>
+    <footer>
+      これらの週報は <strong>shuho</strong>(公開準備中)により自動生成されました。最新情報は <a href="/">alforgelabs.com</a> にて。
+    </footer>
+    </main>
+  </div>
+</div>
+<script>
+  // 現在表示中の週をレールに反映(reduced-motion でも害のない静的ハイライト)
+  const links = [...document.querySelectorAll('.wk')];
+  const byId = Object.fromEntries(links.map((a) => [a.getAttribute('href').slice(1), a]));
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          links.forEach((a) => a.classList.remove('active'));
+          byId[e.target.id]?.classList.add('active');
+        }
+      }
+    },
+    { rootMargin: '-20% 0px -70% 0px' }
+  );
+  document.querySelectorAll('.report').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
