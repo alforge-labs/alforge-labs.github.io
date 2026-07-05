@@ -29,6 +29,11 @@ theme:
 
 extra:
   homepage: https://alforgelabs.com/en/index.html
+  # alpha-bot#664: docs footer に X フォロー導線 (mkdocs-material extra.social)
+  social:
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/Alforge_bot
+      name: Follow @Alforge_bot on X
   alternate:
     - name: 日本語
       link: /ja/docs/
