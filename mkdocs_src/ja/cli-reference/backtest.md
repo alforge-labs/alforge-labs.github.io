@@ -551,13 +551,35 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [STRATEGY_ID3 ...] [O
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
 | `STRATEGY_IDS` | 引数（必須、2 つ以上） | - | 合算する戦略 ID のスペース区切りリスト（例: `iwm_sma200_bho_v1 qqq_ema_macd_v2`） |
-| `--allocation` | choice | `equal` | 資金配分方式（`equal` / `custom`） |
+| `--allocation` | choice | `equal` | 資金配分方式（`equal` / `custom` / `risk_parity` / `vol_target`） |
 | `--weights` | オプション | - | `--allocation custom` 時のウェイト（例: `sid1=0.4,sid2=0.6`）。合計が `1.0 ± 0.01` 以内である必要がある |
 | `--wft` | int | - | WFT（walk-forward test）を実行する window 数（`>= 2`）。指定時は結果に `wft` セクションを返す（#944） |
+| `--rebalance` | choice | `monthly` | 動的配分（`risk_parity` / `vol_target`）のリバランス頻度（`monthly` / `weekly` / `quarterly`）（#1287） |
+| `--vol-lookback` | int | `63` | 動的配分の実現ボラ計算に使う lookback 本数（営業日）（#1287） |
+| `--target-vol` | float | - | `--allocation vol_target` の目標年率ボラ（例: `0.15` = 15%）。`vol_target` では必須（未指定はエラー終了）（#1287） |
+| `--max-leverage` | float | `1.0` | `vol_target` の全体エクスポージャー上限（既定 1.0 = レバなし）（#1287） |
+| `--wft-warmup-bars` | int | `0` | WFT 各窓のウォームアップ本数。窓開始の N 本前からデータを渡し指標計算に使い、評価（metrics）は窓内のみで行う（#1287） |
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#960）。各戦略の symbol について保存済み配当データを読み込み、合算結果にも反映する |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
 
 `--allocation equal` では各戦略へ均等配分し、`--allocation custom` では `--weights` で指定したウェイトを用いる。
+
+`--allocation risk_parity` / `vol_target` は固定ウェイトではなく実現ボラティリティに応じて配分を定期的にリバランスする動的配分（#1287）。`risk_parity` は各戦略の直近 `--vol-lookback` 本の実現ボラの逆数比で配分する inverse-vol 方式。`vol_target` は `risk_parity` ウェイトに加え、合成ポートフォリオ全体の実現ボラを `--target-vol` に合わせて全体エクスポージャーをスケールし、余剰は現金（リターン 0）扱いとなる（`--max-leverage` で上限）。**look-ahead 防止**のため、リバランス日 t までのリターンのみでウェイト/スケールを計算し t の翌営業日から適用する。データ不足期間は equal weight（`vol_target` はスケール 1.0）にフォールバックする。JSON 出力の `combined` ブロックには最終適用ウェイトのみが含まれ、日次のウェイト推移（`weights_history`）は含まれない。
+
+`--wft` と動的配分を併用する場合、窓が短いと `--vol-lookback` 分のデータが窓内で貯まらず equal weight にフォールバックしがちなため、`--wft-warmup-bars` で各窓の**データ**を窓開始の N 本前から渡すこと（**評価は窓内のみ**）を推奨する。
+
+`symbol` フィールドで外部シンボル（VIX 等）を参照する戦略も `backtest combine` に正しく含められる。以前は外部シンボルのマージ処理が `backtest combine` の経路で呼ばれず、該当 indicator が silent に無効化される欠陥があったが、`backtest run` と同じマージ処理を通すよう修正済み（#1287）。
+
+```bash
+# risk_parity 配分 + 月次リバランス + WFT 5窓（warmup 前置あり）
+alpha-forge backtest combine sid_a sid_b sid_c \
+    --allocation risk_parity --rebalance monthly --vol-lookback 63 \
+    --wft 5 --wft-warmup-bars 63 --json
+
+# vol_target 配分（目標年率ボラ 15%、レバレッジ上限 1.5倍）
+alpha-forge backtest combine sid_a sid_b sid_c \
+    --allocation vol_target --target-vol 0.15 --max-leverage 1.5 --json
+```
 
 ---
 

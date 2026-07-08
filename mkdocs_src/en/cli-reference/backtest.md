@@ -551,11 +551,33 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [...] [OPTIONS]
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
 | `STRATEGY_IDS` | arguments (required, 2 or more) | - | Strategy IDs to combine (e.g. `iwm_sma200_bho_v1 qqq_ema_macd_v2`) |
-| `--allocation` | choice | `equal` | Allocation method (`equal` / `custom`) |
+| `--allocation` | choice | `equal` | Allocation method (`equal` / `custom` / `risk_parity` / `vol_target`) |
 | `--weights` | option | - | Weights when `--allocation custom`, e.g. `sid1=0.4,sid2=0.6`. Sum must be within 1.0 ± 0.01. Required with `--allocation custom` |
 | `--wft` | int | - | Number of windows for a walk-forward test (>= 2). Returns a `wft` section when set |
+| `--rebalance` | choice | `monthly` | Rebalance frequency for dynamic allocation (`risk_parity` / `vol_target`): `monthly` / `weekly` / `quarterly` (#1287) |
+| `--vol-lookback` | int | `63` | Lookback bars (trading days) used for the realized-vol calculation in dynamic allocation (#1287) |
+| `--target-vol` | float | - | Target annualized volatility for `--allocation vol_target` (e.g. `0.15` = 15%). Required for `vol_target` (#1287) |
+| `--max-leverage` | float | `1.0` | Exposure cap for `vol_target` scaling (default `1.0` = no leverage) (#1287) |
+| `--wft-warmup-bars` | int | `0` | Warmup bars per WFT window. Feeds data starting N bars before the window for indicator computation, while evaluation (metrics) covers only the window itself (#1287) |
 | `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics. Loads saved dividend data for each strategy's symbol and reflects it in the combined result |
 | `--json` | flag | false | Output results as JSON to stdout |
+
+`--allocation risk_parity` / `vol_target` replace fixed weights with a periodically rebalanced allocation driven by realized volatility (#1287). `risk_parity` allocates weight inversely proportional to each strategy's realized volatility over the trailing `--vol-lookback` window (inverse-vol). `vol_target` builds on `risk_parity` weights and additionally scales the combined portfolio's total exposure so its realized volatility tracks `--target-vol`; unused exposure is treated as cash (zero return), capped by `--max-leverage`. To prevent **look-ahead**, weights (and the `vol_target` scale) are computed from returns up to and including rebalance date t and applied starting the next trading day after t. Periods with insufficient lookback data fall back to equal weight (scale `1.0` for `vol_target`). The `combined` block in JSON output includes only the final applied weights; the daily weight history (`weights_history`) is not included.
+
+When combining `--wft` with dynamic allocation, short windows may not accumulate enough bars for `--vol-lookback` within the window, causing the allocation to fall back to equal weight for most of the window. Use `--wft-warmup-bars` to feed each window's **data** starting N bars before the window boundary while still **evaluating only the window itself**.
+
+Strategies that reference external symbols (e.g. VIX) via the `symbol` field are now correctly included in `backtest combine` as well. Previously, the external-symbol merge step was not invoked on this path, silently disabling those indicators; `backtest combine` now runs the same merge step as `backtest run` (#1287).
+
+```bash
+# risk_parity allocation + monthly rebalance + 5-window WFT with warmup prepend
+alpha-forge backtest combine sid_a sid_b sid_c \
+    --allocation risk_parity --rebalance monthly --vol-lookback 63 \
+    --wft 5 --wft-warmup-bars 63 --json
+
+# vol_target allocation (target 15% annualized vol, 1.5x leverage cap)
+alpha-forge backtest combine sid_a sid_b sid_c \
+    --allocation vol_target --target-vol 0.15 --max-leverage 1.5 --json
+```
 
 ### Common errors
 
@@ -563,6 +585,7 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [...] [OPTIONS]
 |---------|-------|-----|
 | `Error: --allocation custom requires --weights` | `--allocation custom` given without `--weights` | Provide `--weights` |
 | `Error: invalid --weights token (expected sid=val): <token>` | Malformed `--weights` entry | Use `sid1=0.4,sid2=0.6` style |
+| `Error: --allocation vol_target requires --target-vol` | `--allocation vol_target` given without `--target-vol` | Provide `--target-vol` |
 
 ---
 

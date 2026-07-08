@@ -5589,7 +5589,7 @@
 <td><code>--allocation</code></td>
 <td>choice</td>
 <td><code>equal</code></td>
-<td>資金配分方式（<code>equal</code> / <code>custom</code>）</td>
+<td>資金配分方式（<code>equal</code> / <code>custom</code> / <code>risk_parity</code> / <code>vol_target</code>）</td>
 </tr>
 <tr>
 <td><code>--weights</code></td>
@@ -5602,6 +5602,36 @@
 <td>int</td>
 <td>-</td>
 <td>WFT（walk-forward test）を実行する window 数（<code>&gt;= 2</code>）。指定時は結果に <code>wft</code> セクションを返す（#944）</td>
+</tr>
+<tr>
+<td><code>--rebalance</code></td>
+<td>choice</td>
+<td><code>monthly</code></td>
+<td>動的配分（<code>risk_parity</code> / <code>vol_target</code>）のリバランス頻度（<code>monthly</code> / <code>weekly</code> / <code>quarterly</code>）（#1287）</td>
+</tr>
+<tr>
+<td><code>--vol-lookback</code></td>
+<td>int</td>
+<td><code>63</code></td>
+<td>動的配分の実現ボラ計算に使う lookback 本数（営業日）（#1287）</td>
+</tr>
+<tr>
+<td><code>--target-vol</code></td>
+<td>float</td>
+<td>-</td>
+<td><code>--allocation vol_target</code> の目標年率ボラ（例: <code>0.15</code> = 15%）。<code>vol_target</code> では必須（未指定はエラー終了）（#1287）</td>
+</tr>
+<tr>
+<td><code>--max-leverage</code></td>
+<td>float</td>
+<td><code>1.0</code></td>
+<td><code>vol_target</code> の全体エクスポージャー上限（既定 1.0 = レバなし）（#1287）</td>
+</tr>
+<tr>
+<td><code>--wft-warmup-bars</code></td>
+<td>int</td>
+<td><code>0</code></td>
+<td>WFT 各窓のウォームアップ本数。窓開始の N 本前からデータを渡し指標計算に使い、評価（metrics）は窓内のみで行う（#1287）</td>
 </tr>
 <tr>
 <td><code>--dividend-reinvest</code></td>
@@ -5618,11 +5648,23 @@
 </tbody>
 </table>
 <p><code>--allocation equal</code> では各戦略へ均等配分し、<code>--allocation custom</code> では <code>--weights</code> で指定したウェイトを用いる。</p>
+<p><code>--allocation risk_parity</code> / <code>vol_target</code> は固定ウェイトではなく実現ボラティリティに応じて配分を定期的にリバランスする動的配分（#1287）。<code>risk_parity</code> は各戦略の直近 <code>--vol-lookback</code> 本の実現ボラの逆数比で配分する inverse-vol 方式。<code>vol_target</code> は <code>risk_parity</code> ウェイトに加え、合成ポートフォリオ全体の実現ボラを <code>--target-vol</code> に合わせて全体エクスポージャーをスケールし、余剰は現金（リターン 0）扱いとなる（<code>--max-leverage</code> で上限）。<strong>look-ahead 防止</strong>のため、リバランス日 t までのリターンのみでウェイト/スケールを計算し t の翌営業日から適用する。データ不足期間は equal weight（<code>vol_target</code> はスケール 1.0）にフォールバックする。JSON 出力の <code>combined</code> ブロックには最終適用ウェイトのみが含まれ、日次のウェイト推移（<code>weights_history</code>）は含まれない。</p>
+<p><code>--wft</code> と動的配分を併用する場合、窓が短いと <code>--vol-lookback</code> 分のデータが窓内で貯まらず equal weight にフォールバックしがちなため、<code>--wft-warmup-bars</code> で各窓の<strong>データ</strong>を窓開始の N 本前から渡すこと（<strong>評価は窓内のみ</strong>）を推奨する。</p>
+<p><code>symbol</code> フィールドで外部シンボル（VIX 等）を参照する戦略も <code>backtest combine</code> に正しく含められる。以前は外部シンボルのマージ処理が <code>backtest combine</code> の経路で呼ばれず、該当 indicator が silent に無効化される欠陥があったが、<code>backtest run</code> と同じマージ処理を通すよう修正済み（#1287）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># risk_parity 配分 + 月次リバランス + WFT 5窓（warmup 前置あり）</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>sid_a<span class="w"> </span>sid_b<span class="w"> </span>sid_c<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span>--allocation<span class="w"> </span>risk_parity<span class="w"> </span>--rebalance<span class="w"> </span>monthly<span class="w"> </span>--vol-lookback<span class="w"> </span><span class="m">63</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span>--wft<span class="w"> </span><span class="m">5</span><span class="w"> </span>--wft-warmup-bars<span class="w"> </span><span class="m">63</span><span class="w"> </span>--json
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># vol_target 配分（目標年率ボラ 15%、レバレッジ上限 1.5倍）</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>sid_a<span class="w"> </span>sid_b<span class="w"> </span>sid_c<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span>--allocation<span class="w"> </span>vol_target<span class="w"> </span>--target-vol<span class="w"> </span><span class="m">0</span>.15<span class="w"> </span>--max-leverage<span class="w"> </span><span class="m">1</span>.5<span class="w"> </span>--json
+</code></pre></div>
 <hr />
 <h2 id="alpha-forge-backtest-portfolio">alpha-forge backtest portfolio<a class="headerlink" href="#alpha-forge-backtest-portfolio" title="Permanent link">&para;</a></h2>
 <p>複数銘柄のポートフォリオバックテストを実行する。</p>
 <h3 id="_36">構文<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>portfolio<span class="w"> </span>&lt;SYM1&gt;<span class="w"> </span><span class="o">[</span>SYM2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>portfolio<span class="w"> </span>&lt;SYM1&gt;<span class="w"> </span><span class="o">[</span>SYM2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="_37">引数とオプション<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h3>
 <table>
@@ -5674,21 +5716,21 @@
 </tbody>
 </table>
 <h3 id="_38">出力例<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>ポートフォリオバックテストを実行中: [&#39;AAPL&#39;, &#39;MSFT&#39;, &#39;GOOGL&#39;] (equal 配分)
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>=== ポートフォリオ結果: tech_basket_v1 (equal) ===
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>銘柄: AAPL, MSFT, GOOGL
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>配分: AAPL=33.3%, MSFT=33.3%, GOOGL=33.3%
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>総リターン: 78.40%  CAGR: 12.30%
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>SR: 1.45  Sortino: 1.85  Calmar: 0.62
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>MDD: -19.80%  CVaR(95%): -3.20%
-<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>分散効果比率: 1.085
-<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>
-<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>銘柄         ウェイト    Return     SR      MDD
-<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>──────────────────────────────────────────────────
-<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>AAPL          33.3%   +85.2%   1.52  -22.1%
-<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>MSFT          33.3%   +72.0%   1.41  -18.4%
-<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>GOOGL         33.3%   +78.0%   1.38  -19.5%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ポートフォリオバックテストを実行中: [&#39;AAPL&#39;, &#39;MSFT&#39;, &#39;GOOGL&#39;] (equal 配分)
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>=== ポートフォリオ結果: tech_basket_v1 (equal) ===
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>銘柄: AAPL, MSFT, GOOGL
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>配分: AAPL=33.3%, MSFT=33.3%, GOOGL=33.3%
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>総リターン: 78.40%  CAGR: 12.30%
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>SR: 1.45  Sortino: 1.85  Calmar: 0.62
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>MDD: -19.80%  CVaR(95%): -3.20%
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>分散効果比率: 1.085
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>銘柄         ウェイト    Return     SR      MDD
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>──────────────────────────────────────────────────
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>AAPL          33.3%   +85.2%   1.52  -22.1%
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>MSFT          33.3%   +72.0%   1.41  -18.4%
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>GOOGL         33.3%   +78.0%   1.38  -19.5%
 </code></pre></div>
 <h3 id="_39">主なエラー<a class="headerlink" href="#_39" title="Permanent link">&para;</a></h3>
 <table>
@@ -5721,7 +5763,7 @@
 <h2 id="alpha-forge-backtest-chart">alpha-forge backtest chart<a class="headerlink" href="#alpha-forge-backtest-chart" title="Permanent link">&para;</a></h2>
 <p>ダッシュボード上のチャート URL を表示し、必要なら開く。</p>
 <h3 id="_40">構文<a class="headerlink" href="#_40" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span><span class="o">[</span>RESULT_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--open<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>...<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span><span class="o">[</span>RESULT_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--open<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>...<span class="o">]</span>
 </code></pre></div>
 <h3 id="_41">引数とオプション<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
 <table>
@@ -5755,20 +5797,20 @@
 </tbody>
 </table>
 <h3 id="_42">出力例<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>📊 チャートを表示するには `alpha-vis serve` を起動してください:
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>   http://localhost:8000/?run_id=spy_sma_v1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>📊 チャートを表示するには `alpha-vis serve` を起動してください:
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>   http://localhost:8000/?run_id=spy_sma_v1
 </code></pre></div>
 <p><code>?run_id=</code> には引数に渡した <code>RESULT_ID</code> がそのまま入ります（<code>strategy_id</code> を渡せば <code>strategy_id</code> が、特定ランの <code>run_id</code> を渡せばその <code>run_id</code> が入ります）。</p>
 <p>複数戦略比較時:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>📊 チャートを表示するには `alpha-vis serve` を起動してください:
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>📊 チャートを表示するには `alpha-vis serve` を起動してください:
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
 </code></pre></div>
 <p>このコマンド自体は URL を表示するだけです。チャート閲覧には <code>alpha-vis serve</code>（<a href="https://github.com/ysakae/alpha-visualizer">alpha-visualizer</a>）を起動する必要があります。</p>
 <hr />
 <h2 id="alpha-forge-backtest-signal-count">alpha-forge backtest signal-count<a class="headerlink" href="#alpha-forge-backtest-signal-count" title="Permanent link">&para;</a></h2>
 <p>vectorbt をスキップし、エントリー条件のシグナル発生件数だけを高速で集計する。条件式の妥当性確認用。</p>
 <h3 id="_43">構文<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>signal-count<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--period<span class="w"> </span>5y<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>signal-count<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--period<span class="w"> </span>5y<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_44">引数とオプション<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
 <table>
@@ -5814,17 +5856,17 @@
 </tbody>
 </table>
 <h3 id="_45">出力例<a class="headerlink" href="#_45" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>シグナル件数チェック: spy_sma_v1 × SPY (5y)
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>総バー数: 1258 日
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>エントリー条件 (long AND):
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>  sma_fast &gt; sma_slow              :   687 日 ( 54.6%)
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>  ──────────────────────────────────
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>  全条件 AND                       :   687 日 ( 54.6%)
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>レジーム別シグナル件数:
-<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>  state=0    :   312 日 ( 24.8%)
-<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>  state=1    :   375 日 ( 29.8%)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>シグナル件数チェック: spy_sma_v1 × SPY (5y)
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>総バー数: 1258 日
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>エントリー条件 (long AND):
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>  sma_fast &gt; sma_slow              :   687 日 ( 54.6%)
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>  ──────────────────────────────────
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>  全条件 AND                       :   687 日 ( 54.6%)
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>レジーム別シグナル件数:
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>  state=0    :   312 日 ( 24.8%)
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>  state=1    :   375 日 ( 29.8%)
 </code></pre></div>
 <p>シグナルが 0 件の場合 <code>⚠️  シグナルが発生していません</code> の警告が表示されます。</p>
 <div class="admonition note">
@@ -5862,7 +5904,7 @@
 <h2 id="alpha-forge-backtest-monte-carlo">alpha-forge backtest monte-carlo<a class="headerlink" href="#alpha-forge-backtest-monte-carlo" title="Permanent link">&para;</a></h2>
 <p>既存のバックテスト結果のトレード履歴をリサンプリングし、モンテカルロシミュレーションで破産確率や最悪ケースを評価する。</p>
 <h3 id="_47">構文<a class="headerlink" href="#_47" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>monte-carlo<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>--simulations<span class="w"> </span><span class="m">1000</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>monte-carlo<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>--simulations<span class="w"> </span><span class="m">1000</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="_48">引数とオプション<a class="headerlink" href="#_48" title="Permanent link">&para;</a></h3>
 <table>
@@ -5896,31 +5938,31 @@
 </tbody>
 </table>
 <h3 id="_49">出力例<a class="headerlink" href="#_49" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>モンテカルロシミュレーションを実行中: spy_sma_v1_20260415_103021 (1000回試行)
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>✅ シミュレーション完了
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>初期資産: 10000
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>平均最終資産: 14820
-<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>中央最終資産: 14250
-<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>最悪最終資産: 7340
-<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>最高最終資産: 23150
-<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>平均最大MDD: 18.40%
-<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>95%最大MDD:  31.20%
-<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>破産確率:    0.40%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>モンテカルロシミュレーションを実行中: spy_sma_v1_20260415_103021 (1000回試行)
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>✅ シミュレーション完了
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>初期資産: 10000
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>平均最終資産: 14820
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>中央最終資産: 14250
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>最悪最終資産: 7340
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>最高最終資産: 23150
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>平均最大MDD: 18.40%
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>95%最大MDD:  31.20%
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a>破産確率:    0.40%
 </code></pre></div>
 <h3 id="monte-carlo-json">出力例（<code>--json</code>）<a class="headerlink" href="#monte-carlo-json" title="Permanent link">&para;</a></h3>
 <p><code>--json</code> 指定時は、統計値に加えて <code>backtest run</code> / <code>optimize walk-forward</code> と命名・契約を揃えた既定 verdict（<code>pre_filter_pass</code> / <code>pre_filter</code>）を <strong><code>--goal</code> なしでも必ず</strong>含めます（issue #1237）。判定は「破産確率（<code>ruin_probability_pct</code>）が既定閾値 <code>5.0%</code> 以下か」です。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="p">{</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">  </span><span class="nt">&quot;initial_capital&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">  </span><span class="nt">&quot;simulations_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">  </span><span class="nt">&quot;mean_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14820</span><span class="p">,</span>
-<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">  </span><span class="nt">&quot;worst_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7340</span><span class="p">,</span>
-<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">  </span><span class="nt">&quot;best_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">23150</span><span class="p">,</span>
-<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">  </span><span class="nt">&quot;mean_max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">18.40</span><span class="p">,</span>
-<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_95pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">31.20</span><span class="p">,</span>
-<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">  </span><span class="nt">&quot;ruin_probability_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.40</span><span class="p">,</span>
-<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_ruin_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="p">{</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">  </span><span class="nt">&quot;initial_capital&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">  </span><span class="nt">&quot;simulations_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">  </span><span class="nt">&quot;mean_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14820</span><span class="p">,</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">  </span><span class="nt">&quot;worst_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7340</span><span class="p">,</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">  </span><span class="nt">&quot;best_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">23150</span><span class="p">,</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">  </span><span class="nt">&quot;mean_max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">18.40</span><span class="p">,</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_95pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">31.20</span><span class="p">,</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="w">  </span><span class="nt">&quot;ruin_probability_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.40</span><span class="p">,</span>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_ruin_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a><span class="p">}</span>
 </code></pre></div>
 <p>トップレベルのフィールド契約は <a href="../../ai-agents/json-output-reference/#backtest-monte-carlo-json"><code>--json</code> 出力リファレンス</a> も参照してください。</p>
 <h3 id="_50">主なエラー<a class="headerlink" href="#_50" title="Permanent link">&para;</a></h3>
