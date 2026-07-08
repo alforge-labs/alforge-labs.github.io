@@ -572,14 +572,22 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [STRATEGY_ID3 ...] [O
 
 ```bash
 # risk_parity 配分 + 月次リバランス + WFT 5窓（warmup 前置あり）
-alpha-forge backtest combine sid_a sid_b sid_c \
+alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
     --allocation risk_parity --rebalance monthly --vol-lookback 63 \
     --wft 5 --wft-warmup-bars 63 --json
 
 # vol_target 配分（目標年率ボラ 15%、レバレッジ上限 1.5倍）
-alpha-forge backtest combine sid_a sid_b sid_c \
+alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
     --allocation vol_target --target-vol 0.15 --max-leverage 1.5 --json
 ```
+
+### 主なエラー
+
+| メッセージ | 原因 | 対処 |
+|----------|------|------|
+| `エラー: --allocation custom には --weights が必須です` | `--allocation custom` 指定時に `--weights` 未指定 | `--weights` を指定する |
+| `エラー: --weights のフォーマット不正 (期待: sid=val): <token>` | `--weights` の書式違反 | `sid1=0.4,sid2=0.6` 形式で区切る |
+| `エラー: --allocation vol_target には --target-vol が必須です` | `--allocation vol_target` 指定時に `--target-vol` 未指定 | `--target-vol` を指定する |
 
 ---
 

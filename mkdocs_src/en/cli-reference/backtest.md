@@ -570,12 +570,12 @@ Strategies that reference external symbols (e.g. VIX) via the `symbol` field are
 
 ```bash
 # risk_parity allocation + monthly rebalance + 5-window WFT with warmup prepend
-alpha-forge backtest combine sid_a sid_b sid_c \
+alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
     --allocation risk_parity --rebalance monthly --vol-lookback 63 \
     --wft 5 --wft-warmup-bars 63 --json
 
 # vol_target allocation (target 15% annualized vol, 1.5x leverage cap)
-alpha-forge backtest combine sid_a sid_b sid_c \
+alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
     --allocation vol_target --target-vol 0.15 --max-leverage 1.5 --json
 ```
 
