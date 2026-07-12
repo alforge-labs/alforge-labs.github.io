@@ -558,11 +558,14 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [...] [OPTIONS]
 | `--vol-lookback` | int | `63` | Lookback bars (trading days) used for the realized-vol calculation in dynamic allocation (#1287) |
 | `--target-vol` | float | - | Target annualized volatility for `--allocation vol_target` (e.g. `0.15` = 15%). Required for `vol_target` (#1287) |
 | `--max-leverage` | float | `1.0` | Exposure cap for `vol_target` scaling (default `1.0` = no leverage) (#1287) |
+| `--max-pillar-weight` | float | - | Per-pillar weight cap for dynamic allocation (`risk_parity` / `vol_target`), e.g. `0.3`. Omitting it leaves weights uncapped. Exits with an error when combined with `equal` / `custom` |
 | `--wft-warmup-bars` | int | `0` | Warmup bars per WFT window. Feeds data starting N bars before the window for indicator computation, while evaluation (metrics) covers only the window itself (#1287) |
 | `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics. Loads saved dividend data for each strategy's symbol and reflects it in the combined result |
 | `--json` | flag | false | Output results as JSON to stdout |
 
 `--allocation risk_parity` / `vol_target` replace fixed weights with a periodically rebalanced allocation driven by realized volatility (#1287). `risk_parity` allocates weight inversely proportional to each strategy's realized volatility over the trailing `--vol-lookback` window (inverse-vol). `vol_target` builds on `risk_parity` weights and additionally scales the combined portfolio's total exposure so its realized volatility tracks `--target-vol`; unused exposure is treated as cash (zero return), capped by `--max-leverage`. To prevent **look-ahead**, weights (and the `vol_target` scale) are computed from returns up to and including rebalance date t and applied starting the next trading day after t. Periods with insufficient lookback data fall back to equal weight (scale `1.0` for `vol_target`). The `combined` block in JSON output includes only the final applied weights; the daily weight history (`weights_history`) is not included.
+
+Dynamic allocation can concentrate weight in a single strategy. Passing `--max-pillar-weight <cap>` (e.g. `0.3`) clips each strategy's weight to the cap and redistributes the excess proportionally to the strategies still under the cap, iterating until none remain over (water-filling; the total stays at 1.0). If `n_strategies * cap < 1.0` the cap is infeasible and the command exits with an error. Passing this option with `--allocation equal` / `custom` also exits with an error (fail-loud). Omitting it (default `None`) preserves the uncapped behavior.
 
 When combining `--wft` with dynamic allocation, short windows may not accumulate enough bars for `--vol-lookback` within the window, causing the allocation to fall back to equal weight for most of the window. Use `--wft-warmup-bars` to feed each window's **data** starting N bars before the window boundary while still **evaluating only the window itself**.
 
@@ -577,6 +580,10 @@ alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
 # vol_target allocation (target 15% annualized vol, 1.5x leverage cap)
 alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
     --allocation vol_target --target-vol 0.15 --max-leverage 1.5 --json
+
+# risk_parity allocation with a 30% per-pillar weight cap
+alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
+    --allocation risk_parity --max-pillar-weight 0.3 --json
 ```
 
 ### Common errors
@@ -586,6 +593,8 @@ alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
 | `Error: --allocation custom requires --weights` | `--allocation custom` given without `--weights` | Provide `--weights` |
 | `Error: invalid --weights token (expected sid=val): <token>` | Malformed `--weights` entry | Use `sid1=0.4,sid2=0.6` style |
 | `Error: --allocation vol_target requires --target-vol` | `--allocation vol_target` given without `--target-vol` | Provide `--target-vol` |
+| `Error: max_pillar_weight is only valid with allocation='risk_parity'/'vol_target'` | `--max-pillar-weight` combined with `--allocation equal` / `custom` | Use `--allocation risk_parity` / `vol_target`, or drop `--max-pillar-weight` |
+| `Error: per-pillar cap is infeasible: n=..., cap=... (n*cap < 1.0, cannot preserve total 1.0)` | `n_strategies * --max-pillar-weight` is below 1.0 | Raise the cap or add more strategies |
 
 ---
 

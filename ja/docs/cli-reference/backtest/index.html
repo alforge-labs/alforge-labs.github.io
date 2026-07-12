@@ -5650,6 +5650,12 @@
 <td><code>vol_target</code> の全体エクスポージャー上限（既定 1.0 = レバなし）（#1287）</td>
 </tr>
 <tr>
+<td><code>--max-pillar-weight</code></td>
+<td>float</td>
+<td>-</td>
+<td>動的配分（<code>risk_parity</code> / <code>vol_target</code>）の各柱ウェイト上限（例: <code>0.3</code>）。省略時は上限なし。<code>equal</code> / <code>custom</code> と併用するとエラー終了する</td>
+</tr>
+<tr>
 <td><code>--wft-warmup-bars</code></td>
 <td>int</td>
 <td><code>0</code></td>
@@ -5671,6 +5677,7 @@
 </table>
 <p><code>--allocation equal</code> では各戦略へ均等配分し、<code>--allocation custom</code> では <code>--weights</code> で指定したウェイトを用いる。</p>
 <p><code>--allocation risk_parity</code> / <code>vol_target</code> は固定ウェイトではなく実現ボラティリティに応じて配分を定期的にリバランスする動的配分（#1287）。<code>risk_parity</code> は各戦略の直近 <code>--vol-lookback</code> 本の実現ボラの逆数比で配分する inverse-vol 方式。<code>vol_target</code> は <code>risk_parity</code> ウェイトに加え、合成ポートフォリオ全体の実現ボラを <code>--target-vol</code> に合わせて全体エクスポージャーをスケールし、余剰は現金（リターン 0）扱いとなる（<code>--max-leverage</code> で上限）。<strong>look-ahead 防止</strong>のため、リバランス日 t までのリターンのみでウェイト/スケールを計算し t の翌営業日から適用する。データ不足期間は equal weight（<code>vol_target</code> はスケール 1.0）にフォールバックする。JSON 出力の <code>combined</code> ブロックには最終適用ウェイトのみが含まれ、日次のウェイト推移（<code>weights_history</code>）は含まれない。</p>
+<p>動的配分は特定の戦略にウェイトが偏ることがある。<code>--max-pillar-weight &lt;上限&gt;</code>（例: <code>0.3</code>）を指定すると、各戦略のウェイトを上限値でクリップし、超過分を上限未満の戦略へ現ウェイト比例で反復的に再配分する（water-filling、合計 1.0 を維持）。戦略数 × 上限が 1.0 未満で実行不能な場合はエラー終了する。<code>--allocation equal</code> / <code>custom</code> と併用した場合もエラー終了する（fail-loud）。省略時（既定 <code>None</code>）は上限なしで従来どおりの挙動。</p>
 <p><code>--wft</code> と動的配分を併用する場合、窓が短いと <code>--vol-lookback</code> 分のデータが窓内で貯まらず equal weight にフォールバックしがちなため、<code>--wft-warmup-bars</code> で各窓の<strong>データ</strong>を窓開始の N 本前から渡すこと（<strong>評価は窓内のみ</strong>）を推奨する。</p>
 <p><code>symbol</code> フィールドで外部シンボル（VIX 等）を参照する戦略も <code>backtest combine</code> に正しく含められる。以前は外部シンボルのマージ処理が <code>backtest combine</code> の経路で呼ばれず、該当 indicator が silent に無効化される欠陥があったが、<code>backtest run</code> と同じマージ処理を通すよう修正済み（#1287）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># risk_parity 配分 + 月次リバランス + WFT 5窓（warmup 前置あり）</span>
@@ -5681,6 +5688,10 @@
 <a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># vol_target 配分（目標年率ボラ 15%、レバレッジ上限 1.5倍）</span>
 <a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span>--allocation<span class="w"> </span>vol_target<span class="w"> </span>--target-vol<span class="w"> </span><span class="m">0</span>.15<span class="w"> </span>--max-leverage<span class="w"> </span><span class="m">1</span>.5<span class="w"> </span>--json
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="c1"># risk_parity 配分 + per-pillar ウェイト上限 30%</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span>--allocation<span class="w"> </span>risk_parity<span class="w"> </span>--max-pillar-weight<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>--json
 </code></pre></div>
 <h3 id="_36">主なエラー<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
 <table>
@@ -5706,6 +5717,16 @@
 <td><code>エラー: --allocation vol_target には --target-vol が必須です</code></td>
 <td><code>--allocation vol_target</code> 指定時に <code>--target-vol</code> 未指定</td>
 <td><code>--target-vol</code> を指定する</td>
+</tr>
+<tr>
+<td><code>エラー: max_pillar_weight は allocation='risk_parity'/'vol_target' でのみ指定可能です</code></td>
+<td><code>--allocation equal</code> / <code>custom</code> と <code>--max-pillar-weight</code> を併用</td>
+<td><code>--allocation risk_parity</code> / <code>vol_target</code> を指定するか <code>--max-pillar-weight</code> を外す</td>
+</tr>
+<tr>
+<td><code>エラー: per-pillar cap が実行不能: n=..., cap=...（n*cap &lt; 1.0 のため合計 1.0 を維持できない）</code></td>
+<td>戦略数 × <code>--max-pillar-weight</code> が 1.0 未満</td>
+<td>上限値を上げるか戦略数を増やす</td>
 </tr>
 </tbody>
 </table>

@@ -558,6 +558,7 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [STRATEGY_ID3 ...] [O
 | `--vol-lookback` | int | `63` | 動的配分の実現ボラ計算に使う lookback 本数（営業日）（#1287） |
 | `--target-vol` | float | - | `--allocation vol_target` の目標年率ボラ（例: `0.15` = 15%）。`vol_target` では必須（未指定はエラー終了）（#1287） |
 | `--max-leverage` | float | `1.0` | `vol_target` の全体エクスポージャー上限（既定 1.0 = レバなし）（#1287） |
+| `--max-pillar-weight` | float | - | 動的配分（`risk_parity` / `vol_target`）の各柱ウェイト上限（例: `0.3`）。省略時は上限なし。`equal` / `custom` と併用するとエラー終了する |
 | `--wft-warmup-bars` | int | `0` | WFT 各窓のウォームアップ本数。窓開始の N 本前からデータを渡し指標計算に使い、評価（metrics）は窓内のみで行う（#1287） |
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#960）。各戦略の symbol について保存済み配当データを読み込み、合算結果にも反映する |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
@@ -565,6 +566,8 @@ alpha-forge backtest combine <STRATEGY_ID1> <STRATEGY_ID2> [STRATEGY_ID3 ...] [O
 `--allocation equal` では各戦略へ均等配分し、`--allocation custom` では `--weights` で指定したウェイトを用いる。
 
 `--allocation risk_parity` / `vol_target` は固定ウェイトではなく実現ボラティリティに応じて配分を定期的にリバランスする動的配分（#1287）。`risk_parity` は各戦略の直近 `--vol-lookback` 本の実現ボラの逆数比で配分する inverse-vol 方式。`vol_target` は `risk_parity` ウェイトに加え、合成ポートフォリオ全体の実現ボラを `--target-vol` に合わせて全体エクスポージャーをスケールし、余剰は現金（リターン 0）扱いとなる（`--max-leverage` で上限）。**look-ahead 防止**のため、リバランス日 t までのリターンのみでウェイト/スケールを計算し t の翌営業日から適用する。データ不足期間は equal weight（`vol_target` はスケール 1.0）にフォールバックする。JSON 出力の `combined` ブロックには最終適用ウェイトのみが含まれ、日次のウェイト推移（`weights_history`）は含まれない。
+
+動的配分は特定の戦略にウェイトが偏ることがある。`--max-pillar-weight <上限>`（例: `0.3`）を指定すると、各戦略のウェイトを上限値でクリップし、超過分を上限未満の戦略へ現ウェイト比例で反復的に再配分する（water-filling、合計 1.0 を維持）。戦略数 × 上限が 1.0 未満で実行不能な場合はエラー終了する。`--allocation equal` / `custom` と併用した場合もエラー終了する（fail-loud）。省略時（既定 `None`）は上限なしで従来どおりの挙動。
 
 `--wft` と動的配分を併用する場合、窓が短いと `--vol-lookback` 分のデータが窓内で貯まらず equal weight にフォールバックしがちなため、`--wft-warmup-bars` で各窓の**データ**を窓開始の N 本前から渡すこと（**評価は窓内のみ**）を推奨する。
 
@@ -579,6 +582,10 @@ alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
 # vol_target 配分（目標年率ボラ 15%、レバレッジ上限 1.5倍）
 alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
     --allocation vol_target --target-vol 0.15 --max-leverage 1.5 --json
+
+# risk_parity 配分 + per-pillar ウェイト上限 30%
+alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
+    --allocation risk_parity --max-pillar-weight 0.3 --json
 ```
 
 ### 主なエラー
@@ -588,6 +595,8 @@ alpha-forge backtest combine schd_v1 vym_v1 tlt_v1 \
 | `エラー: --allocation custom には --weights が必須です` | `--allocation custom` 指定時に `--weights` 未指定 | `--weights` を指定する |
 | `エラー: --weights のフォーマット不正 (期待: sid=val): <token>` | `--weights` の書式違反 | `sid1=0.4,sid2=0.6` 形式で区切る |
 | `エラー: --allocation vol_target には --target-vol が必須です` | `--allocation vol_target` 指定時に `--target-vol` 未指定 | `--target-vol` を指定する |
+| `エラー: max_pillar_weight は allocation='risk_parity'/'vol_target' でのみ指定可能です` | `--allocation equal` / `custom` と `--max-pillar-weight` を併用 | `--allocation risk_parity` / `vol_target` を指定するか `--max-pillar-weight` を外す |
+| `エラー: per-pillar cap が実行不能: n=..., cap=...（n*cap < 1.0 のため合計 1.0 を維持できない）` | 戦略数 × `--max-pillar-weight` が 1.0 未満 | 上限値を上げるか戦略数を増やす |
 
 ---
 
