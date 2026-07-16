@@ -646,6 +646,15 @@
       background: var(--bg); border: 1px solid var(--border);
       padding: 0.18rem 0.55rem; border-radius: 4px; letter-spacing: 0.04em;
     }
+    .card-links {
+      display: flex; flex-wrap: wrap; gap: 0.9rem;
+      margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--border);
+    }
+    .card-link {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+      color: var(--text2); text-decoration: none; letter-spacing: 0.04em;
+    }
+    .card-link:hover, .card-link:focus-visible { color: var(--accent); }
 
     /* ── PERFORMANCE ── */
     .performance { padding: 6rem 0; border-bottom: 1px solid var(--border); }

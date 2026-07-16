@@ -600,8 +600,31 @@ Consider LIVE migration only after **3+ months of stable paper trading** with **
 
 ---
 
+## 12. Visualizing Live Records (alpha-visualizer)
+
+The event log (JSONL) recorded by alpha-strike can be imported with alpha-forge and visualized as an equity curve on the Live screen of [alpha-visualizer](../alpha-visualizer/index.md) (OSS, Apache-2.0). The same screen shows the drift (diff) against backtests, which feeds directly into the P&L-drift check in the operational routine (§10).
+
+```bash
+# 1. Sync event JSONL from the VM into your local forge project
+alpha-forge live sync-events
+
+# 2. Import events and build live records
+alpha-forge live import-events <strategy_id>          # per strategy
+alpha-forge live replay <portfolio_id> \
+  --combine-strategies <id1>,<id2>                    # combine portfolio
+
+# 3. View on the alpha-visualizer Live screen
+pip install alpha-visualizer
+alpha-vis serve
+```
+
+See [alpha-visualizer features](../alpha-visualizer/features.md) for details on each screen.
+
+---
+
 ## Related Documents
 
 - [TradingView × alpha-strike Integration (payload spec)](./tradingview-alpha-strike.md)
 - [Bringing Pine Scripts into TradingView](./tradingview-pine-integration.md)
 - [End-to-end Strategy Development Workflow](./end-to-end-workflow.md)
+- [alpha-visualizer Features (Live screen)](../alpha-visualizer/features.md)

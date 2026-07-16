@@ -1648,6 +1648,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#12-alpha-visualizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. ライブ実績の可視化（alpha-visualizer）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3852,6 +3863,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#12-alpha-visualizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. ライブ実績の可視化（alpha-visualizer）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4544,11 +4566,28 @@ alpha-strike は OpenD 接続前に <code>ValueError</code> で早期拒否す�
 <li>月次の損益レポート自動化（alpha-forge journal 側）</li>
 </ul>
 <hr />
+<h2 id="12-alpha-visualizer">12. ライブ実績の可視化（alpha-visualizer）<a class="headerlink" href="#12-alpha-visualizer" title="Permanent link">&para;</a></h2>
+<p>alpha-strike が記録したイベントログ（JSONL）は、alpha-forge で取り込み、<a href="../../alpha-visualizer/">alpha-visualizer</a>（OSS・Apache-2.0）の Live 画面でエクイティカーブとして可視化できます。バックテストとの乖離（diff）も同じ画面で確認できるため、§10 の運用ルール（pnl 乖離チェック）にもそのまま使えます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># 1. VM 上のイベント JSONL をローカルの forge プロジェクトへ同期</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1"># 2. イベントを取り込んでライブ実績を生成</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;strategy_id&gt;<span class="w">          </span><span class="c1"># 戦略単位</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;portfolio_id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>&lt;id1&gt;,&lt;id2&gt;<span class="w">                    </span><span class="c1"># combine ポートフォリオ</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="c1"># 3. alpha-visualizer の Live 画面で表示</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>alpha-vis<span class="w"> </span>serve
+</code></pre></div>
+<p>各画面の詳細は <a href="../../alpha-visualizer/features/">alpha-visualizer の機能</a>を参照。</p>
+<hr />
 <h2 id="_2">関連ドキュメント<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../tradingview-alpha-strike/">TradingView と alpha-strike の連携（ペイロード仕様）</a></li>
 <li><a href="../tradingview-pine-integration/">TradingView への Pine Script 反映</a></li>
 <li><a href="../end-to-end-workflow/">エンドツーエンド戦略開発ワークフロー</a></li>
+<li><a href="../../alpha-visualizer/features/">alpha-visualizer の機能（Live 画面）</a></li>
 </ul>
 
 

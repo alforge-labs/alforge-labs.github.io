@@ -620,8 +620,31 @@ sudo rm /etc/alpha-strike/MAINTENANCE
 
 ---
 
+## 12. ライブ実績の可視化（alpha-visualizer）
+
+alpha-strike が記録したイベントログ（JSONL）は、alpha-forge で取り込み、[alpha-visualizer](../alpha-visualizer/index.md)（OSS・Apache-2.0）の Live 画面でエクイティカーブとして可視化できます。バックテストとの乖離（diff）も同じ画面で確認できるため、§10 の運用ルール（pnl 乖離チェック）にもそのまま使えます。
+
+```bash
+# 1. VM 上のイベント JSONL をローカルの forge プロジェクトへ同期
+alpha-forge live sync-events
+
+# 2. イベントを取り込んでライブ実績を生成
+alpha-forge live import-events <strategy_id>          # 戦略単位
+alpha-forge live replay <portfolio_id> \
+  --combine-strategies <id1>,<id2>                    # combine ポートフォリオ
+
+# 3. alpha-visualizer の Live 画面で表示
+pip install alpha-visualizer
+alpha-vis serve
+```
+
+各画面の詳細は [alpha-visualizer の機能](../alpha-visualizer/features.md)を参照。
+
+---
+
 ## 関連ドキュメント
 
 - [TradingView と alpha-strike の連携（ペイロード仕様）](./tradingview-alpha-strike.md)
 - [TradingView への Pine Script 反映](./tradingview-pine-integration.md)
 - [エンドツーエンド戦略開発ワークフロー](./end-to-end-workflow.md)
+- [alpha-visualizer の機能（Live 画面）](../alpha-visualizer/features.md)

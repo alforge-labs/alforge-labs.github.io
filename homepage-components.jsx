@@ -227,6 +227,21 @@ function Products({ t }) {
               <div className="card-tags">
                 {item.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
               </div>
+              {item.links && (
+                <div className="card-links">
+                  {item.links.map(link => (
+                    <a
+                      key={link.href}
+                      className="card-link"
+                      href={link.href}
+                      target={link.external ? '_blank' : undefined}
+                      rel={link.external ? 'noopener noreferrer' : undefined}
+                    >
+                      {link.label}<span aria-hidden="true"> ↗</span>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

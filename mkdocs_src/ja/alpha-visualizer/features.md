@@ -76,7 +76,7 @@ URL クエリで `selectedId` / `compareIds` が同期されるため、特定�
 - **combine ポートフォリオ**（position ベース）: トータルリターン・CAGR・シャープレシオ・最大 DD・ボラティリティと live equity カーブを、バックテスト combine と比較
 - 選択エントリは URL クエリ（`?id=`）に同期されるため共有可能
 
-ライブ実績データは AlphaForge CLI（`alpha-forge live sync-events` → `live import-events` / `live replay`）で `backtest_results.db` に取り込んだものが自動で表示されます。
+ライブ実績データは、[alpha-strike](https://github.com/alforge-labs/alpha-strike)（OSS の Webhook 発注サーバー）が記録したイベントログを AlphaForge CLI（`alpha-forge live sync-events` → `live import-events` / `live replay`）で `backtest_results.db` に取り込んだものが自動で表示されます。取り込み手順の詳細は [alpha-strike セットアップガイド](../guides/alpha-strike-setup.md)を参照してください。
 
 ## Ideas 画面
 
