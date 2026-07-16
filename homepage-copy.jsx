@@ -372,7 +372,7 @@ window.COPY = {
     systemFlow: {
       label: 'システム全体像',
       title: '探索から実行、実績データの蓄積までを一気通貫でつなぐ',
-      subtitle: 'AlphaForgeで戦略を検証・最適化し、AlphaStrategiesに成果物を集約。TradingViewのアラートをAlphaStrikeが受け取り、Broker APIへ注文を送ります。約定・ポジション・損益データはLive Dataとして戻り、次の分析に活用します。',
+      subtitle: 'AlphaForgeで戦略を検証・最適化し、AlphaStrategiesに成果物を集約。TradingViewのアラートをAlphaStrikeが受け取り、Broker APIへ注文を送ります。約定・ポジション・損益データはLive Dataとして戻り、バックテスト結果とあわせてAlphaVisualizerで可視化し、次の分析に活用します。',
       alt: 'AlphaTradeのシステムフロー図',
     },
     usecases: {
@@ -857,7 +857,7 @@ window.COPY = {
     systemFlow: {
       label: 'System Flow',
       title: 'Connect research, execution, and live feedback in one loop',
-      subtitle: 'AlphaForge builds and optimizes strategies, AlphaStrategies stores deliverables, and AlphaStrike receives TradingView alerts to send orders through Broker APIs. Fills, positions, and P&L return as Live Data for the next analysis cycle.',
+      subtitle: 'AlphaForge builds and optimizes strategies, AlphaStrategies stores deliverables, and AlphaStrike receives TradingView alerts to send orders through Broker APIs. Fills, positions, and P&L return as Live Data — visualized alongside backtest results in AlphaVisualizer for the next analysis cycle.',
       alt: 'AlphaTrade system flow diagram',
     },
     usecases: {
