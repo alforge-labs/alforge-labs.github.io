@@ -3064,7 +3064,7 @@
 <li><strong>combine ポートフォリオ</strong>（position ベース）: トータルリターン・CAGR・シャープレシオ・最大 DD・ボラティリティと live equity カーブを、バックテスト combine と比較</li>
 <li>選択エントリは URL クエリ（<code>?id=</code>）に同期されるため共有可能</li>
 </ul>
-<p>ライブ実績データは AlphaForge CLI（<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>）で <code>backtest_results.db</code> に取り込んだものが自動で表示されます。</p>
+<p>ライブ実績データは、<a href="https://github.com/alforge-labs/alpha-strike">alpha-strike</a>（OSS の Webhook 発注サーバー）が記録したイベントログを AlphaForge CLI（<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>）で <code>backtest_results.db</code> に取り込んだものが自動で表示されます。取り込み手順の詳細は <a href="../../guides/alpha-strike-setup/">alpha-strike セットアップガイド</a>を参照してください。</p>
 <h2 id="ideas">Ideas 画面<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>探索アイデアの一覧と状態管理。</p>
 <p><img alt="Ideas 画面" loading="lazy" src="../assets/ideas.png" /></p>

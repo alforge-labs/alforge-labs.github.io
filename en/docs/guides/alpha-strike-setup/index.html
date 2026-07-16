@@ -1620,6 +1620,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#12-visualizing-live-records-alpha-visualizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Visualizing Live Records (alpha-visualizer)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#related-documents" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3796,6 +3807,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#12-visualizing-live-records-alpha-visualizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Visualizing Live Records (alpha-visualizer)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#related-documents" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4467,11 +4489,28 @@ combination <strong>before connecting to OpenD</strong> and raises <code>ValueEr
 <li>Monthly P&amp;L automation on alpha-forge journal side</li>
 </ul>
 <hr />
+<h2 id="12-visualizing-live-records-alpha-visualizer">12. Visualizing Live Records (alpha-visualizer)<a class="headerlink" href="#12-visualizing-live-records-alpha-visualizer" title="Permanent link">&para;</a></h2>
+<p>The event log (JSONL) recorded by alpha-strike can be imported with alpha-forge and visualized as an equity curve on the Live screen of <a href="../../alpha-visualizer/">alpha-visualizer</a> (OSS, Apache-2.0). The same screen shows the drift (diff) against backtests, which feeds directly into the P&amp;L-drift check in the operational routine (§10).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># 1. Sync event JSONL from the VM into your local forge project</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># 2. Import events and build live records</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;strategy_id&gt;<span class="w">          </span><span class="c1"># per strategy</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;portfolio_id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>&lt;id1&gt;,&lt;id2&gt;<span class="w">                    </span><span class="c1"># combine portfolio</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="c1"># 3. View on the alpha-visualizer Live screen</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>alpha-vis<span class="w"> </span>serve
+</code></pre></div>
+<p>See <a href="../../alpha-visualizer/features/">alpha-visualizer features</a> for details on each screen.</p>
+<hr />
 <h2 id="related-documents">Related Documents<a class="headerlink" href="#related-documents" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../tradingview-alpha-strike/">TradingView × alpha-strike Integration (payload spec)</a></li>
 <li><a href="../tradingview-pine-integration/">Bringing Pine Scripts into TradingView</a></li>
 <li><a href="../end-to-end-workflow/">End-to-end Strategy Development Workflow</a></li>
+<li><a href="../../alpha-visualizer/features/">alpha-visualizer Features (Live screen)</a></li>
 </ul>
 
 

@@ -241,6 +241,10 @@ window.COPY = {
           desc: '投資戦略定義をvectorbtで高速シミュレーション。Optunaによるベイズ最適化・ウォークフォワード検証で過学習を防ぎ、Pine Script v6を自動生成。戦略・最適化結果・ジャーナルは JSON / SQLite で一元管理。同梱スキル + MCP サーバで AI エージェントが自律探索。',
           tags: ['Python', 'vectorbt', 'Optuna', 'SQLite', 'Pine Script'],
           accent: 'var(--blue)',
+          links: [
+            { label: 'ドキュメント', href: 'docs/' },
+            { label: 'インストール', href: 'install.html' },
+          ],
         },
         {
           id: 'visualizer',
@@ -252,6 +256,11 @@ window.COPY = {
           desc: 'forge のバックテスト・最適化結果を Web ブラウザで可視化する OSS ダッシュボード。Equity / Drawdown / WFO 合成カーブ、複数戦略の Pearson 相関、ライブ実績との diff をワンクリックで確認。REST API でエージェントからも結果を読み取り可能。forge 本体非依存で動作。',
           tags: ['Python', 'React', 'SQLite', 'PyPI', 'Apache-2.0'],
           accent: 'var(--accent)',
+          links: [
+            { label: 'ドキュメント', href: 'docs/alpha-visualizer/' },
+            { label: 'GitHub', href: 'https://github.com/alforge-labs/alpha-visualizer', external: true },
+            { label: 'PyPI', href: 'https://pypi.org/project/alpha-visualizer/', external: true },
+          ],
         },
         {
           id: 'strike',
@@ -263,6 +272,11 @@ window.COPY = {
           desc: '外部 Webhook シグナルを FastAPI で受け取り、外部 API へ自動リクエスト送信。実行・レスポンスイベントをJSONLで記録。Dockerデプロイ対応。',
           tags: ['FastAPI', 'OANDA', 'moomoo', 'Docker', 'Webhook'],
           accent: 'var(--amber)',
+          links: [
+            { label: 'セットアップガイド', href: 'docs/guides/alpha-strike-setup/' },
+            { label: 'GitHub', href: 'https://github.com/alforge-labs/alpha-strike', external: true },
+            { label: 'PyPI', href: 'https://pypi.org/project/alpha-strike/', external: true },
+          ],
         },
       ],
     },
@@ -748,6 +762,10 @@ window.COPY = {
           desc: 'Simulate investment strategies at high speed with vectorbt. Bayesian optimization via Optuna + walk-forward validation to prevent overfitting. Automatic Pine Script v6 generation. Strategies, optimization results, and journals are managed centrally as JSON/SQLite. Bundled skills + MCP server let AI agents explore autonomously.',
           tags: ['Python', 'vectorbt', 'Optuna', 'SQLite', 'Pine Script'],
           accent: 'var(--blue)',
+          links: [
+            { label: 'Docs', href: 'docs/' },
+            { label: 'Install', href: 'install.html' },
+          ],
         },
         {
           id: 'visualizer',
@@ -759,6 +777,11 @@ window.COPY = {
           desc: 'Open-source browser dashboard that visualizes alpha-forge backtest and optimization results. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff — all in one click. Agents can read results via its REST API. Runs independently of forge.',
           tags: ['Python', 'React', 'SQLite', 'PyPI', 'Apache-2.0'],
           accent: 'var(--accent)',
+          links: [
+            { label: 'Docs', href: 'docs/alpha-visualizer/' },
+            { label: 'GitHub', href: 'https://github.com/alforge-labs/alpha-visualizer', external: true },
+            { label: 'PyPI', href: 'https://pypi.org/project/alpha-visualizer/', external: true },
+          ],
         },
         {
           id: 'strike',
@@ -770,6 +793,11 @@ window.COPY = {
           desc: 'Receives external webhook signals via FastAPI and auto-routes API requests to OANDA and moomoo. Records execution and response events as JSONL. Docker-ready for server deployment.',
           tags: ['FastAPI', 'OANDA', 'moomoo', 'Docker', 'Webhook'],
           accent: 'var(--amber)',
+          links: [
+            { label: 'Setup Guide', href: 'docs/guides/alpha-strike-setup/' },
+            { label: 'GitHub', href: 'https://github.com/alforge-labs/alpha-strike', external: true },
+            { label: 'PyPI', href: 'https://pypi.org/project/alpha-strike/', external: true },
+          ],
         },
       ],
     },

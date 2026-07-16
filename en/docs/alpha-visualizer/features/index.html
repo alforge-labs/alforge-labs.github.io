@@ -3064,7 +3064,7 @@
 <li><strong>Combine portfolios</strong> (position-based): total return, CAGR, Sharpe ratio, max drawdown, and volatility with the live equity curve, compared against the backtest combine</li>
 <li>The selected entry is synced to the URL query (<code>?id=</code>) for sharing</li>
 </ul>
-<p>Live records imported into <code>backtest_results.db</code> via the AlphaForge CLI (<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>) appear automatically.</p>
+<p>Live records appear automatically once the event log recorded by <a href="https://github.com/alforge-labs/alpha-strike">alpha-strike</a> (the OSS webhook execution server) is imported into <code>backtest_results.db</code> via the AlphaForge CLI (<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>). See the <a href="../../guides/alpha-strike-setup/">alpha-strike setup guide</a> for the full import procedure.</p>
 <h2 id="ideas">Ideas<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>Browse exploration ideas and their state.</p>
 <p><img alt="Ideas view" loading="lazy" src="../assets/ideas.png" /></p>

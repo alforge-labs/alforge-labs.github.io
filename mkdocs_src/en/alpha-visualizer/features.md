@@ -76,7 +76,7 @@ Browse live / paper trading records and compare them against backtests. Accessib
 - **Combine portfolios** (position-based): total return, CAGR, Sharpe ratio, max drawdown, and volatility with the live equity curve, compared against the backtest combine
 - The selected entry is synced to the URL query (`?id=`) for sharing
 
-Live records imported into `backtest_results.db` via the AlphaForge CLI (`alpha-forge live sync-events` → `live import-events` / `live replay`) appear automatically.
+Live records appear automatically once the event log recorded by [alpha-strike](https://github.com/alforge-labs/alpha-strike) (the OSS webhook execution server) is imported into `backtest_results.db` via the AlphaForge CLI (`alpha-forge live sync-events` → `live import-events` / `live replay`). See the [alpha-strike setup guide](../guides/alpha-strike-setup.md) for the full import procedure.
 
 ## Ideas
 
