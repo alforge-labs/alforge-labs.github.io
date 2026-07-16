@@ -106,4 +106,5 @@ Switch UI between Japanese and English — useful for screenshots or sharing wit
 
 - **CSV** — download trade history / metric tables from any panel
 - **PNG** — save charts as static images
+- **Share card** — export an OGP-sized (1200×630) PNG card from the Detail screen, combining the equity curve with the five headline metrics (Return, CAGR, Sharpe, Max DD, win rate) — ready to post on X and other social media
 - **URL share** — Browse / Compare selection state is synced to query string, so copying the URL shares the view
