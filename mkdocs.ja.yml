@@ -28,6 +28,10 @@ theme:
     - content.code.annotate
 
 extra:
+  # LP (templates/_partials/head_meta.html.j2) と同一の GA4 プロパティで docs も計測する
+  analytics:
+    provider: google
+    property: G-K8LQ5G28RY
   homepage: https://alforgelabs.com/ja/index.html
   # alpha-bot#664: docs footer に X フォロー導線 (mkdocs-material extra.social)
   social:
