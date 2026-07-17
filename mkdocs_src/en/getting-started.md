@@ -52,6 +52,14 @@ A complete onboarding guide — from installing AlphaForge CLI to reading your f
 
     After installation, **open a new terminal** before continuing.
 
+=== "Homebrew (optional)"
+
+    On macOS (Apple Silicon) you can also install with [Homebrew](https://brew.sh/). Updates flow through `brew upgrade`.
+
+    ```bash
+    brew install alforge-labs/tap/alpha-forge
+    ```
+
 === "uv / PyPI (optional)"
 
     If you have uv / Python, you can install from PyPI too (currently macOS Apple Silicon; more platforms coming). It provides the `alpha-forge` command.

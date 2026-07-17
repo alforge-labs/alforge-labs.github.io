@@ -52,6 +52,14 @@ AlphaForge CLI のインストールから最初のバックテスト結果を�
 
     インストール後、**新しいターミナルを開いてから**次に進んでください。
 
+=== "Homebrew（任意）"
+
+    macOS（Apple Silicon）では [Homebrew](https://brew.sh/) でも導入できます。アップデートは `brew upgrade` に統合されます。
+
+    ```bash
+    brew install alforge-labs/tap/alpha-forge
+    ```
+
 === "uv / PyPI（任意）"
 
     uv / Python 環境があれば PyPI 経由でも導入できます（現在 macOS Apple Silicon 対応・他プラットフォームは順次拡大）。インストール後は `alpha-forge` コマンドを提供します。
