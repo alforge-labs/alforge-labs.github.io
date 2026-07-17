@@ -3305,7 +3305,7 @@
 <p>Prefer to begin directly on a paid plan (Lifetime / Annual / Monthly)? Buy it from the <a href="https://whop.com/alforge-labs/alphaforge/">purchase page</a>. You can also upgrade from Trial later. See <a href="../guides/trial-limits/">Trial Limits</a> for the per-plan feature matrix.</p>
 </div>
 <h3 id="step-1-install-2-min">Step 1 — Install (~2 min)<a class="headerlink" href="#step-1-install-2-min" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">macOS / Linux</label><label for="__tabbed_1_3">uv / PyPI (optional)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">macOS / Linux</label><label for="__tabbed_1_3">Homebrew (optional)</label><label for="__tabbed_1_4">uv / PyPI (optional)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Run in PowerShell (no admin rights needed).</p>
@@ -3319,21 +3319,26 @@
 <p>After installation, <strong>open a new terminal</strong> before continuing.</p>
 </div>
 <div class="tabbed-block">
+<p>On macOS (Apple Silicon) you can also install with <a href="https://brew.sh/">Homebrew</a>. Updates flow through <code>brew upgrade</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>brew<span class="w"> </span>install<span class="w"> </span>alforge-labs/tap/alpha-forge
+</code></pre></div>
+</div>
+<div class="tabbed-block">
 <p>If you have uv / Python, you can install from PyPI too (currently macOS Apple Silicon; more platforms coming). It provides the <code>alpha-forge</code> command.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Try without installing</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>uvx<span class="w"> </span>alpha-forge-launcher<span class="w"> </span>demo
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Persistent install (the alpha-forge command becomes available)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-forge-launcher<span class="w">   </span><span class="c1"># or: pip install alpha-forge-launcher</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>alpha-forge<span class="w"> </span>--version
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Try without installing</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>uvx<span class="w"> </span>alpha-forge-launcher<span class="w"> </span>demo
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Persistent install (the alpha-forge command becomes available)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-forge-launcher<span class="w">   </span><span class="c1"># or: pip install alpha-forge-launcher</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>alpha-forge<span class="w"> </span>--version
 </code></pre></div>
 </div>
 </div>
 </div>
 <p>Verify the installation.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>--version
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>--version
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>AlphaForge, version 0.10.0
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Check for updates: alpha-forge self version
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AlphaForge, version 0.10.0
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Check for updates: alpha-forge self version
 </code></pre></div>
 <p>If you see output like <code>AlphaForge, version &lt;X.Y.Z&gt;</code>, you're ready. For manual installation or custom install paths, see <a href="#detailed-installation">Detailed Installation</a>.</p>
 <div class="admonition note">
@@ -3349,12 +3354,12 @@
 <div class="admonition tip">
 <p class="admonition-title">Fastest path: <code>alpha-forge demo</code> runs init-through-backtest in one command</p>
 <p>Instead of running each step by hand, a single command performs initialization, a backtest on the bundled DEMO data, the result summary, and the visualization hint all at once (no network or login required).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>demo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>demo
 </code></pre></div>
 <p>It creates <code>./alpha-forge-demo</code>, backtests <code>demo_sma_cross</code> on the bundled DEMO synthetic data, and prints the result summary plus the next action (visualize with <code>alpha-vis serve</code>). If you want to understand each step, follow the manual steps below (<code>alpha-forge demo</code> automates all of them).</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>mkdir<span class="w"> </span>quickstart<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>quickstart
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>mkdir<span class="w"> </span>quickstart<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>quickstart
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>init
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">v0.12.0+: one-command initialization with a directory name</p>
@@ -3371,7 +3376,7 @@
 </div>
 <h4 id="zero-fetch-instant-result-run-the-demo-backtest-now">Zero-fetch instant result — run the DEMO backtest now<a class="headerlink" href="#zero-fetch-instant-result-run-the-demo-backtest-now" title="Permanent link">&para;</a></h4>
 <p><code>alpha-forge system init</code> automatically deploys <strong>bundled synthetic learning data and a demo strategy</strong> alongside the config, so you can run a backtest immediately — no data fetch, no network access needed.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>DEMO<span class="w"> </span>--strategy<span class="w"> </span>demo_sma_cross
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>DEMO<span class="w"> </span>--strategy<span class="w"> </span>demo_sma_cross
 </code></pre></div>
 <p><code>DEMO</code> is not a real market ticker. It is <strong>synthetic deterministic OHLCV data</strong> designed to stay within the Trial plan's date range, pre-deployed at <code>data/historical/DEMO_1d.parquet</code>. The paired demo strategy is at <code>data/strategies/demo_sma_cross.json</code> (strategy ID: <code>demo_sma_cross</code>). Use it to verify your install and get an instant first result.</p>
 <div class="admonition note">
@@ -3380,61 +3385,61 @@
 </div>
 <p>The steps below use a real-market symbol (SPY) to show the typical workflow.</p>
 <p>Save the following as <code>sma_cross.json</code> (the <code>_qs</code> suffix in <code>strategy_id</code> just marks it as the quickstart strategy — feel free to use any ID).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_cross_qs&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA Crossover Quickstart&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA(10)/SMA(50) golden-cross strategy (quickstart sample)&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">&quot;target_symbols&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;SPY&quot;</span><span class="p">],</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">&quot;asset_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stock&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">&quot;timeframe&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">  </span><span class="nt">&quot;indicators&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;length&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_slow&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;length&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">  </span><span class="nt">&quot;entry_conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nt">&quot;long&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">      </span><span class="nt">&quot;logic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">      </span><span class="nt">&quot;conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;left&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;right&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_slow&quot;</span><span class="w"> </span><span class="p">}]</span>
-<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">  </span><span class="nt">&quot;exit_conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">    </span><span class="nt">&quot;long&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">      </span><span class="nt">&quot;logic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">      </span><span class="nt">&quot;conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;left&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;right&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_slow&quot;</span><span class="w"> </span><span class="p">}]</span>
-<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">  </span><span class="nt">&quot;risk_management&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">    </span><span class="nt">&quot;position_size_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span>
-<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">    </span><span class="nt">&quot;position_sizing_method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="w">    </span><span class="nt">&quot;max_positions&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="w">    </span><span class="nt">&quot;leverage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span>
-<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;strategy_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_cross_qs&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA Crossover Quickstart&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA(10)/SMA(50) golden-cross strategy (quickstart sample)&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">&quot;target_symbols&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;SPY&quot;</span><span class="p">],</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nt">&quot;asset_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stock&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">&quot;timeframe&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1d&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="nt">&quot;indicators&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;length&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_slow&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SMA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;length&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;close&quot;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">  </span><span class="nt">&quot;entry_conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="nt">&quot;long&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">      </span><span class="nt">&quot;logic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">      </span><span class="nt">&quot;conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;left&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;right&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_slow&quot;</span><span class="w"> </span><span class="p">}]</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">  </span><span class="nt">&quot;exit_conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span><span class="nt">&quot;long&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">      </span><span class="nt">&quot;logic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">      </span><span class="nt">&quot;conditions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;left&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_fast&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;right&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sma_slow&quot;</span><span class="w"> </span><span class="p">}]</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">  </span><span class="nt">&quot;risk_management&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">    </span><span class="nt">&quot;position_size_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="w">    </span><span class="nt">&quot;position_sizing_method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="w">    </span><span class="nt">&quot;max_positions&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a><span class="w">    </span><span class="nt">&quot;leverage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="step-25-fetch-historical-data-for-real-market-symbols-1-min">Step 2.5 — Fetch historical data for real-market symbols (~1 min)<a class="headerlink" href="#step-25-fetch-historical-data-for-real-market-symbols-1-min" title="Permanent link">&para;</a></h3>
 <p>Unlike <code>DEMO</code>, real-market symbols such as SPY require a data fetch before backtesting. <code>backtest run</code> does <strong>not</strong> auto-fetch data for the target symbol, so <strong>if you skip this step the next backtest fails with <code>❌ データが見つかりません: SPY (1d)</code> (data not found)</strong>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--period<span class="w"> </span>10y
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fetch<span class="w"> </span>SPY<span class="w"> </span>--period<span class="w"> </span>10y
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Fetching data: SPY (period=10y, interval=1d)
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Fetched and saved data for SPY (N lines)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Fetching data: SPY (period=10y, interval=1d)
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>Fetched and saved data for SPY (N lines)
 </code></pre></div>
 <p>The data is saved to <code>data/historical/SPY_1d.parquet</code>. Running this step on its own also helps you isolate online-fetch failures (network issues, rate limits) before the backtest.</p>
 <h3 id="step-3-register-the-strategy-and-run-the-backtest-2-min">Step 3 — Register the strategy and run the backtest (~2 min)<a class="headerlink" href="#step-3-register-the-strategy-and-run-the-backtest-2-min" title="Permanent link">&para;</a></h3>
 <p>Register <code>sma_cross.json</code> (from Step 2) with AlphaForge (the strategy DB).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>save<span class="w"> </span>sma_cross.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>alpha-forge<span class="w"> </span>strategy<span class="w"> </span>save<span class="w"> </span>sma_cross.json
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>✅ Registered custom strategy &#39;sma_cross_qs&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>✅ Registered custom strategy &#39;sma_cross_qs&#39;
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Run a backtest directly from a JSON file (<code>--strategy-file</code>)</p>
 <p>To skip DB registration, you can pass <code>--strategy-file sma_cross.json</code> instead of <code>--strategy</code>. The quickstart uses the registered form, but <code>--strategy-file</code> is handy for fast edit-and-run cycles.</p>
 </div>
 <p>Run a backtest within the Trial plan's data range (up to 2023-12-31).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>SPY<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span>--strategy<span class="w"> </span>sma_cross_qs<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span>--start<span class="w"> </span><span class="m">2019</span>-01-01<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span>--end<span class="w"> </span><span class="m">2023</span>-12-31
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>SPY<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>--strategy<span class="w"> </span>sma_cross_qs<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>--start<span class="w"> </span><span class="m">2019</span>-01-01<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span>--end<span class="w"> </span><span class="m">2023</span>-12-31
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Historical data must be fetched first</p>
@@ -3454,21 +3459,21 @@ intuition</strong>. For deterministic regression tests, capture
 <code>alpha-forge backtest run --json</code> snapshots and diff them against your own baseline.
 The CLI label table below maps Japanese CLI labels to conventional English metric names.</p>
 </div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Running backtest: SPY x sma_cross_qs  (2019-01-01 → 2023-12-29, 1258 bars)
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>⚠️  Backtest done   signal-quality score: 0.48/1.0  (0.4–0.7: caution, more validation suggested)
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>⚠️  Warning: too few trades (trades=15, ≥ 30 recommended)
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    → Fewer than 30 trades is statistically noisy and may be filtered out by
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>      optimization / WFT pre_filter. Consider widening the data period
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>      (`--start` to go further back).
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>Total Return: 4.74%   CAGR: 0.93%
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>SR: 0.85   Sortino: -2.86   Calmar: 0.52
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>MDD: 1.79%   Length: 71d   Recovery: 154d
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>PF: 4.01   Win%: 35.7%   avgWin: 10.39%   avgLoss: -1.72%
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>Kelly: 0.25  Payoff: 6.04  Expectancy: 2.60%/trade  GPR: 0.31  Ulcer: 0.0079  Recovery: 2.65
-<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>Win-rate CI(90%): 17.8% - 54.8%
-<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
-<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>DB save: run_id=&lt;uuid&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Running backtest: SPY x sma_cross_qs  (2019-01-01 → 2023-12-29, 1258 bars)
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>⚠️  Backtest done   signal-quality score: 0.48/1.0  (0.4–0.7: caution, more validation suggested)
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>⚠️  Warning: too few trades (trades=15, ≥ 30 recommended)
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    → Fewer than 30 trades is statistically noisy and may be filtered out by
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>      optimization / WFT pre_filter. Consider widening the data period
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>      (`--start` to go further back).
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>Total Return: 4.74%   CAGR: 0.93%
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>SR: 0.85   Sortino: -2.86   Calmar: 0.52
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>MDD: 1.79%   Length: 71d   Recovery: 154d
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>PF: 4.01   Win%: 35.7%   avgWin: 10.39%   avgLoss: -1.72%
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>Kelly: 0.25  Payoff: 6.04  Expectancy: 2.60%/trade  GPR: 0.31  Ulcer: 0.0079  Recovery: 2.65
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>Trades: 15   AvgHold: 56.8d(57bar)   Max: 218.0d(218bar)   Win streak: 4   Loss streak: 6
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>Win-rate CI(90%): 17.8% - 54.8%
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>📊 View charts via `alpha-vis serve` (result ID: sma_cross_qs_report)
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>DB save: run_id=&lt;uuid&gt;
 </code></pre></div>
 <p>A quick read of the key metrics is below. For the full metric list, see <a href="#reading-the-results-detailed">Reading the Results in detail</a> or the <a href="../cli-reference/">CLI Reference</a>.</p>
 <table>
@@ -3575,13 +3580,13 @@ The CLI label table below maps Japanese CLI labels to conventional English metri
 <h3 id="next-steps-visualize">Next steps: visualize the results (optional)<a class="headerlink" href="#next-steps-visualize" title="Permanent link">&para;</a></h3>
 <p>The <code>📊 View charts via alpha-vis serve</code> line at the end of the output points at the separate OSS package <a href="../alpha-visualizer/installation/">alpha-visualizer</a>. It renders the same result as <strong>Equity / Drawdown / trades / metric comparisons in your browser</strong>.</p>
 <p>Three install paths are available (<a href="../alpha-visualizer/installation/">details</a>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">   </span><span class="c1"># uv tool (installs as a standalone CLI — recommended)</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">       </span><span class="c1"># pip (installs into your current Python env)</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://pypi.org/simple<span class="w"> </span>alpha-visualizer<span class="w">  </span><span class="c1"># explicit PyPI source</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">   </span><span class="c1"># uv tool (installs as a standalone CLI — recommended)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">       </span><span class="c1"># pip (installs into your current Python env)</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://pypi.org/simple<span class="w"> </span>alpha-visualizer<span class="w">  </span><span class="c1"># explicit PyPI source</span>
 </code></pre></div>
 <p>Then run <code>alpha-vis serve</code> inside the <code>quickstart/</code> directory and your browser opens the dashboard (default: <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nb">cd</span><span class="w"> </span>quickstart
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>alpha-vis<span class="w"> </span>serve
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nb">cd</span><span class="w"> </span>quickstart
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>alpha-vis<span class="w"> </span>serve
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">If <code>alpha-vis</code> is not recognized</p>
@@ -3593,12 +3598,12 @@ The CLI label table below maps Japanese CLI labels to conventional English metri
 omits <code>optimizer_config</code>. If you want to try <code>alpha-forge optimize run</code>,
 append the block below just before the trailing <code>}</code> of the JSON
 (a comma after <code>risk_management</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">&quot;optimizer_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&quot;param_ranges&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="nt">&quot;sma_fast.length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="nt">&quot;sma_slow.length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">&quot;optimizer_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&quot;param_ranges&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="nt">&quot;sma_fast.length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="nt">&quot;sma_slow.length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="p">}</span>
 </code></pre></div>
 <p>If you skip it, alpha-forge falls back to its built-in default ranges
 (<code>sma_fast.length=[5,25]</code> / <code>sma_slow.length=[20,60]</code>) and prints
@@ -3654,40 +3659,40 @@ by hand.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Run the following command in your terminal. The installer extracts the latest binary bundle (<code>forge.dist</code>) into <code>~/.local/share/alpha-forge/</code> and symlinks the executable as <code>~/.local/bin/alpha-forge</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 </code></pre></div>
 <p>The default install location is <code>~/.local/bin</code> (user-local, no sudo required). During install, you'll be asked <code>Install to system-wide /usr/local/bin instead? (requires sudo) [y/N]:</code>. Press Enter or <code>n</code> to keep the default, or <code>y</code> to install system-wide to <code>/usr/local/bin</code> (which will prompt for sudo).</p>
 <div class="admonition tip">
 <p class="admonition-title">Non-interactive install (<code>INSTALL_DIR</code> env var)</p>
 <p>For CI, Dockerfiles, or any environment where the interactive prompt can't be answered, set <code>INSTALL_DIR</code> to choose the symlink directory directly. The prompt is then skipped entirely.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Pin to ~/.local/bin without any prompt</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nv">INSTALL_DIR</span><span class="o">=</span>~/.local/bin<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="o">)</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Custom directory (must be writable)</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="nv">INSTALL_DIR</span><span class="o">=</span>/opt/forge/bin<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Pin to ~/.local/bin without any prompt</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nv">INSTALL_DIR</span><span class="o">=</span>~/.local/bin<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="o">)</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Custom directory (must be writable)</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="nv">INSTALL_DIR</span><span class="o">=</span>/opt/forge/bin<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="o">)</span>
 </code></pre></div>
 <p>The <code>forge.dist</code> bundle is extracted under <code>&lt;dirname of INSTALL_DIR&gt;/share/alpha-forge/</code> (e.g. <code>INSTALL_DIR=/opt/forge/bin</code> → <code>/opt/forge/share/alpha-forge/</code>). Pass the same <code>INSTALL_DIR</code> to <code>uninstall.sh</code> when removing.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Display language (<code>FORGE_INSTALL_LOCALE</code> env var)</p>
 <p>The installer auto-detects language from <code>LANG</code> / <code>LC_ALL</code> (Japanese for <code>ja*</code>, English otherwise). To force a specific language, set <code>FORGE_INSTALL_LOCALE=ja|en</code>. <code>uninstall.sh</code> honors the same variable.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Force English output regardless of LANG</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nv">FORGE_INSTALL_LOCALE</span><span class="o">=</span>en<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Force English output regardless of LANG</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nv">FORGE_INSTALL_LOCALE</span><span class="o">=</span>en<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/install.sh<span class="o">)</span>
 </code></pre></div>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Paid-plan login (optional)</p>
 <p>Right after install, the CLI runs in Trial mode without any Whop login. Run the following command only after you purchase a paid plan (Lifetime / Annual / Monthly):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>login
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>login
 </code></pre></div>
 </div>
 </div>
 <div class="tabbed-block">
 <p>Run this in PowerShell (no administrator rights required). It extracts the bundled binary set (<code>forge.dist\</code>) into <code>%LOCALAPPDATA%\Programs\alpha-forge\</code>, generates the sibling <code>alpha-forge.cmd</code> launcher, and automatically registers that directory in your User PATH.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
 </code></pre></div>
 <p>If a legacy install (<code>$HOME\bin\forge.exe</code> or <code>C:\Program Files\forge\forge.exe</code>) is detected, it is removed after confirmation and replaced with the new layout. To preview what the installer would do without touching the filesystem, run with <code>-DryRun</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">&amp;</span> <span class="p">(</span><span class="no">[scriptblock]</span><span class="p">::</span><span class="n">Create</span><span class="p">((</span><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span><span class="p">)))</span> <span class="n">-DryRun</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">&amp;</span> <span class="p">(</span><span class="no">[scriptblock]</span><span class="p">::</span><span class="n">Create</span><span class="p">((</span><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span><span class="p">)))</span> <span class="n">-DryRun</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Display language</p>
@@ -3705,8 +3710,8 @@ by hand.</p>
 </li>
 <li>
 <p><strong>macOS / Linux</strong>: make it executable and move it to a directory on your PATH.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>alpha-forge-macos-arm64
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>alpha-forge-macos-arm64<span class="w"> </span>/usr/local/bin/alpha-forge
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>alpha-forge-macos-arm64
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>alpha-forge-macos-arm64<span class="w"> </span>/usr/local/bin/alpha-forge
 </code></pre></div>
 </li>
 <li>
@@ -3722,18 +3727,18 @@ by hand.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">bash</label><label for="__tabbed_3_2">zsh</label><label for="__tabbed_3_3">fish</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># add to ~/.bashrc</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nv">_ALPHA_FORGE_COMPLETE</span><span class="o">=</span>bash_source<span class="w"> </span>alpha-forge<span class="k">)</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># add to ~/.bashrc</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nv">_ALPHA_FORGE_COMPLETE</span><span class="o">=</span>bash_source<span class="w"> </span>alpha-forge<span class="k">)</span><span class="s2">&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># add to ~/.zshrc</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nv">_ALPHA_FORGE_COMPLETE</span><span class="o">=</span>zsh_source<span class="w"> </span>alpha-forge<span class="k">)</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># add to ~/.zshrc</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nv">_ALPHA_FORGE_COMPLETE</span><span class="o">=</span>zsh_source<span class="w"> </span>alpha-forge<span class="k">)</span><span class="s2">&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># add to ~/.config/fish/completions/alpha-forge.fish</span>
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="nv">_ALPHA_FORGE_COMPLETE</span><span class="o">=</span>fish_source<span class="w"> </span>alpha-forge<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nb">source</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># add to ~/.config/fish/completions/alpha-forge.fish</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="nv">_ALPHA_FORGE_COMPLETE</span><span class="o">=</span>fish_source<span class="w"> </span>alpha-forge<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nb">source</span>
 </code></pre></div>
 </div>
 </div>
@@ -3750,22 +3755,22 @@ by hand.</p>
 <p>Open the <a href="https://whop.com/alforge-labs/alphaforge/">purchase page</a> in your browser, sign up to Whop (email / GitHub / Google), and complete checkout for Lifetime, Annual, or Monthly.</p>
 <h3 id="2-authenticate-with-whop-oauth-from-forge">2. Authenticate with Whop OAuth from forge<a class="headerlink" href="#2-authenticate-with-whop-oauth-from-forge" title="Permanent link">&para;</a></h3>
 <p>After the purchase finishes, run the command below in your terminal. It launches a browser and walks you through Whop's OAuth 2.0 PKCE flow.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>login
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>login
 </code></pre></div>
 <p>Credentials are cached at <code>$XDG_CONFIG_HOME/forge/credentials.json</code> (default <code>~/.config/forge/credentials.json</code>). Internet access is required.</p>
 <h3 id="3-verify-the-login-state">3. Verify the login state<a class="headerlink" href="#3-verify-the-login-state" title="Permanent link">&para;</a></h3>
 <p>Inspect the cached user ID, token expiry, and plan tier:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>status
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>alpha-forge<span class="w"> </span>system<span class="w"> </span>auth<span class="w"> </span>status
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>User ID         : user_abc123
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>Access token    : 2026-05-13 12:30 UTC (45 min remaining)
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>Last verified   : 2026-05-13 11:45 UTC (13 min ago)
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>Plan            : Paid (Lifetime)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>User ID         : user_abc123
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>Access token    : 2026-05-13 12:30 UTC (45 min remaining)
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>Last verified   : 2026-05-13 11:45 UTC (13 min ago)
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>Plan            : Paid (Lifetime)
 </code></pre></div>
 <p><code>Plan: Paid (Lifetime)</code> confirms a successful paid-plan activation. Due to an implementation holdover, the CLI also shows <code>Paid (Lifetime)</code> for Annual and Monthly subscribers (Whop OAuth treats all paid tiers as a single "customer" access level). Without Whop registration (i.e. on the Trial plan), the plan details above are not shown at all; instead the command prints only <code>[AlphaForge] Not logged in.</code> followed by <code>Run: alpha-forge system auth login</code>.</p>
 <h3 id="4-confirm-the-unlock">4. Confirm the unlock<a class="headerlink" href="#4-confirm-the-unlock" title="Permanent link">&para;</a></h3>
 <p>Verify that a paid-plan-only feature (Pine Script export) now works:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_cross_qs
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>sma_cross_qs
 </code></pre></div>
 <p>If the red "Premium-only feature" Panel does <strong>not</strong> appear and a <code>.pine</code> file is generated, the paid plan is fully active.</p>
 <hr />
@@ -3829,25 +3834,25 @@ by hand.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Run the official uninstaller. It removes the <code>alpha-forge</code> symlink, the entire <code>forge.dist/</code> directory (~1,100 bundled library files), and the PATH line that was appended to your shell rc.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span>
 </code></pre></div>
 <p>Your credentials (<code>~/.config/forge/credentials.json</code>) are <strong>kept by default</strong>. This is intentional: if you reinstall later, you can skip <code>alpha-forge system auth login</code> and the install will pick up your existing Whop OAuth session.</p>
 <div class="admonition tip">
 <p class="admonition-title">Full wipe (delete credentials and EULA acceptance too)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span><span class="w"> </span>--purge
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span><span class="w"> </span>--purge
 </code></pre></div>
 <p><code>--purge</code> additionally removes <code>~/.config/forge/</code> (Whop OAuth token + EULA state) and the legacy <code>~/.forge/</code> path if it exists.</p>
 </div>
 <div class="admonition info">
 <p class="admonition-title">Preview before deleting</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span><span class="w"> </span>--dry-run
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span><span class="w"> </span>--dry-run
 </code></pre></div>
 <p>Shows exactly which paths would be removed without touching anything.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Uninstall from a custom path (<code>INSTALL_DIR</code> env var)</p>
 <p>If you installed via <code>INSTALL_DIR=...</code>, pass the same value to the uninstaller so it can locate the symlink:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nv">INSTALL_DIR</span><span class="o">=</span>/opt/forge/bin<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="nv">INSTALL_DIR</span><span class="o">=</span>/opt/forge/bin<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-sSL<span class="w"> </span>https://alforge-labs.github.io/uninstall.sh<span class="o">)</span>
 </code></pre></div>
 <p>Without it, both <code>~/.local/bin</code> and <code>/usr/local/bin</code> are auto-discovered.</p>
 </div>
@@ -3859,10 +3864,10 @@ by hand.</p>
 </div>
 <div class="tabbed-block">
 <p>Run the official uninstaller. It removes both the new layout (<code>%LOCALAPPDATA%\Programs\alpha-forge\</code>) and any legacy layouts (<code>$HOME\bin\forge.exe</code> / <code>C:\Program Files\forge\forge.exe</code>), and cleans up the matching User PATH entries.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">uninstall</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">uninstall</span><span class="p">.</span><span class="n">ps1</span> <span class="p">|</span> <span class="nb">iex</span>
 </code></pre></div>
 <p>Authentication cache (<code>~\.config\forge\credentials.json</code>) is preserved by default. Pass <code>-Purge</code> to delete it as well:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="p">&amp;</span> <span class="p">(</span><span class="no">[scriptblock]</span><span class="p">::</span><span class="n">Create</span><span class="p">((</span><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">uninstall</span><span class="p">.</span><span class="n">ps1</span><span class="p">)))</span> <span class="n">-Yes</span> <span class="n">-Purge</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="p">&amp;</span> <span class="p">(</span><span class="no">[scriptblock]</span><span class="p">::</span><span class="n">Create</span><span class="p">((</span><span class="nb">irm </span><span class="n">https</span><span class="p">://</span><span class="n">alforge-labs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">uninstall</span><span class="p">.</span><span class="n">ps1</span><span class="p">)))</span> <span class="n">-Yes</span> <span class="n">-Purge</span>
 </code></pre></div>
 </div>
 </div>
