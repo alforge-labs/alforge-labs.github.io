@@ -65,6 +65,8 @@ envelope なしの生オブジェクトで、メトリクスがトップレベ�
 | `pre_filter` | object | pre-filter 評価時 | 適用閾値（`sharpe_min` / `max_dd_max` / `monthly_volume_usd_min` / `min_trades` / `goal`） |
 | `criteria_check` | object | 合否基準があるとき | 合否 verdict（本体にマージ） |
 | `next_step` | array | 次アクション提示時 | 次コマンド候補（文字列配列） |
+| `carry_adjusted_metrics` | object | `--carry` でキャリー計上できたとき | FX キャリー（金利差近似）込みの参考メトリクス。**キー有無がキャリー計上有無の契約**（未指定・計上不能時はキー自体が無い）。`--split` 併用時は IS 区間ベース |
+| `carry_adjusted_note` | string | `carry_adjusted_metrics` があるとき | 近似方法と限界の注記 |
 
 `--split` を付けると IS/OOS 比較メタが追加されます: `out_of_sample_metrics`（OOS メトリクス）・`overfitting_score`・`overfitting_risk`・`walk_forward_summary`（`is_sharpe` / `oos_sharpe` / `is_return_pct` / `oos_return_pct` / `overfitting_score` / `overfitting_risk`）。
 

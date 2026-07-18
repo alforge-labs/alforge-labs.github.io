@@ -3070,6 +3070,18 @@
 <td>次アクション提示時</td>
 <td>次コマンド候補（文字列配列）</td>
 </tr>
+<tr>
+<td><code>carry_adjusted_metrics</code></td>
+<td>object</td>
+<td><code>--carry</code> でキャリー計上できたとき</td>
+<td>FX キャリー（金利差近似）込みの参考メトリクス。<strong>キー有無がキャリー計上有無の契約</strong>（未指定・計上不能時はキー自体が無い）。<code>--split</code> 併用時は IS 区間ベース</td>
+</tr>
+<tr>
+<td><code>carry_adjusted_note</code></td>
+<td>string</td>
+<td><code>carry_adjusted_metrics</code> があるとき</td>
+<td>近似方法と限界の注記</td>
+</tr>
 </tbody>
 </table>
 <p><code>--split</code> を付けると IS/OOS 比較メタが追加されます: <code>out_of_sample_metrics</code>（OOS メトリクス）・<code>overfitting_score</code>・<code>overfitting_risk</code>・<code>walk_forward_summary</code>（<code>is_sharpe</code> / <code>oos_sharpe</code> / <code>is_return_pct</code> / <code>oos_return_pct</code> / <code>overfitting_score</code> / <code>overfitting_risk</code>）。</p>
