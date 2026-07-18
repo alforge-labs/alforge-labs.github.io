@@ -291,6 +291,7 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--windows` | int | `5` | Number of windows |
 | `--min-window-trades` | int | - | Skip windows whose IS trade count is below N and exclude them from the mean. Useful for low-frequency strategies that would otherwise drop entire windows to `-∞` |
 | `--json` | flag | false | Output results as JSON |
+| `--save` | flag | false | Record WFT results to the DB (`optimization_runs`). Per-window results are stored in `all_trials_json` in window format, and `--json` returns the run_id as `opt_run_id` (also feeds the alpha-visualizer WFO tab) |
 | `--goal` | option | - | Goal name (e.g. `default`, `stocks`). Reads the `goals.yaml` `pre_filter` thresholds; when set, the goal's WFT settings (including the OOS aggregation method `mean` / `median` / `trimmed_mean`, #947) are also applied. **Even without `--goal`, the `--json` output always carries `pre_filter` / `pre_filter_pass` using default thresholds** (issue #1237, contract aligned with `backtest run`) |
 | `--sharpe-min` | float | `--goal` value or `1.0` | Minimum Sharpe ratio for the `pre_filter_pass` decision |
 | `--max-dd` | float | `--goal` value or `25.0` | Max drawdown limit (%) for the `pre_filter_pass` decision |
