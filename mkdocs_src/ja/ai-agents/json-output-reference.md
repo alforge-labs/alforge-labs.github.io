@@ -83,6 +83,7 @@ envelope なしの生オブジェクト。
 | `is_valid_windows` / `valid_oos_windows` / `total_windows` / `skipped_windows` | int | 各種ウィンドウ数 |
 | `all_is_invalid` | bool | 全ウィンドウで IS 最適化が失敗したか |
 | `freemium_limit_notices` | array | Trial 制限通知 |
+| `opt_run_id` | string \| null | `--save` 指定時に記録した `optimization_runs` の run_id（`--save` なし・記録失敗時は `null`。キーは常に載る） |
 | `pre_filter_pass` | bool \| null | 平均 OOS メトリクスが閾値以上か（判定不能なら `null`） |
 | `pre_filter` | object | 適用閾値（`sharpe_min` / `max_dd_max` / `min_trades` / `goal`） |
 

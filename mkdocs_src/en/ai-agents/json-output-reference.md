@@ -83,6 +83,7 @@ A raw object with no envelope.
 | `is_valid_windows` / `valid_oos_windows` / `total_windows` / `skipped_windows` | int | window counts |
 | `all_is_invalid` | bool | whether IS optimization failed in every window |
 | `freemium_limit_notices` | array | Trial limit notices |
+| `opt_run_id` | string \| null | run_id of the `optimization_runs` row recorded with `--save` (`null` without `--save` or on recording failure; the key is always present) |
 | `pre_filter_pass` | bool \| null | whether the average OOS metric meets the threshold (`null` if undecidable) |
 | `pre_filter` | object | applied thresholds (`sharpe_min` / `max_dd_max` / `min_trades` / `goal`) |
 

@@ -291,6 +291,7 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--windows` | int | `5` | ウィンドウ数 |
 | `--min-window-trades` | int | - | IS 期間の取引数が N 件未満のウィンドウをスキップして平均から除外する。シグナル発生回数が少ない戦略でウィンドウ全体が `-∞` に陥るのを防ぐ |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+| `--save` | フラグ | false | WFT 結果を DB（`optimization_runs`）に記録する。ウィンドウごとの結果が window 形式で `all_trials_json` に保存され、`--json` 出力の `opt_run_id` で run_id が返る（alpha-visualizer の WFO タブにも反映される） |
 | `--goal` | オプション | - | ゴール名（例: `default`, `stocks`）。`goals.yaml` の `pre_filter` 閾値を読み込む。指定時は `goals.yaml` の `wft.aggregation_method`（OOS 集約方法 `mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）と `wft.trimmed_pct` も読み込み、`pre_filter_pass` 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は `forge.yaml` の `default_goal` をフォールバック）。**`--goal` を省略しても `--json` 出力には既定閾値で `pre_filter` / `pre_filter_pass` が必ず付きます**（issue #1237、`backtest run` と契約統一） |
 | `--sharpe-min` | float | `--goal` か `1.0` | `pre_filter_pass` 判定の Sharpe 下限（集約後の OOS Sharpe がこの値以上で `true`） |
 | `--max-dd` | float | `--goal` か `25.0` | `pre_filter_pass` の MaxDD 上限（%）。`--json` 出力の `pre_filter.max_dd_max` に反映 |
