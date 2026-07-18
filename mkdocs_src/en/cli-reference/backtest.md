@@ -63,6 +63,49 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--cost-preset` | option | - | Cost preset name (issue #785, e.g. `moomoo-crypto-spot` / `binance-spot-vip0` / `ibkr-us-stock-fixed`); overrides the strategy's `risk_management` commission/slippage in-memory at run time (strategy JSON is untouched) |
 | `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics in the result (#958); requires saved dividends data (`data fetch --with-dividends`) |
 | `--regime-filter` | option | - | Post-hoc entry gating by macro regime (issue #1012); format `<source>:<label>` (e.g. `macro:risk_on`), source=`macro` only; requires FRED data fetched in advance (`data alt fetch FRED:T10Y3M`) |
+| `--carry` | flag | false | Approximate FX carry (swap) from the rate differential and include `carry_adjusted_metrics` ([details](#carry)); requires a `backtest.carry` mapping in `forge.yaml` and pre-fetched FRED rate data |
+
+### Approximate FX carry (swap) with `--carry` {#carry}
+
+To evaluate FX swap/carry strategies, the daily carry is approximated from the **short-term rate differential** (instead of broker swap points) and reported as `carry_adjusted_metrics` (total_return_pct / cagr_pct / max_drawdown_pct / sharpe_ratio / volatility_pct) alongside the price-only metrics.
+
+```
+daily carry fraction = (base short rate − quote short rate − spread_pct) / 100 / 365 × elapsed calendar days
+```
+
+**Setup (2 steps)**
+
+1. Define the pair → rate-series mapping under `backtest.carry` in `forge.yaml`:
+
+    ```yaml
+    backtest:
+      carry:
+        "USDJPY=X":
+          base_rate_series: "DFF"               # short rate of the base currency (USD; effective fed funds, % p.a.)
+          quote_rate_series: "IRSTCI01JPM156N"  # short rate of the quote currency (JPY; uncollateralized O/N call, % p.a.)
+          spread_pct: 0.5                       # broker margin (% p.a.; deducted regardless of direction)
+    ```
+
+2. Fetch the rate data from FRED (stored as look-ahead-free vintage panels):
+
+    ```bash
+    alpha-forge altdata fetch FRED:DFF --start 2015-01-01 --end 2026-01-01
+    alpha-forge altdata fetch FRED:IRSTCI01JPM156N --start 2015-01-01 --end 2026-01-01
+    ```
+
+```bash
+alpha-forge backtest run USDJPY=X --strategy usdjpy_carry_v1 --carry
+```
+
+**Behavior notes**
+
+- Weekend days accrue on the Monday bar as 3 days' worth (calendar-day gap from the previous bar; the "triple Wednesday" T+2 convention is not modeled)
+- Holding short flips the sign of the rate differential; `spread_pct` is deducted regardless of direction
+- Flat bars accrue nothing; this is an adjunct — the main equity curve (SL/TP evaluation etc.) is unaffected
+- A missing mapping or unfetched rate data prints a warning and the backtest continues without carry (the run does not fail)
+- The approximation assumes daily or higher timeframes (a warning is printed on sub-daily timeframes, where accrual clusters on day-crossing bars)
+- With `--split`, `carry_adjusted_metrics` is an IS-period value
+- Real broker swap points deviate from the theoretical differential by the broker margin (roughly 0.2–1.0% p.a.) — tune `spread_pct` accordingly
 
 ### Export per-trade CSV with `--trades-csv` {#trades-csv-export}
 

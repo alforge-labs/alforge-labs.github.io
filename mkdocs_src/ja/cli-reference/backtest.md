@@ -63,6 +63,49 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--cost-preset` | オプション | - | コストプリセット名（issue #785）。戦略 JSON の `risk_management` の commission / slippage を実行時に preset 値で in-memory 上書きする（戦略 JSON は変更しない） |
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
 | `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`alpha-forge data alt fetch FRED:T10Y3M`） |
+| `--carry` | フラグ | false | FX キャリー（スワップ）を金利差で近似し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。`forge.yaml` の `backtest.carry` マッピングと FRED 金利データの事前取得が必要 |
+
+### `--carry` で FX キャリー（スワップ）を金利差近似 {#carry}
+
+FX ペアのスワップ投資（キャリー戦略）を評価するため、ブローカー実スワップポイントの代わりに**短期金利差**で日次キャリーを近似し、price-only metrics と並列に `carry_adjusted_metrics`（total_return_pct / cagr_pct / max_drawdown_pct / sharpe_ratio / volatility_pct）を併記します。
+
+```
+日次キャリー割合 = (base 短期金利 − quote 短期金利 − spread_pct) / 100 / 365 × 経過カレンダー日数
+```
+
+**セットアップ（2 ステップ）**
+
+1. `forge.yaml` の `backtest.carry` に通貨ペア → 金利系列マッピングを定義:
+
+    ```yaml
+    backtest:
+      carry:
+        "USDJPY=X":
+          base_rate_series: "DFF"               # base 通貨 (USD) の短期金利（FF 実効金利・年率%）
+          quote_rate_series: "IRSTCI01JPM156N"  # quote 通貨 (JPY) の短期金利（無担保コール O/N・年率%）
+          spread_pct: 0.5                       # ブローカーマージン（年率%・保有方向によらず控除）
+    ```
+
+2. 金利データを FRED から取得（look-ahead を排除した vintage 形式で保存）:
+
+    ```bash
+    alpha-forge altdata fetch FRED:DFF --start 2015-01-01 --end 2026-01-01
+    alpha-forge altdata fetch FRED:IRSTCI01JPM156N --start 2015-01-01 --end 2026-01-01
+    ```
+
+```bash
+alpha-forge backtest run USDJPY=X --strategy usdjpy_carry_v1 --carry
+```
+
+**挙動のポイント**
+
+- 週末分は月曜バーで 3 日分自動計上（前バーからのカレンダー日差。「水曜 3 倍付与」T+2 慣行までは追いません）
+- ショート保有中は金利差の受け払いが反転。`spread_pct` は保有方向によらず控除
+- ノーポジのバーは計上なし。equity 本体（SL/TP 判定等）には影響しない併記（adjunct）方式
+- マッピング未定義・金利データ未取得は警告してキャリーなしで続行（バックテスト自体は失敗しない）
+- 日足以上のタイムフレーム前提の近似（日足未満では日またぎバーに計上が集中するため警告）
+- `--split` 併用時の `carry_adjusted_metrics` は IS 区間ベース
+- 実ブローカーのスワップポイントは理論値からマージン分（目安 0.2〜1.0%/年）乖離するため、`spread_pct` で調整してください
 
 ### `--trades-csv` で trade 一覧 CSV をエクスポート {#trades-csv-export}
 

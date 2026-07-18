@@ -65,6 +65,8 @@ A raw object with no envelope; metrics sit at the top level (60+ fields in pract
 | `pre_filter` | object | on pre-filter evaluation | applied thresholds (`sharpe_min` / `max_dd_max` / `monthly_volume_usd_min` / `min_trades` / `goal`) |
 | `criteria_check` | object | when pass/fail criteria exist | verdict (merged into the body) |
 | `next_step` | array | when next actions are suggested | next-command candidates (string array) |
+| `carry_adjusted_metrics` | object | when `--carry` accrued carry | reference metrics including FX carry (rate-differential approximation). **Key presence is the contract** (absent when not specified or carry could not be accrued). IS-period value when combined with `--split` |
+| `carry_adjusted_note` | string | when `carry_adjusted_metrics` exists | note on the approximation method and its limits |
 
 With `--split`, IS/OOS comparison meta is added: `out_of_sample_metrics` (OOS metrics), `overfitting_score`, `overfitting_risk`, and `walk_forward_summary` (`is_sharpe` / `oos_sharpe` / `is_return_pct` / `oos_return_pct` / `overfitting_score` / `overfitting_risk`).
 
