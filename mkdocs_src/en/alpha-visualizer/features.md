@@ -27,12 +27,37 @@ Tabs:
 
 | Tab | Contents |
 |---|---|
-| **Backtest** | Equity / Drawdown / Underwater / trade list / benchmark metrics (alpha, beta, IR, correlation) / annual returns |
+| **Backtest** | Equity / Drawdown / Underwater / trade list / benchmark metrics (alpha, beta, IR, correlation) / annual returns. Carry-adjusted metrics recorded with `alpha-forge backtest run --carry` are shown as a dedicated card |
 | **IS / OOS** | In-Sample vs Out-of-Sample metric comparison |
-| **WFO** | Walk-Forward composite equity and per-window results |
+| **WFO** | Walk-Forward composite equity and per-window results. Also renders WFT runs optimized on metrics other than sharpe |
 | **Optimize** | Grid optimization heatmaps and parameter-vs-metric scatter plots |
-| **Run History** | List of past backtest runs |
-| **Strategy** | Indicators, entry/exit rules, and risk management as structured tree |
+| **Run History** | List of past backtest runs. Tuning trial runs launched from the GUI are visually distinguished from regular runs |
+| **Strategy** | Indicators, entry/exit rules, and risk management as structured tree, plus the parameter tuning panel |
+
+## Running from the GUI and parameter tuning
+
+alpha-visualizer does more than display results: **backtests, optimization, and Walk-Forward Tests can be executed from the browser**. GUI-launched backtests have been available for a while; v0.9.0 adds asynchronous optimization / WFT jobs and the parameter tuning loop, closing the whole strategy-development loop inside the GUI. This requires the AlphaForge CLI on the same machine as the server (without the CLI, the dashboard keeps working as a read-only viewer).
+
+### Running backtests / optimization / WFT
+
+- Re-run a backtest from the Detail screen with one click (the log tail and the new run appear immediately)
+- Optimization (Optuna) and Walk-Forward Tests launch as **asynchronous jobs** with real-time log / progress streaming over SSE. Running jobs can be cancelled
+- WFT jobs run with recording enabled (`--save`), so finished runs automatically appear in the WFO tab
+- Concurrency and timeout are configurable via the `ALPHA_VIS_JOB_CONCURRENCY` / `ALPHA_VIS_JOB_TIMEOUT` environment variables (see [Configuration](configuration.md))
+
+### Parameter tuning loop
+
+The tuning panel on the Strategy tab supports an **edit → trial run → compare → explicit save** loop entirely in the GUI.
+
+1. Edit parameters and launch a trial run (the original strategy definition is untouched — the run uses a temporary strategy file)
+2. Compare the trial against existing backtest results side by side
+3. Only when you are happy, press "Save" to write the parameters back to the strategy definition (explicit action only — nothing is written back automatically)
+
+Tuning trial runs are visually distinguished from regular runs in Browse, Run History, and the Backtest tab, so exploration footprints never mix with adopted results.
+
+### Duplicate-based strategy creation
+
+Clone an existing strategy under a new ID and register it as a new strategy — useful for iterating on parameters and rules while keeping the original as a template (conflicting IDs are rejected).
 
 ## Compare
 

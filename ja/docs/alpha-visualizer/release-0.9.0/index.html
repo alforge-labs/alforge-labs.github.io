@@ -1,24 +1,24 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="ja" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="AlphaForge CLI official documentation — installation, commands, strategy templates, and AI agent integration.">
+        <meta name="description" content="alpha-visualizer v0.9.0 は最適化・Walk-Forward Test の非同期ジョブ実行とパラメータチューニングループを追加し、GUI だけで戦略開発ループ全体を回せるように。FX キャリー調整メトリクス表示、X 共有シェアカード、アクセシビリティ強化など v0.7.1 以降の累積ハイライトをまとめます。">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/en/docs/usecases/auto-trading/">
+        <link rel="canonical" href="https://alforgelabs.com/ja/docs/alpha-visualizer/release-0.9.0/">
       
       
-        <link rel="prev" href="../quants/">
+        <link rel="prev" href="../faq/">
       
       
-        <link rel="next" href="../ai-agents/">
+        <link rel="next" href="../release-0.7.1/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>Automated Trading - AlphaForge Documentation</title>
+        <title>alpha-visualizer v0.9.0 リリース — 最適化・WFT の GUI 実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート） - AlphaForge ドキュメント</title>
       
     
     
@@ -94,8 +94,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#automated-trading" class="md-skip">
-          Skip to content
+        <a href="#alpha-visualizer-v090-v071" class="md-skip">
+          コンテンツにスキップ
         </a>
       
     </div>
@@ -107,8 +107,8 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="https://alforgelabs.com/en/index.html" title="AlphaForge Documentation" class="md-header__button md-logo" aria-label="AlphaForge Documentation" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="https://alforgelabs.com/ja/index.html" title="AlphaForge ドキュメント" class="md-header__button md-logo" aria-label="AlphaForge ドキュメント" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -122,13 +122,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AlphaForge Documentation
+            AlphaForge ドキュメント
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Automated Trading
+              alpha-visualizer v0.9.0 リリース — 最適化・WFT の GUI 実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート）
             
           </span>
         </div>
@@ -154,7 +154,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="言語切り替え">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -188,16 +188,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="検索">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -210,7 +210,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            検索を初期化
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -231,7 +231,7 @@
         
           
             
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -247,7 +247,7 @@
   
     
   
-  Home
+  ホーム
 
       </a>
     </li>
@@ -266,7 +266,7 @@
           
   
   
-  Getting Started
+  はじめに
 
         </a>
       </li>
@@ -286,7 +286,7 @@
           
   
   
-  AI Agent Integration
+  AI エージェント連携
 
         </a>
       </li>
@@ -298,17 +298,15 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../../guides/end-to-end-workflow/" class="md-tabs__link">
           
   
   
-  Guides
+  ガイド
 
         </a>
       </li>
@@ -328,7 +326,7 @@
           
   
   
-  Strategy Catalog
+  戦略カタログ
 
         </a>
       </li>
@@ -340,15 +338,17 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../alpha-visualizer/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
-  Visualization
+  データ可視化
 
         </a>
       </li>
@@ -368,7 +368,7 @@
           
   
   
-  CLI Reference
+  CLI リファレンス
 
         </a>
       </li>
@@ -388,7 +388,7 @@
   
     
   
-  Changelog
+  変更履歴
 
       </a>
     </li>
@@ -407,7 +407,7 @@
           
   
   
-  Legal & Disclaimers
+  利用規約と免責
 
         </a>
       </li>
@@ -435,15 +435,15 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://alforgelabs.com/en/index.html" title="AlphaForge Documentation" class="md-nav__button md-logo" aria-label="AlphaForge Documentation" data-md-component="logo">
+    <a href="https://alforgelabs.com/ja/index.html" title="AlphaForge ドキュメント" class="md-nav__button md-logo" aria-label="AlphaForge ドキュメント" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    AlphaForge Documentation
+    AlphaForge ドキュメント
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -462,7 +462,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    ホーム
   
 
     
@@ -505,7 +505,7 @@
   <span class="md-ellipsis">
     
   
-    Getting Started
+    はじめに
   
 
     
@@ -521,7 +521,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Getting Started
+    はじめに
   
 
           </label>
@@ -541,7 +541,7 @@
   <span class="md-ellipsis">
     
   
-    Quickstart & Detailed Installation
+    クイックスタートと詳細インストール
   
 
     
@@ -569,7 +569,7 @@
   <span class="md-ellipsis">
     
   
-    Trial Limits
+    Trial 制限
   
 
     
@@ -620,7 +620,7 @@
   <span class="md-ellipsis">
     
   
-    AI Agent Integration
+    AI エージェント連携
   
 
     
@@ -636,7 +636,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI Agent Integration
+    AI エージェント連携
   
 
           </label>
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    Agent Quickstart
+    エージェントクイックスタート
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    AI-Driven Strategy Exploration Workflow
+    AI 駆動の戦略探索ワークフロー
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    alpha-forge-mcp Reference
+    alpha-forge-mcp リファレンス
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Conventions for Agents
+    エージェントから見た CLI 規約
   
 
     
@@ -796,7 +796,7 @@
   <span class="md-ellipsis">
     
   
-    --json Output Reference
+    --json 出力リファレンス
   
 
     
@@ -821,38 +821,33 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Guides
+    ガイド
   
 
     
@@ -863,12 +858,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Guides
+    ガイド
   
 
           </label>
@@ -888,7 +883,7 @@
   <span class="md-ellipsis">
     
   
-    End-to-End Strategy Development Workflow
+    エンドツーエンド戦略開発ワークフロー
   
 
     
@@ -916,7 +911,7 @@
   <span class="md-ellipsis">
     
   
-    Output Examples
+    実行結果と成果物サンプル
   
 
     
@@ -944,7 +939,7 @@
   <span class="md-ellipsis">
     
   
-    Bringing Pine Scripts into TradingView
+    TradingView への Pine Script 反映
   
 
     
@@ -972,7 +967,7 @@
   <span class="md-ellipsis">
     
   
-    Combine Portfolio Pine — Multi-Strategy
+    Combine Portfolio Pine — 複数戦略統合
   
 
     
@@ -1000,7 +995,7 @@
   <span class="md-ellipsis">
     
   
-    TradingView × alpha-strike Integration
+    TradingView と alpha-strike の連携
   
 
     
@@ -1028,7 +1023,7 @@
   <span class="md-ellipsis">
     
   
-    alpha-strike Setup Guide
+    alpha-strike セットアップガイド
   
 
     
@@ -1056,7 +1051,7 @@
   <span class="md-ellipsis">
     
   
-    FRED Macro Data Guide
+    FRED マクロデータ活用ガイド
   
 
     
@@ -1084,7 +1079,7 @@
   <span class="md-ellipsis">
     
   
-    Glossary
+    用語集
   
 
     
@@ -1102,38 +1097,33 @@
                 
   
   
-    
   
   
-  
     
     
     
     
       
       
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Use Cases by Goal
+    目的別ユースケース
   
 
     
@@ -1144,12 +1134,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Use Cases by Goal
+    目的別ユースケース
   
 
           </label>
@@ -1162,14 +1152,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../usecases/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -1190,14 +1180,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../tradingview/" class="md-nav__link">
+      <a href="../../usecases/tradingview/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    TradingView Users
+    TradingViewユーザー
   
 
     
@@ -1218,14 +1208,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../python-dev/" class="md-nav__link">
+      <a href="../../usecases/python-dev/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Python Developers
+    Python開発者
   
 
     
@@ -1246,172 +1236,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../quants/" class="md-nav__link">
+      <a href="../../usecases/quants/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Quants & Researchers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Automated Trading
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Automated Trading
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#end-to-end-system-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        End-to-End System Architecture
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#role-of-each-component" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Role of Each Component
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pre-production-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pre-Production Checklist
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting Started
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-docs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related Docs
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ai-agents/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    AI Agent Users
+    クオンツ・研究者
   
 
     
@@ -1432,14 +1264,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../discretionary/" class="md-nav__link">
+      <a href="../../usecases/auto-trading/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Discretionary → Systematic
+    自動売買検討者
   
 
     
@@ -1460,14 +1292,70 @@
   
   
     <li class="md-nav__item">
-      <a href="../comparison/" class="md-nav__link">
+      <a href="../../usecases/ai-agents/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Comparison with Other Tools
+    AIエージェント利用者
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usecases/discretionary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    裁量トレーダーのシステム化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usecases/comparison/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    他ツールとの比較
   
 
     
@@ -1526,7 +1414,7 @@
   <span class="md-ellipsis">
     
   
-    Strategy Catalog
+    戦略カタログ
   
 
     
@@ -1542,7 +1430,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Strategy Catalog
+    戦略カタログ
   
 
           </label>
@@ -1562,7 +1450,7 @@
   <span class="md-ellipsis">
     
   
-    Strategy Templates
+    戦略テンプレート
   
 
     
@@ -1590,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    Strategy Gallery
+    戦略実例ギャラリー
   
 
     
@@ -1615,33 +1503,38 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Visualization
+    データ可視化
   
 
     
@@ -1652,12 +1545,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Visualization
+    データ可視化
   
 
           </label>
@@ -1670,14 +1563,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -1698,14 +1591,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Installation
+    インストール
   
 
     
@@ -1726,14 +1619,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/features/" class="md-nav__link">
+      <a href="../features/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Features
+    機能詳細
   
 
     
@@ -1754,14 +1647,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Configuration
+    設定
   
 
     
@@ -1782,7 +1675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/faq/" class="md-nav__link">
+      <a href="../faq/" class="md-nav__link">
         
   
   
@@ -1807,33 +1700,38 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" >
         
           
-          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Release Notes
+    リリースノート
   
 
     
@@ -1844,12 +1742,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6_6">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Release Notes
+    リリースノート
   
 
           </label>
@@ -1859,10 +1757,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../alpha-visualizer/release-0.9.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.9.0 (2026-07-19)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1878,6 +1803,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ハイライト
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ハイライト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-wft-gui-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 最適化・WFT の GUI 実行（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. パラメータチューニングループ（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-fx-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. FX キャリー調整メトリクスの表示（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-x-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. シェアカードと X 共有の拡充（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-ui-v080" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. アクセシビリティと UI 品質の底上げ（v0.8.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-v073v080" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アップグレード方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連リンク
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1890,7 +1940,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/release-0.7.1/" class="md-nav__link">
+      <a href="../release-0.7.1/" class="md-nav__link">
         
   
   
@@ -1918,7 +1968,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../alpha-visualizer/release-0.2.0/" class="md-nav__link">
+      <a href="../release-0.2.0/" class="md-nav__link">
         
   
   
@@ -1984,7 +2034,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI リファレンス
   
 
     
@@ -2000,7 +2050,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    CLI Reference
+    CLI リファレンス
   
 
           </label>
@@ -2020,7 +2070,7 @@
   <span class="md-ellipsis">
     
   
-    Overview
+    概要
   
 
     
@@ -2064,7 +2114,7 @@
   <span class="md-ellipsis">
     
   
-    Core commands
+    コアコマンド
   
 
     
@@ -2080,7 +2130,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Core commands
+    コアコマンド
   
 
           </label>
@@ -2376,7 +2426,7 @@
   <span class="md-ellipsis">
     
   
-    Auxiliary commands
+    補助コマンド
   
 
     
@@ -2392,7 +2442,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Auxiliary commands
+    補助コマンド
   
 
           </label>
@@ -2492,7 +2542,7 @@
   <span class="md-ellipsis">
     
   
-    Meta commands
+    メタコマンド
   
 
     
@@ -2508,7 +2558,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Meta commands
+    メタコマンド
   
 
           </label>
@@ -2571,7 +2621,7 @@
   <span class="md-ellipsis">
     
   
-    Changelog
+    変更履歴
   
 
     
@@ -2614,7 +2664,7 @@
   <span class="md-ellipsis">
     
   
-    Legal & Disclaimers
+    利用規約と免責
   
 
     
@@ -2630,7 +2680,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Legal & Disclaimers
+    利用規約と免責
   
 
           </label>
@@ -2650,7 +2700,7 @@
   <span class="md-ellipsis">
     
   
-    Trust, Safety, and Limits
+    信頼・安全・制限
   
 
     
@@ -2678,7 +2728,7 @@
   <span class="md-ellipsis">
     
   
-    Disclaimers
+    免責事項
   
 
     
@@ -2734,7 +2784,7 @@
   <span class="md-ellipsis">
     
   
-    Privacy Policy
+    プライバシーポリシー
   
 
     
@@ -2768,7 +2818,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="目次">
   
   
   
@@ -2777,15 +2827,98 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      目次
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#end-to-end-system-architecture" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        End-to-End System Architecture
+        ハイライト
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ハイライト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-wft-gui-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 最適化・WFT の GUI 実行（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. パラメータチューニングループ（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-fx-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. FX キャリー調整メトリクスの表示（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-x-v090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. シェアカードと X 共有の拡充（v0.9.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-ui-v080" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. アクセシビリティと UI 品質の底上げ（v0.8.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-v073v080" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アップグレード方法
       
     </span>
   </a>
@@ -2793,43 +2926,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#role-of-each-component" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Role of Each Component
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pre-production-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pre-Production Checklist
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting Started
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-docs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related Docs
+        関連リンク
       
     </span>
   </a>
@@ -2853,82 +2953,60 @@
 
 
 
-<h1 id="automated-trading">Automated Trading<a class="headerlink" href="#automated-trading" title="Permanent link">&para;</a></h1>
-<p>For traders who want a complete end-to-end environment — from strategy development all the way to live order execution.</p>
-<h2 id="end-to-end-system-architecture">End-to-End System Architecture<a class="headerlink" href="#end-to-end-system-architecture" title="Permanent link">&para;</a></h2>
-<p><img alt="AlphaForge auto-trading pipeline architecture" src="../../assets/illustrations/auto-trading/auto-trading-pipeline-architecture-en.png" /></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>AlphaForge (strategy development &amp; validation)
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>      ↓  Pine Script generation
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>TradingView (alert triggering)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      ↓  Webhook
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Alpha Strike (order processing)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      ↓
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Broker API (actual orders)
+<h1 id="alpha-visualizer-v090-v071">alpha-visualizer v0.9.0 リリース — v0.7.1 以降の累積アップデート<a class="headerlink" href="#alpha-visualizer-v090-v071" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>公開日</strong>: 2026 年 7 月 19 日 / <strong>バージョン</strong>: v0.9.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.9.0/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0">GitHub Release</a></p>
+</blockquote>
+<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v0.9.0 の最大の変化は、<strong>最適化・Walk-Forward Test の非同期ジョブ実行とパラメータチューニングループの追加により、GUI だけで戦略開発ループ全体を回せるようになった</strong>ことです。本ノートでは v0.7.1 以降（v0.7.3・v0.8.0・v0.9.0）の累積ハイライトをまとめます。</p>
+<h2 id="_1">ハイライト<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="1-wft-gui-v090">1. 最適化・WFT の GUI 実行（v0.9.0）<a class="headerlink" href="#1-wft-gui-v090" title="Permanent link">&para;</a></h3>
+<p>最適化（Optuna）と Walk-Forward Test を<strong>非同期ジョブ</strong>としてブラウザから起動できるようになりました。SSE によるログ・進捗のリアルタイム表示とキャンセルに対応します。WFT ジョブは記録付き（<code>--save</code>）で実行されるため、完了すると WFO タブへ自動反映されます。以前から可能だった Detail 画面からのバックテスト再実行も、run の直接取得・タイムアウト・実行ログ表示などで堅牢化しました。</p>
+<p>サーバーと同じマシンに AlphaForge CLI がインストールされていることが前提です（CLI が無い環境では従来どおり閲覧専用として動作します）。同時実行数・タイムアウトは <code>ALPHA_VIS_JOB_CONCURRENCY</code> / <code>ALPHA_VIS_JOB_TIMEOUT</code> で調整できます。</p>
+<h3 id="2-v090">2. パラメータチューニングループ（v0.9.0）<a class="headerlink" href="#2-v090" title="Permanent link">&para;</a></h3>
+<p>戦略構成タブのチューニングパネルで、<strong>編集 → 一時実行 → 比較 → 明示保存</strong> のループを GUI だけで回せます。一時実行は元の戦略定義に触れず、書き戻しは「保存」の明示操作のみ。チューニング試行のランは Browse / 実行履歴 / バックテストタブで通常ランと区別表示されるため、探索の足跡と本採用の結果が混ざりません。既存戦略の<strong>複製ベース新規作成</strong>にも対応しました。</p>
+<h3 id="3-fx-v090">3. FX キャリー調整メトリクスの表示（v0.9.0）<a class="headerlink" href="#3-fx-v090" title="Permanent link">&para;</a></h3>
+<p>AlphaForge v0.18.0 の <code>backtest run --carry</code>（FX キャリー / スワップの計上）と連携し、キャリー調整後メトリクス（carry_adjusted）を Detail 画面のバックテストタブにカード表示します。詳細は <a href="../../changelog/">AlphaForge 変更履歴</a>を参照してください。</p>
+<h3 id="4-x-v090">4. シェアカードと X 共有の拡充（v0.9.0）<a class="headerlink" href="#4-x-v090" title="Permanent link">&para;</a></h3>
+<p>equity curve と主要指標をまとめた OGP サイズ（1200×630）の PNG シェアカードを Detail・Compare・Live の各画面から書き出せます。「X で共有」ボタンはカード保存と X 投稿画面のオープン（成績サマリのプリフィル・280 字ガード付き）を 1 クリックで実行します。</p>
+<h3 id="5-ui-v080">5. アクセシビリティと UI 品質の底上げ（v0.8.0）<a class="headerlink" href="#5-ui-v080" title="Permanent link">&para;</a></h3>
+<p>キーボード操作・ARIA ランドマーク・スクリーンリーダー対応・WCAG AA コントラストへの調整を実施しました。ローソク足チャートには OHLC データテーブルの代替表示を追加。ローディングスケルトンの共有化、<code>Intl</code> による桁区切り、OS テーマ追従も入っています。</p>
+<h3 id="6-v073v080">6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）<a class="headerlink" href="#6-v073v080" title="Permanent link">&para;</a></h3>
+<p>主要チャートの既定レンダラを TradingView lightweight-charts に切り替えました（v0.7.3）。最適化結果には<strong>パラメータ 2 軸 × 指標のヒートマップビュー</strong>が加わり、散布図とタブで切り替えられます（v0.8.0）。</p>
+<h2 id="_2">アップグレード方法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># uv</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>add<span class="w"> </span>alpha-visualizer@latest<span class="w">        </span><span class="c1"># プロジェクトに追加</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">       </span><span class="c1"># CLI として使う</span>
 </code></pre></div>
-<h2 id="role-of-each-component">Role of Each Component<a class="headerlink" href="#role-of-each-component" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>AlphaForge</strong></td>
-<td>Strategy backtesting, optimization, walk-forward validation</td>
-</tr>
-<tr>
-<td><strong>Pine Script</strong></td>
-<td>Real-time signal generation in TradingView</td>
-</tr>
-<tr>
-<td><strong>TradingView Alert</strong></td>
-<td>Fires webhook when signal triggers</td>
-</tr>
-<tr>
-<td><strong>Alpha Strike</strong></td>
-<td>Receives webhook and submits orders to broker API</td>
-</tr>
-</tbody>
-</table>
-<h2 id="pre-production-checklist">Pre-Production Checklist<a class="headerlink" href="#pre-production-checklist" title="Permanent link">&para;</a></h2>
-<p><img alt="Auto-trading 3-stage risk management gates" src="../../assets/illustrations/auto-trading/auto-trading-risk-gate-en.png" /></p>
-<div class="admonition warning">
-<p class="admonition-title">Verify Before Going Live</p>
-<ul>
-<li>[ ] IS/OOS degradation rate within acceptable range (guideline: below 50%) in walk-forward validation</li>
-<li>[ ] Maximum drawdown is within your risk tolerance</li>
-<li>[ ] Risk management settings for margin and position sizing confirmed</li>
-<li>[ ] Complete a paper trading period with small size first</li>
-</ul>
-</div>
-<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1. Finalize strategy via backtesting</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>QQQ<span class="w"> </span>--strategy<span class="w"> </span>my_strategy
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 2. Generate Pine Script</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>alpha-forge<span class="w"> </span>pine<span class="w"> </span>generate<span class="w"> </span>--strategy<span class="w"> </span>my_strategy
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># 3. Import to TradingView and configure alerts</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># (done in TradingView UI)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># 4. Test order execution via Alpha Strike</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># (see Alpha Strike setup guide)</span>
+<p>同梱サンプルでの動作確認:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--use-bundled-samples<span class="w"> </span>--no-open
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># http://127.0.0.1:8000 を開く</span>
 </code></pre></div>
-<h2 id="related-docs">Related Docs<a class="headerlink" href="#related-docs" title="Permanent link">&para;</a></h2>
+<p><code>alpha-forge</code> プロジェクト側のデータを見る場合:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--forge-dir<span class="w"> </span>/path/to/your/alpha-strategies
+</code></pre></div>
+<p>設定ファイル（<code>forge.yaml</code>）に変更はありません。GUI 実行機能を使わない場合、既存の使い方はそのまま動作します。</p>
+<h2 id="_3">関連リンク<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../guides/tradingview-alpha-strike/">TradingView × Alpha Strike Integration Guide</a> — Connecting webhooks to order execution</li>
-<li><a href="../../guides/tradingview-pine-integration/">TradingView × Pine Script Integration Guide</a> — Pine Script generation and adjustment</li>
-<li><a href="../../guides/end-to-end-workflow/">End-to-End Strategy Development Workflow</a> — Full pipeline overview</li>
-<li><a href="../../guides/trial-limits/">Trial Limits</a> — What's available on the Trial plan</li>
+<li><strong>PyPI</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.9.0/">https://pypi.org/project/alpha-visualizer/0.9.0/</a></li>
+<li><strong>GitHub Release（タグ）</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0">https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0</a></li>
+<li><strong>CHANGELOG</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md">https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md</a></li>
+<li><strong>インストール手順</strong>: <a href="../installation/">alpha-visualizer / インストール</a></li>
+<li><strong>機能詳細</strong>: <a href="../features/">alpha-visualizer / 機能詳細</a></li>
+<li><strong>設定</strong>: <a href="../configuration/">alpha-visualizer / 設定</a></li>
 </ul>
+<p>不具合報告や機能要望は <a href="https://github.com/alforge-labs/alpha-visualizer/issues">GitHub Issues</a> までお願いします。</p>
 
 
 
 
 
 
+
+  
+  
 
 
 
@@ -2948,7 +3026,7 @@
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Back to top
+  ページトップへ戻る
 </button>
         
       </main>
@@ -2957,33 +3035,33 @@
   
     
       
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      <nav class="md-footer__inner md-grid" aria-label="フッター" >
         
           
-          <a href="../quants/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Quants &amp; Researchers">
+          <a href="../faq/" class="md-footer__link md-footer__link--prev" aria-label="前: FAQ">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Previous
+                前
               </span>
               <div class="md-ellipsis">
-                Quants & Researchers
+                FAQ
               </div>
             </div>
           </a>
         
         
           
-          <a href="../ai-agents/" class="md-footer__link md-footer__link--next" aria-label="Next: AI Agent Users">
+          <a href="../release-0.7.1/" class="md-footer__link md-footer__link--next" aria-label="次: v0.7.1 (2026-06-02)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                Next
+                次
               </span>
               <div class="md-ellipsis">
-                AI Agent Users
+                v0.7.1 (2026-06-02)
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3033,7 +3111,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
