@@ -36,7 +36,7 @@ Tabs:
 
 ## Running from the GUI and parameter tuning
 
-Since v0.9.0, alpha-visualizer is no longer a read-only viewer: **backtests, optimization, and Walk-Forward Tests can be executed from the browser**. This requires the AlphaForge CLI to be installed on the same machine as the server (without the CLI, the dashboard keeps working as a read-only viewer).
+alpha-visualizer does more than display results: **backtests, optimization, and Walk-Forward Tests can be executed from the browser**. GUI-launched backtests have been available for a while; v0.9.0 adds asynchronous optimization / WFT jobs and the parameter tuning loop, closing the whole strategy-development loop inside the GUI. This requires the AlphaForge CLI on the same machine as the server (without the CLI, the dashboard keeps working as a read-only viewer).
 
 ### Running backtests / optimization / WFT
 

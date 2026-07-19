@@ -1,19 +1,19 @@
 ---
-title: alpha-visualizer v0.9.0 — Run backtests and optimization from the GUI, plus a parameter tuning loop (cumulative update since v0.7.1)
-description: With v0.9.0, alpha-visualizer evolves from a read-only viewer into a GUI that runs backtests, optimization, and Walk-Forward Tests from the browser. Highlights since v0.7.1 include the parameter tuning loop, FX carry-adjusted metrics, X share cards, and accessibility upgrades.
+title: alpha-visualizer v0.9.0 — Run optimization and WFT from the GUI, plus a parameter tuning loop (cumulative update since v0.7.1)
+description: alpha-visualizer v0.9.0 adds asynchronous optimization / Walk-Forward Test jobs and a parameter tuning loop, closing the whole strategy-development loop inside the GUI. Highlights since v0.7.1 include FX carry-adjusted metrics, X share cards, and accessibility upgrades.
 ---
 
 # alpha-visualizer v0.9.0 — cumulative update since v0.7.1
 
 > **Published**: July 19, 2026 / **Version**: v0.9.0 / **Distribution**: [PyPI](https://pypi.org/project/alpha-visualizer/0.9.0/) · [GitHub Release](https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0)
 
-[alpha-visualizer](index.md) is a standalone OSS package that visualizes `alpha-forge` backtest results in the browser. The headline change in v0.9.0: **it is no longer a read-only viewer — backtests, optimization, and Walk-Forward Tests now run straight from the browser**. This note summarizes the cumulative highlights since v0.7.1 (v0.8.0 and v0.9.0).
+[alpha-visualizer](index.md) is a standalone OSS package that visualizes `alpha-forge` backtest results in the browser. The headline change in v0.9.0: **asynchronous optimization / WFT jobs and a parameter tuning loop close the whole strategy-development loop inside the GUI**. This note summarizes the cumulative highlights since v0.7.1 (v0.7.3, v0.8.0, and v0.9.0).
 
 ## Highlights
 
-### 1. Run backtests / optimization / WFT from the GUI (v0.9.0)
+### 1. Run optimization / WFT from the GUI (v0.9.0)
 
-Re-run a backtest from the Detail screen with one click. Optimization (Optuna) and Walk-Forward Tests launch as **asynchronous jobs** with real-time log / progress streaming over SSE, and running jobs can be cancelled. WFT jobs run with recording enabled (`--save`), so finished runs automatically appear in the WFO tab.
+Optimization (Optuna) and Walk-Forward Tests now launch from the browser as **asynchronous jobs**, with real-time log / progress streaming over SSE and cancellation. WFT jobs run with recording enabled (`--save`), so finished runs automatically appear in the WFO tab. The Detail screen's backtest re-run — available since earlier releases — was also hardened with direct run retrieval, timeouts, and execution-log display.
 
 This requires the AlphaForge CLI on the same machine as the server (without it, the dashboard keeps working as a read-only viewer). Tune concurrency and timeout via `ALPHA_VIS_JOB_CONCURRENCY` / `ALPHA_VIS_JOB_TIMEOUT`.
 
@@ -33,9 +33,9 @@ Export an OGP-sized (1200×630) PNG share card — equity curve plus headline me
 
 Keyboard navigation, ARIA landmarks, screen-reader support, and WCAG AA contrast adjustments. Candlestick charts gained an OHLC data-table alternative. Shared loading skeletons, `Intl` digit grouping, and OS theme following are also included.
 
-### 6. Charts and the Optimize view (v0.8.0)
+### 6. Charts and the Optimize view (v0.7.3 / v0.8.0)
 
-TradingView lightweight-charts is now the default renderer for the main charts. Optimization results gained a **two-parameter × metric heatmap view**, switchable with the scatter plot via tabs.
+TradingView lightweight-charts became the default renderer for the main charts (v0.7.3). Optimization results gained a **two-parameter × metric heatmap view**, switchable with the scatter plot via tabs (v0.8.0).
 
 ## Upgrading
 
@@ -68,6 +68,7 @@ No configuration (`forge.yaml`) changes are required. If you do not use the GUI 
 - **PyPI**: <https://pypi.org/project/alpha-visualizer/0.9.0/>
 - **GitHub Release (tag)**: <https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0>
 - **CHANGELOG**: <https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md>
+- **Installation**: [alpha-visualizer / Installation](installation.md)
 - **Features**: [alpha-visualizer / Features](features.md)
 - **Configuration**: [alpha-visualizer / Configuration](configuration.md)
 

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="alpha-visualizer が v0.9.0 で「見るだけ」のビューアから、バックテスト・最適化・Walk-Forward Test をブラウザから実行できる GUI に進化。パラメータチューニングループ、FX キャリー調整メトリクス表示、X 共有シェアカード、アクセシビリティ強化など v0.7.1 以降の累積ハイライトをまとめます。">
+        <meta name="description" content="alpha-visualizer v0.9.0 は最適化・Walk-Forward Test の非同期ジョブ実行とパラメータチューニングループを追加し、GUI だけで戦略開発ループ全体を回せるように。FX キャリー調整メトリクス表示、X 共有シェアカード、アクセシビリティ強化など v0.7.1 以降の累積ハイライトをまとめます。">
       
       
         <meta name="author" content="Alforge Labs">
@@ -33,7 +33,7 @@
     
     
       
-        <title>alpha-visualizer v0.9.0 リリース — GUI からのバックテスト・最適化実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート） - AlphaForge ドキュメント</title>
+        <title>alpha-visualizer v0.9.0 リリース — 最適化・WFT の GUI 実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート） - AlphaForge ドキュメント</title>
       
     
     
@@ -128,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              alpha-visualizer v0.9.0 リリース — GUI からのバックテスト・最適化実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート）
+              alpha-visualizer v0.9.0 リリース — 最適化・WFT の GUI 実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート）
             
           </span>
         </div>
@@ -1832,10 +1832,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-gui-wft-v090" class="md-nav__link">
+  <a href="#1-wft-gui-v090" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. GUI からバックテスト・最適化・WFT を実行（v0.9.0）
+        1. 最適化・WFT の GUI 実行（v0.9.0）
       
     </span>
   </a>
@@ -1887,10 +1887,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#6-v080" class="md-nav__link">
+  <a href="#6-v073v080" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. チャートと最適化ビューの強化（v0.8.0）
+        6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）
       
     </span>
   </a>
@@ -2844,10 +2844,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-gui-wft-v090" class="md-nav__link">
+  <a href="#1-wft-gui-v090" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. GUI からバックテスト・最適化・WFT を実行（v0.9.0）
+        1. 最適化・WFT の GUI 実行（v0.9.0）
       
     </span>
   </a>
@@ -2899,10 +2899,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#6-v080" class="md-nav__link">
+  <a href="#6-v073v080" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. チャートと最適化ビューの強化（v0.8.0）
+        6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）
       
     </span>
   </a>
@@ -2957,10 +2957,10 @@
 <blockquote>
 <p><strong>公開日</strong>: 2026 年 7 月 19 日 / <strong>バージョン</strong>: v0.9.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.9.0/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0">GitHub Release</a></p>
 </blockquote>
-<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v0.9.0 の最大の変化は、<strong>「見るだけ」のビューアから、バックテスト・最適化・Walk-Forward Test をブラウザから実行できる GUI への進化</strong>です。本ノートでは v0.7.1 以降（v0.8.0・v0.9.0）の累積ハイライトをまとめます。</p>
+<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v0.9.0 の最大の変化は、<strong>最適化・Walk-Forward Test の非同期ジョブ実行とパラメータチューニングループの追加により、GUI だけで戦略開発ループ全体を回せるようになった</strong>ことです。本ノートでは v0.7.1 以降（v0.7.3・v0.8.0・v0.9.0）の累積ハイライトをまとめます。</p>
 <h2 id="_1">ハイライト<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h3 id="1-gui-wft-v090">1. GUI からバックテスト・最適化・WFT を実行（v0.9.0）<a class="headerlink" href="#1-gui-wft-v090" title="Permanent link">&para;</a></h3>
-<p>Detail 画面からバックテストをワンクリックで再実行できるようになりました。最適化（Optuna）と Walk-Forward Test は<strong>非同期ジョブ</strong>として起動し、SSE によるログ・進捗のリアルタイム表示とキャンセルに対応します。WFT ジョブは記録付き（<code>--save</code>）で実行されるため、完了すると WFO タブへ自動反映されます。</p>
+<h3 id="1-wft-gui-v090">1. 最適化・WFT の GUI 実行（v0.9.0）<a class="headerlink" href="#1-wft-gui-v090" title="Permanent link">&para;</a></h3>
+<p>最適化（Optuna）と Walk-Forward Test を<strong>非同期ジョブ</strong>としてブラウザから起動できるようになりました。SSE によるログ・進捗のリアルタイム表示とキャンセルに対応します。WFT ジョブは記録付き（<code>--save</code>）で実行されるため、完了すると WFO タブへ自動反映されます。以前から可能だった Detail 画面からのバックテスト再実行も、run の直接取得・タイムアウト・実行ログ表示などで堅牢化しました。</p>
 <p>サーバーと同じマシンに AlphaForge CLI がインストールされていることが前提です（CLI が無い環境では従来どおり閲覧専用として動作します）。同時実行数・タイムアウトは <code>ALPHA_VIS_JOB_CONCURRENCY</code> / <code>ALPHA_VIS_JOB_TIMEOUT</code> で調整できます。</p>
 <h3 id="2-v090">2. パラメータチューニングループ（v0.9.0）<a class="headerlink" href="#2-v090" title="Permanent link">&para;</a></h3>
 <p>戦略構成タブのチューニングパネルで、<strong>編集 → 一時実行 → 比較 → 明示保存</strong> のループを GUI だけで回せます。一時実行は元の戦略定義に触れず、書き戻しは「保存」の明示操作のみ。チューニング試行のランは Browse / 実行履歴 / バックテストタブで通常ランと区別表示されるため、探索の足跡と本採用の結果が混ざりません。既存戦略の<strong>複製ベース新規作成</strong>にも対応しました。</p>
@@ -2970,8 +2970,8 @@
 <p>equity curve と主要指標をまとめた OGP サイズ（1200×630）の PNG シェアカードを Detail・Compare・Live の各画面から書き出せます。「X で共有」ボタンはカード保存と X 投稿画面のオープン（成績サマリのプリフィル・280 字ガード付き）を 1 クリックで実行します。</p>
 <h3 id="5-ui-v080">5. アクセシビリティと UI 品質の底上げ（v0.8.0）<a class="headerlink" href="#5-ui-v080" title="Permanent link">&para;</a></h3>
 <p>キーボード操作・ARIA ランドマーク・スクリーンリーダー対応・WCAG AA コントラストへの調整を実施しました。ローソク足チャートには OHLC データテーブルの代替表示を追加。ローディングスケルトンの共有化、<code>Intl</code> による桁区切り、OS テーマ追従も入っています。</p>
-<h3 id="6-v080">6. チャートと最適化ビューの強化（v0.8.0）<a class="headerlink" href="#6-v080" title="Permanent link">&para;</a></h3>
-<p>主要チャートの既定レンダラを TradingView lightweight-charts に切り替えました。最適化結果には<strong>パラメータ 2 軸 × 指標のヒートマップビュー</strong>が加わり、散布図とタブで切り替えられます。</p>
+<h3 id="6-v073v080">6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）<a class="headerlink" href="#6-v073v080" title="Permanent link">&para;</a></h3>
+<p>主要チャートの既定レンダラを TradingView lightweight-charts に切り替えました（v0.7.3）。最適化結果には<strong>パラメータ 2 軸 × 指標のヒートマップビュー</strong>が加わり、散布図とタブで切り替えられます（v0.8.0）。</p>
 <h2 id="_2">アップグレード方法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
@@ -2993,6 +2993,7 @@
 <li><strong>PyPI</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.9.0/">https://pypi.org/project/alpha-visualizer/0.9.0/</a></li>
 <li><strong>GitHub Release（タグ）</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0">https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0</a></li>
 <li><strong>CHANGELOG</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md">https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md</a></li>
+<li><strong>インストール手順</strong>: <a href="../installation/">alpha-visualizer / インストール</a></li>
 <li><strong>機能詳細</strong>: <a href="../features/">alpha-visualizer / 機能詳細</a></li>
 <li><strong>設定</strong>: <a href="../configuration/">alpha-visualizer / 設定</a></li>
 </ul>
