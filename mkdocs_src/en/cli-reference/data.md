@@ -507,6 +507,27 @@ alpha-forge data alt fetch <SOURCE_KEY> --start <YYYY-MM-DD> --end <YYYY-MM-DD>
 
 Output: `✅ <SOURCE_KEY>: saved <N> rows`. Unregistered providers raise `ClickException`.
 
+## alpha-forge data alt import-swap
+
+```bash
+alpha-forge data alt import-swap <PAIR> --csv <path>
+```
+
+Validates a broker-published real swap-point history CSV and stores it under the `SWAP:<PAIR>` key. Once saved, [`backtest run --carry`](backtest.md#carry) uses it **automatically in preference** to the rate-differential approximation.
+
+| Name | Kind | Description |
+|------|------|-------------|
+| `PAIR` | argument (required) | FX pair (`USDJPY=X` / `USD/JPY` / `USD_JPY`; normalized to the yfinance form) |
+| `--csv` | required | CSV path. Header `date,long,short` |
+
+CSV contract:
+
+- Values are the amount received/paid **per unit per day in the quote currency** (positive = received). If published as "X yen per 10,000 units", divide by 10,000
+- Dates must be ascending, unique, and not in the future. Empty (missing) cells are rejected
+- Long and short are separate columns, both **net of broker margin** (`spread_pct` does not apply)
+
+Any validation failure aborts without saving (exit code `1`). Output: `✅ SWAP:<PAIR>: saved <N> rows (<path>)`.
+
 ## alpha-forge data alt list
 
 ```bash

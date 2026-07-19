@@ -63,7 +63,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--cost-preset` | option | - | Cost preset name (issue #785, e.g. `moomoo-crypto-spot` / `binance-spot-vip0` / `ibkr-us-stock-fixed`); overrides the strategy's `risk_management` commission/slippage in-memory at run time (strategy JSON is untouched) |
 | `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics in the result (#958); requires saved dividends data (`data fetch --with-dividends`) |
 | `--regime-filter` | option | - | Post-hoc entry gating by macro regime (issue #1012); format `<source>:<label>` (e.g. `macro:risk_on`), source=`macro` only; requires FRED data fetched in advance (`data alt fetch FRED:T10Y3M`) |
-| `--carry` | flag | false | Approximate FX carry (swap) from the rate differential and include `carry_adjusted_metrics` ([details](#carry)); requires a `backtest.carry` mapping in `forge.yaml` and pre-fetched FRED rate data |
+| `--carry` | flag | false | Accrue FX carry (swap) and include `carry_adjusted_metrics` ([details](#carry)). Resolution order: real swap CSV (`data alt import-swap`) > rate-differential approximation. Major 8 currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required) |
 
 ### Approximate FX carry (swap) with `--carry` {#carry}
 
@@ -73,7 +73,30 @@ To evaluate FX swap/carry strategies, the daily carry is approximated from the *
 daily carry fraction = (base short rate − quote short rate − spread_pct) / 100 / 365 × elapsed calendar days
 ```
 
-**Setup (2 steps)**
+**Major pairs work without configuration**: when `backtest.carry` has no entry for the pair, the builtin currency → series mapping below resolves it automatically (reported at runtime as an optimistic `spread_pct=0` value; a user-defined mapping always takes precedence).
+
+| Currency | FRED series | Description |
+|----------|-------------|-------------|
+| USD | `DFF` | Effective federal funds rate (daily) |
+| JPY | `IRSTCI01JPM156N` | Uncollateralized O/N call rate (OECD, monthly) |
+| EUR | `ECBDFR` | ECB deposit facility rate (daily) |
+| GBP | `IUDSOIA` | SONIA (daily) |
+| AUD | `IRSTCI01AUM156N` | RBA cash-rate equivalent (OECD, monthly) |
+| CAD | `IRSTCI01CAM156N` | BoC O/N equivalent (OECD, monthly) |
+| CHF | `IR3TIB01CHM156N` | 3-month interbank rate (OECD, monthly) |
+| NZD | `IR3TIB01NZM156N` | 3-month interbank rate (OECD, monthly) |
+
+For CHF/NZD the O/N series stopped updating in 2024, so the still-updated 3-month rates are used (a small additional approximation error from the tenor difference). If a series' last observation is roughly 6+ months older than the end of the backtest period, a staleness warning is printed.
+
+**Importing real swap points (higher fidelity)**
+
+If you have a broker-published history of real swap points, import it with [`data alt import-swap`](data.md#alpha-forge-data-alt-import-swap) and it is **automatically preferred** over the rate-differential approximation (no mapping needed; values are net of broker margin so `spread_pct` does not apply).
+
+```bash
+alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy.csv
+```
+
+**Setup (2 steps — to customize the rate-differential approximation)**
 
 1. Define the pair → rate-series mapping under `backtest.carry` in `forge.yaml`:
 
@@ -89,8 +112,8 @@ daily carry fraction = (base short rate − quote short rate − spread_pct) / 1
 2. Fetch the rate data from FRED (stored as look-ahead-free vintage panels):
 
     ```bash
-    alpha-forge altdata fetch FRED:DFF --start 2015-01-01 --end 2026-01-01
-    alpha-forge altdata fetch FRED:IRSTCI01JPM156N --start 2015-01-01 --end 2026-01-01
+    alpha-forge data alt fetch FRED:DFF --start 2015-01-01 --end 2026-01-01
+    alpha-forge data alt fetch FRED:IRSTCI01JPM156N --start 2015-01-01 --end 2026-01-01
     ```
 
 ```bash

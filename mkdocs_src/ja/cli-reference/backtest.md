@@ -63,7 +63,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--cost-preset` | オプション | - | コストプリセット名（issue #785）。戦略 JSON の `risk_management` の commission / slippage を実行時に preset 値で in-memory 上書きする（戦略 JSON は変更しない） |
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
 | `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`alpha-forge data alt fetch FRED:T10Y3M`） |
-| `--carry` | フラグ | false | FX キャリー（スワップ）を金利差で近似し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。`forge.yaml` の `backtest.carry` マッピングと FRED 金利データの事前取得が必要 |
+| `--carry` | フラグ | false | FX キャリー（スワップ）を計上し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。実スワップ CSV（`data alt import-swap`）＞金利差近似の順で解決。主要 8 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要） |
 
 ### `--carry` で FX キャリー（スワップ）を金利差近似 {#carry}
 
@@ -73,7 +73,30 @@ FX ペアのスワップ投資（キャリー戦略）を評価するため、�
 日次キャリー割合 = (base 短期金利 − quote 短期金利 − spread_pct) / 100 / 365 × 経過カレンダー日数
 ```
 
-**セットアップ（2 ステップ）**
+**主要ペアは設定なしで動きます**: `backtest.carry` にペア定義が無い場合、以下のビルトイン通貨 → 系列マッピングで自動解決されます（`spread_pct=0` = ブローカーマージン未控除の楽観値である旨を実行時に表示。ユーザー定義が常に優先）。
+
+| 通貨 | FRED 系列 | 内容 |
+|------|----------|------|
+| USD | `DFF` | FF 実効金利（日次） |
+| JPY | `IRSTCI01JPM156N` | 無担保コール O/N（OECD 月次） |
+| EUR | `ECBDFR` | ECB 預金ファシリティ金利（日次） |
+| GBP | `IUDSOIA` | SONIA（日次） |
+| AUD | `IRSTCI01AUM156N` | RBA キャッシュレート相当（OECD 月次） |
+| CAD | `IRSTCI01CAM156N` | BoC O/N 相当（OECD 月次） |
+| CHF | `IR3TIB01CHM156N` | 3 ヶ月インターバンク（OECD 月次） |
+| NZD | `IR3TIB01NZM156N` | 3 ヶ月インターバンク（OECD 月次） |
+
+CHF/NZD は O/N 系列が 2024 年で更新停止しているため 3 ヶ月物を採用しています（テナー差によるわずかな追加近似誤差あり）。系列の最終観測が対象期間末尾から約 6 ヶ月以上古い場合は staleness 警告が表示されます。
+
+**実スワップポイントの取り込み（より高精度）**
+
+ブローカー公表の実スワップポイント履歴があれば、[`data alt import-swap`](data.md#alpha-forge-data-alt-import-swap) で取り込むと金利差近似より**自動で優先**されます（マッピング設定不要・値はマージン込みネットのため `spread_pct` 非適用）。
+
+```bash
+alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy.csv
+```
+
+**セットアップ（2 ステップ・金利差近似をカスタムする場合）**
 
 1. `forge.yaml` の `backtest.carry` に通貨ペア → 金利系列マッピングを定義:
 
@@ -89,8 +112,8 @@ FX ペアのスワップ投資（キャリー戦略）を評価するため、�
 2. 金利データを FRED から取得（look-ahead を排除した vintage 形式で保存）:
 
     ```bash
-    alpha-forge altdata fetch FRED:DFF --start 2015-01-01 --end 2026-01-01
-    alpha-forge altdata fetch FRED:IRSTCI01JPM156N --start 2015-01-01 --end 2026-01-01
+    alpha-forge data alt fetch FRED:DFF --start 2015-01-01 --end 2026-01-01
+    alpha-forge data alt fetch FRED:IRSTCI01JPM156N --start 2015-01-01 --end 2026-01-01
     ```
 
 ```bash
