@@ -2484,6 +2484,61 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0180-2026-07-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.18.0 — 2026-07-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0170-2026-06-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.17.0 — 2026-06-28
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0160-2026-06-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.16.0 — 2026-06-24
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0150-2026-06-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.15.0 — 2026-06-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0140-2026-06-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.14.0 — 2026-06-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0130-2026-06-08" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2821,6 +2876,61 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0180-2026-07-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.18.0 — 2026-07-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0170-2026-06-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.17.0 — 2026-06-28
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0160-2026-06-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.16.0 — 2026-06-24
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0150-2026-06-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.15.0 — 2026-06-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0140-2026-06-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.14.0 — 2026-06-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0130-2026-06-08" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2976,6 +3086,52 @@
 <p>本ページは<strong>ユーザー向けの要約</strong>です。内部リファクタリング・テスト・CI・ドキュメント整備など、利用に直接影響しない変更は省略しています。最新版へは <code>alpha-forge self update</code> で更新できます。</p>
 </div>
 <hr />
+<h2 id="v0180-2026-07-19">v0.18.0 — 2026-07-19<a class="headerlink" href="#v0180-2026-07-19" title="Permanent link">&para;</a></h2>
+<p>FX キャリー（スワップ）バックテスト一式と、<code>alpha-forge demo</code> による最速オンボーディングを追加しました。複数戦略合成には戦略レベルの動的配分が入りました。</p>
+<ul>
+<li><strong>FX キャリー計上</strong>: <code>backtest run --carry</code> で短期金利差近似の日次キャリーを参考値として併記（<code>carry_adjusted_*</code>）。FRED 金利系列のビルトインマッピングを持つ主要 8 通貨（USD / JPY / EUR / GBP / AUD / CAD / CHF / NZD）の組み合わせなら設定不要で動作し、<code>data alt import-swap</code> でブローカー実スワップ CSV を取り込むとそちらを優先します。結果は DB に永続化され、<a href="../alpha-visualizer/">alpha-visualizer</a> v0.9.0 の詳細画面にも表示されます。</li>
+<li><strong>最速オンボーディング</strong>: <code>alpha-forge demo</code> の 1 コマンドで初期化〜同梱 DEMO データのバックテストまで一気に実行。<code>system init</code> はサンプルデータ＋デモ戦略を自動配置し、データ未存在エラーはそのまま貼り付けて実行できる案内文に。<code>system doctor</code> は解決コマンド（next_actions）まで提示します。</li>
+<li><strong>複数戦略合成の動的配分</strong>: 戦略レベルの <code>risk_parity</code> / <code>vol_target</code> 配分と <code>--max-pillar-weight</code>（柱ごとのウェイト上限）を追加。WFT の warmup 前置で合成初期の欠落も解消しました。</li>
+<li><strong><code>optimize walk-forward --save</code></strong>: WFT 結果を記録し、alpha-visualizer の WFO タブへ自動反映できるように。</li>
+<li><strong>実行元の記録</strong>: バックテスト結果に実行元 provenance（source）を記録するようになりました。</li>
+</ul>
+<h2 id="v0170-2026-06-28">v0.17.0 — 2026-06-28<a class="headerlink" href="#v0170-2026-06-28" title="Permanent link">&para;</a></h2>
+<p>buy-hold-overlay 戦略 scaffold の hedge トリガー拡張と、CLI UX の磨き込みを行いました。</p>
+<ul>
+<li><strong>hedge トリガー拡張</strong>: buy-hold-overlay に高速 hedge トリガー TRAILING_DD と、HMM × TRAILING_DD の複合トリガーを追加。既定 lookback も設定可能に。</li>
+<li><strong>REGIME_RULE の最適化</strong>: レジーム条件の発火閾値を最適化対象にできるようになりました。</li>
+<li><strong><code>combine --json</code></strong>: 複合ポートフォリオの equity_curve を JSON 出力（チャート生成用）。</li>
+<li><strong>CLI UX</strong>: scaffold の exit help・チャートパスの実在検証・did-you-mean 提案など 8 項目の磨き込みに加え、エラー表示・exit code・<code>--json</code> / <code>--help</code> の一貫化を実施。</li>
+</ul>
+<h2 id="v0160-2026-06-24">v0.16.0 — 2026-06-24<a class="headerlink" href="#v0160-2026-06-24" title="Permanent link">&para;</a></h2>
+<p>AI エージェント連携の第 2 弾として、機械可読カタログと <code>--json</code> 出力契約を整備しました。</p>
+<ul>
+<li><strong><code>system describe</code></strong>: 全コマンド・引数の機械可読カタログを新設。エージェントが CLI 仕様を自己発見できます。</li>
+<li><strong><code>--json</code> 契約の整備</strong>: <code>backtest run --json</code> に <code>run_id</code> / <code>result_id</code> を付与し出力をトークン経済化。read-only コマンドの <code>--json</code> を網羅し、WFT / MC の既定 verdict を統一。未捕捉例外も構造化エラー envelope で返します。<code>--json</code> 出力スキーマの契約リファレンスとバージョニング規約も公開。</li>
+<li><strong>next-step 案内</strong>: 各コマンドの成功時に次の一手を提示。<code>strategy templates</code> で同梱テンプレートを一覧できます。</li>
+<li><strong>配布スキル</strong>: Codex 向け forge-* スキルを同梱し、<code>system init</code> が汎用 AGENTS.md を展開するようになりました。</li>
+</ul>
+<h2 id="v0150-2026-06-23">v0.15.0 — 2026-06-23<a class="headerlink" href="#v0150-2026-06-23" title="Permanent link">&para;</a></h2>
+<p>環境診断コマンドとデータ取得の堅牢化、初回体験の改善を行いました。</p>
+<ul>
+<li><strong><code>system doctor</code> / <code>system paths</code></strong>: 環境診断コマンドと、全データ保存先の一覧＋バックアップ手順を新設。</li>
+<li><strong>クラッシュ耐性</strong>: 未捕捉例外に報告導線付きフォールバックと常時クラッシュログを追加。</li>
+<li><strong>データ取得の堅牢化</strong>: プロバイダに指数バックオフ付きリトライを追加し、OANDA のページ取得上限による無言切り捨てを警告。ALTDATA センチメント系にもリトライ / キャッシュを整備。</li>
+<li><strong>Pine ネイティブ変換</strong>: 定番 10 指標をネイティブ変換し <code>pine_supported</code> フラグを追加。</li>
+<li><strong>保守系</strong>: 戦略・結果 JSON にスキーマバージョン＋マイグレーション枠組みを導入。<code>strategy delete</code> / <code>pine delete</code> に <code>--dry-run</code> を追加し、<code>FORGE_CONFIG</code> 未設定の無言フォールバックには WARNING を表示。</li>
+<li><strong>ドキュメント / 英語化</strong>: <code>FORGE_LANG=en</code> でトップ help を完全英語化。Troubleshooting・用語集（Glossary)・CLI だけで完結する end-to-end サンプルを追加しました。</li>
+</ul>
+<h2 id="v0140-2026-06-19">v0.14.0 — 2026-06-19<a class="headerlink" href="#v0140-2026-06-19" title="Permanent link">&para;</a></h2>
+<p>Alpha158 由来のインジケータ群・拡張メトリクス・ポジションサイジングを大幅拡充しました。</p>
+<ul>
+<li><strong>インジケータ拡充</strong>: CMO / PERCENTRANK / STDDEV / AROON / PV_CORR / ROLLING_QUANTILE / UP_RATIO / WVMA など Alpha158 由来の指標群と、LINEAR_REG の pred / resid（Pine ネイティブ変換対応）を追加。KBAR 9 式の EXPR プリセット集も同梱しました。</li>
+<li><strong>拡張メトリクス</strong>: 7 系統の拡張メトリクスを追加。</li>
+<li><strong>ポジションサイジング</strong>: <code>kelly</code> / <code>vol_target</code> を追加。</li>
+<li><strong><code>backtest timeframes</code></strong>: タイムフレーム一括スイープを新設。</li>
+<li><strong>explore</strong>: エスカレーションの既読化 <code>acknowledge</code> コマンドを追加。</li>
+<li><strong>ライセンス猶予</strong>: オフライン猶予を 14 日へ拡張し、猶予切れは機能停止ではなく Trial デグレードに変更。</li>
+<li><strong>セキュリティ / 修正</strong>: 依存パッケージの脆弱性 15 件を解消（pillow / urllib3 / protobuf ほか）。<code>risk_based</code> の Pine 出力サイズをエンジンと一致させる修正、optimizer の無効な param_ranges の実行前検出（exit 2）など。</li>
+</ul>
 <h2 id="v0130-2026-06-08">v0.13.0 — 2026-06-08<a class="headerlink" href="#v0130-2026-06-08" title="Permanent link">&para;</a></h2>
 <p>AI エージェント / CI からの無人利用を全面強化し、確認プロンプトのハング解消・<code>--json</code> 網羅・終了コード統一を実現しました。バグ修正も多数。</p>
 <ul>
