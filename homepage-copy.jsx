@@ -229,7 +229,7 @@ window.COPY = {
     products: {
       label: 'プロダクト',
       title: '3つの層で構成される\n統合データ処理システム',
-      subtitle: 'forge で戦略を半自動開発・最適化、visualizer で結果を可視化・分析、strike が外部 Webhook をトリガーに自動執行。3 層すべてが --json CLI / REST API を備え、AI エージェントから操作できる戦略開発ループ。',
+      subtitle: 'forge で戦略を半自動開発・最適化、visualizer で可視化・分析からパラメータチューニングまで、strike が外部 Webhook をトリガーに自動執行。3 層すべてが --json CLI / REST API を備え、AI エージェントから操作できる戦略開発ループ。',
       items: [
         {
           id: 'forge',
@@ -252,8 +252,8 @@ window.COPY = {
           badgeType: 'released',
           icon: '▦',
           name: 'visualizer',
-          role: '可視化・分析ダッシュボード',
-          desc: 'forge のバックテスト・最適化結果を Web ブラウザで可視化する OSS ダッシュボード。Equity / Drawdown / WFO 合成カーブ、複数戦略の Pearson 相関、ライブ実績との diff をワンクリックで確認。REST API でエージェントからも結果を読み取り可能。forge 本体非依存で動作。',
+          role: '可視化・分析・チューニング GUI',
+          desc: 'forge のバックテスト・最適化結果を可視化し、ブラウザから実行まで行える OSS ダッシュボード。Equity / Drawdown / WFO 合成カーブ、複数戦略の Pearson 相関、ライブ実績との diff に加え、バックテスト・最適化・WFT の GUI 実行とパラメータチューニングループ（編集→一時実行→比較→明示保存）に対応。REST API でエージェントからも結果を読み取り可能。閲覧は forge 本体非依存で動作。',
           tags: ['Python', 'React', 'SQLite', 'PyPI', 'Apache-2.0'],
           accent: 'var(--accent)',
           links: [
@@ -750,7 +750,7 @@ window.COPY = {
     products: {
       label: 'Products',
       title: 'Three layers.\nOne integrated system.',
-      subtitle: 'alpha-forge develops and optimizes strategies, visualizer renders the results, and strike auto-executes on external webhook signals — a complete three-layer loop, with every layer operable by AI agents via --json CLI and REST APIs.',
+      subtitle: 'alpha-forge develops and optimizes strategies, visualizer takes you from analysis to parameter tuning in the browser, and strike auto-executes on external webhook signals — a complete three-layer loop, with every layer operable by AI agents via --json CLI and REST APIs.',
       items: [
         {
           id: 'forge',
@@ -773,8 +773,8 @@ window.COPY = {
           badgeType: 'released',
           icon: '▦',
           name: 'visualizer',
-          role: 'Visualization & Analytics Dashboard',
-          desc: 'Open-source browser dashboard that visualizes alpha-forge backtest and optimization results. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff — all in one click. Agents can read results via its REST API. Runs independently of forge.',
+          role: 'Visualization, Analytics & Tuning GUI',
+          desc: 'Open-source browser dashboard that visualizes alpha-forge backtest and optimization results — and now runs them. Equity / Drawdown / WFO composite curves, Pearson correlation across multiple strategies, and live-vs-backtest diff, plus GUI-launched backtests / optimization / WFT with a parameter tuning loop (edit → trial run → compare → explicit save). Agents can read results via its REST API. Viewing runs independently of forge.',
           tags: ['Python', 'React', 'SQLite', 'PyPI', 'Apache-2.0'],
           accent: 'var(--accent)',
           links: [
