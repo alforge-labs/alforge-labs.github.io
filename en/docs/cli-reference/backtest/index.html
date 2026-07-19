@@ -4795,7 +4795,7 @@
 <td><code>--carry</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Approximate FX carry (swap) from the rate differential and include <code>carry_adjusted_metrics</code> (<a href="#carry">details</a>); requires a <code>backtest.carry</code> mapping in <code>forge.yaml</code> and pre-fetched FRED rate data</td>
+<td>Accrue FX carry (swap) and include <code>carry_adjusted_metrics</code> (<a href="#carry">details</a>). Resolution order: real swap CSV (<code>data alt import-swap</code>) &gt; rate-differential approximation. Major 8 currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required)</td>
 </tr>
 </tbody>
 </table>
@@ -4803,26 +4803,83 @@
 <p>To evaluate FX swap/carry strategies, the daily carry is approximated from the <strong>short-term rate differential</strong> (instead of broker swap points) and reported as <code>carry_adjusted_metrics</code> (total_return_pct / cagr_pct / max_drawdown_pct / sharpe_ratio / volatility_pct) alongside the price-only metrics.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>daily carry fraction = (base short rate − quote short rate − spread_pct) / 100 / 365 × elapsed calendar days
 </code></pre></div>
-<p><strong>Setup (2 steps)</strong></p>
+<p><strong>Major pairs work without configuration</strong>: when <code>backtest.carry</code> has no entry for the pair, the builtin currency → series mapping below resolves it automatically (reported at runtime as an optimistic <code>spread_pct=0</code> value; a user-defined mapping always takes precedence).</p>
+<table>
+<thead>
+<tr>
+<th>Currency</th>
+<th>FRED series</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USD</td>
+<td><code>DFF</code></td>
+<td>Effective federal funds rate (daily)</td>
+</tr>
+<tr>
+<td>JPY</td>
+<td><code>IRSTCI01JPM156N</code></td>
+<td>Uncollateralized O/N call rate (OECD, monthly)</td>
+</tr>
+<tr>
+<td>EUR</td>
+<td><code>ECBDFR</code></td>
+<td>ECB deposit facility rate (daily)</td>
+</tr>
+<tr>
+<td>GBP</td>
+<td><code>IUDSOIA</code></td>
+<td>SONIA (daily)</td>
+</tr>
+<tr>
+<td>AUD</td>
+<td><code>IRSTCI01AUM156N</code></td>
+<td>RBA cash-rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>CAD</td>
+<td><code>IRSTCI01CAM156N</code></td>
+<td>BoC O/N equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>CHF</td>
+<td><code>IR3TIB01CHM156N</code></td>
+<td>3-month interbank rate (OECD, monthly)</td>
+</tr>
+<tr>
+<td>NZD</td>
+<td><code>IR3TIB01NZM156N</code></td>
+<td>3-month interbank rate (OECD, monthly)</td>
+</tr>
+</tbody>
+</table>
+<p>For CHF/NZD the O/N series stopped updating in 2024, so the still-updated 3-month rates are used (a small additional approximation error from the tenor difference). If a series' last observation is roughly 6+ months older than the end of the backtest period, a staleness warning is printed.</p>
+<p><strong>Importing real swap points (higher fidelity)</strong></p>
+<p>If you have a broker-published history of real swap points, import it with <a href="../data/#alpha-forge-data-alt-import-swap"><code>data alt import-swap</code></a> and it is <strong>automatically preferred</strong> over the rate-differential approximation (no mapping needed; values are net of broker margin so <code>spread_pct</code> does not apply).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--csv<span class="w"> </span>swap_usdjpy.csv
+</code></pre></div>
+<p><strong>Setup (2 steps — to customize the rate-differential approximation)</strong></p>
 <ol>
 <li>
 <p>Define the pair → rate-series mapping under <code>backtest.carry</code> in <code>forge.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">backtest</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">carry</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="s">&quot;USDJPY=X&quot;</span><span class="p p-Indicator">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">base_rate_series</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DFF&quot;</span><span class="w">               </span><span class="c1"># short rate of the base currency (USD; effective fed funds, % p.a.)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">quote_rate_series</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IRSTCI01JPM156N&quot;</span><span class="w">  </span><span class="c1"># short rate of the quote currency (JPY; uncollateralized O/N call, % p.a.)</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">spread_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">                       </span><span class="c1"># broker margin (% p.a.; deducted regardless of direction)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">backtest</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">carry</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="s">&quot;USDJPY=X&quot;</span><span class="p p-Indicator">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">base_rate_series</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DFF&quot;</span><span class="w">               </span><span class="c1"># short rate of the base currency (USD; effective fed funds, % p.a.)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">quote_rate_series</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IRSTCI01JPM156N&quot;</span><span class="w">  </span><span class="c1"># short rate of the quote currency (JPY; uncollateralized O/N call, % p.a.)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">spread_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">                       </span><span class="c1"># broker margin (% p.a.; deducted regardless of direction)</span>
 </code></pre></div>
 </li>
 <li>
 <p>Fetch the rate data from FRED (stored as look-ahead-free vintage panels):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>altdata<span class="w"> </span>fetch<span class="w"> </span>FRED:DFF<span class="w"> </span>--start<span class="w"> </span><span class="m">2015</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2026</span>-01-01
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>alpha-forge<span class="w"> </span>altdata<span class="w"> </span>fetch<span class="w"> </span>FRED:IRSTCI01JPM156N<span class="w"> </span>--start<span class="w"> </span><span class="m">2015</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2026</span>-01-01
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>FRED:DFF<span class="w"> </span>--start<span class="w"> </span><span class="m">2015</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2026</span>-01-01
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>fetch<span class="w"> </span>FRED:IRSTCI01JPM156N<span class="w"> </span>--start<span class="w"> </span><span class="m">2015</span>-01-01<span class="w"> </span>--end<span class="w"> </span><span class="m">2026</span>-01-01
 </code></pre></div>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--strategy<span class="w"> </span>usdjpy_carry_v1<span class="w"> </span>--carry
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--strategy<span class="w"> </span>usdjpy_carry_v1<span class="w"> </span>--carry
 </code></pre></div>
 <p><strong>Behavior notes</strong></p>
 <ul>
@@ -4836,7 +4893,7 @@
 </ul>
 <h3 id="trades-csv-export">Export per-trade CSV with <code>--trades-csv</code><a class="headerlink" href="#trades-csv-export" title="Permanent link">&para;</a></h3>
 <p><code>backtest run --trades-csv &lt;path&gt;</code> writes a one-row-per-trade CSV. Use it to cross-check against another engine (e.g. TradingView Strategy Tester) or to investigate divergences like the <code>profit_factor</code> artifact in issue #791.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>AAPL<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--trades-csv<span class="w"> </span>trades.csv
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>AAPL<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--trades-csv<span class="w"> </span>trades.csv
 </code></pre></div>
 <table>
 <thead>
@@ -4974,16 +5031,16 @@
 <p>The progress bar is rendered on <strong>stderr</strong>, so combining it with <code>--json</code> keeps stdout as pure JSON (when <code>--json</code> is passed and stderr is a TTY, the dashboard is still drawn on stderr). When stderr is not a TTY (CI, pipes, redirected files), the progress bar is automatically suppressed. This way, <code>--json</code> invocations from agent loops like <code>/explore-strategies</code> show progress in interactive terminals without polluting CI logs.</p>
 <h3 id="sample-output-text">Sample output (text)<a class="headerlink" href="#sample-output-text" title="Permanent link">&para;</a></h3>
 <p>The leading icon is driven by whether the trade count is statistically sufficient (<code>is_valid</code> = <code>total_trades &gt;= 30</code>): <code>✅</code> when sufficient, <code>⚠️</code> when not. The signal quality score line always carries a hint about how to read the score (<code>≥0.7</code> is reliable / <code>0.4–0.7</code> caution / <code>&lt;0.4</code> low reliability).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Running backtest: SPY x sma_crossover_v1
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>⚠️ Backtest complete  Signal quality score: 0.38/1.0 (&lt;0.4: low reliability, treat as reference only)
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Total Return: +52.30%  CAGR: 5.40%
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>MDD: -16.80%  Duration: 187d  Recovery: 92d
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>PF: 1.74  Win%: 50.0%  avg_win: 4.20%  avg_loss: -2.40%
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>Kelly: 0.21  Payoff: 1.75  Expectancy: 0.90%/trade  GPR: 0.42  Ulcer: 0.0480  Recovery: 3.11
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)  Win streak: 4  Loss streak: 3
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>Win rate CI(90%): 35.2% - 64.8%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Running backtest: SPY x sma_crossover_v1
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>⚠️ Backtest complete  Signal quality score: 0.38/1.0 (&lt;0.4: low reliability, treat as reference only)
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Total Return: +52.30%  CAGR: 5.40%
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>MDD: -16.80%  Duration: 187d  Recovery: 92d
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>PF: 1.74  Win%: 50.0%  avg_win: 4.20%  avg_loss: -2.40%
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>Kelly: 0.21  Payoff: 1.75  Expectancy: 0.90%/trade  GPR: 0.42  Ulcer: 0.0480  Recovery: 3.11
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)  Win streak: 4  Loss streak: 3
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>Win rate CI(90%): 35.2% - 64.8%
 </code></pre></div>
 <p>The <code>Kelly:</code> line shows extended trade-quality metrics: the Kelly criterion (theoretically optimal position fraction), payoff ratio (average win ÷ |average loss|), expectancy (expected return per trade), Gain/Pain ratio, Ulcer Index, and recovery factor (total return ÷ |max drawdown|). With <code>--json</code> these are available as <code>kelly_criterion</code> / <code>payoff_ratio</code> / <code>expectancy_pct</code> / <code>expected_daily_return_pct</code> (and monthly / yearly) / <code>ulcer_index</code> / <code>serenity_index</code> / <code>gain_to_pain_ratio</code> / <code>recovery_factor</code>; values are <code>null</code> when the denominator is undefined (e.g. no losing trades, no drawdown).</p>
 <div class="admonition note">
@@ -4991,26 +5048,26 @@
 <p>Turnover and cost-related monetary metrics are computed <strong>assuming a USD base</strong>. No FX conversion is applied for non-USD accounts or symbols, so interpret the reported monetary amounts as USD. Ratio metrics such as return percentage, Sharpe, and win rate are currency-independent.</p>
 </div>
 <p>When the score or trade count fails the recommended thresholds, a warning and a one-line docs link are added (F-302):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>⚠️  Backtest complete  Signal quality score: 0.43/1.0 (0.4–0.7: caution, more validation suggested)
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>⚠️  Warning: trade count is insufficient (trades=27, minimum 30 recommended)
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    → Fewer than 30 trades is statistically noisy and may be filtered out by
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>      optimization / WFT pre_filter. Consider widening the data period (`--start`
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>      to go further back).
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>⚠️  Backtest complete  Signal quality score: 0.43/1.0 (0.4–0.7: caution, more validation suggested)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>⚠️  Warning: trade count is insufficient (trades=27, minimum 30 recommended)
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    → Fewer than 30 trades is statistically noisy and may be filtered out by
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>      optimization / WFT pre_filter. Consider widening the data period (`--start`
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>      to go further back).
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    → Docs: https://alforgelabs.com/en/docs/cli-reference/backtest/#signal-quality-score
 </code></pre></div>
 <h3 id="signal-quality-score">Signal Quality Score and Minimum Trades (F-302)<a class="headerlink" href="#signal-quality-score" title="Permanent link">&para;</a></h3>
 <h4 id="signal-quality-score-signal_quality_score-0010">Signal Quality Score (<code>signal_quality_score</code>, 0.0–1.0)<a class="headerlink" href="#signal-quality-score-signal_quality_score-0010" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">sharpe_score</span>        <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sharpe_ratio</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>             <span class="c1"># 30%</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">profit_factor_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span><span class="n">profit_factor</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>    <span class="c1"># 20% (0 when profit_factor is None)</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">win_rate_score</span>      <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">win_rate_pct</span> <span class="o">-</span> <span class="mf">50.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">30.0</span><span class="p">)</span>             <span class="c1"># 20% (only the portion above 50% win rate contributes)</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">sample_size_score</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_trades</span> <span class="o">/</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>                        <span class="c1"># 30%</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">signal_quality_score</span> <span class="o">=</span> <span class="p">(</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="mf">0.30</span> <span class="o">*</span> <span class="n">sharpe_score</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">profit_factor_score</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">win_rate_score</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="o">+</span> <span class="mf">0.30</span> <span class="o">*</span> <span class="n">sample_size_score</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">sharpe_score</span>        <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sharpe_ratio</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>             <span class="c1"># 30%</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">profit_factor_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span><span class="n">profit_factor</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>    <span class="c1"># 20% (0 when profit_factor is None)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">win_rate_score</span>      <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">win_rate_pct</span> <span class="o">-</span> <span class="mf">50.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">30.0</span><span class="p">)</span>             <span class="c1"># 20% (only the portion above 50% win rate contributes)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">sample_size_score</span>   <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_trades</span> <span class="o">/</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>                        <span class="c1"># 30%</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">signal_quality_score</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="mf">0.30</span> <span class="o">*</span> <span class="n">sharpe_score</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">profit_factor_score</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">win_rate_score</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="o">+</span> <span class="mf">0.30</span> <span class="o">*</span> <span class="n">sample_size_score</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="p">)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -5054,27 +5111,27 @@
 <li>A single backtest run is not aborted, but the result is low-confidence — extend the data window (<code>--start</code> further into the past) or rework the indicator mix toward higher signal frequency</li>
 </ul>
 <h3 id="sample-output-json">Sample output (<code>--json</code>)<a class="headerlink" href="#sample-output-json" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;total_return_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">52.30</span><span class="p">,</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;cagr_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.40</span><span class="p">,</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;sharpe_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.92</span><span class="p">,</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-16.80</span><span class="p">,</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">&quot;win_rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">50.0</span><span class="p">,</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nt">&quot;profit_factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.74</span><span class="p">,</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">&quot;total_trades&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sharpe_min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_dd_max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">  </span><span class="nt">&quot;next_step&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="s2">&quot;Next: alpha-forge optimize run SPY --strategy sma_crossover_v1 --save&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">    </span><span class="s2">&quot;  or: alpha-forge pine generate --strategy sma_crossover_v1&quot;</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;total_return_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">52.30</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;cagr_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.40</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;sharpe_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.92</span><span class="p">,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-16.80</span><span class="p">,</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">&quot;win_rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">50.0</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">&quot;profit_factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.74</span><span class="p">,</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="nt">&quot;total_trades&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sharpe_min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_dd_max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="nt">&quot;next_step&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="s2">&quot;Next: alpha-forge optimize run SPY --strategy sma_crossover_v1 --save&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">    </span><span class="s2">&quot;  or: alpha-forge pine generate --strategy sma_crossover_v1&quot;</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>next_step</code> (issue #1234) returns the recommended next commands as a string array on a successful backtest, so an agent can follow the scaffold → save → backtest → optimize / pine order without inferring it. The text output prints an equivalent guidance line at the end.</p>
 <h3 id="json-summary">Lightweight JSON with <code>--summary</code> (issue #1224)<a class="headerlink" href="#json-summary" title="Permanent link">&para;</a></h3>
 <p><code>backtest run --json --summary</code> <strong>excludes heavy arrays</strong> (<code>trades</code> / <code>monthly_returns</code> / <code>annual_returns</code> / <code>equity_curve</code>) and returns a lightweight JSON of scalar metrics + verdict (<code>pre_filter_pass</code> / <code>pre_filter</code>) + <code>next_step</code> only. Use it to cut token usage over agents / MCP. Only the array fields are dropped; the meta-field contract above is unchanged.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>SPY<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--json<span class="w"> </span>--summary
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>SPY<span class="w"> </span>--strategy<span class="w"> </span>sma_crossover_v1<span class="w"> </span>--json<span class="w"> </span>--summary
 </code></pre></div>
 <p>See also the top-level field contract in the <a href="../../ai-agents/json-output-reference/#backtest-run-json"><code>--json</code> output reference</a>.</p>
 <h3 id="common-errors">Common errors<a class="headerlink" href="#common-errors" title="Permanent link">&para;</a></h3>
@@ -5113,7 +5170,7 @@
 <h2 id="alpha-forge-backtest-batch">alpha-forge backtest batch<a class="headerlink" href="#alpha-forge-backtest-batch" title="Permanent link">&para;</a></h2>
 <p>Run parallel backtests for many strategy JSON files. Strategies passing the filter (Sharpe / MaxDD) are marked as "passed".</p>
 <h3 id="synopsis_1">Synopsis<a class="headerlink" href="#synopsis_1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>batch<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">(</span>--strategy-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span>...<span class="w"> </span><span class="p">|</span><span class="w"> </span>--strategy-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>batch<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">(</span>--strategy-file<span class="w"> </span>&lt;FILE&gt;<span class="w"> </span>...<span class="w"> </span><span class="p">|</span><span class="w"> </span>--strategy-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_1">Arguments and options<a class="headerlink" href="#arguments-and-options_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -5177,15 +5234,15 @@
 </tbody>
 </table>
 <h3 id="sample-output">Sample output<a class="headerlink" href="#sample-output" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Starting batch backtest: SPY × 5 strategies (workers=3)
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%  CAGR=8.2%  trades=18
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  ❌ spy_rsi_v1: Sharpe=0.61  MaxDD=-22.1%  CAGR=4.1%  trades=24
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%  CAGR=7.0%  trades=15
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>  🔴 spy_broken_v1: ERROR - failed to load strategy JSON
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>Passed strategies: 2/4
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Starting batch backtest: SPY × 5 strategies (workers=3)
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%  CAGR=8.2%  trades=18
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>  ❌ spy_rsi_v1: Sharpe=0.61  MaxDD=-22.1%  CAGR=4.1%  trades=24
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%  CAGR=7.0%  trades=15
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>  🔴 spy_broken_v1: ERROR - failed to load strategy JSON
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>Passed strategies: 2/4
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>  ✅ spy_sma_v1: Sharpe=1.32  MaxDD=-12.4%
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>  ✅ spy_macd_v1: Sharpe=1.18  MaxDD=-15.6%
 </code></pre></div>
 <h3 id="common-errors_1">Common errors<a class="headerlink" href="#common-errors_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -5213,7 +5270,7 @@
 <h2 id="alpha-forge-backtest-timeframes">alpha-forge backtest timeframes<a class="headerlink" href="#alpha-forge-backtest-timeframes" title="Permanent link">&para;</a></h2>
 <p>Backtest the same strategy across multiple timeframes and print a comparison table (timeframe sweep). The strategy's <code>timeframe</code> field is overridden per run, using the stored per-interval data (<code>&lt;SYMBOL&gt;_&lt;interval&gt;.parquet</code>).</p>
 <h3 id="syntax">Syntax<a class="headerlink" href="#syntax" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>timeframes<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">(</span>--strategy<span class="w"> </span>&lt;name&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--strategy-file<span class="w"> </span>&lt;path&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>timeframes<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span><span class="o">(</span>--strategy<span class="w"> </span>&lt;name&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--strategy-file<span class="w"> </span>&lt;path&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_2">Arguments and options<a class="headerlink" href="#arguments-and-options_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -5265,15 +5322,15 @@
 </tbody>
 </table>
 <h3 id="example-output">Example output<a class="headerlink" href="#example-output" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>=== Timeframe Comparison: AAPL × sma_crossover_v1 ===
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>TF       Sharpe   Return%     MDD%      PF    Win%  Trades    Bars
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>──────────────────────────────────────────────────────────────────
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>1h     (no data)
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>4h         1.12    +38.40    12.10    1.62    54.2      48    4380
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>1d   ★     1.45    +52.30    16.80    1.74    50.0      14     730
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>Best: 1d (Sharpe=1.45)
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>No data: 1h (run `data fetch --interval &lt;tf&gt;` to populate)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>=== Timeframe Comparison: AAPL × sma_crossover_v1 ===
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>TF       Sharpe   Return%     MDD%      PF    Win%  Trades    Bars
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>──────────────────────────────────────────────────────────────────
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>1h     (no data)
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>4h         1.12    +38.40    12.10    1.62    54.2      48    4380
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>1d   ★     1.45    +52.30    16.80    1.74    50.0      14     730
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>Best: 1d (Sharpe=1.45)
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>No data: 1h (run `data fetch --interval &lt;tf&gt;` to populate)
 </code></pre></div>
 <p>When data for an interval is missing, the command does <strong>not</strong> fall back to 1d data; the row and the trailing summary both report it explicitly. <code>--json</code> returns a <code>{"symbol", "strategy_id", "timeframes": [...], "count", "best_timeframe", "missing_timeframes"}</code> envelope (each entry has <code>timeframe</code> / <code>status</code> / <code>bars</code> / <code>metrics</code>).</p>
 <h3 id="common-errors_2">Common errors<a class="headerlink" href="#common-errors_2" title="Permanent link">&para;</a></h3>
@@ -5307,7 +5364,7 @@
 <h2 id="alpha-forge-backtest-diagnose">alpha-forge backtest diagnose<a class="headerlink" href="#alpha-forge-backtest-diagnose" title="Permanent link">&para;</a></h2>
 <p>Automatically diagnose performance issues in a strategy (overfitting, low trade count, extreme win/loss balance, etc.).</p>
 <h3 id="synopsis_2">Synopsis<a class="headerlink" href="#synopsis_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>diagnose<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>diagnose<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_3">Arguments and options<a class="headerlink" href="#arguments-and-options_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -5364,7 +5421,7 @@
 <h2 id="alpha-forge-backtest-list">alpha-forge backtest list<a class="headerlink" href="#alpha-forge-backtest-list" title="Permanent link">&para;</a></h2>
 <p>Show saved backtest results from the DB.</p>
 <h3 id="synopsis_3">Synopsis<a class="headerlink" href="#synopsis_3" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h3>
 <table>
@@ -5416,12 +5473,12 @@
 </tbody>
 </table>
 <h3 id="sample-output_1">Sample output<a class="headerlink" href="#sample-output_1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Backtest Results (5 records)
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>run_id                               strategy_id                   symbol         Return  Sharpe      MDD  Trades
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>──────────────────────────────────────────────────────────────────────────────────────────────────────────────
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>spy_sma_v1_20260415_103021           spy_sma_v1                    SPY            +52.3%    0.92   -16.8%      14
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>spy_macd_v1_20260414_181522          spy_macd_v1                   SPY            +38.1%    1.18   -15.6%      12
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Backtest Results (5 records)
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>run_id                               strategy_id                   symbol         Return  Sharpe      MDD  Trades
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>spy_sma_v1_20260415_103021           spy_sma_v1                    SPY            +52.3%    0.92   -16.8%      14
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>spy_macd_v1_20260414_181522          spy_macd_v1                   SPY            +38.1%    1.18   -15.6%      12
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>...
 </code></pre></div>
 <h3 id="common-messages">Common messages<a class="headerlink" href="#common-messages" title="Permanent link">&para;</a></h3>
 <table>
@@ -5442,7 +5499,7 @@
 <h2 id="alpha-forge-backtest-report">alpha-forge backtest report<a class="headerlink" href="#alpha-forge-backtest-report" title="Permanent link">&para;</a></h2>
 <p>Display a saved backtest result in detail.</p>
 <h3 id="synopsis_4">Synopsis<a class="headerlink" href="#synopsis_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>report<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>report<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_4">Arguments and options<a class="headerlink" href="#arguments-and-options_4" title="Permanent link">&para;</a></h3>
 <table>
@@ -5477,12 +5534,12 @@
 </table>
 <p>If <code>RESULT_ID</code> does not match a <code>run_id</code>, the latest run for that <code>strategy_id</code> is used.</p>
 <h3 id="sample-output_2">Sample output<a class="headerlink" href="#sample-output_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>=== spy_sma_v1 / SPY (2026-04-15T10:30:21) ===
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>Total Return: 52.30%  CAGR: 5.40%
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>MDD: -16.80%  PF: 1.74  Win%: 50.0%
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>Trade log: 14 records (use --json to view all)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>=== spy_sma_v1 / SPY (2026-04-15T10:30:21) ===
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>Total Return: 52.30%  CAGR: 5.40%
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>SR: 0.92  Sortino: 1.15  Calmar: 0.32
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>MDD: -16.80%  PF: 1.74  Win%: 50.0%
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>Trades: 14  Avg hold: 28.5d(28bar)  Max: 65.0d(65bar)
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>Trade log: 14 records (use --json to view all)
 </code></pre></div>
 <h3 id="common-errors_3">Common errors<a class="headerlink" href="#common-errors_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -5505,7 +5562,7 @@
 <h2 id="alpha-forge-backtest-migrate">alpha-forge backtest migrate<a class="headerlink" href="#alpha-forge-backtest-migrate" title="Permanent link">&para;</a></h2>
 <p>Import existing <code>*_report.json</code> files into the DB.</p>
 <h3 id="synopsis_5">Synopsis<a class="headerlink" href="#synopsis_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>migrate<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>migrate<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
 </code></pre></div>
 <h3 id="options_1">Options<a class="headerlink" href="#options_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -5534,11 +5591,11 @@
 </table>
 <p><code>run_id</code> values are generated as <code>migrated_&lt;file_stem&gt;</code>.</p>
 <h3 id="sample-output_3">Sample output<a class="headerlink" href="#sample-output_3" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>  ✅ migrated_spy_sma_v1
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>  ♻️  migrated_spy_macd_v1 (overwritten)
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>  Skipping (duplicate): migrated_spy_rsi_v1
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>Done: 2 imported, 1 skipped
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>  ✅ migrated_spy_sma_v1
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>  ♻️  migrated_spy_macd_v1 (overwritten)
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>  Skipping (duplicate): migrated_spy_rsi_v1
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>Done: 2 imported, 1 skipped
 </code></pre></div>
 <h3 id="common-messages_1">Common messages<a class="headerlink" href="#common-messages_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -5567,7 +5624,7 @@
 <p><code>backtest compare</code> <strong>runs fresh backtests</strong> of the given strategies on the spot and compares them (a <strong>heavy operation</strong> with side effects). In contrast, <a href="../journal/#alpha-forge-journal-compare"><code>journal compare</code></a> / <a href="../live/#alpha-forge-live-compare"><code>live compare</code></a> are read-only and merely reference <strong>saved</strong> runs / summaries. Despite the shared verb, the cost and side effects differ — be careful not to let an agent generalize "compare is a safe reference" and unintentionally launch long-running backtests.</p>
 </div>
 <h3 id="synopsis_6">Synopsis<a class="headerlink" href="#synopsis_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY1&gt;<span class="w"> </span><span class="o">[</span>STRATEGY2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>compare<span class="w"> </span>&lt;STRATEGY1&gt;<span class="w"> </span><span class="o">[</span>STRATEGY2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span><span class="o">[</span>--symbol<span class="w"> </span>&lt;SYM&gt;<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_5">Arguments and options<a class="headerlink" href="#arguments-and-options_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -5621,19 +5678,19 @@
 <h3 id="sample-output-text-table">Sample output (text table)<a class="headerlink" href="#sample-output-text-table" title="Permanent link">&para;</a></h3>
 <p>The output uses a <strong>one-row-per-metric</strong> transposed layout. The first strategy you pass is the "baseline" (<code>基準:</code>); for each subsequent strategy the difference from the baseline is shown in the <code>Delta</code> column (<code>✅</code> = improvement / <code>❌</code> = regression). The final line shows the <code>Winner</code> (most improvements; ties broken by Sharpe Ratio). The header column labels are emitted in Japanese (<code>指標</code> = metric, <code>基準:</code> = baseline) regardless of locale.</p>
 <p>The period (e.g. <code>(2020-01-01 to present)</code>) is only added to the header when <code>--start</code> / <code>--end</code> are supplied; otherwise only the strategy count is shown.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>=== Strategy Comparison: SPY (2 strategies) ===
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
-<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>────────────────────────────────────────────────────────────
-<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
-<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>────────────────────────────────────────────────────────────
-<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>Sharpe Ratio                       0.92            1.18          +0.26 ✅
-<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>Total Return %                    52.30%          38.10%         -14.2% ❌
-<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>CAGR %                             5.40%           4.20%          -1.2% ❌
-<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>Max Drawdown %                   -16.80%         -15.60%          +1.2% ✅
-<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>Win Rate %                        50.00%          58.00%          +8.0% ✅
-<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>Profit Factor                      1.74            1.92          +0.18 ✅
-<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>────────────────────────────────────────────────────────────
-<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>Winner: sma_cross_qs (4/6 metrics)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>=== Strategy Comparison: SPY (2 strategies) ===
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>────────────────────────────────────────────────────────────
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>指標                     基準: sma_crossover_v1    sma_cross_qs           Delta
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>────────────────────────────────────────────────────────────
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>Sharpe Ratio                       0.92            1.18          +0.26 ✅
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>Total Return %                    52.30%          38.10%         -14.2% ❌
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>CAGR %                             5.40%           4.20%          -1.2% ❌
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>Max Drawdown %                   -16.80%         -15.60%          +1.2% ✅
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>Win Rate %                        50.00%          58.00%          +8.0% ✅
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>Profit Factor                      1.74            1.92          +0.18 ✅
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>────────────────────────────────────────────────────────────
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>Winner: sma_cross_qs (4/6 metrics)
 </code></pre></div>
 <h3 id="common-errors_4">Common errors<a class="headerlink" href="#common-errors_4" title="Permanent link">&para;</a></h3>
 <table>
@@ -5661,7 +5718,7 @@
 <h2 id="alpha-forge-backtest-combine">alpha-forge backtest combine<a class="headerlink" href="#alpha-forge-backtest-combine" title="Permanent link">&para;</a></h2>
 <p>Run a combined portfolio backtest across two or more strategies. Phase 1 supports equal allocation; Phase 2 supports custom weights.</p>
 <h3 id="synopsis_7">Synopsis<a class="headerlink" href="#synopsis_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>&lt;STRATEGY_ID1&gt;<span class="w"> </span>&lt;STRATEGY_ID2&gt;<span class="w"> </span><span class="o">[</span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>&lt;STRATEGY_ID1&gt;<span class="w"> </span>&lt;STRATEGY_ID2&gt;<span class="w"> </span><span class="o">[</span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_6">Arguments and options<a class="headerlink" href="#arguments-and-options_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -5752,18 +5809,18 @@
 <p>Dynamic allocation can concentrate weight in a single strategy. Passing <code>--max-pillar-weight &lt;cap&gt;</code> (e.g. <code>0.3</code>) clips each strategy's weight to the cap and redistributes the excess proportionally to the strategies still under the cap, iterating until none remain over (water-filling; the total stays at 1.0). If <code>n_strategies * cap &lt; 1.0</code> the cap is infeasible and the command exits with an error. Passing this option with <code>--allocation equal</code> / <code>custom</code> also exits with an error (fail-loud). Omitting it (default <code>None</code>) preserves the uncapped behavior.</p>
 <p>When combining <code>--wft</code> with dynamic allocation, short windows may not accumulate enough bars for <code>--vol-lookback</code> within the window, causing the allocation to fall back to equal weight for most of the window. Use <code>--wft-warmup-bars</code> to feed each window's <strong>data</strong> starting N bars before the window boundary while still <strong>evaluating only the window itself</strong>.</p>
 <p>Strategies that reference external symbols (e.g. VIX) via the <code>symbol</code> field are now correctly included in <code>backtest combine</code> as well. Previously, the external-symbol merge step was not invoked on this path, silently disabling those indicators; <code>backtest combine</code> now runs the same merge step as <code>backtest run</code> (#1287).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># risk_parity allocation + monthly rebalance + 5-window WFT with warmup prepend</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span>--allocation<span class="w"> </span>risk_parity<span class="w"> </span>--rebalance<span class="w"> </span>monthly<span class="w"> </span>--vol-lookback<span class="w"> </span><span class="m">63</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span>--wft<span class="w"> </span><span class="m">5</span><span class="w"> </span>--wft-warmup-bars<span class="w"> </span><span class="m">63</span><span class="w"> </span>--json
-<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
-<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1"># vol_target allocation (target 15% annualized vol, 1.5x leverage cap)</span>
-<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">    </span>--allocation<span class="w"> </span>vol_target<span class="w"> </span>--target-vol<span class="w"> </span><span class="m">0</span>.15<span class="w"> </span>--max-leverage<span class="w"> </span><span class="m">1</span>.5<span class="w"> </span>--json
-<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>
-<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="c1"># risk_parity allocation with a 30% per-pillar weight cap</span>
-<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="w">    </span>--allocation<span class="w"> </span>risk_parity<span class="w"> </span>--max-pillar-weight<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>--json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># risk_parity allocation + monthly rebalance + 5-window WFT with warmup prepend</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span>--allocation<span class="w"> </span>risk_parity<span class="w"> </span>--rebalance<span class="w"> </span>monthly<span class="w"> </span>--vol-lookback<span class="w"> </span><span class="m">63</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span>--wft<span class="w"> </span><span class="m">5</span><span class="w"> </span>--wft-warmup-bars<span class="w"> </span><span class="m">63</span><span class="w"> </span>--json
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="c1"># vol_target allocation (target 15% annualized vol, 1.5x leverage cap)</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">    </span>--allocation<span class="w"> </span>vol_target<span class="w"> </span>--target-vol<span class="w"> </span><span class="m">0</span>.15<span class="w"> </span>--max-leverage<span class="w"> </span><span class="m">1</span>.5<span class="w"> </span>--json
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="c1"># risk_parity allocation with a 30% per-pillar weight cap</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>combine<span class="w"> </span>schd_v1<span class="w"> </span>vym_v1<span class="w"> </span>tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="w">    </span>--allocation<span class="w"> </span>risk_parity<span class="w"> </span>--max-pillar-weight<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>--json
 </code></pre></div>
 <h3 id="common-errors_5">Common errors<a class="headerlink" href="#common-errors_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -5806,7 +5863,7 @@
 <h2 id="alpha-forge-backtest-portfolio">alpha-forge backtest portfolio<a class="headerlink" href="#alpha-forge-backtest-portfolio" title="Permanent link">&para;</a></h2>
 <p>Run a portfolio backtest across multiple symbols.</p>
 <h3 id="synopsis_8">Synopsis<a class="headerlink" href="#synopsis_8" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>portfolio<span class="w"> </span>&lt;SYM1&gt;<span class="w"> </span><span class="o">[</span>SYM2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>portfolio<span class="w"> </span>&lt;SYM1&gt;<span class="w"> </span><span class="o">[</span>SYM2<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_7">Arguments and options<a class="headerlink" href="#arguments-and-options_7" title="Permanent link">&para;</a></h3>
 <table>
@@ -5858,21 +5915,21 @@
 </tbody>
 </table>
 <h3 id="sample-output_4">Sample output<a class="headerlink" href="#sample-output_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Running portfolio backtest: [&#39;AAPL&#39;, &#39;MSFT&#39;, &#39;GOOGL&#39;] (equal allocation)
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>=== Portfolio Results: tech_basket_v1 (equal) ===
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>Symbols: AAPL, MSFT, GOOGL
-<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>Weights: AAPL=33.3%, MSFT=33.3%, GOOGL=33.3%
-<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>Total Return: 78.40%  CAGR: 12.30%
-<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>SR: 1.45  Sortino: 1.85  Calmar: 0.62
-<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>MDD: -19.80%  CVaR(95%): -3.20%
-<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>Diversification ratio: 1.085
-<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>
-<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>Symbol     Weight    Return     SR      MDD
-<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>──────────────────────────────────────────────────
-<a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a>AAPL          33.3%   +85.2%   1.52  -22.1%
-<a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a>MSFT          33.3%   +72.0%   1.41  -18.4%
-<a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a>GOOGL         33.3%   +78.0%   1.38  -19.5%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>Running portfolio backtest: [&#39;AAPL&#39;, &#39;MSFT&#39;, &#39;GOOGL&#39;] (equal allocation)
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>=== Portfolio Results: tech_basket_v1 (equal) ===
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>Symbols: AAPL, MSFT, GOOGL
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>Weights: AAPL=33.3%, MSFT=33.3%, GOOGL=33.3%
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>Total Return: 78.40%  CAGR: 12.30%
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>SR: 1.45  Sortino: 1.85  Calmar: 0.62
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>MDD: -19.80%  CVaR(95%): -3.20%
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>Diversification ratio: 1.085
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>Symbol     Weight    Return     SR      MDD
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>──────────────────────────────────────────────────
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a>AAPL          33.3%   +85.2%   1.52  -22.1%
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a>MSFT          33.3%   +72.0%   1.41  -18.4%
+<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>GOOGL         33.3%   +78.0%   1.38  -19.5%
 </code></pre></div>
 <h3 id="common-errors_6">Common errors<a class="headerlink" href="#common-errors_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -5905,7 +5962,7 @@
 <h2 id="alpha-forge-backtest-chart">alpha-forge backtest chart<a class="headerlink" href="#alpha-forge-backtest-chart" title="Permanent link">&para;</a></h2>
 <p>Show the dashboard chart URL and optionally open it.</p>
 <h3 id="synopsis_9">Synopsis<a class="headerlink" href="#synopsis_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span><span class="o">[</span>RESULT_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--open<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>...<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>chart<span class="w"> </span><span class="o">[</span>RESULT_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--open<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>...<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_8">Arguments and options<a class="headerlink" href="#arguments-and-options_8" title="Permanent link">&para;</a></h3>
 <table>
@@ -5939,20 +5996,20 @@
 </tbody>
 </table>
 <h3 id="sample-output_5">Sample output<a class="headerlink" href="#sample-output_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>📊 To view charts, start `alpha-vis serve`:
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>   http://localhost:8000/?run_id=spy_sma_v1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>📊 To view charts, start `alpha-vis serve`:
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>   http://localhost:8000/?run_id=spy_sma_v1
 </code></pre></div>
 <p><code>?run_id=</code> contains the <code>RESULT_ID</code> you passed verbatim (pass a <code>strategy_id</code> and you get that <code>strategy_id</code>; pass a specific <code>run_id</code> and you get that <code>run_id</code>).</p>
 <p>When comparing strategies:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>📊 To view charts, start `alpha-vis serve`:
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>📊 To view charts, start `alpha-vis serve`:
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>   http://localhost:8000/?ids=sma_crossover,rsi_reversion
 </code></pre></div>
 <p>The command itself only prints a URL. To view charts, start <code>alpha-vis serve</code> (<a href="https://github.com/ysakae/alpha-visualizer">alpha-visualizer</a>).</p>
 <hr />
 <h2 id="alpha-forge-backtest-signal-count">alpha-forge backtest signal-count<a class="headerlink" href="#alpha-forge-backtest-signal-count" title="Permanent link">&para;</a></h2>
 <p>Skip vectorbt and just count entry-condition signal occurrences. Useful for sanity-checking condition expressions.</p>
 <h3 id="synopsis_10">Synopsis<a class="headerlink" href="#synopsis_10" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>signal-count<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--period<span class="w"> </span>5y<span class="o">]</span><span class="w"> </span><span class="o">[</span>--estimate-trades<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>signal-count<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--period<span class="w"> </span>5y<span class="o">]</span><span class="w"> </span><span class="o">[</span>--estimate-trades<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_9">Arguments and options<a class="headerlink" href="#arguments-and-options_9" title="Permanent link">&para;</a></h3>
 <table>
@@ -5998,17 +6055,17 @@
 </tbody>
 </table>
 <h3 id="sample-output_6">Sample output<a class="headerlink" href="#sample-output_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>Signal count check: spy_sma_v1 × SPY (5y)
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>Total bars: 1258 days
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>
-<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>Entry conditions (long AND):
-<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>  sma_fast &gt; sma_slow              :   687 days ( 54.6%)
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>  ──────────────────────────────────
-<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>  All conditions AND               :   687 days ( 54.6%)
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>
-<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>Signal days per regime:
-<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a>  state=0    :   312 days ( 24.8%)
-<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a>  state=1    :   375 days ( 29.8%)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>Signal count check: spy_sma_v1 × SPY (5y)
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>Total bars: 1258 days
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>Entry conditions (long AND):
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>  sma_fast &gt; sma_slow              :   687 days ( 54.6%)
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>  ──────────────────────────────────
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a>  All conditions AND               :   687 days ( 54.6%)
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a>
+<a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a>Signal days per regime:
+<a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a>  state=0    :   312 days ( 24.8%)
+<a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a>  state=1    :   375 days ( 29.8%)
 </code></pre></div>
 <p>If 0 signals, <code>⚠️  No signals generated</code> is printed.</p>
 <div class="admonition note">
@@ -6046,7 +6103,7 @@
 <h2 id="alpha-forge-backtest-monte-carlo">alpha-forge backtest monte-carlo<a class="headerlink" href="#alpha-forge-backtest-monte-carlo" title="Permanent link">&para;</a></h2>
 <p>Resample trade history from a saved backtest result and run a Monte Carlo simulation to evaluate ruin probability and worst-case scenarios.</p>
 <h3 id="synopsis_11">Synopsis<a class="headerlink" href="#synopsis_11" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>monte-carlo<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>--simulations<span class="w"> </span><span class="m">1000</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>monte-carlo<span class="w"> </span>&lt;RESULT_ID&gt;<span class="w"> </span><span class="o">[</span>--simulations<span class="w"> </span><span class="m">1000</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_10">Arguments and options<a class="headerlink" href="#arguments-and-options_10" title="Permanent link">&para;</a></h3>
 <table>
@@ -6080,31 +6137,31 @@
 </tbody>
 </table>
 <h3 id="sample-output_7">Sample output<a class="headerlink" href="#sample-output_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>Running Monte Carlo simulation: spy_sma_v1_20260415_103021 (1000 runs)
-<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>✅ Simulation complete
-<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>Initial capital: 10000
-<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>Mean final equity: 14820
-<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>Median final equity: 14250
-<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a>Worst final equity: 7340
-<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>Best final equity: 23150
-<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a>Mean max MDD: 18.40%
-<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a>95% max MDD:  31.20%
-<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a>Ruin probability: 0.40%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>Running Monte Carlo simulation: spy_sma_v1_20260415_103021 (1000 runs)
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>✅ Simulation complete
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>Initial capital: 10000
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>Mean final equity: 14820
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>Median final equity: 14250
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>Worst final equity: 7340
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>Best final equity: 23150
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a>Mean max MDD: 18.40%
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>95% max MDD:  31.20%
+<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a>Ruin probability: 0.40%
 </code></pre></div>
 <h3 id="monte-carlo-json">Sample output (<code>--json</code>)<a class="headerlink" href="#monte-carlo-json" title="Permanent link">&para;</a></h3>
 <p>With <code>--json</code>, in addition to the statistics, a default verdict (<code>pre_filter_pass</code> / <code>pre_filter</code>) is <strong>always included even without <code>--goal</code></strong>, with naming and contract aligned with <code>backtest run</code> / <code>optimize walk-forward</code> (issue #1237). The verdict checks whether the ruin probability (<code>ruin_probability_pct</code>) is at or below the default threshold of <code>5.0%</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="p">{</span>
-<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">  </span><span class="nt">&quot;initial_capital&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span>
-<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">  </span><span class="nt">&quot;simulations_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">  </span><span class="nt">&quot;mean_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14820</span><span class="p">,</span>
-<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">  </span><span class="nt">&quot;worst_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7340</span><span class="p">,</span>
-<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="w">  </span><span class="nt">&quot;best_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">23150</span><span class="p">,</span>
-<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="w">  </span><span class="nt">&quot;mean_max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">18.40</span><span class="p">,</span>
-<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_95pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">31.20</span><span class="p">,</span>
-<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="w">  </span><span class="nt">&quot;ruin_probability_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.40</span><span class="p">,</span>
-<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_ruin_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="p">{</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">  </span><span class="nt">&quot;initial_capital&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">  </span><span class="nt">&quot;simulations_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="w">  </span><span class="nt">&quot;mean_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14820</span><span class="p">,</span>
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a><span class="w">  </span><span class="nt">&quot;worst_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7340</span><span class="p">,</span>
+<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a><span class="w">  </span><span class="nt">&quot;best_final_equity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">23150</span><span class="p">,</span>
+<a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a><span class="w">  </span><span class="nt">&quot;mean_max_drawdown_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">18.40</span><span class="p">,</span>
+<a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="w">  </span><span class="nt">&quot;max_drawdown_95pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">31.20</span><span class="p">,</span>
+<a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a><span class="w">  </span><span class="nt">&quot;ruin_probability_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.40</span><span class="p">,</span>
+<a id="__codelineno-36-10" name="__codelineno-36-10" href="#__codelineno-36-10"></a><span class="w">  </span><span class="nt">&quot;pre_filter_pass&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-36-11" name="__codelineno-36-11" href="#__codelineno-36-11"></a><span class="w">  </span><span class="nt">&quot;pre_filter&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;max_ruin_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-36-12" name="__codelineno-36-12" href="#__codelineno-36-12"></a><span class="p">}</span>
 </code></pre></div>
 <p>See also the top-level field contract in the <a href="../../ai-agents/json-output-reference/#backtest-monte-carlo-json"><code>--json</code> output reference</a>.</p>
 <h3 id="common-errors_8">Common errors<a class="headerlink" href="#common-errors_8" title="Permanent link">&para;</a></h3>

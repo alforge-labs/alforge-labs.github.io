@@ -507,6 +507,27 @@ alpha-forge data alt fetch <SOURCE_KEY> --start <YYYY-MM-DD> --end <YYYY-MM-DD>
 
 出力: `✅ <SOURCE_KEY>: <N>行を保存しました`。プロバイダー未登録時は `ClickException`。
 
+## alpha-forge data alt import-swap
+
+```bash
+alpha-forge data alt import-swap <PAIR> --csv <path>
+```
+
+ブローカー公表の実スワップポイント履歴 CSV を検証して `SWAP:<PAIR>` キーで保存します。保存後は [`backtest run --carry`](backtest.md#carry) が金利差近似より**自動で優先**して使用します。
+
+| 名前 | 種別 | 説明 |
+|------|------|------|
+| `PAIR` | 引数（必須） | FX ペア（`USDJPY=X` / `USD/JPY` / `USD_JPY`。yfinance 形式へ正規化して保存） |
+| `--csv` | 必須 | CSV パス。ヘッダー `date,long,short` |
+
+CSV の契約:
+
+- 値は **quote 通貨建て・1 単位・1 日あたり**の受け払い（正=受取・負=支払い）。「1 万通貨あたり◯円」公表なら 1/10000 して入力
+- 日付は昇順・重複なし・将来日なし。空セル（欠損値）不可
+- ロング/ショートは別列で、どちらも**マージン込みネット値**（`spread_pct` 非適用）
+
+検証違反はいずれも保存せず終了コード `1`。出力: `✅ SWAP:<PAIR>: <N>行を保存しました (<path>)`。
+
 ## alpha-forge data alt list
 
 ```bash

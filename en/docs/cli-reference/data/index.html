@@ -2668,6 +2668,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-data-alt-import-swap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge data alt import-swap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#alpha-forge-data-alt-list" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3580,6 +3591,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-data-alt-import-swap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge data alt import-swap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#alpha-forge-data-alt-list" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4467,9 +4489,41 @@
 </tbody>
 </table>
 <p>Output: <code>✅ &lt;SOURCE_KEY&gt;: saved &lt;N&gt; rows</code>. Unregistered providers raise <code>ClickException</code>.</p>
+<h2 id="alpha-forge-data-alt-import-swap">alpha-forge data alt import-swap<a class="headerlink" href="#alpha-forge-data-alt-import-swap" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span>&lt;PAIR&gt;<span class="w"> </span>--csv<span class="w"> </span>&lt;path&gt;
+</code></pre></div>
+<p>Validates a broker-published real swap-point history CSV and stores it under the <code>SWAP:&lt;PAIR&gt;</code> key. Once saved, <a href="../backtest/#carry"><code>backtest run --carry</code></a> uses it <strong>automatically in preference</strong> to the rate-differential approximation.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PAIR</code></td>
+<td>argument (required)</td>
+<td>FX pair (<code>USDJPY=X</code> / <code>USD/JPY</code> / <code>USD_JPY</code>; normalized to the yfinance form)</td>
+</tr>
+<tr>
+<td><code>--csv</code></td>
+<td>required</td>
+<td>CSV path. Header <code>date,long,short</code></td>
+</tr>
+</tbody>
+</table>
+<p>CSV contract:</p>
+<ul>
+<li>Values are the amount received/paid <strong>per unit per day in the quote currency</strong> (positive = received). If published as "X yen per 10,000 units", divide by 10,000</li>
+<li>Dates must be ascending, unique, and not in the future. Empty (missing) cells are rejected</li>
+<li>Long and short are separate columns, both <strong>net of broker margin</strong> (<code>spread_pct</code> does not apply)</li>
+</ul>
+<p>Any validation failure aborts without saving (exit code <code>1</code>). Output: <code>✅ SWAP:&lt;PAIR&gt;: saved &lt;N&gt; rows (&lt;path&gt;)</code>.</p>
 <h2 id="alpha-forge-data-alt-list">alpha-forge data alt list<a class="headerlink" href="#alpha-forge-data-alt-list" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4490,18 +4544,18 @@
 </tbody>
 </table>
 <p>Sample output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>Stored alternative data count: 2
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Stored alternative data count: 2
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
 </code></pre></div>
 <p>When no alternative data has been stored, the command prints a single line and exits with code <code>0</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>No stored alternative data found.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>No stored alternative data found.
 </code></pre></div>
 <p>With <code>--json</code>, only pure JSON is written to stdout. <strong>Exit code</strong>: <code>0</code> = success, <code>1</code> = not found / execution failure, <code>2</code> = argument error.</p>
 <h2 id="alpha-forge-data-alt-info">alpha-forge data alt info<a class="headerlink" href="#alpha-forge-data-alt-info" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
 <table>
 <thead>
