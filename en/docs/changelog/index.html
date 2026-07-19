@@ -2484,6 +2484,61 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0180-2026-07-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.18.0 — 2026-07-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0170-2026-06-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.17.0 — 2026-06-28
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0160-2026-06-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.16.0 — 2026-06-24
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0150-2026-06-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.15.0 — 2026-06-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0140-2026-06-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.14.0 — 2026-06-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0130-2026-06-08" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2821,6 +2876,61 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v0180-2026-07-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.18.0 — 2026-07-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0170-2026-06-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.17.0 — 2026-06-28
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0160-2026-06-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.16.0 — 2026-06-24
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0150-2026-06-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.15.0 — 2026-06-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v0140-2026-06-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.14.0 — 2026-06-19
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v0130-2026-06-08" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2976,6 +3086,52 @@
 <p>This page is a <strong>user-facing summary</strong>. Internal refactors, tests, CI, and documentation chores that do not affect usage are omitted. Update to the latest version with <code>alpha-forge self update</code>.</p>
 </div>
 <hr />
+<h2 id="v0180-2026-07-19">v0.18.0 — 2026-07-19<a class="headerlink" href="#v0180-2026-07-19" title="Permanent link">&para;</a></h2>
+<p>Added the full FX carry (swap) backtesting suite and the fastest onboarding path via <code>alpha-forge demo</code>. Multi-strategy portfolios gained strategy-level dynamic allocation.</p>
+<ul>
+<li><strong>FX carry accrual</strong>: <code>backtest run --carry</code> reports daily carry approximated from short-term interest-rate differentials as reference values (<code>carry_adjusted_*</code>). Major 8-currency pairs work with zero configuration via built-in FRED rate-series mappings, and importing broker swap-point CSVs with <code>data alt import-swap</code> takes precedence over the approximation. Results are persisted to the DB and shown on the alpha-visualizer v0.9.0 detail screen.</li>
+<li><strong>Fastest onboarding</strong>: The single <code>alpha-forge demo</code> command runs everything from initialization to a backtest on the bundled DEMO data. <code>system init</code> now auto-places sample data plus a demo strategy, missing-data errors are paste-ready commands, and <code>system doctor</code> suggests concrete resolution commands (next_actions).</li>
+<li><strong>Dynamic allocation for multi-strategy portfolios</strong>: Added strategy-level <code>risk_parity</code> / <code>vol_target</code> allocation and <code>--max-pillar-weight</code> (per-pillar weight cap). WFT warmup pre-fill removes gaps at the start of combined curves.</li>
+<li><strong><code>optimize walk-forward --save</code></strong>: Records WFT results so they automatically appear in alpha-visualizer's WFO tab.</li>
+<li><strong>Run provenance</strong>: Backtest results now record their execution source.</li>
+</ul>
+<h2 id="v0170-2026-06-28">v0.17.0 — 2026-06-28<a class="headerlink" href="#v0170-2026-06-28" title="Permanent link">&para;</a></h2>
+<p>Extended the hedge triggers of the buy-hold-overlay strategy scaffold and polished the CLI UX.</p>
+<ul>
+<li><strong>Hedge trigger extensions</strong>: Added the fast TRAILING_DD hedge trigger and an HMM × TRAILING_DD composite trigger to buy-hold-overlay. The default lookback is now configurable.</li>
+<li><strong>REGIME_RULE optimization</strong>: Regime-condition firing thresholds can now be optimization targets.</li>
+<li><strong><code>combine --json</code></strong>: Outputs the combined portfolio equity_curve as JSON (for chart generation).</li>
+<li><strong>CLI UX</strong>: Eight polish items including scaffold exit help, chart-path existence validation, and did-you-mean suggestions, plus consistent error display, exit codes, and <code>--json</code> / <code>--help</code> behavior.</li>
+</ul>
+<h2 id="v0160-2026-06-24">v0.16.0 — 2026-06-24<a class="headerlink" href="#v0160-2026-06-24" title="Permanent link">&para;</a></h2>
+<p>The second wave of AI-agent integration: a machine-readable catalog and a <code>--json</code> output contract.</p>
+<ul>
+<li><strong><code>system describe</code></strong>: A new machine-readable catalog of every command and argument, letting agents self-discover the CLI surface.</li>
+<li><strong><code>--json</code> contract</strong>: <code>backtest run --json</code> now includes <code>run_id</code> / <code>result_id</code> with token-economized output. Extended <code>--json</code> to all read-only commands, unified the default WFT / MC verdicts, and uncaught exceptions now return a structured error envelope. Published a contract reference and versioning policy for the <code>--json</code> schemas.</li>
+<li><strong>Next-step guidance</strong>: Successful commands suggest the next action. <code>strategy templates</code> lists the bundled templates.</li>
+<li><strong>Distributed skills</strong>: Bundled forge-* skills for Codex, and <code>system init</code> now deploys a generic AGENTS.md.</li>
+</ul>
+<h2 id="v0150-2026-06-23">v0.15.0 — 2026-06-23<a class="headerlink" href="#v0150-2026-06-23" title="Permanent link">&para;</a></h2>
+<p>Hardened diagnostics and data fetching, and improved the first-run experience.</p>
+<ul>
+<li><strong><code>system doctor</code> / <code>system paths</code></strong>: New environment-diagnostics command, plus a listing of all data locations with backup instructions.</li>
+<li><strong>Crash resilience</strong>: Uncaught exceptions now fall back with a reporting path and an always-on crash log.</li>
+<li><strong>Robust data fetching</strong>: Providers gained retries with exponential backoff, OANDA warns instead of silently truncating at its page-fetch limit, and ALTDATA sentiment sources gained retries / caching.</li>
+<li><strong>Native Pine conversion</strong>: Ten staple indicators convert natively, with a <code>pine_supported</code> flag.</li>
+<li><strong>Maintenance</strong>: Introduced schema versions plus a migration framework for strategy / result JSON. Added <code>--dry-run</code> to <code>strategy delete</code> / <code>pine delete</code>, and a WARNING for the silent fallback when <code>FORGE_CONFIG</code> is unset.</li>
+<li><strong>Docs / English</strong>: <code>FORGE_LANG=en</code> fully localizes the top-level help. Added Troubleshooting, a Glossary, and a CLI-only end-to-end sample.</li>
+</ul>
+<h2 id="v0140-2026-06-19">v0.14.0 — 2026-06-19<a class="headerlink" href="#v0140-2026-06-19" title="Permanent link">&para;</a></h2>
+<p>Substantially expanded Alpha158-derived indicators, extended metrics, and position sizing.</p>
+<ul>
+<li><strong>Indicator expansion</strong>: Added Alpha158-derived indicators such as CMO / PERCENTRANK / STDDEV / AROON / PV_CORR / ROLLING_QUANTILE / UP_RATIO / WVMA, plus LINEAR_REG pred / resid (with native Pine conversion). Bundled an EXPR preset collection of nine KBAR formulas.</li>
+<li><strong>Extended metrics</strong>: Added seven families of extended metrics.</li>
+<li><strong>Position sizing</strong>: Added <code>kelly</code> / <code>vol_target</code>.</li>
+<li><strong><code>backtest timeframes</code></strong>: New one-shot sweep across timeframes.</li>
+<li><strong>explore</strong>: Added the <code>acknowledge</code> command to mark escalations as read.</li>
+<li><strong>License grace period</strong>: Extended the offline grace period to 14 days; expiry now degrades to Trial instead of disabling the CLI.</li>
+<li><strong>Security / fixes</strong>: Resolved 15 dependency vulnerabilities (pillow / urllib3 / protobuf and more). Fixed <code>risk_based</code> Pine output size to match the engine, and invalid optimizer param_ranges are now detected before execution (exit 2).</li>
+</ul>
 <h2 id="v0130-2026-06-08">v0.13.0 — 2026-06-08<a class="headerlink" href="#v0130-2026-06-08" title="Permanent link">&para;</a></h2>
 <p>Substantially strengthened unattended use from AI agents / CI: eliminated confirmation-prompt hangs, broadened <code>--json</code> coverage, and unified exit codes. Many bug fixes as well.</p>
 <ul>

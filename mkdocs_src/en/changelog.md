@@ -12,6 +12,57 @@ A user-facing summary of notable changes in each public AlphaForge CLI release. 
 
 ---
 
+## v0.18.0 — 2026-07-19
+
+Added the full FX carry (swap) backtesting suite and the fastest onboarding path via `alpha-forge demo`. Multi-strategy portfolios gained strategy-level dynamic allocation.
+
+- **FX carry accrual**: `backtest run --carry` reports daily carry approximated from short-term interest-rate differentials as reference values (`carry_adjusted_*`). Major 8-currency pairs work with zero configuration via built-in FRED rate-series mappings, and importing broker swap-point CSVs with `data alt import-swap` takes precedence over the approximation. Results are persisted to the DB and shown on the alpha-visualizer v0.9.0 detail screen.
+- **Fastest onboarding**: The single `alpha-forge demo` command runs everything from initialization to a backtest on the bundled DEMO data. `system init` now auto-places sample data plus a demo strategy, missing-data errors are paste-ready commands, and `system doctor` suggests concrete resolution commands (next_actions).
+- **Dynamic allocation for multi-strategy portfolios**: Added strategy-level `risk_parity` / `vol_target` allocation and `--max-pillar-weight` (per-pillar weight cap). WFT warmup pre-fill removes gaps at the start of combined curves.
+- **`optimize walk-forward --save`**: Records WFT results so they automatically appear in alpha-visualizer's WFO tab.
+- **Run provenance**: Backtest results now record their execution source.
+
+## v0.17.0 — 2026-06-28
+
+Extended the hedge triggers of the buy-hold-overlay strategy scaffold and polished the CLI UX.
+
+- **Hedge trigger extensions**: Added the fast TRAILING_DD hedge trigger and an HMM × TRAILING_DD composite trigger to buy-hold-overlay. The default lookback is now configurable.
+- **REGIME_RULE optimization**: Regime-condition firing thresholds can now be optimization targets.
+- **`combine --json`**: Outputs the combined portfolio equity_curve as JSON (for chart generation).
+- **CLI UX**: Eight polish items including scaffold exit help, chart-path existence validation, and did-you-mean suggestions, plus consistent error display, exit codes, and `--json` / `--help` behavior.
+
+## v0.16.0 — 2026-06-24
+
+The second wave of AI-agent integration: a machine-readable catalog and a `--json` output contract.
+
+- **`system describe`**: A new machine-readable catalog of every command and argument, letting agents self-discover the CLI surface.
+- **`--json` contract**: `backtest run --json` now includes `run_id` / `result_id` with token-economized output. Extended `--json` to all read-only commands, unified the default WFT / MC verdicts, and uncaught exceptions now return a structured error envelope. Published a contract reference and versioning policy for the `--json` schemas.
+- **Next-step guidance**: Successful commands suggest the next action. `strategy templates` lists the bundled templates.
+- **Distributed skills**: Bundled forge-* skills for Codex, and `system init` now deploys a generic AGENTS.md.
+
+## v0.15.0 — 2026-06-23
+
+Hardened diagnostics and data fetching, and improved the first-run experience.
+
+- **`system doctor` / `system paths`**: New environment-diagnostics command, plus a listing of all data locations with backup instructions.
+- **Crash resilience**: Uncaught exceptions now fall back with a reporting path and an always-on crash log.
+- **Robust data fetching**: Providers gained retries with exponential backoff, OANDA warns instead of silently truncating at its page-fetch limit, and ALTDATA sentiment sources gained retries / caching.
+- **Native Pine conversion**: Ten staple indicators convert natively, with a `pine_supported` flag.
+- **Maintenance**: Introduced schema versions plus a migration framework for strategy / result JSON. Added `--dry-run` to `strategy delete` / `pine delete`, and a WARNING for the silent fallback when `FORGE_CONFIG` is unset.
+- **Docs / English**: `FORGE_LANG=en` fully localizes the top-level help. Added Troubleshooting, a Glossary, and a CLI-only end-to-end sample.
+
+## v0.14.0 — 2026-06-19
+
+Substantially expanded Alpha158-derived indicators, extended metrics, and position sizing.
+
+- **Indicator expansion**: Added Alpha158-derived indicators such as CMO / PERCENTRANK / STDDEV / AROON / PV_CORR / ROLLING_QUANTILE / UP_RATIO / WVMA, plus LINEAR_REG pred / resid (with native Pine conversion). Bundled an EXPR preset collection of nine KBAR formulas.
+- **Extended metrics**: Added seven families of extended metrics.
+- **Position sizing**: Added `kelly` / `vol_target`.
+- **`backtest timeframes`**: New one-shot sweep across timeframes.
+- **explore**: Added the `acknowledge` command to mark escalations as read.
+- **License grace period**: Extended the offline grace period to 14 days; expiry now degrades to Trial instead of disabling the CLI.
+- **Security / fixes**: Resolved 15 dependency vulnerabilities (pillow / urllib3 / protobuf and more). Fixed `risk_based` Pine output size to match the engine, and invalid optimizer param_ranges are now detected before execution (exit 2).
+
 ## v0.13.0 — 2026-06-08
 
 Substantially strengthened unattended use from AI agents / CI: eliminated confirmation-prompt hangs, broadened `--json` coverage, and unified exit codes. Many bug fixes as well.
