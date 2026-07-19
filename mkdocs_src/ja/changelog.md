@@ -16,7 +16,7 @@ AlphaForge CLI の公開リリースごとの主な変更点をまとめてい�
 
 FX キャリー（スワップ）バックテスト一式と、`alpha-forge demo` による最速オンボーディングを追加しました。複数戦略合成には戦略レベルの動的配分が入りました。
 
-- **FX キャリー計上**: `backtest run --carry` で短期金利差近似の日次キャリーを参考値として併記（`carry_adjusted_*`）。主要 8 通貨ペアは FRED 金利系列のビルトインマッピングで設定不要で動作し、`data alt import-swap` でブローカー実スワップ CSV を取り込むとそちらを優先します。結果は DB に永続化され、alpha-visualizer v0.9.0 の詳細画面にも表示されます。
+- **FX キャリー計上**: `backtest run --carry` で短期金利差近似の日次キャリーを参考値として併記（`carry_adjusted_*`）。FRED 金利系列のビルトインマッピングを持つ主要 8 通貨（USD / JPY / EUR / GBP / AUD / CAD / CHF / NZD）の組み合わせなら設定不要で動作し、`data alt import-swap` でブローカー実スワップ CSV を取り込むとそちらを優先します。結果は DB に永続化され、[alpha-visualizer](alpha-visualizer/index.md) v0.9.0 の詳細画面にも表示されます。
 - **最速オンボーディング**: `alpha-forge demo` の 1 コマンドで初期化〜同梱 DEMO データのバックテストまで一気に実行。`system init` はサンプルデータ＋デモ戦略を自動配置し、データ未存在エラーはそのまま貼り付けて実行できる案内文に。`system doctor` は解決コマンド（next_actions）まで提示します。
 - **複数戦略合成の動的配分**: 戦略レベルの `risk_parity` / `vol_target` 配分と `--max-pillar-weight`（柱ごとのウェイト上限）を追加。WFT の warmup 前置で合成初期の欠落も解消しました。
 - **`optimize walk-forward --save`**: WFT 結果を記録し、alpha-visualizer の WFO タブへ自動反映できるように。

@@ -3089,7 +3089,7 @@
 <h2 id="v0180-2026-07-19">v0.18.0 — 2026-07-19<a class="headerlink" href="#v0180-2026-07-19" title="Permanent link">&para;</a></h2>
 <p>FX キャリー（スワップ）バックテスト一式と、<code>alpha-forge demo</code> による最速オンボーディングを追加しました。複数戦略合成には戦略レベルの動的配分が入りました。</p>
 <ul>
-<li><strong>FX キャリー計上</strong>: <code>backtest run --carry</code> で短期金利差近似の日次キャリーを参考値として併記（<code>carry_adjusted_*</code>）。主要 8 通貨ペアは FRED 金利系列のビルトインマッピングで設定不要で動作し、<code>data alt import-swap</code> でブローカー実スワップ CSV を取り込むとそちらを優先します。結果は DB に永続化され、alpha-visualizer v0.9.0 の詳細画面にも表示されます。</li>
+<li><strong>FX キャリー計上</strong>: <code>backtest run --carry</code> で短期金利差近似の日次キャリーを参考値として併記（<code>carry_adjusted_*</code>）。FRED 金利系列のビルトインマッピングを持つ主要 8 通貨（USD / JPY / EUR / GBP / AUD / CAD / CHF / NZD）の組み合わせなら設定不要で動作し、<code>data alt import-swap</code> でブローカー実スワップ CSV を取り込むとそちらを優先します。結果は DB に永続化され、<a href="../alpha-visualizer/">alpha-visualizer</a> v0.9.0 の詳細画面にも表示されます。</li>
 <li><strong>最速オンボーディング</strong>: <code>alpha-forge demo</code> の 1 コマンドで初期化〜同梱 DEMO データのバックテストまで一気に実行。<code>system init</code> はサンプルデータ＋デモ戦略を自動配置し、データ未存在エラーはそのまま貼り付けて実行できる案内文に。<code>system doctor</code> は解決コマンド（next_actions）まで提示します。</li>
 <li><strong>複数戦略合成の動的配分</strong>: 戦略レベルの <code>risk_parity</code> / <code>vol_target</code> 配分と <code>--max-pillar-weight</code>（柱ごとのウェイト上限）を追加。WFT の warmup 前置で合成初期の欠落も解消しました。</li>
 <li><strong><code>optimize walk-forward --save</code></strong>: WFT 結果を記録し、alpha-visualizer の WFO タブへ自動反映できるように。</li>
