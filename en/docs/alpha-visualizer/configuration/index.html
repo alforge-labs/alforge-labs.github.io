@@ -1899,6 +1899,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../release-0.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.9.0 (2026-07-19)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../release-0.7.1/" class="md-nav__link">
         
   
@@ -2999,6 +3027,14 @@
 <tr>
 <td><code>FORGE_CONFIG</code></td>
 <td>Fallback path to <code>forge.yaml</code>, consulted only when <code>--forge-config</code> is not given and <code>&lt;forge-dir&gt;/forge.yaml</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ALPHA_VIS_JOB_TIMEOUT</code></td>
+<td>Timeout in seconds for asynchronous jobs (GUI-launched optimize / WFT / backtest; default <code>3600</code>)</td>
+</tr>
+<tr>
+<td><code>ALPHA_VIS_JOB_CONCURRENCY</code></td>
+<td>Number of concurrent asynchronous jobs (default <code>1</code>; the backtest engine is CPU-bound, so raise with care)</td>
 </tr>
 </tbody>
 </table>

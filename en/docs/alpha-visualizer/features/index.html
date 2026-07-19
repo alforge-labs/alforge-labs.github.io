@@ -1701,6 +1701,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#running-from-the-gui-and-parameter-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running from the GUI and parameter tuning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running from the GUI and parameter tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-backtests-optimization-wft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running backtests / optimization / WFT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameter-tuning-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameter tuning loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duplicate-based-strategy-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duplicate-based strategy creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#compare" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1935,6 +1985,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-0.9.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.9.0 (2026-07-19)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2857,6 +2935,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#running-from-the-gui-and-parameter-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running from the GUI and parameter tuning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running from the GUI and parameter tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-backtests-optimization-wft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running backtests / optimization / WFT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameter-tuning-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameter tuning loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duplicate-based-strategy-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Duplicate-based strategy creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#compare" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3016,7 +3144,7 @@
 <tbody>
 <tr>
 <td><strong>Backtest</strong></td>
-<td>Equity / Drawdown / Underwater / trade list / benchmark metrics (alpha, beta, IR, correlation) / annual returns</td>
+<td>Equity / Drawdown / Underwater / trade list / benchmark metrics (alpha, beta, IR, correlation) / annual returns. Carry-adjusted metrics recorded with <code>alpha-forge backtest run --carry</code> are shown as a dedicated card</td>
 </tr>
 <tr>
 <td><strong>IS / OOS</strong></td>
@@ -3024,7 +3152,7 @@
 </tr>
 <tr>
 <td><strong>WFO</strong></td>
-<td>Walk-Forward composite equity and per-window results</td>
+<td>Walk-Forward composite equity and per-window results. Also renders WFT runs optimized on metrics other than sharpe</td>
 </tr>
 <tr>
 <td><strong>Optimize</strong></td>
@@ -3032,14 +3160,33 @@
 </tr>
 <tr>
 <td><strong>Run History</strong></td>
-<td>List of past backtest runs</td>
+<td>List of past backtest runs. Tuning trial runs launched from the GUI are visually distinguished from regular runs</td>
 </tr>
 <tr>
 <td><strong>Strategy</strong></td>
-<td>Indicators, entry/exit rules, and risk management as structured tree</td>
+<td>Indicators, entry/exit rules, and risk management as structured tree, plus the parameter tuning panel</td>
 </tr>
 </tbody>
 </table>
+<h2 id="running-from-the-gui-and-parameter-tuning">Running from the GUI and parameter tuning<a class="headerlink" href="#running-from-the-gui-and-parameter-tuning" title="Permanent link">&para;</a></h2>
+<p>Since v0.9.0, alpha-visualizer is no longer a read-only viewer: <strong>backtests, optimization, and Walk-Forward Tests can be executed from the browser</strong>. This requires the AlphaForge CLI to be installed on the same machine as the server (without the CLI, the dashboard keeps working as a read-only viewer).</p>
+<h3 id="running-backtests-optimization-wft">Running backtests / optimization / WFT<a class="headerlink" href="#running-backtests-optimization-wft" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Re-run a backtest from the Detail screen with one click (the log tail and the new run appear immediately)</li>
+<li>Optimization (Optuna) and Walk-Forward Tests launch as <strong>asynchronous jobs</strong> with real-time log / progress streaming over SSE. Running jobs can be cancelled</li>
+<li>WFT jobs run with recording enabled (<code>--save</code>), so finished runs automatically appear in the WFO tab</li>
+<li>Concurrency and timeout are configurable via the <code>ALPHA_VIS_JOB_CONCURRENCY</code> / <code>ALPHA_VIS_JOB_TIMEOUT</code> environment variables (see <a href="../configuration/">Configuration</a>)</li>
+</ul>
+<h3 id="parameter-tuning-loop">Parameter tuning loop<a class="headerlink" href="#parameter-tuning-loop" title="Permanent link">&para;</a></h3>
+<p>The tuning panel on the Strategy tab supports an <strong>edit → trial run → compare → explicit save</strong> loop entirely in the GUI.</p>
+<ol>
+<li>Edit parameters and launch a trial run (the original strategy definition is untouched — the run uses a temporary strategy file)</li>
+<li>Compare the trial against existing backtest results side by side</li>
+<li>Only when you are happy, press "Save" to write the parameters back to the strategy definition (explicit action only — nothing is written back automatically)</li>
+</ol>
+<p>Tuning trial runs are visually distinguished from regular runs in Browse, Run History, and the Backtest tab, so exploration footprints never mix with adopted results.</p>
+<h3 id="duplicate-based-strategy-creation">Duplicate-based strategy creation<a class="headerlink" href="#duplicate-based-strategy-creation" title="Permanent link">&para;</a></h3>
+<p>Clone an existing strategy under a new ID and register it as a new strategy — useful for iterating on parameters and rules while keeping the original as a template (conflicting IDs are rejected).</p>
 <h2 id="compare">Compare<a class="headerlink" href="#compare" title="Permanent link">&para;</a></h2>
 <p>Side-by-side view of multiple strategies.</p>
 <p><img alt="Compare view" loading="lazy" src="../assets/compare.png" /></p>

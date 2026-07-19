@@ -11,12 +11,14 @@
 
 - Browse, search, and multi-select your strategy library
 - Inspect equity / drawdown / trade history with benchmark metrics (alpha, beta, IR, correlation)
+- **Run backtests, optimization, and Walk-Forward Tests from the GUI** (async jobs, SSE progress, cancellation)
+- **Parameter tuning loop** (edit → trial run → compare → explicit save) and duplicate-based strategy creation
 - Compare strategies side-by-side, including a Pearson correlation heatmap
 - Visualize Walk-Forward composite equity and Grid optimization results
 - Reconcile live trading against backtest with period-aligned diff
 - Track exploration ideas with status and tag filters
 - Toggle dark/light theme and Japanese/English UI
-- Export CSV / PNG, share state via URL
+- Export CSV / PNG, share cards with X sharing, share state via URL
 
 ## Documentation map
 

@@ -58,6 +58,8 @@ ideas:
 | 変数 | 用途 |
 |---|---|
 | `FORGE_CONFIG` | `--forge-config` 未指定かつ `<forge-dir>/forge.yaml` が無いときのフォールバックとして参照される forge.yaml のパス |
+| `ALPHA_VIS_JOB_TIMEOUT` | 非同期ジョブ（optimize / WFT / backtest の GUI 実行）のタイムアウト秒数（既定 `3600`） |
+| `ALPHA_VIS_JOB_CONCURRENCY` | 非同期ジョブの同時実行数（既定 `1`。バックテストエンジンは CPU 集約のため、増やす場合はマシン性能に注意） |
 
 優先順位は `--forge-config` > `<forge-dir>/forge.yaml` > `FORGE_CONFIG` です（v0.7.2 以降）。`--forge-dir` で開いたプロジェクトに `forge.yaml` があれば常にそちらが使われるため、シェルに `export FORGE_CONFIG` が残っていても別プロジェクトのデータを読むことはありません。フォールバックとして `FORGE_CONFIG` が採用された場合は、起動ログに採用元が表示されます。
 
