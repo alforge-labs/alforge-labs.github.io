@@ -3640,7 +3640,11 @@ raises a <code>ValueError</code> with this message:</p>
 <p>Firing <code>alert()</code> from inside the strategy lets you leave the TradingView Message field empty and ship the JSON straight from Pine. <code>alert.freq_once_per_bar_close</code> fires only on bar close, avoiding repaint / duplicate orders.</p>
 <hr />
 <h2 id="4-bis-idempotency-automatic-duplicate-rejection">4-bis. Idempotency (automatic duplicate rejection)<a class="headerlink" href="#4-bis-idempotency-automatic-duplicate-rejection" title="Permanent link">&para;</a></h2>
-<p>TradingView webhooks can arrive <strong>multiple times for the same signal</strong> due to network retries, alert re-evaluation, or manual Restart spamming. alpha-strike v0.5.0+ uses <strong><code>signal_id</code> as an idempotency key</strong>: if the same <code>signal_id</code> arrives again within the TTL window, the request is <strong>not routed to the broker</strong> and a 200 is returned (we deliberately avoid 409 to stop TradingView's auto-retry).</p>
+<p>TradingView webhooks can arrive <strong>multiple times for the same signal</strong> due to network retries, alert re-evaluation, or manual Restart spamming. alpha-strike v0.5.0+ uses <strong>the composite key <code>(signal_id, broker, ticker, action)</code> as an idempotency key</strong>: if the same combination arrives again within the TTL window, the request is <strong>not routed to the broker</strong> and a 200 is returned (we deliberately avoid 409 to stop TradingView's auto-retry).</p>
+<div class="admonition info">
+<p class="admonition-title">Why a composite key (v1.0.4+)</p>
+<p><code>signal_id</code> is typically issued per bar, so <strong>a strategy that rebalances several symbols on the same bar sends multiple alerts sharing one <code>signal_id</code></strong>. Keying on <code>signal_id</code> alone drops every alert after the first one — TradingView still shows "successfully delivered" while the rebalance silently goes missing. Including the symbol and side makes each alert a distinct signal.</p>
+</div>
 <h3 id="behavior">Behavior<a class="headerlink" href="#behavior" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3655,8 +3659,12 @@ raises a <code>ValueError</code> with this message:</p>
 <td>Normal order flow</td>
 </tr>
 <tr>
-<td><code>signal_id</code> set, repeated within TTL</td>
+<td><code>signal_id</code> set, repeated within TTL with <strong>the same broker/ticker/action</strong></td>
 <td>Broker call skipped, 200 <code>{"status":"success", "message":"duplicate signal_id — already processed"}</code></td>
+</tr>
+<tr>
+<td><code>signal_id</code> set, arriving within TTL with <strong>a different ticker or action</strong></td>
+<td>Treated as a distinct signal; normal order flow</td>
 </tr>
 <tr>
 <td><code>signal_id</code> set, repeated after TTL</td>
@@ -3711,6 +3719,7 @@ raises a <code>ValueError</code> with this message:</p>
 </code></pre></div>
 <blockquote>
 <p><strong>Effect</strong>: with <code>signal_id</code> formatted as <code>&lt;strategy_id&gt;_&lt;timeframe&gt;_&lt;bar_open_time&gt;</code>, even if <code>alert.freq_once_per_bar_close</code> somehow fires multiple times within the same bar, alpha-strike will treat the duplicates as 200 + duplicate and block any double broker orders.</p>
+<p><strong>Rebalancing several symbols at once</strong>: this format does not include the symbol, so alerts for different symbols on the same bar share one <code>signal_id</code>. alpha-strike keys on <code>ticker</code> / <code>action</code> as well, so <strong>every symbol is routed correctly as-is</strong>. Adding the symbol to <code>signal_id</code> is fine but not required.</p>
 <p><strong>Backward compatibility</strong>: existing payloads without <code>signal_id</code> keep working unchanged. Strongly recommended to add <code>signal_id</code> to reduce duplicate-order risk.</p>
 </blockquote>
 <hr />

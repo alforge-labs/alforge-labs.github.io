@@ -223,14 +223,18 @@ Firing `alert()` from inside the strategy lets you leave the TradingView Message
 
 ## 4-bis. Idempotency (automatic duplicate rejection)
 
-TradingView webhooks can arrive **multiple times for the same signal** due to network retries, alert re-evaluation, or manual Restart spamming. alpha-strike v0.5.0+ uses **`signal_id` as an idempotency key**: if the same `signal_id` arrives again within the TTL window, the request is **not routed to the broker** and a 200 is returned (we deliberately avoid 409 to stop TradingView's auto-retry).
+TradingView webhooks can arrive **multiple times for the same signal** due to network retries, alert re-evaluation, or manual Restart spamming. alpha-strike v0.5.0+ uses **the composite key `(signal_id, broker, ticker, action)` as an idempotency key**: if the same combination arrives again within the TTL window, the request is **not routed to the broker** and a 200 is returned (we deliberately avoid 409 to stop TradingView's auto-retry).
+
+!!! info "Why a composite key (v1.0.4+)"
+    `signal_id` is typically issued per bar, so **a strategy that rebalances several symbols on the same bar sends multiple alerts sharing one `signal_id`**. Keying on `signal_id` alone drops every alert after the first one — TradingView still shows "successfully delivered" while the rebalance silently goes missing. Including the symbol and side makes each alert a distinct signal.
 
 ### Behavior
 
 | Condition | Response |
 |---|---|
 | `signal_id` set, first arrival | Normal order flow |
-| `signal_id` set, repeated within TTL | Broker call skipped, 200 `{"status":"success", "message":"duplicate signal_id — already processed"}` |
+| `signal_id` set, repeated within TTL with **the same broker/ticker/action** | Broker call skipped, 200 `{"status":"success", "message":"duplicate signal_id — already processed"}` |
+| `signal_id` set, arriving within TTL with **a different ticker or action** | Treated as a distinct signal; normal order flow |
 | `signal_id` set, repeated after TTL | Normal order flow (history was evicted) |
 | `signal_id` omitted | Idempotency check skipped (legacy compatibility, broker is called every time) |
 
@@ -269,6 +273,8 @@ make_payload(string action, float qty) =>
 ```
 
 > **Effect**: with `signal_id` formatted as `<strategy_id>_<timeframe>_<bar_open_time>`, even if `alert.freq_once_per_bar_close` somehow fires multiple times within the same bar, alpha-strike will treat the duplicates as 200 + duplicate and block any double broker orders.
+>
+> **Rebalancing several symbols at once**: this format does not include the symbol, so alerts for different symbols on the same bar share one `signal_id`. alpha-strike keys on `ticker` / `action` as well, so **every symbol is routed correctly as-is**. Adding the symbol to `signal_id` is fine but not required.
 >
 > **Backward compatibility**: existing payloads without `signal_id` keep working unchanged. Strongly recommended to add `signal_id` to reduce duplicate-order risk.
 
