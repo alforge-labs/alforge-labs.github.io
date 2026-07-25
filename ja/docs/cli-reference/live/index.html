@@ -2778,6 +2778,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#equity-issue-1332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        equity の計算方法（issue #1332）
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3980,6 +3991,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#equity-issue-1332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        equity の計算方法（issue #1332）
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4683,8 +4705,26 @@
 <td>false</td>
 <td><code>backtest combine</code> の結果と並べて比較表示する</td>
 </tr>
+<tr>
+<td><code>--initial-capital</code></td>
+<td>オプション</td>
+<td><code>backtest.initial_capital</code>（既定 100,000）</td>
+<td>ライブ口座の基準資本</td>
+</tr>
 </tbody>
 </table>
+<h3 id="equity-issue-1332">equity の計算方法（issue #1332）<a class="headerlink" href="#equity-issue-1332" title="Permanent link">&para;</a></h3>
+<p>equity は次式で求めます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>equity = initial_capital + cash 増減 + Σ(建玉 × 終値)
+</code></pre></div>
+<p>建玉の買い付けは cash 減少と評価額増加が相殺されるため equity を動かさず、<strong>価格が動いて初めて損益が出ます</strong>。</p>
+<p>このため <code>--initial-capital</code> は実際のライブ口座の資本と一致させてください。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率がその比率でずれます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># 実口座が $1,000,000 の場合</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_v1,gld_v1,tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+<p>equity / メトリクスは<strong>最初の receipt 以降</strong>に限定されます。価格データは十数年分あるため、全期間で算出すると運用実績が数ヶ月でも CAGR / Sharpe が全期間ベースの無意味な値になるためです。</p>
 <hr />
 <h2 id="_37">共通の挙動<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h2>
 <ul>

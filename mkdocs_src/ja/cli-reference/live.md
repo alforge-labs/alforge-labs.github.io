@@ -460,6 +460,28 @@ alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1>,<ID2>[,...] [O
 | `--combine-strategies` | オプション（必須） | - | combine 対象戦略 ID（カンマ区切り、2 戦略以上） |
 | `--since` | オプション | - | 期間下限（ISO 形式） |
 | `--compare` | フラグ | false | `backtest combine` の結果と並べて比較表示する |
+| `--initial-capital` | オプション | `backtest.initial_capital`（既定 100,000） | ライブ口座の基準資本 |
+
+### equity の計算方法（issue #1332）
+
+equity は次式で求めます。
+
+```text
+equity = initial_capital + cash 増減 + Σ(建玉 × 終値)
+```
+
+建玉の買い付けは cash 減少と評価額増加が相殺されるため equity を動かさず、**価格が動いて初めて損益が出ます**。
+
+このため `--initial-capital` は実際のライブ口座の資本と一致させてください。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率がその比率でずれます。
+
+```bash
+# 実口座が $1,000,000 の場合
+alpha-forge live replay beat_qqq_hedged_v1 \
+  --combine-strategies tqqq_v1,gld_v1,tlt_v1 \
+  --initial-capital 1000000
+```
+
+equity / メトリクスは**最初の receipt 以降**に限定されます。価格データは十数年分あるため、全期間で算出すると運用実績が数ヶ月でも CAGR / Sharpe が全期間ベースの無意味な値になるためです。
 
 ---
 
