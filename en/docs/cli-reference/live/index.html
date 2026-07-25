@@ -2779,6 +2779,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-equity-is-computed-issue-1332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How equity is computed (issue #1332)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sample-output_8" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4003,6 +4014,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-equity-is-computed-issue-1332" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How equity is computed (issue #1332)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sample-output_8" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4690,7 +4712,7 @@
 <h2 id="alpha-forge-live-replay">alpha-forge live replay<a class="headerlink" href="#alpha-forge-live-replay" title="Permanent link">&para;</a></h2>
 <p>Reconstruct position-based live metrics from a combine portfolio's alert log. Intended for always-in-market combine overlays: it rebuilds position transitions from synced <code>alpha-strike</code> events (<code>alpha-forge live sync-events</code>) and computes Sharpe / CAGR / MaxDD from the portfolio equity curve. <code>order_reconciled</code> receipts are preferred as the authoritative source.</p>
 <h3 id="synopsis_9">Synopsis<a class="headerlink" href="#synopsis_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span><span class="w"> </span><span class="o">[</span>--initial-capital<span class="w"> </span>&lt;FLOAT&gt;<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_9">Arguments and options<a class="headerlink" href="#arguments-and-options_9" title="Permanent link">&para;</a></h3>
 <table>
@@ -4727,18 +4749,36 @@
 <td>false</td>
 <td>Also run the backtest combine and show it side by side</td>
 </tr>
+<tr>
+<td><code>--initial-capital</code></td>
+<td>option</td>
+<td><code>backtest.initial_capital</code> (default 100,000)</td>
+<td>Capital base of the live account</td>
+</tr>
 </tbody>
 </table>
+<h3 id="how-equity-is-computed-issue-1332">How equity is computed (issue #1332)<a class="headerlink" href="#how-equity-is-computed-issue-1332" title="Permanent link">&para;</a></h3>
+<p>Equity is computed as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>equity = initial_capital + cash delta + Σ(position × close)
+</code></pre></div>
+<p>Buying a position lowers cash and raises market value by the same amount, so the purchase itself does not move equity — <strong>P&amp;L only appears once prices move</strong>.</p>
+<p>Because of this, <code>--initial-capital</code> must match the capital base of the real live account. Leaving it at the backtest default (100,000) while the live account holds 1,000,000 skews the return percentages by that same ratio.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># When the live account holds $1,000,000</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_v1,gld_v1,tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+<p>Equity and metrics are restricted to the period <strong>from the first receipt onward</strong>. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.</p>
 <h3 id="sample-output_8">Sample output<a class="headerlink" href="#sample-output_8" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>=== live replay (position-based) — combo_spy_qqq ===
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>receipts: 128
-<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
-<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>| Metric           | Live      | Backtest  |
-<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>|------------------|-----------|-----------|
-<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>| sharpe_ratio     |      1.21 |      1.38 |
-<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>| cagr_pct         |     14.30 |     16.80 |
-<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>| max_drawdown_pct |     -5.40 |     -4.90 |
-<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>| total_return_pct |     +9.85 |    +11.20 |
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>=== live replay (position-based) — combo_spy_qqq ===
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>receipts: 128
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>| Metric           | Live      | Backtest  |
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>|------------------|-----------|-----------|
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>| sharpe_ratio     |      1.21 |      1.38 |
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>| cagr_pct         |     14.30 |     16.80 |
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>| max_drawdown_pct |     -5.40 |     -4.90 |
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>| total_return_pct |     +9.85 |    +11.20 |
 </code></pre></div>
 <p>The <code>Backtest</code> column appears only when <code>--compare</code> is passed. When no receipts match the <code>portfolio_id</code>, a warning is shown prompting you to confirm <code>alpha-forge live sync-events</code> has been run.</p>
 <h3 id="common-errors_5">Common errors<a class="headerlink" href="#common-errors_5" title="Permanent link">&para;</a></h3>

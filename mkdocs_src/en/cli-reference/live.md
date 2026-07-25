@@ -449,7 +449,7 @@ Reconstruct position-based live metrics from a combine portfolio's alert log. In
 ### Synopsis
 
 ```bash
-alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--since <ISO>] [--compare]
+alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--since <ISO>] [--compare] [--initial-capital <FLOAT>]
 ```
 
 ### Arguments and options
@@ -460,6 +460,28 @@ alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--sin
 | `--combine-strategies` | option (required) | - | Comma-separated combine strategy IDs (**2 or more required**) |
 | `--since` | option | - | Lower bound of the period (ISO format; UTC assumed when no timezone) |
 | `--compare` | flag | false | Also run the backtest combine and show it side by side |
+| `--initial-capital` | option | `backtest.initial_capital` (default 100,000) | Capital base of the live account |
+
+### How equity is computed (issue #1332)
+
+Equity is computed as:
+
+```text
+equity = initial_capital + cash delta + Σ(position × close)
+```
+
+Buying a position lowers cash and raises market value by the same amount, so the purchase itself does not move equity — **P&L only appears once prices move**.
+
+Because of this, `--initial-capital` must match the capital base of the real live account. Leaving it at the backtest default (100,000) while the live account holds 1,000,000 skews the return percentages by that same ratio.
+
+```bash
+# When the live account holds $1,000,000
+alpha-forge live replay beat_qqq_hedged_v1 \
+  --combine-strategies tqqq_v1,gld_v1,tlt_v1 \
+  --initial-capital 1000000
+```
+
+Equity and metrics are restricted to the period **from the first receipt onward**. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.
 
 ### Sample output
 
