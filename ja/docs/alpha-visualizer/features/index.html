@@ -1792,6 +1792,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Live 画面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        戦略単位（trade ベース）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        combine ポートフォリオ（position ベース）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3026,6 +3054,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Live 画面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        戦略単位（trade ベース）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        combine ポートフォリオ（position ベース）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3217,11 +3273,43 @@
 <p>ライブ / ペーパートレード実績の一覧と、バックテストとの突き合わせ。<code>/live</code> でアクセスでき、Browse 画面ヘッダの「Live →」リンクからも遷移できます。</p>
 <ul>
 <li>ライブ実績を持つエントリの一覧（戦略単位 / combine ポートフォリオの両方）</li>
-<li><strong>戦略単位</strong>（trade ベース）: 総取引数・勝率・プロフィットファクター・最大 DD・純 PnL を、同期間のバックテスト値と diff 付きで比較</li>
-<li><strong>combine ポートフォリオ</strong>（position ベース）: トータルリターン・CAGR・シャープレシオ・最大 DD・ボラティリティと live equity カーブを、バックテスト combine と比較</li>
 <li>選択エントリは URL クエリ（<code>?id=</code>）に同期されるため共有可能</li>
 </ul>
+<h3 id="trade">戦略単位（trade ベース）<a class="headerlink" href="#trade" title="Permanent link">&para;</a></h3>
+<p>総取引数・勝率・プロフィットファクター・最大 DD・純 PnL を、同期間のバックテスト値と diff 付きで比較します。</p>
+<h3 id="combine-position">combine ポートフォリオ（position ベース）<a class="headerlink" href="#combine-position" title="Permanent link">&para;</a></h3>
+<p>「いくらになったか」→「市場に勝てているか」→「どう推移したか」→「何を持っているか」の順に、以下の 4 段で表示します。</p>
+<table>
+<thead>
+<tr>
+<th>ブロック</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>KPI 行</strong></td>
+<td>現在評価額（＋前日比）／累計損益（額・%）／現在 DD（＋ピークからの日数）／計測期間／超過リターン vs 指数／超過リターン vs BT。超過リターンの 2 項目は、対応する比較系列が無ければ非表示になります</td>
+</tr>
+<tr>
+<td><strong>エクイティ＋ドローダウンチャート</strong></td>
+<td>Detail 画面と同じ TradingView 製チャートを再利用し、指数（Buy &amp; Hold）とバックテスト combine の比較線を最大 2 本まで重畳表示（<code>alpha-forge live replay</code> を <code>--benchmark</code> / <code>--compare</code> 付きで実行した場合のみ表示。無指定なら live 単独の線）。レンジ切替（1M/3M/6M/1Y/2Y/ALL）とアクセシブルなデータ表を備えます</td>
+</tr>
+<tr>
+<td><strong>指標カード（既存）</strong></td>
+<td>トータルリターン／CAGR／シャープレシオ／最大 DD／ボラティリティを、同期間のバックテストと diff 付きで比較</td>
+</tr>
+<tr>
+<td><strong>建玉テーブル</strong></td>
+<td>銘柄・数量・平均取得単価・現在値・評価額・構成比・含み損益と、建玉合計／現金／合計の集計行。<strong>イベントログからの再構築値であり、ブローカーの実口座残高とは異なる場合がある</strong>旨が UI 上に明記されます</td>
+</tr>
+</tbody>
+</table>
 <p>ライブ実績データは、<a href="https://github.com/alforge-labs/alpha-strike">alpha-strike</a>（OSS の Webhook 発注サーバー）が記録したイベントログを AlphaForge CLI（<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>）で <code>backtest_results.db</code> に取り込んだものが自動で表示されます。取り込み手順の詳細は <a href="../../guides/alpha-strike-setup/">alpha-strike セットアップガイド</a>を参照してください。</p>
+<div class="admonition note">
+<p class="admonition-title">古い DB で combine ポートフォリオが一覧から消える場合</p>
+<p><code>benchmark_equity</code> / <code>backtest_equity</code> / <code>positions</code> / <code>cash</code> / <code>total_value</code> は列を後から追加する方式で導入されています。alpha-forge をアップデートしてからまだ一度も <code>live replay</code> を実行していない古い DB では、該当する combine ポートフォリオが <code>/live</code> の一覧から丸ごと見えなくなることがあります。<code>alpha-forge live replay</code> を一度実行すると必要な列が追加され、以降は通常どおり表示されます。</p>
+</div>
 <h2 id="ideas">Ideas 画面<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>探索アイデアの一覧と状態管理。</p>
 <p><img alt="Ideas 画面" loading="lazy" src="../assets/ideas.png" /></p>

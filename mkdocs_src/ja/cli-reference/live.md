@@ -461,6 +461,7 @@ alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1>,<ID2>[,...] [O
 | `--since` | オプション | - | 期間下限（ISO 形式） |
 | `--compare` | フラグ | false | `backtest combine` の結果と並べて比較表示する |
 | `--initial-capital` | オプション | `backtest.initial_capital`（既定 100,000） | ライブ口座の基準資本 |
+| `--benchmark` | オプション | `forge.yaml` の `live.benchmark`（既定は未設定） | 比較用の指数銘柄（buy&hold）。本フラグと `live.benchmark` の両方が未設定の場合、比較線は表示されません |
 
 ### equity の計算方法（issue #1332）
 
@@ -482,6 +483,10 @@ alpha-forge live replay beat_qqq_hedged_v1 \
 ```
 
 equity / メトリクスは**最初の receipt 以降**に限定されます。価格データは十数年分あるため、全期間で算出すると運用実績が数ヶ月でも CAGR / Sharpe が全期間ベースの無意味な値になるためです。
+
+`--benchmark <SYMBOL>` を指定すると、同じライブ期間について指数の buy&hold を第三の比較線として追加します。`--benchmark` を省略した場合は `forge.yaml` の `live.benchmark` にフォールバックし、両方とも未設定であれば単に比較線が出ないだけです（エラーにはなりません）。`--compare` の backtest 線と同様、ベンチマーク線も先頭値が `--initial-capital` と一致するよう正規化されるため、live・ベンチマーク・backtest の各線の差がそのまま超過リターンとして読み取れます。
+
+ベンチマーク銘柄の価格データが未取得（`alpha-forge data fetch <SYMBOL>` 未実行）の場合、`live replay` は警告を出してベンチマーク線のみを省略します。live のエクイティカーブ（および `--compare` 指定時の backtest 線）は引き続き計算され、コマンドは正常終了します。
 
 ---
 
