@@ -4753,6 +4753,11 @@
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
 </code></pre></div>
 <p>equity / メトリクスは<strong>最初の receipt 以降</strong>に限定されます。価格データは十数年分あるため、全期間で算出すると運用実績が数ヶ月でも CAGR / Sharpe が全期間ベースの無意味な値になるためです。</p>
+<p>equity を並べる日付軸は、構成銘柄すべての価格インデックスの<strong>和集合</strong>です。ある銘柄の価格データにだけ欠けている営業日があっても、他の銘柄が取引していればその日は equity に現れます（欠けている銘柄の価格は直前値で前方補完されます）。<code>--combine-strategies</code> に渡す銘柄の並び順は結果に影響しません。</p>
+<div class="admonition note">
+<p class="admonition-title">v1.1.0 より前からの移行</p>
+<p>v1.1.0 までは日付軸が「最初の銘柄の価格インデックス」固定でした。そのため他の銘柄にしか無い営業日が欠落することがあり、再実行すると Sharpe / ボラティリティがわずかに変わる場合があります（累計リターン・CAGR・最大DD は日付軸の端点と極値で決まるため変わりません）。</p>
+</div>
 <p><code>--benchmark &lt;SYMBOL&gt;</code> を指定すると、同じライブ期間について指数の buy&amp;hold を第三の比較線として追加します。<code>--benchmark</code> を省略した場合は <code>forge.yaml</code> の <code>live.benchmark</code> にフォールバックし、両方とも未設定であれば単に比較線が出ないだけです（エラーにはなりません）。<code>--compare</code> の backtest 線と同様、ベンチマーク線も先頭値が <code>--initial-capital</code> と一致するよう正規化されるため、live・ベンチマーク・backtest の各線の差がそのまま超過リターンとして読み取れます。</p>
 <p>ベンチマーク銘柄の価格データが未取得（<code>alpha-forge data fetch &lt;SYMBOL&gt;</code> 未実行）の場合、<code>live replay</code> は警告を出してベンチマーク線のみを省略します。live のエクイティカーブ（および <code>--compare</code> 指定時の backtest 線）は引き続き計算され、コマンドは正常終了します。</p>
 <h3 id="_37">再構築の精度に関する警告<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h3>

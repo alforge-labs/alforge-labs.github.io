@@ -484,6 +484,11 @@ alpha-forge live replay beat_qqq_hedged_v1 \
 
 Equity and metrics are restricted to the period **from the first receipt onward**. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.
 
+The date axis is the **union** of the price indexes of every constituent symbol. If a trading day is missing from one symbol's price data but present in another's, that day still appears in the equity curve (the symbol with the gap is forward-filled from its previous close). The order of symbols passed to `--combine-strategies` does not affect the result.
+
+!!! note "Upgrading from before v1.1.0"
+    Through v1.1.0 the date axis was pinned to the first symbol's price index, so trading days present only in other symbols could be dropped. Re-running may therefore shift Sharpe and volatility slightly. Total return, CAGR, and max drawdown are unchanged, since they depend on the endpoints and extremes rather than the intermediate path.
+
 `--benchmark <SYMBOL>` adds a third line to the comparison: a buy-and-hold of that index over the same live period. Omitting `--benchmark` falls back to `live.benchmark` in `forge.yaml`; leaving both unset simply means no comparison line is produced (this is not an error). Like the `--compare` backtest line, the benchmark line is normalized so its first point equals `--initial-capital`, so the gap between the live, benchmark, and backtest lines reads directly as excess return.
 
 If price data for the benchmark symbol has not been fetched (`alpha-forge data fetch <SYMBOL>`), `live replay` logs a warning and drops only the benchmark line — the live equity curve (and the `--compare` backtest line, if requested) are still computed and the command still exits successfully.
