@@ -3306,6 +3306,10 @@
 </tbody>
 </table>
 <p>ライブ実績データは、<a href="https://github.com/alforge-labs/alpha-strike">alpha-strike</a>（OSS の Webhook 発注サーバー）が記録したイベントログを AlphaForge CLI（<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>）で <code>backtest_results.db</code> に取り込んだものが自動で表示されます。取り込み手順の詳細は <a href="../../guides/alpha-strike-setup/">alpha-strike セットアップガイド</a>を参照してください。</p>
+<div class="admonition note">
+<p class="admonition-title">古い DB で combine ポートフォリオが一覧から消える場合</p>
+<p><code>benchmark_equity</code> / <code>backtest_equity</code> / <code>positions</code> / <code>cash</code> / <code>total_value</code> は列を後から追加する方式で導入されています。alpha-forge をアップデートしてからまだ一度も <code>live replay</code> を実行していない古い DB では、該当する combine ポートフォリオが <code>/live</code> の一覧から丸ごと見えなくなることがあります。<code>alpha-forge live replay</code> を一度実行すると必要な列が追加され、以降は通常どおり表示されます。</p>
+</div>
 <h2 id="ideas">Ideas 画面<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>探索アイデアの一覧と状態管理。</p>
 <p><img alt="Ideas 画面" loading="lazy" src="../assets/ideas.png" /></p>

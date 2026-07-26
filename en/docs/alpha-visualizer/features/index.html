@@ -3306,6 +3306,10 @@
 </tbody>
 </table>
 <p>Live records appear automatically once the event log recorded by <a href="https://github.com/alforge-labs/alpha-strike">alpha-strike</a> (the OSS webhook execution server) is imported into <code>backtest_results.db</code> via the AlphaForge CLI (<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>). See the <a href="../../guides/alpha-strike-setup/">alpha-strike setup guide</a> for the full import procedure.</p>
+<div class="admonition note">
+<p class="admonition-title">Combine portfolio missing from the list on an old database</p>
+<p><code>benchmark_equity</code> / <code>backtest_equity</code> / <code>positions</code> / <code>cash</code> / <code>total_value</code> were added as later column migrations. On a database that hasn't had <code>live replay</code> run against it since upgrading alpha-forge, the corresponding combine portfolio can vanish entirely from the <code>/live</code> list. Running <code>alpha-forge live replay</code> once adds the missing columns, after which it shows up as usual.</p>
+</div>
 <h2 id="ideas">Ideas<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>Browse exploration ideas and their state.</p>
 <p><img alt="Ideas view" loading="lazy" src="../assets/ideas.png" /></p>

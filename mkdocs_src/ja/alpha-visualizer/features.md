@@ -116,6 +116,9 @@ alpha-visualizer は結果を見るだけでなく、**バックテスト・最�
 
 ライブ実績データは、[alpha-strike](https://github.com/alforge-labs/alpha-strike)（OSS の Webhook 発注サーバー）が記録したイベントログを AlphaForge CLI（`alpha-forge live sync-events` → `live import-events` / `live replay`）で `backtest_results.db` に取り込んだものが自動で表示されます。取り込み手順の詳細は [alpha-strike セットアップガイド](../guides/alpha-strike-setup.md)を参照してください。
 
+!!! note "古い DB で combine ポートフォリオが一覧から消える場合"
+    `benchmark_equity` / `backtest_equity` / `positions` / `cash` / `total_value` は列を後から追加する方式で導入されています。alpha-forge をアップデートしてからまだ一度も `live replay` を実行していない古い DB では、該当する combine ポートフォリオが `/live` の一覧から丸ごと見えなくなることがあります。`alpha-forge live replay` を一度実行すると必要な列が追加され、以降は通常どおり表示されます。
+
 ## Ideas 画面
 
 探索アイデアの一覧と状態管理。
