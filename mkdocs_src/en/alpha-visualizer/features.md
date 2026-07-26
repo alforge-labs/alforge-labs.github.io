@@ -97,9 +97,22 @@ Visualize the structure of a strategy JSON.
 Browse live / paper trading records and compare them against backtests. Accessible at `/live`, or via the "Live →" link in the Browse header.
 
 - Lists every entry with live records (both per-strategy and combine portfolios)
-- **Per-strategy** (trade-based): total trades, win rate, profit factor, max drawdown, and net PnL compared with the period-aligned backtest, with diffs
-- **Combine portfolios** (position-based): total return, CAGR, Sharpe ratio, max drawdown, and volatility with the live equity curve, compared against the backtest combine
 - The selected entry is synced to the URL query (`?id=`) for sharing
+
+### Per-strategy (trade-based)
+
+Total trades, win rate, profit factor, max drawdown, and net PnL, compared with the period-aligned backtest with diffs.
+
+### Combine portfolios (position-based)
+
+Shown in four blocks, in the order an investor actually reads them — how much is it worth, is it beating the market, how did it get there, and what's actually held.
+
+| Block | Contents |
+|---|---|
+| **KPI row** | Current Value (+ day change) / Total P&L (amount & %) / Current DD (+ days since peak) / Period / Excess vs Index / Excess vs Backtest. The two excess-return figures only appear when the matching comparison series is available |
+| **Equity + drawdown chart** | Reuses the same TradingView chart from the Detail page, overlaying up to two comparison lines — an index bought-and-held over the same period, and the backtest combine — present only when `alpha-forge live replay` was run with `--benchmark` / `--compare` (live-only otherwise). Includes range toggles (1M/3M/6M/1Y/2Y/ALL) and an accessible data table |
+| **Metrics cards (existing)** | Total return / CAGR / Sharpe ratio / max drawdown / volatility, each compared against the period-aligned backtest |
+| **Holdings table** | Ticker / Qty / Avg cost / Last / Value / Weight / Unrealized P&L, plus Positions Subtotal / Cash / Total rows. **These are reconstructed from event logs, not queried live from the broker — the UI states this explicitly** |
 
 Live records appear automatically once the event log recorded by [alpha-strike](https://github.com/alforge-labs/alpha-strike) (the OSS webhook execution server) is imported into `backtest_results.db` via the AlphaForge CLI (`alpha-forge live sync-events` → `live import-events` / `live replay`). See the [alpha-strike setup guide](../guides/alpha-strike-setup.md) for the full import procedure.
 

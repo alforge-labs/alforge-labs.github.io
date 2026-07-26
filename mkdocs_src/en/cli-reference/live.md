@@ -449,7 +449,7 @@ Reconstruct position-based live metrics from a combine portfolio's alert log. In
 ### Synopsis
 
 ```bash
-alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--since <ISO>] [--compare] [--initial-capital <FLOAT>]
+alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--since <ISO>] [--compare] [--initial-capital <FLOAT>] [--benchmark <SYMBOL>]
 ```
 
 ### Arguments and options
@@ -461,6 +461,7 @@ alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--sin
 | `--since` | option | - | Lower bound of the period (ISO format; UTC assumed when no timezone) |
 | `--compare` | flag | false | Also run the backtest combine and show it side by side |
 | `--initial-capital` | option | `backtest.initial_capital` (default 100,000) | Capital base of the live account |
+| `--benchmark` | option | `live.benchmark` in `forge.yaml` (unset by default) | Index symbol for a buy-and-hold comparison line; leaving both this flag and `live.benchmark` unset means no comparison line is produced |
 
 ### How equity is computed (issue #1332)
 
@@ -482,6 +483,10 @@ alpha-forge live replay beat_qqq_hedged_v1 \
 ```
 
 Equity and metrics are restricted to the period **from the first receipt onward**. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.
+
+`--benchmark <SYMBOL>` adds a third line to the comparison: a buy-and-hold of that index over the same live period. Omitting `--benchmark` falls back to `live.benchmark` in `forge.yaml`; leaving both unset simply means no comparison line is produced (this is not an error). Like the `--compare` backtest line, the benchmark line is normalized so its first point equals `--initial-capital`, so the gap between the live, benchmark, and backtest lines reads directly as excess return.
+
+If price data for the benchmark symbol has not been fetched (`alpha-forge data fetch <SYMBOL>`), `live replay` logs a warning and drops only the benchmark line — the live equity curve (and the `--compare` backtest line, if requested) are still computed and the command still exits successfully.
 
 ### Sample output
 

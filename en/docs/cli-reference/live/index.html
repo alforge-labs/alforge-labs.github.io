@@ -4712,7 +4712,7 @@
 <h2 id="alpha-forge-live-replay">alpha-forge live replay<a class="headerlink" href="#alpha-forge-live-replay" title="Permanent link">&para;</a></h2>
 <p>Reconstruct position-based live metrics from a combine portfolio's alert log. Intended for always-in-market combine overlays: it rebuilds position transitions from synced <code>alpha-strike</code> events (<code>alpha-forge live sync-events</code>) and computes Sharpe / CAGR / MaxDD from the portfolio equity curve. <code>order_reconciled</code> receipts are preferred as the authoritative source.</p>
 <h3 id="synopsis_9">Synopsis<a class="headerlink" href="#synopsis_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span><span class="w"> </span><span class="o">[</span>--initial-capital<span class="w"> </span>&lt;FLOAT&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span><span class="w"> </span><span class="o">[</span>--initial-capital<span class="w"> </span>&lt;FLOAT&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--benchmark<span class="w"> </span>&lt;SYMBOL&gt;<span class="o">]</span>
 </code></pre></div>
 <h3 id="arguments-and-options_9">Arguments and options<a class="headerlink" href="#arguments-and-options_9" title="Permanent link">&para;</a></h3>
 <table>
@@ -4755,6 +4755,12 @@
 <td><code>backtest.initial_capital</code> (default 100,000)</td>
 <td>Capital base of the live account</td>
 </tr>
+<tr>
+<td><code>--benchmark</code></td>
+<td>option</td>
+<td><code>live.benchmark</code> in <code>forge.yaml</code> (unset by default)</td>
+<td>Index symbol for a buy-and-hold comparison line; leaving both this flag and <code>live.benchmark</code> unset means no comparison line is produced</td>
+</tr>
 </tbody>
 </table>
 <h3 id="how-equity-is-computed-issue-1332">How equity is computed (issue #1332)<a class="headerlink" href="#how-equity-is-computed-issue-1332" title="Permanent link">&para;</a></h3>
@@ -4769,6 +4775,8 @@
 <a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
 </code></pre></div>
 <p>Equity and metrics are restricted to the period <strong>from the first receipt onward</strong>. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.</p>
+<p><code>--benchmark &lt;SYMBOL&gt;</code> adds a third line to the comparison: a buy-and-hold of that index over the same live period. Omitting <code>--benchmark</code> falls back to <code>live.benchmark</code> in <code>forge.yaml</code>; leaving both unset simply means no comparison line is produced (this is not an error). Like the <code>--compare</code> backtest line, the benchmark line is normalized so its first point equals <code>--initial-capital</code>, so the gap between the live, benchmark, and backtest lines reads directly as excess return.</p>
+<p>If price data for the benchmark symbol has not been fetched (<code>alpha-forge data fetch &lt;SYMBOL&gt;</code>), <code>live replay</code> logs a warning and drops only the benchmark line — the live equity curve (and the <code>--compare</code> backtest line, if requested) are still computed and the command still exits successfully.</p>
 <h3 id="sample-output_8">Sample output<a class="headerlink" href="#sample-output_8" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>=== live replay (position-based) — combo_spy_qqq ===
 <a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>receipts: 128

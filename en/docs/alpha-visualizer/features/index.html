@@ -1792,6 +1792,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Live">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-strategy-trade-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-strategy (trade-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-portfolios-position-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combine portfolios (position-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3026,6 +3054,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Live">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-strategy-trade-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-strategy (trade-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-portfolios-position-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combine portfolios (position-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3217,10 +3273,38 @@
 <p>Browse live / paper trading records and compare them against backtests. Accessible at <code>/live</code>, or via the "Live →" link in the Browse header.</p>
 <ul>
 <li>Lists every entry with live records (both per-strategy and combine portfolios)</li>
-<li><strong>Per-strategy</strong> (trade-based): total trades, win rate, profit factor, max drawdown, and net PnL compared with the period-aligned backtest, with diffs</li>
-<li><strong>Combine portfolios</strong> (position-based): total return, CAGR, Sharpe ratio, max drawdown, and volatility with the live equity curve, compared against the backtest combine</li>
 <li>The selected entry is synced to the URL query (<code>?id=</code>) for sharing</li>
 </ul>
+<h3 id="per-strategy-trade-based">Per-strategy (trade-based)<a class="headerlink" href="#per-strategy-trade-based" title="Permanent link">&para;</a></h3>
+<p>Total trades, win rate, profit factor, max drawdown, and net PnL, compared with the period-aligned backtest with diffs.</p>
+<h3 id="combine-portfolios-position-based">Combine portfolios (position-based)<a class="headerlink" href="#combine-portfolios-position-based" title="Permanent link">&para;</a></h3>
+<p>Shown in four blocks, in the order an investor actually reads them — how much is it worth, is it beating the market, how did it get there, and what's actually held.</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>KPI row</strong></td>
+<td>Current Value (+ day change) / Total P&amp;L (amount &amp; %) / Current DD (+ days since peak) / Period / Excess vs Index / Excess vs Backtest. The two excess-return figures only appear when the matching comparison series is available</td>
+</tr>
+<tr>
+<td><strong>Equity + drawdown chart</strong></td>
+<td>Reuses the same TradingView chart from the Detail page, overlaying up to two comparison lines — an index bought-and-held over the same period, and the backtest combine — present only when <code>alpha-forge live replay</code> was run with <code>--benchmark</code> / <code>--compare</code> (live-only otherwise). Includes range toggles (1M/3M/6M/1Y/2Y/ALL) and an accessible data table</td>
+</tr>
+<tr>
+<td><strong>Metrics cards (existing)</strong></td>
+<td>Total return / CAGR / Sharpe ratio / max drawdown / volatility, each compared against the period-aligned backtest</td>
+</tr>
+<tr>
+<td><strong>Holdings table</strong></td>
+<td>Ticker / Qty / Avg cost / Last / Value / Weight / Unrealized P&amp;L, plus Positions Subtotal / Cash / Total rows. <strong>These are reconstructed from event logs, not queried live from the broker — the UI states this explicitly</strong></td>
+</tr>
+</tbody>
+</table>
 <p>Live records appear automatically once the event log recorded by <a href="https://github.com/alforge-labs/alpha-strike">alpha-strike</a> (the OSS webhook execution server) is imported into <code>backtest_results.db</code> via the AlphaForge CLI (<code>alpha-forge live sync-events</code> → <code>live import-events</code> / <code>live replay</code>). See the <a href="../../guides/alpha-strike-setup/">alpha-strike setup guide</a> for the full import procedure.</p>
 <h2 id="ideas">Ideas<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>Browse exploration ideas and their state.</p>
