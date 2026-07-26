@@ -2790,6 +2790,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#warnings-about-reconstruction-accuracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Warnings about reconstruction accuracy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sample-output_8" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4025,6 +4036,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#warnings-about-reconstruction-accuracy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Warnings about reconstruction accuracy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sample-output_8" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4777,6 +4799,29 @@
 <p>Equity and metrics are restricted to the period <strong>from the first receipt onward</strong>. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.</p>
 <p><code>--benchmark &lt;SYMBOL&gt;</code> adds a third line to the comparison: a buy-and-hold of that index over the same live period. Omitting <code>--benchmark</code> falls back to <code>live.benchmark</code> in <code>forge.yaml</code>; leaving both unset simply means no comparison line is produced (this is not an error). Like the <code>--compare</code> backtest line, the benchmark line is normalized so its first point equals <code>--initial-capital</code>, so the gap between the live, benchmark, and backtest lines reads directly as excess return.</p>
 <p>If price data for the benchmark symbol has not been fetched (<code>alpha-forge data fetch &lt;SYMBOL&gt;</code>), <code>live replay</code> logs a warning and drops only the benchmark line — the live equity curve (and the <code>--compare</code> backtest line, if requested) are still computed and the command still exits successfully.</p>
+<h3 id="warnings-about-reconstruction-accuracy">Warnings about reconstruction accuracy<a class="headerlink" href="#warnings-about-reconstruction-accuracy" title="Permanent link">&para;</a></h3>
+<p><code>live replay</code> warns when the reconstructed positions may have drifted from the real account. The command still exits successfully in both cases, but <strong>the reported amounts are off</strong>, so read the warning before trusting the numbers.</p>
+<table>
+<thead>
+<tr>
+<th>Warning</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A position is held but its closing price is missing</td>
+<td>The price history is shorter than the alert log, so a held position is valued at $0. Equity, max drawdown, and cumulative P&amp;L are all understated</td>
+<td>Re-fetch with a longer window: <code>alpha-forge data fetch &lt;SYMBOL&gt; --period &lt;longer&gt;</code>, covering the date trading started</td>
+</tr>
+<tr>
+<td>A sell exceeds the held quantity</td>
+<td>The reconstructed position has drifted from the real account (missing or duplicated alert log entries, open-loop desync on the Pine side). The position is clamped to 0, and the average cost, unrealized P&amp;L, and weights that follow are computed on a wrong basis</td>
+<td>Inspect the order history for that symbol via <code>live events</code>. If it recurs, verify that the Pine-side quantity calculation is closed-loop</td>
+</tr>
+</tbody>
+</table>
 <h3 id="sample-output_8">Sample output<a class="headerlink" href="#sample-output_8" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>=== live replay (position-based) — combo_spy_qqq ===
 <a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>receipts: 128

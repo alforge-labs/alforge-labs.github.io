@@ -2789,13 +2789,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        再構築の精度に関する警告
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_37" class="md-nav__link">
+  <a href="#_38" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -4002,13 +4013,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        再構築の精度に関する警告
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_37" class="md-nav__link">
+  <a href="#_38" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -4733,8 +4755,31 @@
 <p>equity / メトリクスは<strong>最初の receipt 以降</strong>に限定されます。価格データは十数年分あるため、全期間で算出すると運用実績が数ヶ月でも CAGR / Sharpe が全期間ベースの無意味な値になるためです。</p>
 <p><code>--benchmark &lt;SYMBOL&gt;</code> を指定すると、同じライブ期間について指数の buy&amp;hold を第三の比較線として追加します。<code>--benchmark</code> を省略した場合は <code>forge.yaml</code> の <code>live.benchmark</code> にフォールバックし、両方とも未設定であれば単に比較線が出ないだけです（エラーにはなりません）。<code>--compare</code> の backtest 線と同様、ベンチマーク線も先頭値が <code>--initial-capital</code> と一致するよう正規化されるため、live・ベンチマーク・backtest の各線の差がそのまま超過リターンとして読み取れます。</p>
 <p>ベンチマーク銘柄の価格データが未取得（<code>alpha-forge data fetch &lt;SYMBOL&gt;</code> 未実行）の場合、<code>live replay</code> は警告を出してベンチマーク線のみを省略します。live のエクイティカーブ（および <code>--compare</code> 指定時の backtest 線）は引き続き計算され、コマンドは正常終了します。</p>
+<h3 id="_37">再構築の精度に関する警告<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h3>
+<p><code>live replay</code> は、再構築した建玉が実口座とずれている可能性を検知すると警告を出します。いずれもコマンド自体は正常終了しますが、<strong>表示される金額が実態とずれている</strong>ため内容を確認してください。</p>
+<table>
+<thead>
+<tr>
+<th>警告</th>
+<th>意味</th>
+<th>対処</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建玉があるのに終値が欠測している</td>
+<td>価格データの期間がアラートログより短く、保有中の建玉が時価 $0 として評価されている。equity・最大DD・累計損益がいずれも過小に出る</td>
+<td><code>alpha-forge data fetch &lt;SYMBOL&gt; --period &lt;長め&gt;</code> で運用開始日以前まで価格データを取得し直す</td>
+</tr>
+<tr>
+<td>保有数量を超える売却を検出した</td>
+<td>再構築した建玉と実口座がずれている（アラートログの欠落・重複、Pine 側の open-loop desync など）。建玉は 0 にクランプされ、以降の平均取得単価・含み損益・構成比は誤った前提で計算される</td>
+<td>イベントログ（<code>live events</code>）で該当銘柄の発注履歴を確認する。恒常的に出る場合は Pine 側の数量計算が closed-loop になっているか確認する</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="_37">共通の挙動<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h2>
+<h2 id="_38">共通の挙動<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>保存先</strong>:<ul>
 <li>raw event ログ: <code>&lt;journal_path&gt;/../live/events/</code>（ファイルシステム上の JSON）</li>
