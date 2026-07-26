@@ -488,6 +488,15 @@ Equity and metrics are restricted to the period **from the first receipt onward*
 
 If price data for the benchmark symbol has not been fetched (`alpha-forge data fetch <SYMBOL>`), `live replay` logs a warning and drops only the benchmark line — the live equity curve (and the `--compare` backtest line, if requested) are still computed and the command still exits successfully.
 
+### Warnings about reconstruction accuracy
+
+`live replay` warns when the reconstructed positions may have drifted from the real account. The command still exits successfully in both cases, but **the reported amounts are off**, so read the warning before trusting the numbers.
+
+| Warning | What it means | What to do |
+|---|---|---|
+| A position is held but its closing price is missing | The price history is shorter than the alert log, so a held position is valued at $0. Equity, max drawdown, and cumulative P&L are all understated | Re-fetch with a longer window: `alpha-forge data fetch <SYMBOL> --period <longer>`, covering the date trading started |
+| A sell exceeds the held quantity | The reconstructed position has drifted from the real account (missing or duplicated alert log entries, open-loop desync on the Pine side). The position is clamped to 0, and the average cost, unrealized P&L, and weights that follow are computed on a wrong basis | Inspect the order history for that symbol via `live events`. If it recurs, verify that the Pine-side quantity calculation is closed-loop |
+
 ### Sample output
 
 ```text
