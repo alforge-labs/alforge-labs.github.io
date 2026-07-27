@@ -3176,11 +3176,12 @@
 <h1 id="_1">機能詳細<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p><code>alpha-vis serve</code> で起動するダッシュボードの各画面の役割を解説します。</p>
 <h2 id="browse">Browse 画面<a class="headerlink" href="#browse" title="Permanent link">&para;</a></h2>
-<p>戦略ライブラリの一覧と検索。資産クラス別の Symbol Atlas、プリセットレンズ（Saved Views）、グルーピング可能な Strategy Ledger を備えます。</p>
+<p>戦略ライブラリの一覧と検索。同名・同銘柄・同時間軸の戦略は 1 つの「レシピ」に畳まれ、行を展開するとパラメータ違いの個別戦略を確認できます。銘柄カバレッジ表、プリセットレンズ（Saved Views）、グルーピング可能な Strategy Ledger を備えます。</p>
 <p><img alt="Browse 画面" loading="lazy" src="../assets/browse.png" /></p>
 <p>主な操作:</p>
 <ul>
 <li>戦略の絞り込み（Symbol / Timeframe / Sharpe Tier 等）</li>
+<li>銘柄カバレッジ表で、銘柄ごとのレシピ数・実行済・未実行を確認（既定は未実行の多い順なので、次にバックテストする銘柄を選びやすい）。行クリックでその銘柄に絞り込み</li>
 <li>Saved Views でよく使うフィルタを保存</li>
 <li>グローバル検索（<code>Cmd+K</code> / <code>Ctrl+K</code>）でコマンドパレットを開く</li>
 <li>行クリックでスライドパネル展開、または Detail 画面に遷移</li>

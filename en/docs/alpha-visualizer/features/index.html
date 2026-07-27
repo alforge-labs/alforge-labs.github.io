@@ -3176,11 +3176,12 @@
 <h1 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h1>
 <p>Walkthrough of each dashboard screen served by <code>alpha-vis serve</code>.</p>
 <h2 id="browse">Browse<a class="headerlink" href="#browse" title="Permanent link">&para;</a></h2>
-<p>Strategy library with search. Includes the Symbol Atlas grouped by asset class, Saved Views (preset filters), and a groupable Strategy Ledger.</p>
+<p>Strategy library with search. Strategies sharing a name, symbol, and timeframe are rolled up into a single "recipe" row; expand a row to see the individual parameter variants. Includes the symbol coverage table, Saved Views (preset filters), and a groupable Strategy Ledger.</p>
 <p><img alt="Browse view" loading="lazy" src="../assets/browse.png" /></p>
 <p>Key actions:</p>
 <ul>
 <li>Filter by symbol / timeframe / Sharpe tier</li>
+<li>Read recipe counts, run, and unrun per symbol in the symbol coverage table (sorted by unrun descending by default, so the next symbol to backtest surfaces first). Click a row to filter by that symbol</li>
 <li>Save your favorite filter combinations as Saved Views</li>
 <li>Open the global command palette with <code>Cmd+K</code> / <code>Ctrl+K</code></li>
 <li>Click a row to expand the slide panel, or jump to Detail</li>
