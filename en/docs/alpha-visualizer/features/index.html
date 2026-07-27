@@ -1834,6 +1834,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintenance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cross-cutting-features" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3096,6 +3107,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintenance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cross-cutting-features" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3319,6 +3341,18 @@
 <li>Filter by tag</li>
 <li>Linked strategies tie ideas to their implementations</li>
 </ul>
+<h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
+<p>Lists "orphan" backtest results — runs whose strategy definition no longer exists in <code>strategies.db</code> — and lets you select and delete them. Accessible at <code>/maintenance</code>, or via the "Maintenance" link in the header nav.</p>
+<ul>
+<li>Listing: strategy ID, backtest run count, optimization run count, disk size, and last run timestamp</li>
+<li>Select rows to delete with checkboxes (nothing is selected by default)</li>
+<li>Deletion runs only after a confirmation dialog</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Orphans are not necessarily unwanted data</p>
+<p>Running <code>alpha-forge strategy delete</code> without <code>--with-results</code> removes only the strategy definition and intentionally keeps its results. So orphans include both "leftovers from deleted or renamed strategies" and "results kept on purpose." <strong>Review carefully before deleting — deletion cannot be undone.</strong></p>
+</div>
+<p>Both listing and deletion are delegated to <code>alpha-forge backtest prune-orphans</code> on the server (alpha-visualizer does not determine orphans itself, to avoid mistakenly flagging built-in template strategies as orphans). This screen requires the AlphaForge CLI installed on the same machine as the server; if the CLI isn't found, an error with install instructions is shown.</p>
 <h2 id="cross-cutting-features">Cross-cutting features<a class="headerlink" href="#cross-cutting-features" title="Permanent link">&para;</a></h2>
 <h3 id="global-search-cmdk">Global search (Cmd+K)<a class="headerlink" href="#global-search-cmdk" title="Permanent link">&para;</a></h3>
 <p><code>Cmd+K</code> (macOS) / <code>Ctrl+K</code> (Windows / Linux) opens a command palette from any screen, letting you jump by strategy name or screen name.</p>
