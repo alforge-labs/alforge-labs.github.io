@@ -3353,6 +3353,10 @@
 <p><code>alpha-forge strategy delete</code> を <code>--with-results</code> を付けずに実行すると、戦略定義だけを削除し結果は意図的に残します。孤児には「削除・改名済みの残骸」だけでなく「あえて残した過去の結果」も含まれるため、<strong>削除する前に内容をよく確認してください。削除は元に戻せません。</strong></p>
 </div>
 <p>一覧・削除とも、サーバー側で <code>alpha-forge backtest prune-orphans</code> に委譲しています（alpha-visualizer 自身は孤児を判定しません。組み込みテンプレート戦略を誤って孤児表示しないためです）。この画面を使うには、サーバーと同じマシンに AlphaForge CLI がインストールされている必要があります。CLI が見つからない場合はインストール導線付きのエラーが表示されます。</p>
+<div class="admonition note">
+<p class="admonition-title">古いバージョンの alpha-forge では使えません</p>
+<p>この画面が委譲する <code>alpha-forge backtest prune-orphans</code> コマンドは、比較的新しいバージョンの alpha-forge にのみ含まれています。<code>backtest prune-orphans</code> を持たないバージョンでは、CLI が「該当コマンドが無い」エラーを返し、画面には新しいバージョンへの更新を促すメッセージが表示されます。<code>alpha-forge backtest prune-orphans --help</code> が通るかどうかで対応可否を確認できます。</p>
+</div>
 <h2 id="_5">横断機能<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <h3 id="cmdk">グローバル検索（Cmd+K）<a class="headerlink" href="#cmdk" title="Permanent link">&para;</a></h3>
 <p>任意の画面で <code>Cmd+K</code>（macOS）/ <code>Ctrl+K</code>（Windows・Linux）でコマンドパレットを開き、戦略名・画面名から即座に遷移できます。</p>

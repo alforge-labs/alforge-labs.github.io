@@ -3353,6 +3353,10 @@
 <p>Running <code>alpha-forge strategy delete</code> without <code>--with-results</code> removes only the strategy definition and intentionally keeps its results. So orphans include both "leftovers from deleted or renamed strategies" and "results kept on purpose." <strong>Review carefully before deleting — deletion cannot be undone.</strong></p>
 </div>
 <p>Both listing and deletion are delegated to <code>alpha-forge backtest prune-orphans</code> on the server (alpha-visualizer does not determine orphans itself, to avoid mistakenly flagging built-in template strategies as orphans). This screen requires the AlphaForge CLI installed on the same machine as the server; if the CLI isn't found, an error with install instructions is shown.</p>
+<div class="admonition note">
+<p class="admonition-title">Not available on older alpha-forge versions</p>
+<p>The <code>alpha-forge backtest prune-orphans</code> command this screen delegates to is only available in relatively recent alpha-forge versions. On a version that lacks <code>backtest prune-orphans</code>, the CLI reports the command as missing and the screen shows a message prompting you to update. Run <code>alpha-forge backtest prune-orphans --help</code> to check whether your installed version supports it.</p>
+</div>
 <h2 id="cross-cutting-features">Cross-cutting features<a class="headerlink" href="#cross-cutting-features" title="Permanent link">&para;</a></h2>
 <h3 id="global-search-cmdk">Global search (Cmd+K)<a class="headerlink" href="#global-search-cmdk" title="Permanent link">&para;</a></h3>
 <p><code>Cmd+K</code> (macOS) / <code>Ctrl+K</code> (Windows / Linux) opens a command palette from any screen, letting you jump by strategy name or screen name.</p>

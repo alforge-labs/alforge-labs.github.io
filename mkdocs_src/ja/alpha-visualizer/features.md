@@ -143,6 +143,9 @@ alpha-visualizer は結果を見るだけでなく、**バックテスト・最�
 
 一覧・削除とも、サーバー側で `alpha-forge backtest prune-orphans` に委譲しています（alpha-visualizer 自身は孤児を判定しません。組み込みテンプレート戦略を誤って孤児表示しないためです）。この画面を使うには、サーバーと同じマシンに AlphaForge CLI がインストールされている必要があります。CLI が見つからない場合はインストール導線付きのエラーが表示されます。
 
+!!! note "古いバージョンの alpha-forge では使えません"
+    この画面が委譲する `alpha-forge backtest prune-orphans` コマンドは、比較的新しいバージョンの alpha-forge にのみ含まれています。`backtest prune-orphans` を持たないバージョンでは、CLI が「該当コマンドが無い」エラーを返し、画面には新しいバージョンへの更新を促すメッセージが表示されます。`alpha-forge backtest prune-orphans --help` が通るかどうかで対応可否を確認できます。
+
 ## 横断機能
 
 ### グローバル検索（Cmd+K）

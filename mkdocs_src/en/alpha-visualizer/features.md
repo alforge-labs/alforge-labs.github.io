@@ -143,6 +143,9 @@ Lists "orphan" backtest results — runs whose strategy definition no longer exi
 
 Both listing and deletion are delegated to `alpha-forge backtest prune-orphans` on the server (alpha-visualizer does not determine orphans itself, to avoid mistakenly flagging built-in template strategies as orphans). This screen requires the AlphaForge CLI installed on the same machine as the server; if the CLI isn't found, an error with install instructions is shown.
 
+!!! note "Not available on older alpha-forge versions"
+    The `alpha-forge backtest prune-orphans` command this screen delegates to is only available in relatively recent alpha-forge versions. On a version that lacks `backtest prune-orphans`, the CLI reports the command as missing and the screen shows a message prompting you to update. Run `alpha-forge backtest prune-orphans --help` to check whether your installed version supports it.
+
 ## Cross-cutting features
 
 ### Global search (Cmd+K)
