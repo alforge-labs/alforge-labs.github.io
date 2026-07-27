@@ -2988,7 +2988,68 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-backtest-prune-orphans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge backtest prune-orphans
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge backtest prune-orphans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        オプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        出力例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        主なエラー
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_56" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -4562,7 +4623,68 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-backtest-prune-orphans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge backtest prune-orphans
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge backtest prune-orphans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        オプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        出力例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        主なエラー
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_56" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -4655,6 +4777,10 @@
 <tr>
 <td><a href="#alpha-forge-backtest-monte-carlo"><code>alpha-forge backtest monte-carlo</code></a></td>
 <td>既存のバックテスト結果からモンテカルロシミュレーションを実行する</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-backtest-prune-orphans"><code>alpha-forge backtest prune-orphans</code></a></td>
+<td>戦略定義が存在しない孤児のバックテスト・最適化結果を削除する（破壊的）</td>
 </tr>
 </tbody>
 </table>
@@ -6221,7 +6347,117 @@
 </tbody>
 </table>
 <hr />
-<h2 id="_52">共通の挙動<a class="headerlink" href="#_52" title="Permanent link">&para;</a></h2>
+<h2 id="alpha-forge-backtest-prune-orphans">alpha-forge backtest prune-orphans<a class="headerlink" href="#alpha-forge-backtest-prune-orphans" title="Permanent link">&para;</a></h2>
+<p>戦略定義が存在しない <code>strategy_id</code> のバックテスト結果・最適化結果を削除する（破壊的: DB から行を削除する）。探索でスキャフォールドした戦略を消したあとや、テスト用の戦略を消したあとに、結果だけが <code>backtest_results.db</code> に残り続けている場合に使う。</p>
+<div class="admonition warning">
+<p class="admonition-title">孤児は必ずしも不要なデータではありません</p>
+<p><code>strategy delete</code> は <code>--with-results</code> を付けなければ<strong>結果を意図的に残します</strong>。「戦略定義は消したいが実行履歴は残したい」という操作でも孤児は生まれます。削除する前に必ず <code>--dry-run</code> で中身を確認してください。削除は元に戻せません。</p>
+</div>
+<h3 id="_52">構文<a class="headerlink" href="#_52" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<h3 id="_53">オプション<a class="headerlink" href="#_53" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--dry-run</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>削除せず、対象を表示して終了する</td>
+</tr>
+<tr>
+<td><code>--strategy</code></td>
+<td>複数指定可</td>
+<td>-</td>
+<td>削除する <code>strategy_id</code>。複数指定できる。省略時はすべての孤児が対象</td>
+</tr>
+<tr>
+<td><code>-y</code>, <code>--yes</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>確認プロンプトを表示せずに削除する</td>
+</tr>
+<tr>
+<td><code>--vacuum</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>削除後に <code>VACUUM</code> を実行してファイルを縮める（排他ロックと一時領域が必要。既定は無効）</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON 形式で標準出力</td>
+</tr>
+</tbody>
+</table>
+<p>破壊的操作のため、非対話環境（<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / 非 TTY）で <code>--yes</code> が無いと終了コード <code>2</code> で停止する。<code>--json</code> と <code>--yes</code> 未指定の組み合わせも同様に終了コード <code>2</code>（確認プロンプトが stdout の JSON 純度を汚さないようにするため）。<code>--strategy</code> に孤児ではない ID を指定した場合は終了コード <code>1</code>。</p>
+<p><code>--vacuum</code> を既定で無効にしているのは、<code>VACUUM</code> がデータベース全体の排他ロックを取り、一時的に元ファイルと同程度の空き容量を必要とするためです。<code>alpha-vis serve</code> が動作中の環境や空き容量の少ない環境では失敗することがあります。削除自体は完了しているので、空き容量を確保してから <code>--vacuum</code> を付けて再実行してください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1"># 対象を確認する（削除しない）</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>--dry-run
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="c1"># すべての孤児を削除する</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>-y
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="c1"># 一部だけ削除する</span>
+<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>-y<span class="w"> </span>--strategy<span class="w"> </span>old_a<span class="w"> </span>--strategy<span class="w"> </span>old_b
+<a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a>
+<a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="c1"># 削除してファイルサイズも縮める</span>
+<a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>-y<span class="w"> </span>--vacuum
+</code></pre></div>
+<h3 id="_54">出力例<a class="headerlink" href="#_54" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>[dry-run] 削除対象:
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>  old_scaffold_v1  backtest=3  optimize=1  0.8MB  2026-05-01T09:12:00..2026-05-03T14:02:11
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>  old_scaffold_v2  backtest=1  optimize=0  0.2MB  2026-05-02T10:00:00..2026-05-02T10:00:00
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>合計 2 ID / 5 行 / 1.0 MB
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>削除しました: 2 ID / backtest 4 行 / optimize 1 行
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>回収した容量: 0.7 MB
+</code></pre></div>
+<h3 id="_55">主なエラー<a class="headerlink" href="#_55" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>メッセージ</th>
+<th>原因</th>
+<th>対処</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>孤児の実行結果はありません</code></td>
+<td>対象の孤児が 0 件</td>
+<td>対処不要（DB はクリーンな状態）</td>
+</tr>
+<tr>
+<td><code>エラー: 孤児ではない、または存在しない strategy_id が指定されました: &lt;id&gt;</code></td>
+<td><code>--strategy</code> に生存戦略または未知の ID を指定</td>
+<td><code>--dry-run</code> で孤児一覧を確認してから指定し直す</td>
+</tr>
+<tr>
+<td><code>--json では --yes の明示が必要です（破壊的操作の確認でハングを防ぐため）。</code></td>
+<td><code>--json</code> と <code>-y</code>/<code>--yes</code> 未指定を同時使用</td>
+<td><code>-y</code>/<code>--yes</code> を追加する</td>
+</tr>
+<tr>
+<td><code>警告: 削除は完了しましたが VACUUM に失敗しました（&lt;理由&gt;）。空き容量を確保して再度 --vacuum を実行してください</code></td>
+<td><code>VACUUM</code> 実行時に排他ロック取得失敗・容量不足など</td>
+<td>空き容量を確保して <code>--vacuum</code> を再実行（削除自体は完了済み）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_56">共通の挙動<a class="headerlink" href="#_56" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>DB / ファイルモード</strong>: <code>list</code> <code>report</code> <code>migrate</code> <code>monte-carlo</code> は <code>config.report.output_path / config.report.db_filename</code>（SQLite）を主ストアとします。</li>
 <li><strong><code>FORGE_CONFIG</code></strong>: 戦略・データ・結果の保管場所は環境変数 <code>FORGE_CONFIG</code> が指す <code>forge.yaml</code> で決まります。</li>

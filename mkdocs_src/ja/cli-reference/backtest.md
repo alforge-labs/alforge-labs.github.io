@@ -22,6 +22,7 @@
 | [`alpha-forge backtest chart`](#alpha-forge-backtest-chart) | ダッシュボードの URL を表示してチャートへ誘導する |
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | エントリー条件のシグナル発生件数を高速チェック |
 | [`alpha-forge backtest monte-carlo`](#alpha-forge-backtest-monte-carlo) | 既存のバックテスト結果からモンテカルロシミュレーションを実行する |
+| [`alpha-forge backtest prune-orphans`](#alpha-forge-backtest-prune-orphans) | 戦略定義が存在しない孤児のバックテスト・最適化結果を削除する（破壊的） |
 
 ---
 
@@ -867,6 +868,74 @@ alpha-forge backtest monte-carlo <RESULT_ID> [--simulations 1000] [--json]
 | `エラー: 結果が見つかりません - <id>` | DB に該当なし | `alpha-forge backtest list` で確認 |
 | `エラー: 有効なトレード履歴がありません（最低10件必要です）` | トレード件数 < 10 | より長い期間または別戦略でバックテスト |
 | `エラー: シミュレーションに失敗しました - <理由>` | 計算過程で例外 | エラーメッセージに従い対処 |
+
+---
+
+## alpha-forge backtest prune-orphans
+
+戦略定義が存在しない `strategy_id` のバックテスト結果・最適化結果を削除する（破壊的: DB から行を削除する）。探索でスキャフォールドした戦略を消したあとや、テスト用の戦略を消したあとに、結果だけが `backtest_results.db` に残り続けている場合に使う。
+
+!!! warning "孤児は必ずしも不要なデータではありません"
+    `strategy delete` は `--with-results` を付けなければ**結果を意図的に残します**。「戦略定義は消したいが実行履歴は残したい」という操作でも孤児は生まれます。削除する前に必ず `--dry-run` で中身を確認してください。削除は元に戻せません。
+
+### 構文
+
+```bash
+alpha-forge backtest prune-orphans [OPTIONS]
+```
+
+### オプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--dry-run` | フラグ | false | 削除せず、対象を表示して終了する |
+| `--strategy` | 複数指定可 | - | 削除する `strategy_id`。複数指定できる。省略時はすべての孤児が対象 |
+| `-y`, `--yes` | フラグ | false | 確認プロンプトを表示せずに削除する |
+| `--vacuum` | フラグ | false | 削除後に `VACUUM` を実行してファイルを縮める（排他ロックと一時領域が必要。既定は無効） |
+| `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+
+破壊的操作のため、非対話環境（`FORGE_NONINTERACTIVE` / `CI` / 非 TTY）で `--yes` が無いと終了コード `2` で停止する。`--json` と `--yes` 未指定の組み合わせも同様に終了コード `2`（確認プロンプトが stdout の JSON 純度を汚さないようにするため）。`--strategy` に孤児ではない ID を指定した場合は終了コード `1`。
+
+`--vacuum` を既定で無効にしているのは、`VACUUM` がデータベース全体の排他ロックを取り、一時的に元ファイルと同程度の空き容量を必要とするためです。`alpha-vis serve` が動作中の環境や空き容量の少ない環境では失敗することがあります。削除自体は完了しているので、空き容量を確保してから `--vacuum` を付けて再実行してください。
+
+```bash
+# 対象を確認する（削除しない）
+alpha-forge backtest prune-orphans --dry-run
+
+# すべての孤児を削除する
+alpha-forge backtest prune-orphans -y
+
+# 一部だけ削除する
+alpha-forge backtest prune-orphans -y --strategy old_a --strategy old_b
+
+# 削除してファイルサイズも縮める
+alpha-forge backtest prune-orphans -y --vacuum
+```
+
+### 出力例
+
+```text
+[dry-run] 削除対象:
+
+  old_scaffold_v1  backtest=3  optimize=1  0.8MB  2026-05-01T09:12:00..2026-05-03T14:02:11
+  old_scaffold_v2  backtest=1  optimize=0  0.2MB  2026-05-02T10:00:00..2026-05-02T10:00:00
+
+合計 2 ID / 5 行 / 1.0 MB
+```
+
+```text
+削除しました: 2 ID / backtest 4 行 / optimize 1 行
+回収した容量: 0.7 MB
+```
+
+### 主なエラー
+
+| メッセージ | 原因 | 対処 |
+|----------|------|------|
+| `孤児の実行結果はありません` | 対象の孤児が 0 件 | 対処不要（DB はクリーンな状態） |
+| `エラー: 孤児ではない、または存在しない strategy_id が指定されました: <id>` | `--strategy` に生存戦略または未知の ID を指定 | `--dry-run` で孤児一覧を確認してから指定し直す |
+| `--json では --yes の明示が必要です（破壊的操作の確認でハングを防ぐため）。` | `--json` と `-y`/`--yes` 未指定を同時使用 | `-y`/`--yes` を追加する |
+| `警告: 削除は完了しましたが VACUUM に失敗しました（<理由>）。空き容量を確保して再度 --vacuum を実行してください` | `VACUUM` 実行時に排他ロック取得失敗・容量不足など | 空き容量を確保して `--vacuum` を再実行（削除自体は完了済み） |
 
 ---
 

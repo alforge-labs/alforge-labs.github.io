@@ -22,6 +22,7 @@ Run backtests and analyze results. Provides single-strategy runs, parallel batch
 | [`alpha-forge backtest chart`](#alpha-forge-backtest-chart) | Display dashboard URL to navigate to charts |
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | Fast signal count check without running the full backtest |
 | [`alpha-forge backtest monte-carlo`](#alpha-forge-backtest-monte-carlo) | Run a Monte Carlo simulation from an existing backtest result |
+| [`alpha-forge backtest prune-orphans`](#alpha-forge-backtest-prune-orphans) | Delete orphaned backtest / optimization results whose strategy definition no longer exists (destructive) |
 
 ---
 
@@ -865,6 +866,74 @@ See also the top-level field contract in the [`--json` output reference](../ai-a
 | `Error: Result not found - <id>` | Not in DB | Check `alpha-forge backtest list` |
 | `Error: No valid trade history found (minimum 10 trades required).` | Trade count < 10 | Use a longer period or a different strategy |
 | `Error: Simulation failed - <reason>` | Exception during simulation | Address the message |
+
+---
+
+## alpha-forge backtest prune-orphans
+
+Deletes backtest and optimization results whose strategy definition no longer exists (destructive: removes rows from the DB). Use it when results linger in `backtest_results.db` after deleting scaffolded or throwaway strategies.
+
+!!! warning "Orphans are not necessarily junk"
+    `strategy delete` **intentionally keeps results** unless you pass `--with-results`. Orphans are also created by "delete the definition but keep the run history". Always inspect with `--dry-run` before deleting. Deletion cannot be undone.
+
+### Synopsis
+
+```bash
+alpha-forge backtest prune-orphans [OPTIONS]
+```
+
+### Options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--dry-run` | flag | false | Show targets and exit without deleting |
+| `--strategy` | repeatable | - | `strategy_id` to delete. Repeatable. All orphans when omitted |
+| `-y`, `--yes` | flag | false | Delete without a confirmation prompt |
+| `--vacuum` | flag | false | Run `VACUUM` after deleting to shrink the file (needs an exclusive lock and temp space; off by default) |
+| `--json` | flag | false | Output results as JSON to stdout |
+
+Being a destructive operation, it exits with code `2` when `--yes` is missing in a non-interactive environment (`FORGE_NONINTERACTIVE` / `CI` / non-TTY). The same applies to `--json` without `--yes` (exit code `2`), so the confirmation prompt cannot pollute the JSON on stdout. Passing a non-orphan `strategy_id` to `--strategy` exits with code `1`.
+
+`--vacuum` is off by default because `VACUUM` takes an exclusive lock on the whole database and temporarily needs free space comparable to the original file. It can fail while `alpha-vis serve` is running or on a nearly full disk. The deletion itself still completes — free up space and re-run with `--vacuum`.
+
+```bash
+# Inspect targets without deleting
+alpha-forge backtest prune-orphans --dry-run
+
+# Delete every orphan
+alpha-forge backtest prune-orphans -y
+
+# Delete only some of them
+alpha-forge backtest prune-orphans -y --strategy old_a --strategy old_b
+
+# Delete and shrink the file
+alpha-forge backtest prune-orphans -y --vacuum
+```
+
+### Sample output
+
+```text
+[dry-run] Prune targets:
+
+  old_scaffold_v1  backtest=3  optimize=1  0.8MB  2026-05-01T09:12:00..2026-05-03T14:02:11
+  old_scaffold_v2  backtest=1  optimize=0  0.2MB  2026-05-02T10:00:00..2026-05-02T10:00:00
+
+Total 2 IDs / 5 rows / 1.0 MB
+```
+
+```text
+Deleted: 2 IDs / 4 backtest rows / 1 optimization rows
+Reclaimed: 0.7 MB
+```
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `No orphan runs found` | Zero orphans | No action needed (the DB is already clean) |
+| `Error: not orphan or unknown strategy_id(s): <id>` | `--strategy` names a live or unknown ID | Check the orphan list with `--dry-run` first, then re-run |
+| `--json requires an explicit --yes (to avoid blocking on a destructive-action confirmation).` | `--json` used without `-y`/`--yes` | Add `-y`/`--yes` |
+| `Warning: rows were deleted but VACUUM failed (<reason>). Free up disk space and run with --vacuum again` | `VACUUM` failed to get its exclusive lock or ran out of space | Free up disk space and re-run with `--vacuum` (the deletion itself already completed) |
 
 ---
 

@@ -2988,6 +2988,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-backtest-prune-orphans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge backtest prune-orphans
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge backtest prune-orphans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synopsis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-errors_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4562,6 +4623,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-backtest-prune-orphans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge backtest prune-orphans
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge backtest prune-orphans">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synopsis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-output_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-errors_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4655,6 +4777,10 @@
 <tr>
 <td><a href="#alpha-forge-backtest-monte-carlo"><code>alpha-forge backtest monte-carlo</code></a></td>
 <td>Run a Monte Carlo simulation from an existing backtest result</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-backtest-prune-orphans"><code>alpha-forge backtest prune-orphans</code></a></td>
+<td>Delete orphaned backtest / optimization results whose strategy definition no longer exists (destructive)</td>
 </tr>
 </tbody>
 </table>
@@ -6216,6 +6342,116 @@
 <td><code>Error: Simulation failed - &lt;reason&gt;</code></td>
 <td>Exception during simulation</td>
 <td>Address the message</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="alpha-forge-backtest-prune-orphans">alpha-forge backtest prune-orphans<a class="headerlink" href="#alpha-forge-backtest-prune-orphans" title="Permanent link">&para;</a></h2>
+<p>Deletes backtest and optimization results whose strategy definition no longer exists (destructive: removes rows from the DB). Use it when results linger in <code>backtest_results.db</code> after deleting scaffolded or throwaway strategies.</p>
+<div class="admonition warning">
+<p class="admonition-title">Orphans are not necessarily junk</p>
+<p><code>strategy delete</code> <strong>intentionally keeps results</strong> unless you pass <code>--with-results</code>. Orphans are also created by "delete the definition but keep the run history". Always inspect with <code>--dry-run</code> before deleting. Deletion cannot be undone.</p>
+</div>
+<h3 id="synopsis_12">Synopsis<a class="headerlink" href="#synopsis_12" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<h3 id="options_2">Options<a class="headerlink" href="#options_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--dry-run</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Show targets and exit without deleting</td>
+</tr>
+<tr>
+<td><code>--strategy</code></td>
+<td>repeatable</td>
+<td>-</td>
+<td><code>strategy_id</code> to delete. Repeatable. All orphans when omitted</td>
+</tr>
+<tr>
+<td><code>-y</code>, <code>--yes</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Delete without a confirmation prompt</td>
+</tr>
+<tr>
+<td><code>--vacuum</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Run <code>VACUUM</code> after deleting to shrink the file (needs an exclusive lock and temp space; off by default)</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Output results as JSON to stdout</td>
+</tr>
+</tbody>
+</table>
+<p>Being a destructive operation, it exits with code <code>2</code> when <code>--yes</code> is missing in a non-interactive environment (<code>FORGE_NONINTERACTIVE</code> / <code>CI</code> / non-TTY). The same applies to <code>--json</code> without <code>--yes</code> (exit code <code>2</code>), so the confirmation prompt cannot pollute the JSON on stdout. Passing a non-orphan <code>strategy_id</code> to <code>--strategy</code> exits with code <code>1</code>.</p>
+<p><code>--vacuum</code> is off by default because <code>VACUUM</code> takes an exclusive lock on the whole database and temporarily needs free space comparable to the original file. It can fail while <code>alpha-vis serve</code> is running or on a nearly full disk. The deletion itself still completes — free up space and re-run with <code>--vacuum</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1"># Inspect targets without deleting</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>--dry-run
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="c1"># Delete every orphan</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>-y
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="c1"># Delete only some of them</span>
+<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>-y<span class="w"> </span>--strategy<span class="w"> </span>old_a<span class="w"> </span>--strategy<span class="w"> </span>old_b
+<a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a>
+<a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="c1"># Delete and shrink the file</span>
+<a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>prune-orphans<span class="w"> </span>-y<span class="w"> </span>--vacuum
+</code></pre></div>
+<h3 id="sample-output_8">Sample output<a class="headerlink" href="#sample-output_8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>[dry-run] Prune targets:
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>  old_scaffold_v1  backtest=3  optimize=1  0.8MB  2026-05-01T09:12:00..2026-05-03T14:02:11
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>  old_scaffold_v2  backtest=1  optimize=0  0.2MB  2026-05-02T10:00:00..2026-05-02T10:00:00
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>Total 2 IDs / 5 rows / 1.0 MB
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>Deleted: 2 IDs / 4 backtest rows / 1 optimization rows
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>Reclaimed: 0.7 MB
+</code></pre></div>
+<h3 id="common-errors_9">Common errors<a class="headerlink" href="#common-errors_9" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>No orphan runs found</code></td>
+<td>Zero orphans</td>
+<td>No action needed (the DB is already clean)</td>
+</tr>
+<tr>
+<td><code>Error: not orphan or unknown strategy_id(s): &lt;id&gt;</code></td>
+<td><code>--strategy</code> names a live or unknown ID</td>
+<td>Check the orphan list with <code>--dry-run</code> first, then re-run</td>
+</tr>
+<tr>
+<td><code>--json requires an explicit --yes (to avoid blocking on a destructive-action confirmation).</code></td>
+<td><code>--json</code> used without <code>-y</code>/<code>--yes</code></td>
+<td>Add <code>-y</code>/<code>--yes</code></td>
+</tr>
+<tr>
+<td><code>Warning: rows were deleted but VACUUM failed (&lt;reason&gt;). Free up disk space and run with --vacuum again</code></td>
+<td><code>VACUUM</code> failed to get its exclusive lock or ran out of space</td>
+<td>Free up disk space and re-run with <code>--vacuum</code> (the deletion itself already completed)</td>
 </tr>
 </tbody>
 </table>
