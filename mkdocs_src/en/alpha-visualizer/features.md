@@ -4,13 +4,14 @@ Walkthrough of each dashboard screen served by `alpha-vis serve`.
 
 ## Browse
 
-Strategy library with search. Includes the Symbol Atlas grouped by asset class, Saved Views (preset filters), and a groupable Strategy Ledger.
+Strategy library with search. Strategies sharing a name, symbol, and timeframe are rolled up into a single "recipe" row; expand a row to see the individual parameter variants. Includes the symbol coverage table, Saved Views (preset filters), and a groupable Strategy Ledger.
 
 ![Browse view](assets/browse.png){ loading=lazy }
 
 Key actions:
 
 - Filter by symbol / timeframe / Sharpe tier
+- Read recipe counts, run, and unrun per symbol in the symbol coverage table (sorted by unrun descending by default, so the next symbol to backtest surfaces first). Click a row to filter by that symbol
 - Save your favorite filter combinations as Saved Views
 - Open the global command palette with `Cmd+K` / `Ctrl+K`
 - Click a row to expand the slide panel, or jump to Detail
