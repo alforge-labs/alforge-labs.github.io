@@ -130,6 +130,22 @@ Browse exploration ideas and their state.
 - Filter by tag
 - Linked strategies tie ideas to their implementations
 
+## Maintenance
+
+Lists "orphan" backtest results — runs whose strategy definition no longer exists in `strategies.db` — and lets you select and delete them. Accessible at `/maintenance`, or via the "Maintenance" link in the header nav.
+
+- Listing: strategy ID, backtest run count, optimization run count, disk size, and last run timestamp
+- Select rows to delete with checkboxes (nothing is selected by default)
+- Deletion runs only after a confirmation dialog
+
+!!! warning "Orphans are not necessarily unwanted data"
+    Running `alpha-forge strategy delete` without `--with-results` removes only the strategy definition and intentionally keeps its results. So orphans include both "leftovers from deleted or renamed strategies" and "results kept on purpose." **Review carefully before deleting — deletion cannot be undone.**
+
+Both listing and deletion are delegated to `alpha-forge backtest prune-orphans` on the server (alpha-visualizer does not determine orphans itself, to avoid mistakenly flagging built-in template strategies as orphans). This screen requires the AlphaForge CLI installed on the same machine as the server; if the CLI isn't found, an error with install instructions is shown.
+
+!!! note "Not available on older alpha-forge versions"
+    The `alpha-forge backtest prune-orphans` command this screen delegates to is only available in relatively recent alpha-forge versions. On a version that lacks `backtest prune-orphans`, the CLI reports the command as missing and the screen shows a message prompting you to update. Run `alpha-forge backtest prune-orphans --help` to check whether your installed version supports it.
+
 ## Cross-cutting features
 
 ### Global search (Cmd+K)
