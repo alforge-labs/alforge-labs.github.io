@@ -48,6 +48,23 @@ function Hero({ t, lang }) {
           </a>
           <a href="#ai-agents" className="btn-secondary">{c.cta2} →</a>
         </div>
+        {/* Product Hunt バッジ。PH 提供の embed をそのまま使う (post_id=1203615)。
+            PH が渡すキャッシュバスター t=<コピー時刻> は付けない。静的サイトでは
+            その時刻が永久に固定され、バッジ右端の upvote 数が古い値でキャッシュ
+            され続けるため (t の有無で応答自体は同一なことは確認済み)。 */}
+        <a
+          className="hero-ph-badge"
+          href="https://www.producthunt.com/products/alphaforge?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-alphaforge"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1203615&theme=neutral"
+            alt="AlphaForge - The quant CLI your AI agent drives — backtest to Pine v6 | Product Hunt"
+            width="250"
+            height="54"
+          />
+        </a>
         <div className="hero-stats">
           {stats.map((s, i) => (
             <div key={i} className="stat">
