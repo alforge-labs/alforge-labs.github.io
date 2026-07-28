@@ -750,7 +750,7 @@ When comparing strategies:
    http://localhost:8000/?ids=sma_crossover,rsi_reversion
 ```
 
-The command itself only prints a URL. To view charts, start `alpha-vis serve` ([alpha-visualizer](https://github.com/ysakae/alpha-visualizer)).
+The command itself only prints a URL. To view charts, start `alpha-vis serve` ([alpha-visualizer](https://github.com/alforge-labs/alpha-visualizer)).
 
 ---
 

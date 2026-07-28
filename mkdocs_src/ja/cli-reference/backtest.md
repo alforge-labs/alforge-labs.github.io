@@ -752,7 +752,7 @@ alpha-forge backtest chart [RESULT_ID] [--open] [--compare <ID> ...]
    http://localhost:8000/?ids=sma_crossover,rsi_reversion
 ```
 
-このコマンド自体は URL を表示するだけです。チャート閲覧には `alpha-vis serve`（[alpha-visualizer](https://github.com/ysakae/alpha-visualizer)）を起動する必要があります。
+このコマンド自体は URL を表示するだけです。チャート閲覧には `alpha-vis serve`（[alpha-visualizer](https://github.com/alforge-labs/alpha-visualizer)）を起動する必要があります。
 
 ---
 
