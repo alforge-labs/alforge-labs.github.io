@@ -614,7 +614,9 @@ alpha-forge pine generate --strategy sma_cross_qs
 
 ## レビューについて（一度きりの案内）
 
-`backtest run` を通算 10 回実行すると、対話実行時に **1 度だけ** [Product Hunt のレビューページ](https://www.producthunt.com/products/alphaforge/reviews) を案内するメッセージが表示されます。繰り返し出ることはありません。
+`backtest run` を通算 10 回実行すると、その後の**いずれかのコマンドの実行後**に **1 度だけ**
+[Product Hunt のレビューページ](https://www.producthunt.com/products/alphaforge/reviews) を
+案内するメッセージが表示されます。繰り返し出ることはありません。
 
 以下の場合は表示されません。
 

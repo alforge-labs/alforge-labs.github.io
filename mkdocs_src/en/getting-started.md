@@ -618,7 +618,9 @@ For other issues and detailed FAQ, see [`/en/install.html`](https://alforgelabs.
 
 ## About reviews (shown once)
 
-After your 10th `backtest run`, an interactive run prints a single message pointing at the [Product Hunt review page](https://www.producthunt.com/products/alphaforge/reviews). It never repeats.
+After your 10th `backtest run`, the next interactive command prints a single message
+pointing at the [Product Hunt review page](https://www.producthunt.com/products/alphaforge/reviews).
+It never repeats.
 
 It is not shown when:
 
