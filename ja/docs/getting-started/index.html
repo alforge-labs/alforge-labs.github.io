@@ -864,6 +864,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        レビューについて（一度きりの案内）
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3253,6 +3264,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        レビューについて（一度きりの案内）
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3986,6 +4008,18 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <li><a href="../templates/">戦略テンプレート</a> — HMM × BB × RSI などの複合戦略例</li>
 <li><a href="../ai-agents/exploration-workflow/">AI 駆動の戦略探索ワークフロー</a> — Claude Code / Codex × AlphaForge による自律探索</li>
 </ul>
+<hr />
+<h2 id="_12">レビューについて（一度きりの案内）<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<p><code>backtest run</code> を通算 10 回実行すると、対話実行時に <strong>1 度だけ</strong> <a href="https://www.producthunt.com/products/alphaforge/reviews">Product Hunt のレビューページ</a> を案内するメッセージが表示されます。繰り返し出ることはありません。</p>
+<p>以下の場合は表示されません。</p>
+<ul>
+<li><code>--json</code> を付けた実行（機械が読む出力を汚さないため）</li>
+<li>非対話実行（<code>FORGE_NONINTERACTIVE=1</code> / <code>CI=1</code> / 標準入力が TTY でない場合）</li>
+</ul>
+<p>案内自体を無効化するには環境変数を設定してください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
+</code></pre></div>
+<p>表示状態は <code>$XDG_CONFIG_HOME/forge/review_prompt.json</code>（未設定時 <code>~/.config/forge/review_prompt.json</code>）に記録されます。実際に使ってみて役に立った・立たなかったのどちらでも、レビューは同じ課題を持つ人の判断材料になります。</p>
 <hr />
 <!-- 同期元: `ja/install.html`（インストール・Whop ログイン・トラブルシューティング部分）。バックテスト実行例は alpha-forge の戦略 JSON スキーマ（`spy_sma_crossover_v1.json` を参考）に基づく。issue #117 で旧 `quickstart.md` を本ページに統合。 -->
 

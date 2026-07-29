@@ -616,4 +616,23 @@ For other issues and detailed FAQ, see [`/en/install.html`](https://alforgelabs.
 
 ---
 
+## About reviews (shown once)
+
+After your 10th `backtest run`, an interactive run prints a single message pointing at the [Product Hunt review page](https://www.producthunt.com/products/alphaforge/reviews). It never repeats.
+
+It is not shown when:
+
+- the run uses `--json` (so machine-readable output stays clean)
+- the run is non-interactive (`FORGE_NONINTERACTIVE=1` / `CI=1` / stdin is not a TTY)
+
+To disable it entirely:
+
+```bash
+export FORGE_NO_REVIEW_PROMPT=1
+```
+
+State is recorded in `$XDG_CONFIG_HOME/forge/review_prompt.json` (or `~/.config/forge/review_prompt.json` when unset). Whether it worked for you or not, a review gives the next person with the same problem something concrete to go on.
+
+---
+
 <!-- Synced from: `en/install.html` (install / Whop login / troubleshooting). The backtest example follows the alpha-forge strategy JSON schema (based on `spy_sma_crossover_v1.json`). Issue #117 merged the former `quickstart.md` into this page. -->

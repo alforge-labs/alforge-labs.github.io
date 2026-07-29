@@ -612,4 +612,23 @@ alpha-forge pine generate --strategy sma_cross_qs
 
 ---
 
+## レビューについて（一度きりの案内）
+
+`backtest run` を通算 10 回実行すると、対話実行時に **1 度だけ** [Product Hunt のレビューページ](https://www.producthunt.com/products/alphaforge/reviews) を案内するメッセージが表示されます。繰り返し出ることはありません。
+
+以下の場合は表示されません。
+
+- `--json` を付けた実行（機械が読む出力を汚さないため）
+- 非対話実行（`FORGE_NONINTERACTIVE=1` / `CI=1` / 標準入力が TTY でない場合）
+
+案内自体を無効化するには環境変数を設定してください。
+
+```bash
+export FORGE_NO_REVIEW_PROMPT=1
+```
+
+表示状態は `$XDG_CONFIG_HOME/forge/review_prompt.json`（未設定時 `~/.config/forge/review_prompt.json`）に記録されます。実際に使ってみて役に立った・立たなかったのどちらでも、レビューは同じ課題を持つ人の判断材料になります。
+
+---
+
 <!-- 同期元: `ja/install.html`（インストール・Whop ログイン・トラブルシューティング部分）。バックテスト実行例は alpha-forge の戦略 JSON スキーマ（`spy_sma_crossover_v1.json` を参考）に基づく。issue #117 で旧 `quickstart.md` を本ページに統合。 -->
