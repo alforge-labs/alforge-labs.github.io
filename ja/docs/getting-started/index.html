@@ -865,6 +865,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#24-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        更新の案内（24 時間に 1 回まで）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3265,6 +3276,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#24-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        更新の案内（24 時間に 1 回まで）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4009,6 +4031,31 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <li><a href="../ai-agents/exploration-workflow/">AI 駆動の戦略探索ワークフロー</a> — Claude Code / Codex × AlphaForge による自律探索</li>
 </ul>
 <hr />
+<h2 id="24-1">更新の案内（24 時間に 1 回まで）<a class="headerlink" href="#24-1" title="Permanent link">&para;</a></h2>
+<p>新しいバージョンがあるとき、コマンドの実行後に 1 行の案内が表示されます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>ℹ 新しいバージョンがあります: 1.2.0 → 1.3.0
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>  `alpha-forge self update` で更新できます（FORGE_NO_UPDATE_CHECK=1 でこの案内を無効化）。
+</code></pre></div>
+<ul>
+<li>最新バージョンの確認は <strong>24 時間に 1 回</strong>だけ行い、結果をキャッシュします。オフラインでも長くは待たされません（接続 1.5 秒・読み取り 2.0 秒でタイムアウトし、確認に失敗しても黙って次回に回します）</li>
+<li>同じバージョンについて案内が出るのは <strong>24 時間に 1 回</strong>までです。新しいバージョンが出たときはその場で案内します</li>
+<li>以下の場合は確認も表示も行いません<ul>
+<li><code>--json</code> を付けた実行（機械が読む出力を汚さないため）</li>
+<li>非対話実行（<code>FORGE_NONINTERACTIVE=1</code> / <code>CI=1</code> / 標準入力が TTY でない場合）</li>
+<li>開発モード（ソースからの実行）— <code>alpha-forge self update</code> が使えないため</li>
+</ul>
+</li>
+<li>プレリリース（beta 等）は案内しません。プレリリースを使う場合は <code>alpha-forge self update --version &lt;タグ&gt;</code> でバージョンを明示してください</li>
+</ul>
+<p>案内を無効化するには環境変数を設定してください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_UPDATE_CHECK</span><span class="o">=</span><span class="m">1</span>
+</code></pre></div>
+<p>確認状況は <code>$XDG_CONFIG_HOME/forge/update_check.json</code>（未設定時 <code>~/.config/forge/update_check.json</code>）に記録されます。</p>
+<div class="admonition info">
+<p class="admonition-title">送信先について</p>
+<p>更新確認の通信先は <strong>GitHub（配布リポジトリの Releases API）</strong> です。AlphaForge の開発者側には何も送信されません。バージョン番号・利用状況を含むテレメトリは一切ありません。</p>
+</div>
+<hr />
 <h2 id="_12">レビューについて（一度きりの案内）<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
 <p><code>backtest run</code> を通算 10 回実行すると、その後の<strong>いずれかのコマンドの実行後</strong>に <strong>1 度だけ</strong>
 <a href="https://www.producthunt.com/products/alphaforge/reviews">Product Hunt のレビューページ</a> を
@@ -4019,7 +4066,7 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <li>非対話実行（<code>FORGE_NONINTERACTIVE=1</code> / <code>CI=1</code> / 標準入力が TTY でない場合）</li>
 </ul>
 <p>案内自体を無効化するには環境変数を設定してください。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
 </code></pre></div>
 <p>表示状態は <code>$XDG_CONFIG_HOME/forge/review_prompt.json</code>（未設定時 <code>~/.config/forge/review_prompt.json</code>）に記録されます。実際に使ってみて役に立った・立たなかったのどちらでも、レビューは同じ課題を持つ人の判断材料になります。</p>
 <hr />
