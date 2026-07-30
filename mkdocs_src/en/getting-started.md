@@ -616,6 +616,37 @@ For other issues and detailed FAQ, see [`/en/install.html`](https://alforgelabs.
 
 ---
 
+## Update notices (at most once per 24 hours)
+
+When a newer version is available, a one-line notice appears after a command finishes.
+
+```text
+ℹ A new version is available: 1.2.0 → 1.3.0
+  Run `alpha-forge self update` to upgrade (set FORGE_NO_UPDATE_CHECK=1 to disable this notice).
+```
+
+- The latest version is checked **at most once per 24 hours** and the result is cached. You are never made to wait long when offline (1.5 s connect / 2.0 s read timeout; a failed check is silently retried next time)
+- The notice for a given version appears **at most once per 24 hours**. When a new version ships, it is shown right away
+- Neither the check nor the notice happens when
+    - the command was run with `--json` (machine-readable output stays clean)
+    - the run is non-interactive (`FORGE_NONINTERACTIVE=1` / `CI=1` / stdin is not a TTY)
+    - running from source — `alpha-forge self update` is unavailable there
+- Pre-releases (beta and the like) are never recommended. To install one, pass its tag explicitly with `alpha-forge self update --version <tag>`
+
+To disable the notice:
+
+```bash
+export FORGE_NO_UPDATE_CHECK=1
+```
+
+Check state is recorded in `$XDG_CONFIG_HOME/forge/update_check.json` (or `~/.config/forge/update_check.json` when unset).
+
+!!! info "Where the check goes"
+
+    The update check talks to **GitHub** (the distribution repository's Releases API). Nothing is sent to the AlphaForge developers. There is no telemetry of any kind.
+
+---
+
 ## About reviews (shown once)
 
 After your 10th `backtest run`, the next interactive command prints a single message

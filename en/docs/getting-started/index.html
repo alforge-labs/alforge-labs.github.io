@@ -865,6 +865,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#update-notices-at-most-once-per-24-hours" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update notices (at most once per 24 hours)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#about-reviews-shown-once" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3265,6 +3276,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#update-notices-at-most-once-per-24-hours" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update notices (at most once per 24 hours)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#about-reviews-shown-once" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4013,6 +4035,31 @@ by hand.</p>
 <li><a href="../ai-agents/exploration-workflow/">AI-Driven Strategy Exploration Workflow</a> — Autonomous exploration with Claude Code / Codex × AlphaForge</li>
 </ul>
 <hr />
+<h2 id="update-notices-at-most-once-per-24-hours">Update notices (at most once per 24 hours)<a class="headerlink" href="#update-notices-at-most-once-per-24-hours" title="Permanent link">&para;</a></h2>
+<p>When a newer version is available, a one-line notice appears after a command finishes.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>ℹ A new version is available: 1.2.0 → 1.3.0
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>  Run `alpha-forge self update` to upgrade (set FORGE_NO_UPDATE_CHECK=1 to disable this notice).
+</code></pre></div>
+<ul>
+<li>The latest version is checked <strong>at most once per 24 hours</strong> and the result is cached. You are never made to wait long when offline (1.5 s connect / 2.0 s read timeout; a failed check is silently retried next time)</li>
+<li>The notice for a given version appears <strong>at most once per 24 hours</strong>. When a new version ships, it is shown right away</li>
+<li>Neither the check nor the notice happens when<ul>
+<li>the command was run with <code>--json</code> (machine-readable output stays clean)</li>
+<li>the run is non-interactive (<code>FORGE_NONINTERACTIVE=1</code> / <code>CI=1</code> / stdin is not a TTY)</li>
+<li>running from source — <code>alpha-forge self update</code> is unavailable there</li>
+</ul>
+</li>
+<li>Pre-releases (beta and the like) are never recommended. To install one, pass its tag explicitly with <code>alpha-forge self update --version &lt;tag&gt;</code></li>
+</ul>
+<p>To disable the notice:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_UPDATE_CHECK</span><span class="o">=</span><span class="m">1</span>
+</code></pre></div>
+<p>Check state is recorded in <code>$XDG_CONFIG_HOME/forge/update_check.json</code> (or <code>~/.config/forge/update_check.json</code> when unset).</p>
+<div class="admonition info">
+<p class="admonition-title">Where the check goes</p>
+<p>The update check talks to <strong>GitHub</strong> (the distribution repository's Releases API). Nothing is sent to the AlphaForge developers. There is no telemetry of any kind.</p>
+</div>
+<hr />
 <h2 id="about-reviews-shown-once">About reviews (shown once)<a class="headerlink" href="#about-reviews-shown-once" title="Permanent link">&para;</a></h2>
 <p>After your 10th <code>backtest run</code>, the next interactive command prints a single message
 pointing at the <a href="https://www.producthunt.com/products/alphaforge/reviews">Product Hunt review page</a>.
@@ -4023,7 +4070,7 @@ It never repeats.</p>
 <li>the run is non-interactive (<code>FORGE_NONINTERACTIVE=1</code> / <code>CI=1</code> / stdin is not a TTY)</li>
 </ul>
 <p>To disable it entirely:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
 </code></pre></div>
 <p>State is recorded in <code>$XDG_CONFIG_HOME/forge/review_prompt.json</code> (or <code>~/.config/forge/review_prompt.json</code> when unset). Whether it worked for you or not, a review gives the next person with the same problem something concrete to go on.</p>
 <hr />
