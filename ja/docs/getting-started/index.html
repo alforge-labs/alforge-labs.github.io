@@ -886,6 +886,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        フィードバックを送る
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3297,6 +3308,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        フィードバックを送る
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4069,6 +4091,47 @@ JSON 末尾の <code>}</code> 直前に追加してください（<code>risk_man
 <div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
 </code></pre></div>
 <p>表示状態は <code>$XDG_CONFIG_HOME/forge/review_prompt.json</code>（未設定時 <code>~/.config/forge/review_prompt.json</code>）に記録されます。実際に使ってみて役に立った・立たなかったのどちらでも、レビューは同じ課題を持つ人の判断材料になります。</p>
+<hr />
+<h2 id="_13">フィードバックを送る<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
+<p>うまくいかなかったこと・欲しい機能・使ってみた感想は、次のコマンドで送れます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>alpha-forge<span class="w"> </span>feedback
+</code></pre></div>
+<p>ブラウザで <a href="https://github.com/alforge-labs/feedback">alforge-labs/feedback</a> の issue フォームが開きます。直近 24 時間以内にエラーが出ていた場合は、バグ報告テンプレートが選ばれ、次の項目が自動で入ります。</p>
+<table>
+<thead>
+<tr>
+<th>自動で入るもの</th>
+<th>決して入らないもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AlphaForge のバージョン</td>
+<td><strong>コマンドの引数</strong>（銘柄・戦略 ID）</td>
+</tr>
+<tr>
+<td>OS / アーキテクチャ</td>
+<td><strong>診断ログの中身</strong></td>
+</tr>
+<tr>
+<td>エラーの種類（例外クラス名）</td>
+<td></td>
+</tr>
+<tr>
+<td>サブコマンド名（引数を除く）</td>
+<td></td>
+</tr>
+<tr>
+<td>診断ログの<strong>パス</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">送信ボタンを押すまで何も送信されません</p>
+<p>自動で入るのは上表の左側だけです。<strong>銘柄や戦略 ID を含むコマンド引数と、診断ログの中身は含まれません。</strong> 内容は送信前に自由に編集・削除できます。診断ログを添付するかどうかは、中身を確認したうえでご自身で判断してください。</p>
+</div>
+<p>ブラウザを開かず URL だけ確認したい場合は <code>alpha-forge feedback --print-url</code> を使ってください。非対話実行（<code>FORGE_NONINTERACTIVE=1</code> / CI / 標準入力が TTY でない場合）でも同じ挙動になります。</p>
 <hr />
 <!-- 同期元: `ja/install.html`（インストール・Whop ログイン・トラブルシューティング部分）。バックテスト実行例は alpha-forge の戦略 JSON スキーマ（`spy_sma_crossover_v1.json` を参考）に基づく。issue #117 で旧 `quickstart.md` を本ページに統合。 -->
 

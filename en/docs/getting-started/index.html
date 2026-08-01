@@ -886,6 +886,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sending-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sending feedback
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3297,6 +3308,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sending-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sending feedback
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4073,6 +4095,47 @@ It never repeats.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FORGE_NO_REVIEW_PROMPT</span><span class="o">=</span><span class="m">1</span>
 </code></pre></div>
 <p>State is recorded in <code>$XDG_CONFIG_HOME/forge/review_prompt.json</code> (or <code>~/.config/forge/review_prompt.json</code> when unset). Whether it worked for you or not, a review gives the next person with the same problem something concrete to go on.</p>
+<hr />
+<h2 id="sending-feedback">Sending feedback<a class="headerlink" href="#sending-feedback" title="Permanent link">&para;</a></h2>
+<p>What did not work, what you wish existed, or just what you thought — one command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>alpha-forge<span class="w"> </span>feedback
+</code></pre></div>
+<p>This opens an issue form at <a href="https://github.com/alforge-labs/feedback">alforge-labs/feedback</a> in your browser. If an error occurred within the last 24 hours, the bug report template is selected and the following are filled in for you.</p>
+<table>
+<thead>
+<tr>
+<th>Filled in automatically</th>
+<th>Never included</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AlphaForge version</td>
+<td><strong>Command arguments</strong> (tickers, strategy IDs)</td>
+</tr>
+<tr>
+<td>OS / architecture</td>
+<td><strong>Diagnostic log contents</strong></td>
+</tr>
+<tr>
+<td>Error type (exception class name)</td>
+<td></td>
+</tr>
+<tr>
+<td>Subcommand name (without arguments)</td>
+<td></td>
+</tr>
+<tr>
+<td>Diagnostic log <strong>path</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Nothing is sent until you press Submit</p>
+<p>Only the left column above is filled in. <strong>Command arguments — which carry your tickers and strategy IDs — and the contents of the diagnostic log are never included.</strong> Edit or delete anything before submitting. Whether to attach the log is your call, after you have read it.</p>
+</div>
+<p>To see the URL without opening a browser, use <code>alpha-forge feedback --print-url</code>. Non-interactive runs (<code>FORGE_NONINTERACTIVE=1</code> / CI / stdin is not a TTY) behave the same way.</p>
 <hr />
 <!-- Synced from: `en/install.html` (install / Whop login / troubleshooting). The backtest example follows the alpha-forge strategy JSON schema (based on `spy_sma_crossover_v1.json`). Issue #117 merged the former `quickstart.md` into this page. -->
 

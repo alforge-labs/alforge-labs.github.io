@@ -668,4 +668,30 @@ State is recorded in `$XDG_CONFIG_HOME/forge/review_prompt.json` (or `~/.config/
 
 ---
 
+## Sending feedback
+
+What did not work, what you wish existed, or just what you thought — one command:
+
+```bash
+alpha-forge feedback
+```
+
+This opens an issue form at [alforge-labs/feedback](https://github.com/alforge-labs/feedback) in your browser. If an error occurred within the last 24 hours, the bug report template is selected and the following are filled in for you.
+
+| Filled in automatically | Never included |
+|---|---|
+| AlphaForge version | **Command arguments** (tickers, strategy IDs) |
+| OS / architecture | **Diagnostic log contents** |
+| Error type (exception class name) | |
+| Subcommand name (without arguments) | |
+| Diagnostic log **path** | |
+
+!!! info "Nothing is sent until you press Submit"
+
+    Only the left column above is filled in. **Command arguments — which carry your tickers and strategy IDs — and the contents of the diagnostic log are never included.** Edit or delete anything before submitting. Whether to attach the log is your call, after you have read it.
+
+To see the URL without opening a browser, use `alpha-forge feedback --print-url`. Non-interactive runs (`FORGE_NONINTERACTIVE=1` / CI / stdin is not a TTY) behave the same way.
+
+---
+
 <!-- Synced from: `en/install.html` (install / Whop login / troubleshooting). The backtest example follows the alpha-forge strategy JSON schema (based on `spy_sma_crossover_v1.json`). Issue #117 merged the former `quickstart.md` into this page. -->
