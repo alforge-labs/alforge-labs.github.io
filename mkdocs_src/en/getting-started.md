@@ -120,6 +120,19 @@ alpha-forge system init
 
     In **non-interactive environments** (CI, pipes, agents) you can't type `y`, so the command stops with `Aborted!`. In that case, set the environment variable `FORGE_ACCEPT_EULA=1` (`true` / `yes` / `on` also work) to auto-accept the EULA on first run and continue (available in a recent version onward).
 
+!!! tip "The display language follows your locale"
+
+    The CLI picks its display language — including the EULA acceptance prompt — from `LC_ALL` / `LC_MESSAGES` / `LANG`: Japanese for a Japanese locale, English for any other real locale. When no locale is set, or it is `C` / `POSIX`, it falls back to Japanese.
+
+    Set `FORGE_LANG` to choose explicitly; it takes precedence over the locale.
+
+    ```bash
+    export FORGE_LANG=en   # force English
+    export FORGE_LANG=ja   # force Japanese
+    ```
+
+    **The full EULA text is available in English only.** The prompt shows a summary and points at the full-text file.
+
 #### Zero-fetch instant result — run the DEMO backtest now
 
 `alpha-forge system init` automatically deploys **bundled synthetic learning data and a demo strategy** alongside the config, so you can run a backtest immediately — no data fetch, no network access needed.
