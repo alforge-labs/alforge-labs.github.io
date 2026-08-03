@@ -3036,6 +3036,10 @@
 <td><code>ALPHA_VIS_JOB_CONCURRENCY</code></td>
 <td>非同期ジョブの同時実行数（既定 <code>1</code>。バックテストエンジンは CPU 集約のため、増やす場合はマシン性能に注意）</td>
 </tr>
+<tr>
+<td><code>ALPHA_VIS_AGENT_TIMEOUT</code></td>
+<td>AI 戦略開発（Develop 画面）ジョブのタイムアウト秒数（既定 <code>1800</code>）。ハング時はプロセスツリーごと kill してジョブを失敗扱いにする</td>
+</tr>
 </tbody>
 </table>
 <p>優先順位は <code>--forge-config</code> &gt; <code>&lt;forge-dir&gt;/forge.yaml</code> &gt; <code>FORGE_CONFIG</code> です（v0.7.2 以降）。<code>--forge-dir</code> で開いたプロジェクトに <code>forge.yaml</code> があれば常にそちらが使われるため、シェルに <code>export FORGE_CONFIG</code> が残っていても別プロジェクトのデータを読むことはありません。フォールバックとして <code>FORGE_CONFIG</code> が採用された場合は、起動ログに採用元が表示されます。</p>

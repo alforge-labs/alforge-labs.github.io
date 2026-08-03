@@ -60,6 +60,7 @@ If `forge.yaml` lives directly under `<forge-dir>`, it is loaded automatically. 
 | `FORGE_CONFIG` | Fallback path to `forge.yaml`, consulted only when `--forge-config` is not given and `<forge-dir>/forge.yaml` does not exist |
 | `ALPHA_VIS_JOB_TIMEOUT` | Timeout in seconds for asynchronous jobs (GUI-launched optimize / WFT / backtest; default `3600`) |
 | `ALPHA_VIS_JOB_CONCURRENCY` | Number of concurrent asynchronous jobs (default `1`; the backtest engine is CPU-bound, so raise with care) |
+| `ALPHA_VIS_AGENT_TIMEOUT` | Timeout in seconds for an AI strategy development (Develop view) job (default `1800`). On timeout, the whole process tree is killed and the job is marked failed |
 
 The resolution order is `--forge-config` > `<forge-dir>/forge.yaml` > `FORGE_CONFIG` (since v0.7.2). If the project opened via `--forge-dir` contains a `forge.yaml`, it always wins — a stale `export FORGE_CONFIG` in your shell can no longer silently point the dashboard at a different project. When the `FORGE_CONFIG` fallback is used, the startup log shows which file was picked.
 
