@@ -1834,6 +1834,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Develop 画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3107,6 +3118,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Develop 画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3341,6 +3363,61 @@
 <li>タグフィルタ</li>
 <li>戦略リンクでアイデアと実装の対応を追跡</li>
 </ul>
+<h2 id="develop">Develop 画面<a class="headerlink" href="#develop" title="Permanent link">&para;</a></h2>
+<p>GUI から AI 戦略開発を自動実行する画面です。<code>/develop</code> でアクセスでき、ヘッダーナビの「開発」からも遷移できます（ライブの後・整理の前に表示）。<code>alpha-vis serve</code> が loopback（既定のホスト）で起動しており、かつ <code>claude</code> / <code>codex</code> CLI のいずれかが検出された場合にのみ、ナビ項目自体が表示されます。</p>
+<p>ゴール文（自由記述）・対象銘柄（任意）・バックエンド（Claude Code / Codex CLI）を入力すると、ローカルにインストール済みの <code>claude</code> / <code>codex</code> CLI をヘッドレスで起動し、戦略 JSON の作成 → <code>alpha-forge backtest run</code> による検証 → 完了後に新戦略へのリンク表示、までを非同期ジョブとして自動実行します。ジョブの観察・キャンセルは実行履歴と共通の仕組みを使います。</p>
+<div class="admonition warning">
+<p class="admonition-title">外部通信について</p>
+<p>本機能はユーザー自身の <code>claude</code> / <code>codex</code> CLI をそのまま起動します。これらの CLI は Anthropic / OpenAI と通信します。alpha-visualizer 自体は API キーの入力・保存・送信を一切行いません。</p>
+</div>
+<p><strong>権限モデル</strong></p>
+<ul>
+<li>エージェントは forge ワークスペース内でのみ動作します（claude: <code>--permission-mode dontAsk</code> + <code>--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"</code>、codex: <code>--sandbox workspace-write</code>）</li>
+<li>非 loopback バインド（<code>alpha-vis serve --host 0.0.0.0</code> 等）で起動している場合、この機能自体が無効化されます（LAN 越しに任意コード実行に近い操作をされないようにするため）</li>
+</ul>
+<p><strong>前提条件</strong></p>
+<ul>
+<li><code>claude</code>（Claude Code）または <code>codex</code>（Codex CLI）が PATH にあり、認証済みであること</li>
+<li><code>alpha-forge</code> が導入済みであること</li>
+<li><strong>codex バックエンドの既知の制約</strong>: <code>--sandbox workspace-write</code> はネットワークを遮断するため、未キャッシュ銘柄の価格データ取得ができません（実測: DNS 解決の段階で失敗）。対象銘柄で事前に一度バックテストを実行してデータをキャッシュしておくか、claude バックエンドを使ってください（claude 側はエージェントのツール実行に制限を課しますが、alpha-forge CLI 自体の通信までは遮断しません）</li>
+</ul>
+<p><strong>環境変数</strong></p>
+<table>
+<thead>
+<tr>
+<th>変数名</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ALPHA_VIS_AGENT_TIMEOUT</code></td>
+<td>エージェントジョブのタイムアウト秒数（既定 <code>1800</code>）。ハング時はプロセスツリーごと kill してジョブを失敗扱いにする</td>
+</tr>
+</tbody>
+</table>
+<p><strong>API</strong></p>
+<table>
+<thead>
+<tr>
+<th>メソッド</th>
+<th>パス</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/agent/backends</code></td>
+<td><code>claude</code> / <code>codex</code> の検出状況（導入有無・バージョン）と、機能自体が有効か（loopback バインドかどうか）を返す</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/agent/jobs</code></td>
+<td>ゴール文・対象銘柄・バックエンドを指定してエージェントジョブを起動する（202 を返し、以降の観察・キャンセルは既存の <code>/api/jobs</code> 系エンドポイントに委譲）</td>
+</tr>
+</tbody>
+</table>
 <h2 id="maintenance">Maintenance 画面<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
 <p><code>strategies.db</code> に定義がもう存在しない戦略の実行結果（「孤児」）を一覧し、選んで削除します。<code>/maintenance</code> でアクセスでき、ヘッダーナビの「整理」からも遷移できます。</p>
 <ul>

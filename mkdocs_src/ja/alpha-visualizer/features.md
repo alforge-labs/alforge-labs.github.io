@@ -130,6 +130,39 @@ alpha-visualizer は結果を見るだけでなく、**バックテスト・最�
 - タグフィルタ
 - 戦略リンクでアイデアと実装の対応を追跡
 
+## Develop 画面
+
+GUI から AI 戦略開発を自動実行する画面です。`/develop` でアクセスでき、ヘッダーナビの「開発」からも遷移できます（ライブの後・整理の前に表示）。`alpha-vis serve` が loopback（既定のホスト）で起動しており、かつ `claude` / `codex` CLI のいずれかが検出された場合にのみ、ナビ項目自体が表示されます。
+
+ゴール文（自由記述）・対象銘柄（任意）・バックエンド（Claude Code / Codex CLI）を入力すると、ローカルにインストール済みの `claude` / `codex` CLI をヘッドレスで起動し、戦略 JSON の作成 → `alpha-forge backtest run` による検証 → 完了後に新戦略へのリンク表示、までを非同期ジョブとして自動実行します。ジョブの観察・キャンセルは実行履歴と共通の仕組みを使います。
+
+!!! warning "外部通信について"
+    本機能はユーザー自身の `claude` / `codex` CLI をそのまま起動します。これらの CLI は Anthropic / OpenAI と通信します。alpha-visualizer 自体は API キーの入力・保存・送信を一切行いません。
+
+**権限モデル**
+
+- エージェントは forge ワークスペース内でのみ動作します（claude: `--permission-mode dontAsk` + `--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"`、codex: `--sandbox workspace-write`）
+- 非 loopback バインド（`alpha-vis serve --host 0.0.0.0` 等）で起動している場合、この機能自体が無効化されます（LAN 越しに任意コード実行に近い操作をされないようにするため）
+
+**前提条件**
+
+- `claude`（Claude Code）または `codex`（Codex CLI）が PATH にあり、認証済みであること
+- `alpha-forge` が導入済みであること
+- **codex バックエンドの既知の制約**: `--sandbox workspace-write` はネットワークを遮断するため、未キャッシュ銘柄の価格データ取得ができません（実測: DNS 解決の段階で失敗）。対象銘柄で事前に一度バックテストを実行してデータをキャッシュしておくか、claude バックエンドを使ってください（claude 側はエージェントのツール実行に制限を課しますが、alpha-forge CLI 自体の通信までは遮断しません）
+
+**環境変数**
+
+| 変数名 | 役割 |
+|---|---|
+| `ALPHA_VIS_AGENT_TIMEOUT` | エージェントジョブのタイムアウト秒数（既定 `1800`）。ハング時はプロセスツリーごと kill してジョブを失敗扱いにする |
+
+**API**
+
+| メソッド | パス | 内容 |
+|---|---|---|
+| `GET` | `/api/agent/backends` | `claude` / `codex` の検出状況（導入有無・バージョン）と、機能自体が有効か（loopback バインドかどうか）を返す |
+| `POST` | `/api/agent/jobs` | ゴール文・対象銘柄・バックエンドを指定してエージェントジョブを起動する（202 を返し、以降の観察・キャンセルは既存の `/api/jobs` 系エンドポイントに委譲） |
+
 ## Maintenance 画面
 
 `strategies.db` に定義がもう存在しない戦略の実行結果（「孤児」）を一覧し、選んで削除します。`/maintenance` でアクセスでき、ヘッダーナビの「整理」からも遷移できます。

@@ -1834,6 +1834,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Develop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3107,6 +3118,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#develop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Develop
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3341,6 +3363,61 @@
 <li>Filter by tag</li>
 <li>Linked strategies tie ideas to their implementations</li>
 </ul>
+<h2 id="develop">Develop<a class="headerlink" href="#develop" title="Permanent link">&para;</a></h2>
+<p>Runs AI-assisted strategy development from the GUI. Available at <code>/develop</code>, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The nav item only appears when <code>alpha-vis serve</code> is bound to loopback (the default host) and either the <code>claude</code> or <code>codex</code> CLI is detected.</p>
+<p>Enter a free-text goal, an optional target symbol, and a backend (Claude Code / Codex CLI). This launches your locally installed <code>claude</code> / <code>codex</code> CLI headlessly as an asynchronous job to automatically: create a strategy JSON, validate it with <code>alpha-forge backtest run</code>, and show a link to the new strategy once it's done. Observing and cancelling the job uses the same mechanism as the run history screen.</p>
+<div class="admonition warning">
+<p class="admonition-title">About external communication</p>
+<p>This feature launches your own <code>claude</code> / <code>codex</code> CLI as-is. Those CLIs communicate with Anthropic / OpenAI. alpha-visualizer itself never handles, stores, or transmits API keys.</p>
+</div>
+<p><strong>Permission model</strong></p>
+<ul>
+<li>The agent only operates inside the forge workspace (claude: <code>--permission-mode dontAsk</code> + <code>--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"</code>; codex: <code>--sandbox workspace-write</code>)</li>
+<li>If the server is bound to a non-loopback address (e.g. <code>alpha-vis serve --host 0.0.0.0</code>), this feature is disabled entirely, so it can't be used to run arbitrary-code-like operations over the LAN</li>
+</ul>
+<p><strong>Prerequisites</strong></p>
+<ul>
+<li><code>claude</code> (Claude Code) or <code>codex</code> (Codex CLI) must be on <code>PATH</code> and already authenticated</li>
+<li><code>alpha-forge</code> must be installed</li>
+<li><strong>Known limitation of the codex backend</strong>: <code>--sandbox workspace-write</code> blocks network access, so it cannot fetch price data for a symbol that isn't already cached (observed: it fails at DNS resolution). Run a backtest for the target symbol once beforehand to cache the data, or use the claude backend instead (claude restricts what tools the agent can run, but doesn't block the alpha-forge CLI's own network access)</li>
+</ul>
+<p><strong>Environment variable</strong></p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ALPHA_VIS_AGENT_TIMEOUT</code></td>
+<td>Timeout in seconds for an agent job (default <code>1800</code>). On timeout, the whole process tree is killed and the job is marked failed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>API</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/agent/backends</code></td>
+<td>Returns detection status (installed / version) for <code>claude</code> and <code>codex</code>, plus whether the feature itself is enabled (i.e. bound to loopback)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/agent/jobs</code></td>
+<td>Launches an agent job with a goal, optional symbol, and backend (returns 202; subsequent observation/cancellation is delegated to the existing <code>/api/jobs</code> endpoints)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
 <p>Lists "orphan" backtest results — runs whose strategy definition no longer exists in <code>strategies.db</code> — and lets you select and delete them. Accessible at <code>/maintenance</code>, or via the "Maintenance" link in the header nav.</p>
 <ul>
