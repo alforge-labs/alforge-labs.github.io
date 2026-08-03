@@ -141,7 +141,9 @@ GUI から AI 戦略開発を自動実行する画面です。`/develop` でア�
 
 **権限モデル**
 
-- エージェントは forge ワークスペース内でのみ動作します（claude: `--permission-mode dontAsk` + `--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"`、codex: `--sandbox workspace-write`）
+- エージェントは forge ワークスペース内でのみ動作します（claude: `--permission-mode dontAsk` + `--allowedTools "Read(//<workspace>/**),Edit(//<workspace>/**),Glob,Grep,Bash(alpha-forge *)"`、codex: `--sandbox workspace-write`）
+- claude バックエンドではファイルの読み書きがワークスペース配下のパスにスコープされ、範囲外の操作は自動的に拒否されます（`Edit` ルールは Write を含むファイル編集ツール全体に適用されます）。ただしこれは CLI 自身の許可判定であり、codex の `--sandbox workspace-write` のような OS レベルのサンドボックスではありません
+- 実行できるシェルコマンドは `alpha-forge` のみです。エージェントが起動するプロセスには `FORGE_NONINTERACTIVE=1` が継承されるため、alpha-forge 側の破壊的操作の確認プロンプトは自動的に確認済みとして扱われます（操作がワークスペース内で完結する前提での許容です）
 - 非 loopback バインド（`alpha-vis serve --host 0.0.0.0` 等）で起動している場合、この機能自体が無効化されます（LAN 越しに任意コード実行に近い操作をされないようにするため）
 
 **前提条件**

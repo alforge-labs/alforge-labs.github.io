@@ -141,7 +141,9 @@ Enter a free-text goal, an optional target symbol, and a backend (Claude Code / 
 
 **Permission model**
 
-- The agent only operates inside the forge workspace (claude: `--permission-mode dontAsk` + `--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"`; codex: `--sandbox workspace-write`)
+- The agent only operates inside the forge workspace (claude: `--permission-mode dontAsk` + `--allowedTools "Read(//<workspace>/**),Edit(//<workspace>/**),Glob,Grep,Bash(alpha-forge *)"`; codex: `--sandbox workspace-write`)
+- On the claude backend, file reads and writes are scoped to paths under the workspace, and anything outside is denied automatically (the `Edit` rule covers all file-editing tools, including Write). Note that this is the CLI's own permission check, not an OS-level sandbox like codex's `--sandbox workspace-write`
+- The only shell command the agent can run is `alpha-forge`. Processes it starts inherit `FORGE_NONINTERACTIVE=1`, so alpha-forge's confirmation prompts for destructive operations are auto-confirmed — an accepted trade-off given that those operations stay inside the workspace
 - If the server is bound to a non-loopback address (e.g. `alpha-vis serve --host 0.0.0.0`), this feature is disabled entirely, so it can't be used to run arbitrary-code-like operations over the LAN
 
 **Prerequisites**
