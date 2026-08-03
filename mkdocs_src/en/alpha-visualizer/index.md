@@ -13,6 +13,7 @@
 - Inspect equity / drawdown / trade history with benchmark metrics (alpha, beta, IR, correlation)
 - **Run backtests, optimization, and Walk-Forward Tests from the GUI** (async jobs, SSE progress, cancellation)
 - **Parameter tuning loop** (edit → trial run → compare → explicit save) and duplicate-based strategy creation
+- **AI strategy development** (Develop view, localhost only): enter a goal and your local `claude` / `codex` CLI automatically creates a strategy JSON and validates it with a backtest
 - Compare strategies side-by-side, including a Pearson correlation heatmap
 - Visualize Walk-Forward composite equity and Grid optimization results
 - Reconcile live trading against backtest with period-aligned diff

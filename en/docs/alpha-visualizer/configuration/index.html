@@ -3036,6 +3036,10 @@
 <td><code>ALPHA_VIS_JOB_CONCURRENCY</code></td>
 <td>Number of concurrent asynchronous jobs (default <code>1</code>; the backtest engine is CPU-bound, so raise with care)</td>
 </tr>
+<tr>
+<td><code>ALPHA_VIS_AGENT_TIMEOUT</code></td>
+<td>Timeout in seconds for an AI strategy development (Develop view) job (default <code>1800</code>). On timeout, the whole process tree is killed and the job is marked failed</td>
+</tr>
 </tbody>
 </table>
 <p>The resolution order is <code>--forge-config</code> &gt; <code>&lt;forge-dir&gt;/forge.yaml</code> &gt; <code>FORGE_CONFIG</code> (since v0.7.2). If the project opened via <code>--forge-dir</code> contains a <code>forge.yaml</code>, it always wins — a stale <code>export FORGE_CONFIG</code> in your shell can no longer silently point the dashboard at a different project. When the <code>FORGE_CONFIG</code> fallback is used, the startup log shows which file was picked.</p>

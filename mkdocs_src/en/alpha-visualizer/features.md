@@ -130,6 +130,39 @@ Browse exploration ideas and their state.
 - Filter by tag
 - Linked strategies tie ideas to their implementations
 
+## Develop
+
+Runs AI-assisted strategy development from the GUI. Available at `/develop`, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The "Develop" nav item appears whenever `alpha-vis serve` is bound to localhost (loopback, the default host). If neither `claude` nor `codex` is installed, the nav item and view are still shown, and the view displays an install-guidance card instead of the form.
+
+Enter a free-text goal, an optional target symbol, and a backend (Claude Code / Codex CLI). This launches your locally installed `claude` / `codex` CLI headlessly as an asynchronous job to automatically: create a strategy JSON, validate it with `alpha-forge backtest run`, and show a link to the new strategy once it's done. Observing and cancelling the job uses the same mechanism as the run history screen.
+
+!!! warning "About external communication"
+    This feature launches your own `claude` / `codex` CLI as-is. Those CLIs communicate with Anthropic / OpenAI. alpha-visualizer itself never handles, stores, or transmits API keys.
+
+**Permission model**
+
+- The agent only operates inside the forge workspace (claude: `--permission-mode dontAsk` + `--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"`; codex: `--sandbox workspace-write`)
+- If the server is bound to a non-loopback address (e.g. `alpha-vis serve --host 0.0.0.0`), this feature is disabled entirely, so it can't be used to run arbitrary-code-like operations over the LAN
+
+**Prerequisites**
+
+- `claude` (Claude Code) or `codex` (Codex CLI) must be on `PATH` and already authenticated
+- `alpha-forge` must be installed
+- **Known limitation of the codex backend**: `--sandbox workspace-write` blocks network access, so it cannot fetch price data for a symbol that isn't already cached (observed: it fails at DNS resolution). Run a backtest for the target symbol once beforehand to cache the data, or use the claude backend instead (claude restricts what tools the agent can run, but doesn't block the alpha-forge CLI's own network access)
+
+**Environment variable**
+
+| Variable | Role |
+|---|---|
+| `ALPHA_VIS_AGENT_TIMEOUT` | Timeout in seconds for an agent job (default `1800`). On timeout, the whole process tree is killed and the job is marked failed |
+
+**API**
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/agent/backends` | Returns detection status (installed / version) for `claude` and `codex`, plus whether the feature itself is enabled (i.e. bound to loopback) |
+| `POST` | `/api/agent/jobs` | Launches an agent job with a goal, optional symbol, and backend (returns 202; subsequent observation/cancellation is delegated to the existing `/api/jobs` endpoints) |
+
 ## Maintenance
 
 Lists "orphan" backtest results — runs whose strategy definition no longer exists in `strategies.db` — and lets you select and delete them. Accessible at `/maintenance`, or via the "Maintenance" link in the header nav.
