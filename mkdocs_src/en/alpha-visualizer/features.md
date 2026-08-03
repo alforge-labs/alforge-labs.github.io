@@ -132,7 +132,7 @@ Browse exploration ideas and their state.
 
 ## Develop
 
-Runs AI-assisted strategy development from the GUI. Available at `/develop`, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The nav item only appears when `alpha-vis serve` is bound to loopback (the default host) and either the `claude` or `codex` CLI is detected.
+Runs AI-assisted strategy development from the GUI. Available at `/develop`, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The "Develop" nav item appears whenever `alpha-vis serve` is bound to localhost (loopback, the default host). If neither `claude` nor `codex` is installed, the nav item and view are still shown, and the view displays an install-guidance card instead of the form.
 
 Enter a free-text goal, an optional target symbol, and a backend (Claude Code / Codex CLI). This launches your locally installed `claude` / `codex` CLI headlessly as an asynchronous job to automatically: create a strategy JSON, validate it with `alpha-forge backtest run`, and show a link to the new strategy once it's done. Observing and cancelling the job uses the same mechanism as the run history screen.
 

@@ -3364,7 +3364,7 @@
 <li>Linked strategies tie ideas to their implementations</li>
 </ul>
 <h2 id="develop">Develop<a class="headerlink" href="#develop" title="Permanent link">&para;</a></h2>
-<p>Runs AI-assisted strategy development from the GUI. Available at <code>/develop</code>, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The nav item only appears when <code>alpha-vis serve</code> is bound to loopback (the default host) and either the <code>claude</code> or <code>codex</code> CLI is detected.</p>
+<p>Runs AI-assisted strategy development from the GUI. Available at <code>/develop</code>, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The "Develop" nav item appears whenever <code>alpha-vis serve</code> is bound to localhost (loopback, the default host). If neither <code>claude</code> nor <code>codex</code> is installed, the nav item and view are still shown, and the view displays an install-guidance card instead of the form.</p>
 <p>Enter a free-text goal, an optional target symbol, and a backend (Claude Code / Codex CLI). This launches your locally installed <code>claude</code> / <code>codex</code> CLI headlessly as an asynchronous job to automatically: create a strategy JSON, validate it with <code>alpha-forge backtest run</code>, and show a link to the new strategy once it's done. Observing and cancelling the job uses the same mechanism as the run history screen.</p>
 <div class="admonition warning">
 <p class="admonition-title">About external communication</p>

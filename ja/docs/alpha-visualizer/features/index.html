@@ -3364,7 +3364,7 @@
 <li>戦略リンクでアイデアと実装の対応を追跡</li>
 </ul>
 <h2 id="develop">Develop 画面<a class="headerlink" href="#develop" title="Permanent link">&para;</a></h2>
-<p>GUI から AI 戦略開発を自動実行する画面です。<code>/develop</code> でアクセスでき、ヘッダーナビの「開発」からも遷移できます（ライブの後・整理の前に表示）。<code>alpha-vis serve</code> が loopback（既定のホスト）で起動しており、かつ <code>claude</code> / <code>codex</code> CLI のいずれかが検出された場合にのみ、ナビ項目自体が表示されます。</p>
+<p>GUI から AI 戦略開発を自動実行する画面です。<code>/develop</code> でアクセスでき、ヘッダーナビの「開発」からも遷移できます（ライブの後・整理の前に表示）。ナビの「開発」項目は <code>alpha-vis serve</code> が localhost（loopback、既定のホスト）で起動している場合に表示されます。<code>claude</code> / <code>codex</code> が未導入の場合はナビ項目・ビュー自体は表示され、ビュー内に導入案内カードが表示されます。</p>
 <p>ゴール文（自由記述）・対象銘柄（任意）・バックエンド（Claude Code / Codex CLI）を入力すると、ローカルにインストール済みの <code>claude</code> / <code>codex</code> CLI をヘッドレスで起動し、戦略 JSON の作成 → <code>alpha-forge backtest run</code> による検証 → 完了後に新戦略へのリンク表示、までを非同期ジョブとして自動実行します。ジョブの観察・キャンセルは実行履歴と共通の仕組みを使います。</p>
 <div class="admonition warning">
 <p class="admonition-title">外部通信について</p>
