@@ -3372,7 +3372,9 @@
 </div>
 <p><strong>権限モデル</strong></p>
 <ul>
-<li>エージェントは forge ワークスペース内でのみ動作します（claude: <code>--permission-mode dontAsk</code> + <code>--allowedTools "Read,Write,Edit,Glob,Grep,Bash(alpha-forge *)"</code>、codex: <code>--sandbox workspace-write</code>）</li>
+<li>エージェントは forge ワークスペース内でのみ動作します（claude: <code>--permission-mode dontAsk</code> + <code>--allowedTools "Read(//&lt;workspace&gt;/**),Edit(//&lt;workspace&gt;/**),Glob,Grep,Bash(alpha-forge *)"</code>、codex: <code>--sandbox workspace-write</code>）</li>
+<li>claude バックエンドではファイルの読み書きがワークスペース配下のパスにスコープされ、範囲外の操作は自動的に拒否されます（<code>Edit</code> ルールは Write を含むファイル編集ツール全体に適用されます）。ただしこれは CLI 自身の許可判定であり、codex の <code>--sandbox workspace-write</code> のような OS レベルのサンドボックスではありません</li>
+<li>実行できるシェルコマンドは <code>alpha-forge</code> のみです。エージェントが起動するプロセスには <code>FORGE_NONINTERACTIVE=1</code> が継承されるため、alpha-forge 側の破壊的操作の確認プロンプトは自動的に確認済みとして扱われます（操作がワークスペース内で完結する前提での許容です）</li>
 <li>非 loopback バインド（<code>alpha-vis serve --host 0.0.0.0</code> 等）で起動している場合、この機能自体が無効化されます（LAN 越しに任意コード実行に近い操作をされないようにするため）</li>
 </ul>
 <p><strong>前提条件</strong></p>
