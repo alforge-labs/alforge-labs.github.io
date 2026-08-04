@@ -3396,8 +3396,15 @@
 <td><code>ALPHA_VIS_AGENT_TIMEOUT</code></td>
 <td>Timeout in seconds for an agent job (default <code>1800</code>). On timeout, the whole process tree is killed and the job is marked failed</td>
 </tr>
+<tr>
+<td><code>ALPHA_VIS_AGENT_MAX_TURNS</code></td>
+<td>Default turn limit (default <code>100</code>, claude only). The Develop view's "Turn limit" field overrides it per run (max <code>500</code>)</td>
+</tr>
 </tbody>
 </table>
+<p><strong>Turn limit</strong></p>
+<p>The claude backend stops as soon as it reaches its turn limit (<code>--max-turns</code>), even in the middle of the work. The default is <code>100</code>, chosen so it roughly matches the timeout (1800 s by default) — measurements put one turn at about 17 seconds.</p>
+<p>Exploratory goals that re-run backtests many times can hit the limit, so either raise "Turn limit (optional)" in the Develop view for that run, or split the goal into smaller steps. When a run is cut off this way, the error states that explicitly along with the limit that applied, and whatever the agent created so far stays in the workspace. The codex backend has no equivalent mechanism, so the field only appears when claude is selected.</p>
 <p><strong>API</strong></p>
 <table>
 <thead>
