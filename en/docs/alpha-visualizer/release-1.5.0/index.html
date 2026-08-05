@@ -6,19 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="AlphaForge CLI official documentation — installation, commands, strategy templates, and AI agent integration.">
+        <meta name="description" content="alpha-visualizer v1.5.0 is a major release that closes the loop from data fetching to strategy creation, backtesting, optimization, and Pine export — all in the GUI. It adds a Data screen, TradingView Pine Script export, AI development upgrades (goal builder, derived development), and a setup checklist with a first-strategy guide.">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/en/docs/cli-reference/">
+        <link rel="canonical" href="https://alforgelabs.com/en/docs/alpha-visualizer/release-1.5.0/">
       
       
-        <link rel="prev" href="../alpha-visualizer/release-0.2.0/">
+        <link rel="prev" href="../faq/">
       
       
-        <link rel="next" href="strategy/">
+        <link rel="next" href="../release-1.4.0/">
       
       
         
@@ -28,19 +28,19 @@
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Overview - AlphaForge Documentation</title>
+        <title>alpha-visualizer v1.5.0 — the GUI wave (data management, Pine export, AI development upgrades, Get Started) - AlphaForge Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -59,7 +59,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -94,7 +94,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cli-reference" class="md-skip">
+        <a href="#alpha-visualizer-v150-the-gui-wave" class="md-skip">
           Skip to content
         </a>
       
@@ -128,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              alpha-visualizer v1.5.0 — the GUI wave (data management, Pine export, AI development upgrades, Get Started)
             
           </span>
         </div>
@@ -241,7 +241,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -262,7 +262,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../getting-started/" class="md-tabs__link">
+        <a href="../../getting-started/" class="md-tabs__link">
           
   
   
@@ -282,7 +282,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../ai-agents/" class="md-tabs__link">
+        <a href="../../ai-agents/" class="md-tabs__link">
           
   
   
@@ -302,7 +302,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../guides/end-to-end-workflow/" class="md-tabs__link">
+        <a href="../../guides/end-to-end-workflow/" class="md-tabs__link">
           
   
   
@@ -322,31 +322,11 @@
     
     
       <li class="md-tabs__item">
-        <a href="../templates/" class="md-tabs__link">
+        <a href="../../templates/" class="md-tabs__link">
           
   
   
   Strategy Catalog
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../alpha-visualizer/" class="md-tabs__link">
-          
-  
-  
-  Visualization
 
         </a>
       </li>
@@ -364,7 +344,27 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Visualization
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cli-reference/" class="md-tabs__link">
           
   
   
@@ -382,7 +382,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../changelog/" class="md-tabs__link">
+      <a href="../../changelog/" class="md-tabs__link">
         
   
   
@@ -403,7 +403,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../legal/trust-safety-limits/" class="md-tabs__link">
+        <a href="../../legal/trust-safety-limits/" class="md-tabs__link">
           
   
   
@@ -455,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -534,7 +534,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   
@@ -562,7 +562,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/trial-limits/" class="md-nav__link">
+      <a href="../../guides/trial-limits/" class="md-nav__link">
         
   
   
@@ -649,7 +649,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/" class="md-nav__link">
+      <a href="../../ai-agents/" class="md-nav__link">
         
   
   
@@ -677,7 +677,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/quickstart/" class="md-nav__link">
+      <a href="../../ai-agents/quickstart/" class="md-nav__link">
         
   
   
@@ -705,7 +705,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/exploration-workflow/" class="md-nav__link">
+      <a href="../../ai-agents/exploration-workflow/" class="md-nav__link">
         
   
   
@@ -733,7 +733,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/mcp-reference/" class="md-nav__link">
+      <a href="../../ai-agents/mcp-reference/" class="md-nav__link">
         
   
   
@@ -761,7 +761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/cli-conventions/" class="md-nav__link">
+      <a href="../../ai-agents/cli-conventions/" class="md-nav__link">
         
   
   
@@ -789,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-agents/json-output-reference/" class="md-nav__link">
+      <a href="../../ai-agents/json-output-reference/" class="md-nav__link">
         
   
   
@@ -876,7 +876,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/end-to-end-workflow/" class="md-nav__link">
+      <a href="../../guides/end-to-end-workflow/" class="md-nav__link">
         
   
   
@@ -904,7 +904,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/output-examples/" class="md-nav__link">
+      <a href="../../guides/output-examples/" class="md-nav__link">
         
   
   
@@ -932,7 +932,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/tradingview-pine-integration/" class="md-nav__link">
+      <a href="../../guides/tradingview-pine-integration/" class="md-nav__link">
         
   
   
@@ -960,7 +960,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/combine-portfolio-pine/" class="md-nav__link">
+      <a href="../../guides/combine-portfolio-pine/" class="md-nav__link">
         
   
   
@@ -988,7 +988,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/tradingview-alpha-strike/" class="md-nav__link">
+      <a href="../../guides/tradingview-alpha-strike/" class="md-nav__link">
         
   
   
@@ -1016,7 +1016,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/alpha-strike-setup/" class="md-nav__link">
+      <a href="../../guides/alpha-strike-setup/" class="md-nav__link">
         
   
   
@@ -1044,7 +1044,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/macro-data/" class="md-nav__link">
+      <a href="../../guides/macro-data/" class="md-nav__link">
         
   
   
@@ -1072,7 +1072,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/glossary/" class="md-nav__link">
+      <a href="../../guides/glossary/" class="md-nav__link">
         
   
   
@@ -1152,7 +1152,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/" class="md-nav__link">
+      <a href="../../usecases/" class="md-nav__link">
         
   
   
@@ -1180,7 +1180,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/tradingview/" class="md-nav__link">
+      <a href="../../usecases/tradingview/" class="md-nav__link">
         
   
   
@@ -1208,7 +1208,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/python-dev/" class="md-nav__link">
+      <a href="../../usecases/python-dev/" class="md-nav__link">
         
   
   
@@ -1236,7 +1236,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/quants/" class="md-nav__link">
+      <a href="../../usecases/quants/" class="md-nav__link">
         
   
   
@@ -1264,7 +1264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/auto-trading/" class="md-nav__link">
+      <a href="../../usecases/auto-trading/" class="md-nav__link">
         
   
   
@@ -1292,7 +1292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/ai-agents/" class="md-nav__link">
+      <a href="../../usecases/ai-agents/" class="md-nav__link">
         
   
   
@@ -1320,7 +1320,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/discretionary/" class="md-nav__link">
+      <a href="../../usecases/discretionary/" class="md-nav__link">
         
   
   
@@ -1348,7 +1348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../usecases/comparison/" class="md-nav__link">
+      <a href="../../usecases/comparison/" class="md-nav__link">
         
   
   
@@ -1443,7 +1443,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../templates/" class="md-nav__link">
+      <a href="../../templates/" class="md-nav__link">
         
   
   
@@ -1471,7 +1471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../strategy-gallery/" class="md-nav__link">
+      <a href="../../strategy-gallery/" class="md-nav__link">
         
   
   
@@ -1503,26 +1503,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -1540,7 +1545,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1558,7 +1563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -1586,7 +1591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -1614,7 +1619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/features/" class="md-nav__link">
+      <a href="../features/" class="md-nav__link">
         
   
   
@@ -1642,7 +1647,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -1670,7 +1675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/faq/" class="md-nav__link">
+      <a href="../faq/" class="md-nav__link">
         
   
   
@@ -1695,26 +1700,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" >
         
           
-          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="">
             
   
   
@@ -1732,7 +1742,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1747,10 +1757,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-1.5.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.5.0 (2026-08-05)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1766,6 +1803,120 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Highlights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Highlights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-the-data-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Data screen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pine-script-export-to-tradingview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Pine Script export to TradingView
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ai-strategy-development-agent-develop-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. AI strategy development (Agent Develop) upgrades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-get-started-setup-checklist-first-strategy-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Get Started (setup checklist + first-strategy guide)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-everything-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Everything else
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Links
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1778,7 +1929,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-1.4.0/" class="md-nav__link">
+      <a href="../release-1.4.0/" class="md-nav__link">
         
   
   
@@ -1806,7 +1957,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-1.3.0/" class="md-nav__link">
+      <a href="../release-1.3.0/" class="md-nav__link">
         
   
   
@@ -1834,7 +1985,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-1.2.0/" class="md-nav__link">
+      <a href="../release-1.2.0/" class="md-nav__link">
         
   
   
@@ -1862,7 +2013,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-1.0.0/" class="md-nav__link">
+      <a href="../release-1.0.0/" class="md-nav__link">
         
   
   
@@ -1890,7 +2041,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-0.9.0/" class="md-nav__link">
+      <a href="../release-0.9.0/" class="md-nav__link">
         
   
   
@@ -1918,7 +2069,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-0.7.1/" class="md-nav__link">
+      <a href="../release-0.7.1/" class="md-nav__link">
         
   
   
@@ -1946,7 +2097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../alpha-visualizer/release-0.2.0/" class="md-nav__link">
+      <a href="../release-0.2.0/" class="md-nav__link">
         
   
   
@@ -1986,31 +2137,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -2028,7 +2174,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2043,37 +2189,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../cli-reference/" class="md-nav__link">
         
   
   
@@ -2089,70 +2208,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#all-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        All Commands
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#built-in-help" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Built-in Help
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-from-agents-ci-non-interactive-execution-json-exit-codes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage from agents / CI (non-interactive execution, --json, exit codes)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related Documentation
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2171,20 +2226,17 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
         
           
-          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
             
   
   
@@ -2220,7 +2272,7 @@
   
   
     <li class="md-nav__item">
-      <a href="strategy/" class="md-nav__link">
+      <a href="../../cli-reference/strategy/" class="md-nav__link">
         
   
   
@@ -2248,7 +2300,7 @@
   
   
     <li class="md-nav__item">
-      <a href="backtest/" class="md-nav__link">
+      <a href="../../cli-reference/backtest/" class="md-nav__link">
         
   
   
@@ -2276,7 +2328,7 @@
   
   
     <li class="md-nav__item">
-      <a href="optimize/" class="md-nav__link">
+      <a href="../../cli-reference/optimize/" class="md-nav__link">
         
   
   
@@ -2304,7 +2356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="explore/" class="md-nav__link">
+      <a href="../../cli-reference/explore/" class="md-nav__link">
         
   
   
@@ -2332,7 +2384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="live/" class="md-nav__link">
+      <a href="../../cli-reference/live/" class="md-nav__link">
         
   
   
@@ -2360,7 +2412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="pine/" class="md-nav__link">
+      <a href="../../cli-reference/pine/" class="md-nav__link">
         
   
   
@@ -2388,7 +2440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="journal/" class="md-nav__link">
+      <a href="../../cli-reference/journal/" class="md-nav__link">
         
   
   
@@ -2416,7 +2468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="idea/" class="md-nav__link">
+      <a href="../../cli-reference/idea/" class="md-nav__link">
         
   
   
@@ -2444,7 +2496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="data/" class="md-nav__link">
+      <a href="../../cli-reference/data/" class="md-nav__link">
         
   
   
@@ -2486,20 +2538,17 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
         
           
-          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
             
   
   
@@ -2535,7 +2584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="analyze/" class="md-nav__link">
+      <a href="../../cli-reference/analyze/" class="md-nav__link">
         
   
   
@@ -2563,7 +2612,7 @@
   
   
     <li class="md-nav__item">
-      <a href="system/" class="md-nav__link">
+      <a href="../../cli-reference/system/" class="md-nav__link">
         
   
   
@@ -2605,20 +2654,17 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
         
           
-          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
             
   
   
@@ -2654,7 +2700,7 @@
   
   
     <li class="md-nav__item">
-      <a href="self/" class="md-nav__link">
+      <a href="../../cli-reference/self/" class="md-nav__link">
         
   
   
@@ -2697,7 +2743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../changelog/" class="md-nav__link">
+      <a href="../../changelog/" class="md-nav__link">
         
   
   
@@ -2776,7 +2822,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../legal/trust-safety-limits/" class="md-nav__link">
+      <a href="../../legal/trust-safety-limits/" class="md-nav__link">
         
   
   
@@ -2804,7 +2850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../legal/disclaimers/" class="md-nav__link">
+      <a href="../../legal/disclaimers/" class="md-nav__link">
         
   
   
@@ -2832,7 +2878,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../legal/eula/" class="md-nav__link">
+      <a href="../../legal/eula/" class="md-nav__link">
         
   
   
@@ -2860,7 +2906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../legal/privacy/" class="md-nav__link">
+      <a href="../../legal/privacy/" class="md-nav__link">
         
   
   
@@ -2915,10 +2961,82 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#all-commands" class="md-nav__link">
+  <a href="#highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        All Commands
+        Highlights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Highlights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-the-data-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Data screen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pine-script-export-to-tradingview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Pine Script export to TradingView
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ai-strategy-development-agent-develop-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. AI strategy development (Agent Develop) upgrades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-get-started-setup-checklist-first-strategy-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Get Started (setup checklist + first-strategy guide)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-everything-else" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Everything else
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to upgrade
       
     </span>
   </a>
@@ -2926,32 +3044,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#built-in-help" class="md-nav__link">
+  <a href="#links" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Built-in Help
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-from-agents-ci-non-interactive-execution-json-exit-codes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage from agents / CI (non-interactive execution, --json, exit codes)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related Documentation
+        Links
       
     </span>
   </a>
@@ -2975,142 +3071,54 @@
 
 
 
-<h1 id="cli-reference">CLI Reference<a class="headerlink" href="#cli-reference" title="Permanent link">&para;</a></h1>
-<p>A complete catalog of every command group and subcommand provided by the <code>alpha-forge</code> CLI. Per-group details and parameter documentation are linked from the table below.</p>
-<h2 id="all-commands">All Commands<a class="headerlink" href="#all-commands" title="Permanent link">&para;</a></h2>
-<p>Implementation-derived catalog extracted from the Click decorators in <code>alpha-forge/src/alpha_forge/cli.py</code> and <code>commands/*.py</code>. The <strong>Kind</strong> column reflects each group's place in the CLI hierarchy. Every group is invoked as <code>alpha-forge &lt;group&gt; &lt;subcommand&gt;</code>.</p>
+<h1 id="alpha-visualizer-v150-the-gui-wave">alpha-visualizer v1.5.0 — the GUI wave<a class="headerlink" href="#alpha-visualizer-v150-the-gui-wave" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Released</strong>: August 5, 2026 / <strong>Version</strong>: v1.5.0 / <strong>Distribution</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a> · <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.5.0">GitHub Release</a></p>
+</blockquote>
+<p><a href="../">alpha-visualizer</a> is a standalone OSS package that visualizes AlphaForge backtest results in a web browser. v1.5.0 is a major release that lets beginner-to-intermediate investors complete the whole loop — <strong>fetch data → create a strategy → backtest → optimize → export Pine</strong> — almost entirely in the GUI.</p>
+<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
+<h3 id="1-the-data-screen">1. The Data screen<a class="headerlink" href="#1-the-data-screen" title="Permanent link">&para;</a></h3>
+<p>A new "Data" screen lists stored historical datasets with freshness (datasets older than 24 hours get a "Stale" badge) and lets you fetch symbols or incrementally update everything from the GUI, as asynchronous jobs with SSE progress and cancellation. Screens that hit missing data and the AI develop view link here with the symbol pre-filled. See <a href="../features/#data">Data in Features</a>.</p>
+<h3 id="2-pine-script-export-to-tradingview">2. Pine Script export to TradingView<a class="headerlink" href="#2-pine-script-export-to-tradingview" title="Permanent link">&para;</a></h3>
+<p>The "Export to TradingView" card on the Detail screen (Strategy tab) copies or downloads the strategy as Pine Script (v6). Unsupported indicators are flagged before generating, and the card walks you through pasting into the TradingView Pine editor. Pine export is a paid-plan AlphaForge feature (Trial shows an upgrade prompt).</p>
+<h3 id="3-ai-strategy-development-agent-develop-upgrades">3. AI strategy development (Agent Develop) upgrades<a class="headerlink" href="#3-ai-strategy-development-agent-develop-upgrades" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Core</strong>: the nine groups you use most often in real strategy development; placed directly at the top level</li>
-<li><strong>Auxiliary</strong>: <code>analyze</code> / <code>system</code> are nested groups (<code>alpha-forge &lt;auxiliary&gt; &lt;tool&gt; &lt;action&gt;</code> — three levels deep)</li>
-<li><strong>Meta</strong>: binary self-operations (<code>self</code>)</li>
+<li><strong>Goal builder</strong>: pick a strategy type (trend following / mean reversion / breakout) and indicators to auto-draft a goal text. Indicator choices are limited to Pine-convertible ones, keeping a later TradingView export safe</li>
+<li><strong>Next actions on completion</strong>: jump straight from the completion panel to the new strategy's backtest, optimization, or a comparison with existing strategies</li>
+<li><strong>Derived development from an existing strategy</strong>: the "Improve with AI" card on Detail sends an improvement instruction (e.g. trade less often) and creates a <strong>derived version under a new id</strong> — the original strategy is never modified</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>Group</th>
-<th>Kind</th>
-<th>Subcommands</th>
-<th>Description</th>
-<th>Details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>strategy</strong></td>
-<td>Core</td>
-<td><code>list</code> <code>templates</code> <code>create</code> <code>save</code> <code>show</code> <code>migrate</code> <code>delete</code> <code>purge</code> <code>validate</code> <code>signals</code> <code>scaffold</code> <code>cost-presets</code></td>
-<td>Create, register, and manage strategy JSON</td>
-<td><a href="strategy/">strategy →</a></td>
-</tr>
-<tr>
-<td><strong>backtest</strong></td>
-<td>Core</td>
-<td><code>run</code> <code>batch</code> <code>combine</code> <code>diagnose</code> <code>list</code> <code>report</code> <code>migrate</code> <code>compare</code> <code>portfolio</code> <code>chart</code> <code>monte-carlo</code> <code>signal-count</code></td>
-<td>Run backtests and analyze results</td>
-<td><a href="backtest/">backtest →</a></td>
-</tr>
-<tr>
-<td><strong>optimize</strong></td>
-<td>Core</td>
-<td><code>run</code> <code>cross-symbol</code> <code>portfolio</code> <code>multi-portfolio</code> <code>walk-forward</code> <code>apply</code> <code>sensitivity</code> <code>history</code> <code>grid</code> <code>clean</code></td>
-<td>Parameter optimization (Bayesian, grid, walk-forward) and result cleanup</td>
-<td><a href="optimize/">optimize →</a></td>
-</tr>
-<tr>
-<td><strong>explore</strong></td>
-<td>Core</td>
-<td><code>run</code> <code>import</code> <code>log</code> <code>status</code> <code>health</code> <code>diagnose</code> <code>recommend {show,prune}</code> <code>coverage {update,build,show}</code> <code>result show</code></td>
-<td>Autonomous exploration loop (backtest → optimize → WFT)</td>
-<td><a href="explore/">explore →</a></td>
-</tr>
-<tr>
-<td><strong>live</strong></td>
-<td>Core</td>
-<td><code>list</code> <code>events</code> <code>convert-check</code> <code>import-events</code> <code>trades</code> <code>summary</code> <code>compare</code> <code>doctor</code> <code>sync-events</code> <code>replay</code></td>
-<td>Live trading analysis and operational records</td>
-<td><a href="live/">live →</a></td>
-</tr>
-<tr>
-<td><strong>pine</strong></td>
-<td>Core</td>
-<td><code>generate</code> <code>preview</code> <code>verify</code> <code>import</code> <code>list</code> <code>delete</code> <code>clean</code></td>
-<td>Convert between strategy JSON and TradingView Pine Script (<code>verify</code> validates syntax via TradingView MCP); list / delete / clean generated <code>.pine</code> files</td>
-<td><a href="pine/">pine →</a></td>
-</tr>
-<tr>
-<td><strong>journal</strong></td>
-<td>Core</td>
-<td><code>list</code> <code>show</code> <code>runs</code> <code>compare</code> <code>tag</code> <code>note</code> <code>report</code> <code>verdict</code></td>
-<td>Track run history, tags, verdicts, and Markdown reports</td>
-<td><a href="journal/">journal →</a></td>
-</tr>
-<tr>
-<td><strong>idea</strong></td>
-<td>Core</td>
-<td><code>add</code> <code>list</code> <code>show</code> <code>status</code> <code>link</code> <code>tag</code> <code>note</code> <code>search</code></td>
-<td>Manage and search investment ideas</td>
-<td><a href="idea/">idea →</a></td>
-</tr>
-<tr>
-<td><strong>data</strong></td>
-<td>Core</td>
-<td><code>fetch</code> <code>list</code> <code>trend</code> <code>update</code> <code>alt {fetch,list,info}</code> <code>tv-mcp {chart,inspect,check,cache-clean}</code></td>
-<td>Historical / alternative / TradingView MCP data</td>
-<td><a href="data/">data →</a></td>
-</tr>
-<tr>
-<td><strong>analyze</strong></td>
-<td>Auxiliary</td>
-<td><code>indicator {list,show}</code> <code>ml {train,models,walk-forward}</code> <code>ml dataset {build,feature-sets}</code> <code>pairs {scan,scan-all,build}</code></td>
-<td>Strategy-analysis utilities (indicators, ML, pairs trading)</td>
-<td><a href="analyze/">analyze →</a></td>
-</tr>
-<tr>
-<td><strong>system</strong></td>
-<td>Auxiliary</td>
-<td><code>init</code> <code>auth {login,logout,status}</code> <code>auth check op</code> <code>docs {list,show}</code> <code>describe</code> <code>config</code> <code>paths</code> <code>doctor</code></td>
-<td>Operational utilities (workspace init, Whop OAuth, bundled docs, machine-readable catalog, effective-config dump, env diagnostics)</td>
-<td><a href="system/">system →</a></td>
-</tr>
-<tr>
-<td><strong>self</strong></td>
-<td>Meta</td>
-<td><code>version</code> <code>update</code></td>
-<td><code>alpha-forge</code> binary self-operations (version check, self-update)</td>
-<td><a href="self/">self →</a></td>
-</tr>
-</tbody>
-</table>
-<p>The <code>{a,b,c}</code> notation expands into siblings under the same parent group. For example, <code>data alt {fetch,list,info}</code> represents the three subcommands <code>alpha-forge data alt fetch</code> / <code>alpha-forge data alt list</code> / <code>alpha-forge data alt info</code>.</p>
-<h2 id="built-in-help">Built-in Help<a class="headerlink" href="#built-in-help" title="Permanent link">&para;</a></h2>
-<p>Every command supports <code>--help</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>--help<span class="w">                         </span><span class="c1"># Top-level command list</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>--help<span class="w">                </span><span class="c1"># Subcommands of the backtest group</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>run<span class="w"> </span>--help<span class="w">            </span><span class="c1"># Detailed parameters for a specific subcommand</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>--help<span class="w">                </span><span class="c1"># Subcommands of a nested auxiliary group</span>
+<h3 id="4-get-started-setup-checklist-first-strategy-guide">4. Get Started (setup checklist + first-strategy guide)<a class="headerlink" href="#4-get-started-setup-checklist-first-strategy-guide" title="Permanent link">&para;</a></h3>
+<p>A new "Get Started" screen aggregates first-run setup state (forge CLI / EULA / workspace / authentication / data) with a concrete next step per incomplete item — copyable commands or in-GUI links. Below it, a five-step first-strategy guide marks progress based on actual data. While setup is incomplete, the "Start" nav item carries an attention dot. See <a href="../features/#get-started">Get Started in Features</a>.</p>
+<h3 id="5-everything-else">5. Everything else<a class="headerlink" href="#5-everything-else" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Dev-dependency security updates (undici 7.29.0 / postcss 8.5.25; no impact on the production bundle)</li>
+</ul>
+<h2 id="how-to-upgrade">How to upgrade<a class="headerlink" href="#how-to-upgrade" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># uv</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
 </code></pre></div>
-<h2 id="usage-from-agents-ci-non-interactive-execution-json-exit-codes">Usage from agents / CI (non-interactive execution, <code>--json</code>, exit codes)<a class="headerlink" href="#usage-from-agents-ci-non-interactive-execution-json-exit-codes" title="Permanent link">&para;</a></h2>
-<p><code>alpha-forge</code> is designed for subprocess usage from coding agents (Claude Code / Codex, etc.) and CI (epic <a href="https://github.com/ysakae/alpha-forge/issues/1083">#1083</a>).</p>
+<p>GUI execution features (data fetching, Pine export, etc.) require an AlphaForge CLI (v1.3+ recommended) on the same machine as the server. View-only usage keeps working without the CLI. Write-type features such as data-fetch jobs are enabled only on localhost binds.</p>
+<h2 id="links">Links<a class="headerlink" href="#links" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Non-interactive execution</strong>: <code>FORGE_NONINTERACTIVE=1</code> (or <code>CI</code> / non-TTY detection) removes confirmation prompts. Destructive operations stop with exit code <code>2</code> when <code>--yes</code> is missing (hang prevention). See <a href="../ai-agents/exploration-workflow/#non-interactive">AI-Driven Strategy Exploration Workflow › Non-interactive execution</a> for details.</li>
-<li><strong><code>--json</code></strong>: observation / reference commands (<code>system config</code> / <code>live</code> / <code>journal</code> / <code>idea</code> / <code>analyze</code> groups, etc.) support <code>--json</code>. stdout contains pure JSON only; decoration and progress go to stderr.</li>
-<li><strong>Exit codes</strong>: <code>0</code> = success (including explicit cancel) / <code>1</code> = not found or expected failure (use this to stop unattended loops) / <code>2</code> = argument error or missing <code>--yes</code> in non-interactive execution. A not-found under <code>--json</code> emits <code>{error, code, id}</code> to stdout with exit code <code>1</code>.</li>
-<li><strong>The two meanings of <code>compare</code></strong>: <code>backtest compare</code> runs new backtests (a heavy operation), while <code>journal compare</code> / <code>live compare</code> are read-only references to saved results.</li>
+<li><strong>PyPI</strong>: <a href="https://pypi.org/project/alpha-visualizer/">https://pypi.org/project/alpha-visualizer/</a></li>
+<li><strong>GitHub Release</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.5.0">https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.5.0</a></li>
+<li><strong>CHANGELOG</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md">https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md</a></li>
+<li><strong>Features</strong>: <a href="../features/">alpha-visualizer / Features</a></li>
+<li><strong>Installation</strong>: <a href="../installation/">alpha-visualizer / Installation</a></li>
 </ul>
-<h2 id="related-documentation">Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../getting-started/">Getting Started</a> — Tutorial covering installation through your first backtest</li>
-<li><a href="../templates/">Strategy Templates</a> — Bundled strategies overview</li>
-<li><a href="../ai-agents/exploration-workflow/">AI-Driven Strategy Exploration Workflow</a> — Claude Code / Codex × AlphaForge</li>
-</ul>
-<hr />
-<!-- Synced from: `alpha-forge/src/alpha_forge/cli.py` (_TOP_LEVEL_LAZY / _ANALYZE_LAZY / _SYSTEM_LAZY) and `commands/*.py` Click decorators. Keep this table in sync when CLI commands change. Epic #1083 added system config / optimize clean / pine list,delete,clean / data tv-mcp cache-clean. -->
+<p>Bug reports and feature requests are welcome on <a href="https://github.com/alforge-labs/alpha-visualizer/issues">GitHub Issues</a>.</p>
 
 
 
 
 
 
+
+  
+  
 
 
 
@@ -3142,7 +3150,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../alpha-visualizer/release-0.2.0/" class="md-footer__link md-footer__link--prev" aria-label="Previous: v0.2.0 (2026-05-11)">
+          <a href="../faq/" class="md-footer__link md-footer__link--prev" aria-label="Previous: FAQ">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3152,20 +3160,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                v0.2.0 (2026-05-11)
+                FAQ
               </div>
             </div>
           </a>
         
         
           
-          <a href="strategy/" class="md-footer__link md-footer__link--next" aria-label="Next: strategy">
+          <a href="../release-1.4.0/" class="md-footer__link md-footer__link--next" aria-label="Next: v1.4.0 (2026-08-03)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                strategy
+                v1.4.0 (2026-08-03)
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3215,10 +3223,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
