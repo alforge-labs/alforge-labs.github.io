@@ -2,6 +2,16 @@
 
 ## Installation & startup
 
+### Can I try it without AlphaForge?
+
+Yes. Bundled synthetic sample data lets you explore the whole dashboard without installing AlphaForge.
+
+```bash
+alpha-vis serve --use-bundled-samples
+```
+
+Install AlphaForge once you want to visualize your own backtest results. See [Try it right after installing (sample data)](installation.md#try-with-samples).
+
 ### `alpha-vis: command not found`
 
 When installed via `uv tool install`, your shell must include uv's tool directory in `PATH`.
@@ -103,7 +113,17 @@ See [CONTRIBUTING.en.md](https://github.com/alforge-labs/alpha-visualizer/blob/m
 
 ### Compatible `alpha-forge` versions
 
-`alpha-visualizer` reads `backtest_results.db` (SQLite) and strategy JSON. See the CHANGELOG or [Releases](https://github.com/alforge-labs/alpha-visualizer/releases) for compatibility windows.
+`alpha-visualizer` depends on the `backtest_results.db` (SQLite) schema and strategy JSON structure. **Pairs developed and verified together** are the safest choice.
+
+| alpha-visualizer | alpha-forge | Notes |
+|---|---|---|
+| v1.4.x (2026-08) | v1.3.0 | Adds AI strategy development (Agent Develop) |
+| v1.3.x (2026-08) | v1.3.0 | Run-time parameter display (params_json) requires forge v1.3.0 |
+| v1.2.x (2026-07) | v1.2.0 | Live comparison overlays require `live replay --benchmark / --compare` |
+| v1.0.x–v1.1.x (2026-07) | v1.0.x–v1.1.0 | Pairs since the simultaneous four-product GA (2026-07-21) |
+| v0.9.0 (2026-07) | v0.18.x | Carry-adjusted metrics require `backtest run --carry` |
+
+The database is extended by adding columns, so **databases produced by older alpha-forge versions generally remain viewable** (only the views that depend on newer columns stay hidden). Conversely, GUI execution features (backtests, optimization, data fetching, Pine export, etc.) need a recent alpha-forge CLI that has the corresponding subcommands; with an older CLI the UI shows an update prompt.
 
 ### Running on Python 3.11 or older
 

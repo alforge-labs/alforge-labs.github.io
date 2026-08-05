@@ -2,8 +2,8 @@
 
 `alpha-visualizer` は PyPI で配布されています。Python 3.12 以上が必要です。
 
-!!! tip "alpha-forge と一緒に使う"
-    `alpha-visualizer` は `alpha-forge` 本体（バックテストエンジン）とは独立してインストール・実行できますが、可視化対象である `backtest_results.db` は `alpha-forge` が生成します。`alpha-forge` のインストールがまだの場合は [AlphaForge スタートガイド](../getting-started.md) を参照してください（最新バイナリは [GitHub Releases](https://github.com/alforge-labs/alforge-labs.github.io/releases/latest) からも取得可能）。
+!!! tip "AlphaForge が無くても試せます"
+    `alpha-visualizer` は同梱の合成サンプルデータを持っており、**AlphaForge をインストールしなくても全画面を試せます**（後述の[インストール直後の動作確認](#try-with-samples)参照）。自分のバックテスト結果を可視化する段階になったら、`backtest_results.db` を生成する `alpha-forge` 本体を [AlphaForge スタートガイド](../getting-started.md) からインストールしてください（最新バイナリは [GitHub Releases](https://github.com/alforge-labs/alforge-labs.github.io/releases/latest) からも取得可能）。
 
 ## 動作要件
 
@@ -60,6 +60,22 @@ alpha-vis --version
 ```
 
 正常にインストールされていれば、バージョン番号が表示されます。
+
+## インストール直後の動作確認（サンプルデータ） { #try-with-samples }
+
+AlphaForge のインストールや自分のバックテスト結果が無くても、同梱の合成サンプルデータでダッシュボード全体を動かして確認できます。
+
+```bash
+alpha-vis serve --use-bundled-samples
+```
+
+ブラウザが自動で開き（開かない場合は <http://127.0.0.1:8000>）、サンプルの戦略・バックテスト結果・アイデアで Browse / Detail / Compare などの各画面を一通り試せます。`--use-bundled-samples` 指定時は `--forge-dir` / `--forge-config` は無視されます。
+
+自分のデータを見る段階になったら、`alpha-forge` でバックテストを実行してから次のように起動します。
+
+```bash
+alpha-vis serve --forge-dir /path/to/your/alpha-strategies
+```
 
 ## アップグレード
 

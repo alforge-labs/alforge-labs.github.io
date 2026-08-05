@@ -18,7 +18,7 @@
         <link rel="prev" href="../configuration/">
       
       
-        <link rel="next" href="../release-0.9.0/">
+        <link rel="next" href="../release-1.4.0/">
       
       
         
@@ -1747,6 +1747,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#can-i-try-it-without-alphaforge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I try it without AlphaForge?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#alpha-vis-command-not-found" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2047,6 +2058,118 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.4.0 (2026-08-03)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.3.0 (2026-08-01)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.2.0 (2026-07-27)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.0.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.0.0 GA (2026-07-21)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2987,6 +3110,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#can-i-try-it-without-alphaforge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I try it without AlphaForge?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#alpha-vis-command-not-found" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3243,34 +3377,39 @@
 
 <h1 id="faq-troubleshooting">FAQ &amp; Troubleshooting<a class="headerlink" href="#faq-troubleshooting" title="Permanent link">&para;</a></h1>
 <h2 id="installation-startup">Installation &amp; startup<a class="headerlink" href="#installation-startup" title="Permanent link">&para;</a></h2>
+<h3 id="can-i-try-it-without-alphaforge">Can I try it without AlphaForge?<a class="headerlink" href="#can-i-try-it-without-alphaforge" title="Permanent link">&para;</a></h3>
+<p>Yes. Bundled synthetic sample data lets you explore the whole dashboard without installing AlphaForge.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--use-bundled-samples
+</code></pre></div>
+<p>Install AlphaForge once you want to visualize your own backtest results. See <a href="../installation/#try-with-samples">Try it right after installing (sample data)</a>.</p>
 <h3 id="alpha-vis-command-not-found"><code>alpha-vis: command not found</code><a class="headerlink" href="#alpha-vis-command-not-found" title="Permanent link">&para;</a></h3>
 <p>When installed via <code>uv tool install</code>, your shell must include uv's tool directory in <code>PATH</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Check uv tool dir</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>dir
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Verify $HOME/.local/bin is on PATH</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$PATH</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># If missing</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Check uv tool dir</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>dir
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Verify $HOME/.local/bin is on PATH</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$PATH</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># If missing</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
 </code></pre></div>
 <h3 id="backtest_resultsdb-not-found-no-strategies-shown"><code>backtest_results.db</code> not found / no strategies shown<a class="headerlink" href="#backtest_resultsdb-not-found-no-strategies-shown" title="Permanent link">&para;</a></h3>
 <p><code>alpha-vis serve</code> may not see <code>&lt;forge-dir&gt;/data/results/backtest_results.db</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Inspect resolved paths (printed at startup)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--forge-dir<span class="w"> </span>&lt;path&gt;
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Verify directly</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>ls<span class="w"> </span>&lt;path&gt;/data/results/backtest_results.db
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>ls<span class="w"> </span>&lt;path&gt;/data/strategies/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Inspect resolved paths (printed at startup)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--forge-dir<span class="w"> </span>&lt;path&gt;
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Verify directly</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>ls<span class="w"> </span>&lt;path&gt;/data/results/backtest_results.db
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>ls<span class="w"> </span>&lt;path&gt;/data/strategies/
 </code></pre></div>
 <p>If you have never executed <code>alpha-forge backtest run</code>, <code>backtest_results.db</code> does not exist yet. Run at least one backtest before launching <code>alpha-vis serve</code>.</p>
 <h3 id="port-already-in-use">Port already in use<a class="headerlink" href="#port-already-in-use" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ERROR:    [Errno 48] error while attempting to bind on address (&#39;127.0.0.1&#39;, 8000): address already in use
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ERROR:    [Errno 48] error while attempting to bind on address (&#39;127.0.0.1&#39;, 8000): address already in use
 </code></pre></div>
 <p>Pick another port or stop the conflicting process.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--port<span class="w"> </span><span class="m">9000</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Inspect what is using port 8000</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>lsof<span class="w"> </span>-i<span class="w"> </span>:8000
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--port<span class="w"> </span><span class="m">9000</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Inspect what is using port 8000</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>lsof<span class="w"> </span>-i<span class="w"> </span>:8000
 </code></pre></div>
 <h3 id="browser-does-not-open-automatically">Browser does not open automatically<a class="headerlink" href="#browser-does-not-open-automatically" title="Permanent link">&para;</a></h3>
 <p>If you did not pass <code>--no-open</code> and the browser still does not open, your environment may suppress automatic browser launch (common on WSL / headless servers). Open <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> manually.</p>
@@ -3283,7 +3422,7 @@
 <p>If selected strategies have <strong>no overlapping trade period</strong>, correlation cannot be computed. Pick strategies with overlapping date ranges.</p>
 <h2 id="remote-production">Remote / production<a class="headerlink" href="#remote-production" title="Permanent link">&para;</a></h2>
 <h3 id="access-from-another-machine">Access from another machine<a class="headerlink" href="#access-from-another-machine" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
 </code></pre></div>
 <p>Then:</p>
 <ul>
@@ -3303,7 +3442,44 @@
 <p>See <a href="https://github.com/alforge-labs/alpha-visualizer/blob/main/CONTRIBUTING.en.md">CONTRIBUTING.en.md</a>. Pull requests are welcome via GitHub Flow.</p>
 <h2 id="versions-compatibility">Versions &amp; compatibility<a class="headerlink" href="#versions-compatibility" title="Permanent link">&para;</a></h2>
 <h3 id="compatible-alpha-forge-versions">Compatible <code>alpha-forge</code> versions<a class="headerlink" href="#compatible-alpha-forge-versions" title="Permanent link">&para;</a></h3>
-<p><code>alpha-visualizer</code> reads <code>backtest_results.db</code> (SQLite) and strategy JSON. See the CHANGELOG or <a href="https://github.com/alforge-labs/alpha-visualizer/releases">Releases</a> for compatibility windows.</p>
+<p><code>alpha-visualizer</code> depends on the <code>backtest_results.db</code> (SQLite) schema and strategy JSON structure. <strong>Pairs developed and verified together</strong> are the safest choice.</p>
+<table>
+<thead>
+<tr>
+<th>alpha-visualizer</th>
+<th>alpha-forge</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.4.x (2026-08)</td>
+<td>v1.3.0</td>
+<td>Adds AI strategy development (Agent Develop)</td>
+</tr>
+<tr>
+<td>v1.3.x (2026-08)</td>
+<td>v1.3.0</td>
+<td>Run-time parameter display (params_json) requires forge v1.3.0</td>
+</tr>
+<tr>
+<td>v1.2.x (2026-07)</td>
+<td>v1.2.0</td>
+<td>Live comparison overlays require <code>live replay --benchmark / --compare</code></td>
+</tr>
+<tr>
+<td>v1.0.x–v1.1.x (2026-07)</td>
+<td>v1.0.x–v1.1.0</td>
+<td>Pairs since the simultaneous four-product GA (2026-07-21)</td>
+</tr>
+<tr>
+<td>v0.9.0 (2026-07)</td>
+<td>v0.18.x</td>
+<td>Carry-adjusted metrics require <code>backtest run --carry</code></td>
+</tr>
+</tbody>
+</table>
+<p>The database is extended by adding columns, so <strong>databases produced by older alpha-forge versions generally remain viewable</strong> (only the views that depend on newer columns stay hidden). Conversely, GUI execution features (backtests, optimization, data fetching, Pine export, etc.) need a recent alpha-forge CLI that has the corresponding subcommands; with an older CLI the UI shows an update prompt.</p>
 <h3 id="running-on-python-311-or-older">Running on Python 3.11 or older<a class="headerlink" href="#running-on-python-311-or-older" title="Permanent link">&para;</a></h3>
 <p>Python 3.12+ is required. Older versions are not supported.</p>
 
@@ -3360,13 +3536,13 @@
         
         
           
-          <a href="../release-0.9.0/" class="md-footer__link md-footer__link--next" aria-label="Next: v0.9.0 (2026-07-19)">
+          <a href="../release-1.4.0/" class="md-footer__link md-footer__link--next" aria-label="Next: v1.4.0 (2026-08-03)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                v0.9.0 (2026-07-19)
+                v1.4.0 (2026-08-03)
               </div>
             </div>
             <div class="md-footer__button md-icon">

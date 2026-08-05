@@ -2,6 +2,16 @@
 
 ## インストール・起動
 
+### AlphaForge なしで試せますか？
+
+はい。同梱の合成サンプルデータで、AlphaForge をインストールせずにダッシュボード全体を試せます。
+
+```bash
+alpha-vis serve --use-bundled-samples
+```
+
+自分のバックテスト結果を可視化する段階になったら AlphaForge を導入してください。手順は[インストール直後の動作確認（サンプルデータ）](installation.md#try-with-samples)を参照してください。
+
 ### `alpha-vis: command not found` が出る
 
 `uv tool install` でインストールした場合、シェルの PATH に uv のツールディレクトリが含まれている必要があります。
@@ -103,7 +113,17 @@ alpha-vis serve --host 0.0.0.0 --port 8000
 
 ### 動作確認済みの alpha-forge バージョン
 
-`alpha-visualizer` は `backtest_results.db`（SQLite）のスキーマと戦略 JSON 構造に依存します。`alpha-forge` の互換性のある範囲は CHANGELOG または [Releases](https://github.com/alforge-labs/alpha-visualizer/releases) を参照してください。
+`alpha-visualizer` は `backtest_results.db`（SQLite）のスキーマと戦略 JSON 構造に依存します。**同時期に開発・検証されたペア**を使うのが最も確実です。
+
+| alpha-visualizer | alpha-forge | 備考 |
+|---|---|---|
+| v1.4.x（2026-08） | v1.3.0 | AI 戦略開発（Agent Develop）を追加 |
+| v1.3.x（2026-08） | v1.3.0 | 実行時パラメータ表示（params_json）は forge v1.3.0 が必要 |
+| v1.2.x（2026-07） | v1.2.0 | Live の比較線表示は `live replay --benchmark / --compare` が必要 |
+| v1.0.x〜v1.1.x（2026-07） | v1.0.x〜v1.1.0 | 4 プロダクト同時 GA（2026-07-21）以降のペア |
+| v0.9.0（2026-07） | v0.18.x | キャリー調整メトリクス表示は `backtest run --carry` が必要 |
+
+DB は列を後から追加する方式で拡張されているため、**古い alpha-forge が生成した DB も基本的に閲覧できます**（新しい列に依存する表示だけが出ません）。逆に、GUI からの実行系機能（バックテスト / 最適化 / データ取得 / Pine 出力など）は、対応するサブコマンドを持つ新しめの alpha-forge CLI が必要です。CLI が古い場合は画面に更新を促すメッセージが表示されます。
 
 ### Python 3.11 以下で動かしたい
 
