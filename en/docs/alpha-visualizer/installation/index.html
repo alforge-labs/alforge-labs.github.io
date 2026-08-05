@@ -1706,6 +1706,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#try-with-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Try it right after installing (sample data)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#upgrade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1885,6 +1896,118 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.4.0 (2026-08-03)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.3.0 (2026-08-01)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.2.0 (2026-07-27)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.0.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.0.0 GA (2026-07-21)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2868,6 +2991,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#try-with-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Try it right after installing (sample data)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#upgrade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2920,8 +3054,8 @@
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
 <p><code>alpha-visualizer</code> is published on PyPI and requires Python 3.12+.</p>
 <div class="admonition tip">
-<p class="admonition-title">Pair with alpha-forge</p>
-<p><code>alpha-visualizer</code> installs and runs independently of <code>alpha-forge</code> (the backtest engine), but the <code>backtest_results.db</code> it visualizes is produced by <code>alpha-forge</code>. If you haven't installed it yet, see the <a href="../../getting-started/">AlphaForge Getting Started guide</a> (latest binaries are also on <a href="https://github.com/alforge-labs/alforge-labs.github.io/releases/latest">GitHub Releases</a>).</p>
+<p class="admonition-title">You can try it without AlphaForge</p>
+<p><code>alpha-visualizer</code> ships with synthetic sample data, so <strong>you can explore every screen without installing AlphaForge</strong> (see <a href="#try-with-samples">Try it right after installing</a> below). Once you want to visualize your own backtest results, install <code>alpha-forge</code> — the engine that produces <code>backtest_results.db</code> — via the <a href="../../getting-started/">AlphaForge Getting Started guide</a> (latest binaries are also on <a href="https://github.com/alforge-labs/alforge-labs.github.io/releases/latest">GitHub Releases</a>).</p>
 </div>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <table>
@@ -2973,19 +3107,27 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alpha-vis<span class="w"> </span>--version
 </code></pre></div>
 <p>A correctly installed <code>alpha-vis</code> prints its version.</p>
+<h2 id="try-with-samples">Try it right after installing (sample data)<a class="headerlink" href="#try-with-samples" title="Permanent link">&para;</a></h2>
+<p>You can run the whole dashboard on bundled synthetic sample data — no AlphaForge install and no backtest results of your own required.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--use-bundled-samples
+</code></pre></div>
+<p>Your browser opens automatically (or visit <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>) with sample strategies, backtest results, and ideas, letting you walk through Browse / Detail / Compare and the other screens. With <code>--use-bundled-samples</code>, the <code>--forge-dir</code> / <code>--forge-config</code> options are ignored.</p>
+<p>When you are ready to look at your own data, run a backtest with <code>alpha-forge</code> and start the server like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--forge-dir<span class="w"> </span>/path/to/your/alpha-strategies
+</code></pre></div>
 <h2 id="upgrade">Upgrade<a class="headerlink" href="#upgrade" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># uv</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># pip</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>alpha-visualizer
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># uv</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># pip</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>alpha-visualizer
 </code></pre></div>
 <h2 id="uninstall">Uninstall<a class="headerlink" href="#uninstall" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># uv</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>uninstall<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># pip</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>pip<span class="w"> </span>uninstall<span class="w"> </span>alpha-visualizer
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># uv</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>uv<span class="w"> </span>tool<span class="w"> </span>uninstall<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># pip</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>pip<span class="w"> </span>uninstall<span class="w"> </span>alpha-visualizer
 </code></pre></div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
