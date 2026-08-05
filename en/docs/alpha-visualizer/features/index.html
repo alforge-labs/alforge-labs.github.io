@@ -1679,6 +1679,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#get-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get Started
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Get Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-strategy-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-strategy guide
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#browse" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1781,6 +1820,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Strategy structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-to-tradingview-pine-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to TradingView (Pine Script)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1819,6 +1875,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2963,6 +3030,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#get-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get Started
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Get Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-strategy-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-strategy guide
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#browse" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3065,6 +3171,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Strategy structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-to-tradingview-pine-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to TradingView (Pine Script)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3103,6 +3226,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3219,6 +3353,50 @@
 
 <h1 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h1>
 <p>Walkthrough of each dashboard screen served by <code>alpha-vis serve</code>.</p>
+<h2 id="get-started">Get Started<a class="headerlink" href="#get-started" title="Permanent link">&para;</a></h2>
+<p>Shows first-run setup status and guides you to your first strategy. Available at <code>/start</code>, and from the "Start" link at the head of the header nav.</p>
+<p><img alt="Get Started view" loading="lazy" src="../assets/start.png" /></p>
+<h3 id="setup-checklist">Setup checklist<a class="headerlink" href="#setup-checklist" title="Permanent link">&para;</a></h3>
+<p><code>GET /api/setup/status</code> aggregates the following five checks. Each incomplete item shows a concrete next step (a copyable command, or a link inside the GUI).</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>What is verified</th>
+<th>Guidance when incomplete</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AlphaForge CLI</td>
+<td><code>alpha-forge</code> command detection and version</td>
+<td>Link to the installation guide</td>
+</tr>
+<tr>
+<td>End User License Agreement (EULA)</td>
+<td>Whether the EULA has been accepted</td>
+<td>Run <code>alpha-forge system doctor</code> in a terminal and accept it there (<strong>it cannot be accepted from this screen</strong>)</td>
+</tr>
+<tr>
+<td>Workspace (forge.yaml)</td>
+<td>Whether the server can resolve a forge.yaml</td>
+<td>Run <code>alpha-forge system init</code> and restart with <code>--forge-dir</code></td>
+</tr>
+<tr>
+<td>Authentication (license)</td>
+<td>Login state and plan</td>
+<td>Run <code>alpha-forge system auth login</code> in a terminal (the browser flow completes on the CLI side)</td>
+</tr>
+<tr>
+<td>Historical data</td>
+<td>Whether any datasets exist</td>
+<td>Link to the Data screen</td>
+</tr>
+</tbody>
+</table>
+<p>A failure in one check never breaks the whole screen — only that item is shown as "unknown". Once everything is in place, a completion banner appears with links to AI strategy development and Browse. While setup is incomplete, the "Start" nav item carries an attention dot.</p>
+<h3 id="first-strategy-guide">First-strategy guide<a class="headerlink" href="#first-strategy-guide" title="Permanent link">&para;</a></h3>
+<p>Below the checklist, a five-step guide (fetch data → create a strategy → review backtest results → optimize → export Pine to TradingView) walks you to your first success. Steps are marked "Done" based on actual data (datasets, strategies, runs), and once at least one strategy exists, the later steps link directly to the relevant detail tabs. The guide can be hidden with "Don't show again" (persisted in the browser) and restored at any time.</p>
 <h2 id="browse">Browse<a class="headerlink" href="#browse" title="Permanent link">&para;</a></h2>
 <p>Strategy library with search. Strategies sharing a name, symbol, and timeframe are rolled up into a single "recipe" row; expand a row to see the individual parameter variants. Includes the symbol coverage table, Saved Views (preset filters), and a groupable Strategy Ledger.</p>
 <p><img alt="Browse view" loading="lazy" src="../assets/browse.png" /></p>
@@ -3314,6 +3492,16 @@
 <li>Risk management (stop logic, position sizing)</li>
 <li>Target symbols and timeframe</li>
 </ul>
+<h3 id="export-to-tradingview-pine-script">Export to TradingView (Pine Script)<a class="headerlink" href="#export-to-tradingview-pine-script" title="Permanent link">&para;</a></h3>
+<p>The "Export to TradingView" card on the Strategy tab copies or downloads the strategy as TradingView Pine Script (v6), delegated server-side to <code>alpha-forge pine preview</code>.</p>
+<ul>
+<li>Before generating, the strategy's indicators are checked against the Pine conversion support table, and unsupported indicators are flagged before you press the button</li>
+<li>After generating, the card walks you through pasting into the TradingView Pine editor (open a chart → open the editor → paste → add to chart)</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Pine Script export requires a paid plan</p>
+<p>Pine export is a paid-plan feature of AlphaForge (Lifetime / Annual / Monthly). Running it on a Trial plan shows an upgrade prompt. If you have already purchased but are treated as Trial, run <code>alpha-forge system auth login</code> in a terminal to authenticate.</p>
+</div>
 <h2 id="live">Live<a class="headerlink" href="#live" title="Permanent link">&para;</a></h2>
 <p>Browse live / paper trading records and compare them against backtests. Accessible at <code>/live</code>, or via the "Live →" link in the Browse header.</p>
 <ul>
@@ -3355,6 +3543,18 @@
 <p class="admonition-title">Combine portfolio missing from the list on an old database</p>
 <p><code>benchmark_equity</code> / <code>backtest_equity</code> / <code>positions</code> / <code>cash</code> / <code>total_value</code> were added as later column migrations. On a database that hasn't had <code>live replay</code> run against it since upgrading alpha-forge, the corresponding combine portfolio can vanish entirely from the <code>/live</code> list. Running <code>alpha-forge live replay</code> once adds the missing columns, after which it shows up as usual.</p>
 </div>
+<h2 id="data">Data<a class="headerlink" href="#data" title="Permanent link">&para;</a></h2>
+<p>Lists stored historical datasets with freshness, and lets you fetch or bulk-update data from the GUI. Available at <code>/data</code>, and from the "Data" link in the header nav.</p>
+<p><img alt="Data view" loading="lazy" src="../assets/data.png" /></p>
+<ul>
+<li>Dataset list (symbol, interval, range, rows, size, last updated). The list is delegated to <code>alpha-forge data list</code>; datasets older than 24 hours are marked "Stale"</li>
+<li>Fetch a symbol (with period and interval) or incrementally update all stored datasets. Both run as asynchronous jobs with SSE progress logs and can be cancelled</li>
+<li>Screens that hit missing data (no_data) and the AI develop view link here with the symbol pre-filled</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Fetching and updating are localhost-only</p>
+<p>Because they involve network access and file writes, fetch/update are disabled when <code>alpha-vis serve</code> is bound to a non-loopback host (e.g. <code>--host 0.0.0.0</code>). The list itself remains viewable.</p>
+</div>
 <h2 id="ideas">Ideas<a class="headerlink" href="#ideas" title="Permanent link">&para;</a></h2>
 <p>Browse exploration ideas and their state.</p>
 <p><img alt="Ideas view" loading="lazy" src="../assets/ideas.png" /></p>
@@ -3366,6 +3566,14 @@
 <h2 id="develop">Develop<a class="headerlink" href="#develop" title="Permanent link">&para;</a></h2>
 <p>Runs AI-assisted strategy development from the GUI. Available at <code>/develop</code>, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The "Develop" nav item appears whenever <code>alpha-vis serve</code> is bound to localhost (loopback, the default host). If neither <code>claude</code> nor <code>codex</code> is installed, the nav item and view are still shown, and the view displays an install-guidance card instead of the form.</p>
 <p>Enter a free-text goal, an optional target symbol, and a backend (Claude Code / Codex CLI). This launches your locally installed <code>claude</code> / <code>codex</code> CLI headlessly as an asynchronous job to automatically: create a strategy JSON, validate it with <code>alpha-forge backtest run</code>, and show a link to the new strategy once it's done. Observing and cancelling the job uses the same mechanism as the run history screen.</p>
+<p><strong>Input assistance and follow-up actions</strong></p>
+<ul>
+<li><strong>Goal builder</strong>: pick a strategy type (trend following / mean reversion / breakout) and indicators to auto-draft a goal text (freely editable afterwards). The indicator choices are limited to those supported by Pine conversion, so exporting to TradingView later stays safe</li>
+<li><strong>Missing-data warning</strong>: if the target symbol has no historical data, a warning appears before launch with a link to the Data screen (symbol pre-filled)</li>
+<li><strong>Next actions on completion</strong>: the completion panel links to reviewing the new strategy's backtest, optimizing it, and comparing it with existing strategies</li>
+</ul>
+<p><strong>AI-derived improvement of an existing strategy</strong></p>
+<p>The "Improve with AI" card on the Detail screen (Strategy tab) lets you send an improvement instruction (e.g. trade less often, use tighter stops) that starts from an existing strategy. The agent reads the original and creates a <strong>derived version under a new id</strong> — <strong>the original strategy is never modified</strong>. On completion you can jump straight to a comparison against the original.</p>
 <div class="admonition warning">
 <p class="admonition-title">About external communication</p>
 <p>This feature launches your own <code>claude</code> / <code>codex</code> CLI as-is. Those CLIs communicate with Anthropic / OpenAI. alpha-visualizer itself never handles, stores, or transmits API keys.</p>
@@ -3423,7 +3631,7 @@
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/agent/jobs</code></td>
-<td>Launches an agent job with a goal, optional symbol, and backend (returns 202; subsequent observation/cancellation is delegated to the existing <code>/api/jobs</code> endpoints)</td>
+<td>Launches an agent job with a goal, optional symbol, and backend (returns 202; subsequent observation/cancellation is delegated to the existing <code>/api/jobs</code> endpoints). Passing <code>base_strategy_id</code> switches to derived-development mode starting from an existing strategy (404 if the base does not exist)</td>
 </tr>
 </tbody>
 </table>

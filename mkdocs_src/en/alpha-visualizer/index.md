@@ -11,9 +11,12 @@
 
 - Browse, search, and multi-select your strategy library
 - Inspect equity / drawdown / trade history with benchmark metrics (alpha, beta, IR, correlation)
+- **Setup checklist and a first-strategy guide** (Get Started view)
+- **Historical data management** (dataset list with freshness, GUI-driven fetch and bulk update)
 - **Run backtests, optimization, and Walk-Forward Tests from the GUI** (async jobs, SSE progress, cancellation)
 - **Parameter tuning loop** (edit → trial run → compare → explicit save) and duplicate-based strategy creation
-- **AI strategy development** (Develop view, localhost only): enter a goal and your local `claude` / `codex` CLI automatically creates a strategy JSON and validates it with a backtest
+- **AI strategy development** (Develop view, localhost only): enter a goal and your local `claude` / `codex` CLI automatically creates a strategy JSON and validates it with a backtest; improvement instructions on an existing strategy (derived development) are supported too
+- **Pine Script export**: copy or download strategies as TradingView Pine Script (v6), with pre-flight warnings for unsupported indicators (paid plans)
 - Compare strategies side-by-side, including a Pearson correlation heatmap
 - Visualize Walk-Forward composite equity and Grid optimization results
 - Reconcile live trading against backtest with period-aligned diff
@@ -26,7 +29,7 @@
 | Page | Contents |
 |---|---|
 | [Installation](installation.md) | uv / pip / from source — three installation paths |
-| [Features](features.md) | Browse / Detail / Compare / Optimize / Live / Ideas walkthroughs |
+| [Features](features.md) | Get Started / Browse / Detail / Data / Compare / Optimize / Live / Ideas / Develop walkthroughs |
 | [Configuration](configuration.md) | CLI options, `forge.yaml`, data path resolution |
 | [FAQ & Troubleshooting](faq.md) | Common issues and fixes |
 

@@ -11,9 +11,12 @@
 
 - 登録済み戦略の一覧・検索・複数選択
 - バックテスト結果の Equity / Drawdown / 取引履歴・ベンチマーク指標可視化
+- **セットアップチェックリストとはじめての戦略作成ガイド**（はじめる画面）
+- **ヒストリカルデータ管理**（保有一覧・鮮度表示と、GUI からの取得・一括更新）
 - **バックテスト・最適化・Walk-Forward Test の GUI 実行**（非同期ジョブ・SSE 進捗・キャンセル）
 - **パラメータチューニングループ**（編集 → 一時実行 → 比較 → 明示保存）と複製ベースの新規戦略作成
-- **AI 戦略開発**（Develop 画面、localhost 限定）: ゴール文を入力するとローカルの `claude` / `codex` CLI が戦略 JSON 作成〜バックテスト検証までを自動実行
+- **AI 戦略開発**（Develop 画面、localhost 限定）: ゴール文を入力するとローカルの `claude` / `codex` CLI が戦略 JSON 作成〜バックテスト検証までを自動実行。既存戦略を起点にした改善指示（派生開発）にも対応
+- **Pine Script 出力**: 戦略を TradingView の Pine Script（v6）としてコピー・ダウンロード（非対応指標の事前警告付き・有料プラン限定）
 - 複数戦略の比較（指標の横断ビュー、Pearson 相関ヒートマップ）
 - 最適化結果（WFO 合成エクイティカーブ・Grid 結果）の可視化
 - ライブ実績とバックテストの期間整合 diff
@@ -26,7 +29,7 @@
 | ページ | 内容 |
 |---|---|
 | [インストール](installation.md) | uv / pip / ソースからの 3 通りのインストール手順 |
-| [機能詳細](features.md) | Browse / Detail / Compare / Optimize / Live / Ideas の各画面解説 |
+| [機能詳細](features.md) | はじめる / Browse / Detail / データ管理 / Compare / Optimize / Live / Ideas / Develop の各画面解説 |
 | [設定](configuration.md) | CLI オプション・`forge.yaml` ・データパス仕様 |
 | [FAQ・トラブルシューティング](faq.md) | よくある問題と対処法 |
 

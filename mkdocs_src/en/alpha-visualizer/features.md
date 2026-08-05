@@ -2,6 +2,30 @@
 
 Walkthrough of each dashboard screen served by `alpha-vis serve`.
 
+## Get Started
+
+Shows first-run setup status and guides you to your first strategy. Available at `/start`, and from the "Start" link at the head of the header nav.
+
+![Get Started view](assets/start.png){ loading=lazy }
+
+### Setup checklist
+
+`GET /api/setup/status` aggregates the following five checks. Each incomplete item shows a concrete next step (a copyable command, or a link inside the GUI).
+
+| Check | What is verified | Guidance when incomplete |
+|---|---|---|
+| AlphaForge CLI | `alpha-forge` command detection and version | Link to the installation guide |
+| End User License Agreement (EULA) | Whether the EULA has been accepted | Run `alpha-forge system doctor` in a terminal and accept it there (**it cannot be accepted from this screen**) |
+| Workspace (forge.yaml) | Whether the server can resolve a forge.yaml | Run `alpha-forge system init` and restart with `--forge-dir` |
+| Authentication (license) | Login state and plan | Run `alpha-forge system auth login` in a terminal (the browser flow completes on the CLI side) |
+| Historical data | Whether any datasets exist | Link to the Data screen |
+
+A failure in one check never breaks the whole screen — only that item is shown as "unknown". Once everything is in place, a completion banner appears with links to AI strategy development and Browse. While setup is incomplete, the "Start" nav item carries an attention dot.
+
+### First-strategy guide
+
+Below the checklist, a five-step guide (fetch data → create a strategy → review backtest results → optimize → export Pine to TradingView) walks you to your first success. Steps are marked "Done" based on actual data (datasets, strategies, runs), and once at least one strategy exists, the later steps link directly to the relevant detail tabs. The guide can be hidden with "Don't show again" (persisted in the browser) and restored at any time.
+
 ## Browse
 
 Strategy library with search. Strategies sharing a name, symbol, and timeframe are rolled up into a single "recipe" row; expand a row to see the individual parameter variants. Includes the symbol coverage table, Saved Views (preset filters), and a groupable Strategy Ledger.
@@ -93,6 +117,16 @@ Visualize the structure of a strategy JSON.
 - Risk management (stop logic, position sizing)
 - Target symbols and timeframe
 
+### Export to TradingView (Pine Script)
+
+The "Export to TradingView" card on the Strategy tab copies or downloads the strategy as TradingView Pine Script (v6), delegated server-side to `alpha-forge pine preview`.
+
+- Before generating, the strategy's indicators are checked against the Pine conversion support table, and unsupported indicators are flagged before you press the button
+- After generating, the card walks you through pasting into the TradingView Pine editor (open a chart → open the editor → paste → add to chart)
+
+!!! note "Pine Script export requires a paid plan"
+    Pine export is a paid-plan feature of AlphaForge (Lifetime / Annual / Monthly). Running it on a Trial plan shows an upgrade prompt. If you have already purchased but are treated as Trial, run `alpha-forge system auth login` in a terminal to authenticate.
+
 ## Live
 
 Browse live / paper trading records and compare them against backtests. Accessible at `/live`, or via the "Live →" link in the Browse header.
@@ -120,6 +154,19 @@ Live records appear automatically once the event log recorded by [alpha-strike](
 !!! note "Combine portfolio missing from the list on an old database"
     `benchmark_equity` / `backtest_equity` / `positions` / `cash` / `total_value` were added as later column migrations. On a database that hasn't had `live replay` run against it since upgrading alpha-forge, the corresponding combine portfolio can vanish entirely from the `/live` list. Running `alpha-forge live replay` once adds the missing columns, after which it shows up as usual.
 
+## Data
+
+Lists stored historical datasets with freshness, and lets you fetch or bulk-update data from the GUI. Available at `/data`, and from the "Data" link in the header nav.
+
+![Data view](assets/data.png){ loading=lazy }
+
+- Dataset list (symbol, interval, range, rows, size, last updated). The list is delegated to `alpha-forge data list`; datasets older than 24 hours are marked "Stale"
+- Fetch a symbol (with period and interval) or incrementally update all stored datasets. Both run as asynchronous jobs with SSE progress logs and can be cancelled
+- Screens that hit missing data (no_data) and the AI develop view link here with the symbol pre-filled
+
+!!! note "Fetching and updating are localhost-only"
+    Because they involve network access and file writes, fetch/update are disabled when `alpha-vis serve` is bound to a non-loopback host (e.g. `--host 0.0.0.0`). The list itself remains viewable.
+
 ## Ideas
 
 Browse exploration ideas and their state.
@@ -135,6 +182,16 @@ Browse exploration ideas and their state.
 Runs AI-assisted strategy development from the GUI. Available at `/develop`, and from the "Develop" link in the header nav (shown after Live, before Maintenance). The "Develop" nav item appears whenever `alpha-vis serve` is bound to localhost (loopback, the default host). If neither `claude` nor `codex` is installed, the nav item and view are still shown, and the view displays an install-guidance card instead of the form.
 
 Enter a free-text goal, an optional target symbol, and a backend (Claude Code / Codex CLI). This launches your locally installed `claude` / `codex` CLI headlessly as an asynchronous job to automatically: create a strategy JSON, validate it with `alpha-forge backtest run`, and show a link to the new strategy once it's done. Observing and cancelling the job uses the same mechanism as the run history screen.
+
+**Input assistance and follow-up actions**
+
+- **Goal builder**: pick a strategy type (trend following / mean reversion / breakout) and indicators to auto-draft a goal text (freely editable afterwards). The indicator choices are limited to those supported by Pine conversion, so exporting to TradingView later stays safe
+- **Missing-data warning**: if the target symbol has no historical data, a warning appears before launch with a link to the Data screen (symbol pre-filled)
+- **Next actions on completion**: the completion panel links to reviewing the new strategy's backtest, optimizing it, and comparing it with existing strategies
+
+**AI-derived improvement of an existing strategy**
+
+The "Improve with AI" card on the Detail screen (Strategy tab) lets you send an improvement instruction (e.g. trade less often, use tighter stops) that starts from an existing strategy. The agent reads the original and creates a **derived version under a new id** — **the original strategy is never modified**. On completion you can jump straight to a comparison against the original.
 
 !!! warning "About external communication"
     This feature launches your own `claude` / `codex` CLI as-is. Those CLIs communicate with Anthropic / OpenAI. alpha-visualizer itself never handles, stores, or transmits API keys.
@@ -170,7 +227,7 @@ Exploratory goals that re-run backtests many times can hit the limit, so either 
 | Method | Path | Description |
 |---|---|---|
 | `GET` | `/api/agent/backends` | Returns detection status (installed / version) for `claude` and `codex`, plus whether the feature itself is enabled (i.e. bound to loopback) |
-| `POST` | `/api/agent/jobs` | Launches an agent job with a goal, optional symbol, and backend (returns 202; subsequent observation/cancellation is delegated to the existing `/api/jobs` endpoints) |
+| `POST` | `/api/agent/jobs` | Launches an agent job with a goal, optional symbol, and backend (returns 202; subsequent observation/cancellation is delegated to the existing `/api/jobs` endpoints). Passing `base_strategy_id` switches to derived-development mode starting from an existing strategy (404 if the base does not exist) |
 
 ## Maintenance
 
