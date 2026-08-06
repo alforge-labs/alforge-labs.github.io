@@ -29,6 +29,7 @@ Live trading event ingestion (VPS → local), raw event → trade record convers
 | [`alpha-forge live doctor`](#alpha-forge-live-doctor) | Check the setup status of live trading analysis |
 | [`alpha-forge live sync-events`](#alpha-forge-live-sync-events) | Sync event logs from VPS to local via rsync |
 | [`alpha-forge live replay`](#alpha-forge-live-replay) | Reconstruct position-based live metrics from a combine portfolio's alert log |
+| [`alpha-forge live refresh`](#alpha-forge-live-refresh) | Run sync-events → data update → replay in one shot (used by the visualizer's Live refresh button) |
 
 ---
 
@@ -449,19 +450,49 @@ Reconstruct position-based live metrics from a combine portfolio's alert log. In
 ### Synopsis
 
 ```bash
-alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1,ID2,...> [--since <ISO>] [--compare] [--initial-capital <FLOAT>] [--benchmark <SYMBOL>]
+alpha-forge live replay [PORTFOLIO_ID] [--combine-strategies <ID1,ID2,...>] [--since <ISO>] [--compare] [--initial-capital <FLOAT>] [--benchmark <SYMBOL>]
 ```
+
+`PORTFOLIO_ID` and `--combine-strategies` are now optional. See [Config fallback for omitted arguments](#config-fallback-for-omitted-arguments-livereplay) below.
 
 ### Arguments and options
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
-| `PORTFOLIO_ID` | argument (required) | - | Combine portfolio ID |
-| `--combine-strategies` | option (required) | - | Comma-separated combine strategy IDs (**2 or more required**) |
+| `PORTFOLIO_ID` | argument (optional) | - | Combine portfolio ID; falls back to `live.replay.portfolio_id` in `forge.yaml` when omitted |
+| `--combine-strategies` | option (optional) | - | Comma-separated combine strategy IDs (**2 or more required**); falls back to `live.replay.combine_strategies` when omitted |
 | `--since` | option | - | Lower bound of the period (ISO format; UTC assumed when no timezone) |
-| `--compare` | flag | false | Also run the backtest combine and show it side by side |
-| `--initial-capital` | option | `backtest.initial_capital` (default 100,000) | Capital base of the live account |
+| `--compare` | flag | false | Also run the backtest combine and show it side by side. When `live.replay.compare: true` is set, comparison is always on even without this flag (it's an OR, so config `true` cannot be turned off by omitting `--compare`) |
+| `--initial-capital` | option | `live.replay.initial_capital`, then `backtest.initial_capital` (default 100,000) | Capital base of the live account |
 | `--benchmark` | option | `live.benchmark` in `forge.yaml` (unset by default) | Index symbol for a buy-and-hold comparison line; leaving both this flag and `live.benchmark` unset means no comparison line is produced |
+
+### Config fallback for omitted arguments (`live.replay`)
+
+`PORTFOLIO_ID`, `--combine-strategies`, `--initial-capital`, and `--compare` are all optional — whatever you omit is filled in from the `live.replay` section of `forge.yaml`. [`alpha-forge live refresh`](#alpha-forge-live-refresh) uses the same resolution logic, so running it from the visualizer's Live page "Refresh" button requires this section to be configured beforehand.
+
+```yaml
+live:
+  benchmark: ""            # existing (buy-and-hold comparison symbol)
+  replay:
+    portfolio_id: ""         # combine portfolio ID (e.g. my_hedged_pf_v1)
+    combine_strategies: []   # combine target strategy IDs (2 or more)
+    initial_capital: null    # capital base of the live account (null = use backtest.initial_capital)
+    compare: false            # compare against the backtest combine
+```
+
+| Key | Description |
+|-----|--------------|
+| `live.replay.portfolio_id` | Default used when the `PORTFOLIO_ID` argument is omitted |
+| `live.replay.combine_strategies` | Default used when `--combine-strategies` is omitted (set 2 or more strategy IDs) |
+| `live.replay.initial_capital` | Default used when `--initial-capital` is omitted. When `null`, falls back further to `backtest.initial_capital` (default 100,000) |
+| `live.replay.compare` | When `true`, always compares against the backtest combine even without passing `--compare` |
+
+Resolution order is "flag (e.g. `--combine-strategies`) > `live.replay` config value > `backtest.initial_capital` (the final fallback, for `initial_capital` only)". Existing usage that always passes flags explicitly continues to work unchanged (backward compatible).
+
+!!! warning "Always match `initial_capital` to the real account's capital"
+    As described in [How equity is computed](#how-equity-is-computed-issue-1332) below, equity is computed as `initial_capital + cash delta + position market value`. If `--initial-capital` (or `live.replay.initial_capital`) doesn't match the real account's capital base, the return percentages skew by that ratio. Leaving it at the backtest default (100,000) while the live account holds 1,000,000 skews the return percentages by 10x.
+
+If `portfolio_id` or `combine_strategies` (2 or more) cannot be resolved in the end, `live replay` exits with Click's argument-error exit code `2`.
 
 ### How equity is computed (issue #1332)
 
@@ -524,6 +555,69 @@ The `Backtest` column appears only when `--compare` is passed. When no receipts 
 |---------|-------|-----|
 | `--combine-strategies must list 2 or more strategies (comma-separated)` | Fewer than 2 strategy IDs provided | Pass at least two IDs, e.g. `--combine-strategies spy_sma_v1,qqq_hmm_v1` |
 | `Failed to parse --since as ISO: ...` | Invalid ISO datetime | Use an ISO 8601 value, e.g. `2026-03-01` or `2026-03-01T00:00:00Z` |
+
+---
+
+## alpha-forge live refresh
+
+A composite command that runs [`alpha-forge live sync-events`](#alpha-forge-live-sync-events) → `alpha-forge data update` → [`alpha-forge live replay`](#alpha-forge-live-replay) in sequence to bring a combine portfolio's live track record fully up to date in one shot. The "Refresh" button on the alpha-visualizer Live page calls this command.
+
+### Synopsis
+
+```bash
+alpha-forge live refresh [--json]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `--json` | flag | false | Emit the result as JSON (`{"steps": [...], "replay": {...}}`) |
+
+### The 3 steps it runs
+
+```text
+1. alpha-forge live sync-events   Sync event logs from the VPS
+2. alpha-forge data update        Update stored historical data
+3. alpha-forge live replay        Rebuild the combine portfolio's live track record
+```
+
+Each step's parameters come from the `remote` / `live.replay` sections of `forge.yaml` — the command itself takes no CLI arguments for them.
+
+When `remote.enabled` is `false`, step 1 (sync-events) is **skipped and the command continues** (this is not an error). When `true`, it requires the same [`remote` configuration](#alpha-forge-live-sync-events) as a standalone `sync-events` run.
+
+If any step fails, the command **aborts immediately** with exit code `1` (subsequent steps do not run). Which step failed is reported to stderr as `Error: step <name> failed: <reason>`.
+
+If `live.replay.portfolio_id` or `combine_strategies` (2 or more strategies) is not configured, the command exits with code `2` before running any step. Configure `live.replay` in `forge.yaml` first (see [`alpha-forge live replay`](#alpha-forge-live-replay) for the config keys).
+
+### `--json` output contract
+
+All progress (`[1/3] sync-events: ...`, etc.) is sent to stderr. With `--json`, stdout contains pure JSON of the following shape only:
+
+```json
+{
+  "steps": [
+    {"name": "sync_events", "status": "done"},
+    {"name": "data_update", "status": "done", "updated_count": 3},
+    {"name": "replay", "status": "done"}
+  ],
+  "replay": {
+    "portfolio_id": "pf_1",
+    "receipts_count": 128,
+    "live_metrics": {"...": "..."},
+    "backtest_metrics": null,
+    "sub_strategies": ["..."]
+  }
+}
+```
+
+When sync-events is skipped because `remote.enabled: false`, that step reads `{"name": "sync_events", "status": "skipped", "reason": "remote_disabled"}`. If any step fails and the command aborts, nothing is written to stdout (the entire JSON payload, including `replay`, is omitted — the error is reported to stderr only).
+
+### Exit codes
+
+- Success: `0`
+- Missing config (`live.replay.portfolio_id` / `combine_strategies` not set): `2`
+- Any step failed: `1`
 
 ---
 
