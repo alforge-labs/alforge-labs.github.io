@@ -559,11 +559,11 @@ alpha-forge live refresh [--json]
 3. alpha-forge live replay        combine portfolio のライブ実績を再構築
 ```
 
-各ステップのパラメータは `forge.yaml` の `remote` / `live.replay` セクションから取得します（CLI 引数は取りません）。
+本コマンドは CLI 引数を取らず、各ステップのパラメータは `forge.yaml` から取得します。ステップ 1（sync-events）は `remote` セクション、ステップ 3（replay）は `live.replay` セクションを参照します。ステップ 2（data update）は保存済みヒストリカルデータ全件を対象とするため、`remote` / `live.replay` のどちらも参照しません。
 
 `remote.enabled` が `false` の場合、ステップ 1（sync-events）は**スキップして続行します**（エラーにはなりません）。`true` の場合は通常の `sync-events` と同じ [`remote` 設定](#alpha-forge-live-sync-events) が必要です。
 
-いずれかのステップが失敗すると**その場で中断**し、終了コード `1` で終了します（後続ステップは実行されません）。どのステップが失敗したかは標準エラー出力に `ステップ <name> が失敗しました: <理由>` の形式で表示されます。
+いずれかのステップが失敗すると**その場で中断**し、終了コード `1` で終了します（後続ステップは実行されません）。どのステップが失敗したかは標準エラー出力に `エラー: ステップ <name> が失敗しました: <理由>` の形式で表示されます。
 
 `live.replay.portfolio_id` または `combine_strategies`（2 戦略以上）が未設定の場合は、ステップを 1 つも実行せずに終了コード `2` でエラー終了します。事前に `forge.yaml` の `live.replay` を設定してください（設定キーの詳細は [`alpha-forge live replay`](#alpha-forge-live-replay) を参照）。
 

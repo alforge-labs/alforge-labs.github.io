@@ -582,7 +582,7 @@ alpha-forge live refresh [--json]
 3. alpha-forge live replay        Rebuild the combine portfolio's live track record
 ```
 
-Each step's parameters come from the `remote` / `live.replay` sections of `forge.yaml` — the command itself takes no CLI arguments for them.
+The command itself takes no CLI arguments; each step's parameters come from `forge.yaml` instead. Step 1 (sync-events) reads the `remote` section, and step 3 (replay) reads the `live.replay` section. Step 2 (data update) targets all stored historical datasets, so it reads neither `remote` nor `live.replay`.
 
 When `remote.enabled` is `false`, step 1 (sync-events) is **skipped and the command continues** (this is not an error). When `true`, it requires the same [`remote` configuration](#alpha-forge-live-sync-events) as a standalone `sync-events` run.
 
