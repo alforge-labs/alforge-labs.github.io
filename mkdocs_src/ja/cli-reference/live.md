@@ -494,6 +494,18 @@ live:
 
 `portfolio_id` または `combine_strategies`（2 戦略以上）が最終的に解決できない場合、`live replay` は Click の引数エラーとして終了コード `2` で終了します。
 
+!!! warning "`PORTFOLIO_ID` を明示するときは `--combine-strategies` も明示する"
+    `forge.yaml` に `live.replay.combine_strategies` を設定したうえで、**その設定が想定していない `PORTFOLIO_ID` を引数で明示**し、かつ `--combine-strategies` を省略した場合、`live replay` は終了コード `2` で停止します。
+
+    これは config の戦略リストが別のポートフォリオへ無言で流用され、誤った構成で算出した metrics がその `portfolio_id` のサマリとして保存されるのを防ぐためのガードです（[equity の計算方法](#equity-issue-1332) と同じく、気付きにくい数値ずれになります）。
+
+    停止するのは次のどちらかのケースです。
+
+    - `live.replay.portfolio_id` を設定していて、それと**異なる** `PORTFOLIO_ID` を引数で渡した
+    - `live.replay.portfolio_id` を**設定しておらず**、`PORTFOLIO_ID` を引数で渡した（config がどのポートフォリオ向けの設定か表明していないため）
+
+    引数と `--combine-strategies` を両方明示する使い方、config だけで実行する使い方、config と同じ `PORTFOLIO_ID` を明示する使い方はいずれもそのまま動作します。`live refresh` は引数を取らないため、この経路には該当しません。
+
 ### equity の計算方法（issue #1332）
 
 equity は次式で求めます。

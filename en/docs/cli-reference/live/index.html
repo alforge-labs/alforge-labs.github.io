@@ -5138,6 +5138,17 @@
 <p>As described in <a href="#how-equity-is-computed-issue-1332">How equity is computed</a> below, equity is computed as <code>initial_capital + cash delta + position market value</code>. If <code>--initial-capital</code> (or <code>live.replay.initial_capital</code>) doesn't match the real account's capital base, the return percentages skew by that ratio. Leaving it at the backtest default (100,000) while the live account holds 1,000,000 skews the return percentages by 10x.</p>
 </div>
 <p>If <code>portfolio_id</code> or <code>combine_strategies</code> (2 or more) cannot be resolved in the end, <code>live replay</code> exits with Click's argument-error exit code <code>2</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Pass <code>--combine-strategies</code> explicitly whenever you pass <code>PORTFOLIO_ID</code></p>
+<p>If <code>live.replay.combine_strategies</code> is configured in <code>forge.yaml</code> and you explicitly pass a <code>PORTFOLIO_ID</code> <strong>that the config does not account for</strong> while omitting <code>--combine-strategies</code>, <code>live replay</code> stops with exit code <code>2</code>.</p>
+<p>This guard prevents the configured strategy list from being silently reused for a different portfolio, which would persist metrics computed from the wrong composition as that <code>portfolio_id</code>'s summary — an easy-to-miss numeric skew, much like <a href="#how-equity-is-computed-issue-1332">How equity is computed</a>.</p>
+<p>It stops in either of these cases:</p>
+<ul>
+<li><code>live.replay.portfolio_id</code> is set and you pass a <strong>different</strong> <code>PORTFOLIO_ID</code> as an argument</li>
+<li><code>live.replay.portfolio_id</code> is <strong>not set</strong> and you pass a <code>PORTFOLIO_ID</code> as an argument (the config never states which portfolio it is meant for)</li>
+</ul>
+<p>Passing both the argument and <code>--combine-strategies</code>, running purely from config, and explicitly passing the same <code>PORTFOLIO_ID</code> as the config all keep working. <code>live refresh</code> takes no arguments, so it never hits this path.</p>
+</div>
 <h3 id="how-equity-is-computed-issue-1332">How equity is computed (issue #1332)<a class="headerlink" href="#how-equity-is-computed-issue-1332" title="Permanent link">&para;</a></h3>
 <p>Equity is computed as:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>equity = initial_capital + cash delta + Σ(position × close)
