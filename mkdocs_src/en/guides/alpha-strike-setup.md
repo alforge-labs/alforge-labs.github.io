@@ -604,6 +604,26 @@ Consider LIVE migration only after **3+ months of stable paper trading** with **
 
 The event log (JSONL) recorded by alpha-strike can be imported with alpha-forge and visualized as an equity curve on the Live screen of [alpha-visualizer](../alpha-visualizer/index.md) (OSS, Apache-2.0). The same screen shows the drift (diff) against backtests, which feeds directly into the P&L-drift check in the operational routine (§10).
 
+### 12-1. Recommended: bulk-refresh with `alpha-forge live refresh`
+
+The three steps — sync-events → data update → replay — can be run in one shot via [`alpha-forge live refresh`](../cli-reference/live.md#alpha-forge-live-refresh). The "Refresh live data" button on the alpha-visualizer Live screen also calls this command internally.
+
+```bash
+alpha-forge live refresh
+
+pip install alpha-visualizer
+alpha-vis serve
+```
+
+This requires the `forge.yaml` `live.replay` section (`portfolio_id` / `combine_strategies` / `initial_capital`, etc.) to be configured beforehand. If it isn't, the command exits with an error before running any step. See [`alpha-forge live replay`](../cli-reference/live.md#alpha-forge-live-replay) for the config keys.
+
+!!! warning "Set `initial_capital` to match your real account"
+    If `live.replay.initial_capital` doesn't match your real account's base capital, the equity return rate will be skewed by the ratio between the two. Leaving it at the backtest default (100,000) while your real account holds 1,000,000 skews the return rate by 10x.
+
+### 12-2. Running steps individually (the original 3 commands)
+
+If `remote.enabled: false` (no sync-events needed) or you only want to re-run a specific step, you can still run the individual commands as before.
+
 ```bash
 # 1. Sync event JSONL from the VM into your local forge project
 alpha-forge live sync-events

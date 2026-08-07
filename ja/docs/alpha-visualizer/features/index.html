@@ -3647,6 +3647,7 @@
 <ul>
 <li>ライブ実績を持つエントリの一覧（戦略単位 / combine ポートフォリオの両方）</li>
 <li>選択エントリは URL クエリ（<code>?id=</code>）に同期されるため共有可能</li>
+<li>「ライブデータを更新」ボタンから forge の <code>live refresh</code>（sync-events → data update → live replay）を非同期ジョブとして実行し、進捗をその場に表示。完了後は一覧と詳細の両方を自動で再取得します（<code>POST /api/live/jobs</code>）</li>
 </ul>
 <h3 id="trade">戦略単位（trade ベース）<a class="headerlink" href="#trade" title="Permanent link">&para;</a></h3>
 <p>総取引数・勝率・プロフィットファクター・最大 DD・純 PnL を、同期間のバックテスト値と diff 付きで比較します。</p>
@@ -3682,6 +3683,10 @@
 <div class="admonition note">
 <p class="admonition-title">古い DB で combine ポートフォリオが一覧から消える場合</p>
 <p><code>benchmark_equity</code> / <code>backtest_equity</code> / <code>positions</code> / <code>cash</code> / <code>total_value</code> は列を後から追加する方式で導入されています。alpha-forge をアップデートしてからまだ一度も <code>live replay</code> を実行していない古い DB では、該当する combine ポートフォリオが <code>/live</code> の一覧から丸ごと見えなくなることがあります。<code>alpha-forge live replay</code> を一度実行すると必要な列が追加され、以降は通常どおり表示されます。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">更新ボタンは localhost 限定・forge.yaml の live.replay が前提です</p>
+<p>「ライブデータを更新」はネットワークアクセスと DB 書き込みを伴うため、<code>alpha-vis serve</code> を非 loopback バインド（<code>--host 0.0.0.0</code> 等）で起動している場合は無効化されます（一覧・詳細の閲覧はできます）。パラメータ入力欄は無く、<code>forge.yaml</code> の <code>live.replay</code> セクション（<a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> 参照）が SSoT です。<code>live refresh</code> に対応していない古い forge では「未対応」の案内が表示されます。</p>
 </div>
 <h2 id="data">データ管理画面<a class="headerlink" href="#data" title="Permanent link">&para;</a></h2>
 <p>保有ヒストリカルデータの一覧・鮮度確認と、GUI からのデータ取得・一括更新を行う画面です。<code>/data</code> でアクセスでき、ヘッダーナビの「データ」からも遷移できます。</p>

@@ -29,6 +29,7 @@
 | [`alpha-forge live doctor`](#alpha-forge-live-doctor) | live trading analysis の導入状態を確認 |
 | [`alpha-forge live sync-events`](#alpha-forge-live-sync-events) | VPS 上のイベントログをローカルに rsync で同期 |
 | [`alpha-forge live replay`](#alpha-forge-live-replay) | combine portfolio の alert log から position ベースで live メトリクスを再構築 |
+| [`alpha-forge live refresh`](#alpha-forge-live-refresh) | sync-events → data update → replay を一括実行する（visualizer の Live 更新もこれを使う） |
 
 ---
 
@@ -449,19 +450,49 @@ always-in-market の combine overlay 向けに、同期済み alpha-strike イ�
 ### 構文
 
 ```bash
-alpha-forge live replay <PORTFOLIO_ID> --combine-strategies <ID1>,<ID2>[,...] [OPTIONS]
+alpha-forge live replay [PORTFOLIO_ID] [--combine-strategies <ID1>,<ID2>[,...]] [OPTIONS]
 ```
+
+`PORTFOLIO_ID` 引数と `--combine-strategies` は省略可能です。詳細は [引数省略時の config フォールバック](#config-livereplay) を参照してください。
 
 ### 引数とオプション
 
 | 名前 | 種別 | デフォルト | 説明 |
 |------|------|----------|------|
-| `PORTFOLIO_ID` | 引数（必須） | - | combine portfolio 識別子 |
-| `--combine-strategies` | オプション（必須） | - | combine 対象戦略 ID（カンマ区切り、2 戦略以上） |
+| `PORTFOLIO_ID` | 引数（省略可） | - | combine portfolio 識別子。省略時は `forge.yaml` の `live.replay.portfolio_id` を使う |
+| `--combine-strategies` | オプション（省略可） | - | combine 対象戦略 ID（カンマ区切り、2 戦略以上）。省略時は `live.replay.combine_strategies` を使う |
 | `--since` | オプション | - | 期間下限（ISO 形式） |
-| `--compare` | フラグ | false | `backtest combine` の結果と並べて比較表示する |
-| `--initial-capital` | オプション | `backtest.initial_capital`（既定 100,000） | ライブ口座の基準資本 |
+| `--compare` | フラグ | false | `backtest combine` の結果と並べて比較表示する。`live.replay.compare: true` の場合、本フラグを付けなくても常に ON になる（OR 結合のため、config 側で ON にすると `--compare` なしでは OFF にできない） |
+| `--initial-capital` | オプション | `live.replay.initial_capital` → 未設定なら `backtest.initial_capital`（既定 100,000） | ライブ口座の基準資本 |
 | `--benchmark` | オプション | `forge.yaml` の `live.benchmark`（既定は未設定） | 比較用の指数銘柄（buy&hold）。本フラグと `live.benchmark` の両方が未設定の場合、比較線は表示されません |
+
+### 引数省略時の config フォールバック（`live.replay`）
+
+`PORTFOLIO_ID` / `--combine-strategies` / `--initial-capital` / `--compare` はすべて省略可能で、省略した項目は `forge.yaml` の `live.replay` セクションの値で補われます。[`alpha-forge live refresh`](#alpha-forge-live-refresh) も同じ解決ロジックを使うため、Live ページの「更新」ボタンから実行する場合は事前にこのセクションを設定しておく必要があります。
+
+```yaml
+live:
+  benchmark: ""            # 既存（buy&hold 比較銘柄）
+  replay:
+    portfolio_id: ""         # combine portfolio ID（例: my_hedged_pf_v1）
+    combine_strategies: []   # combine 対象戦略 ID（2 つ以上）
+    initial_capital: null    # ライブ口座の基準資本（null なら backtest.initial_capital）
+    compare: false            # backtest combine と比較する
+```
+
+| キー | 説明 |
+|------|------|
+| `live.replay.portfolio_id` | `PORTFOLIO_ID` 引数省略時のデフォルト値 |
+| `live.replay.combine_strategies` | `--combine-strategies` 省略時のデフォルト値（2 戦略以上を設定すること） |
+| `live.replay.initial_capital` | `--initial-capital` 省略時のデフォルト値。`null` の場合はさらに `backtest.initial_capital`（既定 100,000）にフォールバックする |
+| `live.replay.compare` | `true` にすると `--compare` を付けなくても常に backtest combine と比較表示する |
+
+解決順は「フラグ（`--combine-strategies` 等） > `live.replay` の設定値 > `backtest.initial_capital`（`initial_capital` のみの最終フォールバック）」です。フラグを毎回明示指定する既存の使い方はそのまま動作します（後方互換）。
+
+!!! warning "`initial_capital` は必ず実口座の資本に合わせる"
+    後述の [equity の計算方法](#equity-issue-1332) の通り、equity は `initial_capital + cash 増減 + 建玉評価額` で計算されます。`--initial-capital`（または `live.replay.initial_capital`）を実口座の資本に合わせないと、リターン率が基準資本の比率でずれます。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率が 10 倍ずれます。
+
+`portfolio_id` または `combine_strategies`（2 戦略以上）が最終的に解決できない場合、`live replay` は Click の引数エラーとして終了コード `2` で終了します。
 
 ### equity の計算方法（issue #1332）
 
@@ -501,6 +532,69 @@ equity を並べる日付軸は、構成銘柄すべての価格インデック�
 |---|---|---|
 | 建玉があるのに終値が欠測している | 価格データの期間がアラートログより短く、保有中の建玉が時価 $0 として評価されている。equity・最大DD・累計損益がいずれも過小に出る | `alpha-forge data fetch <SYMBOL> --period <長め>` で運用開始日以前まで価格データを取得し直す |
 | 保有数量を超える売却を検出した | 再構築した建玉と実口座がずれている（アラートログの欠落・重複、Pine 側の open-loop desync など）。建玉は 0 にクランプされ、以降の平均取得単価・含み損益・構成比は誤った前提で計算される | イベントログ（`live events`）で該当銘柄の発注履歴を確認する。恒常的に出る場合は Pine 側の数量計算が closed-loop になっているか確認する |
+
+---
+
+## alpha-forge live refresh
+
+[`alpha-forge live sync-events`](#alpha-forge-live-sync-events) → `alpha-forge data update` → [`alpha-forge live replay`](#alpha-forge-live-replay) を順に実行し、combine portfolio のライブ実績を一括で最新化する複合コマンドです。alpha-visualizer の Live ページの「更新」ボタンはこのコマンドを呼び出します。
+
+### 構文
+
+```bash
+alpha-forge live refresh [--json]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `--json` | フラグ | false | 結果を JSON で出力（`{"steps": [...], "replay": {...}}`） |
+
+### 実行される3ステップ
+
+```text
+1. alpha-forge live sync-events   VPS からイベントログを同期
+2. alpha-forge data update        保存済みヒストリカルデータを最新化
+3. alpha-forge live replay        combine portfolio のライブ実績を再構築
+```
+
+本コマンドは CLI 引数を取らず、各ステップのパラメータは `forge.yaml` から取得します。ステップ 1（sync-events）は `remote` セクション、ステップ 3（replay）は `live.replay` セクションを参照します。ステップ 2（data update）は保存済みヒストリカルデータ全件を対象とするため、`remote` / `live.replay` のどちらも参照しません。
+
+`remote.enabled` が `false` の場合、ステップ 1（sync-events）は**スキップして続行します**（エラーにはなりません）。`true` の場合は通常の `sync-events` と同じ [`remote` 設定](#alpha-forge-live-sync-events) が必要です。
+
+いずれかのステップが失敗すると**その場で中断**し、終了コード `1` で終了します（後続ステップは実行されません）。どのステップが失敗したかは標準エラー出力に `エラー: ステップ <name> が失敗しました: <理由>` の形式で表示されます。
+
+`live.replay.portfolio_id` または `combine_strategies`（2 戦略以上）が未設定の場合は、ステップを 1 つも実行せずに終了コード `2` でエラー終了します。事前に `forge.yaml` の `live.replay` を設定してください（設定キーの詳細は [`alpha-forge live replay`](#alpha-forge-live-replay) を参照）。
+
+### `--json` の出力規約
+
+進捗（`[1/3] sync-events: ...` 等）はすべて標準エラー出力へ送られます。`--json` 指定時、標準出力は次の形の純 JSON のみです。
+
+```json
+{
+  "steps": [
+    {"name": "sync_events", "status": "done"},
+    {"name": "data_update", "status": "done", "updated_count": 3},
+    {"name": "replay", "status": "done"}
+  ],
+  "replay": {
+    "portfolio_id": "pf_1",
+    "receipts_count": 128,
+    "live_metrics": {"...": "..."},
+    "backtest_metrics": null,
+    "sub_strategies": ["..."]
+  }
+}
+```
+
+`remote.enabled: false` で sync-events がスキップされた場合、該当ステップは `{"name": "sync_events", "status": "skipped", "reason": "remote_disabled"}` になります。いずれかのステップが失敗して中断した場合は、標準出力には何も出力されません（`replay` を含む JSON 全体が省略され、エラー内容は標準エラーにのみ出ます）。
+
+### 終了コード
+
+- 成功: `0`
+- 設定不足（`live.replay.portfolio_id` / `combine_strategies` 未設定）: `2`
+- いずれかのステップの失敗: `1`
 
 ---
 

@@ -1666,6 +1666,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="12. ライブ実績の可視化（alpha-visualizer）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12-1-alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-1. 推奨: alpha-forge live refresh で一括更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-2-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-2. 個別に実行したい場合（従来の3コマンド）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -4049,6 +4077,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="12. ライブ実績の可視化（alpha-visualizer）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12-1-alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-1. 推奨: alpha-forge live refresh で一括更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-2-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-2. 個別に実行したい場合（従来の3コマンド）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -4746,17 +4802,31 @@ alpha-strike は OpenD 接続前に <code>ValueError</code> で早期拒否す�
 <hr />
 <h2 id="12-alpha-visualizer">12. ライブ実績の可視化（alpha-visualizer）<a class="headerlink" href="#12-alpha-visualizer" title="Permanent link">&para;</a></h2>
 <p>alpha-strike が記録したイベントログ（JSONL）は、alpha-forge で取り込み、<a href="../../alpha-visualizer/">alpha-visualizer</a>（OSS・Apache-2.0）の Live 画面でエクイティカーブとして可視化できます。バックテストとの乖離（diff）も同じ画面で確認できるため、§10 の運用ルール（pnl 乖離チェック）にもそのまま使えます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># 1. VM 上のイベント JSONL をローカルの forge プロジェクトへ同期</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1"># 2. イベントを取り込んでライブ実績を生成</span>
-<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;strategy_id&gt;<span class="w">          </span><span class="c1"># 戦略単位</span>
-<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;portfolio_id&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>&lt;id1&gt;,&lt;id2&gt;<span class="w">                    </span><span class="c1"># combine ポートフォリオ</span>
-<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>
-<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="c1"># 3. alpha-visualizer の Live 画面で表示</span>
-<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>alpha-vis<span class="w"> </span>serve
+<h3 id="12-1-alpha-forge-live-refresh">12-1. 推奨: <code>alpha-forge live refresh</code> で一括更新<a class="headerlink" href="#12-1-alpha-forge-live-refresh" title="Permanent link">&para;</a></h3>
+<p>sync-events → data update → replay の 3 ステップは <a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> にまとめて実行できます。alpha-visualizer の Live 画面にある「ライブデータを更新」ボタンも内部でこのコマンドを呼び出します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>refresh
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>alpha-vis<span class="w"> </span>serve
+</code></pre></div>
+<p>事前に <code>forge.yaml</code> の <code>live.replay</code> セクション（<code>portfolio_id</code> / <code>combine_strategies</code> / <code>initial_capital</code> 等）を設定しておく必要があります。未設定の場合、コマンドはステップを 1 つも実行せずにエラー終了します。設定キーの詳細は <a href="../../cli-reference/live/#alpha-forge-live-replay"><code>alpha-forge live replay</code></a> を参照してください。</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>initial_capital</code> は実口座の基準資本に合わせる</p>
+<p><code>live.replay.initial_capital</code> を実口座の資本に合わせないと、equity のリターン率が基準資本の比率でずれます。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率が 10 倍ずれます。</p>
+</div>
+<h3 id="12-2-3">12-2. 個別に実行したい場合（従来の3コマンド）<a class="headerlink" href="#12-2-3" title="Permanent link">&para;</a></h3>
+<p><code>remote.enabled: false</code> の環境（sync-events を使わない）や、特定のステップだけをやり直したい場合は、従来どおり個別コマンドを実行できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># 1. VM 上のイベント JSONL をローカルの forge プロジェクトへ同期</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="c1"># 2. イベントを取り込んでライブ実績を生成</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;strategy_id&gt;<span class="w">          </span><span class="c1"># 戦略単位</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;portfolio_id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>&lt;id1&gt;,&lt;id2&gt;<span class="w">                    </span><span class="c1"># combine ポートフォリオ</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="c1"># 3. alpha-visualizer の Live 画面で表示</span>
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>alpha-vis<span class="w"> </span>serve
 </code></pre></div>
 <p>各画面の詳細は <a href="../../alpha-visualizer/features/">alpha-visualizer の機能</a>を参照。</p>
 <hr />

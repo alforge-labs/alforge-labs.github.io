@@ -2919,6 +2919,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#config-livereplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数省略時の config フォールバック（live.replay）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#equity-issue-1332" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2946,7 +2957,79 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live refresh
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live refresh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行される3ステップ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json の出力規約
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        終了コード
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_41" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -4143,6 +4226,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#config-livereplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数省略時の config フォールバック（live.replay）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#equity-issue-1332" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4170,7 +4264,79 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live refresh
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live refresh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数とオプション
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        実行される3ステップ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json の出力規約
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        終了コード
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_41" class="md-nav__link">
     <span class="md-ellipsis">
       
         共通の挙動
@@ -4258,6 +4424,10 @@
 <tr>
 <td><a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a></td>
 <td>combine portfolio の alert log から position ベースで live メトリクスを再構築</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a></td>
+<td>sync-events → data update → replay を一括実行する（visualizer の Live 更新もこれを使う）</td>
 </tr>
 </tbody>
 </table>
@@ -4830,8 +5000,9 @@
 <h2 id="alpha-forge-live-replay">alpha-forge live replay<a class="headerlink" href="#alpha-forge-live-replay" title="Permanent link">&para;</a></h2>
 <p>always-in-market の combine overlay 向けに、同期済み alpha-strike イベント（<a href="#alpha-forge-live-sync-events"><code>alpha-forge live sync-events</code></a> で取得）から position 推移を再構築し、portfolio equity curve から Sharpe / CAGR / MaxDD を算出します（issue #57）。<code>order_reconciled</code> イベントを権威ソースとして優先します。</p>
 <h3 id="_35">構文<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1&gt;,&lt;ID2&gt;<span class="o">[</span>,...<span class="o">]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span><span class="o">[</span>PORTFOLIO_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--combine-strategies<span class="w"> </span>&lt;ID1&gt;,&lt;ID2&gt;<span class="o">[</span>,...<span class="o">]]</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
+<p><code>PORTFOLIO_ID</code> 引数と <code>--combine-strategies</code> は省略可能です。詳細は <a href="#config-livereplay">引数省略時の config フォールバック</a> を参照してください。</p>
 <h3 id="_36">引数とオプション<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4845,15 +5016,15 @@
 <tbody>
 <tr>
 <td><code>PORTFOLIO_ID</code></td>
-<td>引数（必須）</td>
+<td>引数（省略可）</td>
 <td>-</td>
-<td>combine portfolio 識別子</td>
+<td>combine portfolio 識別子。省略時は <code>forge.yaml</code> の <code>live.replay.portfolio_id</code> を使う</td>
 </tr>
 <tr>
 <td><code>--combine-strategies</code></td>
-<td>オプション（必須）</td>
+<td>オプション（省略可）</td>
 <td>-</td>
-<td>combine 対象戦略 ID（カンマ区切り、2 戦略以上）</td>
+<td>combine 対象戦略 ID（カンマ区切り、2 戦略以上）。省略時は <code>live.replay.combine_strategies</code> を使う</td>
 </tr>
 <tr>
 <td><code>--since</code></td>
@@ -4865,12 +5036,12 @@
 <td><code>--compare</code></td>
 <td>フラグ</td>
 <td>false</td>
-<td><code>backtest combine</code> の結果と並べて比較表示する</td>
+<td><code>backtest combine</code> の結果と並べて比較表示する。<code>live.replay.compare: true</code> の場合、本フラグを付けなくても常に ON になる（OR 結合のため、config 側で ON にすると <code>--compare</code> なしでは OFF にできない）</td>
 </tr>
 <tr>
 <td><code>--initial-capital</code></td>
 <td>オプション</td>
-<td><code>backtest.initial_capital</code>（既定 100,000）</td>
+<td><code>live.replay.initial_capital</code> → 未設定なら <code>backtest.initial_capital</code>（既定 100,000）</td>
 <td>ライブ口座の基準資本</td>
 </tr>
 <tr>
@@ -4881,16 +5052,58 @@
 </tr>
 </tbody>
 </table>
+<h3 id="config-livereplay">引数省略時の config フォールバック（<code>live.replay</code>）<a class="headerlink" href="#config-livereplay" title="Permanent link">&para;</a></h3>
+<p><code>PORTFOLIO_ID</code> / <code>--combine-strategies</code> / <code>--initial-capital</code> / <code>--compare</code> はすべて省略可能で、省略した項目は <code>forge.yaml</code> の <code>live.replay</code> セクションの値で補われます。<a href="#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> も同じ解決ロジックを使うため、Live ページの「更新」ボタンから実行する場合は事前にこのセクションを設定しておく必要があります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">live</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">benchmark</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">            </span><span class="c1"># 既存（buy&amp;hold 比較銘柄）</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">replay</span><span class="p">:</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="nt">portfolio_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">         </span><span class="c1"># combine portfolio ID（例: my_hedged_pf_v1）</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="nt">combine_strategies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">   </span><span class="c1"># combine 対象戦略 ID（2 つ以上）</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">    </span><span class="nt">initial_capital</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">    </span><span class="c1"># ライブ口座の基準資本（null なら backtest.initial_capital）</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="nt">compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">            </span><span class="c1"># backtest combine と比較する</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>live.replay.portfolio_id</code></td>
+<td><code>PORTFOLIO_ID</code> 引数省略時のデフォルト値</td>
+</tr>
+<tr>
+<td><code>live.replay.combine_strategies</code></td>
+<td><code>--combine-strategies</code> 省略時のデフォルト値（2 戦略以上を設定すること）</td>
+</tr>
+<tr>
+<td><code>live.replay.initial_capital</code></td>
+<td><code>--initial-capital</code> 省略時のデフォルト値。<code>null</code> の場合はさらに <code>backtest.initial_capital</code>（既定 100,000）にフォールバックする</td>
+</tr>
+<tr>
+<td><code>live.replay.compare</code></td>
+<td><code>true</code> にすると <code>--compare</code> を付けなくても常に backtest combine と比較表示する</td>
+</tr>
+</tbody>
+</table>
+<p>解決順は「フラグ（<code>--combine-strategies</code> 等） &gt; <code>live.replay</code> の設定値 &gt; <code>backtest.initial_capital</code>（<code>initial_capital</code> のみの最終フォールバック）」です。フラグを毎回明示指定する既存の使い方はそのまま動作します（後方互換）。</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>initial_capital</code> は必ず実口座の資本に合わせる</p>
+<p>後述の <a href="#equity-issue-1332">equity の計算方法</a> の通り、equity は <code>initial_capital + cash 増減 + 建玉評価額</code> で計算されます。<code>--initial-capital</code>（または <code>live.replay.initial_capital</code>）を実口座の資本に合わせないと、リターン率が基準資本の比率でずれます。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率が 10 倍ずれます。</p>
+</div>
+<p><code>portfolio_id</code> または <code>combine_strategies</code>（2 戦略以上）が最終的に解決できない場合、<code>live replay</code> は Click の引数エラーとして終了コード <code>2</code> で終了します。</p>
 <h3 id="equity-issue-1332">equity の計算方法（issue #1332）<a class="headerlink" href="#equity-issue-1332" title="Permanent link">&para;</a></h3>
 <p>equity は次式で求めます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>equity = initial_capital + cash 増減 + Σ(建玉 × 終値)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>equity = initial_capital + cash 増減 + Σ(建玉 × 終値)
 </code></pre></div>
 <p>建玉の買い付けは cash 減少と評価額増加が相殺されるため equity を動かさず、<strong>価格が動いて初めて損益が出ます</strong>。</p>
 <p>このため <code>--initial-capital</code> は実際のライブ口座の資本と一致させてください。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率がその比率でずれます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># 実口座が $1,000,000 の場合</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_v1,gld_v1,tlt_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># 実口座が $1,000,000 の場合</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_v1,gld_v1,tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
 </code></pre></div>
 <p>equity / メトリクスは<strong>最初の receipt 以降</strong>に限定されます。価格データは十数年分あるため、全期間で算出すると運用実績が数ヶ月でも CAGR / Sharpe が全期間ベースの無意味な値になるためです。</p>
 <p>equity を並べる日付軸は、構成銘柄すべての価格インデックスの<strong>和集合</strong>です。ある銘柄の価格データにだけ欠けている営業日があっても、他の銘柄が取引していればその日は equity に現れます（欠けている銘柄の価格は直前値で前方補完されます）。<code>--combine-strategies</code> に渡す銘柄の並び順は結果に影響しません。</p>
@@ -4924,7 +5137,65 @@
 </tbody>
 </table>
 <hr />
-<h2 id="_38">共通の挙動<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h2>
+<h2 id="alpha-forge-live-refresh">alpha-forge live refresh<a class="headerlink" href="#alpha-forge-live-refresh" title="Permanent link">&para;</a></h2>
+<p><a href="#alpha-forge-live-sync-events"><code>alpha-forge live sync-events</code></a> → <code>alpha-forge data update</code> → <a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a> を順に実行し、combine portfolio のライブ実績を一括で最新化する複合コマンドです。alpha-visualizer の Live ページの「更新」ボタンはこのコマンドを呼び出します。</p>
+<h3 id="_38">構文<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>refresh<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</code></pre></div>
+<h3 id="_39">引数とオプション<a class="headerlink" href="#_39" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>デフォルト</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>フラグ</td>
+<td>false</td>
+<td>結果を JSON で出力（<code>{"steps": [...], "replay": {...}}</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3">実行される3ステップ<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>1. alpha-forge live sync-events   VPS からイベントログを同期
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>2. alpha-forge data update        保存済みヒストリカルデータを最新化
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>3. alpha-forge live replay        combine portfolio のライブ実績を再構築
+</code></pre></div>
+<p>本コマンドは CLI 引数を取らず、各ステップのパラメータは <code>forge.yaml</code> から取得します。ステップ 1（sync-events）は <code>remote</code> セクション、ステップ 3（replay）は <code>live.replay</code> セクションを参照します。ステップ 2（data update）は保存済みヒストリカルデータ全件を対象とするため、<code>remote</code> / <code>live.replay</code> のどちらも参照しません。</p>
+<p><code>remote.enabled</code> が <code>false</code> の場合、ステップ 1（sync-events）は<strong>スキップして続行します</strong>（エラーにはなりません）。<code>true</code> の場合は通常の <code>sync-events</code> と同じ <a href="#alpha-forge-live-sync-events"><code>remote</code> 設定</a> が必要です。</p>
+<p>いずれかのステップが失敗すると<strong>その場で中断</strong>し、終了コード <code>1</code> で終了します（後続ステップは実行されません）。どのステップが失敗したかは標準エラー出力に <code>エラー: ステップ &lt;name&gt; が失敗しました: &lt;理由&gt;</code> の形式で表示されます。</p>
+<p><code>live.replay.portfolio_id</code> または <code>combine_strategies</code>（2 戦略以上）が未設定の場合は、ステップを 1 つも実行せずに終了コード <code>2</code> でエラー終了します。事前に <code>forge.yaml</code> の <code>live.replay</code> を設定してください（設定キーの詳細は <a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a> を参照）。</p>
+<h3 id="-json"><code>--json</code> の出力規約<a class="headerlink" href="#-json" title="Permanent link">&para;</a></h3>
+<p>進捗（<code>[1/3] sync-events: ...</code> 等）はすべて標準エラー出力へ送られます。<code>--json</code> 指定時、標準出力は次の形の純 JSON のみです。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">{</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span><span class="nt">&quot;steps&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sync_events&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">},</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data_update&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;updated_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">},</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;replay&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">}</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">  </span><span class="nt">&quot;replay&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">    </span><span class="nt">&quot;portfolio_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pf_1&quot;</span><span class="p">,</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">    </span><span class="nt">&quot;receipts_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">    </span><span class="nt">&quot;live_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;...&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">},</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">    </span><span class="nt">&quot;backtest_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="w">    </span><span class="nt">&quot;sub_strategies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;...&quot;</span><span class="p">]</span>
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="p">}</span>
+</code></pre></div>
+<p><code>remote.enabled: false</code> で sync-events がスキップされた場合、該当ステップは <code>{"name": "sync_events", "status": "skipped", "reason": "remote_disabled"}</code> になります。いずれかのステップが失敗して中断した場合は、標準出力には何も出力されません（<code>replay</code> を含む JSON 全体が省略され、エラー内容は標準エラーにのみ出ます）。</p>
+<h3 id="_40">終了コード<a class="headerlink" href="#_40" title="Permanent link">&para;</a></h3>
+<ul>
+<li>成功: <code>0</code></li>
+<li>設定不足（<code>live.replay.portfolio_id</code> / <code>combine_strategies</code> 未設定）: <code>2</code></li>
+<li>いずれかのステップの失敗: <code>1</code></li>
+</ul>
+<hr />
+<h2 id="_41">共通の挙動<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>保存先</strong>:<ul>
 <li>raw event ログ: <code>&lt;journal_path&gt;/../live/events/</code>（ファイルシステム上の JSON）</li>

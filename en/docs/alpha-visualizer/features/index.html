@@ -3647,6 +3647,7 @@
 <ul>
 <li>Lists every entry with live records (both per-strategy and combine portfolios)</li>
 <li>The selected entry is synced to the URL query (<code>?id=</code>) for sharing</li>
+<li>The "Refresh live data" button runs forge's <code>live refresh</code> (sync-events → data update → live replay) as an asynchronous job, showing progress inline; on completion, both the list and the detail view refetch automatically (<code>POST /api/live/jobs</code>)</li>
 </ul>
 <h3 id="per-strategy-trade-based">Per-strategy (trade-based)<a class="headerlink" href="#per-strategy-trade-based" title="Permanent link">&para;</a></h3>
 <p>Total trades, win rate, profit factor, max drawdown, and net PnL, compared with the period-aligned backtest with diffs.</p>
@@ -3682,6 +3683,10 @@
 <div class="admonition note">
 <p class="admonition-title">Combine portfolio missing from the list on an old database</p>
 <p><code>benchmark_equity</code> / <code>backtest_equity</code> / <code>positions</code> / <code>cash</code> / <code>total_value</code> were added as later column migrations. On a database that hasn't had <code>live replay</code> run against it since upgrading alpha-forge, the corresponding combine portfolio can vanish entirely from the <code>/live</code> list. Running <code>alpha-forge live replay</code> once adds the missing columns, after which it shows up as usual.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Refresh is localhost-only and requires <code>live.replay</code> in forge.yaml</p>
+<p>Because "Refresh live data" involves network access and DB writes, it is disabled when <code>alpha-vis serve</code> is bound to a non-loopback host (e.g. <code>--host 0.0.0.0</code>) — the list and detail views remain viewable. There is no parameter input; the <code>forge.yaml</code> <code>live.replay</code> section (see <a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a>) is the source of truth. Older forge versions without <code>live refresh</code> support show a not-supported notice instead.</p>
 </div>
 <h2 id="data">Data<a class="headerlink" href="#data" title="Permanent link">&para;</a></h2>
 <p>Lists stored historical datasets with freshness, and lets you fetch or bulk-update data from the GUI. Available at <code>/data</code>, and from the "Data" link in the header nav.</p>

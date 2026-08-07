@@ -2919,6 +2919,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#config-fallback-for-omitted-arguments-livereplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config fallback for omitted arguments (live.replay)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#how-equity-is-computed-issue-1332" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2956,6 +2967,78 @@
     <span class="md-ellipsis">
       
         Common errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live refresh
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live refresh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synopsis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-3-steps-it-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 3 steps it runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json-output-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json output contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit-codes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit codes
       
     </span>
   </a>
@@ -4165,6 +4248,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#config-fallback-for-omitted-arguments-livereplay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config fallback for omitted arguments (live.replay)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#how-equity-is-computed-issue-1332" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4202,6 +4296,78 @@
     <span class="md-ellipsis">
       
         Common errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        alpha-forge live refresh
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="alpha-forge live refresh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synopsis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguments-and-options_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arguments and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-3-steps-it-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 3 steps it runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-json-output-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --json output contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit-codes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit codes
       
     </span>
   </a>
@@ -4302,6 +4468,10 @@
 <tr>
 <td><a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a></td>
 <td>Reconstruct position-based live metrics from a combine portfolio's alert log</td>
+</tr>
+<tr>
+<td><a href="#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a></td>
+<td>Run sync-events → data update → replay in one shot (used by the visualizer's Live refresh button)</td>
 </tr>
 </tbody>
 </table>
@@ -4874,8 +5044,9 @@
 <h2 id="alpha-forge-live-replay">alpha-forge live replay<a class="headerlink" href="#alpha-forge-live-replay" title="Permanent link">&para;</a></h2>
 <p>Reconstruct position-based live metrics from a combine portfolio's alert log. Intended for always-in-market combine overlays: it rebuilds position transitions from synced <code>alpha-strike</code> events (<code>alpha-forge live sync-events</code>) and computes Sharpe / CAGR / MaxDD from the portfolio equity curve. <code>order_reconciled</code> receipts are preferred as the authoritative source.</p>
 <h3 id="synopsis_9">Synopsis<a class="headerlink" href="#synopsis_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;PORTFOLIO_ID&gt;<span class="w"> </span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span><span class="w"> </span><span class="o">[</span>--initial-capital<span class="w"> </span>&lt;FLOAT&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--benchmark<span class="w"> </span>&lt;SYMBOL&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span><span class="o">[</span>PORTFOLIO_ID<span class="o">]</span><span class="w"> </span><span class="o">[</span>--combine-strategies<span class="w"> </span>&lt;ID1,ID2,...&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--since<span class="w"> </span>&lt;ISO&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--compare<span class="o">]</span><span class="w"> </span><span class="o">[</span>--initial-capital<span class="w"> </span>&lt;FLOAT&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--benchmark<span class="w"> </span>&lt;SYMBOL&gt;<span class="o">]</span>
 </code></pre></div>
+<p><code>PORTFOLIO_ID</code> and <code>--combine-strategies</code> are now optional. See <a href="#config-fallback-for-omitted-arguments-livereplay">Config fallback for omitted arguments</a> below.</p>
 <h3 id="arguments-and-options_9">Arguments and options<a class="headerlink" href="#arguments-and-options_9" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4889,15 +5060,15 @@
 <tbody>
 <tr>
 <td><code>PORTFOLIO_ID</code></td>
-<td>argument (required)</td>
+<td>argument (optional)</td>
 <td>-</td>
-<td>Combine portfolio ID</td>
+<td>Combine portfolio ID; falls back to <code>live.replay.portfolio_id</code> in <code>forge.yaml</code> when omitted</td>
 </tr>
 <tr>
 <td><code>--combine-strategies</code></td>
-<td>option (required)</td>
+<td>option (optional)</td>
 <td>-</td>
-<td>Comma-separated combine strategy IDs (<strong>2 or more required</strong>)</td>
+<td>Comma-separated combine strategy IDs (<strong>2 or more required</strong>); falls back to <code>live.replay.combine_strategies</code> when omitted</td>
 </tr>
 <tr>
 <td><code>--since</code></td>
@@ -4909,12 +5080,12 @@
 <td><code>--compare</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Also run the backtest combine and show it side by side</td>
+<td>Also run the backtest combine and show it side by side. When <code>live.replay.compare: true</code> is set, comparison is always on even without this flag (it's an OR, so config <code>true</code> cannot be turned off by omitting <code>--compare</code>)</td>
 </tr>
 <tr>
 <td><code>--initial-capital</code></td>
 <td>option</td>
-<td><code>backtest.initial_capital</code> (default 100,000)</td>
+<td><code>live.replay.initial_capital</code>, then <code>backtest.initial_capital</code> (default 100,000)</td>
 <td>Capital base of the live account</td>
 </tr>
 <tr>
@@ -4925,16 +5096,58 @@
 </tr>
 </tbody>
 </table>
+<h3 id="config-fallback-for-omitted-arguments-livereplay">Config fallback for omitted arguments (<code>live.replay</code>)<a class="headerlink" href="#config-fallback-for-omitted-arguments-livereplay" title="Permanent link">&para;</a></h3>
+<p><code>PORTFOLIO_ID</code>, <code>--combine-strategies</code>, <code>--initial-capital</code>, and <code>--compare</code> are all optional — whatever you omit is filled in from the <code>live.replay</code> section of <code>forge.yaml</code>. <a href="#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> uses the same resolution logic, so running it from the visualizer's Live page "Refresh" button requires this section to be configured beforehand.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">live</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">benchmark</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">            </span><span class="c1"># existing (buy-and-hold comparison symbol)</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">replay</span><span class="p">:</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="nt">portfolio_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">         </span><span class="c1"># combine portfolio ID (e.g. my_hedged_pf_v1)</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="nt">combine_strategies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">   </span><span class="c1"># combine target strategy IDs (2 or more)</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">    </span><span class="nt">initial_capital</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">    </span><span class="c1"># capital base of the live account (null = use backtest.initial_capital)</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="nt">compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">            </span><span class="c1"># compare against the backtest combine</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>live.replay.portfolio_id</code></td>
+<td>Default used when the <code>PORTFOLIO_ID</code> argument is omitted</td>
+</tr>
+<tr>
+<td><code>live.replay.combine_strategies</code></td>
+<td>Default used when <code>--combine-strategies</code> is omitted (set 2 or more strategy IDs)</td>
+</tr>
+<tr>
+<td><code>live.replay.initial_capital</code></td>
+<td>Default used when <code>--initial-capital</code> is omitted. When <code>null</code>, falls back further to <code>backtest.initial_capital</code> (default 100,000)</td>
+</tr>
+<tr>
+<td><code>live.replay.compare</code></td>
+<td>When <code>true</code>, always compares against the backtest combine even without passing <code>--compare</code></td>
+</tr>
+</tbody>
+</table>
+<p>Resolution order is "flag (e.g. <code>--combine-strategies</code>) &gt; <code>live.replay</code> config value &gt; <code>backtest.initial_capital</code> (the final fallback, for <code>initial_capital</code> only)". Existing usage that always passes flags explicitly continues to work unchanged (backward compatible).</p>
+<div class="admonition warning">
+<p class="admonition-title">Always match <code>initial_capital</code> to the real account's capital</p>
+<p>As described in <a href="#how-equity-is-computed-issue-1332">How equity is computed</a> below, equity is computed as <code>initial_capital + cash delta + position market value</code>. If <code>--initial-capital</code> (or <code>live.replay.initial_capital</code>) doesn't match the real account's capital base, the return percentages skew by that ratio. Leaving it at the backtest default (100,000) while the live account holds 1,000,000 skews the return percentages by 10x.</p>
+</div>
+<p>If <code>portfolio_id</code> or <code>combine_strategies</code> (2 or more) cannot be resolved in the end, <code>live replay</code> exits with Click's argument-error exit code <code>2</code>.</p>
 <h3 id="how-equity-is-computed-issue-1332">How equity is computed (issue #1332)<a class="headerlink" href="#how-equity-is-computed-issue-1332" title="Permanent link">&para;</a></h3>
 <p>Equity is computed as:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>equity = initial_capital + cash delta + Σ(position × close)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>equity = initial_capital + cash delta + Σ(position × close)
 </code></pre></div>
 <p>Buying a position lowers cash and raises market value by the same amount, so the purchase itself does not move equity — <strong>P&amp;L only appears once prices move</strong>.</p>
 <p>Because of this, <code>--initial-capital</code> must match the capital base of the real live account. Leaving it at the backtest default (100,000) while the live account holds 1,000,000 skews the return percentages by that same ratio.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># When the live account holds $1,000,000</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_v1,gld_v1,tlt_v1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># When the live account holds $1,000,000</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>beat_qqq_hedged_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>tqqq_v1,gld_v1,tlt_v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">  </span>--initial-capital<span class="w"> </span><span class="m">1000000</span>
 </code></pre></div>
 <p>Equity and metrics are restricted to the period <strong>from the first receipt onward</strong>. Price history spans well over a decade, so computing across the full index would yield meaningless full-history CAGR / Sharpe values for a live track record that is only a few months old.</p>
 <p>The date axis is the <strong>union</strong> of the price indexes of every constituent symbol. If a trading day is missing from one symbol's price data but present in another's, that day still appears in the equity curve (the symbol with the gap is forward-filled from its previous close). The order of symbols passed to <code>--combine-strategies</code> does not affect the result.</p>
@@ -4968,15 +5181,15 @@
 </tbody>
 </table>
 <h3 id="sample-output_8">Sample output<a class="headerlink" href="#sample-output_8" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>=== live replay (position-based) — combo_spy_qqq ===
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>receipts: 128
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>| Metric           | Live      | Backtest  |
-<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>|------------------|-----------|-----------|
-<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>| sharpe_ratio     |      1.21 |      1.38 |
-<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>| cagr_pct         |     14.30 |     16.80 |
-<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>| max_drawdown_pct |     -5.40 |     -4.90 |
-<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>| total_return_pct |     +9.85 |    +11.20 |
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>=== live replay (position-based) — combo_spy_qqq ===
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>receipts: 128
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>| Metric           | Live      | Backtest  |
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>|------------------|-----------|-----------|
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>| sharpe_ratio     |      1.21 |      1.38 |
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>| cagr_pct         |     14.30 |     16.80 |
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>| max_drawdown_pct |     -5.40 |     -4.90 |
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>| total_return_pct |     +9.85 |    +11.20 |
 </code></pre></div>
 <p>The <code>Backtest</code> column appears only when <code>--compare</code> is passed. When no receipts match the <code>portfolio_id</code>, a warning is shown prompting you to confirm <code>alpha-forge live sync-events</code> has been run.</p>
 <h3 id="common-errors_5">Common errors<a class="headerlink" href="#common-errors_5" title="Permanent link">&para;</a></h3>
@@ -5001,6 +5214,64 @@
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="alpha-forge-live-refresh">alpha-forge live refresh<a class="headerlink" href="#alpha-forge-live-refresh" title="Permanent link">&para;</a></h2>
+<p>A composite command that runs <a href="#alpha-forge-live-sync-events"><code>alpha-forge live sync-events</code></a> → <code>alpha-forge data update</code> → <a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a> in sequence to bring a combine portfolio's live track record fully up to date in one shot. The "Refresh" button on the alpha-visualizer Live page calls this command.</p>
+<h3 id="synopsis_10">Synopsis<a class="headerlink" href="#synopsis_10" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>refresh<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</code></pre></div>
+<h3 id="arguments-and-options_10">Arguments and options<a class="headerlink" href="#arguments-and-options_10" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Kind</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>flag</td>
+<td>false</td>
+<td>Emit the result as JSON (<code>{"steps": [...], "replay": {...}}</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-3-steps-it-runs">The 3 steps it runs<a class="headerlink" href="#the-3-steps-it-runs" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>1. alpha-forge live sync-events   Sync event logs from the VPS
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>2. alpha-forge data update        Update stored historical data
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>3. alpha-forge live replay        Rebuild the combine portfolio&#39;s live track record
+</code></pre></div>
+<p>The command itself takes no CLI arguments; each step's parameters come from <code>forge.yaml</code> instead. Step 1 (sync-events) reads the <code>remote</code> section, and step 3 (replay) reads the <code>live.replay</code> section. Step 2 (data update) targets all stored historical datasets, so it reads neither <code>remote</code> nor <code>live.replay</code>.</p>
+<p>When <code>remote.enabled</code> is <code>false</code>, step 1 (sync-events) is <strong>skipped and the command continues</strong> (this is not an error). When <code>true</code>, it requires the same <a href="#alpha-forge-live-sync-events"><code>remote</code> configuration</a> as a standalone <code>sync-events</code> run.</p>
+<p>If any step fails, the command <strong>aborts immediately</strong> with exit code <code>1</code> (subsequent steps do not run). Which step failed is reported to stderr as <code>Error: step &lt;name&gt; failed: &lt;reason&gt;</code>.</p>
+<p>If <code>live.replay.portfolio_id</code> or <code>combine_strategies</code> (2 or more strategies) is not configured, the command exits with code <code>2</code> before running any step. Configure <code>live.replay</code> in <code>forge.yaml</code> first (see <a href="#alpha-forge-live-replay"><code>alpha-forge live replay</code></a> for the config keys).</p>
+<h3 id="-json-output-contract"><code>--json</code> output contract<a class="headerlink" href="#-json-output-contract" title="Permanent link">&para;</a></h3>
+<p>All progress (<code>[1/3] sync-events: ...</code>, etc.) is sent to stderr. With <code>--json</code>, stdout contains pure JSON of the following shape only:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="p">{</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">  </span><span class="nt">&quot;steps&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sync_events&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">},</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data_update&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;updated_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">},</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;replay&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">}</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">  </span><span class="nt">&quot;replay&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">    </span><span class="nt">&quot;portfolio_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pf_1&quot;</span><span class="p">,</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="w">    </span><span class="nt">&quot;receipts_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="w">    </span><span class="nt">&quot;live_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;...&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">},</span>
+<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="w">    </span><span class="nt">&quot;backtest_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="w">    </span><span class="nt">&quot;sub_strategies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;...&quot;</span><span class="p">]</span>
+<a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a><span class="p">}</span>
+</code></pre></div>
+<p>When sync-events is skipped because <code>remote.enabled: false</code>, that step reads <code>{"name": "sync_events", "status": "skipped", "reason": "remote_disabled"}</code>. If any step fails and the command aborts, nothing is written to stdout (the entire JSON payload, including <code>replay</code>, is omitted — the error is reported to stderr only).</p>
+<h3 id="exit-codes_1">Exit codes<a class="headerlink" href="#exit-codes_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Success: <code>0</code></li>
+<li>Missing config (<code>live.replay.portfolio_id</code> / <code>combine_strategies</code> not set): <code>2</code></li>
+<li>Any step failed: <code>1</code></li>
+</ul>
 <hr />
 <h2 id="common-behavior">Common behavior<a class="headerlink" href="#common-behavior" title="Permanent link">&para;</a></h2>
 <ul>

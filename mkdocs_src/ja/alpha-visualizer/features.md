@@ -133,6 +133,7 @@ alpha-visualizer は結果を見るだけでなく、**バックテスト・最�
 
 - ライブ実績を持つエントリの一覧（戦略単位 / combine ポートフォリオの両方）
 - 選択エントリは URL クエリ（`?id=`）に同期されるため共有可能
+- 「ライブデータを更新」ボタンから forge の `live refresh`（sync-events → data update → live replay）を非同期ジョブとして実行し、進捗をその場に表示。完了後は一覧と詳細の両方を自動で再取得します（`POST /api/live/jobs`）
 
 ### 戦略単位（trade ベース）
 
@@ -153,6 +154,9 @@ alpha-visualizer は結果を見るだけでなく、**バックテスト・最�
 
 !!! note "古い DB で combine ポートフォリオが一覧から消える場合"
     `benchmark_equity` / `backtest_equity` / `positions` / `cash` / `total_value` は列を後から追加する方式で導入されています。alpha-forge をアップデートしてからまだ一度も `live replay` を実行していない古い DB では、該当する combine ポートフォリオが `/live` の一覧から丸ごと見えなくなることがあります。`alpha-forge live replay` を一度実行すると必要な列が追加され、以降は通常どおり表示されます。
+
+!!! note "更新ボタンは localhost 限定・forge.yaml の live.replay が前提です"
+    「ライブデータを更新」はネットワークアクセスと DB 書き込みを伴うため、`alpha-vis serve` を非 loopback バインド（`--host 0.0.0.0` 等）で起動している場合は無効化されます（一覧・詳細の閲覧はできます）。パラメータ入力欄は無く、`forge.yaml` の `live.replay` セクション（[`alpha-forge live refresh`](../cli-reference/live.md#alpha-forge-live-refresh) 参照）が SSoT です。`live refresh` に対応していない古い forge では「未対応」の案内が表示されます。
 
 ## データ管理画面 { #data }
 
