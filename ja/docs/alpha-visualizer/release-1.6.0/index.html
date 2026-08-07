@@ -6,19 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="alpha-visualizer v0.9.0 は最適化・Walk-Forward Test の非同期ジョブ実行とパラメータチューニングループを追加し、GUI だけで戦略開発ループ全体を回せるように。FX キャリー調整メトリクス表示、X 共有シェアカード、アクセシビリティ強化など v0.7.1 以降の累積ハイライトをまとめます。">
+        <meta name="description" content="alpha-visualizer v1.6.0 は、これまで CLI で 3 コマンドを順に実行する必要があったライブデータの更新を、Live 画面のボタン 1 クリックで完結できるようにするリリースです。replay パラメータは forge.yaml に集約され、初期資本の指定漏れによるリターン率のずれが構造的に起きなくなります。">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/ja/docs/alpha-visualizer/release-0.9.0/">
+        <link rel="canonical" href="https://alforgelabs.com/ja/docs/alpha-visualizer/release-1.6.0/">
       
       
-        <link rel="prev" href="../release-1.0.0/">
+        <link rel="prev" href="../faq/">
       
       
-        <link rel="next" href="../release-0.7.1/">
+        <link rel="next" href="../release-1.5.0/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>alpha-visualizer v0.9.0 リリース — 最適化・WFT の GUI 実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート） - AlphaForge ドキュメント</title>
+        <title>alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新 - AlphaForge ドキュメント</title>
       
     
     
@@ -94,7 +94,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#alpha-visualizer-v090-v071" class="md-skip">
+        <a href="#alpha-visualizer-v160-live" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -128,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              alpha-visualizer v0.9.0 リリース — 最適化・WFT の GUI 実行とパラメータチューニングループ（v0.7.1 以降の累積アップデート）
+              alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新
             
           </span>
         </div>
@@ -1757,10 +1757,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../release-1.6.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.6.0 (2026-08-07)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1776,6 +1803,98 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ハイライト
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ハイライト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 「ライブデータを更新」ボタン
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-replay-forgeyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. replay パラメータを forge.yaml に集約
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        修正
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アップグレード方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連ドキュメント
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1925,37 +2044,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    v0.9.0 (2026-07-19)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../release-0.9.0/" class="md-nav__link">
         
   
   
@@ -1971,131 +2063,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目次">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目次
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ハイライト
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="ハイライト">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-wft-gui-v090" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. 最適化・WFT の GUI 実行（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-v090" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. パラメータチューニングループ（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-fx-v090" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. FX キャリー調整メトリクスの表示（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-x-v090" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. シェアカードと X 共有の拡充（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-ui-v080" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. アクセシビリティと UI 品質の底上げ（v0.8.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-v073v080" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        アップグレード方法
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        関連リンク
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -3012,10 +2979,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-wft-gui-v090" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 最適化・WFT の GUI 実行（v0.9.0）
+        1. 「ライブデータを更新」ボタン
       
     </span>
   </a>
@@ -3023,54 +2990,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-v090" class="md-nav__link">
+  <a href="#2-replay-forgeyaml" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. パラメータチューニングループ（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-fx-v090" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. FX キャリー調整メトリクスの表示（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-x-v090" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. シェアカードと X 共有の拡充（v0.9.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-ui-v080" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. アクセシビリティと UI 品質の底上げ（v0.8.0）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-v073v080" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）
+        2. replay パラメータを forge.yaml に集約
       
     </span>
   </a>
@@ -3086,7 +3009,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        アップグレード方法
+        修正
       
     </span>
   </a>
@@ -3097,7 +3020,18 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        関連リンク
+        アップグレード方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連ドキュメント
       
     </span>
   </a>
@@ -3121,51 +3055,59 @@
 
 
 
-<h1 id="alpha-visualizer-v090-v071">alpha-visualizer v0.9.0 リリース — v0.7.1 以降の累積アップデート<a class="headerlink" href="#alpha-visualizer-v090-v071" title="Permanent link">&para;</a></h1>
+<h1 id="alpha-visualizer-v160-live">alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新<a class="headerlink" href="#alpha-visualizer-v160-live" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>公開日</strong>: 2026 年 7 月 19 日 / <strong>バージョン</strong>: v0.9.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.9.0/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0">GitHub Release</a></p>
+<p><strong>公開日</strong>: 2026 年 8 月 7 日 / <strong>バージョン</strong>: v1.6.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.6.0">GitHub Release</a></p>
 </blockquote>
-<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v0.9.0 の最大の変化は、<strong>最適化・Walk-Forward Test の非同期ジョブ実行とパラメータチューニングループの追加により、GUI だけで戦略開発ループ全体を回せるようになった</strong>ことです。本ノートでは v0.7.1 以降（v0.7.3・v0.8.0・v0.9.0）の累積ハイライトをまとめます。</p>
+<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v1.6.0 は、ペーパートレード／実運用の記録を最新化する作業を GUI に取り込むリリースです。</p>
 <h2 id="_1">ハイライト<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h3 id="1-wft-gui-v090">1. 最適化・WFT の GUI 実行（v0.9.0）<a class="headerlink" href="#1-wft-gui-v090" title="Permanent link">&para;</a></h3>
-<p>最適化（Optuna）と Walk-Forward Test を<strong>非同期ジョブ</strong>としてブラウザから起動できるようになりました。SSE によるログ・進捗のリアルタイム表示とキャンセルに対応します。WFT ジョブは記録付き（<code>--save</code>）で実行されるため、完了すると WFO タブへ自動反映されます。以前から可能だった Detail 画面からのバックテスト再実行も、run の直接取得・タイムアウト・実行ログ表示などで堅牢化しました。</p>
-<p>サーバーと同じマシンに AlphaForge CLI がインストールされていることが前提です（CLI が無い環境では従来どおり閲覧専用として動作します）。同時実行数・タイムアウトは <code>ALPHA_VIS_JOB_CONCURRENCY</code> / <code>ALPHA_VIS_JOB_TIMEOUT</code> で調整できます。</p>
-<h3 id="2-v090">2. パラメータチューニングループ（v0.9.0）<a class="headerlink" href="#2-v090" title="Permanent link">&para;</a></h3>
-<p>戦略構成タブのチューニングパネルで、<strong>編集 → 一時実行 → 比較 → 明示保存</strong> のループを GUI だけで回せます。一時実行は元の戦略定義に触れず、書き戻しは「保存」の明示操作のみ。チューニング試行のランは Browse / 実行履歴 / バックテストタブで通常ランと区別表示されるため、探索の足跡と本採用の結果が混ざりません。既存戦略の<strong>複製ベース新規作成</strong>にも対応しました。</p>
-<h3 id="3-fx-v090">3. FX キャリー調整メトリクスの表示（v0.9.0）<a class="headerlink" href="#3-fx-v090" title="Permanent link">&para;</a></h3>
-<p>AlphaForge v0.18.0 の <code>backtest run --carry</code>（FX キャリー / スワップの計上）と連携し、キャリー調整後メトリクス（carry_adjusted）を Detail 画面のバックテストタブにカード表示します。詳細は <a href="../../changelog/">AlphaForge 変更履歴</a>を参照してください。</p>
-<h3 id="4-x-v090">4. シェアカードと X 共有の拡充（v0.9.0）<a class="headerlink" href="#4-x-v090" title="Permanent link">&para;</a></h3>
-<p>equity curve と主要指標をまとめた OGP サイズ（1200×630）の PNG シェアカードを Detail・Compare・Live の各画面から書き出せます。「X で共有」ボタンはカード保存と X 投稿画面のオープン（成績サマリのプリフィル・280 字ガード付き）を 1 クリックで実行します。</p>
-<h3 id="5-ui-v080">5. アクセシビリティと UI 品質の底上げ（v0.8.0）<a class="headerlink" href="#5-ui-v080" title="Permanent link">&para;</a></h3>
-<p>キーボード操作・ARIA ランドマーク・スクリーンリーダー対応・WCAG AA コントラストへの調整を実施しました。ローソク足チャートには OHLC データテーブルの代替表示を追加。ローディングスケルトンの共有化、<code>Intl</code> による桁区切り、OS テーマ追従も入っています。</p>
-<h3 id="6-v073v080">6. チャートと最適化ビューの強化（v0.7.3・v0.8.0）<a class="headerlink" href="#6-v073v080" title="Permanent link">&para;</a></h3>
-<p>主要チャートの既定レンダラを TradingView lightweight-charts に切り替えました（v0.7.3）。最適化結果には<strong>パラメータ 2 軸 × 指標のヒートマップビュー</strong>が加わり、散布図とタブで切り替えられます（v0.8.0）。</p>
-<h2 id="_2">アップグレード方法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># uv</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>add<span class="w"> </span>alpha-visualizer@latest<span class="w">        </span><span class="c1"># プロジェクトに追加</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>alpha-visualizer<span class="w">       </span><span class="c1"># CLI として使う</span>
+<h3 id="1">1. 「ライブデータを更新」ボタン<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p>Live 画面に更新ボタンが加わりました。これまでは CLI で 3 つのコマンドを順に実行する必要がありました。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events<span class="w">     </span><span class="c1"># 発注サーバーからイベントを取得</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>update<span class="w">          </span><span class="c1"># ヒストリカルデータを差分更新</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>...<span class="w">      </span><span class="c1"># ライブ成績を再計算</span>
 </code></pre></div>
-<p>同梱サンプルでの動作確認:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--use-bundled-samples<span class="w"> </span>--no-open
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># http://127.0.0.1:8000 を開く</span>
+<p>v1.6.0 ではこれが 1 クリックで完結します。進捗はステップごとにリアルタイムで表示され、実行中はキャンセルできます。完了すると一覧と詳細が自動で再取得されます。</p>
+<p>詳細は<a href="../features/#live">機能詳細の Live 画面</a>を参照してください。</p>
+<h3 id="2-replay-forgeyaml">2. replay パラメータを <code>forge.yaml</code> に集約<a class="headerlink" href="#2-replay-forgeyaml" title="Permanent link">&para;</a></h3>
+<p>更新処理は AlphaForge の <a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> に委譲しています。replay のパラメータは <code>forge.yaml</code> の <code>live.replay</code> セクションが単一の情報源になります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">live</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">replay</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">portfolio_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">         </span><span class="c1"># combine portfolio ID</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">combine_strategies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">   </span><span class="c1"># combine 対象戦略 ID（2 つ以上）</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">initial_capital</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">    </span><span class="c1"># 実口座の資本に合わせる</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">           </span><span class="c1"># backtest combine と比較表示するか</span>
 </code></pre></div>
-<p><code>alpha-forge</code> プロジェクト側のデータを見る場合:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-vis<span class="w"> </span>serve<span class="w"> </span>--forge-dir<span class="w"> </span>/path/to/your/alpha-strategies
-</code></pre></div>
-<p>設定ファイル（<code>forge.yaml</code>）に変更はありません。GUI 実行機能を使わない場合、既存の使い方はそのまま動作します。</p>
-<h2 id="_3">関連リンク<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>これにより、<strong><code>--initial-capital</code> の指定漏れでリターン率が実口座比で大きくずれる事故が構造的に起きなくなりました</strong>。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率は 10 倍ずれます。設定の詳細は <a href="../../cli-reference/live/#config-livereplay"><code>live replay</code> の config フォールバック</a>を参照してください。</p>
+<div class="admonition warning">
+<p class="admonition-title">AlphaForge v1.4.0 以降が必要です</p>
+<p>このボタンは <code>alpha-forge live refresh</code> を呼び出すため、<strong>AlphaForge v1.4.0 以降</strong>が必要です。それ以前のバージョンでは、未対応である旨の案内が表示されます。</p>
+<p>また LAN 公開（非 loopback）で <code>alpha-vis serve</code> している場合、このボタンは無効です（ローカル書き込みを伴う操作のため）。</p>
+</div>
+<h2 id="_2">修正<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>PyPI</strong>: <a href="https://pypi.org/project/alpha-visualizer/0.9.0/">https://pypi.org/project/alpha-visualizer/0.9.0/</a></li>
-<li><strong>GitHub Release（タグ）</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0">https://github.com/alforge-labs/alpha-visualizer/releases/tag/v0.9.0</a></li>
-<li><strong>CHANGELOG</strong>: <a href="https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md">https://github.com/alforge-labs/alpha-visualizer/blob/main/CHANGELOG.md</a></li>
-<li><strong>インストール手順</strong>: <a href="../installation/">alpha-visualizer / インストール</a></li>
-<li><strong>機能詳細</strong>: <a href="../features/">alpha-visualizer / 機能詳細</a></li>
-<li><strong>設定</strong>: <a href="../configuration/">alpha-visualizer / 設定</a></li>
+<li><strong>ジョブ作成の失敗が画面に表示されない問題を修正しました。</strong> LAN 公開中（403）、AlphaForge 未導入（503）、AI 派生開発で派生元の戦略が見つからない（404）といったケースで、ボタンを押しても何も起きないように見えていました。データ管理画面と AI 戦略開発画面の両方が対象です</li>
+<li>ドキュメント用スクリーンショットが画像の下端で切れることがある問題を修正しました（内部ツール）</li>
 </ul>
-<p>不具合報告や機能要望は <a href="https://github.com/alforge-labs/alpha-visualizer/issues">GitHub Issues</a> までお願いします。</p>
+<h2 id="_3">アップグレード方法<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># pip</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># uv</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># pipx</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>pipx<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+</code></pre></div>
+<p>AlphaForge 側も更新してください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update
+</code></pre></div>
+<h2 id="_4">関連ドキュメント<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../features/#live">機能詳細 — Live 画面</a></li>
+<li><a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a></li>
+<li><a href="../../guides/alpha-strike-setup/">alpha-strike セットアップガイド</a></li>
+</ul>
 
 
 
@@ -3206,7 +3148,7 @@
       <nav class="md-footer__inner md-grid" aria-label="フッター" >
         
           
-          <a href="../release-1.0.0/" class="md-footer__link md-footer__link--prev" aria-label="前: v1.0.0 GA (2026-07-21)">
+          <a href="../faq/" class="md-footer__link md-footer__link--prev" aria-label="前: FAQ">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3216,20 +3158,20 @@
                 前
               </span>
               <div class="md-ellipsis">
-                v1.0.0 GA (2026-07-21)
+                FAQ
               </div>
             </div>
           </a>
         
         
           
-          <a href="../release-0.7.1/" class="md-footer__link md-footer__link--next" aria-label="次: v0.7.1 (2026-06-02)">
+          <a href="../release-1.5.0/" class="md-footer__link md-footer__link--next" aria-label="次: v1.5.0 (2026-08-05)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 次
               </span>
               <div class="md-ellipsis">
-                v0.7.1 (2026-06-02)
+                v1.5.0 (2026-08-05)
               </div>
             </div>
             <div class="md-footer__button md-icon">
