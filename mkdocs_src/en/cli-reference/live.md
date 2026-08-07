@@ -494,6 +494,18 @@ Resolution order is "flag (e.g. `--combine-strategies`) > `live.replay` config v
 
 If `portfolio_id` or `combine_strategies` (2 or more) cannot be resolved in the end, `live replay` exits with Click's argument-error exit code `2`.
 
+!!! warning "Pass `--combine-strategies` explicitly whenever you pass `PORTFOLIO_ID`"
+    If `live.replay.combine_strategies` is configured in `forge.yaml` and you explicitly pass a `PORTFOLIO_ID` **that the config does not account for** while omitting `--combine-strategies`, `live replay` stops with exit code `2`.
+
+    This guard prevents the configured strategy list from being silently reused for a different portfolio, which would persist metrics computed from the wrong composition as that `portfolio_id`'s summary — an easy-to-miss numeric skew, much like [How equity is computed](#how-equity-is-computed-issue-1332).
+
+    It stops in either of these cases:
+
+    - `live.replay.portfolio_id` is set and you pass a **different** `PORTFOLIO_ID` as an argument
+    - `live.replay.portfolio_id` is **not set** and you pass a `PORTFOLIO_ID` as an argument (the config never states which portfolio it is meant for)
+
+    Passing both the argument and `--combine-strategies`, running purely from config, and explicitly passing the same `PORTFOLIO_ID` as the config all keep working. `live refresh` takes no arguments, so it never hits this path.
+
 ### How equity is computed (issue #1332)
 
 Equity is computed as:

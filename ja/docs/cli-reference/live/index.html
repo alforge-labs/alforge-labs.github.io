@@ -5094,6 +5094,17 @@
 <p>後述の <a href="#equity-issue-1332">equity の計算方法</a> の通り、equity は <code>initial_capital + cash 増減 + 建玉評価額</code> で計算されます。<code>--initial-capital</code>（または <code>live.replay.initial_capital</code>）を実口座の資本に合わせないと、リターン率が基準資本の比率でずれます。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率が 10 倍ずれます。</p>
 </div>
 <p><code>portfolio_id</code> または <code>combine_strategies</code>（2 戦略以上）が最終的に解決できない場合、<code>live replay</code> は Click の引数エラーとして終了コード <code>2</code> で終了します。</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>PORTFOLIO_ID</code> を明示するときは <code>--combine-strategies</code> も明示する</p>
+<p><code>forge.yaml</code> に <code>live.replay.combine_strategies</code> を設定したうえで、<strong>その設定が想定していない <code>PORTFOLIO_ID</code> を引数で明示</strong>し、かつ <code>--combine-strategies</code> を省略した場合、<code>live replay</code> は終了コード <code>2</code> で停止します。</p>
+<p>これは config の戦略リストが別のポートフォリオへ無言で流用され、誤った構成で算出した metrics がその <code>portfolio_id</code> のサマリとして保存されるのを防ぐためのガードです（<a href="#equity-issue-1332">equity の計算方法</a> と同じく、気付きにくい数値ずれになります）。</p>
+<p>停止するのは次のどちらかのケースです。</p>
+<ul>
+<li><code>live.replay.portfolio_id</code> を設定していて、それと<strong>異なる</strong> <code>PORTFOLIO_ID</code> を引数で渡した</li>
+<li><code>live.replay.portfolio_id</code> を<strong>設定しておらず</strong>、<code>PORTFOLIO_ID</code> を引数で渡した（config がどのポートフォリオ向けの設定か表明していないため）</li>
+</ul>
+<p>引数と <code>--combine-strategies</code> を両方明示する使い方、config だけで実行する使い方、config と同じ <code>PORTFOLIO_ID</code> を明示する使い方はいずれもそのまま動作します。<code>live refresh</code> は引数を取らないため、この経路には該当しません。</p>
+</div>
 <h3 id="equity-issue-1332">equity の計算方法（issue #1332）<a class="headerlink" href="#equity-issue-1332" title="Permanent link">&para;</a></h3>
 <p>equity は次式で求めます。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>equity = initial_capital + cash 増減 + Σ(建玉 × 終値)
