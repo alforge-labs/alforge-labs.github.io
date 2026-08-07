@@ -133,6 +133,7 @@ Browse live / paper trading records and compare them against backtests. Accessib
 
 - Lists every entry with live records (both per-strategy and combine portfolios)
 - The selected entry is synced to the URL query (`?id=`) for sharing
+- The "Refresh live data" button runs forge's `live refresh` (sync-events → data update → live replay) as an asynchronous job, showing progress inline; on completion, both the list and the detail view refetch automatically (`POST /api/live/jobs`)
 
 ### Per-strategy (trade-based)
 
@@ -153,6 +154,9 @@ Live records appear automatically once the event log recorded by [alpha-strike](
 
 !!! note "Combine portfolio missing from the list on an old database"
     `benchmark_equity` / `backtest_equity` / `positions` / `cash` / `total_value` were added as later column migrations. On a database that hasn't had `live replay` run against it since upgrading alpha-forge, the corresponding combine portfolio can vanish entirely from the `/live` list. Running `alpha-forge live replay` once adds the missing columns, after which it shows up as usual.
+
+!!! note "Refresh is localhost-only and requires `live.replay` in forge.yaml"
+    Because "Refresh live data" involves network access and DB writes, it is disabled when `alpha-vis serve` is bound to a non-loopback host (e.g. `--host 0.0.0.0`) — the list and detail views remain viewable. There is no parameter input; the `forge.yaml` `live.replay` section (see [`alpha-forge live refresh`](../cli-reference/live.md#alpha-forge-live-refresh)) is the source of truth. Older forge versions without `live refresh` support show a not-supported notice instead.
 
 ## Data
 

@@ -1638,6 +1638,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="12. Visualizing Live Records (alpha-visualizer)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12-1-recommended-bulk-refresh-with-alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-1. Recommended: bulk-refresh with alpha-forge live refresh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-2-running-steps-individually-the-original-3-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-2. Running steps individually (the original 3 commands)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3993,6 +4021,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="12. Visualizing Live Records (alpha-visualizer)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12-1-recommended-bulk-refresh-with-alpha-forge-live-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-1. Recommended: bulk-refresh with alpha-forge live refresh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-2-running-steps-individually-the-original-3-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-2. Running steps individually (the original 3 commands)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -4669,17 +4725,31 @@ combination <strong>before connecting to OpenD</strong> and raises <code>ValueEr
 <hr />
 <h2 id="12-visualizing-live-records-alpha-visualizer">12. Visualizing Live Records (alpha-visualizer)<a class="headerlink" href="#12-visualizing-live-records-alpha-visualizer" title="Permanent link">&para;</a></h2>
 <p>The event log (JSONL) recorded by alpha-strike can be imported with alpha-forge and visualized as an equity curve on the Live screen of <a href="../../alpha-visualizer/">alpha-visualizer</a> (OSS, Apache-2.0). The same screen shows the drift (diff) against backtests, which feeds directly into the P&amp;L-drift check in the operational routine (§10).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># 1. Sync event JSONL from the VM into your local forge project</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># 2. Import events and build live records</span>
-<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;strategy_id&gt;<span class="w">          </span><span class="c1"># per strategy</span>
-<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;portfolio_id&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>&lt;id1&gt;,&lt;id2&gt;<span class="w">                    </span><span class="c1"># combine portfolio</span>
-<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
-<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="c1"># 3. View on the alpha-visualizer Live screen</span>
-<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>alpha-vis<span class="w"> </span>serve
+<h3 id="12-1-recommended-bulk-refresh-with-alpha-forge-live-refresh">12-1. Recommended: bulk-refresh with <code>alpha-forge live refresh</code><a class="headerlink" href="#12-1-recommended-bulk-refresh-with-alpha-forge-live-refresh" title="Permanent link">&para;</a></h3>
+<p>The three steps — sync-events → data update → replay — can be run in one shot via <a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a>. The "Refresh live data" button on the alpha-visualizer Live screen also calls this command internally.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>refresh
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>alpha-vis<span class="w"> </span>serve
+</code></pre></div>
+<p>This requires the <code>forge.yaml</code> <code>live.replay</code> section (<code>portfolio_id</code> / <code>combine_strategies</code> / <code>initial_capital</code>, etc.) to be configured beforehand. If it isn't, the command exits with an error before running any step. See <a href="../../cli-reference/live/#alpha-forge-live-replay"><code>alpha-forge live replay</code></a> for the config keys.</p>
+<div class="admonition warning">
+<p class="admonition-title">Set <code>initial_capital</code> to match your real account</p>
+<p>If <code>live.replay.initial_capital</code> doesn't match your real account's base capital, the equity return rate will be skewed by the ratio between the two. Leaving it at the backtest default (100,000) while your real account holds 1,000,000 skews the return rate by 10x.</p>
+</div>
+<h3 id="12-2-running-steps-individually-the-original-3-commands">12-2. Running steps individually (the original 3 commands)<a class="headerlink" href="#12-2-running-steps-individually-the-original-3-commands" title="Permanent link">&para;</a></h3>
+<p>If <code>remote.enabled: false</code> (no sync-events needed) or you only want to re-run a specific step, you can still run the individual commands as before.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># 1. Sync event JSONL from the VM into your local forge project</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1"># 2. Import events and build live records</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>import-events<span class="w"> </span>&lt;strategy_id&gt;<span class="w">          </span><span class="c1"># per strategy</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>&lt;portfolio_id&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--combine-strategies<span class="w"> </span>&lt;id1&gt;,&lt;id2&gt;<span class="w">                    </span><span class="c1"># combine portfolio</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="c1"># 3. View on the alpha-visualizer Live screen</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>pip<span class="w"> </span>install<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>alpha-vis<span class="w"> </span>serve
 </code></pre></div>
 <p>See <a href="../../alpha-visualizer/features/">alpha-visualizer features</a> for details on each screen.</p>
 <hr />

@@ -624,6 +624,26 @@ sudo rm /etc/alpha-strike/MAINTENANCE
 
 alpha-strike が記録したイベントログ（JSONL）は、alpha-forge で取り込み、[alpha-visualizer](../alpha-visualizer/index.md)（OSS・Apache-2.0）の Live 画面でエクイティカーブとして可視化できます。バックテストとの乖離（diff）も同じ画面で確認できるため、§10 の運用ルール（pnl 乖離チェック）にもそのまま使えます。
 
+### 12-1. 推奨: `alpha-forge live refresh` で一括更新
+
+sync-events → data update → replay の 3 ステップは [`alpha-forge live refresh`](../cli-reference/live.md#alpha-forge-live-refresh) にまとめて実行できます。alpha-visualizer の Live 画面にある「ライブデータを更新」ボタンも内部でこのコマンドを呼び出します。
+
+```bash
+alpha-forge live refresh
+
+pip install alpha-visualizer
+alpha-vis serve
+```
+
+事前に `forge.yaml` の `live.replay` セクション（`portfolio_id` / `combine_strategies` / `initial_capital` 等）を設定しておく必要があります。未設定の場合、コマンドはステップを 1 つも実行せずにエラー終了します。設定キーの詳細は [`alpha-forge live replay`](../cli-reference/live.md#alpha-forge-live-replay) を参照してください。
+
+!!! warning "`initial_capital` は実口座の基準資本に合わせる"
+    `live.replay.initial_capital` を実口座の資本に合わせないと、equity のリターン率が基準資本の比率でずれます。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率が 10 倍ずれます。
+
+### 12-2. 個別に実行したい場合（従来の3コマンド）
+
+`remote.enabled: false` の環境（sync-events を使わない）や、特定のステップだけをやり直したい場合は、従来どおり個別コマンドを実行できます。
+
 ```bash
 # 1. VM 上のイベント JSONL をローカルの forge プロジェクトへ同期
 alpha-forge live sync-events
