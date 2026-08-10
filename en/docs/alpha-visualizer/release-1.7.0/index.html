@@ -1,24 +1,24 @@
 
 <!doctype html>
-<html lang="ja" class="no-js">
+<html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="alpha-visualizer v1.6.0 は、これまで CLI で 3 コマンドを順に実行する必要があったライブデータの更新を、Live 画面のボタン 1 クリックで完結できるようにするリリースです。replay パラメータは forge.yaml に集約され、初期資本の指定漏れによるリターン率のずれが構造的に起きなくなります。">
+        <meta name="description" content="alpha-visualizer v1.7.0 lists the current and latest versions of alpha-forge, alpha-visualizer, and alpha-strike on the Maintenance screen, and lets you update the ones that can be updated from the GUI. Updating alpha-visualizer itself restarts the server automatically — but only when the update succeeds.">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/ja/docs/alpha-visualizer/release-1.6.0/">
+        <link rel="canonical" href="https://alforgelabs.com/en/docs/alpha-visualizer/release-1.7.0/">
       
       
-        <link rel="prev" href="../release-1.7.0/">
+        <link rel="prev" href="../faq/">
       
       
-        <link rel="next" href="../release-1.5.0/">
+        <link rel="next" href="../release-1.6.0/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新 - AlphaForge ドキュメント</title>
+        <title>alpha-visualizer v1.7.0 — Check and update your tool versions - AlphaForge Documentation</title>
       
     
     
@@ -94,8 +94,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#alpha-visualizer-v160-live" class="md-skip">
-          コンテンツにスキップ
+        <a href="#alpha-visualizer-v170-check-and-update-your-tool-versions" class="md-skip">
+          Skip to content
         </a>
       
     </div>
@@ -107,8 +107,8 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
-    <a href="https://alforgelabs.com/ja/index.html" title="AlphaForge ドキュメント" class="md-header__button md-logo" aria-label="AlphaForge ドキュメント" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://alforgelabs.com/en/index.html" title="AlphaForge Documentation" class="md-header__button md-logo" aria-label="AlphaForge Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -122,13 +122,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AlphaForge ドキュメント
+            AlphaForge Documentation
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新
+              alpha-visualizer v1.7.0 — Check and update your tool versions
             
           </span>
         </div>
@@ -154,7 +154,7 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="言語切り替え">
+    <button class="md-header__button md-icon" aria-label="Select language">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
@@ -188,16 +188,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="検索">
+      <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -210,7 +210,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            検索を初期化
+            Initializing search
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -231,7 +231,7 @@
         
           
             
-<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -247,7 +247,7 @@
   
     
   
-  ホーム
+  Home
 
       </a>
     </li>
@@ -266,7 +266,7 @@
           
   
   
-  はじめに
+  Getting Started
 
         </a>
       </li>
@@ -286,7 +286,7 @@
           
   
   
-  AI エージェント連携
+  AI Agent Integration
 
         </a>
       </li>
@@ -306,7 +306,7 @@
           
   
   
-  ガイド
+  Guides
 
         </a>
       </li>
@@ -326,7 +326,7 @@
           
   
   
-  戦略カタログ
+  Strategy Catalog
 
         </a>
       </li>
@@ -348,7 +348,7 @@
           
   
   
-  データ可視化
+  Visualization
 
         </a>
       </li>
@@ -368,7 +368,7 @@
           
   
   
-  CLI リファレンス
+  CLI Reference
 
         </a>
       </li>
@@ -388,7 +388,7 @@
   
     
   
-  変更履歴
+  Changelog
 
       </a>
     </li>
@@ -407,7 +407,7 @@
           
   
   
-  利用規約と免責
+  Legal & Disclaimers
 
         </a>
       </li>
@@ -435,15 +435,15 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ナビゲーション" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="https://alforgelabs.com/ja/index.html" title="AlphaForge ドキュメント" class="md-nav__button md-logo" aria-label="AlphaForge ドキュメント" data-md-component="logo">
+    <a href="https://alforgelabs.com/en/index.html" title="AlphaForge Documentation" class="md-nav__button md-logo" aria-label="AlphaForge Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    AlphaForge ドキュメント
+    AlphaForge Documentation
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -462,7 +462,7 @@
   <span class="md-ellipsis">
     
   
-    ホーム
+    Home
   
 
     
@@ -505,7 +505,7 @@
   <span class="md-ellipsis">
     
   
-    はじめに
+    Getting Started
   
 
     
@@ -521,7 +521,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    はじめに
+    Getting Started
   
 
           </label>
@@ -541,7 +541,7 @@
   <span class="md-ellipsis">
     
   
-    クイックスタートと詳細インストール
+    Quickstart & Detailed Installation
   
 
     
@@ -569,7 +569,7 @@
   <span class="md-ellipsis">
     
   
-    Trial 制限
+    Trial Limits
   
 
     
@@ -620,7 +620,7 @@
   <span class="md-ellipsis">
     
   
-    AI エージェント連携
+    AI Agent Integration
   
 
     
@@ -636,7 +636,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    AI エージェント連携
+    AI Agent Integration
   
 
           </label>
@@ -656,7 +656,7 @@
   <span class="md-ellipsis">
     
   
-    概要
+    Overview
   
 
     
@@ -684,7 +684,7 @@
   <span class="md-ellipsis">
     
   
-    エージェントクイックスタート
+    Agent Quickstart
   
 
     
@@ -712,7 +712,7 @@
   <span class="md-ellipsis">
     
   
-    AI 駆動の戦略探索ワークフロー
+    AI-Driven Strategy Exploration Workflow
   
 
     
@@ -740,7 +740,7 @@
   <span class="md-ellipsis">
     
   
-    alpha-forge-mcp リファレンス
+    alpha-forge-mcp Reference
   
 
     
@@ -768,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    エージェントから見た CLI 規約
+    CLI Conventions for Agents
   
 
     
@@ -796,7 +796,7 @@
   <span class="md-ellipsis">
     
   
-    --json 出力リファレンス
+    --json Output Reference
   
 
     
@@ -847,7 +847,7 @@
   <span class="md-ellipsis">
     
   
-    ガイド
+    Guides
   
 
     
@@ -863,7 +863,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    ガイド
+    Guides
   
 
           </label>
@@ -883,7 +883,7 @@
   <span class="md-ellipsis">
     
   
-    エンドツーエンド戦略開発ワークフロー
+    End-to-End Strategy Development Workflow
   
 
     
@@ -911,7 +911,7 @@
   <span class="md-ellipsis">
     
   
-    実行結果と成果物サンプル
+    Output Examples
   
 
     
@@ -939,7 +939,7 @@
   <span class="md-ellipsis">
     
   
-    TradingView への Pine Script 反映
+    Bringing Pine Scripts into TradingView
   
 
     
@@ -967,7 +967,7 @@
   <span class="md-ellipsis">
     
   
-    Combine Portfolio Pine — 複数戦略統合
+    Combine Portfolio Pine — Multi-Strategy
   
 
     
@@ -995,7 +995,7 @@
   <span class="md-ellipsis">
     
   
-    TradingView と alpha-strike の連携
+    TradingView × alpha-strike Integration
   
 
     
@@ -1023,7 +1023,7 @@
   <span class="md-ellipsis">
     
   
-    alpha-strike セットアップガイド
+    alpha-strike Setup Guide
   
 
     
@@ -1051,7 +1051,7 @@
   <span class="md-ellipsis">
     
   
-    FRED マクロデータ活用ガイド
+    FRED Macro Data Guide
   
 
     
@@ -1079,7 +1079,7 @@
   <span class="md-ellipsis">
     
   
-    用語集
+    Glossary
   
 
     
@@ -1123,7 +1123,7 @@
   <span class="md-ellipsis">
     
   
-    目的別ユースケース
+    Use Cases by Goal
   
 
     
@@ -1139,7 +1139,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    目的別ユースケース
+    Use Cases by Goal
   
 
           </label>
@@ -1159,7 +1159,7 @@
   <span class="md-ellipsis">
     
   
-    概要
+    Overview
   
 
     
@@ -1187,7 +1187,7 @@
   <span class="md-ellipsis">
     
   
-    TradingViewユーザー
+    TradingView Users
   
 
     
@@ -1215,7 +1215,7 @@
   <span class="md-ellipsis">
     
   
-    Python開発者
+    Python Developers
   
 
     
@@ -1243,7 +1243,7 @@
   <span class="md-ellipsis">
     
   
-    クオンツ・研究者
+    Quants & Researchers
   
 
     
@@ -1271,7 +1271,7 @@
   <span class="md-ellipsis">
     
   
-    自動売買検討者
+    Automated Trading
   
 
     
@@ -1299,7 +1299,7 @@
   <span class="md-ellipsis">
     
   
-    AIエージェント利用者
+    AI Agent Users
   
 
     
@@ -1327,7 +1327,7 @@
   <span class="md-ellipsis">
     
   
-    裁量トレーダーのシステム化
+    Discretionary → Systematic
   
 
     
@@ -1355,7 +1355,7 @@
   <span class="md-ellipsis">
     
   
-    他ツールとの比較
+    Comparison with Other Tools
   
 
     
@@ -1414,7 +1414,7 @@
   <span class="md-ellipsis">
     
   
-    戦略カタログ
+    Strategy Catalog
   
 
     
@@ -1430,7 +1430,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    戦略カタログ
+    Strategy Catalog
   
 
           </label>
@@ -1450,7 +1450,7 @@
   <span class="md-ellipsis">
     
   
-    戦略テンプレート
+    Strategy Templates
   
 
     
@@ -1478,7 +1478,7 @@
   <span class="md-ellipsis">
     
   
-    戦略実例ギャラリー
+    Strategy Gallery
   
 
     
@@ -1534,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    データ可視化
+    Visualization
   
 
     
@@ -1550,7 +1550,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    データ可視化
+    Visualization
   
 
           </label>
@@ -1570,7 +1570,7 @@
   <span class="md-ellipsis">
     
   
-    概要
+    Overview
   
 
     
@@ -1598,7 +1598,7 @@
   <span class="md-ellipsis">
     
   
-    インストール
+    Installation
   
 
     
@@ -1626,7 +1626,7 @@
   <span class="md-ellipsis">
     
   
-    機能詳細
+    Features
   
 
     
@@ -1654,7 +1654,7 @@
   <span class="md-ellipsis">
     
   
-    設定
+    Configuration
   
 
     
@@ -1731,7 +1731,7 @@
   <span class="md-ellipsis">
     
   
-    リリースノート
+    Release Notes
   
 
     
@@ -1747,39 +1747,11 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    リリースノート
+    Release Notes
   
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../release-1.7.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    v1.7.0 (2026-08-10)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
             
               
                 
@@ -1804,7 +1776,7 @@
   <span class="md-ellipsis">
     
   
-    v1.6.0 (2026-08-07)
+    v1.7.0 (2026-08-10)
   
 
     
@@ -1822,7 +1794,7 @@
   <span class="md-ellipsis">
     
   
-    v1.6.0 (2026-08-07)
+    v1.7.0 (2026-08-10)
   
 
     
@@ -1834,7 +1806,7 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="目次">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -1843,27 +1815,27 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      目次
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ハイライト
+        Highlights
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ハイライト">
+    <nav class="md-nav" aria-label="Highlights">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-a-single-list-of-versions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 「ライブデータを更新」ボタン
+        1. A single list of versions
       
     </span>
   </a>
@@ -1871,10 +1843,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-replay-forgeyaml" class="md-nav__link">
+  <a href="#2-updating-from-the-gui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. replay パラメータを forge.yaml に集約
+        2. Updating from the GUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-alpha-strike-is-display-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. alpha-strike is display-only
       
     </span>
   </a>
@@ -1887,10 +1870,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#safety-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        修正
+        Safety limits
       
     </span>
   </a>
@@ -1898,10 +1881,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#improvements" class="md-nav__link">
     <span class="md-ellipsis">
       
-        アップグレード方法
+        Improvements
       
     </span>
   </a>
@@ -1909,10 +1892,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#how-to-upgrade" class="md-nav__link">
     <span class="md-ellipsis">
       
-        関連ドキュメント
+        How to upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related documentation
       
     </span>
   </a>
@@ -1923,6 +1917,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.6.0 (2026-08-07)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2197,7 +2219,7 @@
   <span class="md-ellipsis">
     
   
-    CLI リファレンス
+    CLI Reference
   
 
     
@@ -2213,7 +2235,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    CLI リファレンス
+    CLI Reference
   
 
           </label>
@@ -2233,7 +2255,7 @@
   <span class="md-ellipsis">
     
   
-    概要
+    Overview
   
 
     
@@ -2277,7 +2299,7 @@
   <span class="md-ellipsis">
     
   
-    コアコマンド
+    Core commands
   
 
     
@@ -2293,7 +2315,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    コアコマンド
+    Core commands
   
 
           </label>
@@ -2589,7 +2611,7 @@
   <span class="md-ellipsis">
     
   
-    補助コマンド
+    Auxiliary commands
   
 
     
@@ -2605,7 +2627,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    補助コマンド
+    Auxiliary commands
   
 
           </label>
@@ -2705,7 +2727,7 @@
   <span class="md-ellipsis">
     
   
-    メタコマンド
+    Meta commands
   
 
     
@@ -2721,7 +2743,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    メタコマンド
+    Meta commands
   
 
           </label>
@@ -2784,7 +2806,7 @@
   <span class="md-ellipsis">
     
   
-    変更履歴
+    Changelog
   
 
     
@@ -2827,7 +2849,7 @@
   <span class="md-ellipsis">
     
   
-    利用規約と免責
+    Legal & Disclaimers
   
 
     
@@ -2843,7 +2865,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    利用規約と免責
+    Legal & Disclaimers
   
 
           </label>
@@ -2863,7 +2885,7 @@
   <span class="md-ellipsis">
     
   
-    信頼・安全・制限
+    Trust, Safety, and Limits
   
 
     
@@ -2891,7 +2913,7 @@
   <span class="md-ellipsis">
     
   
-    免責事項
+    Disclaimers
   
 
     
@@ -2947,7 +2969,7 @@
   <span class="md-ellipsis">
     
   
-    プライバシーポリシー
+    Privacy Policy
   
 
     
@@ -2981,7 +3003,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="目次">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -2990,27 +3012,27 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      目次
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ハイライト
+        Highlights
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="ハイライト">
+    <nav class="md-nav" aria-label="Highlights">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-a-single-list-of-versions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 「ライブデータを更新」ボタン
+        1. A single list of versions
       
     </span>
   </a>
@@ -3018,10 +3040,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-replay-forgeyaml" class="md-nav__link">
+  <a href="#2-updating-from-the-gui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. replay パラメータを forge.yaml に集約
+        2. Updating from the GUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-alpha-strike-is-display-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. alpha-strike is display-only
       
     </span>
   </a>
@@ -3034,10 +3067,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#safety-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        修正
+        Safety limits
       
     </span>
   </a>
@@ -3045,10 +3078,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#improvements" class="md-nav__link">
     <span class="md-ellipsis">
       
-        アップグレード方法
+        Improvements
       
     </span>
   </a>
@@ -3056,10 +3089,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#how-to-upgrade" class="md-nav__link">
     <span class="md-ellipsis">
       
-        関連ドキュメント
+        How to upgrade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related documentation
       
     </span>
   </a>
@@ -3083,58 +3127,63 @@
 
 
 
-<h1 id="alpha-visualizer-v160-live">alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新<a class="headerlink" href="#alpha-visualizer-v160-live" title="Permanent link">&para;</a></h1>
+<h1 id="alpha-visualizer-v170-check-and-update-your-tool-versions">alpha-visualizer v1.7.0 — Check and update your tool versions<a class="headerlink" href="#alpha-visualizer-v170-check-and-update-your-tool-versions" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>公開日</strong>: 2026 年 8 月 7 日 / <strong>バージョン</strong>: v1.6.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.6.0">GitHub Release</a></p>
+<p><strong>Released</strong>: August 10, 2026 / <strong>Version</strong>: v1.7.0 / <strong>Distribution</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a> · <a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0">GitHub Release</a></p>
 </blockquote>
-<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v1.6.0 は、ペーパートレード／実運用の記録を最新化する作業を GUI に取り込むリリースです。</p>
-<h2 id="_1">ハイライト<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h3 id="1">1. 「ライブデータを更新」ボタン<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
-<p>Live 画面に更新ボタンが加わりました。これまでは CLI で 3 つのコマンドを順に実行する必要がありました。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events<span class="w">     </span><span class="c1"># 発注サーバーからイベントを取得</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>update<span class="w">          </span><span class="c1"># ヒストリカルデータを差分更新</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>...<span class="w">      </span><span class="c1"># ライブ成績を再計算</span>
-</code></pre></div>
-<p>v1.6.0 ではこれが 1 クリックで完結します。進捗はステップごとにリアルタイムで表示され、実行中はキャンセルできます。完了すると一覧と詳細が自動で再取得されます。</p>
-<p>詳細は<a href="../features/#live">機能詳細の Live 画面</a>を参照してください。</p>
-<h3 id="2-replay-forgeyaml">2. replay パラメータを <code>forge.yaml</code> に集約<a class="headerlink" href="#2-replay-forgeyaml" title="Permanent link">&para;</a></h3>
-<p>更新処理は AlphaForge の <a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> に委譲しています。replay のパラメータは <code>forge.yaml</code> の <code>live.replay</code> セクションが単一の情報源になります。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">live</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">replay</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">portfolio_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">         </span><span class="c1"># combine portfolio ID</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">combine_strategies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">   </span><span class="c1"># combine 対象戦略 ID（2 つ以上）</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">initial_capital</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">    </span><span class="c1"># 実口座の資本に合わせる</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">           </span><span class="c1"># backtest combine と比較表示するか</span>
-</code></pre></div>
-<p>これにより、<strong><code>--initial-capital</code> の指定漏れでリターン率が実口座比で大きくずれる事故が構造的に起きなくなりました</strong>。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率は 10 倍ずれます。設定の詳細は <a href="../../cli-reference/live/#config-livereplay"><code>live replay</code> の config フォールバック</a>を参照してください。</p>
-<div class="admonition warning">
-<p class="admonition-title">AlphaForge v1.4.0 以降が必要です</p>
-<p>このボタンは <code>alpha-forge live refresh</code> を呼び出すため、<strong>AlphaForge v1.4.0 以降</strong>が必要です。それ以前のバージョンでは、未対応である旨の案内が表示されます。</p>
-<p>また LAN 公開（非 loopback）で <code>alpha-vis serve</code> している場合、このボタンは無効です（ローカル書き込みを伴う操作のため）。</p>
-</div>
-<h2 id="_2">修正<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><a href="../">alpha-visualizer</a> is a standalone OSS package that visualizes <code>alpha-forge</code> backtest results in your browser. v1.7.0 makes it possible to tell, from the GUI, whether the tools you are using are out of date.</p>
+<p>Until now version information was scattered across the UI, and every place only showed the version you already had installed. Finding out whether a newer release existed meant running a command for each tool.</p>
+<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
+<h3 id="1-a-single-list-of-versions">1. A single list of versions<a class="headerlink" href="#1-a-single-list-of-versions" title="Permanent link">&para;</a></h3>
+<p>The Maintenance screen (<code>/maintenance</code>) gained a "Versions" section. The current and latest versions of alpha-forge, alpha-visualizer, and alpha-strike appear side by side in one table.</p>
+<p><img alt="Maintenance screen" loading="lazy" src="../assets/maintenance.png" /></p>
+<p>If a lookup fails, only that row shows "Unknown" — the other rows and the rest of the screen are unaffected. Being offline, or not having AlphaForge installed, is an expected state rather than a broken one, so it never breaks the screen.</p>
+<h3 id="2-updating-from-the-gui">2. Updating from the GUI<a class="headerlink" href="#2-updating-from-the-gui" title="Permanent link">&para;</a></h3>
+<p>Rows with an available update get an "Update" button.</p>
 <ul>
-<li><strong>ジョブ作成の失敗が画面に表示されない問題を修正しました。</strong> LAN 公開中（403）、AlphaForge 未導入（503）、AI 派生開発で派生元の戦略が見つからない（404）といったケースで、ボタンを押しても何も起きないように見えていました。データ管理画面と AI 戦略開発画面の両方が対象です</li>
-<li>ドキュメント用スクリーンショットが画像の下端で切れることがある問題を修正しました（内部ツール）</li>
+<li><strong>alpha-forge</strong> — delegates to <a href="../../cli-reference/self/"><code>alpha-forge self update --yes</code></a>. Download verification, the smoke test, and rollback are handled by AlphaForge itself</li>
+<li><strong>alpha-visualizer</strong> — runs its own update via pip / uv, and restarts the server automatically <strong>only when the update succeeds</strong>, bringing the page back on its own</li>
 </ul>
-<h2 id="_3">アップグレード方法<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># pip</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># uv</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># pipx</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>pipx<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
-</code></pre></div>
-<p>AlphaForge 側も更新してください。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update
-</code></pre></div>
-<h2 id="_4">関連ドキュメント<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>Progress is shown live while the update runs.</p>
+<div class="admonition warning">
+<p class="admonition-title">Self-update is not supported on Windows</p>
+<p>The running <code>alpha-vis.exe</code> is locked, so pip cannot replace the file. On Windows the screen shows the update command instead.</p>
+</div>
+<h3 id="3-alpha-strike-is-display-only">3. alpha-strike is display-only<a class="headerlink" href="#3-alpha-strike-is-display-only" title="Permanent link">&para;</a></h3>
+<p>alpha-strike is a live order-execution server. To avoid restarting it from the GUI, no update button is shown — only a link to the update procedure.</p>
+<p>The version shown is the one captured the last time <a href="../../cli-reference/live/"><code>alpha-forge live sync-events</code></a> ran, not a live value. The screen always shows "Last synced" alongside it so the value is never mistaken for real time.</p>
+<div class="admonition note">
+<p class="admonition-title">Requires alpha-strike v1.1.0 or later</p>
+<p>The version travels as a metadata file that alpha-strike writes at startup and the existing sync path picks up. Deploy <a href="https://github.com/alforge-labs/alpha-strike/releases/tag/v1.1.0">alpha-strike v1.1.0</a> or later to your VM and run <code>alpha-forge live sync-events</code> at least once. Until then the row shows "Unknown" with guidance.</p>
+</div>
+<h2 id="safety-limits">Safety limits<a class="headerlink" href="#safety-limits" title="Permanent link">&para;</a></h2>
+<p>Updates can only be run <strong>from localhost</strong>. If you expose the server to your LAN (for example with <code>--host 0.0.0.0</code>), updating is disabled, because the API has no authentication.</p>
+<p>The alpha-visualizer self-update refuses to start when any of the following applies:</p>
 <ul>
-<li><a href="../features/#live">機能詳細 — Live 画面</a></li>
-<li><a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a></li>
-<li><a href="../../guides/alpha-strike-setup/">alpha-strike セットアップガイド</a></li>
+<li>Another job is running (backtest, optimization, AI strategy development, …)</li>
+<li>The package is installed in editable (development) mode</li>
+<li>Neither pip nor uv is available</li>
+</ul>
+<h2 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Added language and theme toggles to the Maintenance screen.</strong> It was the only main screen without them, so switching meant navigating away</li>
+<li><strong>Fixed mismatched dark-mode colors.</strong> When the OS color scheme was dark, the first render applied the light color tokens</li>
+</ul>
+<h2 id="how-to-upgrade">How to upgrade<a class="headerlink" href="#how-to-upgrade" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># uv</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># pipx</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>pipx<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+</code></pre></div>
+<p>From v1.7.0 you can also update from the "Update" button on the Maintenance screen (except on Windows).</p>
+<h2 id="related-documentation">Related documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../features/">Features — Maintenance screen</a></li>
+<li><a href="https://github.com/alforge-labs/alpha-strike/releases/tag/v1.1.0">alpha-strike v1.1.0 release</a></li>
 </ul>
 
 
@@ -3164,7 +3213,7 @@
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  ページトップへ戻る
+  Back to top
 </button>
         
       </main>
@@ -3173,33 +3222,33 @@
   
     
       
-      <nav class="md-footer__inner md-grid" aria-label="フッター" >
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../release-1.7.0/" class="md-footer__link md-footer__link--prev" aria-label="前: v1.7.0 (2026-08-10)">
+          <a href="../faq/" class="md-footer__link md-footer__link--prev" aria-label="Previous: FAQ">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                前
+                Previous
               </span>
               <div class="md-ellipsis">
-                v1.7.0 (2026-08-10)
+                FAQ
               </div>
             </div>
           </a>
         
         
           
-          <a href="../release-1.5.0/" class="md-footer__link md-footer__link--next" aria-label="次: v1.5.0 (2026-08-05)">
+          <a href="../release-1.6.0/" class="md-footer__link md-footer__link--next" aria-label="Next: v1.6.0 (2026-08-07)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
-                次
+                Next
               </span>
               <div class="md-ellipsis">
-                v1.5.0 (2026-08-05)
+                v1.6.0 (2026-08-07)
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3249,7 +3298,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

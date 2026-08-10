@@ -6,19 +6,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="alpha-visualizer v1.6.0 は、これまで CLI で 3 コマンドを順に実行する必要があったライブデータの更新を、Live 画面のボタン 1 クリックで完結できるようにするリリースです。replay パラメータは forge.yaml に集約され、初期資本の指定漏れによるリターン率のずれが構造的に起きなくなります。">
+        <meta name="description" content="alpha-visualizer v1.7.0 は、alpha-forge / alpha-visualizer / alpha-strike の現在版と最新版をメンテナンス画面で一覧し、更新可能なものは GUI から更新まで完了できるようにするリリースです。alpha-visualizer 自身の更新は成功したときだけサーバーを自動再起動します。">
       
       
         <meta name="author" content="Alforge Labs">
       
       
-        <link rel="canonical" href="https://alforgelabs.com/ja/docs/alpha-visualizer/release-1.6.0/">
+        <link rel="canonical" href="https://alforgelabs.com/ja/docs/alpha-visualizer/release-1.7.0/">
       
       
-        <link rel="prev" href="../release-1.7.0/">
+        <link rel="prev" href="../faq/">
       
       
-        <link rel="next" href="../release-1.5.0/">
+        <link rel="next" href="../release-1.6.0/">
       
       
         
@@ -33,7 +33,7 @@
     
     
       
-        <title>alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新 - AlphaForge ドキュメント</title>
+        <title>alpha-visualizer v1.7.0 リリース — 各種ツールのバージョン確認と更新 - AlphaForge ドキュメント</title>
       
     
     
@@ -94,7 +94,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#alpha-visualizer-v160-live" class="md-skip">
+        <a href="#alpha-visualizer-v170" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -128,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新
+              alpha-visualizer v1.7.0 リリース — 各種ツールのバージョン確認と更新
             
           </span>
         </div>
@@ -1757,34 +1757,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../release-1.7.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    v1.7.0 (2026-08-10)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1804,7 +1776,7 @@
   <span class="md-ellipsis">
     
   
-    v1.6.0 (2026-08-07)
+    v1.7.0 (2026-08-10)
   
 
     
@@ -1822,7 +1794,7 @@
   <span class="md-ellipsis">
     
   
-    v1.6.0 (2026-08-07)
+    v1.7.0 (2026-08-10)
   
 
     
@@ -1863,7 +1835,7 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 「ライブデータを更新」ボタン
+        1. バージョンの一覧
       
     </span>
   </a>
@@ -1871,10 +1843,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-replay-forgeyaml" class="md-nav__link">
+  <a href="#2-gui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. replay パラメータを forge.yaml に集約
+        2. GUI からの更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-alpha-strike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. alpha-strike は表示のみ
       
     </span>
   </a>
@@ -1890,7 +1873,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        修正
+        安全のための制限
       
     </span>
   </a>
@@ -1901,7 +1884,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        アップグレード方法
+        改善
       
     </span>
   </a>
@@ -1910,6 +1893,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アップグレード方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         関連ドキュメント
@@ -1923,6 +1917,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-1.6.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v1.6.0 (2026-08-07)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -3010,7 +3032,7 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 「ライブデータを更新」ボタン
+        1. バージョンの一覧
       
     </span>
   </a>
@@ -3018,10 +3040,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-replay-forgeyaml" class="md-nav__link">
+  <a href="#2-gui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. replay パラメータを forge.yaml に集約
+        2. GUI からの更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-alpha-strike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. alpha-strike は表示のみ
       
     </span>
   </a>
@@ -3037,7 +3070,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        修正
+        安全のための制限
       
     </span>
   </a>
@@ -3048,7 +3081,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        アップグレード方法
+        改善
       
     </span>
   </a>
@@ -3057,6 +3090,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アップグレード方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         関連ドキュメント
@@ -3083,58 +3127,63 @@
 
 
 
-<h1 id="alpha-visualizer-v160-live">alpha-visualizer v1.6.0 リリース — Live ページからライブデータを一括更新<a class="headerlink" href="#alpha-visualizer-v160-live" title="Permanent link">&para;</a></h1>
+<h1 id="alpha-visualizer-v170">alpha-visualizer v1.7.0 リリース — 各種ツールのバージョン確認と更新<a class="headerlink" href="#alpha-visualizer-v170" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>公開日</strong>: 2026 年 8 月 7 日 / <strong>バージョン</strong>: v1.6.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.6.0">GitHub Release</a></p>
+<p><strong>公開日</strong>: 2026 年 8 月 10 日 / <strong>バージョン</strong>: v1.7.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0">GitHub Release</a></p>
 </blockquote>
-<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v1.6.0 は、ペーパートレード／実運用の記録を最新化する作業を GUI に取り込むリリースです。</p>
+<p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v1.7.0 は、使っているツールが古いかどうかを GUI から判断できるようにするリリースです。</p>
+<p>これまでバージョン情報は画面のあちこちに分散し、どれも「今入っている版」しか分かりませんでした。新しい版が出ているかどうかを知るには、それぞれのツールでコマンドを打つ必要がありました。</p>
 <h2 id="_1">ハイライト<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h3 id="1">1. 「ライブデータを更新」ボタン<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
-<p>Live 画面に更新ボタンが加わりました。これまでは CLI で 3 つのコマンドを順に実行する必要がありました。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>sync-events<span class="w">     </span><span class="c1"># 発注サーバーからイベントを取得</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>update<span class="w">          </span><span class="c1"># ヒストリカルデータを差分更新</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>alpha-forge<span class="w"> </span>live<span class="w"> </span>replay<span class="w"> </span>...<span class="w">      </span><span class="c1"># ライブ成績を再計算</span>
-</code></pre></div>
-<p>v1.6.0 ではこれが 1 クリックで完結します。進捗はステップごとにリアルタイムで表示され、実行中はキャンセルできます。完了すると一覧と詳細が自動で再取得されます。</p>
-<p>詳細は<a href="../features/#live">機能詳細の Live 画面</a>を参照してください。</p>
-<h3 id="2-replay-forgeyaml">2. replay パラメータを <code>forge.yaml</code> に集約<a class="headerlink" href="#2-replay-forgeyaml" title="Permanent link">&para;</a></h3>
-<p>更新処理は AlphaForge の <a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a> に委譲しています。replay のパラメータは <code>forge.yaml</code> の <code>live.replay</code> セクションが単一の情報源になります。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">live</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">replay</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">portfolio_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">         </span><span class="c1"># combine portfolio ID</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">combine_strategies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">   </span><span class="c1"># combine 対象戦略 ID（2 つ以上）</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">initial_capital</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">    </span><span class="c1"># 実口座の資本に合わせる</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">           </span><span class="c1"># backtest combine と比較表示するか</span>
-</code></pre></div>
-<p>これにより、<strong><code>--initial-capital</code> の指定漏れでリターン率が実口座比で大きくずれる事故が構造的に起きなくなりました</strong>。バックテストの既定（100,000）のまま実口座が 1,000,000 だと、リターン率は 10 倍ずれます。設定の詳細は <a href="../../cli-reference/live/#config-livereplay"><code>live replay</code> の config フォールバック</a>を参照してください。</p>
-<div class="admonition warning">
-<p class="admonition-title">AlphaForge v1.4.0 以降が必要です</p>
-<p>このボタンは <code>alpha-forge live refresh</code> を呼び出すため、<strong>AlphaForge v1.4.0 以降</strong>が必要です。それ以前のバージョンでは、未対応である旨の案内が表示されます。</p>
-<p>また LAN 公開（非 loopback）で <code>alpha-vis serve</code> している場合、このボタンは無効です（ローカル書き込みを伴う操作のため）。</p>
-</div>
-<h2 id="_2">修正<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="1">1. バージョンの一覧<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p>メンテナンス画面（<code>/maintenance</code>）に「バージョン」セクションが加わりました。alpha-forge / alpha-visualizer / alpha-strike の現在版と最新版が 1 つの表に並びます。</p>
+<p><img alt="整理画面" loading="lazy" src="../assets/maintenance.png" /></p>
+<p>個別の照会に失敗したツールは、その行だけが「不明」と表示されます。他の行や画面全体には影響しません。オフラインや AlphaForge 未導入は「壊れた状態」ではなく想定内なので、画面を壊さない設計にしています。</p>
+<h3 id="2-gui">2. GUI からの更新<a class="headerlink" href="#2-gui" title="Permanent link">&para;</a></h3>
+<p>更新がある行には「更新」ボタンが出ます。</p>
 <ul>
-<li><strong>ジョブ作成の失敗が画面に表示されない問題を修正しました。</strong> LAN 公開中（403）、AlphaForge 未導入（503）、AI 派生開発で派生元の戦略が見つからない（404）といったケースで、ボタンを押しても何も起きないように見えていました。データ管理画面と AI 戦略開発画面の両方が対象です</li>
-<li>ドキュメント用スクリーンショットが画像の下端で切れることがある問題を修正しました（内部ツール）</li>
+<li><strong>alpha-forge</strong> — <a href="../../cli-reference/self/"><code>alpha-forge self update --yes</code></a> に委譲します。ダウンロードの検証・スモークテスト・ロールバックは AlphaForge 側が行います</li>
+<li><strong>alpha-visualizer</strong> — pip / uv による自己更新を実行します。<strong>成功したときだけ</strong>サーバーを自動で再起動し、画面が復帰します</li>
 </ul>
-<h2 id="_3">アップグレード方法<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># pip</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># uv</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># pipx</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>pipx<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
-</code></pre></div>
-<p>AlphaForge 側も更新してください。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>alpha-forge<span class="w"> </span>self<span class="w"> </span>update
-</code></pre></div>
-<h2 id="_4">関連ドキュメント<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>進捗は実行中もリアルタイムで表示されます。</p>
+<div class="admonition warning">
+<p class="admonition-title">Windows では自己更新に対応していません</p>
+<p>実行中の <code>alpha-vis.exe</code> がロックされ、pip がファイルを置換できないためです。Windows では更新コマンドの提示のみ行います。</p>
+</div>
+<h3 id="3-alpha-strike">3. alpha-strike は表示のみ<a class="headerlink" href="#3-alpha-strike" title="Permanent link">&para;</a></h3>
+<p>alpha-strike は稼働中の発注サーバーです。GUI から再起動させないため、更新ボタンは出さず、更新手順へのリンクのみ表示します。</p>
+<p>表示されるバージョンは <a href="../../cli-reference/live/"><code>alpha-forge live sync-events</code></a> で同期された時点のもので、リアルタイムではありません。値がいつ時点のものかが分かるよう、画面には「最終同期」を併記します。</p>
+<div class="admonition note">
+<p class="admonition-title">alpha-strike v1.1.0 以降が必要です</p>
+<p>バージョンの受け渡しは、alpha-strike が起動時に書き出すメタファイルを既存の同期経路で受け取る方式です。表示には <a href="https://github.com/alforge-labs/alpha-strike/releases/tag/v1.1.0">alpha-strike v1.1.0</a> 以降を VM へ反映し、<code>alpha-forge live sync-events</code> を 1 回以上実行する必要があります。それまでは「不明」と案内が表示されます。</p>
+</div>
+<h2 id="_2">安全のための制限<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>更新の実行は <strong>localhost からのみ</strong>行えます。<code>--host 0.0.0.0</code> などで LAN へ公開している場合は無効です（認証を持たない API のため）。</p>
+<p>alpha-visualizer の自己更新は、次のいずれかに当てはまると開始しません。</p>
 <ul>
-<li><a href="../features/#live">機能詳細 — Live 画面</a></li>
-<li><a href="../../cli-reference/live/#alpha-forge-live-refresh"><code>alpha-forge live refresh</code></a></li>
-<li><a href="../../guides/alpha-strike-setup/">alpha-strike セットアップガイド</a></li>
+<li>ほかのジョブ（バックテスト・最適化・AI 戦略開発など）が実行中</li>
+<li>開発用（editable）インストール</li>
+<li>pip も uv も使えない環境</li>
+</ul>
+<h2 id="_3">改善<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>整理画面に言語・テーマの切り替えを追加しました。</strong> 主要画面でこの画面だけ切り替え手段がなく、別の画面へ移動する必要がありました</li>
+<li><strong>ダークモードの配色が揃わない問題を修正しました。</strong> OS のカラースキームがダークの場合、初回表示でライト用の配色が当たっていました</li>
+</ul>
+<h2 id="_4">アップグレード方法<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># uv</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>tool<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># pipx</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>pipx<span class="w"> </span>upgrade<span class="w"> </span>alpha-visualizer
+</code></pre></div>
+<p>v1.7.0 からは、メンテナンス画面の「更新」ボタンからも更新できます（Windows を除く）。</p>
+<h2 id="_5">関連ドキュメント<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../features/">機能詳細 — Maintenance 画面</a></li>
+<li><a href="https://github.com/alforge-labs/alpha-strike/releases/tag/v1.1.0">alpha-strike v1.1.0 リリース</a></li>
 </ul>
 
 
@@ -3176,7 +3225,7 @@
       <nav class="md-footer__inner md-grid" aria-label="フッター" >
         
           
-          <a href="../release-1.7.0/" class="md-footer__link md-footer__link--prev" aria-label="前: v1.7.0 (2026-08-10)">
+          <a href="../faq/" class="md-footer__link md-footer__link--prev" aria-label="前: FAQ">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3186,20 +3235,20 @@
                 前
               </span>
               <div class="md-ellipsis">
-                v1.7.0 (2026-08-10)
+                FAQ
               </div>
             </div>
           </a>
         
         
           
-          <a href="../release-1.5.0/" class="md-footer__link md-footer__link--next" aria-label="次: v1.5.0 (2026-08-05)">
+          <a href="../release-1.6.0/" class="md-footer__link md-footer__link--next" aria-label="次: v1.6.0 (2026-08-07)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 次
               </span>
               <div class="md-ellipsis">
-                v1.5.0 (2026-08-05)
+                v1.6.0 (2026-08-07)
               </div>
             </div>
             <div class="md-footer__button md-icon">
