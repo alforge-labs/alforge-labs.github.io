@@ -235,7 +235,36 @@ Exploratory goals that re-run backtests many times can hit the limit, so either 
 
 ## Maintenance
 
-Lists "orphan" backtest results — runs whose strategy definition no longer exists in `strategies.db` — and lets you select and delete them. Accessible at `/maintenance`, or via the "Maintenance" link in the header nav.
+Accessible at `/maintenance`, or via the "Maintenance" link in the header nav. This screen has two features: checking/updating tool versions, and deleting orphan backtest results (the versions section is shown above the orphan-deletion section in the UI).
+
+![Maintenance screen](assets/maintenance.png){ loading=lazy }
+
+### Version check & update
+
+Shows the current and latest versions of alpha-forge, alpha-visualizer, and alpha-strike side by side.
+
+- Lists each tool's current and latest version. A tool whose lookup fails shows "Unknown" for that row only — it doesn't affect the other rows or the rest of the screen
+- alpha-forge and alpha-visualizer can be updated from the GUI via an "Update" button. alpha-forge delegates to `alpha-forge self update --yes`; alpha-visualizer runs its own self-update job via pip/uv
+- alpha-visualizer restarts the server automatically **only when the update succeeds** (it doesn't restart on failure, so it never keeps running in a broken state). It can't start an update while another job — backtest, optimization, agent development, etc. — is running (409)
+- alpha-strike is display-only; it can't be updated from the GUI. Its values come from `_meta.json`, synced by `alpha-forge live sync-events`, and reflect the **last sync**, not real time. This row is hidden entirely when `remote.enabled` is disabled in `forge.yaml`
+
+!!! warning "alpha-visualizer's self-update is not supported on Windows"
+    On Windows, the running `alpha-vis.exe` locks the file pip would need to replace, so GUI-based self-update is disabled there. Instead, the screen shows instructions to run `pip install -U alpha-visualizer` manually.
+
+!!! note "Updates only run on localhost"
+    For security, the update endpoints (`POST /api/versions/forge/update` / `POST /api/versions/visualizer/update`) only work when accessed from localhost. If the server is exposed on the LAN (e.g. `alpha-vis serve --host 0.0.0.0`), these return 403.
+
+**API**
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/versions` | Returns current/latest versions for alpha-forge, alpha-visualizer, and alpha-strike |
+| `POST` | `/api/versions/forge/update` | Starts a self-update job for alpha-forge (202; localhost only) |
+| `POST` | `/api/versions/visualizer/update` | Starts a self-update job for alpha-visualizer (202; localhost only; restarts automatically on success) |
+
+### Orphan backtest result deletion
+
+Lists "orphan" backtest results — runs whose strategy definition no longer exists in `strategies.db` — and lets you select and delete them.
 
 - Listing: strategy ID, backtest run count, optimization run count, disk size, and last run timestamp
 - Select rows to delete with checkboxes (nothing is selected by default)

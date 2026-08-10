@@ -1920,6 +1920,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-check-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version check &amp; update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orphan-backtest-result-deletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orphan backtest result deletion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3439,6 +3467,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-check-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version check &amp; update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orphan-backtest-result-deletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orphan backtest result deletion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3809,7 +3865,53 @@
 </tbody>
 </table>
 <h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
-<p>Lists "orphan" backtest results — runs whose strategy definition no longer exists in <code>strategies.db</code> — and lets you select and delete them. Accessible at <code>/maintenance</code>, or via the "Maintenance" link in the header nav.</p>
+<p>Accessible at <code>/maintenance</code>, or via the "Maintenance" link in the header nav. This screen has two features: checking/updating tool versions, and deleting orphan backtest results (the versions section is shown above the orphan-deletion section in the UI).</p>
+<p><img alt="Maintenance screen" loading="lazy" src="../assets/maintenance.png" /></p>
+<h3 id="version-check-update">Version check &amp; update<a class="headerlink" href="#version-check-update" title="Permanent link">&para;</a></h3>
+<p>Shows the current and latest versions of alpha-forge, alpha-visualizer, and alpha-strike side by side.</p>
+<ul>
+<li>Lists each tool's current and latest version. A tool whose lookup fails shows "Unknown" for that row only — it doesn't affect the other rows or the rest of the screen</li>
+<li>alpha-forge and alpha-visualizer can be updated from the GUI via an "Update" button. alpha-forge delegates to <code>alpha-forge self update --yes</code>; alpha-visualizer runs its own self-update job via pip/uv</li>
+<li>alpha-visualizer restarts the server automatically <strong>only when the update succeeds</strong> (it doesn't restart on failure, so it never keeps running in a broken state). It can't start an update while another job — backtest, optimization, agent development, etc. — is running (409)</li>
+<li>alpha-strike is display-only; it can't be updated from the GUI. Its values come from <code>_meta.json</code>, synced by <code>alpha-forge live sync-events</code>, and reflect the <strong>last sync</strong>, not real time. This row is hidden entirely when <code>remote.enabled</code> is disabled in <code>forge.yaml</code></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">alpha-visualizer's self-update is not supported on Windows</p>
+<p>On Windows, the running <code>alpha-vis.exe</code> locks the file pip would need to replace, so GUI-based self-update is disabled there. Instead, the screen shows instructions to run <code>pip install -U alpha-visualizer</code> manually.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Updates only run on localhost</p>
+<p>For security, the update endpoints (<code>POST /api/versions/forge/update</code> / <code>POST /api/versions/visualizer/update</code>) only work when accessed from localhost. If the server is exposed on the LAN (e.g. <code>alpha-vis serve --host 0.0.0.0</code>), these return 403.</p>
+</div>
+<p><strong>API</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/versions</code></td>
+<td>Returns current/latest versions for alpha-forge, alpha-visualizer, and alpha-strike</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/versions/forge/update</code></td>
+<td>Starts a self-update job for alpha-forge (202; localhost only)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/versions/visualizer/update</code></td>
+<td>Starts a self-update job for alpha-visualizer (202; localhost only; restarts automatically on success)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="orphan-backtest-result-deletion">Orphan backtest result deletion<a class="headerlink" href="#orphan-backtest-result-deletion" title="Permanent link">&para;</a></h3>
+<p>Lists "orphan" backtest results — runs whose strategy definition no longer exists in <code>strategies.db</code> — and lets you select and delete them.</p>
 <ul>
 <li>Listing: strategy ID, backtest run count, optimization run count, disk size, and last run timestamp</li>
 <li>Select rows to delete with checkboxes (nothing is selected by default)</li>
