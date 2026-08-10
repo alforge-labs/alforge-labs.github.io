@@ -1920,10 +1920,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Maintenance 画面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        バージョン確認・更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        孤児バックテスト結果の削除
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         横断機能
@@ -1946,7 +1974,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         テーマ切替
@@ -1957,7 +1985,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         言語切替
@@ -1968,7 +1996,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
         エクスポート
@@ -3439,10 +3467,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Maintenance 画面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        バージョン確認・更新
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        孤児バックテスト結果の削除
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         横断機能
@@ -3465,7 +3521,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         テーマ切替
@@ -3476,7 +3532,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         言語切替
@@ -3487,7 +3543,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
         エクスポート
@@ -3809,7 +3865,52 @@
 </tbody>
 </table>
 <h2 id="maintenance">Maintenance 画面<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
-<p><code>strategies.db</code> に定義がもう存在しない戦略の実行結果（「孤児」）を一覧し、選んで削除します。<code>/maintenance</code> でアクセスでき、ヘッダーナビの「整理」からも遷移できます。</p>
+<p><code>/maintenance</code> でアクセスでき、ヘッダーナビの「整理」からも遷移できます。各種ツールのバージョン確認・更新と、孤児バックテスト結果の削除の2つの機能があります（画面内ではバージョンのセクションが上、孤児削除が下に並びます）。</p>
+<h3 id="_7">バージョン確認・更新<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>alpha-forge / alpha-visualizer / alpha-strike の現在版・最新版を並べて表示します。</p>
+<ul>
+<li>各ツールの現在版・最新版を一覧表示。個別の照会に失敗したツールは「不明」と表示され、他のツールの表示や画面全体には影響しません</li>
+<li>alpha-forge と alpha-visualizer は「更新」ボタンから GUI 経由で更新できます。alpha-forge は <code>alpha-forge self update --yes</code> に、alpha-visualizer は pip/uv 経由の自己更新ジョブにそれぞれ委譲します</li>
+<li>alpha-visualizer の更新は<strong>成功したときだけ</strong>サーバーを自動で再起動します（壊れた状態のまま起動し続けるのを避けるため、失敗時は再起動しません）。更新中に他のジョブ（バックテスト・最適化・エージェント開発など）が実行中の場合は開始できません（409）</li>
+<li>alpha-strike は表示のみで、GUI から更新はできません。値は <code>alpha-forge live sync-events</code> で同期された <code>_meta.json</code> に由来する<strong>最終同期時点</strong>のもので、リアルタイムの値ではありません。<code>forge.yaml</code> の <code>remote.enabled</code> が無効な場合、この行自体が表示されません</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">alpha-visualizer の自己更新は Windows 非対応です</p>
+<p>Windows では実行中の <code>alpha-vis.exe</code> が pip によるファイル置換をロックしてしまうため、GUI からの自己更新を行いません。代わりに <code>pip install -U alpha-visualizer</code> の実行案内が表示されます。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">更新の実行は localhost 限定です</p>
+<p>セキュリティ上、更新系エンドポイント（<code>POST /api/versions/forge/update</code> / <code>POST /api/versions/visualizer/update</code>）は localhost からのアクセスでのみ実行できます。<code>alpha-vis serve --host 0.0.0.0</code> などで LAN に公開している場合は 403 になります。</p>
+</div>
+<p><strong>API</strong></p>
+<table>
+<thead>
+<tr>
+<th>メソッド</th>
+<th>パス</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/versions</code></td>
+<td>alpha-forge / alpha-visualizer / alpha-strike の現在版・最新版を集約して返す</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/versions/forge/update</code></td>
+<td>alpha-forge の自己更新ジョブを起動する（202。localhost 限定）</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/versions/visualizer/update</code></td>
+<td>alpha-visualizer の自己更新ジョブを起動する（202。localhost 限定・成功時に自動再起動）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_8">孤児バックテスト結果の削除<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p><code>strategies.db</code> に定義がもう存在しない戦略の実行結果（「孤児」）を一覧し、選んで削除します。</p>
 <ul>
 <li>一覧: 戦略 ID・バックテスト件数・最適化件数・容量・最終実行日時</li>
 <li>チェックボックスで削除対象を選択（既定では 1 件も選択されていません）</li>
@@ -3824,14 +3925,14 @@
 <p class="admonition-title">古いバージョンの alpha-forge では使えません</p>
 <p>この画面が委譲する <code>alpha-forge backtest prune-orphans</code> コマンドは、比較的新しいバージョンの alpha-forge にのみ含まれています。<code>backtest prune-orphans</code> を持たないバージョンでは、CLI が「該当コマンドが無い」エラーを返し、画面には新しいバージョンへの更新を促すメッセージが表示されます。<code>alpha-forge backtest prune-orphans --help</code> が通るかどうかで対応可否を確認できます。</p>
 </div>
-<h2 id="_7">横断機能<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_9">横断機能<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <h3 id="cmdk">グローバル検索（Cmd+K）<a class="headerlink" href="#cmdk" title="Permanent link">&para;</a></h3>
 <p>任意の画面で <code>Cmd+K</code>（macOS）/ <code>Ctrl+K</code>（Windows・Linux）でコマンドパレットを開き、戦略名・画面名から即座に遷移できます。</p>
-<h3 id="_8">テーマ切替<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<h3 id="_10">テーマ切替<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>ヘッダー右上のトグルでダーク/ライトモードを切替。設定はブラウザの localStorage に保存されます。</p>
-<h3 id="_9">言語切替<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<h3 id="_11">言語切替<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <p>UI を日本語 / 英語に切替可能。スクリーンショット撮影や国際チームとの共有時に便利です。</p>
-<h3 id="_10">エクスポート<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<h3 id="_12">エクスポート<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
 <ul>
 <li>CSV: 各テーブルから取引履歴・指標一覧をダウンロード</li>
 <li>PNG: チャートをそのまま画像保存</li>

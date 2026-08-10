@@ -235,7 +235,34 @@ claude バックエンドはターン数の上限に達すると、作業の途�
 
 ## Maintenance 画面
 
-`strategies.db` に定義がもう存在しない戦略の実行結果（「孤児」）を一覧し、選んで削除します。`/maintenance` でアクセスでき、ヘッダーナビの「整理」からも遷移できます。
+`/maintenance` でアクセスでき、ヘッダーナビの「整理」からも遷移できます。各種ツールのバージョン確認・更新と、孤児バックテスト結果の削除の2つの機能があります（画面内ではバージョンのセクションが上、孤児削除が下に並びます）。
+
+### バージョン確認・更新
+
+alpha-forge / alpha-visualizer / alpha-strike の現在版・最新版を並べて表示します。
+
+- 各ツールの現在版・最新版を一覧表示。個別の照会に失敗したツールは「不明」と表示され、他のツールの表示や画面全体には影響しません
+- alpha-forge と alpha-visualizer は「更新」ボタンから GUI 経由で更新できます。alpha-forge は `alpha-forge self update --yes` に、alpha-visualizer は pip/uv 経由の自己更新ジョブにそれぞれ委譲します
+- alpha-visualizer の更新は**成功したときだけ**サーバーを自動で再起動します（壊れた状態のまま起動し続けるのを避けるため、失敗時は再起動しません）。更新中に他のジョブ（バックテスト・最適化・エージェント開発など）が実行中の場合は開始できません（409）
+- alpha-strike は表示のみで、GUI から更新はできません。値は `alpha-forge live sync-events` で同期された `_meta.json` に由来する**最終同期時点**のもので、リアルタイムの値ではありません。`forge.yaml` の `remote.enabled` が無効な場合、この行自体が表示されません
+
+!!! warning "alpha-visualizer の自己更新は Windows 非対応です"
+    Windows では実行中の `alpha-vis.exe` が pip によるファイル置換をロックしてしまうため、GUI からの自己更新を行いません。代わりに `pip install -U alpha-visualizer` の実行案内が表示されます。
+
+!!! note "更新の実行は localhost 限定です"
+    セキュリティ上、更新系エンドポイント（`POST /api/versions/forge/update` / `POST /api/versions/visualizer/update`）は localhost からのアクセスでのみ実行できます。`alpha-vis serve --host 0.0.0.0` などで LAN に公開している場合は 403 になります。
+
+**API**
+
+| メソッド | パス | 内容 |
+|---|---|---|
+| `GET` | `/api/versions` | alpha-forge / alpha-visualizer / alpha-strike の現在版・最新版を集約して返す |
+| `POST` | `/api/versions/forge/update` | alpha-forge の自己更新ジョブを起動する（202。localhost 限定） |
+| `POST` | `/api/versions/visualizer/update` | alpha-visualizer の自己更新ジョブを起動する（202。localhost 限定・成功時に自動再起動） |
+
+### 孤児バックテスト結果の削除
+
+`strategies.db` に定義がもう存在しない戦略の実行結果（「孤児」）を一覧し、選んで削除します。
 
 - 一覧: 戦略 ID・バックテスト件数・最適化件数・容量・最終実行日時
 - チェックボックスで削除対象を選択（既定では 1 件も選択されていません）
