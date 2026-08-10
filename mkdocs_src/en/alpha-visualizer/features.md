@@ -237,6 +237,8 @@ Exploratory goals that re-run backtests many times can hit the limit, so either 
 
 Accessible at `/maintenance`, or via the "Maintenance" link in the header nav. This screen has two features: checking/updating tool versions, and deleting orphan backtest results (the versions section is shown above the orphan-deletion section in the UI).
 
+![Maintenance screen](assets/maintenance.png){ loading=lazy }
+
 ### Version check & update
 
 Shows the current and latest versions of alpha-forge, alpha-visualizer, and alpha-strike side by side.
