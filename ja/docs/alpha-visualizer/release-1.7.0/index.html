@@ -1892,6 +1892,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#v171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        修正（v1.7.1）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3089,6 +3100,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#v171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        修正（v1.7.1）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3129,7 +3151,7 @@
 
 <h1 id="alpha-visualizer-v170">alpha-visualizer v1.7.0 リリース — 各種ツールのバージョン確認と更新<a class="headerlink" href="#alpha-visualizer-v170" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>公開日</strong>: 2026 年 8 月 10 日 / <strong>バージョン</strong>: v1.7.0 / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0">GitHub Release</a></p>
+<p><strong>公開日</strong>: 2026 年 8 月 10 日 / <strong>バージョン</strong>: v1.7.0（本ノートは v1.7.1 のパッチを含む累積） / <strong>配布</strong>: <a href="https://pypi.org/project/alpha-visualizer/">PyPI</a>・<a href="https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0">GitHub Release</a></p>
 </blockquote>
 <p><a href="../">alpha-visualizer</a> は、<code>alpha-forge</code> が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v1.7.0 は、使っているツールが古いかどうかを GUI から判断できるようにするリリースです。</p>
 <p>これまでバージョン情報は画面のあちこちに分散し、どれも「今入っている版」しか分かりませんでした。新しい版が出ているかどうかを知るには、それぞれのツールでコマンドを打つ必要がありました。</p>
@@ -3168,6 +3190,11 @@
 <ul>
 <li><strong>整理画面に言語・テーマの切り替えを追加しました。</strong> 主要画面でこの画面だけ切り替え手段がなく、別の画面へ移動する必要がありました</li>
 <li><strong>ダークモードの配色が揃わない問題を修正しました。</strong> OS のカラースキームがダークの場合、初回表示でライト用の配色が当たっていました</li>
+</ul>
+<h2 id="v171">修正（v1.7.1）<a class="headerlink" href="#v171" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>EULA の再同意待ちが「不明」と表示される問題を修正しました。</strong> AlphaForge は EULA が改訂されると再同意を求めます。GUI から alpha-forge を更新した直後は必ずこの状態を通りますが、バージョン欄は原因を示さず「未導入または実行に失敗」とだけ表示していました。v1.7.1 からは EULA 未同意である旨と、<code>alpha-forge system doctor</code> で同意する手順を案内します</li>
+<li>併せて、ロケールが設定されていない環境（<code>LANG</code> 未設定など）で AlphaForge の呼び出しが文字コードエラーになる問題も修正しました</li>
 </ul>
 <h2 id="_4">アップグレード方法<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># pip</span>

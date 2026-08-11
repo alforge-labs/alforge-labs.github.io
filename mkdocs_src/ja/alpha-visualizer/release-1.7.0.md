@@ -5,7 +5,7 @@ description: alpha-visualizer v1.7.0 は、alpha-forge / alpha-visualizer / alph
 
 # alpha-visualizer v1.7.0 リリース — 各種ツールのバージョン確認と更新
 
-> **公開日**: 2026 年 8 月 10 日 / **バージョン**: v1.7.0 / **配布**: [PyPI](https://pypi.org/project/alpha-visualizer/)・[GitHub Release](https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0)
+> **公開日**: 2026 年 8 月 10 日 / **バージョン**: v1.7.0（本ノートは v1.7.1 のパッチを含む累積） / **配布**: [PyPI](https://pypi.org/project/alpha-visualizer/)・[GitHub Release](https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0)
 
 [alpha-visualizer](index.md) は、`alpha-forge` が出力するバックテスト結果を Web ブラウザで可視化するスタンドアロンの OSS パッケージです。v1.7.0 は、使っているツールが古いかどうかを GUI から判断できるようにするリリースです。
 
@@ -56,6 +56,11 @@ alpha-visualizer の自己更新は、次のいずれかに当てはまると開
 
 - **整理画面に言語・テーマの切り替えを追加しました。** 主要画面でこの画面だけ切り替え手段がなく、別の画面へ移動する必要がありました
 - **ダークモードの配色が揃わない問題を修正しました。** OS のカラースキームがダークの場合、初回表示でライト用の配色が当たっていました
+
+## 修正（v1.7.1）
+
+- **EULA の再同意待ちが「不明」と表示される問題を修正しました。** AlphaForge は EULA が改訂されると再同意を求めます。GUI から alpha-forge を更新した直後は必ずこの状態を通りますが、バージョン欄は原因を示さず「未導入または実行に失敗」とだけ表示していました。v1.7.1 からは EULA 未同意である旨と、`alpha-forge system doctor` で同意する手順を案内します
+- 併せて、ロケールが設定されていない環境（`LANG` 未設定など）で AlphaForge の呼び出しが文字コードエラーになる問題も修正しました
 
 ## アップグレード方法
 
