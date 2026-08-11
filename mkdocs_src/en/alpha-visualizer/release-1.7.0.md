@@ -5,7 +5,7 @@ description: alpha-visualizer v1.7.0 lists the current and latest versions of al
 
 # alpha-visualizer v1.7.0 — Check and update your tool versions
 
-> **Released**: August 10, 2026 / **Version**: v1.7.0 / **Distribution**: [PyPI](https://pypi.org/project/alpha-visualizer/) · [GitHub Release](https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0)
+> **Released**: August 10, 2026 / **Version**: v1.7.0 (this note also covers the v1.7.1 patch) / **Distribution**: [PyPI](https://pypi.org/project/alpha-visualizer/) · [GitHub Release](https://github.com/alforge-labs/alpha-visualizer/releases/tag/v1.7.0)
 
 [alpha-visualizer](index.md) is a standalone OSS package that visualizes `alpha-forge` backtest results in your browser. v1.7.0 makes it possible to tell, from the GUI, whether the tools you are using are out of date.
 
@@ -56,6 +56,11 @@ The alpha-visualizer self-update refuses to start when any of the following appl
 
 - **Added language and theme toggles to the Maintenance screen.** It was the only main screen without them, so switching meant navigating away
 - **Fixed mismatched dark-mode colors.** When the OS color scheme was dark, the first render applied the light color tokens
+
+## Fixes (v1.7.1)
+
+- **Fixed a pending EULA re-acceptance showing up as "Unknown".** AlphaForge asks you to accept the EULA again whenever it is revised — which you always pass through right after updating alpha-forge from the GUI. The version row gave no hint of the cause and simply read "not installed, or the command failed". From v1.7.1 it says the EULA has not been accepted and how to accept it with `alpha-forge system doctor`
+- Also fixed AlphaForge invocations failing with an encoding error in environments with no locale configured (for example when `LANG` is unset)
 
 ## How to upgrade
 
