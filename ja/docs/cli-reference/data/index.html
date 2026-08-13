@@ -4736,6 +4736,11 @@
 <td>必須</td>
 <td>CSV パス。ヘッダー <code>date,long,short</code></td>
 </tr>
+<tr>
+<td><code>--merge</code></td>
+<td>フラグ</td>
+<td>保存済みの SWAP データと日付で結合して保存する（重複日は新データ優先）。未指定時は全上書き</td>
+</tr>
 </tbody>
 </table>
 <p>CSV の契約:</p>
@@ -4744,10 +4749,13 @@
 <li>日付は昇順・重複なし・将来日なし。空セル（欠損値）不可</li>
 <li>ロング/ショートは別列で、どちらも<strong>マージン込みネット値</strong>（<code>spread_pct</code> 非適用）</li>
 </ul>
-<p>検証違反はいずれも保存せず終了コード <code>1</code>。出力: <code>✅ SWAP:&lt;PAIR&gt;: &lt;N&gt;行を保存しました (&lt;path&gt;)</code>。</p>
+<p>バリデーションは <code>--merge</code> 指定時も常にマージ前の CSV 単体に適用され、違反時は保存済みデータを変更せず終了コード <code>1</code>。ブローカー公表 CSV は直近数十日分のみのことが多いため、週次などの定期取込で過去分を蓄積したい場合は <code>--merge</code> を使ってください:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--csv<span class="w"> </span>swap_usdjpy_latest.csv<span class="w"> </span>--merge
+</code></pre></div>
+<p>検証違反はいずれも保存せず終了コード <code>1</code>。出力: <code>✅ SWAP:&lt;PAIR&gt;: &lt;N&gt;行を保存しました (&lt;path&gt;)</code>（<code>--merge</code> 指定時は「（既存とマージ）」を付記）。</p>
 <h2 id="alpha-forge-data-alt-list">alpha-forge data alt list<a class="headerlink" href="#alpha-forge-data-alt-list" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4768,18 +4776,18 @@
 </tbody>
 </table>
 <p>サンプル出力：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>保存済み代替データ件数: 2
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>保存済み代替データ件数: 2
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
 </code></pre></div>
 <p>保存済みの代替データが無い場合は次の 1 行のみを出力して終了コード <code>0</code> で終わります。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>保存済みの代替データはありません。
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>保存済みの代替データはありません。
 </code></pre></div>
 <p><code>--json</code> 指定時は stdout に純 JSON のみを出力します。<strong>Exit code</strong>: <code>0</code>=成功, <code>1</code>=not found / 実行失敗, <code>2</code>=引数エラー。</p>
 <h2 id="alpha-forge-data-alt-info">alpha-forge data alt info<a class="headerlink" href="#alpha-forge-data-alt-info" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># 機械可読（MCP / パイプ用途、issue #1225）</span>
 </code></pre></div>
 <table>
 <thead>

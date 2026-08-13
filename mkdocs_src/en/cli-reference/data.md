@@ -519,6 +519,7 @@ Validates a broker-published real swap-point history CSV and stores it under the
 |------|------|-------------|
 | `PAIR` | argument (required) | FX pair (`USDJPY=X` / `USD/JPY` / `USD_JPY`; normalized to the yfinance form) |
 | `--csv` | required | CSV path. Header `date,long,short` |
+| `--merge` | flag | Merge with previously stored SWAP data by date (new rows win on duplicates). Overwrites entirely when omitted |
 
 CSV contract:
 
@@ -526,7 +527,13 @@ CSV contract:
 - Dates must be ascending, unique, and not in the future. Empty (missing) cells are rejected
 - Long and short are separate columns, both **net of broker margin** (`spread_pct` does not apply)
 
-Any validation failure aborts without saving (exit code `1`). Output: `✅ SWAP:<PAIR>: saved <N> rows (<path>)`.
+Validation always applies to the CSV alone before merging, even with `--merge`; any violation aborts without touching the stored data (exit code `1`). Broker-published CSVs often cover only the last few dozen days, so use `--merge` for periodic (e.g. weekly) imports where you want to retain accumulated history:
+
+```bash
+alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy_latest.csv --merge
+```
+
+Any validation failure aborts without saving (exit code `1`). Output: `✅ SWAP:<PAIR>: saved <N> rows (<path>)` (appends "(merged with existing)" when `--merge` is given).
 
 ## alpha-forge data alt list
 
