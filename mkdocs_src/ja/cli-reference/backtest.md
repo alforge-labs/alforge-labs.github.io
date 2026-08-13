@@ -64,7 +64,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--cost-preset` | オプション | - | コストプリセット名（issue #785）。戦略 JSON の `risk_management` の commission / slippage を実行時に preset 値で in-memory 上書きする（戦略 JSON は変更しない） |
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
 | `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`alpha-forge data alt fetch FRED:T10Y3M`） |
-| `--carry` | フラグ | false | FX キャリー（スワップ）を計上し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。実スワップ CSV（`data alt import-swap`）＞金利差近似の順で解決。主要 8 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要） |
+| `--carry` | フラグ | false | FX キャリー（スワップ）を計上し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。実スワップ CSV（`data alt import-swap`）＞金利差近似の順で解決。主要 17 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要） |
 
 ### `--carry` で FX キャリー（スワップ）を金利差近似 {#carry}
 
@@ -86,8 +86,17 @@ FX ペアのスワップ投資（キャリー戦略）を評価するため、�
 | CAD | `IRSTCI01CAM156N` | BoC O/N 相当（OECD 月次） |
 | CHF | `IR3TIB01CHM156N` | 3 ヶ月インターバンク（OECD 月次） |
 | NZD | `IR3TIB01NZM156N` | 3 ヶ月インターバンク（OECD 月次） |
+| MXN | `IRSTCI01MXM156N` | 無担保コール O/N 相当（OECD 月次） |
+| TRY | `IRSTCI01TRM156N` | 無担保コール O/N 相当（OECD 月次） |
+| ZAR | `IRSTCI01ZAM156N` | 無担保コール O/N 相当（OECD 月次） |
+| CZK | `IRSTCI01CZM156N` | 無担保コール O/N 相当（OECD 月次） |
+| HUF | `IRSTCI01HUM156N` | 無担保コール O/N 相当（OECD 月次） |
+| PLN | `IRSTCI01PLM156N` | 無担保コール O/N 相当（OECD 月次） |
+| NOK | `IRSTCI01NOM156N` | 無担保コール O/N 相当（OECD 月次） |
+| SEK | `IR3TIB01SEM156N` | 3 ヶ月インターバンク STIBOR（OECD 月次） |
+| CNH | `IR3TIB01CNM156N` | 3 ヶ月インターバンク・オンショア CNY 近似（OECD 月次） |
 
-CHF/NZD は O/N 系列が 2024 年で更新停止しているため 3 ヶ月物を採用しています（テナー差によるわずかな追加近似誤差あり）。系列の最終観測が対象期間末尾から約 6 ヶ月以上古い場合は staleness 警告が表示されます。
+CHF/NZD/SEK は O/N 系列が更新停止している（CHF/NZD は 2024 年、SEK は 2020 年）ため、更新継続中の 3 ヶ月物（インターバンク／STIBOR）を採用しています（テナー差によるわずかな追加近似誤差あり）。CNH（オフショア人民元）は FRED にオフショア金利系列が無いため、オンショア CNY の 3 ヶ月インターバンク（CHIBOR 系）で近似しています（オンショア・オフショアの金利差は乖離しうるため `spread_pct` で調整してください）。HKD/SGD は FRED に使える短期金利系列が無くビルトイン対象外です（実スワップポイント履歴の CSV 取り込み `data alt import-swap` でのみキャリー計上可能）。RUB は金利系列が経済制裁以降実質停止しているためビルトイン対象外です。系列の最終観測が対象期間末尾から約 6 ヶ月以上古い場合は staleness 警告が表示されます。
 
 **実スワップポイントの取り込み（より高精度）**
 
@@ -96,6 +105,8 @@ CHF/NZD は O/N 系列が 2024 年で更新停止しているため 3 ヶ月物�
 ```bash
 alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy.csv
 ```
+
+ブローカー公表 CSV は直近数十日分などの限定期間のみのことが多く、毎回そのまま取り込むと過去分が上書きで消えてしまいます。`--merge` を付けると保存済みの SWAP データと日付で結合保存されます（重複日は新しく取り込んだ CSV の値が優先）。週次などの定期取込で過去の蓄積を維持したい場合は[こちら](data.md#alpha-forge-data-alt-import-swap)を使ってください。
 
 **セットアップ（2 ステップ・金利差近似をカスタムする場合）**
 

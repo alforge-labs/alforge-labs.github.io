@@ -5145,7 +5145,7 @@
 <td><code>--carry</code></td>
 <td>フラグ</td>
 <td>false</td>
-<td>FX キャリー（スワップ）を計上し <code>carry_adjusted_metrics</code> を併記する（<a href="#carry">詳細</a>）。実スワップ CSV（<code>data alt import-swap</code>）＞金利差近似の順で解決。主要 8 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要）</td>
+<td>FX キャリー（スワップ）を計上し <code>carry_adjusted_metrics</code> を併記する（<a href="#carry">詳細</a>）。実スワップ CSV（<code>data alt import-swap</code>）＞金利差近似の順で解決。主要 17 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要）</td>
 </tr>
 </tbody>
 </table>
@@ -5203,13 +5203,59 @@
 <td><code>IR3TIB01NZM156N</code></td>
 <td>3 ヶ月インターバンク（OECD 月次）</td>
 </tr>
+<tr>
+<td>MXN</td>
+<td><code>IRSTCI01MXM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>TRY</td>
+<td><code>IRSTCI01TRM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>ZAR</td>
+<td><code>IRSTCI01ZAM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>CZK</td>
+<td><code>IRSTCI01CZM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>HUF</td>
+<td><code>IRSTCI01HUM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>PLN</td>
+<td><code>IRSTCI01PLM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>NOK</td>
+<td><code>IRSTCI01NOM156N</code></td>
+<td>無担保コール O/N 相当（OECD 月次）</td>
+</tr>
+<tr>
+<td>SEK</td>
+<td><code>IR3TIB01SEM156N</code></td>
+<td>3 ヶ月インターバンク STIBOR（OECD 月次）</td>
+</tr>
+<tr>
+<td>CNH</td>
+<td><code>IR3TIB01CNM156N</code></td>
+<td>3 ヶ月インターバンク・オンショア CNY 近似（OECD 月次）</td>
+</tr>
 </tbody>
 </table>
-<p>CHF/NZD は O/N 系列が 2024 年で更新停止しているため 3 ヶ月物を採用しています（テナー差によるわずかな追加近似誤差あり）。系列の最終観測が対象期間末尾から約 6 ヶ月以上古い場合は staleness 警告が表示されます。</p>
+<p>CHF/NZD/SEK は O/N 系列が更新停止している（CHF/NZD は 2024 年、SEK は 2020 年）ため、更新継続中の 3 ヶ月物（インターバンク／STIBOR）を採用しています（テナー差によるわずかな追加近似誤差あり）。CNH（オフショア人民元）は FRED にオフショア金利系列が無いため、オンショア CNY の 3 ヶ月インターバンク（CHIBOR 系）で近似しています（オンショア・オフショアの金利差は乖離しうるため <code>spread_pct</code> で調整してください）。HKD/SGD は FRED に使える短期金利系列が無くビルトイン対象外です（実スワップポイント履歴の CSV 取り込み <code>data alt import-swap</code> でのみキャリー計上可能）。RUB は金利系列が経済制裁以降実質停止しているためビルトイン対象外です。系列の最終観測が対象期間末尾から約 6 ヶ月以上古い場合は staleness 警告が表示されます。</p>
 <p><strong>実スワップポイントの取り込み（より高精度）</strong></p>
 <p>ブローカー公表の実スワップポイント履歴があれば、<a href="../data/#alpha-forge-data-alt-import-swap"><code>data alt import-swap</code></a> で取り込むと金利差近似より<strong>自動で優先</strong>されます（マッピング設定不要・値はマージン込みネットのため <code>spread_pct</code> 非適用）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--csv<span class="w"> </span>swap_usdjpy.csv
 </code></pre></div>
+<p>ブローカー公表 CSV は直近数十日分などの限定期間のみのことが多く、毎回そのまま取り込むと過去分が上書きで消えてしまいます。<code>--merge</code> を付けると保存済みの SWAP データと日付で結合保存されます（重複日は新しく取り込んだ CSV の値が優先）。週次などの定期取込で過去の蓄積を維持したい場合は<a href="../data/#alpha-forge-data-alt-import-swap">こちら</a>を使ってください。</p>
 <p><strong>セットアップ（2 ステップ・金利差近似をカスタムする場合）</strong></p>
 <ol>
 <li>

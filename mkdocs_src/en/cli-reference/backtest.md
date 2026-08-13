@@ -64,7 +64,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--cost-preset` | option | - | Cost preset name (issue #785, e.g. `moomoo-crypto-spot` / `binance-spot-vip0` / `ibkr-us-stock-fixed`); overrides the strategy's `risk_management` commission/slippage in-memory at run time (strategy JSON is untouched) |
 | `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics in the result (#958); requires saved dividends data (`data fetch --with-dividends`) |
 | `--regime-filter` | option | - | Post-hoc entry gating by macro regime (issue #1012); format `<source>:<label>` (e.g. `macro:risk_on`), source=`macro` only; requires FRED data fetched in advance (`data alt fetch FRED:T10Y3M`) |
-| `--carry` | flag | false | Accrue FX carry (swap) and include `carry_adjusted_metrics` ([details](#carry)). Resolution order: real swap CSV (`data alt import-swap`) > rate-differential approximation. Major 8 currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required) |
+| `--carry` | flag | false | Accrue FX carry (swap) and include `carry_adjusted_metrics` ([details](#carry)). Resolution order: real swap CSV (`data alt import-swap`) > rate-differential approximation. 17 major currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required) |
 
 ### Approximate FX carry (swap) with `--carry` {#carry}
 
@@ -86,8 +86,17 @@ daily carry fraction = (base short rate − quote short rate − spread_pct) / 1
 | CAD | `IRSTCI01CAM156N` | BoC O/N equivalent (OECD, monthly) |
 | CHF | `IR3TIB01CHM156N` | 3-month interbank rate (OECD, monthly) |
 | NZD | `IR3TIB01NZM156N` | 3-month interbank rate (OECD, monthly) |
+| MXN | `IRSTCI01MXM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| TRY | `IRSTCI01TRM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| ZAR | `IRSTCI01ZAM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| CZK | `IRSTCI01CZM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| HUF | `IRSTCI01HUM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| PLN | `IRSTCI01PLM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| NOK | `IRSTCI01NOM156N` | Uncollateralized O/N call rate equivalent (OECD, monthly) |
+| SEK | `IR3TIB01SEM156N` | 3-month interbank STIBOR (OECD, monthly) |
+| CNH | `IR3TIB01CNM156N` | 3-month interbank, onshore CNY approximation (OECD, monthly) |
 
-For CHF/NZD the O/N series stopped updating in 2024, so the still-updated 3-month rates are used (a small additional approximation error from the tenor difference). If a series' last observation is roughly 6+ months older than the end of the backtest period, a staleness warning is printed.
+For CHF/NZD/SEK the O/N series stopped updating (CHF/NZD in 2024, SEK in 2020), so the still-updated 3-month rates (interbank/STIBOR) are used (a small additional approximation error from the tenor difference). CNH (offshore RMB) has no offshore rate series in FRED, so it is approximated with the 3-month onshore CNY interbank rate (CHIBOR family) — onshore/offshore rates can diverge, so tune `spread_pct` accordingly. HKD/SGD have no usable short-term rate series in FRED and are not built in (carry can only be accrued via a real swap-point CSV import with `data alt import-swap`). RUB is excluded because its rate series has effectively stopped since the sanctions. If a series' last observation is roughly 6+ months older than the end of the backtest period, a staleness warning is printed.
 
 **Importing real swap points (higher fidelity)**
 
@@ -96,6 +105,8 @@ If you have a broker-published history of real swap points, import it with [`dat
 ```bash
 alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy.csv
 ```
+
+Broker-published CSVs often cover only a limited window (e.g. the last few dozen days), so importing the same file repeatedly would overwrite older history. Add `--merge` to merge with the previously stored SWAP data by date (new rows win on duplicate dates). Use this for periodic (e.g. weekly) imports where you want to retain accumulated history — see [here](data.md#alpha-forge-data-alt-import-swap) for details.
 
 **Setup (2 steps — to customize the rate-differential approximation)**
 
