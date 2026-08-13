@@ -889,6 +889,42 @@ cagr_at_target_dd_realistic
 
 `compute_derived_metrics` は `bt_metrics` に `derived_metrics_assumption`（`"linear_no_cost"` または `"with_costs"`）と `derived_metrics_costs_applied`（適用済みコスト名リスト）を機械可読フラグとして付与します。`alpha-forge explore result show <id>` の脚注にも適用済みコスト項が表示されます。
 
+### explore のキャリー評価（`exploration.carry: true`）
+
+FX スワップ投資（キャリー戦略）は price-only の Sharpe がマイナスでも、スワップ収益を加味すると Sharpe がプラスに転じることがあります。`goals.yaml` の `exploration.carry: true` を指定すると、`alpha-forge explore run` の評価パイプライン（バックテスト → pre_filter → 最適化 → WFT → 合否判定 → DB 記録）全体が FX キャリー込み指標（`carry_adjusted_metrics`）ベースに切り替わり、price-only 判定では pre_filter で弾かれてしまうキャリー狙いの戦略を正しく評価できます。
+
+```yaml
+# goals.yaml
+exploration:
+  carry: true
+  optimization_metric: carry_sharpe_ratio   # 省略可（省略時は最適化目的関数は price-only の sharpe_ratio のまま）
+
+target_metrics:
+  carry_sharpe_ratio: ">= 1.0"
+  carry_cagr:         ">= 8%"
+  carry_max_drawdown: "<= 25%"
+```
+
+**有効化方法**: ゴールの `goals.yaml` に `exploration.carry: true` を追加するだけです。キャリーの解決は `backtest run --carry` / `optimize run --carry` と同じ経路（優先順位: ①保存済み実スワップポイント `data alt import-swap` → ②`forge.yaml` の `backtest.carry` マッピング → ③ビルトインの通貨→金利系列マッピング）で自動的に行われます。**3 つとも解決できない場合、`explore run` は price-only へ暗黙フォールバックせず `UsageError`（exit code 2）で停止します**（carry ゴールの評価軸が意図せず price-only に戻ることを防ぐ fail-fast 設計）。
+
+**評価軸の切り替え表**: carry 有効時、以下の各段階が price-only の値ではなく `carry_adjusted_metrics` 由来の値で判定されます（carry はゴール単位設定のため、同一ゴール内では常に軸が一貫します）。
+
+| 段階 | carry 無効（既定） | carry 有効 |
+|------|------|------|
+| pre_filter（Sharpe / MaxDD） | price-only `sharpe_ratio` / `max_drawdown_pct` | carry 側の `sharpe_ratio` / `max_drawdown_pct` |
+| pre_filter（取引数） | price-only `total_trades` | 変更なし（`optimize run --carry` と同じ規約で price-only のまま） |
+| near_pass（factors / cross_compensation / composite） | price-only 値で判定 | carry 側の値で判定。`composite` の calmar 救済は carry 派生の `calmar_ratio`（`carry_cagr_pct / carry_max_drawdown_pct`）で判定 |
+| 最適化（Optuna objective） | `optimization_metric` 既定 `sharpe_ratio` | `optimization_metric: carry_sharpe_ratio` / `carry_cagr_pct` を指定した場合のみ carry 側を最大化（未指定なら price-only のまま） |
+| WFT（OOS 評価） | `bt_engine.run()` の price-only 結果 | `optimization_metric` が `carry_*` のとき `carry_adjusted_metrics` から OOS を評価（`oos_total_trades` は price-only のまま） |
+| target_metrics | `sharpe_ratio` / `cagr` / `max_drawdown` 等 | `carry_sharpe_ratio`（`optimization_metric=carry_sharpe_ratio` のとき WFT 平均、それ以外は backtest） / `carry_cagr` / `carry_max_drawdown` / `carry_calmar_ratio` / `carry_total_return`（backtest ソース） |
+| 自動緩和・recommendations | price-only の `sharpe_ratio` / `max_drawdown_pct` で親子比較・score 算出 | carry 側の値で親子比較・`score` / `basis_sharpe` / `basis_maxdd` を算出 |
+
+**carry 側に存在しない指標**: `carry_adjusted_metrics` にあるキーは `total_return_pct` / `cagr_pct` / `max_drawdown_pct` / `sharpe_ratio` / `volatility_pct`（+ `annual_breakdown`）のみです。`total_trades` / `win_rate_pct` / `profit_factor` / `sortino_ratio` / 月次系メトリクス（`positive_months_ratio` 等）は carry 側に存在しないため、carry ゴールの `target_metrics` にこれらを書いても評価に使えません（value が `None` になり warning を出して skip されます。戦略は失格扱いになりません）。
+
+**WFT 窓ごとのキャリーは近似**: WFT の各窓・OOS 区間のキャリーは「全期間分の accrual を窓の index に reindex」して部分適用されます。窓先頭バーの経過日数は全期間基準のまま計算される既知の近似です（窓境界を跨ぐ最初のキャリー計上のみに影響し、以降の計算は通常の reindex ロジックと同じです）。
+
+**DB 記録と `result show`**: carry 有効なトライアルは `exploration_trials.carry_adjusted_json` 列に `{"metrics": {...carry_adjusted_metrics...}, "note": "..."}` が記録されます（carry 無効なトライアルは `NULL` = 計上なし契約）。`alpha-forge explore result show <id> --json` の `carry_adjusted` フィールドに含まれ、テキスト表示でも carry 調整後 Sharpe/CAGR/MaxDD が併記されます。pre_filter 診断の Sharpe / Max DD ラベルにも carry 軸で判定していることを示す「（carry）」が付記されます（取引数は price-only のゲートのため付記されません）。
+
 ### WFT 散らばり系 target_metrics（issue #859）
 
 WFT 5 窓の単純平均 Sharpe（`target_metrics.sharpe_ratio` 評価値）は **外れ値依存で嵩上げされる病的パターン** を検出できません。例えば 2026-05-21 観察の `QQQ EMA+MACD+SUPERTREND v2/v3` の `windows=(-1.24, -1.98, -0.98, -0.94, +2.54)` は単純平均 `-0.32` ですが、4 窓が深いマイナスで 1 窓だけ +2.54 のピークで嵩上げされている u-shape パターンで、auto-relax v(N+1) を生成しても `degraded_chain` で停止しがちです。
