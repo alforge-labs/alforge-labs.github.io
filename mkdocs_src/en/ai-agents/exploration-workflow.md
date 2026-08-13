@@ -833,42 +833,6 @@ target_metrics:
 
 Unsupported metric names or operators are skipped with a warning (the strategy is not marked failed because of them).
 
-### Carry-aware evaluation for explore (`exploration.carry: true`)
-
-FX swap (carry) strategies can have a negative price-only Sharpe that turns positive once swap income is included. Setting `exploration.carry: true` in `goals.yaml` switches the entire `alpha-forge explore run` evaluation pipeline (backtest → pre_filter → optimization → WFT → pass/fail → DB record) to FX-carry-inclusive metrics (`carry_adjusted_metrics`), so carry-seeking strategies are no longer wrongly rejected by a price-only pre_filter.
-
-```yaml
-# goals.yaml
-exploration:
-  carry: true
-  optimization_metric: carry_sharpe_ratio   # optional; without it the Optuna objective stays price-only sharpe_ratio
-
-target_metrics:
-  carry_sharpe_ratio: ">= 1.0"
-  carry_cagr:         ">= 8%"
-  carry_max_drawdown: "<= 25%"
-```
-
-**Enabling it**: just add `exploration.carry: true` to the goal's `goals.yaml`. Carry is resolved through the same path as `backtest run --carry` / `optimize run --carry` (priority: ① a stored real swap-point series via `data alt import-swap` → ② the `backtest.carry` mapping in `forge.yaml` → ③ the built-in currency-to-rate-series mapping). **If none of the three resolve, `explore run` does not silently fall back to price-only — it stops with `UsageError` (exit code 2)**, a deliberate fail-fast so a carry goal's evaluation axis never drifts back to price-only unnoticed.
-
-**Evaluation-axis switch table**: with carry enabled, the following stages are judged against `carry_adjusted_metrics` values instead of price-only ones. Since `carry` is a per-goal setting, the axis stays consistent throughout a single goal.
-
-| Stage | carry disabled (default) | carry enabled |
-|-------|---------------------------|----------------|
-| pre_filter (Sharpe / MaxDD) | price-only `sharpe_ratio` / `max_drawdown_pct` | carry-side `sharpe_ratio` / `max_drawdown_pct` |
-| pre_filter (trade count) | price-only `total_trades` | unchanged — stays price-only (same convention as `optimize run --carry`) |
-| near_pass (factors / cross_compensation / composite) | judged on price-only values | judged on carry-side values; the `composite` calmar rescue uses the carry-derived `calmar_ratio` (from `carry_cagr_pct` / `carry_max_drawdown_pct`) |
-| Optimization (Optuna objective) | `optimization_metric` defaults to `sharpe_ratio` | maximizes the carry side only when `optimization_metric: carry_sharpe_ratio` / `carry_cagr_pct` is set explicitly (otherwise stays price-only) |
-| WFT (OOS evaluation) | price-only result from `bt_engine.run()` | when `optimization_metric` is `carry_*`, OOS is evaluated from `carry_adjusted_metrics` (`oos_total_trades` stays price-only) |
-| target_metrics | `sharpe_ratio` / `cagr` / `max_drawdown` etc. | `carry_sharpe_ratio` (WFT average when `optimization_metric=carry_sharpe_ratio`, backtest otherwise) / `carry_cagr` / `carry_max_drawdown` / `carry_calmar_ratio` / `carry_total_return` (all backtest-sourced) |
-| Auto-relax / recommendations | parent/child comparison and score computed from price-only `sharpe_ratio` / `max_drawdown_pct` | parent/child comparison and `score` / `basis_sharpe` / `basis_maxdd` computed from carry-side values |
-
-**Metrics that don't exist on the carry side**: `carry_adjusted_metrics` only contains `total_return_pct` / `cagr_pct` / `max_drawdown_pct` / `sharpe_ratio` / `volatility_pct` (plus `annual_breakdown`). `total_trades` / `win_rate_pct` / `profit_factor` / `sortino_ratio` and monthly-series metrics (e.g. `positive_months_ratio`) don't exist on the carry side, so writing them into a carry goal's `target_metrics` can't be evaluated on that axis (the value resolves to `None`, which is logged as a warning and skipped rather than failing the strategy).
-
-**Per-window WFT carry is an approximation**: each WFT window's and OOS segment's carry is computed by reindexing the full-period accrual series onto that window's index (partial application). This means the elapsed-day count for a window's first bar is still computed against the full-period baseline — a known approximation that only affects the very first carry accrual crossing a window boundary; everything after that follows the normal reindex logic.
-
-**DB record and `result show`**: trials run with carry enabled get an `exploration_trials.carry_adjusted_json` column containing `{"metrics": {...carry_adjusted_metrics...}, "note": "..."}` (non-carry trials store `NULL`, meaning "not tracked"). It shows up in the `carry_adjusted` field of `alpha-forge explore result show <id> --json`, and the text view also prints carry-adjusted Sharpe/CAGR/MaxDD. The pre_filter diagnostics' Sharpe / Max DD labels also get a "(carry)" suffix to make clear they were judged on the carry axis (the trade-count gate has no suffix since it stays price-only).
-
 #### Risk-adjusted-return criteria for low-vol strategies (issue #673 / #845, recommended)
 
 `cagr >= 20%` alone discards otherwise excellent **low-volatility / low-return** strategies (e.g. Sharpe 1.4 / MaxDD 0.5% / CAGR 0.6%). Since real-world deployments lever up to lift CAGR, evaluating with risk-adjusted criteria salvages more high-quality candidates.
@@ -926,6 +890,42 @@ cagr_at_target_dd_realistic
 - **`borrow_fee_pct_per_year` and `slippage_amplification_factor` are forward-compatible hooks.** Because `MetricsCalculator` does not yet emit `short_exposure_pct` / `annualized_slippage_pct`, those drag terms evaluate to 0. They will take effect once those backtest fields are added; you can safely declare the config keys now.
 
 `compute_derived_metrics` records two machine-readable fields in `bt_metrics`: `derived_metrics_assumption` (`"linear_no_cost"` or `"with_costs"`) and `derived_metrics_costs_applied` (list of applied cost names). `alpha-forge explore result show <id>` prints a footnote listing which cost terms are applied.
+
+### Carry-aware evaluation for explore (`exploration.carry: true`)
+
+FX swap (carry) strategies can have a negative price-only Sharpe that turns positive once swap income is included. Setting `exploration.carry: true` in `goals.yaml` switches the entire `alpha-forge explore run` evaluation pipeline (backtest → pre_filter → optimization → WFT → pass/fail → DB record) to FX-carry-inclusive metrics (`carry_adjusted_metrics`), so carry-seeking strategies are no longer wrongly rejected by a price-only pre_filter.
+
+```yaml
+# goals.yaml
+exploration:
+  carry: true
+  optimization_metric: carry_sharpe_ratio   # optional; without it the Optuna objective stays price-only sharpe_ratio
+
+target_metrics:
+  carry_sharpe_ratio: ">= 1.0"
+  carry_cagr:         ">= 8%"
+  carry_max_drawdown: "<= 25%"
+```
+
+**Enabling it**: just add `exploration.carry: true` to the goal's `goals.yaml`. Carry is resolved through the same path as `backtest run --carry` / `optimize run --carry` (priority: ① a stored real swap-point series via `data alt import-swap` → ② the `backtest.carry` mapping in `forge.yaml` → ③ the built-in currency-to-rate-series mapping). **If none of the three resolve, `explore run` does not silently fall back to price-only — it stops with `UsageError` (exit code 2)**, a deliberate fail-fast so a carry goal's evaluation axis never drifts back to price-only unnoticed.
+
+**Evaluation-axis switch table**: with carry enabled, the following stages are judged against `carry_adjusted_metrics` values instead of price-only ones. Since `carry` is a per-goal setting, the axis stays consistent throughout a single goal.
+
+| Stage | carry disabled (default) | carry enabled |
+|-------|---------------------------|----------------|
+| pre_filter (Sharpe / MaxDD) | price-only `sharpe_ratio` / `max_drawdown_pct` | carry-side `sharpe_ratio` / `max_drawdown_pct` |
+| pre_filter (trade count) | price-only `total_trades` | unchanged — stays price-only (same convention as `optimize run --carry`) |
+| near_pass (factors / cross_compensation / composite) | judged on price-only values | judged on carry-side values; the `composite` calmar rescue uses the carry-derived `calmar_ratio` (from `carry_cagr_pct` / `carry_max_drawdown_pct`) |
+| Optimization (Optuna objective) | `optimization_metric` defaults to `sharpe_ratio` | maximizes the carry side only when `optimization_metric: carry_sharpe_ratio` / `carry_cagr_pct` is set explicitly (otherwise stays price-only) |
+| WFT (OOS evaluation) | price-only result from `bt_engine.run()` | when `optimization_metric` is `carry_*`, OOS is evaluated from `carry_adjusted_metrics` (`oos_total_trades` stays price-only) |
+| target_metrics | `sharpe_ratio` / `cagr` / `max_drawdown` etc. | `carry_sharpe_ratio` (WFT average when `optimization_metric=carry_sharpe_ratio`, backtest otherwise) / `carry_cagr` / `carry_max_drawdown` / `carry_calmar_ratio` / `carry_total_return` (all backtest-sourced) |
+| Auto-relax / recommendations | parent/child comparison and score computed from price-only `sharpe_ratio` / `max_drawdown_pct` | parent/child comparison and `score` / `basis_sharpe` / `basis_maxdd` computed from carry-side values |
+
+**Metrics that don't exist on the carry side**: `carry_adjusted_metrics` only contains `total_return_pct` / `cagr_pct` / `max_drawdown_pct` / `sharpe_ratio` / `volatility_pct` (plus `annual_breakdown`). `total_trades` / `win_rate_pct` / `profit_factor` / `sortino_ratio` and monthly-series metrics (e.g. `positive_months_ratio`) don't exist on the carry side, so writing them into a carry goal's `target_metrics` can't be evaluated on that axis (the value resolves to `None`, which is logged as a warning and skipped rather than failing the strategy).
+
+**Per-window WFT carry is an approximation**: each WFT window's and OOS segment's carry is computed by reindexing the full-period accrual series onto that window's index (partial application). This means the elapsed-day count for a window's first bar is still computed against the full-period baseline — a known approximation that only affects the very first carry accrual crossing a window boundary; everything after that follows the normal reindex logic.
+
+**DB record and `result show`**: trials run with carry enabled get an `exploration_trials.carry_adjusted_json` column containing `{"metrics": {...carry_adjusted_metrics...}, "note": "..."}` (non-carry trials store `NULL`, meaning "not tracked"). It shows up in the `carry_adjusted` field of `alpha-forge explore result show <id> --json`, and the text view also prints carry-adjusted Sharpe/CAGR/MaxDD. The pre_filter diagnostics' Sharpe / Max DD labels also get a "(carry)" suffix to make clear they were judged on the carry axis (the trade-count gate has no suffix since it stays price-only).
 
 ### WFT dispersion target_metrics (issue #859)
 

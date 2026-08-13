@@ -1188,18 +1188,7 @@
     </span>
   </a>
   
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#carry-aware-evaluation-for-explore-explorationcarry-true" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Carry-aware evaluation for explore (exploration.carry: true)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Carry-aware evaluation for explore (exploration.carry: true)">
+    <nav class="md-nav" aria-label="target_metrics arbitrary-metric evaluation (issue #458)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1215,6 +1204,17 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#carry-aware-evaluation-for-explore-explorationcarry-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Carry-aware evaluation for explore (exploration.carry: true)
+      
+    </span>
+  </a>
   
 </li>
         
@@ -3973,18 +3973,7 @@
     </span>
   </a>
   
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#carry-aware-evaluation-for-explore-explorationcarry-true" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Carry-aware evaluation for explore (exploration.carry: true)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Carry-aware evaluation for explore (exploration.carry: true)">
+    <nav class="md-nav" aria-label="target_metrics arbitrary-metric evaluation (issue #458)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4000,6 +3989,17 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#carry-aware-evaluation-for-explore-explorationcarry-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Carry-aware evaluation for explore (exploration.carry: true)
+      
+    </span>
+  </a>
   
 </li>
         
@@ -5434,17 +5434,60 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">  </span><span class="nt">profit_factor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.3&quot;</span>
 </code></pre></div>
 <p>Unsupported metric names or operators are skipped with a warning (the strategy is not marked failed because of them).</p>
+<h4 id="risk-adjusted-return-criteria-for-low-vol-strategies-issue-673-845-recommended">Risk-adjusted-return criteria for low-vol strategies (issue #673 / #845, recommended)<a class="headerlink" href="#risk-adjusted-return-criteria-for-low-vol-strategies-issue-673-845-recommended" title="Permanent link">&para;</a></h4>
+<p><code>cagr &gt;= 20%</code> alone discards otherwise excellent <strong>low-volatility / low-return</strong> strategies (e.g. Sharpe 1.4 / MaxDD 0.5% / CAGR 0.6%). Since real-world deployments lever up to lift CAGR, evaluating with risk-adjusted criteria salvages more high-quality candidates.</p>
+<p><strong>Option A) <code>calmar_ratio</code> — simplest, no <code>derived_metrics_config:</code> needed:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.5&quot;</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span><span class="nt">calmar_ratio</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.8&quot;</span><span class="w">     </span><span class="c1"># CAGR/MDD ≥ 0.8 (≡ CAGR 20% at MaxDD 25%)</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">30&quot;</span>
+</code></pre></div>
+<p><strong>Option B) <code>cagr_at_target_dd</code> — when you want the absolute return target after leverage:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.5&quot;</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span><span class="nt">cagr_at_target_dd</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">20%&quot;</span><span class="w">  </span><span class="c1"># CAGR scaled linearly to target_metrics.max_drawdown</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">         </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">30&quot;</span>
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="c1"># derived_metrics_config: not required (reference_max_dd_pct auto-detected from max_drawdown)</span>
+</code></pre></div>
+<p>The <strong>reference MaxDD for <code>cagr_at_target_dd</code> is auto-detected from <code>target_metrics.max_drawdown</code></strong> (issue #845). Override with <code>derived_metrics_config.reference_max_dd_pct</code> if needed. Leverage adjustment uses a linear assumption (ignores funding cost / borrow / slippage).</p>
+<p><strong>Option C) <code>cagr_at_target_dd_realistic</code> — when you want the absolute return target after funding / borrow / slippage costs (issue #850):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">                </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.5&quot;</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">  </span><span class="nt">cagr_at_target_dd_realistic</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">20%&quot;</span><span class="w">   </span><span class="c1"># after funding / borrow / slippage drag</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">                </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">                  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">30&quot;</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="nt">derived_metrics_config</span><span class="p">:</span>
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="w">  </span><span class="nt">reference_max_dd_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25.0</span>
+<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="w">  </span><span class="nt">funding_cost_pct_per_year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0</span><span class="w">      </span><span class="c1"># margin borrow rate, e.g. SBI 2.0 / IBKR 3.0</span>
+<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">  </span><span class="nt">borrow_fee_pct_per_year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w">        </span><span class="c1"># FX short borrow rate (0 disables)</span>
+<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">  </span><span class="nt">slippage_amplification_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">  </span><span class="c1"># 1.0 keeps slippage linear; &gt;1.0 adds drag per leverage unit</span>
+</code></pre></div>
+<p>Computation (% units):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>funding_drag    = max(0, implied_leverage - 1) * funding_cost_pct_per_year
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>borrow_drag     = (short_exposure_pct / 100) * borrow_fee_pct_per_year
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>slippage_drag   = annualized_slippage_pct
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>                  * (slippage_amplification_factor - 1) * implied_leverage
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>cagr_at_target_dd_realistic
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>                = cagr_at_target_dd - funding_drag - borrow_drag - slippage_drag
+</code></pre></div>
+<ul>
+<li><strong>Only <code>funding_cost_pct_per_year</code> is active today.</strong> When <code>implied_leverage &gt; 1</code>, the formula subtracts <code>(implied_leverage - 1) × rate%</code> from CAGR. With <code>implied_leverage &lt;= 1</code> the drag is 0 (no borrowing).</li>
+<li><strong><code>borrow_fee_pct_per_year</code> and <code>slippage_amplification_factor</code> are forward-compatible hooks.</strong> Because <code>MetricsCalculator</code> does not yet emit <code>short_exposure_pct</code> / <code>annualized_slippage_pct</code>, those drag terms evaluate to 0. They will take effect once those backtest fields are added; you can safely declare the config keys now.</li>
+</ul>
+<p><code>compute_derived_metrics</code> records two machine-readable fields in <code>bt_metrics</code>: <code>derived_metrics_assumption</code> (<code>"linear_no_cost"</code> or <code>"with_costs"</code>) and <code>derived_metrics_costs_applied</code> (list of applied cost names). <code>alpha-forge explore result show &lt;id&gt;</code> prints a footnote listing which cost terms are applied.</p>
 <h3 id="carry-aware-evaluation-for-explore-explorationcarry-true">Carry-aware evaluation for explore (<code>exploration.carry: true</code>)<a class="headerlink" href="#carry-aware-evaluation-for-explore-explorationcarry-true" title="Permanent link">&para;</a></h3>
 <p>FX swap (carry) strategies can have a negative price-only Sharpe that turns positive once swap income is included. Setting <code>exploration.carry: true</code> in <code>goals.yaml</code> switches the entire <code>alpha-forge explore run</code> evaluation pipeline (backtest → pre_filter → optimization → WFT → pass/fail → DB record) to FX-carry-inclusive metrics (<code>carry_adjusted_metrics</code>), so carry-seeking strategies are no longer wrongly rejected by a price-only pre_filter.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># goals.yaml</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="nt">exploration</span><span class="p">:</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span><span class="nt">carry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">  </span><span class="nt">optimization_metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">carry_sharpe_ratio</span><span class="w">   </span><span class="c1"># optional; without it the Optuna objective stays price-only sharpe_ratio</span>
-<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="nt">target_metrics</span><span class="p">:</span>
-<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">  </span><span class="nt">carry_sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">  </span><span class="nt">carry_cagr</span><span class="p">:</span><span class="w">         </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">8%&quot;</span>
-<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">  </span><span class="nt">carry_max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="c1"># goals.yaml</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="nt">exploration</span><span class="p">:</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">  </span><span class="nt">carry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="w">  </span><span class="nt">optimization_metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">carry_sharpe_ratio</span><span class="w">   </span><span class="c1"># optional; without it the Optuna objective stays price-only sharpe_ratio</span>
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>
+<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a><span class="nt">target_metrics</span><span class="p">:</span>
+<a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a><span class="w">  </span><span class="nt">carry_sharpe_ratio</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0&quot;</span>
+<a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="w">  </span><span class="nt">carry_cagr</span><span class="p">:</span><span class="w">         </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">8%&quot;</span>
+<a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a><span class="w">  </span><span class="nt">carry_max_drawdown</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
 </code></pre></div>
 <p><strong>Enabling it</strong>: just add <code>exploration.carry: true</code> to the goal's <code>goals.yaml</code>. Carry is resolved through the same path as <code>backtest run --carry</code> / <code>optimize run --carry</code> (priority: ① a stored real swap-point series via <code>data alt import-swap</code> → ② the <code>backtest.carry</code> mapping in <code>forge.yaml</code> → ③ the built-in currency-to-rate-series mapping). <strong>If none of the three resolve, <code>explore run</code> does not silently fall back to price-only — it stops with <code>UsageError</code> (exit code 2)</strong>, a deliberate fail-fast so a carry goal's evaluation axis never drifts back to price-only unnoticed.</p>
 <p><strong>Evaluation-axis switch table</strong>: with carry enabled, the following stages are judged against <code>carry_adjusted_metrics</code> values instead of price-only ones. Since <code>carry</code> is a per-goal setting, the axis stays consistent throughout a single goal.</p>
@@ -5497,49 +5540,6 @@ TV MCP is still useful for Pine verification (<code>alpha-forge pine verify --ch
 <p><strong>Metrics that don't exist on the carry side</strong>: <code>carry_adjusted_metrics</code> only contains <code>total_return_pct</code> / <code>cagr_pct</code> / <code>max_drawdown_pct</code> / <code>sharpe_ratio</code> / <code>volatility_pct</code> (plus <code>annual_breakdown</code>). <code>total_trades</code> / <code>win_rate_pct</code> / <code>profit_factor</code> / <code>sortino_ratio</code> and monthly-series metrics (e.g. <code>positive_months_ratio</code>) don't exist on the carry side, so writing them into a carry goal's <code>target_metrics</code> can't be evaluated on that axis (the value resolves to <code>None</code>, which is logged as a warning and skipped rather than failing the strategy).</p>
 <p><strong>Per-window WFT carry is an approximation</strong>: each WFT window's and OOS segment's carry is computed by reindexing the full-period accrual series onto that window's index (partial application). This means the elapsed-day count for a window's first bar is still computed against the full-period baseline — a known approximation that only affects the very first carry accrual crossing a window boundary; everything after that follows the normal reindex logic.</p>
 <p><strong>DB record and <code>result show</code></strong>: trials run with carry enabled get an <code>exploration_trials.carry_adjusted_json</code> column containing <code>{"metrics": {...carry_adjusted_metrics...}, "note": "..."}</code> (non-carry trials store <code>NULL</code>, meaning "not tracked"). It shows up in the <code>carry_adjusted</code> field of <code>alpha-forge explore result show &lt;id&gt; --json</code>, and the text view also prints carry-adjusted Sharpe/CAGR/MaxDD. The pre_filter diagnostics' Sharpe / Max DD labels also get a "(carry)" suffix to make clear they were judged on the carry axis (the trade-count gate has no suffix since it stays price-only).</p>
-<h4 id="risk-adjusted-return-criteria-for-low-vol-strategies-issue-673-845-recommended">Risk-adjusted-return criteria for low-vol strategies (issue #673 / #845, recommended)<a class="headerlink" href="#risk-adjusted-return-criteria-for-low-vol-strategies-issue-673-845-recommended" title="Permanent link">&para;</a></h4>
-<p><code>cagr &gt;= 20%</code> alone discards otherwise excellent <strong>low-volatility / low-return</strong> strategies (e.g. Sharpe 1.4 / MaxDD 0.5% / CAGR 0.6%). Since real-world deployments lever up to lift CAGR, evaluating with risk-adjusted criteria salvages more high-quality candidates.</p>
-<p><strong>Option A) <code>calmar_ratio</code> — simplest, no <code>derived_metrics_config:</code> needed:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
-<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.5&quot;</span>
-<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span><span class="nt">calmar_ratio</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">0.8&quot;</span><span class="w">     </span><span class="c1"># CAGR/MDD ≥ 0.8 (≡ CAGR 20% at MaxDD 25%)</span>
-<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
-<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">    </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">30&quot;</span>
-</code></pre></div>
-<p><strong>Option B) <code>cagr_at_target_dd</code> — when you want the absolute return target after leverage:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
-<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.5&quot;</span>
-<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">  </span><span class="nt">cagr_at_target_dd</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">20%&quot;</span><span class="w">  </span><span class="c1"># CAGR scaled linearly to target_metrics.max_drawdown</span>
-<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">       </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
-<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">         </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">30&quot;</span>
-<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="c1"># derived_metrics_config: not required (reference_max_dd_pct auto-detected from max_drawdown)</span>
-</code></pre></div>
-<p>The <strong>reference MaxDD for <code>cagr_at_target_dd</code> is auto-detected from <code>target_metrics.max_drawdown</code></strong> (issue #845). Override with <code>derived_metrics_config.reference_max_dd_pct</code> if needed. Leverage adjustment uses a linear assumption (ignores funding cost / borrow / slippage).</p>
-<p><strong>Option C) <code>cagr_at_target_dd_realistic</code> — when you want the absolute return target after funding / borrow / slippage costs (issue #850):</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nt">target_metrics</span><span class="p">:</span>
-<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">  </span><span class="nt">sharpe_ratio</span><span class="p">:</span><span class="w">                </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.5&quot;</span>
-<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">  </span><span class="nt">cagr_at_target_dd_realistic</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">20%&quot;</span><span class="w">   </span><span class="c1"># after funding / borrow / slippage drag</span>
-<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">  </span><span class="nt">max_drawdown</span><span class="p">:</span><span class="w">                </span><span class="s">&quot;&lt;=</span><span class="nv"> </span><span class="s">25%&quot;</span>
-<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">  </span><span class="nt">min_trades</span><span class="p">:</span><span class="w">                  </span><span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">30&quot;</span>
-<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="nt">derived_metrics_config</span><span class="p">:</span>
-<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="w">  </span><span class="nt">reference_max_dd_pct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25.0</span>
-<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">  </span><span class="nt">funding_cost_pct_per_year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0</span><span class="w">      </span><span class="c1"># margin borrow rate, e.g. SBI 2.0 / IBKR 3.0</span>
-<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="w">  </span><span class="nt">borrow_fee_pct_per_year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w">        </span><span class="c1"># FX short borrow rate (0 disables)</span>
-<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="w">  </span><span class="nt">slippage_amplification_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">  </span><span class="c1"># 1.0 keeps slippage linear; &gt;1.0 adds drag per leverage unit</span>
-</code></pre></div>
-<p>Computation (% units):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>funding_drag    = max(0, implied_leverage - 1) * funding_cost_pct_per_year
-<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>borrow_drag     = (short_exposure_pct / 100) * borrow_fee_pct_per_year
-<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>slippage_drag   = annualized_slippage_pct
-<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>                  * (slippage_amplification_factor - 1) * implied_leverage
-<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>cagr_at_target_dd_realistic
-<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>                = cagr_at_target_dd - funding_drag - borrow_drag - slippage_drag
-</code></pre></div>
-<ul>
-<li><strong>Only <code>funding_cost_pct_per_year</code> is active today.</strong> When <code>implied_leverage &gt; 1</code>, the formula subtracts <code>(implied_leverage - 1) × rate%</code> from CAGR. With <code>implied_leverage &lt;= 1</code> the drag is 0 (no borrowing).</li>
-<li><strong><code>borrow_fee_pct_per_year</code> and <code>slippage_amplification_factor</code> are forward-compatible hooks.</strong> Because <code>MetricsCalculator</code> does not yet emit <code>short_exposure_pct</code> / <code>annualized_slippage_pct</code>, those drag terms evaluate to 0. They will take effect once those backtest fields are added; you can safely declare the config keys now.</li>
-</ul>
-<p><code>compute_derived_metrics</code> records two machine-readable fields in <code>bt_metrics</code>: <code>derived_metrics_assumption</code> (<code>"linear_no_cost"</code> or <code>"with_costs"</code>) and <code>derived_metrics_costs_applied</code> (list of applied cost names). <code>alpha-forge explore result show &lt;id&gt;</code> prints a footnote listing which cost terms are applied.</p>
 <h3 id="wft-dispersion-target_metrics-issue-859">WFT dispersion target_metrics (issue #859)<a class="headerlink" href="#wft-dispersion-target_metrics-issue-859" title="Permanent link">&para;</a></h3>
 <p>The WFT mean Sharpe (the value used by <code>target_metrics.sharpe_ratio</code>) is a plain mean across valid windows and therefore <strong>cannot detect pathological patterns where a single peak window inflates the average</strong>. For example the <code>QQQ EMA+MACD+SUPERTREND v2/v3</code> runs from 2026-05-21 had <code>windows=(-1.24, -1.98, -0.98, -0.94, +2.54)</code> with mean <code>-0.32</code> — looks almost passable, yet four of five windows are deeply negative and the auto-relax v(N+1) chain stalls at <code>degraded_chain</code>.</p>
 <p><code>runner.run()</code> injects the following three dispersion metrics into <code>bt_metrics</code> once WFT completes so <code>target_metrics</code> can threshold them individually.</p>
