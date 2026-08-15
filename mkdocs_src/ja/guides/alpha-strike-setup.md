@@ -337,6 +337,12 @@ MOOMOO_TRADE_ENV=SIMULATE
 # GTC 注文の翌営業日約定をイベントログへ反映する遅延再照合（既定 ON、v0.7.1+）。
 # 間隔調整は PENDING_RECONCILE_INTERVAL_SECONDS=600、
 # 無効化する場合のみ設定: PENDING_RECONCILE_ENABLED=0
+# TradingView シグナルの途絶監視（既定 ON、v1.2.0+）。TradingView のアラートは
+# 現行プランで最大 1 ヶ月しか設定できず、期限切れでサイレントに配信が止まる。
+# 最後のシグナルからの実効時間（土日除外）が 60h を超えたら ntfy で通知する。
+# 調整は SIGNAL_WATCHDOG_THRESHOLD_HOURS=60 / SIGNAL_WATCHDOG_INTERVAL_SECONDS=3600 /
+# SIGNAL_WATCHDOG_RENOTIFY_HOURS=24 / SIGNAL_WATCHDOG_BROKER=moomoo
+# 無効化する場合のみ設定: SIGNAL_WATCHDOG_ENABLED=0
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>

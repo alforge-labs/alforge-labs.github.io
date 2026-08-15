@@ -332,6 +332,12 @@ MOOMOO_TRADE_ENV=SIMULATE
 # Delayed re-reconciliation that reflects next-day GTC fills into the event
 # log (default ON, v0.7.1+). Tune with PENDING_RECONCILE_INTERVAL_SECONDS=600.
 # Set PENDING_RECONCILE_ENABLED=0 only to disable.
+# Signal outage watchdog (default ON, v1.2.0+). TradingView alerts expire after at
+# most one month on the current plan and stop firing silently. Sends an ntfy alert
+# when the effective time (weekends excluded) since the last signal exceeds 60h.
+# Tune with SIGNAL_WATCHDOG_THRESHOLD_HOURS=60 / SIGNAL_WATCHDOG_INTERVAL_SECONDS=3600 /
+# SIGNAL_WATCHDOG_RENOTIFY_HOURS=24 / SIGNAL_WATCHDOG_BROKER=moomoo.
+# Set SIGNAL_WATCHDOG_ENABLED=0 only to disable.
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>
