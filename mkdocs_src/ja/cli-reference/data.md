@@ -519,6 +519,7 @@ alpha-forge data alt import-swap <PAIR> --csv <path>
 |------|------|------|
 | `PAIR` | 引数（必須） | FX ペア（`USDJPY=X` / `USD/JPY` / `USD_JPY`。yfinance 形式へ正規化して保存） |
 | `--csv` | 必須 | CSV パス。ヘッダー `date,long,short` |
+| `--merge` | フラグ | 保存済みの SWAP データと日付で結合して保存する（重複日は新データ優先）。未指定時は全上書き |
 
 CSV の契約:
 
@@ -526,7 +527,13 @@ CSV の契約:
 - 日付は昇順・重複なし・将来日なし。空セル（欠損値）不可
 - ロング/ショートは別列で、どちらも**マージン込みネット値**（`spread_pct` 非適用）
 
-検証違反はいずれも保存せず終了コード `1`。出力: `✅ SWAP:<PAIR>: <N>行を保存しました (<path>)`。
+バリデーションは `--merge` 指定時も常にマージ前の CSV 単体に適用され、違反時は保存済みデータを変更せず終了コード `1`。ブローカー公表 CSV は直近数十日分のみのことが多いため、週次などの定期取込で過去分を蓄積したい場合は `--merge` を使ってください:
+
+```bash
+alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy_latest.csv --merge
+```
+
+検証違反はいずれも保存せず終了コード `1`。出力: `✅ SWAP:<PAIR>: <N>行を保存しました (<path>)`（`--merge` 指定時は「（既存とマージ）」を付記）。
 
 ## alpha-forge data alt list
 

@@ -5145,7 +5145,7 @@
 <td><code>--carry</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Accrue FX carry (swap) and include <code>carry_adjusted_metrics</code> (<a href="#carry">details</a>). Resolution order: real swap CSV (<code>data alt import-swap</code>) &gt; rate-differential approximation. Major 8 currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required)</td>
+<td>Accrue FX carry (swap) and include <code>carry_adjusted_metrics</code> (<a href="#carry">details</a>). Resolution order: real swap CSV (<code>data alt import-swap</code>) &gt; rate-differential approximation. 17 major currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required)</td>
 </tr>
 </tbody>
 </table>
@@ -5203,13 +5203,59 @@
 <td><code>IR3TIB01NZM156N</code></td>
 <td>3-month interbank rate (OECD, monthly)</td>
 </tr>
+<tr>
+<td>MXN</td>
+<td><code>IRSTCI01MXM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>TRY</td>
+<td><code>IRSTCI01TRM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>ZAR</td>
+<td><code>IRSTCI01ZAM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>CZK</td>
+<td><code>IRSTCI01CZM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>HUF</td>
+<td><code>IRSTCI01HUM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>PLN</td>
+<td><code>IRSTCI01PLM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>NOK</td>
+<td><code>IRSTCI01NOM156N</code></td>
+<td>Uncollateralized O/N call rate equivalent (OECD, monthly)</td>
+</tr>
+<tr>
+<td>SEK</td>
+<td><code>IR3TIB01SEM156N</code></td>
+<td>3-month interbank STIBOR (OECD, monthly)</td>
+</tr>
+<tr>
+<td>CNH</td>
+<td><code>IR3TIB01CNM156N</code></td>
+<td>3-month interbank, onshore CNY approximation (OECD, monthly)</td>
+</tr>
 </tbody>
 </table>
-<p>For CHF/NZD the O/N series stopped updating in 2024, so the still-updated 3-month rates are used (a small additional approximation error from the tenor difference). If a series' last observation is roughly 6+ months older than the end of the backtest period, a staleness warning is printed.</p>
+<p>For CHF/NZD/SEK the O/N series stopped updating (CHF/NZD in 2024, SEK in 2020), so the still-updated 3-month rates (interbank/STIBOR) are used (a small additional approximation error from the tenor difference). CNH (offshore RMB) has no offshore rate series in FRED, so it is approximated with the 3-month onshore CNY interbank rate (CHIBOR family) — onshore/offshore rates can diverge, so tune <code>spread_pct</code> accordingly. HKD/SGD have no usable short-term rate series in FRED and are not built in (carry can only be accrued via a real swap-point CSV import with <code>data alt import-swap</code>). RUB is excluded because its rate series has effectively stopped since the sanctions. If a series' last observation is roughly 6+ months older than the end of the backtest period, a staleness warning is printed.</p>
 <p><strong>Importing real swap points (higher fidelity)</strong></p>
 <p>If you have a broker-published history of real swap points, import it with <a href="../data/#alpha-forge-data-alt-import-swap"><code>data alt import-swap</code></a> and it is <strong>automatically preferred</strong> over the rate-differential approximation (no mapping needed; values are net of broker margin so <code>spread_pct</code> does not apply).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--csv<span class="w"> </span>swap_usdjpy.csv
 </code></pre></div>
+<p>Broker-published CSVs often cover only a limited window (e.g. the last few dozen days), so importing the same file repeatedly would overwrite older history. Add <code>--merge</code> to merge with the previously stored SWAP data by date (new rows win on duplicate dates). Use this for periodic (e.g. weekly) imports where you want to retain accumulated history — see <a href="../data/#alpha-forge-data-alt-import-swap">here</a> for details.</p>
 <p><strong>Setup (2 steps — to customize the rate-differential approximation)</strong></p>
 <ol>
 <li>

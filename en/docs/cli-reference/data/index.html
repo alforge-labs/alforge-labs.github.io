@@ -4736,6 +4736,11 @@
 <td>required</td>
 <td>CSV path. Header <code>date,long,short</code></td>
 </tr>
+<tr>
+<td><code>--merge</code></td>
+<td>flag</td>
+<td>Merge with previously stored SWAP data by date (new rows win on duplicates). Overwrites entirely when omitted</td>
+</tr>
 </tbody>
 </table>
 <p>CSV contract:</p>
@@ -4744,10 +4749,13 @@
 <li>Dates must be ascending, unique, and not in the future. Empty (missing) cells are rejected</li>
 <li>Long and short are separate columns, both <strong>net of broker margin</strong> (<code>spread_pct</code> does not apply)</li>
 </ul>
-<p>Any validation failure aborts without saving (exit code <code>1</code>). Output: <code>✅ SWAP:&lt;PAIR&gt;: saved &lt;N&gt; rows (&lt;path&gt;)</code>.</p>
+<p>Validation always applies to the CSV alone before merging, even with <code>--merge</code>; any violation aborts without touching the stored data (exit code <code>1</code>). Broker-published CSVs often cover only the last few dozen days, so use <code>--merge</code> for periodic (e.g. weekly) imports where you want to retain accumulated history:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--csv<span class="w"> </span>swap_usdjpy_latest.csv<span class="w"> </span>--merge
+</code></pre></div>
+<p>Any validation failure aborts without saving (exit code <code>1</code>). Output: <code>✅ SWAP:&lt;PAIR&gt;: saved &lt;N&gt; rows (&lt;path&gt;)</code> (appends "(merged with existing)" when <code>--merge</code> is given).</p>
 <h2 id="alpha-forge-data-alt-list">alpha-forge data alt list<a class="headerlink" href="#alpha-forge-data-alt-list" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>list<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
 <table>
 <thead>
@@ -4768,18 +4776,18 @@
 </tbody>
 </table>
 <p>Sample output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Stored alternative data count: 2
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
-<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
-<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>Stored alternative data count: 2
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>SOURCE_KEY                INTERVAL   ROWS         START           END
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>fear_greed_index          1d          1525   2020-01-01   2025-12-31
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>vix_termstructure         1d          1530   2020-01-01   2025-12-31
 </code></pre></div>
 <p>When no alternative data has been stored, the command prints a single line and exits with code <code>0</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>No stored alternative data found.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>No stored alternative data found.
 </code></pre></div>
 <p>With <code>--json</code>, only pure JSON is written to stdout. <strong>Exit code</strong>: <code>0</code> = success, <code>1</code> = not found / execution failure, <code>2</code> = argument error.</p>
 <h2 id="alpha-forge-data-alt-info">alpha-forge data alt info<a class="headerlink" href="#alpha-forge-data-alt-info" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>info<span class="w"> </span>&lt;SOURCE_KEY&gt;<span class="w"> </span>--json<span class="w">   </span><span class="c1"># machine-readable (for MCP / pipe use, issue #1225)</span>
 </code></pre></div>
 <table>
 <thead>
