@@ -65,6 +65,8 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
 | `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`alpha-forge data alt fetch FRED:T10Y3M`） |
 | `--carry` | フラグ | false | FX キャリー（スワップ）を計上し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。実スワップ CSV（`data alt import-swap`）＞金利差近似の順で解決。主要 17 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要） |
+| `--carry-spread-scenarios` | フラグ | false | `spread_pct_range` から spread の low/base/high 3 シナリオを一括比較する感度分析（[詳細](#carry-spread-sensitivity)）。`--carry` と対象ペアの `spread_pct_range` 定義が必要 |
+| `--carry-spread-pct` | オプション | - | `spread_pct`（ブローカーマージン・年率%・0〜10）をこの実行に限り上書き（[詳細](#carry-spread-sensitivity)）。`--carry` が必要 |
 
 ### `--carry` で FX キャリー（スワップ）を金利差近似 {#carry}
 
@@ -141,6 +143,30 @@ alpha-forge backtest run USDJPY=X --strategy usdjpy_carry_v1 --carry
 - 日足以上のタイムフレーム前提の近似（日足未満では日またぎバーに計上が集中するため警告）
 - `--split` 併用時の `carry_adjusted_metrics` は IS 区間ベース
 - 実ブローカーのスワップポイントは理論値からマージン分（目安 0.2〜1.0%/年）乖離するため、`spread_pct` で調整してください
+
+### spread 感度分析（`--carry-spread-scenarios` / `--carry-spread-pct`） {#carry-spread-sensitivity}
+
+同じ通貨・同じ日でも業者間でスワップには大きな開きがあり（通貨によっては数倍）、`spread_pct` の置き方ひとつで長期リターンの順位が入れ替わることがあります。控除の置き方に対して結論が頑健かを 1 コマンドで確認するには、`backtest.carry` に業者レンジ `spread_pct_range` を定義して `--carry-spread-scenarios` を付けます:
+
+```yaml
+backtest:
+  carry:
+    "MXNJPY=X":
+      base_rate_series: "IRSTCI01MXM156N"
+      quote_rate_series: "IRSTCI01JPM156N"
+      spread_pct: 0.5              # base シナリオ（従来どおり）
+      spread_pct_range: [0.2, 3.6] # 業者レンジ [low, high]（0 ≤ low ≤ base ≤ high ≤ 10）
+```
+
+```bash
+alpha-forge backtest run MXNJPY=X --strategy mxnjpy_carry_v1 --carry --carry-spread-scenarios --json
+```
+
+- `carry_adjusted_metrics` が `{"low": {...}, "base": {...}, "high": {...}}` のシナリオ別ネスト形式になり、`--json` には使用した spread 値の対応表 `carry_spread_scenarios` が併記されます（シナリオ未指定時の出力形式は従来のまま）
+- シミュレーション（売買・約定）は 1 回で、シナリオ間はキャリー控除の差し替えのみ（取引回数などの price-only 指標は全シナリオ共通）
+- spread は金利差近似のパラメータのため、実スワップ（`SWAP:<PAIR>`）が保存済みでも実スワップ優先をスキップして金利差近似で計上します（その旨を情報表示）
+- `spread_pct_range` 未設定・マッピング欠如・金利データ未取得は続行せず exit code 2 で停止します（感度分析はキャリーが本体のため）
+- レンジを定義せず 1 点だけ試す場合は `--carry-spread-pct <値>` で `spread_pct` をその実行に限り上書きできます（出力形式は従来の単一オブジェクトのまま・上書き値は注記に明示）
 
 ### `--trades-csv` で trade 一覧 CSV をエクスポート {#trades-csv-export}
 

@@ -65,6 +65,8 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--dividend-reinvest` | flag | false | Include dividend-reinvest metrics in the result (#958); requires saved dividends data (`data fetch --with-dividends`) |
 | `--regime-filter` | option | - | Post-hoc entry gating by macro regime (issue #1012); format `<source>:<label>` (e.g. `macro:risk_on`), source=`macro` only; requires FRED data fetched in advance (`data alt fetch FRED:T10Y3M`) |
 | `--carry` | flag | false | Accrue FX carry (swap) and include `carry_adjusted_metrics` ([details](#carry)). Resolution order: real swap CSV (`data alt import-swap`) > rate-differential approximation. 17 major currencies resolve via the builtin rate-series mapping without configuration (pre-fetched FRED rate data is still required) |
+| `--carry-spread-scenarios` | flag | false | Sensitivity analysis comparing low/base/high spread scenarios from `spread_pct_range` in one run ([details](#carry-spread-sensitivity)). Requires `--carry` and a `spread_pct_range` for the pair |
+| `--carry-spread-pct` | option | - | Override `spread_pct` (broker margin, annual %, 0–10) for this run only ([details](#carry-spread-sensitivity)). Requires `--carry` |
 
 ### Approximate FX carry (swap) with `--carry` {#carry}
 
@@ -141,6 +143,30 @@ alpha-forge backtest run USDJPY=X --strategy usdjpy_carry_v1 --carry
 - The approximation assumes daily or higher timeframes (a warning is printed on sub-daily timeframes, where accrual clusters on day-crossing bars)
 - With `--split`, `carry_adjusted_metrics` is an IS-period value
 - Real broker swap points deviate from the theoretical differential by the broker margin (roughly 0.2–1.0% p.a.) — tune `spread_pct` accordingly
+
+### Spread sensitivity analysis (`--carry-spread-scenarios` / `--carry-spread-pct`) {#carry-spread-sensitivity}
+
+Swap points can differ widely between brokers even for the same pair on the same day (several-fold for some currencies), so the choice of `spread_pct` alone can reorder long-horizon results. To check in one command whether your conclusion is robust to the margin assumption, define the broker range `spread_pct_range` under `backtest.carry` and pass `--carry-spread-scenarios`:
+
+```yaml
+backtest:
+  carry:
+    "MXNJPY=X":
+      base_rate_series: "IRSTCI01MXM156N"
+      quote_rate_series: "IRSTCI01JPM156N"
+      spread_pct: 0.5              # base scenario (as before)
+      spread_pct_range: [0.2, 3.6] # broker range [low, high] (0 ≤ low ≤ base ≤ high ≤ 10)
+```
+
+```bash
+alpha-forge backtest run MXNJPY=X --strategy mxnjpy_carry_v1 --carry --carry-spread-scenarios --json
+```
+
+- `carry_adjusted_metrics` becomes a nested object keyed by scenario (`{"low": {...}, "base": {...}, "high": {...}}`), and `--json` additionally reports the spread values used as `carry_spread_scenarios` (without the flag the output shape is unchanged)
+- The simulation (entries/exits/fills) runs once; only the carry deduction differs between scenarios, so price-only metrics such as the trade count are identical across scenarios
+- Because spread is a parameter of the rate-differential approximation, the real-swap preference is skipped even when `SWAP:<PAIR>` data is saved (an informational message is printed)
+- If `spread_pct_range` is missing, the pair has no `backtest.carry` entry, or the rate data has not been fetched, the command stops with exit code 2 instead of continuing price-only (carry is the whole point of the sensitivity analysis)
+- To try a single point without defining a range, use `--carry-spread-pct <value>` to override `spread_pct` for that run only (the output keeps the traditional single-object shape; the override is stated in the note)
 
 ### Export per-trade CSV with `--trades-csv` {#trades-csv-export}
 
