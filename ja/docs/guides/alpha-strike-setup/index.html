@@ -4553,13 +4553,19 @@
 <a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="s"># GTC 注文の翌営業日約定をイベントログへ反映する遅延再照合（既定 ON、v0.7.1+）。</span>
 <a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="s"># 間隔調整は PENDING_RECONCILE_INTERVAL_SECONDS=600、</span>
 <a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="s"># 無効化する場合のみ設定: PENDING_RECONCILE_ENABLED=0</span>
-<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a>
-<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="s"># OANDA を使う場合のみ</span>
-<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
-<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
-<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="s"># OANDA_ENV=PRACTICE</span>
-<a id="__codelineno-15-32" name="__codelineno-15-32" href="#__codelineno-15-32"></a><span class="s">EOF</span>
-<a id="__codelineno-15-33" name="__codelineno-15-33" href="#__codelineno-15-33"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="s"># TradingView シグナルの途絶監視（既定 ON、v1.2.0+）。TradingView のアラートは</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="s"># 現行プランで最大 1 ヶ月しか設定できず、期限切れでサイレントに配信が止まる。</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="s"># 最後のシグナルからの実効時間（土日除外）が 60h を超えたら ntfy で通知する。</span>
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="s"># 調整は SIGNAL_WATCHDOG_THRESHOLD_HOURS=60 / SIGNAL_WATCHDOG_INTERVAL_SECONDS=3600 /</span>
+<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="s"># SIGNAL_WATCHDOG_RENOTIFY_HOURS=24 / SIGNAL_WATCHDOG_BROKER=moomoo</span>
+<a id="__codelineno-15-32" name="__codelineno-15-32" href="#__codelineno-15-32"></a><span class="s"># 無効化する場合のみ設定: SIGNAL_WATCHDOG_ENABLED=0</span>
+<a id="__codelineno-15-33" name="__codelineno-15-33" href="#__codelineno-15-33"></a>
+<a id="__codelineno-15-34" name="__codelineno-15-34" href="#__codelineno-15-34"></a><span class="s"># OANDA を使う場合のみ</span>
+<a id="__codelineno-15-35" name="__codelineno-15-35" href="#__codelineno-15-35"></a><span class="s"># OANDA_API_KEY=&lt;your-token&gt;</span>
+<a id="__codelineno-15-36" name="__codelineno-15-36" href="#__codelineno-15-36"></a><span class="s"># OANDA_ACCOUNT_ID=&lt;your-account-id&gt;</span>
+<a id="__codelineno-15-37" name="__codelineno-15-37" href="#__codelineno-15-37"></a><span class="s"># OANDA_ENV=PRACTICE</span>
+<a id="__codelineno-15-38" name="__codelineno-15-38" href="#__codelineno-15-38"></a><span class="s">EOF</span>
+<a id="__codelineno-15-39" name="__codelineno-15-39" href="#__codelineno-15-39"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/alpha-strike/.env
 </code></pre></div>
 <p><code>WEBHOOK_PASSPHRASE</code> は 1Password にも保管しておきます（後で TradingView の Message JSON に貼り付ける）。</p>
 <h3 id="6-3-systemd">6-3. systemd ユニット<a class="headerlink" href="#6-3-systemd" title="Permanent link">&para;</a></h3>
