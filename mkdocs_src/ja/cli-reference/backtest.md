@@ -102,7 +102,7 @@ CHF/NZD/SEK は O/N 系列が更新停止している（CHF/NZD は 2024 年、S
 
 **実スワップポイントの取り込み（より高精度）**
 
-ブローカー公表の実スワップポイント履歴があれば、[`data alt import-swap`](data.md#alpha-forge-data-alt-import-swap) で取り込むと金利差近似より**自動で優先**されます（マッピング設定不要・値はマージン込みネットのため `spread_pct` 非適用）。
+ブローカー公表の実スワップポイント履歴があれば、[`data alt import-swap`](data.md#alpha-forge-data-alt-import-swap) で取り込むと金利差近似より**自動で優先**されます（マッピング設定不要・値はマージン込みネットのため `spread_pct` 非適用）。ただし**実スワップが対象期間の 80% 未満しかカバーしない場合は、警告して金利差近似へフォールバック**します（蓄積が浅いデータを長期バックテストで優先するとカバー外の大半のバーがキャリーゼロになり評価が歪むため。蓄積が期間を十分カバーするようになれば自動的に実スワップ優先へ戻ります）。
 
 ```bash
 alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy.csv

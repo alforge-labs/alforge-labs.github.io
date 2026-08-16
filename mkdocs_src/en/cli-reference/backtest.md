@@ -102,7 +102,7 @@ For CHF/NZD/SEK the O/N series stopped updating (CHF/NZD in 2024, SEK in 2020), 
 
 **Importing real swap points (higher fidelity)**
 
-If you have a broker-published history of real swap points, import it with [`data alt import-swap`](data.md#alpha-forge-data-alt-import-swap) and it is **automatically preferred** over the rate-differential approximation (no mapping needed; values are net of broker margin so `spread_pct` does not apply).
+If you have a broker-published history of real swap points, import it with [`data alt import-swap`](data.md#alpha-forge-data-alt-import-swap) and it is **automatically preferred** over the rate-differential approximation (no mapping needed; values are net of broker margin so `spread_pct` does not apply). However, **if the real swap data covers less than 80% of the backtest period, a warning is printed and the rate-differential approximation is used instead** (preferring a thin accumulation over a long backtest would leave most bars with zero carry; once the accumulation sufficiently covers the period, the real-swap preference resumes automatically).
 
 ```bash
 alpha-forge data alt import-swap USDJPY=X --csv swap_usdjpy.csv
