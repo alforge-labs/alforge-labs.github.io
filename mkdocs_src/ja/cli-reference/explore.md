@@ -19,6 +19,8 @@
 バリデーション → データ自動取得 → バックテスト → 最適化 → ウォークフォワードテスト（WFT）→ coverage 更新 → DB 登録を 1 コマンドで完結させます。不合格時は exit code 1 を返します（`--dry-run` / `--pre-check` 時を除く）。  
 エージェントの `/explore-strategies` スキルから内部的に呼び出されます。
 
+合格（passed）した戦略には `backtest run` と同様に Journal RunRecord が自動追記され、そのまま `journal report <strategy_id>` が使えます（メトリクスは explore の評価軸そのもの＝carry ゴールでは carry 差し替え済みの値。不合格戦略には追記されません。`journal.auto_record: false` で無効化できます）。
+
 ```bash
 alpha-forge explore run <SYMBOL> --strategy <NAME> --goal <GOAL> [--no-cleanup] [--dry-run] [--pre-check] [--json] [--db <PATH>]
 ```

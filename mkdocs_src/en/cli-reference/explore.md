@@ -19,6 +19,8 @@ Manage exploration pipeline state and run the full pipeline in one command. Thes
 Runs validation → auto data fetch → backtest → optimize → walk-forward test (WFT) → coverage update → DB registration in a single command. Returns exit code 1 on failure (except `--dry-run` / `--pre-check`).  
 Called internally by the `/explore-strategies` agent skill.
 
+A strategy that passes receives a Journal RunRecord just like `backtest run`, so `journal report <strategy_id>` works right away (the metrics are the explore evaluation axis itself — carry-substituted values in carry goals; failed strategies are not journaled; disable with `journal.auto_record: false`).
+
 ```bash
 alpha-forge explore run <SYMBOL> --strategy <NAME> --goal <GOAL> [--no-cleanup] [--dry-run] [--pre-check] [--json] [--db <PATH>]
 ```

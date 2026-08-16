@@ -3408,6 +3408,7 @@
 <h2 id="alpha-forge-explore-run">alpha-forge explore run<a class="headerlink" href="#alpha-forge-explore-run" title="Permanent link">&para;</a></h2>
 <p>バリデーション → データ自動取得 → バックテスト → 最適化 → ウォークフォワードテスト（WFT）→ coverage 更新 → DB 登録を 1 コマンドで完結させます。不合格時は exit code 1 を返します（<code>--dry-run</code> / <code>--pre-check</code> 時を除く）。<br />
 エージェントの <code>/explore-strategies</code> スキルから内部的に呼び出されます。</p>
+<p>合格（passed）した戦略には <code>backtest run</code> と同様に Journal RunRecord が自動追記され、そのまま <code>journal report &lt;strategy_id&gt;</code> が使えます（メトリクスは explore の評価軸そのもの＝carry ゴールでは carry 差し替え済みの値。不合格戦略には追記されません。<code>journal.auto_record: false</code> で無効化できます）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>alpha-forge<span class="w"> </span>explore<span class="w"> </span>run<span class="w"> </span>&lt;SYMBOL&gt;<span class="w"> </span>--strategy<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span>--goal<span class="w"> </span>&lt;GOAL&gt;<span class="w"> </span><span class="o">[</span>--no-cleanup<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pre-check<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span><span class="w"> </span><span class="o">[</span>--db<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
 </code></pre></div>
 <table>
