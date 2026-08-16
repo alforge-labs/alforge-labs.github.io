@@ -5338,7 +5338,10 @@
 <li>シミュレーション（売買・約定）は 1 回で、シナリオ間はキャリー控除の差し替えのみ（取引回数などの price-only 指標は全シナリオ共通）</li>
 <li>spread は金利差近似のパラメータのため、実スワップ（<code>SWAP:&lt;PAIR&gt;</code>）が保存済みでも実スワップ優先をスキップして金利差近似で計上します（その旨を情報表示）</li>
 <li><code>spread_pct_range</code> 未設定・マッピング欠如・金利データ未取得は続行せず exit code 2 で停止します（感度分析はキャリーが本体のため）</li>
-<li>レンジを定義せず 1 点だけ試す場合は <code>--carry-spread-pct &lt;値&gt;</code> で <code>spread_pct</code> をその実行に限り上書きできます（出力形式は従来の単一オブジェクトのまま・上書き値は注記に明示）</li>
+<li>レンジを定義せず 1 点だけ試す場合は <code>--carry-spread-pct &lt;値&gt;</code> で <code>spread_pct</code> をその実行に限り上書きできます（出力形式は従来の単一オブジェクトのまま・上書き値は注記に加え機械可読キー <code>carry_spread_pct</code> として <code>--json</code> にも載ります）</li>
+<li><strong>レンジ端の選び方に注意</strong>: <code>spread_pct_range</code> を実測の min/max からそのまま取ると、1社だけの外れ値水準に端が張り付くことがあります（掲示の大半が狭い帯に集中し、離れた1件が「数倍の開き」を作るケースがある）。多数派帯の端を取るか、外れ値を含める場合は「あり得る最悪ケース」として読むかを意識して設定してください。どちらを取ったかは出力の <code>carry_spread_scenarios</code>（使用 spread 値）から後で追えます</li>
+<li><strong>レンジの定数化も近似です</strong>: 業者間レンジ自体が時間とともに変動します（スワップの改定は頻繁で、業者間の幅が数週間で大きく縮むこともあります）。長期バックテストに spread の時系列を持ち込むのは現実的でないため、本機能は「一定レンジの上下で回して結論が頑健かを見る」ための感度分析として使ってください（特定時点の実測レンジを固定した近似です）</li>
+<li>複数通貨の<strong>順位がシナリオでどう入れ替わるか</strong>を見たい場合は、<code>backtest carry-compare &lt;SYMBOLS...&gt; --carry --carry-spread-scenarios</code> がシナリオ別のキャリー込みリターン順位と順位変動・符号反転のサマリーを併記します（全銘柄に <code>spread_pct_range</code> 定義が必要・欠落銘柄は列挙して exit code 2）</li>
 </ul>
 <h3 id="trades-csv-export"><code>--trades-csv</code> で trade 一覧 CSV をエクスポート<a class="headerlink" href="#trades-csv-export" title="Permanent link">&para;</a></h3>
 <p><code>backtest run --trades-csv &lt;path&gt;</code> を指定すると、各 trade の詳細を CSV で書き出します。TradingView Strategy Tester など別エンジンとの突合や、<code>profit_factor</code> artifact（issue #791）のような数値乖離を実機で点検する用途に使います。</p>
