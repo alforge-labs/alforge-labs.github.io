@@ -4746,8 +4746,10 @@
 <p>CSV の契約:</p>
 <ul>
 <li>値は <strong>quote 通貨建て・1 単位・1 日あたり</strong>の受け払い（正=受取・負=支払い）。「1 万通貨あたり◯円」公表なら 1/10000 して入力</li>
+<li><strong>1 日あたりへの正規化は必須の規約</strong>: 業者の掲示値には付与日数がまとめて乗っています（水曜に 3 日分など）。掲示値をそのまま入れると計上時のカレンダー日数換算と重なって<strong>二重計上</strong>になります。必ず付与日数で割ってから取り込んでください（取込時に同一列内で中央値の 2.5 倍を超える飛び値を検出すると「付与日数込みの可能性」を警告します）</li>
 <li>日付は昇順・重複なし・将来日なし。空セル（欠損値）不可</li>
 <li>ロング/ショートは別列で、どちらも<strong>マージン込みネット値</strong>（<code>spread_pct</code> 非適用）</li>
+<li>計上はカレンダー日ベースの近似のため、<strong>週の途中で対象期間を切ると実際の付与累積と数日ぶんずれます</strong>（短い窓ほど相対的に影響大。週の境界で切るのが安全）</li>
 </ul>
 <p>バリデーションは <code>--merge</code> 指定時も常にマージ前の CSV 単体に適用され、違反時は保存済みデータを変更せず終了コード <code>1</code>。ブローカー公表 CSV は直近数十日分のみのことが多いため、週次などの定期取込で過去分を蓄積したい場合は <code>--merge</code> を使ってください:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>alt<span class="w"> </span>import-swap<span class="w"> </span><span class="nv">USDJPY</span><span class="o">=</span>X<span class="w"> </span>--csv<span class="w"> </span>swap_usdjpy_latest.csv<span class="w"> </span>--merge

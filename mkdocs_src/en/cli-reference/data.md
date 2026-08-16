@@ -524,8 +524,10 @@ Validates a broker-published real swap-point history CSV and stores it under the
 CSV contract:
 
 - Values are the amount received/paid **per unit per day in the quote currency** (positive = received). If published as "X yen per 10,000 units", divide by 10,000
+- **Per-day normalization is mandatory**: broker listings bundle the number of grant days into the value (e.g. triple grants on Wednesdays). Importing raw listings double-counts against the calendar-day accrual — always divide by the number of grant days first (the import detects values exceeding 2.5x the column median and warns about possible bundled grant days)
 - Dates must be ascending, unique, and not in the future. Empty (missing) cells are rejected
 - Long and short are separate columns, both **net of broker margin** (`spread_pct` does not apply)
+- The accrual is a calendar-day approximation, so **starting or ending the backtest period mid-week drifts a few days** from the actual grant accumulation (relatively significant for short windows; cutting on week boundaries is safest)
 
 Validation always applies to the CSV alone before merging, even with `--merge`; any violation aborts without touching the stored data (exit code `1`). Broker-published CSVs often cover only the last few dozen days, so use `--merge` for periodic (e.g. weekly) imports where you want to retain accumulated history:
 
