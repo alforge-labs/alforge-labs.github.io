@@ -166,7 +166,9 @@ alpha-forge backtest run MXNJPY=X --strategy mxnjpy_carry_v1 --carry --carry-spr
 - シミュレーション（売買・約定）は 1 回で、シナリオ間はキャリー控除の差し替えのみ（取引回数などの price-only 指標は全シナリオ共通）
 - spread は金利差近似のパラメータのため、実スワップ（`SWAP:<PAIR>`）が保存済みでも実スワップ優先をスキップして金利差近似で計上します（その旨を情報表示）
 - `spread_pct_range` 未設定・マッピング欠如・金利データ未取得は続行せず exit code 2 で停止します（感度分析はキャリーが本体のため）
-- レンジを定義せず 1 点だけ試す場合は `--carry-spread-pct <値>` で `spread_pct` をその実行に限り上書きできます（出力形式は従来の単一オブジェクトのまま・上書き値は注記に明示）
+- レンジを定義せず 1 点だけ試す場合は `--carry-spread-pct <値>` で `spread_pct` をその実行に限り上書きできます（出力形式は従来の単一オブジェクトのまま・上書き値は注記に加え機械可読キー `carry_spread_pct` として `--json` にも載ります）
+- **レンジ端の選び方に注意**: `spread_pct_range` を実測の min/max からそのまま取ると、1社だけの外れ値水準に端が張り付くことがあります（掲示の大半が狭い帯に集中し、離れた1件が「数倍の開き」を作るケースがある）。多数派帯の端を取るか、外れ値を含める場合は「あり得る最悪ケース」として読むかを意識して設定してください。どちらを取ったかは出力の `carry_spread_scenarios`（使用 spread 値）から後で追えます
+- 複数通貨の**順位がシナリオでどう入れ替わるか**を見たい場合は、`backtest carry-compare <SYMBOLS...> --carry --carry-spread-scenarios` がシナリオ別のキャリー込みリターン順位と順位変動・符号反転のサマリーを併記します（全銘柄に `spread_pct_range` 定義が必要・欠落銘柄は列挙して exit code 2）
 
 ### `--trades-csv` で trade 一覧 CSV をエクスポート {#trades-csv-export}
 

@@ -166,7 +166,9 @@ alpha-forge backtest run MXNJPY=X --strategy mxnjpy_carry_v1 --carry --carry-spr
 - The simulation (entries/exits/fills) runs once; only the carry deduction differs between scenarios, so price-only metrics such as the trade count are identical across scenarios
 - Because spread is a parameter of the rate-differential approximation, the real-swap preference is skipped even when `SWAP:<PAIR>` data is saved (an informational message is printed)
 - If `spread_pct_range` is missing, the pair has no `backtest.carry` entry, or the rate data has not been fetched, the command stops with exit code 2 instead of continuing price-only (carry is the whole point of the sensitivity analysis)
-- To try a single point without defining a range, use `--carry-spread-pct <value>` to override `spread_pct` for that run only (the output keeps the traditional single-object shape; the override is stated in the note)
+- To try a single point without defining a range, use `--carry-spread-pct <value>` to override `spread_pct` for that run only (the output keeps the traditional single-object shape; the override is stated in the note and also reported machine-readably as `carry_spread_pct` in `--json`)
+- **Choose the range endpoints deliberately**: taking `spread_pct_range` straight from a measured min/max can pin an endpoint to a single outlier broker (most quotes often cluster in a narrow band while one distant quote creates a "several-fold spread"). Either take the edges of the majority band, or read the outlier scenario as a "plausible worst case". Which one you chose remains traceable afterwards via `carry_spread_scenarios` (the spread values used) in the output
+- To see how the **cross-currency ranking** moves between scenarios, `backtest carry-compare <SYMBOLS...> --carry --carry-spread-scenarios` adds per-scenario carry-return rankings plus a summary of rank changes and sign flips (every symbol needs a `spread_pct_range`; missing symbols are listed and the command exits with code 2)
 
 ### Export per-trade CSV with `--trades-csv` {#trades-csv-export}
 
