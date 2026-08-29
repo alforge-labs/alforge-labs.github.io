@@ -338,6 +338,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # Tune with SIGNAL_WATCHDOG_THRESHOLD_HOURS=60 / SIGNAL_WATCHDOG_INTERVAL_SECONDS=3600 /
 # SIGNAL_WATCHDOG_RENOTIFY_HOURS=24 / SIGNAL_WATCHDOG_BROKER=moomoo.
 # Set SIGNAL_WATCHDOG_ENABLED=0 only to disable.
+# Note: since v1.3.0 the watchdog runs in its own process (systemd timer
+#   alpha-strike-watchdog.timer), hourly. It keeps working even if the main
+#   event loop is frozen by a blocking OpenD call or the process dies.
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>

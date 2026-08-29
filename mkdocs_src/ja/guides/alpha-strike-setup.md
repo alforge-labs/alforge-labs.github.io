@@ -343,6 +343,9 @@ MOOMOO_TRADE_ENV=SIMULATE
 # 調整は SIGNAL_WATCHDOG_THRESHOLD_HOURS=60 / SIGNAL_WATCHDOG_INTERVAL_SECONDS=3600 /
 # SIGNAL_WATCHDOG_RENOTIFY_HOURS=24 / SIGNAL_WATCHDOG_BROKER=moomoo
 # 無効化する場合のみ設定: SIGNAL_WATCHDOG_ENABLED=0
+# ※ v1.3.0 以降、途絶監視は alpha-strike 本体とは別プロセス（systemd timer
+#   alpha-strike-watchdog.timer）で毎時実行される。本体のイベントループが OpenD の
+#   同期呼び出しで凍結しても、プロセスが落ちても監視は動き続ける。
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>
