@@ -84,13 +84,16 @@ List all stored datasets.
 ### Synopsis
 
 ```bash
-alpha-forge data list [--json]
+alpha-forge data list [-s SYMBOL] [--interval INTERVAL] [--common-range] [--json]
 ```
 
 ### Arguments and options
 
 | Name | Kind | Default | Description |
 |------|------|---------|-------------|
+| `--symbol` / `-s` | string (repeatable) | none | Target symbol(s); repeats and comma-separated lists both work (issue #1392) |
+| `--interval` | string | none (`1d` with `--common-range`) | Filter by interval (issue #1392) |
+| `--common-range` | flag | false | Show the common range across the given symbols and which symbol limits it (issue #1392) |
 | `--json` | flag | false | Emit the result as JSON on stdout (machine-readable; MCP / pipe use) (issue #1176) |
 
 When `--json` is passed, pure JSON is written to stdout (decoration and progress go to stderr).
@@ -109,6 +112,23 @@ When no data is stored:
 ```text
 Stored data count: 0
 ```
+
+### Common range across symbols (`--common-range`)
+
+When you pick a window for a multi-symbol study, a few symbols with shorter history silently turn it into "a short window compared as if it were long". `--common-range` reports the shared range plus **which symbol constrains it**.
+
+```bash
+alpha-forge data list --common-range -s USDJPY=X,EURJPY=X,AUDJPY=X,CADJPY=X
+```
+
+```text
+Common range: 2021-03-23 to 2026-08-24 (1410 rows, 1d)
+  Limits the start: AUDJPY=X (starts 2021-03-23, 8910 days later than the earliest)
+  Limits the start: CADJPY=X (starts 2021-03-23, 8910 days later than the earliest)
+  Symbols covering it fully: USDJPY=X (1996-10-30-2026-08-24) / EURJPY=X (2003-01-23-2026-08-24)
+```
+
+Knowing the limiting symbol lets you choose between dropping it for a longer window or keeping every symbol on a shorter one. `rows` counts **dates every symbol actually has**, not calendar days. If any symbol has no stored data the command stops with exit code 2 instead of silently dropping it. Nothing is auto-fetched or backfilled, and portfolio backtests are unaffected.
 
 ### Sample output (`--json`)
 
