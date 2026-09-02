@@ -290,6 +290,8 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--metric` | option | `sharpe_ratio` | Metric to optimize |
 | `--windows` | int | `5` | Number of windows |
 | `--min-window-trades` | int | - | Skip windows whose IS trade count is below N and exclude them from the mean. Useful for low-frequency strategies that would otherwise drop entire windows to `-∞` |
+| `--start` | option | - | Start date of the walk-forward period (YYYY-MM-DD). Same period filter as `optimize run --start`; all data is used if omitted |
+| `--end` | option | - | End date of the walk-forward period (YYYY-MM-DD). All data is used if omitted. Invalid format or no data in range exits with 1, same as `optimize run` |
 | `--json` | flag | false | Output results as JSON |
 | `--save` | flag | false | Record WFT results to the DB (`optimization_runs`). Per-window results are stored in `all_trials_json` in window format, and `--json` returns the run_id as `opt_run_id` (also feeds the alpha-visualizer WFO tab) |
 | `--goal` | option | - | Goal name (e.g. `default`, `stocks`). Reads the `goals.yaml` `pre_filter` thresholds; when set, the goal's WFT settings (including the OOS aggregation method `mean` / `median` / `trimmed_mean`, #947) are also applied. **Even without `--goal`, the `--json` output always carries `pre_filter` / `pre_filter_pass` using default thresholds** (issue #1237, contract aligned with `backtest run`) |
@@ -427,6 +429,8 @@ alpha-forge optimize sensitivity <RESULT_FILE> [OPTIONS]
 | `--steps` | int | `3` | Steps to test around best value |
 | `--threshold` | float | `0.8` | Robustness threshold ratio |
 | `--symbol` | option | from `result_file` | Symbol whose data is used |
+| `--start` | option | - | Start date of the sensitivity period (YYYY-MM-DD). Same period filter as `optimize run` / `walk-forward`; use it to evaluate the neighbourhood over the same window the parameters were optimized on |
+| `--end` | option | - | End date of the sensitivity period (YYYY-MM-DD). All data is used if omitted |
 | `--json` | flag | false | Output results as JSON |
 | `--save` | flag | false | Save results to a file |
 
