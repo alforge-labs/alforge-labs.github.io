@@ -4831,6 +4831,18 @@
 <td>IS 期間の取引数が N 件未満のウィンドウをスキップして平均から除外する。シグナル発生回数が少ない戦略でウィンドウ全体が <code>-∞</code> に陥るのを防ぐ</td>
 </tr>
 <tr>
+<td><code>--start</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>ウォークフォワードに使う期間の開始日（YYYY-MM-DD）。<code>optimize run --start</code> と同じ期間フィルタ。指定がなければ全データ</td>
+</tr>
+<tr>
+<td><code>--end</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>ウォークフォワードに使う期間の終了日（YYYY-MM-DD）。指定がなければ全データ。形式不正・該当データ0件は <code>optimize run</code> と同じく exit 1</td>
+</tr>
+<tr>
 <td><code>--json</code></td>
 <td>フラグ</td>
 <td>false</td>
@@ -5064,6 +5076,18 @@
 <td>オプション</td>
 <td><code>result_file</code> から自動</td>
 <td>データを取得する銘柄</td>
+</tr>
+<tr>
+<td><code>--start</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>感度分析に使う期間の開始日（YYYY-MM-DD）。<code>optimize run</code> / <code>walk-forward</code> と同じ期間フィルタ。最適化した窓と同じ期間で近傍を評価するために使う</td>
+</tr>
+<tr>
+<td><code>--end</code></td>
+<td>オプション</td>
+<td>-</td>
+<td>感度分析に使う期間の終了日（YYYY-MM-DD）。指定がなければ全データ</td>
 </tr>
 <tr>
 <td><code>--json</code></td>

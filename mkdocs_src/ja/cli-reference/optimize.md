@@ -290,6 +290,8 @@ alpha-forge optimize walk-forward <SYMBOL> --strategy <ID> [OPTIONS]
 | `--metric` | オプション | `sharpe_ratio` | 最適化対象の指標 |
 | `--windows` | int | `5` | ウィンドウ数 |
 | `--min-window-trades` | int | - | IS 期間の取引数が N 件未満のウィンドウをスキップして平均から除外する。シグナル発生回数が少ない戦略でウィンドウ全体が `-∞` に陥るのを防ぐ |
+| `--start` | オプション | - | ウォークフォワードに使う期間の開始日（YYYY-MM-DD）。`optimize run --start` と同じ期間フィルタ。指定がなければ全データ |
+| `--end` | オプション | - | ウォークフォワードに使う期間の終了日（YYYY-MM-DD）。指定がなければ全データ。形式不正・該当データ0件は `optimize run` と同じく exit 1 |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
 | `--save` | フラグ | false | WFT 結果を DB（`optimization_runs`）に記録する。ウィンドウごとの結果が window 形式で `all_trials_json` に保存され、`--json` 出力の `opt_run_id` で run_id が返る（alpha-visualizer の WFO タブにも反映される） |
 | `--goal` | オプション | - | ゴール名（例: `default`, `stocks`）。`goals.yaml` の `pre_filter` 閾値を読み込む。指定時は `goals.yaml` の `wft.aggregation_method`（OOS 集約方法 `mean` / `median` / `trimmed_mean`、既定 `mean`、issue #947）と `wft.trimmed_pct` も読み込み、`pre_filter_pass` 判定に使う集約 OOS Sharpe の計算方式を切り替える（省略時は `forge.yaml` の `default_goal` をフォールバック）。**`--goal` を省略しても `--json` 出力には既定閾値で `pre_filter` / `pre_filter_pass` が必ず付きます**（issue #1237、`backtest run` と契約統一） |
@@ -427,6 +429,8 @@ alpha-forge optimize sensitivity <RESULT_FILE> [OPTIONS]
 | `--steps` | int | `3` | 最良値の前後にテストするステップ数 |
 | `--threshold` | float | `0.8` | ロバスト判定の閾値比率 |
 | `--symbol` | オプション | `result_file` から自動 | データを取得する銘柄 |
+| `--start` | オプション | - | 感度分析に使う期間の開始日（YYYY-MM-DD）。`optimize run` / `walk-forward` と同じ期間フィルタ。最適化した窓と同じ期間で近傍を評価するために使う |
+| `--end` | オプション | - | 感度分析に使う期間の終了日（YYYY-MM-DD）。指定がなければ全データ |
 | `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
 | `--save` | フラグ | false | 結果をファイルに保存 |
 

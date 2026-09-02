@@ -4831,6 +4831,18 @@
 <td>Skip windows whose IS trade count is below N and exclude them from the mean. Useful for low-frequency strategies that would otherwise drop entire windows to <code>-∞</code></td>
 </tr>
 <tr>
+<td><code>--start</code></td>
+<td>option</td>
+<td>-</td>
+<td>Start date of the walk-forward period (YYYY-MM-DD). Same period filter as <code>optimize run --start</code>; all data is used if omitted</td>
+</tr>
+<tr>
+<td><code>--end</code></td>
+<td>option</td>
+<td>-</td>
+<td>End date of the walk-forward period (YYYY-MM-DD). All data is used if omitted. Invalid format or no data in range exits with 1, same as <code>optimize run</code></td>
+</tr>
+<tr>
 <td><code>--json</code></td>
 <td>flag</td>
 <td>false</td>
@@ -5064,6 +5076,18 @@
 <td>option</td>
 <td>from <code>result_file</code></td>
 <td>Symbol whose data is used</td>
+</tr>
+<tr>
+<td><code>--start</code></td>
+<td>option</td>
+<td>-</td>
+<td>Start date of the sensitivity period (YYYY-MM-DD). Same period filter as <code>optimize run</code> / <code>walk-forward</code>; use it to evaluate the neighbourhood over the same window the parameters were optimized on</td>
+</tr>
+<tr>
+<td><code>--end</code></td>
+<td>option</td>
+<td>-</td>
+<td>End date of the sensitivity period (YYYY-MM-DD). All data is used if omitted</td>
 </tr>
 <tr>
 <td><code>--json</code></td>
