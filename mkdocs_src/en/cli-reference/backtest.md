@@ -725,7 +725,7 @@ alpha-forge backtest portfolio <SYM1> [SYM2 ...] --strategy <ID> [OPTIONS]
 | `--weights` | option | - | Custom weights `AAPL=0.4,MSFT=0.6` (used with `--allocation custom`). Split on the last `=`, so symbols with `=` in the name like `GC=F=0` work as expected |
 | `--start` | option | - | Start date `YYYY-MM-DD`. Applies the same date filter as `backtest run` to each symbol (aligns symbols with different start points) |
 | `--end` | option | - | End date `YYYY-MM-DD` |
-| `--rebalance` | choice | `none` | How often to reset weights to target (`none` / `monthly` / `quarterly` / `annual`). `none` sums the per-symbol curves as usual. Others rebalance to target allocation at the close of the last business day of each period. **No transaction cost is applied** |
+| `--rebalance` | choice | `none` | How often to reset weights to target (`none` / `monthly` / `quarterly` / `annual`). `none` sums the per-symbol curves as usual. Others rebalance to target allocation at the close of the last business day of each period. **No transaction cost is applied**. Each asset's daily returns come from its stand-alone backtest and the same return series is reused after every reset (an approximation that assumes per-asset performance does not depend on the capital allocated). |
 | `--json` | flag | false | Output as JSON |
 | `--save` | flag | false | Save results to a file |
 

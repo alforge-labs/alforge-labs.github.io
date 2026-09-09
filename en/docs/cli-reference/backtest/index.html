@@ -6390,7 +6390,7 @@
 <td><code>--rebalance</code></td>
 <td>choice</td>
 <td><code>none</code></td>
-<td>How often to reset weights to target (<code>none</code> / <code>monthly</code> / <code>quarterly</code> / <code>annual</code>). <code>none</code> sums the per-symbol curves as usual. Others rebalance to target allocation at the close of the last business day of each period. <strong>No transaction cost is applied</strong></td>
+<td>How often to reset weights to target (<code>none</code> / <code>monthly</code> / <code>quarterly</code> / <code>annual</code>). <code>none</code> sums the per-symbol curves as usual. Others rebalance to target allocation at the close of the last business day of each period. <strong>No transaction cost is applied</strong>. Each asset's daily returns come from its stand-alone backtest and the same return series is reused after every reset (an approximation that assumes per-asset performance does not depend on the capital allocated).</td>
 </tr>
 <tr>
 <td><code>--json</code></td>

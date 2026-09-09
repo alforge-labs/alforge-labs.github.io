@@ -6391,7 +6391,7 @@
 <td><code>--rebalance</code></td>
 <td>choice</td>
 <td><code>none</code></td>
-<td>配分を目標値に戻す頻度（<code>none</code> / <code>monthly</code> / <code>quarterly</code> / <code>annual</code>）。<code>none</code> は従来どおり銘柄ごとの曲線を合算。それ以外は各期間の最終営業日の終値時点で目標配分に戻す。<strong>リバランスにコストは掛けない</strong></td>
+<td>配分を目標値に戻す頻度（<code>none</code> / <code>monthly</code> / <code>quarterly</code> / <code>annual</code>）。<code>none</code> は従来どおり銘柄ごとの曲線を合算。それ以外は各期間の最終営業日の終値時点で目標配分に戻す。<strong>リバランスにコストは掛けない</strong>。各資産の日次リターンは配分前の個別バックテストから取り、リセット後も同じリターン列を使う（資産ごとの成績が元手の大きさに依存しないという近似）。</td>
 </tr>
 <tr>
 <td><code>--json</code></td>

@@ -727,7 +727,7 @@ alpha-forge backtest portfolio <SYM1> [SYM2 ...] --strategy <ID> [OPTIONS]
 | `--weights` | オプション | - | カスタムウェイト `AAPL=0.4,MSFT=0.6`（`--allocation custom` 用）。最後の `=` で区切るので `GC=F=0` のように `=` を含む銘柄も指定できる |
 | `--start` | オプション | - | 開始日 `YYYY-MM-DD`。`backtest run` と同じ期間フィルタを各銘柄に適用する（起点の異なる銘柄を揃える） |
 | `--end` | オプション | - | 終了日 `YYYY-MM-DD` |
-| `--rebalance` | choice | `none` | 配分を目標値に戻す頻度（`none` / `monthly` / `quarterly` / `annual`）。`none` は従来どおり銘柄ごとの曲線を合算。それ以外は各期間の最終営業日の終値時点で目標配分に戻す。**リバランスにコストは掛けない** |
+| `--rebalance` | choice | `none` | 配分を目標値に戻す頻度（`none` / `monthly` / `quarterly` / `annual`）。`none` は従来どおり銘柄ごとの曲線を合算。それ以外は各期間の最終営業日の終値時点で目標配分に戻す。**リバランスにコストは掛けない**。各資産の日次リターンは配分前の個別バックテストから取り、リセット後も同じリターン列を使う（資産ごとの成績が元手の大きさに依存しないという近似）。 |
 | `--json` | フラグ | false | 結果を JSON 形式で出力 |
 | `--save` | フラグ | false | 結果をファイルに保存 |
 
