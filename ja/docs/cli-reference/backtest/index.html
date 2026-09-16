@@ -5177,7 +5177,7 @@
 <td><code>--dividend-reinvest</code></td>
 <td>フラグ</td>
 <td>false</td>
-<td>配当再投資 metrics を併記する（#958）。保存済み配当データが必要（<code>alpha-forge data fetch --with-dividends</code> で取得）</td>
+<td>配当再投資 metrics を併記する（#958）。保存済み配当データが必要（<code>alpha-forge data fetch --with-dividends</code> で取得）。指定時は <code>--json</code> に <code>dividend_adjusted_metrics</code>（配当再投資込みの total_return_pct・max_drawdown_pct・cagr_pct）と <code>dividend_adjusted_note</code> が入り、テキスト表示にも同じブロックが出る。注意: <code>data fetch</code> が保存する ETF・個別株の終値は配当・分配金込みの調整後終値なので、その保存値に対して <code>--dividend-reinvest</code> を使うと配当を二重に数える。</td>
 </tr>
 <tr>
 <td><code>--regime-filter</code></td>

@@ -62,7 +62,7 @@ alpha-forge backtest run <SYMBOL> (--strategy <ID> | --strategy-file <PATH>) [OP
 | `--debug` | フラグ | false | `alpha_forge.*` ロガーを DEBUG レベルに上げる（issue #800） |
 | `--goal` | オプション | - | ゴール名。`goals.yaml` の `pre_filter` 閾値（`sharpe-min` / `max-dd`）を自動適用する |
 | `--cost-preset` | オプション | - | コストプリセット名（issue #785）。戦略 JSON の `risk_management` の commission / slippage を実行時に preset 値で in-memory 上書きする（戦略 JSON は変更しない） |
-| `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得） |
+| `--dividend-reinvest` | フラグ | false | 配当再投資 metrics を併記する（#958）。保存済み配当データが必要（`alpha-forge data fetch --with-dividends` で取得）。指定時は `--json` に `dividend_adjusted_metrics`（配当再投資込みの total_return_pct・max_drawdown_pct・cagr_pct）と `dividend_adjusted_note` が入り、テキスト表示にも同じブロックが出る。注意: `data fetch` が保存する ETF・個別株の終値は配当・分配金込みの調整後終値なので、その保存値に対して `--dividend-reinvest` を使うと配当を二重に数える。 |
 | `--regime-filter` | オプション | - | マクロ regime でエントリーを post-hoc ゲーティングする（issue #1012）。形式は `source:label`（例: `macro:risk_on`）で `source` は `macro` のみ対応。事前に FRED データの取得が必要（`alpha-forge data alt fetch FRED:T10Y3M`） |
 | `--carry` | フラグ | false | FX キャリー（スワップ）を計上し `carry_adjusted_metrics` を併記する（[詳細](#carry)）。実スワップ CSV（`data alt import-swap`）＞金利差近似の順で解決。主要 17 通貨はビルトインの金利系列マッピングで設定不要（FRED 金利データの事前取得は必要） |
 | `--carry-spread-scenarios` | フラグ | false | `spread_pct_range` から spread の low/base/high 3 シナリオを一括比較する感度分析（[詳細](#carry-spread-sensitivity)）。`--carry` と対象ペアの `spread_pct_range` 定義が必要 |

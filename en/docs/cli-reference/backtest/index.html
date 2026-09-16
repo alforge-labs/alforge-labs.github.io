@@ -5177,7 +5177,7 @@
 <td><code>--dividend-reinvest</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Include dividend-reinvest metrics in the result (#958); requires saved dividends data (<code>data fetch --with-dividends</code>)</td>
+<td>Include dividend-reinvest metrics in the result (#958); requires saved dividends data (<code>data fetch --with-dividends</code>). When set, <code>--json</code> includes <code>dividend_adjusted_metrics</code> (dividend-reinvested total_return_pct / max_drawdown_pct / cagr_pct) and <code>dividend_adjusted_note</code>, and the text output shows the same block. Note: closes stored by <code>data fetch</code> for ETFs and stocks are dividend-adjusted, so applying <code>--dividend-reinvest</code> to stored data double-counts dividends.</td>
 </tr>
 <tr>
 <td><code>--regime-filter</code></td>
