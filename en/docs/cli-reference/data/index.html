@@ -4000,7 +4000,7 @@
 <td><code>--with-dividends</code></td>
 <td>flag</td>
 <td>false</td>
-<td>Also fetch and save dividend history alongside OHLCV (#958 Phase 2). Required for a true total-return evaluation of high-yield ETFs, and a prerequisite for <code>alpha-forge backtest run --dividend-reinvest</code></td>
+<td>Also fetch and save dividend history alongside OHLCV (#958 Phase 2). Required for a true total-return evaluation of high-yield ETFs, and a prerequisite for <code>alpha-forge backtest run --dividend-reinvest</code>. Dividends are fetched through the fallback provider as well (#1406 fix; previously saved as 0 entries).</td>
 </tr>
 </tbody>
 </table>

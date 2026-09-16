@@ -39,7 +39,7 @@ alpha-forge data fetch --watchlist <FILE> [OPTIONS]
 | `--provider` | choice | - | データソースを明示指定（`yfinance` / `moomoo` / `tv_mcp`）。省略時は `forge.yaml` の `data.providers` 設定で自動解決 |
 | `--mcp-server` | オプション | - | `--provider tv_mcp` 用 MCP サーバーコマンド（例: `node /opt/tv-mcp/server.js`）。省略時は環境変数 `FORGE_TV_MCP_ENDPOINT` → `forge.yaml` の `data.providers.tv_mcp.endpoint` の順で解決（issue #689）。endpoint 内の `~` / `$HOME` は自動展開される |
 | `--mcp-server-flavor` | choice | - | `--provider tv_mcp` 用 MCP server 系統（`tradesdontlie` / `vinicius`）。CLI 指定が `forge.yaml` より優先 |
-| `--with-dividends` | フラグ | false | OHLCV と同時に配当履歴も取得して保存する（#958 Phase 2）。高配当 ETF の真の total return 評価に必要 |
+| `--with-dividends` | フラグ | false | OHLCV と同時に配当履歴も取得して保存する（#958 Phase 2）。高配当 ETF の真の total return 評価に必要。フォールバック用プロバイダ経由でも配当を取得する（#1406 修正前はフォールバック経由で0件保存されていた） |
 
 `SYMBOL` も `--watchlist` も指定しないとエラーになります。`--provider tv_mcp` を指定しても `endpoint` が解決できない場合はエラーで停止します。
 

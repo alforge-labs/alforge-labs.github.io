@@ -39,7 +39,7 @@ alpha-forge data fetch --watchlist <FILE> [OPTIONS]
 | `--provider` | choice | - | Explicit provider override (`yfinance` / `moomoo` / `tv_mcp`). Falls back to `data.providers` in `forge.yaml` when omitted |
 | `--mcp-server` | option | - | MCP server command for `--provider tv_mcp` (e.g. `node /opt/tv-mcp/server.js`). When omitted, the value is resolved from the `FORGE_TV_MCP_ENDPOINT` environment variable, then `data.providers.tv_mcp.endpoint` in `forge.yaml` (issue #689). `~` / `$HOME` inside the command are expanded automatically |
 | `--mcp-server-flavor` | choice | - | MCP server flavor for `--provider tv_mcp` (`tradesdontlie` / `vinicius`). CLI value takes precedence over `forge.yaml` |
-| `--with-dividends` | flag | false | Also fetch and save dividend history alongside OHLCV (#958 Phase 2). Required for a true total-return evaluation of high-yield ETFs, and a prerequisite for `alpha-forge backtest run --dividend-reinvest` |
+| `--with-dividends` | flag | false | Also fetch and save dividend history alongside OHLCV (#958 Phase 2). Required for a true total-return evaluation of high-yield ETFs, and a prerequisite for `alpha-forge backtest run --dividend-reinvest`. Dividends are fetched through the fallback provider as well (#1406 fix; previously saved as 0 entries). |
 
 You must provide either `SYMBOL` or `--watchlist`. With `--provider tv_mcp`, the command fails fast if no `endpoint` can be resolved.
 
