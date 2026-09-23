@@ -926,6 +926,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-dca-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest dca --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#list-envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3095,6 +3106,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-dca-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest dca --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#list-envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3415,6 +3437,89 @@
 </tbody>
 </table>
 <p>If the input result has fewer than 10 valid trades, an error is printed to stderr and exit code <code>1</code> is returned (no pure JSON is emitted).</p>
+<hr />
+<h2 id="backtest-dca-json"><code>backtest dca --json</code><a class="headerlink" href="#backtest-dca-json" title="Permanent link">&para;</a></h2>
+<p>Dollar-cost averaging simulation. A raw object without an envelope. Numbers are not rounded (only <code>irr_pct</code> is rounded to 4 decimals). See <a href="../../cli-reference/backtest/#alpha-forge-backtest-dca">backtest dca in the CLI reference</a> for the command itself.</p>
+<p><strong>Single window (without <code>--rolling-years</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>start</code> / <code>end</code></td>
+<td>string</td>
+<td>Symbol and window (dates are <code>YYYY-MM-DD</code>)</td>
+</tr>
+<tr>
+<td><code>total</code> / <code>months</code> / <code>buy_day</code> / <code>cost_pct</code></td>
+<td>number / int | null / string / number</td>
+<td>Total amount, number of buys (<code>null</code> when omitted = window months), buy day, one-way cost (%)</td>
+</tr>
+<tr>
+<td><code>final</code> / <code>invested</code> / <code>cash</code> / <code>units</code></td>
+<td>number</td>
+<td>Final value, amount invested, uninvested cash (normally 0), units held</td>
+</tr>
+<tr>
+<td><code>buys</code> / <code>boosted</code></td>
+<td>int</td>
+<td>Number of buys, number of buys whose boost condition was true (zero-amount buys are not counted)</td>
+</tr>
+<tr>
+<td><code>underwater</code></td>
+<td>bool</td>
+<td><code>final &lt; invested</code> (unrounded)</td>
+</tr>
+<tr>
+<td><code>mdd_pct</code> / <code>irr_pct</code></td>
+<td>number</td>
+<td>Max drawdown of the value (%), money-weighted annual return (%)</td>
+</tr>
+<tr>
+<td><code>curve</code></td>
+<td>array</td>
+<td>Daily <code>{"date", "value", "invested"}</code></td>
+</tr>
+<tr>
+<td><code>lump</code></td>
+<td>object | null</td>
+<td>With <code>--compare-lump</code>: the lump sum (buys the whole total on the window's first business day). Same keys without <code>curve</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>All windows (<code>--rolling-years N</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>years</code> / <code>range</code></td>
+<td>int / array</td>
+<td>Window length in years, and the range the windows are taken from <code>[start, end]</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>array</td>
+<td>Per window: <code>start</code> / <code>end</code> / <code>final</code> / <code>invested</code> / <code>underwater</code> / <code>irr_pct</code> / <code>mdd_pct</code> / <code>boosted</code> / <code>lump_final</code> / <code>lump_wins</code> (the last two have values only with <code>--compare-lump</code>, otherwise <code>null</code>; <code>lump_wins</code> is <code>lump_final &gt; final</code>, unrounded)</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>object</td>
+<td><code>n_windows</code> / <code>n_underwater</code> / <code>n_lump_wins</code> (<code>null</code> without <code>--compare-lump</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Validation errors (both <code>--boost-dd</code> and <code>--boost-sma</code>, an invalid <code>--buy-day</code>, <code>--months</code> beyond the window, etc.) exit with code <code>2</code>; an unknown <code>--cost-preset</code> or a preset with <code>fixed_per_share</code> exits with code <code>1</code>.</p>
 <hr />
 <h2 id="list-envelope">List envelope<a class="headerlink" href="#list-envelope" title="Permanent link">&para;</a></h2>
 <p>List / scan commands return <code>{"&lt;plural&gt;": [...], "count": n}</code>. Even when empty, an empty array + exit code <code>0</code>.</p>

@@ -22,6 +22,7 @@
 | [`alpha-forge backtest chart`](#alpha-forge-backtest-chart) | ダッシュボードの URL を表示してチャートへ誘導する |
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | エントリー条件のシグナル発生件数を高速チェック |
 | [`alpha-forge backtest monte-carlo`](#alpha-forge-backtest-monte-carlo) | 既存のバックテスト結果からモンテカルロシミュレーションを実行する |
+| [`alpha-forge backtest dca`](#alpha-forge-backtest-dca) | 積立（ドルコスト平均法）を一括投資と比較シミュレーションする |
 | [`alpha-forge backtest prune-orphans`](#alpha-forge-backtest-prune-orphans) | 戦略定義が存在しない孤児のバックテスト・最適化結果を削除する（破壊的） |
 
 ---
@@ -919,6 +920,111 @@ alpha-forge backtest monte-carlo <RESULT_ID> [--simulations 1000] [--json]
 | `エラー: 結果が見つかりません - <id>` | DB に該当なし | `alpha-forge backtest list` で確認 |
 | `エラー: 有効なトレード履歴がありません（最低10件必要です）` | トレード件数 < 10 | より長い期間または別戦略でバックテスト |
 | `エラー: シミュレーションに失敗しました - <理由>` | 計算過程で例外 | エラーメッセージに従い対処 |
+
+---
+
+## alpha-forge backtest dca
+
+積立（ドルコスト平均法）をシミュレーションする純関数ベースのコマンド。vectorbt は使わず、毎月決まった日に予算を「残り予算 ÷ 残りの買う回数」で配って買うだけの単純なシミュレーションを行う。`--rolling-years` を付けると、始めた月を1か月ずつずらした全窓を1コマンドでまとめて出せる。一括投資と積立の比較（「一括か積立か」「買うタイミングは気にしなくていいか」の検証）に使う。
+
+### 構文
+
+```bash
+alpha-forge backtest dca <SYMBOL> [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `SYMBOL` | 引数（必須） | - | 銘柄シンボル |
+| `--start` | オプション | - | 開始日 `YYYY-MM-DD`（省略時は保存済みデータの先頭） |
+| `--end` | オプション | - | 終了日 `YYYY-MM-DD`（省略時は保存済みデータの末尾）。`--rolling-years` 指定時は「全窓を取る範囲」として扱われる |
+| `--total` | float | `1,000,000` | 投資総額 |
+| `--months` | int | 窓の月数 | 買う回数 |
+| `--buy-day` | 文字列 | `first` | 買う日: `first` / `last` または `1`〜`28` |
+| `--boost-dd` | float | - | 高値からの下落率(%)以上で買い増し（`--boost-sma` と排他） |
+| `--boost-sma` | int | - | 直近N本の移動平均割れで買い増し（`--boost-dd` と排他） |
+| `--boost-mult` | float | `1.0` | 買い増し時の倍率（1以上） |
+| `--rolling-years` | int | - | 始めた月を1か月ずつずらした全窓（年数指定）を出す |
+| `--compare-lump` | フラグ | false | 一括投資（同額を初回に一括で買う）と比較する |
+| `--cost-preset` | オプション | - | コストプリセット名（片道コスト率を算出。`fixed_per_share` を含むプリセットは未対応） |
+| `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+
+- **総額は変わらない**: 積立でも一括でも投資総額は同じで、配り方だけが違う
+- **待機中の現金（まだ買っていない残り予算）の金利は0%として計算する**（一括投資に有利な、開示済みの単純化）
+- **一括投資の比較は `--buy-day` の指定にかかわらず、常に窓の最初の営業日に買う**（`--buy-day` は積立側の買う日にのみ影響する）
+- **`--start`/`--end` は `--rolling-years` と併用すると意味が変わる**: 単一窓なら期間そのもの、`--rolling-years N` 指定時は「全窓を取る範囲」になり、窓ごとの結果が `rows` にまとまる
+- **`fixed_per_share` を含むコストプリセットは未対応**で、指定すると終了コード1で失敗する
+- **配当は系列（銘柄）側の責任**: 配当込みの実質リターンを見たい場合は `^SP500TR` のような配当込み（トータルリターン）系列を指定する
+
+### 出力例
+
+```bash
+alpha-forge backtest dca "^GSPC" --start 2000-01-01 --end 2009-12-31 --months 120 \
+  --compare-lump --cost-preset moomoo-us-stock
+```
+
+```text
+^GSPC: 積立シミュレーション 2000-01-03 〜 2009-12-31
+最終額: 964,732  入れた総額: 1,000,000  年率(IRR): -0.71%  最大下落: 48.72%
+一括の最終額: 766,199
+```
+
+### 出力例（`--json`）
+
+**envelope なしの生のオブジェクト**。数値は丸めない（表示専用の丸めは `--json` なし時のみ）。単一窓（`--rolling-years` なし）の場合:
+
+```json
+{
+  "symbol": "^GSPC",
+  "total": 1000000.0,
+  "months": 120,
+  "buy_day": "first",
+  "cost_pct": 0.01,
+  "start": "2000-01-03",
+  "end": "2009-12-31",
+  "final": 964732.4685807923,
+  "invested": 1000000.0,
+  "cash": 0.0,
+  "units": 865.153340240965,
+  "buys": 120,
+  "boosted": 0,
+  "underwater": true,
+  "mdd_pct": 48.7151774245476,
+  "irr_pct": -0.7141,
+  "curve": [
+    { "date": "2000-01-03", "value": 8332.5, "invested": 8333.333333333334 },
+    { "date": "2000-01-04", "value": 8012.9930532359185, "invested": 8333.333333333334 }
+  ],
+  "lump": {
+    "start": "2000-01-03", "end": "2009-12-31",
+    "final": 766199.2606173794, "invested": 1000000.0, "cash": 0.0,
+    "units": 687.1126153641734, "buys": 1, "boosted": 0,
+    "underwater": true, "mdd_pct": 56.77538774277282, "irr_pct": -2.6298
+  }
+}
+```
+
+`curve` は日次系列（`date` / `value` / `invested`）。`lump` は `--compare-lump` 指定時のみ値を持ち（`curve` を除く同じキー）、未指定時は `null`。
+
+`--rolling-years N` を指定した場合は、`rows`（要素は `start` / `end` / `final` / `invested` / `underwater` / `irr_pct` / `mdd_pct` / `boosted` / `lump_final` / `lump_wins`）と `summary`（`n_windows` / `n_underwater` / `n_lump_wins`）を返す。`lump_final` / `lump_wins` / `summary.n_lump_wins` は `--compare-lump` 未指定時は `null`。
+
+### 主なエラー
+
+| メッセージ | 原因 | 対処 |
+|----------|------|------|
+| `--start の日付形式が不正です: ...` | `--start`/`--end` が `YYYY-MM-DD` でない | 日付形式を修正する |
+| `--buy-day は first/last または 1〜28 の数字です: ...` | `--buy-day` が範囲外 | `first`/`last` または 1〜28 の数字を指定する |
+| `--boost-dd と --boost-sma は同時に指定できません` | 両方指定 | どちらか一方だけ指定する |
+| `--boost-mult は1以上を指定してください` | `--boost-mult` が1未満 | 1以上の値を指定する |
+| `--total は正の数を指定してください` | `--total` が0以下 | 正の値を指定する |
+| `--months は1以上を指定してください` | `--months` が0以下 | 1以上の値を指定する |
+| `--months は --rolling-years の月数（N）を超えられません: M` | `--months` が `--rolling-years × 12` を超える | `--months` を減らすか `--rolling-years` を増やす |
+| `--months: months=N が窓の月数 M を超えています` | `--months` が窓（`--start`〜`--end`）の月数を超える | `--months` を窓の月数以下にする |
+| `未知の --cost-preset です: ...` | 存在しないプリセット名、または `fixed_per_share` を含むプリセット | `alpha-forge` の cost preset 一覧を確認する |
+
+exit code: `0`=成功、`1`=データ未取得や未知の `--cost-preset`（`fixed_per_share` 含む）等の実行失敗、`2`=引数エラー。
 
 ---
 

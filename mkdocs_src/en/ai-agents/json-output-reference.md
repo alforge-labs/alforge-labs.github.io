@@ -111,6 +111,35 @@ If the input result has fewer than 10 valid trades, an error is printed to stder
 
 ---
 
+## `backtest dca --json`
+
+Dollar-cost averaging simulation. A raw object without an envelope. Numbers are not rounded (only `irr_pct` is rounded to 4 decimals). See [backtest dca in the CLI reference](../cli-reference/backtest.md#alpha-forge-backtest-dca) for the command itself.
+
+**Single window (without `--rolling-years`)**
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `symbol` / `start` / `end` | string | Symbol and window (dates are `YYYY-MM-DD`) |
+| `total` / `months` / `buy_day` / `cost_pct` | number / int \| null / string / number | Total amount, number of buys (`null` when omitted = window months), buy day, one-way cost (%) |
+| `final` / `invested` / `cash` / `units` | number | Final value, amount invested, uninvested cash (normally 0), units held |
+| `buys` / `boosted` | int | Number of buys, number of buys whose boost condition was true (zero-amount buys are not counted) |
+| `underwater` | bool | `final < invested` (unrounded) |
+| `mdd_pct` / `irr_pct` | number | Max drawdown of the value (%), money-weighted annual return (%) |
+| `curve` | array | Daily `{"date", "value", "invested"}` |
+| `lump` | object \| null | With `--compare-lump`: the lump sum (buys the whole total on the window's first business day). Same keys without `curve` |
+
+**All windows (`--rolling-years N`)**
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `years` / `range` | int / array | Window length in years, and the range the windows are taken from `[start, end]` |
+| `rows` | array | Per window: `start` / `end` / `final` / `invested` / `underwater` / `irr_pct` / `mdd_pct` / `boosted` / `lump_final` / `lump_wins` (the last two have values only with `--compare-lump`, otherwise `null`; `lump_wins` is `lump_final > final`, unrounded) |
+| `summary` | object | `n_windows` / `n_underwater` / `n_lump_wins` (`null` without `--compare-lump`) |
+
+Validation errors (both `--boost-dd` and `--boost-sma`, an invalid `--buy-day`, `--months` beyond the window, etc.) exit with code `2`; an unknown `--cost-preset` or a preset with `fixed_per_share` exits with code `1`.
+
+---
+
 ## List envelope
 
 List / scan commands return `{"<plural>": [...], "count": n}`. Even when empty, an empty array + exit code `0`.

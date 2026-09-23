@@ -22,6 +22,7 @@ Run backtests and analyze results. Provides single-strategy runs, parallel batch
 | [`alpha-forge backtest chart`](#alpha-forge-backtest-chart) | Display dashboard URL to navigate to charts |
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | Fast signal count check without running the full backtest |
 | [`alpha-forge backtest monte-carlo`](#alpha-forge-backtest-monte-carlo) | Run a Monte Carlo simulation from an existing backtest result |
+| [`alpha-forge backtest dca`](#alpha-forge-backtest-dca) | Simulate dollar-cost averaging compared against a lump-sum purchase |
 | [`alpha-forge backtest prune-orphans`](#alpha-forge-backtest-prune-orphans) | Delete orphaned backtest / optimization results whose strategy definition no longer exists (destructive) |
 
 ---
@@ -917,6 +918,111 @@ See also the top-level field contract in the [`--json` output reference](../ai-a
 | `Error: Result not found - <id>` | Not in DB | Check `alpha-forge backtest list` |
 | `Error: No valid trade history found (minimum 10 trades required).` | Trade count < 10 | Use a longer period or a different strategy |
 | `Error: Simulation failed - <reason>` | Exception during simulation | Address the message |
+
+---
+
+## alpha-forge backtest dca
+
+A pure-function command that simulates dollar-cost averaging (DCA). It does not use vectorbt; it simply spreads the budget across fixed monthly purchases ("remaining budget ÷ remaining number of purchases"). With `--rolling-years`, it enumerates every window whose start month is shifted by one month at a time, in a single command. Use it to compare a lump-sum purchase against DCA (e.g. to check whether "lump-sum beats DCA" or "purchase timing doesn't matter").
+
+### Synopsis
+
+```bash
+alpha-forge backtest dca <SYMBOL> [OPTIONS]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `SYMBOL` | argument (required) | - | Symbol |
+| `--start` | option | - | Start date `YYYY-MM-DD` (defaults to the start of the stored data) |
+| `--end` | option | - | End date `YYYY-MM-DD` (defaults to the end of the stored data). With `--rolling-years`, this instead sets the range over which every window is enumerated |
+| `--total` | float | `1,000,000` | Total amount invested |
+| `--months` | int | number of months in the window | Number of purchases |
+| `--buy-day` | string | `first` | Purchase day: `first` / `last`, or `1`..`28` |
+| `--boost-dd` | float | - | Boost when down this % from the peak (mutually exclusive with `--boost-sma`) |
+| `--boost-sma` | int | - | Boost when below the N-period SMA (mutually exclusive with `--boost-dd`) |
+| `--boost-mult` | float | `1.0` | Boost multiplier (must be >= 1) |
+| `--rolling-years` | int | - | Enumerate every window, shifting the start month by 1, for this many years |
+| `--compare-lump` | flag | false | Compare against a lump-sum purchase of the same total made on day one |
+| `--cost-preset` | option | - | Cost preset name (derives one-way cost %; a preset with `fixed_per_share` is unsupported) |
+| `--json` | flag | false | Output results as JSON to stdout |
+
+- **The total amount invested never changes**: lump-sum and DCA invest the same total; only how it is spread out differs
+- **Cash still waiting to be invested earns 0% interest** (a disclosed simplification that favors the lump-sum case)
+- **The lump-sum comparison always buys on the window's first business day, regardless of `--buy-day`** (`--buy-day` only affects the DCA purchases)
+- **`--start`/`--end` change meaning when combined with `--rolling-years`**: for a single window they are the period itself; with `--rolling-years N` they instead set the range over which every window is enumerated, and results are returned per-window in `rows`
+- **A cost preset with `fixed_per_share` is unsupported** and fails with exit code 1 if specified
+- **Dividends are the series' responsibility**: to see total-return performance, point this at a dividend-reinvested (total-return) series such as `^SP500TR`
+
+### Sample output
+
+```bash
+alpha-forge backtest dca "^GSPC" --start 2000-01-01 --end 2009-12-31 --months 120 \
+  --compare-lump --cost-preset moomoo-us-stock
+```
+
+```text
+^GSPC: DCA simulation 2000-01-03 .. 2009-12-31
+Final: 964,732  Invested: 1,000,000  IRR: -0.71%  MaxDD: 48.72%
+Lump-sum final: 766,199
+```
+
+### Sample output (`--json`)
+
+**A raw object with no envelope.** Numbers are not rounded (display-only rounding applies only without `--json`). For a single window (no `--rolling-years`):
+
+```json
+{
+  "symbol": "^GSPC",
+  "total": 1000000.0,
+  "months": 120,
+  "buy_day": "first",
+  "cost_pct": 0.01,
+  "start": "2000-01-03",
+  "end": "2009-12-31",
+  "final": 964732.4685807923,
+  "invested": 1000000.0,
+  "cash": 0.0,
+  "units": 865.153340240965,
+  "buys": 120,
+  "boosted": 0,
+  "underwater": true,
+  "mdd_pct": 48.7151774245476,
+  "irr_pct": -0.7141,
+  "curve": [
+    { "date": "2000-01-03", "value": 8332.5, "invested": 8333.333333333334 },
+    { "date": "2000-01-04", "value": 8012.9930532359185, "invested": 8333.333333333334 }
+  ],
+  "lump": {
+    "start": "2000-01-03", "end": "2009-12-31",
+    "final": 766199.2606173794, "invested": 1000000.0, "cash": 0.0,
+    "units": 687.1126153641734, "buys": 1, "boosted": 0,
+    "underwater": true, "mdd_pct": 56.77538774277282, "irr_pct": -2.6298
+  }
+}
+```
+
+`curve` is a daily series (`date` / `value` / `invested`). `lump` is populated only with `--compare-lump` (same keys minus `curve`); otherwise it is `null`.
+
+With `--rolling-years N`, the output instead has `rows` (each with `start` / `end` / `final` / `invested` / `underwater` / `irr_pct` / `mdd_pct` / `boosted` / `lump_final` / `lump_wins`) and `summary` (`n_windows` / `n_underwater` / `n_lump_wins`). `lump_final` / `lump_wins` / `summary.n_lump_wins` are `null` unless `--compare-lump` is given.
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `--start has an invalid date format: ...` | `--start`/`--end` is not `YYYY-MM-DD` | Fix the date format |
+| `--buy-day must be 'first', 'last', or a number 1..28: ...` | `--buy-day` out of range | Pass `first`/`last` or a number 1..28 |
+| `--boost-dd and --boost-sma are mutually exclusive` | Both given | Pass only one |
+| `--boost-mult must be >= 1` | `--boost-mult` below 1 | Pass a value >= 1 |
+| `--total must be a positive number` | `--total` is <= 0 | Pass a positive value |
+| `--months must be >= 1` | `--months` is < 1 | Pass a value >= 1 |
+| `--months cannot exceed the --rolling-years window (N months): M` | `--months` exceeds `--rolling-years × 12` | Reduce `--months` or increase `--rolling-years` |
+| `--months: months=N が窓の月数 M を超えています` (message stays in Japanese even under `FORGE_LANG=en`) | `--months` exceeds the number of months in the window (`--start`..`--end`) | Set `--months` to at most the number of months in the window |
+| `Unknown --cost-preset: ...` | Preset name does not exist, or the preset includes `fixed_per_share` | Check the list of cost presets in `alpha-forge` |
+
+Exit code: `0` on success, `1` on a run failure such as missing data or an unknown `--cost-preset` (including `fixed_per_share`), `2` on a usage/argument error.
 
 ---
 
