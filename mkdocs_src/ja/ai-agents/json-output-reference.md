@@ -111,6 +111,35 @@ envelope なしの生オブジェクト。
 
 ---
 
+## `backtest dca --json`
+
+積立（ドルコスト平均法）のシミュレーション。envelope なしの生オブジェクトです。数値は丸めません（`irr_pct` だけ小数第4位に丸めます）。コマンドの説明は [CLI リファレンスの backtest dca](../cli-reference/backtest.md#alpha-forge-backtest-dca) を参照してください。
+
+**1窓（`--rolling-years` なし）**
+
+| フィールド | 型 | 意味 |
+|-----------|-----|------|
+| `symbol` / `start` / `end` | string | 銘柄と窓（日付は `YYYY-MM-DD`） |
+| `total` / `months` / `buy_day` / `cost_pct` | number / int \| null / string / number | 総額・買う回数（未指定は `null`＝窓の月数）・買う日・片道コスト率（%） |
+| `final` / `invested` / `cash` / `units` | number | 最終額・入れた総額・未投資の現金（通常 0）・口数 |
+| `buys` / `boosted` | int | 買った回数・買い増しの条件が真だった回数（金額 0 の回は数えない） |
+| `underwater` | bool | `final < invested`（丸め前） |
+| `mdd_pct` / `irr_pct` | number | 評価額の最大下落（%）・入金の時期を考えた年率利回り（%） |
+| `curve` | array | `{"date", "value", "invested"}` の日次系列 |
+| `lump` | object \| null | `--compare-lump` のときの一括（窓の最初の営業日に総額を買う）。`curve` を除く同じキー |
+
+**全窓（`--rolling-years N`）**
+
+| フィールド | 型 | 意味 |
+|-----------|-----|------|
+| `years` / `range` | int / array | 窓の年数・全窓を取る範囲 `[開始, 終了]` |
+| `rows` | array | 窓ごとに `start` / `end` / `final` / `invested` / `underwater` / `irr_pct` / `mdd_pct` / `boosted` / `lump_final` / `lump_wins`（後ろ2つは `--compare-lump` のときだけ値、それ以外は `null`。`lump_wins` は `lump_final > final` を丸め前で判定） |
+| `summary` | object | `n_windows` / `n_underwater` / `n_lump_wins`（`--compare-lump` なしは `null`） |
+
+引数の検証エラー（`--boost-dd` と `--boost-sma` の同時指定・不正な `--buy-day`・窓を超える `--months` など）は終了コード `2`、未知の `--cost-preset` と `fixed_per_share` を持つプリセットは終了コード `1` です。
+
+---
+
 ## 一覧系の envelope
 
 一覧・スキャン系は `{"<複数形>": [...], "count": n}` を返します。データ不在でも空配列 + 終了コード `0` です。

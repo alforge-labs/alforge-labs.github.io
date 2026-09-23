@@ -926,6 +926,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-dca-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest dca --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3095,6 +3106,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-dca-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest dca --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3415,6 +3437,89 @@
 </tbody>
 </table>
 <p>有効なトレードが 10 件未満の場合は stderr にエラーを出して終了コード <code>1</code> になります（純 JSON は出ません）。</p>
+<hr />
+<h2 id="backtest-dca-json"><code>backtest dca --json</code><a class="headerlink" href="#backtest-dca-json" title="Permanent link">&para;</a></h2>
+<p>積立（ドルコスト平均法）のシミュレーション。envelope なしの生オブジェクトです。数値は丸めません（<code>irr_pct</code> だけ小数第4位に丸めます）。コマンドの説明は <a href="../../cli-reference/backtest/#alpha-forge-backtest-dca">CLI リファレンスの backtest dca</a> を参照してください。</p>
+<p><strong>1窓（<code>--rolling-years</code> なし）</strong></p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>start</code> / <code>end</code></td>
+<td>string</td>
+<td>銘柄と窓（日付は <code>YYYY-MM-DD</code>）</td>
+</tr>
+<tr>
+<td><code>total</code> / <code>months</code> / <code>buy_day</code> / <code>cost_pct</code></td>
+<td>number / int | null / string / number</td>
+<td>総額・買う回数（未指定は <code>null</code>＝窓の月数）・買う日・片道コスト率（%）</td>
+</tr>
+<tr>
+<td><code>final</code> / <code>invested</code> / <code>cash</code> / <code>units</code></td>
+<td>number</td>
+<td>最終額・入れた総額・未投資の現金（通常 0）・口数</td>
+</tr>
+<tr>
+<td><code>buys</code> / <code>boosted</code></td>
+<td>int</td>
+<td>買った回数・買い増しの条件が真だった回数（金額 0 の回は数えない）</td>
+</tr>
+<tr>
+<td><code>underwater</code></td>
+<td>bool</td>
+<td><code>final &lt; invested</code>（丸め前）</td>
+</tr>
+<tr>
+<td><code>mdd_pct</code> / <code>irr_pct</code></td>
+<td>number</td>
+<td>評価額の最大下落（%）・入金の時期を考えた年率利回り（%）</td>
+</tr>
+<tr>
+<td><code>curve</code></td>
+<td>array</td>
+<td><code>{"date", "value", "invested"}</code> の日次系列</td>
+</tr>
+<tr>
+<td><code>lump</code></td>
+<td>object | null</td>
+<td><code>--compare-lump</code> のときの一括（窓の最初の営業日に総額を買う）。<code>curve</code> を除く同じキー</td>
+</tr>
+</tbody>
+</table>
+<p><strong>全窓（<code>--rolling-years N</code>）</strong></p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>years</code> / <code>range</code></td>
+<td>int / array</td>
+<td>窓の年数・全窓を取る範囲 <code>[開始, 終了]</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>array</td>
+<td>窓ごとに <code>start</code> / <code>end</code> / <code>final</code> / <code>invested</code> / <code>underwater</code> / <code>irr_pct</code> / <code>mdd_pct</code> / <code>boosted</code> / <code>lump_final</code> / <code>lump_wins</code>（後ろ2つは <code>--compare-lump</code> のときだけ値、それ以外は <code>null</code>。<code>lump_wins</code> は <code>lump_final &gt; final</code> を丸め前で判定）</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>object</td>
+<td><code>n_windows</code> / <code>n_underwater</code> / <code>n_lump_wins</code>（<code>--compare-lump</code> なしは <code>null</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>引数の検証エラー（<code>--boost-dd</code> と <code>--boost-sma</code> の同時指定・不正な <code>--buy-day</code>・窓を超える <code>--months</code> など）は終了コード <code>2</code>、未知の <code>--cost-preset</code> と <code>fixed_per_share</code> を持つプリセットは終了コード <code>1</code> です。</p>
 <hr />
 <h2 id="envelope">一覧系の envelope<a class="headerlink" href="#envelope" title="Permanent link">&para;</a></h2>
 <p>一覧・スキャン系は <code>{"&lt;複数形&gt;": [...], "count": n}</code> を返します。データ不在でも空配列 + 終了コード <code>0</code> です。</p>
