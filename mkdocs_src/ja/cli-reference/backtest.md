@@ -23,6 +23,7 @@
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | エントリー条件のシグナル発生件数を高速チェック |
 | [`alpha-forge backtest monte-carlo`](#alpha-forge-backtest-monte-carlo) | 既存のバックテスト結果からモンテカルロシミュレーションを実行する |
 | [`alpha-forge backtest dca`](#alpha-forge-backtest-dca) | 積立（ドルコスト平均法）を一括投資と比較シミュレーションする |
+| [`alpha-forge backtest withdraw`](#alpha-forge-backtest-withdraw) | 取り崩し（定額/定率・物価連動・guard）をシミュレーションする |
 | [`alpha-forge backtest prune-orphans`](#alpha-forge-backtest-prune-orphans) | 戦略定義が存在しない孤児のバックテスト・最適化結果を削除する（破壊的） |
 
 ---
@@ -1025,6 +1026,103 @@ alpha-forge backtest dca "^GSPC" --start 2000-01-01 --end 2009-12-31 --months 12
 | `未知の --cost-preset です: ...` | 存在しないプリセット名、または `fixed_per_share` を含むプリセット | `alpha-forge` の cost preset 一覧を確認する |
 
 exit code: `0`=成功、`1`=データ未取得や未知の `--cost-preset`（`fixed_per_share` 含む）等の実行失敗、`2`=引数エラー。
+
+---
+
+## alpha-forge backtest withdraw
+
+取り崩し（定額/定率・物価連動・guard）をシミュレーションする純関数ベースのコマンド。`backtest dca` と同じく vectorbt は使わず、窓の最初の営業日に元手を買い、以後は毎年同じ月の最初の営業日に必要な額だけ売る単純なシミュレーションを行う。`--rolling-years` を付けると、始めた月を1か月ずつずらした全窓を1コマンドでまとめて出せる。「年4%取り崩しは何年もつか」「物価連動させたら結果はどう変わるか」の検証に使う。
+
+### 構文
+
+```bash
+alpha-forge backtest withdraw <SYMBOL> [OPTIONS]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `SYMBOL` | 引数（必須） | - | 銘柄シンボル |
+| `--start` | オプション | - | 開始日 `YYYY-MM-DD`（省略時は保存済みデータの先頭） |
+| `--end` | オプション | - | 終了日 `YYYY-MM-DD`（省略時は保存済みデータの末尾）。`--rolling-years` 指定時は「全窓を取る範囲」として扱われる |
+| `--rolling-years` | int | - | 始めた月を1か月ずつずらした全窓（年数指定）を出す |
+| `--initial` | float | `1,000,000` | 元手 |
+| `--rate` | float | `4` | 取り崩し率(%)（0以上100未満） |
+| `--mode` | 選択 | `fixed` | `fixed`=初年度額を物価で増やす定額 / `percent`=手取り残高に率を掛ける定率 |
+| `--cpi` | オプション | - | 物価指数の保存キー（例 `FRED:CPIAUCNS`）。未指定なら物価連動しない |
+| `--guard` | オプション | - | 下落時の減額ルール: `yoy`（前年比マイナス）または `dd:N`（高値からN%下落）。`--mode fixed` のときだけ指定可 |
+| `--guard-cut` | float | `0` | guard 発動時の減額率(%)（`0`/`10`/`20` のいずれか） |
+| `--cost-preset` | オプション | - | コストプリセット名（片道コスト率を算出。`fixed_per_share` を含むプリセットは未対応） |
+| `--json` | フラグ | false | 結果を JSON 形式で標準出力 |
+
+- **定額は前年の額を物価の比で増やし、定率はその日の手取り残高（コスト控除後）に率を掛ける**（`--cpi` 未指定時は物価連動なしの単純な定額のまま）
+- **予定の額に残高が足りなければその窓は「尽きた」と判定する**（丸め誤差で誤って尽きたと判定しないよう相対許容つき）
+- **`--guard` は `--mode fixed` のときだけ指定できる**（`--mode percent` との併用は終了コード2）
+- **`--start`/`--end` は `--rolling-years` と併用すると意味が変わる**: 単一窓なら期間そのもの、`--rolling-years N` 指定時は「全窓を取る範囲」になり、窓ごとの結果が `rows` にまとまる
+- **`--cpi` の系列が保存されていなければ** `alpha-forge data alt fetch <KEY> --start ... --end ...` を案内して終了コード1、**窓の最初の取り崩し日の前の月に物価の値が無ければ** 終了コード2で停止する
+
+### 出力例
+
+```bash
+alpha-forge backtest withdraw "^GSPC" --rolling-years 30 --cpi FRED:CPIAUCNS --cost-preset moomoo-us-stock
+```
+
+```text
+^GSPC: 全窓 12 件
+尽きた窓: 0 件
+```
+
+### 出力例（`--json`）
+
+**envelope なしの生のオブジェクト**。数値は丸めない（表示専用の丸めは `--json` なし時のみ）。単一窓（`--rolling-years` なし）の場合:
+
+```json
+{
+  "symbol": "^GSPC",
+  "start": "2000-01-03",
+  "end": "2005-12-30",
+  "initial": 1000000.0,
+  "rate_pct": 4.0,
+  "mode": "fixed",
+  "cpi": null,
+  "guard": null,
+  "guard_cut_pct": 0.0,
+  "cost_pct": 0.0,
+  "final": 15501257.90753982,
+  "final_real": 15501257.90753982,
+  "depleted": false,
+  "depleted_year": null,
+  "withdrawn_total": 240000.0,
+  "withdrawn_real_total": 240000.0,
+  "min_withdrawal_ratio": 1.0,
+  "guarded": 0,
+  "schedule": [
+    { "date": "2000-01-03", "amount": 40000.0, "amount_real": 40000.0, "balance_after": 960000.0 },
+    { "date": "2001-01-01", "amount": 40000.0, "amount_real": 40000.0, "balance_after": 3416000.0 }
+  ]
+}
+```
+
+`schedule` は取り崩しごとの日次系列（`date` / `amount` / `amount_real` / `balance_after`）。`--cpi` 未指定時は `final_real` / `amount_real` / `withdrawn_real_total` は名目値と同値になる。
+
+`--rolling-years N` を指定した場合は、`rows`（要素は `start` / `end` / `final` / `final_real` / `depleted` / `depleted_year` / `withdrawn_total` / `withdrawn_real_total` / `min_withdrawal_ratio` / `guarded`。`schedule` は含まない）と `summary`（`n_windows` / `n_depleted`）を返す。
+
+### 主なエラー
+
+| メッセージ | 原因 | 対処 |
+|----------|------|------|
+| `--start の日付形式が不正です: ...` | `--start`/`--end` が `YYYY-MM-DD` でない | 日付形式を修正する |
+| `--initial は正の数を指定してください` | `--initial` が0以下 | 正の値を指定する |
+| `--rate は0以上100未満を指定してください: ...` | `--rate` が範囲外 | 0以上100未満の値を指定する |
+| `--guard は --mode fixed のときだけ指定できます` | `--guard` を `--mode percent` と併用 | `--mode fixed` にするか `--guard` を外す |
+| `--guard は yoy または dd:<数値> の形式です: ...` | `--guard` の形式が不正 | `yoy` または `dd:<数値>` を指定する |
+| `--guard-cut は 0/10/20 のいずれかです: ...` | `--guard-cut` が0/10/20以外 | `0`/`10`/`20` のいずれかを指定する |
+| `<KEY> の物価データが見つかりません。...` | `--cpi` の系列が未取得 | `alpha-forge data alt fetch <KEY> --start ... --end ...` を実行する |
+| `{p} に営業日がありません` / 物価の系列が届いていない旨のメッセージ | 窓の取り崩し日周辺のデータや物価が不足 | データ範囲・`--cpi` の取得範囲を確認する |
+| `未知の --cost-preset です: ...` | 存在しないプリセット名、または `fixed_per_share` を含むプリセット | `alpha-forge` の cost preset 一覧を確認する |
+
+exit code: `0`=成功、`1`=物価データ未取得や未知の `--cost-preset`（`fixed_per_share` 含む）等の実行失敗、`2`=引数エラー。
 
 ---
 

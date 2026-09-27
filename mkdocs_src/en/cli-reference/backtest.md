@@ -23,6 +23,7 @@ Run backtests and analyze results. Provides single-strategy runs, parallel batch
 | [`alpha-forge backtest signal-count`](#alpha-forge-backtest-signal-count) | Fast signal count check without running the full backtest |
 | [`alpha-forge backtest monte-carlo`](#alpha-forge-backtest-monte-carlo) | Run a Monte Carlo simulation from an existing backtest result |
 | [`alpha-forge backtest dca`](#alpha-forge-backtest-dca) | Simulate dollar-cost averaging compared against a lump-sum purchase |
+| [`alpha-forge backtest withdraw`](#alpha-forge-backtest-withdraw) | Simulate withdrawal (fixed/percent, inflation-adjusted, guard rules) |
 | [`alpha-forge backtest prune-orphans`](#alpha-forge-backtest-prune-orphans) | Delete orphaned backtest / optimization results whose strategy definition no longer exists (destructive) |
 
 ---
@@ -1023,6 +1024,103 @@ With `--rolling-years N`, the output instead has `rows` (each with `start` / `en
 | `Unknown --cost-preset: ...` | Preset name does not exist, or the preset includes `fixed_per_share` | Check the list of cost presets in `alpha-forge` |
 
 Exit code: `0` on success, `1` on a run failure such as missing data or an unknown `--cost-preset` (including `fixed_per_share`), `2` on a usage/argument error.
+
+---
+
+## alpha-forge backtest withdraw
+
+A pure-function command that simulates withdrawal (fixed/percent, inflation-adjusted, guard rules). Like `backtest dca`, it does not use vectorbt: it buys the principal on the window's first business day, then sells only what's needed on the first business day of the same month each following year. With `--rolling-years`, it enumerates every window whose start month is shifted by one month at a time, in a single command. Use it to check claims like "how many years does a 4% withdrawal rate last" or "how does inflation-adjusting change the outcome".
+
+### Synopsis
+
+```bash
+alpha-forge backtest withdraw <SYMBOL> [OPTIONS]
+```
+
+### Arguments and options
+
+| Name | Kind | Default | Description |
+|------|------|---------|-------------|
+| `SYMBOL` | argument (required) | - | Symbol |
+| `--start` | option | - | Start date `YYYY-MM-DD` (defaults to the start of the stored data) |
+| `--end` | option | - | End date `YYYY-MM-DD` (defaults to the end of the stored data). With `--rolling-years`, this instead sets the range over which every window is enumerated |
+| `--rolling-years` | int | - | Enumerate every window, shifting the start month by 1, for this many years |
+| `--initial` | float | `1,000,000` | Initial principal |
+| `--rate` | float | `4` | Withdrawal rate (%) (must be >= 0 and < 100) |
+| `--mode` | choice | `fixed` | `fixed` = grow the first year's amount with inflation / `percent` = the rate times the current after-cost balance |
+| `--cpi` | option | - | Stored CPI series key (e.g. `FRED:CPIAUCNS`). If omitted, amounts are not inflation-adjusted |
+| `--guard` | option | - | Cut rule on a downturn: `yoy` (down year-over-year) or `dd:N` (down N% from the peak). Only valid with `--mode fixed` |
+| `--guard-cut` | float | `0` | Cut percentage when the guard triggers (one of `0`/`10`/`20`) |
+| `--cost-preset` | option | - | Cost preset name (derives one-way cost %; a preset with `fixed_per_share` is unsupported) |
+| `--json` | flag | false | Output results as JSON to stdout |
+
+- **Fixed mode grows the previous year's amount by the change in CPI; percent mode multiplies the current after-cost balance by the rate** (with no `--cpi`, fixed mode stays a plain fixed amount with no inflation-adjustment)
+- **A window is marked "depleted" once the balance can no longer cover the planned amount** (with a relative tolerance so rounding error doesn't falsely trigger depletion)
+- **`--guard` can only be used with `--mode fixed`** (combining it with `--mode percent` exits with code 2)
+- **`--start`/`--end` change meaning when combined with `--rolling-years`**: for a single window they are the period itself; with `--rolling-years N` they instead set the range over which every window is enumerated, and results are returned per-window in `rows`
+- **If the `--cpi` series has not been fetched**, it points you at `alpha-forge data alt fetch <KEY> --start ... --end ...` and exits with code 1; **if there is no CPI value before the month of a window's first withdrawal date**, it exits with code 2
+
+### Sample output
+
+```bash
+alpha-forge backtest withdraw "^GSPC" --rolling-years 30 --cpi FRED:CPIAUCNS --cost-preset moomoo-us-stock
+```
+
+```text
+^GSPC: 12 windows
+Depleted: 0 windows
+```
+
+### Sample output (`--json`)
+
+**A raw object with no envelope.** Numbers are not rounded (display-only rounding applies only without `--json`). For a single window (no `--rolling-years`):
+
+```json
+{
+  "symbol": "^GSPC",
+  "start": "2000-01-03",
+  "end": "2005-12-30",
+  "initial": 1000000.0,
+  "rate_pct": 4.0,
+  "mode": "fixed",
+  "cpi": null,
+  "guard": null,
+  "guard_cut_pct": 0.0,
+  "cost_pct": 0.0,
+  "final": 15501257.90753982,
+  "final_real": 15501257.90753982,
+  "depleted": false,
+  "depleted_year": null,
+  "withdrawn_total": 240000.0,
+  "withdrawn_real_total": 240000.0,
+  "min_withdrawal_ratio": 1.0,
+  "guarded": 0,
+  "schedule": [
+    { "date": "2000-01-03", "amount": 40000.0, "amount_real": 40000.0, "balance_after": 960000.0 },
+    { "date": "2001-01-01", "amount": 40000.0, "amount_real": 40000.0, "balance_after": 3416000.0 }
+  ]
+}
+```
+
+`schedule` is the per-withdrawal series (`date` / `amount` / `amount_real` / `balance_after`). Without `--cpi`, `final_real` / `amount_real` / `withdrawn_real_total` equal their nominal counterparts.
+
+With `--rolling-years N`, the output instead has `rows` (each with `start` / `end` / `final` / `final_real` / `depleted` / `depleted_year` / `withdrawn_total` / `withdrawn_real_total` / `min_withdrawal_ratio` / `guarded`; no `schedule`) and `summary` (`n_windows` / `n_depleted`).
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `--start has an invalid date format: ...` | `--start`/`--end` is not `YYYY-MM-DD` | Fix the date format |
+| `--initial must be a positive number` | `--initial` is <= 0 | Pass a positive value |
+| `--rate must be >= 0 and < 100: ...` | `--rate` out of range | Pass a value >= 0 and < 100 |
+| `--guard can only be used with --mode fixed` | `--guard` combined with `--mode percent` | Use `--mode fixed`, or drop `--guard` |
+| `--guard must be 'yoy' or 'dd:<number>': ...` | `--guard` has an invalid format | Pass `yoy` or `dd:<number>` |
+| `--guard-cut must be one of 0/10/20: ...` | `--guard-cut` is not 0/10/20 | Pass `0`, `10`, or `20` |
+| `CPI data for <KEY> was not found. ...` | The `--cpi` series has not been fetched | Run `alpha-forge data alt fetch <KEY> --start ... --end ...` |
+| Messages about missing business days / CPI coverage before a window's start (stay in Japanese even under `FORGE_LANG=en`, same known limitation as `backtest dca`) | Insufficient price data or `--cpi` coverage around the window's withdrawal dates | Check the data range and the `--cpi` fetch range |
+| `Unknown --cost-preset: ...` | Preset name does not exist, or the preset includes `fixed_per_share` | Check the list of cost presets in `alpha-forge` |
+
+Exit code: `0` on success, `1` on a run failure such as missing CPI data or an unknown `--cost-preset` (including `fixed_per_share`), `2` on a usage/argument error.
 
 ---
 

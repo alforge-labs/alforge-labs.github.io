@@ -937,6 +937,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-withdraw-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest withdraw --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#list-envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3117,6 +3128,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-withdraw-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest withdraw --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#list-envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3520,6 +3542,94 @@
 </tbody>
 </table>
 <p>Validation errors (both <code>--boost-dd</code> and <code>--boost-sma</code>, an invalid <code>--buy-day</code>, <code>--months</code> beyond the window, etc.) exit with code <code>2</code>; an unknown <code>--cost-preset</code> or a preset with <code>fixed_per_share</code> exits with code <code>1</code>.</p>
+<hr />
+<h2 id="backtest-withdraw-json"><code>backtest withdraw --json</code><a class="headerlink" href="#backtest-withdraw-json" title="Permanent link">&para;</a></h2>
+<p>Withdrawal simulation (fixed/percent, inflation-adjusted, guard rules). A raw object without an envelope. Numbers are not rounded. See <a href="../../cli-reference/backtest/#alpha-forge-backtest-withdraw">backtest withdraw in the CLI reference</a> for the command itself.</p>
+<p><strong>Single window (without <code>--rolling-years</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>start</code> / <code>end</code></td>
+<td>string</td>
+<td>Symbol and window (dates are <code>YYYY-MM-DD</code>)</td>
+</tr>
+<tr>
+<td><code>initial</code> / <code>rate_pct</code> / <code>mode</code> / <code>cpi</code></td>
+<td>number / number / string / string | null</td>
+<td>Principal, withdrawal rate (%), <code>fixed</code>/<code>percent</code>, <code>--cpi</code> storage key (<code>null</code> when omitted)</td>
+</tr>
+<tr>
+<td><code>guard</code> / <code>guard_cut_pct</code> / <code>cost_pct</code></td>
+<td>string | null / number / number</td>
+<td>Guard rule (<code>yoy</code>/<code>dd:N</code>/<code>null</code>), cut % when it triggers, one-way cost (%)</td>
+</tr>
+<tr>
+<td><code>final</code> / <code>final_real</code></td>
+<td>number</td>
+<td>Final value, nominal and real (equal to each other without <code>--cpi</code>)</td>
+</tr>
+<tr>
+<td><code>depleted</code> / <code>depleted_year</code></td>
+<td>bool / int | null</td>
+<td>Whether the window ran out mid-way, and which withdrawal (<code>null</code> if never depleted)</td>
+</tr>
+<tr>
+<td><code>withdrawn_total</code> / <code>withdrawn_real_total</code></td>
+<td>number</td>
+<td>Total withdrawn, nominal and real</td>
+</tr>
+<tr>
+<td><code>min_withdrawal_ratio</code></td>
+<td>number</td>
+<td>Smallest real withdrawal ÷ the first real withdrawal</td>
+</tr>
+<tr>
+<td><code>guarded</code></td>
+<td>int</td>
+<td>Number of times the guard triggered</td>
+</tr>
+<tr>
+<td><code>schedule</code></td>
+<td>array</td>
+<td>Per-withdrawal <code>{"date", "amount", "amount_real", "balance_after"}</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>All windows (<code>--rolling-years N</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>years</code> / <code>range</code></td>
+<td>int / array</td>
+<td>Window length in years, and the range the windows are taken from <code>[start, end]</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>array</td>
+<td>Per window: <code>start</code> / <code>end</code> / <code>final</code> / <code>final_real</code> / <code>depleted</code> / <code>depleted_year</code> / <code>withdrawn_total</code> / <code>withdrawn_real_total</code> / <code>min_withdrawal_ratio</code> / <code>guarded</code> (no <code>schedule</code>)</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>object</td>
+<td><code>n_windows</code> / <code>n_depleted</code></td>
+</tr>
+</tbody>
+</table>
+<p>Validation errors (<code>--guard</code> with <code>--mode percent</code>, an invalid <code>--guard</code> format, <code>--guard-cut</code> not 0/10/20, <code>--rate</code> out of range, <code>--initial</code> &lt;= 0, CPI not covering a window's withdrawal date, etc.) exit with code <code>2</code>; a <code>--cpi</code> series that has not been fetched exits with code <code>1</code>.</p>
 <hr />
 <h2 id="list-envelope">List envelope<a class="headerlink" href="#list-envelope" title="Permanent link">&para;</a></h2>
 <p>List / scan commands return <code>{"&lt;plural&gt;": [...], "count": n}</code>. Even when empty, an empty array + exit code <code>0</code>.</p>

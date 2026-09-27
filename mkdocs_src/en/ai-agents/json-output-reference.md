@@ -140,6 +140,36 @@ Validation errors (both `--boost-dd` and `--boost-sma`, an invalid `--buy-day`, 
 
 ---
 
+## `backtest withdraw --json`
+
+Withdrawal simulation (fixed/percent, inflation-adjusted, guard rules). A raw object without an envelope. Numbers are not rounded. See [backtest withdraw in the CLI reference](../cli-reference/backtest.md#alpha-forge-backtest-withdraw) for the command itself.
+
+**Single window (without `--rolling-years`)**
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `symbol` / `start` / `end` | string | Symbol and window (dates are `YYYY-MM-DD`) |
+| `initial` / `rate_pct` / `mode` / `cpi` | number / number / string / string \| null | Principal, withdrawal rate (%), `fixed`/`percent`, `--cpi` storage key (`null` when omitted) |
+| `guard` / `guard_cut_pct` / `cost_pct` | string \| null / number / number | Guard rule (`yoy`/`dd:N`/`null`), cut % when it triggers, one-way cost (%) |
+| `final` / `final_real` | number | Final value, nominal and real (equal to each other without `--cpi`) |
+| `depleted` / `depleted_year` | bool / int \| null | Whether the window ran out mid-way, and which withdrawal (`null` if never depleted) |
+| `withdrawn_total` / `withdrawn_real_total` | number | Total withdrawn, nominal and real |
+| `min_withdrawal_ratio` | number | Smallest real withdrawal ÷ the first real withdrawal |
+| `guarded` | int | Number of times the guard triggered |
+| `schedule` | array | Per-withdrawal `{"date", "amount", "amount_real", "balance_after"}` |
+
+**All windows (`--rolling-years N`)**
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `years` / `range` | int / array | Window length in years, and the range the windows are taken from `[start, end]` |
+| `rows` | array | Per window: `start` / `end` / `final` / `final_real` / `depleted` / `depleted_year` / `withdrawn_total` / `withdrawn_real_total` / `min_withdrawal_ratio` / `guarded` (no `schedule`) |
+| `summary` | object | `n_windows` / `n_depleted` |
+
+Validation errors (`--guard` with `--mode percent`, an invalid `--guard` format, `--guard-cut` not 0/10/20, `--rate` out of range, `--initial` <= 0, CPI not covering a window's withdrawal date, etc.) exit with code `2`; a `--cpi` series that has not been fetched exits with code `1`.
+
+---
+
 ## List envelope
 
 List / scan commands return `{"<plural>": [...], "count": n}`. Even when empty, an empty array + exit code `0`.

@@ -937,6 +937,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-withdraw-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest withdraw --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3117,6 +3128,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backtest-withdraw-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backtest withdraw --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3520,6 +3542,94 @@
 </tbody>
 </table>
 <p>引数の検証エラー（<code>--boost-dd</code> と <code>--boost-sma</code> の同時指定・不正な <code>--buy-day</code>・窓を超える <code>--months</code> など）は終了コード <code>2</code>、未知の <code>--cost-preset</code> と <code>fixed_per_share</code> を持つプリセットは終了コード <code>1</code> です。</p>
+<hr />
+<h2 id="backtest-withdraw-json"><code>backtest withdraw --json</code><a class="headerlink" href="#backtest-withdraw-json" title="Permanent link">&para;</a></h2>
+<p>取り崩し（定額/定率・物価連動・guard）のシミュレーション。envelope なしの生オブジェクトです。数値は丸めません。コマンドの説明は <a href="../../cli-reference/backtest/#alpha-forge-backtest-withdraw">CLI リファレンスの backtest withdraw</a> を参照してください。</p>
+<p><strong>1窓（<code>--rolling-years</code> なし）</strong></p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>start</code> / <code>end</code></td>
+<td>string</td>
+<td>銘柄と窓（日付は <code>YYYY-MM-DD</code>）</td>
+</tr>
+<tr>
+<td><code>initial</code> / <code>rate_pct</code> / <code>mode</code> / <code>cpi</code></td>
+<td>number / number / string / string | null</td>
+<td>元手・取り崩し率(%)・<code>fixed</code>/<code>percent</code>・<code>--cpi</code> の保存キー（未指定は <code>null</code>）</td>
+</tr>
+<tr>
+<td><code>guard</code> / <code>guard_cut_pct</code> / <code>cost_pct</code></td>
+<td>string | null / number / number</td>
+<td>guard ルール（<code>yoy</code>/<code>dd:N</code>/<code>null</code>）・発動時の減額率(%)・片道コスト率(%)</td>
+</tr>
+<tr>
+<td><code>final</code> / <code>final_real</code></td>
+<td>number</td>
+<td>最終評価額（名目・実質。<code>--cpi</code> 未指定時は同値）</td>
+</tr>
+<tr>
+<td><code>depleted</code> / <code>depleted_year</code></td>
+<td>bool / int | null</td>
+<td>窓の途中で尽きたか・尽きた回（尽きていなければ <code>null</code>）</td>
+</tr>
+<tr>
+<td><code>withdrawn_total</code> / <code>withdrawn_real_total</code></td>
+<td>number</td>
+<td>取り崩した総額（名目・実質）</td>
+</tr>
+<tr>
+<td><code>min_withdrawal_ratio</code></td>
+<td>number</td>
+<td>実質取り崩し額の最小値 ÷ 初回実質取り崩し額</td>
+</tr>
+<tr>
+<td><code>guarded</code></td>
+<td>int</td>
+<td>guard が発動した回数</td>
+</tr>
+<tr>
+<td><code>schedule</code></td>
+<td>array</td>
+<td><code>{"date", "amount", "amount_real", "balance_after"}</code> の取り崩しごとの系列</td>
+</tr>
+</tbody>
+</table>
+<p><strong>全窓（<code>--rolling-years N</code>）</strong></p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>years</code> / <code>range</code></td>
+<td>int / array</td>
+<td>窓の年数・全窓を取る範囲 <code>[開始, 終了]</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>array</td>
+<td>窓ごとに <code>start</code> / <code>end</code> / <code>final</code> / <code>final_real</code> / <code>depleted</code> / <code>depleted_year</code> / <code>withdrawn_total</code> / <code>withdrawn_real_total</code> / <code>min_withdrawal_ratio</code> / <code>guarded</code>（<code>schedule</code> は含まない）</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>object</td>
+<td><code>n_windows</code> / <code>n_depleted</code></td>
+</tr>
+</tbody>
+</table>
+<p>引数の検証エラー（<code>--guard</code> と <code>--mode percent</code> の同時指定・<code>--guard</code> の形式違い・<code>--guard-cut</code> が0/10/20以外・<code>--rate</code> が範囲外・<code>--initial</code> が0以下・物価が窓の取り崩し日に届いていない等）は終了コード <code>2</code>、<code>--cpi</code> の系列が未取得の場合は終了コード <code>1</code> です。</p>
 <hr />
 <h2 id="envelope">一覧系の envelope<a class="headerlink" href="#envelope" title="Permanent link">&para;</a></h2>
 <p>一覧・スキャン系は <code>{"&lt;複数形&gt;": [...], "count": n}</code> を返します。データ不在でも空配列 + 終了コード <code>0</code> です。</p>
