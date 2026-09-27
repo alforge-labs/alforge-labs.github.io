@@ -140,6 +140,36 @@ envelope なしの生オブジェクト。
 
 ---
 
+## `backtest withdraw --json`
+
+取り崩し（定額/定率・物価連動・guard）のシミュレーション。envelope なしの生オブジェクトです。数値は丸めません。コマンドの説明は [CLI リファレンスの backtest withdraw](../cli-reference/backtest.md#alpha-forge-backtest-withdraw) を参照してください。
+
+**1窓（`--rolling-years` なし）**
+
+| フィールド | 型 | 意味 |
+|-----------|-----|------|
+| `symbol` / `start` / `end` | string | 銘柄と窓（日付は `YYYY-MM-DD`） |
+| `initial` / `rate_pct` / `mode` / `cpi` | number / number / string / string \| null | 元手・取り崩し率(%)・`fixed`/`percent`・`--cpi` の保存キー（未指定は `null`） |
+| `guard` / `guard_cut_pct` / `cost_pct` | string \| null / number / number | guard ルール（`yoy`/`dd:N`/`null`）・発動時の減額率(%)・片道コスト率(%) |
+| `final` / `final_real` | number | 最終評価額（名目・実質。`--cpi` 未指定時は同値） |
+| `depleted` / `depleted_year` | bool / int \| null | 窓の途中で尽きたか・尽きた回（尽きていなければ `null`） |
+| `withdrawn_total` / `withdrawn_real_total` | number | 取り崩した総額（名目・実質） |
+| `min_withdrawal_ratio` | number | 実質取り崩し額の最小値 ÷ 初回実質取り崩し額 |
+| `guarded` | int | guard が発動した回数 |
+| `schedule` | array | `{"date", "amount", "amount_real", "balance_after"}` の取り崩しごとの系列 |
+
+**全窓（`--rolling-years N`）**
+
+| フィールド | 型 | 意味 |
+|-----------|-----|------|
+| `years` / `range` | int / array | 窓の年数・全窓を取る範囲 `[開始, 終了]` |
+| `rows` | array | 窓ごとに `start` / `end` / `final` / `final_real` / `depleted` / `depleted_year` / `withdrawn_total` / `withdrawn_real_total` / `min_withdrawal_ratio` / `guarded`（`schedule` は含まない） |
+| `summary` | object | `n_windows` / `n_depleted` |
+
+引数の検証エラー（`--guard` と `--mode percent` の同時指定・`--guard` の形式違い・`--guard-cut` が0/10/20以外・`--rate` が範囲外・`--initial` が0以下・物価が窓の取り崩し日に届いていない等）は終了コード `2`、`--cpi` の系列が未取得の場合は終了コード `1` です。
+
+---
+
 ## 一覧系の envelope
 
 一覧・スキャン系は `{"<複数形>": [...], "count": n}` を返します。データ不在でも空配列 + 終了コード `0` です。
