@@ -4451,7 +4451,7 @@
 <td><code>--save-as</code></td>
 <td>オプション（必須）</td>
 <td>-</td>
-<td>保存する名前。元の記号と別にする（例: <code>^GSPC.JPY</code>）。<code>/</code> と <code>\</code> は使えず、末尾が <code>_X</code> / <code>_F</code> も不可</td>
+<td>保存する名前。元の記号と別にする（例: <code>^GSPC.JPY</code>）。<code>/</code>・<code>\</code>・<code>=</code> は使えず、末尾が <code>_X</code> / <code>_F</code> も不可。保存先に実データ（合成でない系列）があると上書きせず exit 1（合成済みの系列は上書きして作り直せる）</td>
 </tr>
 <tr>
 <td><code>--hedge</code></td>
@@ -4492,13 +4492,14 @@
 <li>為替が指数の最初の日より前・最後の日より後を覆わない場合はエラー</li>
 <li>合成した系列の <code>attrs</code> に <code>synthesized=True</code> と <code>synthesized_from</code> が入る</li>
 </ul>
-<p><code>--hedge</code> は金利差だけで再現した近似です。組み替えの手数料・先物と金利差のずれは入りません。</p>
+<p><code>--hedge</code> は金利差だけで再現した近似です。組み替えの手数料・先物と金利差のずれは入りません。月の途中の値動きにもヘッジ額が完全に追随するとみなし、比は各月の最後の取引日に前の月の金利で掛けます。金利の系列は月次に限ります（同じ月に観測が2つ以上あるとエラー）。</p>
+<p>合成系列は <code>data update</code> の対象に入り取得エラーの行になります。更新せず <code>data fx-convert</code> で作り直してください。</p>
 <h3 id="_20">サンプル<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fx-convert<span class="w"> </span><span class="s2">&quot;^GSPC&quot;</span><span class="w"> </span>--fx<span class="w"> </span>FRED:DEXJPUS<span class="w"> </span>--save-as<span class="w"> </span><span class="s2">&quot;^GSPC.JPY&quot;</span><span class="w"> </span>--start<span class="w"> </span><span class="m">1971</span>-01-01
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>dca<span class="w"> </span><span class="s2">&quot;^GSPC.JPY&quot;</span><span class="w"> </span>--months<span class="w"> </span><span class="m">1</span><span class="w"> </span>--rolling-years<span class="w"> </span><span class="m">10</span>
 </code></pre></div>
 <p><code>--json</code> のキーは <a href="../../ai-agents/json-output-reference/#data-fx-convert-json">JSON 出力リファレンス</a> を参照してください。</p>
-<p><strong>Exit code</strong>: <code>0</code>=成功、<code>1</code>=元の日足や FRED の系列が未保存、<code>2</code>=引数エラー（<code>--save-as</code> の不正・<code>--hedge</code> と金利キーの組み合わせ違い・為替や金利が期間を覆わない等）。</p>
+<p><strong>Exit code</strong>: <code>0</code>=成功、<code>1</code>=元の日足や FRED の系列が未保存・保存先に実データがある、<code>2</code>=引数エラー（<code>--save-as</code> の不正・<code>--hedge</code> と金利キーの組み合わせ違い・為替や金利が期間を覆わない等）。</p>
 <h3 id="_21">主なエラー<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4513,6 +4514,11 @@
 <td><code>&lt;SYMBOL&gt; の日足が保存されていません。</code></td>
 <td>元の日足が未取得</td>
 <td><code>alpha-forge data fetch &lt;SYMBOL&gt;</code> で取得</td>
+</tr>
+<tr>
+<td><code>&lt;SAVE_AS&gt; に実データ（合成でない系列）が保存されているため、上書きしないで止めました。</code></td>
+<td>保存先が実データ</td>
+<td>別の名前を <code>--save-as</code> に指定</td>
 </tr>
 <tr>
 <td><code>&lt;KEY&gt; が保存されていません。</code></td>

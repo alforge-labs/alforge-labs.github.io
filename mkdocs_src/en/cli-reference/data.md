@@ -295,7 +295,7 @@ alpha-forge data fx-convert SYMBOL --fx KEY --save-as NAME [--hedge --rate-quote
 |------|------|---------|-------------|
 | `SYMBOL` | argument (required) | - | Stored index (daily bars) to convert |
 | `--fx` | option (required) | - | FRED key of the FX rate (e.g. `FRED:DEXJPUS`) |
-| `--save-as` | option (required) | - | Name to save under; must differ from SYMBOL (e.g. `^GSPC.JPY`). `/` and `\` are not allowed, and the name must not end with `_X` / `_F` |
+| `--save-as` | option (required) | - | Name to save under; must differ from SYMBOL (e.g. `^GSPC.JPY`). `/`, `\` and `=` are not allowed, and the name must not end with `_X` / `_F`. If the target already holds real (non-synthesized) data the command stops with exit 1 instead of overwriting it (a synthesized series can be overwritten and rebuilt) |
 | `--hedge` | flag | false | Fix FX at the first day and roll monthly by the rate differential |
 | `--rate-quote` | option | - | FRED key of the index currency's rate (annual %, monthly). Use with `--hedge` |
 | `--rate-base` | option | - | FRED key of the target currency's rate (annual %, monthly). Use with `--hedge` |
@@ -309,7 +309,9 @@ Conversion rules:
 - If FX does not cover the index from its first day to its last, the command fails
 - The synthesized series carries `synthesized=True` and `synthesized_from` in `attrs`
 
-`--hedge` is an approximation rebuilt from the rate differential alone. Roll fees and the gap between futures and the rate differential are not included.
+`--hedge` is an approximation rebuilt from the rate differential alone. Roll fees and the gap between futures and the rate differential are not included. It also assumes the hedge amount follows intra-month moves perfectly, and the ratio is applied on each month's last trading day using the previous month's rate. Rate series must be monthly (two or more observations in one month is an error).
+
+Synthesized series are included in `data update` and show up as fetch-error rows; rebuild them with `data fx-convert` instead of updating.
 
 ### Examples
 
@@ -320,13 +322,14 @@ alpha-forge backtest dca "^GSPC.JPY" --months 1 --rolling-years 10
 
 For the `--json` keys see the [JSON output reference](../ai-agents/json-output-reference.md#data-fx-convert-json).
 
-**Exit code**: `0` = success, `1` = the source daily bars or a FRED series are not stored, `2` = argument error (invalid `--save-as`, wrong `--hedge` / rate-key combination, FX or rates not covering the period, etc.).
+**Exit code**: `0` = success, `1` = the source daily bars or a FRED series are not stored, or the save target holds real data, `2` = argument error (invalid `--save-as`, wrong `--hedge` / rate-key combination, FX or rates not covering the period, etc.).
 
 ### Common errors
 
 | Message | Cause | Fix |
 |---------|-------|-----|
 | `Daily data for <SYMBOL> is not stored.` | The source daily bars are not fetched | Fetch with `alpha-forge data fetch <SYMBOL>` |
+| `<SAVE_AS> already holds real (non-synthesized) data` | The save target is real data | Choose another `--save-as` name |
 | `<KEY> is not stored.` | The FRED series is not fetched | Fetch with `alpha-forge data alt fetch <KEY> --start YYYY-MM-DD --end YYYY-MM-DD` |
 
 ---

@@ -4451,7 +4451,7 @@
 <td><code>--save-as</code></td>
 <td>option (required)</td>
 <td>-</td>
-<td>Name to save under; must differ from SYMBOL (e.g. <code>^GSPC.JPY</code>). <code>/</code> and <code>\</code> are not allowed, and the name must not end with <code>_X</code> / <code>_F</code></td>
+<td>Name to save under; must differ from SYMBOL (e.g. <code>^GSPC.JPY</code>). <code>/</code>, <code>\</code> and <code>=</code> are not allowed, and the name must not end with <code>_X</code> / <code>_F</code>. If the target already holds real (non-synthesized) data the command stops with exit 1 instead of overwriting it (a synthesized series can be overwritten and rebuilt)</td>
 </tr>
 <tr>
 <td><code>--hedge</code></td>
@@ -4492,13 +4492,14 @@
 <li>If FX does not cover the index from its first day to its last, the command fails</li>
 <li>The synthesized series carries <code>synthesized=True</code> and <code>synthesized_from</code> in <code>attrs</code></li>
 </ul>
-<p><code>--hedge</code> is an approximation rebuilt from the rate differential alone. Roll fees and the gap between futures and the rate differential are not included.</p>
+<p><code>--hedge</code> is an approximation rebuilt from the rate differential alone. Roll fees and the gap between futures and the rate differential are not included. It also assumes the hedge amount follows intra-month moves perfectly, and the ratio is applied on each month's last trading day using the previous month's rate. Rate series must be monthly (two or more observations in one month is an error).</p>
+<p>Synthesized series are included in <code>data update</code> and show up as fetch-error rows; rebuild them with <code>data fx-convert</code> instead of updating.</p>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>alpha-forge<span class="w"> </span>data<span class="w"> </span>fx-convert<span class="w"> </span><span class="s2">&quot;^GSPC&quot;</span><span class="w"> </span>--fx<span class="w"> </span>FRED:DEXJPUS<span class="w"> </span>--save-as<span class="w"> </span><span class="s2">&quot;^GSPC.JPY&quot;</span><span class="w"> </span>--start<span class="w"> </span><span class="m">1971</span>-01-01
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>alpha-forge<span class="w"> </span>backtest<span class="w"> </span>dca<span class="w"> </span><span class="s2">&quot;^GSPC.JPY&quot;</span><span class="w"> </span>--months<span class="w"> </span><span class="m">1</span><span class="w"> </span>--rolling-years<span class="w"> </span><span class="m">10</span>
 </code></pre></div>
 <p>For the <code>--json</code> keys see the <a href="../../ai-agents/json-output-reference/#data-fx-convert-json">JSON output reference</a>.</p>
-<p><strong>Exit code</strong>: <code>0</code> = success, <code>1</code> = the source daily bars or a FRED series are not stored, <code>2</code> = argument error (invalid <code>--save-as</code>, wrong <code>--hedge</code> / rate-key combination, FX or rates not covering the period, etc.).</p>
+<p><strong>Exit code</strong>: <code>0</code> = success, <code>1</code> = the source daily bars or a FRED series are not stored, or the save target holds real data, <code>2</code> = argument error (invalid <code>--save-as</code>, wrong <code>--hedge</code> / rate-key combination, FX or rates not covering the period, etc.).</p>
 <h3 id="common-errors_3">Common errors<a class="headerlink" href="#common-errors_3" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4513,6 +4514,11 @@
 <td><code>Daily data for &lt;SYMBOL&gt; is not stored.</code></td>
 <td>The source daily bars are not fetched</td>
 <td>Fetch with <code>alpha-forge data fetch &lt;SYMBOL&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;SAVE_AS&gt; already holds real (non-synthesized) data</code></td>
+<td>The save target is real data</td>
+<td>Choose another <code>--save-as</code> name</td>
 </tr>
 <tr>
 <td><code>&lt;KEY&gt; is not stored.</code></td>
