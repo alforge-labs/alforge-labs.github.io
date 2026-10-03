@@ -13,6 +13,7 @@ Fetch, update, and inspect historical market data. Pulls OHLCV from configured p
 | [`alpha-forge data list`](#alpha-forge-data-list) | List all stored historical datasets |
 | [`alpha-forge data trend`](#alpha-forge-data-trend) | Evaluate market trend from stored data |
 | [`alpha-forge data update`](#alpha-forge-data-update) | Incrementally update all stored historical data to the latest |
+| [`alpha-forge data fx-convert`](#alpha-forge-data-fx-convert) | Convert a stored index into another currency and save it under a new name |
 
 ---
 
@@ -275,6 +276,58 @@ No stored data found.
 |---------|-------|-----|
 | `[Skip] <SYM> (<interval>): no valid last fetch date.` | Corrupted metadata or empty file | Re-fetch with `alpha-forge data fetch <SYM> --force` |
 | `- Error: <details>` | Provider error | Address per the message |
+
+---
+
+## alpha-forge data fx-convert
+
+Multiplies a stored index by an FX rate (a FRED series) and saves the result under a new name as a series in another currency. `backtest run` / `backtest dca` / `backtest withdraw` read the saved series as-is.
+
+### Syntax
+
+```bash
+alpha-forge data fx-convert SYMBOL --fx KEY --save-as NAME [--hedge --rate-quote KEY --rate-base KEY] [--start YYYY-MM-DD] [--end YYYY-MM-DD] [--json]
+```
+
+### Arguments and options
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `SYMBOL` | argument (required) | - | Stored index (daily bars) to convert |
+| `--fx` | option (required) | - | FRED key of the FX rate (e.g. `FRED:DEXJPUS`) |
+| `--save-as` | option (required) | - | Name to save under; must differ from SYMBOL (e.g. `^GSPC.JPY`). `/` and `\` are not allowed, and the name must not end with `_X` / `_F` |
+| `--hedge` | flag | false | Fix FX at the first day and roll monthly by the rate differential |
+| `--rate-quote` | option | - | FRED key of the index currency's rate (annual %, monthly). Use with `--hedge` |
+| `--rate-base` | option | - | FRED key of the target currency's rate (annual %, monthly). Use with `--hedge` |
+| `--start` / `--end` | option | - | Period to convert (`YYYY-MM-DD`) |
+| `--json` | flag | false | Output results as JSON to stdout |
+
+Conversion rules:
+
+- Converted value = index value x that day's FX rate (the same rate multiplies Open, High, Low and Close; `Volume` is unchanged)
+- On days when FX is missing, the last value on or before that day is used. The count is reported as `filled_days` (a warning goes to stderr above 2% of rows)
+- If FX does not cover the index from its first day to its last, the command fails
+- The synthesized series carries `synthesized=True` and `synthesized_from` in `attrs`
+
+`--hedge` is an approximation rebuilt from the rate differential alone. Roll fees and the gap between futures and the rate differential are not included.
+
+### Examples
+
+```bash
+alpha-forge data fx-convert "^GSPC" --fx FRED:DEXJPUS --save-as "^GSPC.JPY" --start 1971-01-01
+alpha-forge backtest dca "^GSPC.JPY" --months 1 --rolling-years 10
+```
+
+For the `--json` keys see the [JSON output reference](../ai-agents/json-output-reference.md#data-fx-convert-json).
+
+**Exit code**: `0` = success, `1` = the source daily bars or a FRED series are not stored, `2` = argument error (invalid `--save-as`, wrong `--hedge` / rate-key combination, FX or rates not covering the period, etc.).
+
+### Common errors
+
+| Message | Cause | Fix |
+|---------|-------|-----|
+| `Daily data for <SYMBOL> is not stored.` | The source daily bars are not fetched | Fetch with `alpha-forge data fetch <SYMBOL>` |
+| `<KEY> is not stored.` | The FRED series is not fetched | Fetch with `alpha-forge data alt fetch <KEY> --start YYYY-MM-DD --end YYYY-MM-DD` |
 
 ---
 

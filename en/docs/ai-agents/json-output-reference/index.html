@@ -948,6 +948,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#data-fx-convert-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        data fx-convert --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#list-envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3139,6 +3150,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#data-fx-convert-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        data fx-convert --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#list-envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3630,6 +3652,66 @@
 </tbody>
 </table>
 <p>Validation errors (<code>--guard</code> with <code>--mode percent</code>, an invalid <code>--guard</code> format, <code>--guard-cut</code> not 0/10/20, <code>--rate</code> out of range, <code>--initial</code> &lt;= 0, CPI not covering a window's withdrawal date, etc.) exit with code <code>2</code>; a <code>--cpi</code> series that has not been fetched exits with code <code>1</code>.</p>
+<hr />
+<h2 id="data-fx-convert-json"><code>data fx-convert --json</code><a class="headerlink" href="#data-fx-convert-json" title="Permanent link">&para;</a></h2>
+<p>Converts a stored index into another currency and saves it under a new name. A raw object without an envelope. The warning for FX forward-filled on more than 2% of rows goes to stderr, so stdout stays pure JSON. See <a href="../../cli-reference/data/#alpha-forge-data-fx-convert">data fx-convert in the CLI reference</a> for the command itself.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>save_as</code></td>
+<td>string</td>
+<td>Source symbol and the saved name</td>
+</tr>
+<tr>
+<td><code>interval</code></td>
+<td>string</td>
+<td>Always <code>"1d"</code></td>
+</tr>
+<tr>
+<td><code>fx</code></td>
+<td>string</td>
+<td>FRED key of the FX rate</td>
+</tr>
+<tr>
+<td><code>hedge</code></td>
+<td>bool</td>
+<td>Whether <code>--hedge</code> was set</td>
+</tr>
+<tr>
+<td><code>rate_quote</code> / <code>rate_base</code></td>
+<td>string | null</td>
+<td>FRED keys of the rates (<code>null</code> without <code>--hedge</code>)</td>
+</tr>
+<tr>
+<td><code>start</code> / <code>end</code></td>
+<td>string</td>
+<td>First and last day of the saved series (<code>YYYY-MM-DD</code>)</td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>int</td>
+<td>Number of saved rows</td>
+</tr>
+<tr>
+<td><code>filled_days</code></td>
+<td>int</td>
+<td>Days on which FX was forward-filled</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>string</td>
+<td>Where the series was saved</td>
+</tr>
+</tbody>
+</table>
+<p>Validation errors (invalid <code>--save-as</code>, wrong <code>--hedge</code> / rate-key combination, an empty <code>--start</code> / <code>--end</code> slice, FX or rates not covering the period, etc.) exit with code <code>2</code>; a missing source daily series or FRED series exits with code <code>1</code>.</p>
 <hr />
 <h2 id="list-envelope">List envelope<a class="headerlink" href="#list-envelope" title="Permanent link">&para;</a></h2>
 <p>List / scan commands return <code>{"&lt;plural&gt;": [...], "count": n}</code>. Even when empty, an empty array + exit code <code>0</code>.</p>

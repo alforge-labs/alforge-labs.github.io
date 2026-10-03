@@ -948,6 +948,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#data-fx-convert-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        data fx-convert --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3139,6 +3150,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#data-fx-convert-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        data fx-convert --json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#envelope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3630,6 +3652,66 @@
 </tbody>
 </table>
 <p>引数の検証エラー（<code>--guard</code> と <code>--mode percent</code> の同時指定・<code>--guard</code> の形式違い・<code>--guard-cut</code> が0/10/20以外・<code>--rate</code> が範囲外・<code>--initial</code> が0以下・物価が窓の取り崩し日に届いていない等）は終了コード <code>2</code>、<code>--cpi</code> の系列が未取得の場合は終了コード <code>1</code> です。</p>
+<hr />
+<h2 id="data-fx-convert-json"><code>data fx-convert --json</code><a class="headerlink" href="#data-fx-convert-json" title="Permanent link">&para;</a></h2>
+<p>保存済みの指数を別通貨建てに直して別名で保存します。envelope なしの生オブジェクトです。為替を埋めた日が行数の 2% を超えた警告は stderr に出るため、stdout は純 JSON のままです。コマンドの説明は <a href="../../cli-reference/data/#alpha-forge-data-fx-convert">CLI リファレンスの data fx-convert</a> を参照してください。</p>
+<table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>型</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symbol</code> / <code>save_as</code></td>
+<td>string</td>
+<td>元の記号・保存した名前</td>
+</tr>
+<tr>
+<td><code>interval</code></td>
+<td>string</td>
+<td>常に <code>"1d"</code></td>
+</tr>
+<tr>
+<td><code>fx</code></td>
+<td>string</td>
+<td>為替の FRED キー</td>
+</tr>
+<tr>
+<td><code>hedge</code></td>
+<td>bool</td>
+<td><code>--hedge</code> を付けたか</td>
+</tr>
+<tr>
+<td><code>rate_quote</code> / <code>rate_base</code></td>
+<td>string | null</td>
+<td>金利の FRED キー（<code>--hedge</code> なしのとき <code>null</code>）</td>
+</tr>
+<tr>
+<td><code>start</code> / <code>end</code></td>
+<td>string</td>
+<td>保存した系列の最初と最後の日（<code>YYYY-MM-DD</code>）</td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>int</td>
+<td>保存した行数</td>
+</tr>
+<tr>
+<td><code>filled_days</code></td>
+<td>int</td>
+<td>為替を前の日の値で埋めた日数</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>string</td>
+<td>保存先のパス</td>
+</tr>
+</tbody>
+</table>
+<p>引数の検証エラー（<code>--save-as</code> の不正・<code>--hedge</code> と金利キーの組み合わせ違い・<code>--start</code> / <code>--end</code> で切った結果が空・為替や金利が期間を覆わない等）は終了コード <code>2</code>、元の日足や FRED の系列が未保存の場合は終了コード <code>1</code> です。</p>
 <hr />
 <h2 id="envelope">一覧系の envelope<a class="headerlink" href="#envelope" title="Permanent link">&para;</a></h2>
 <p>一覧・スキャン系は <code>{"&lt;複数形&gt;": [...], "count": n}</code> を返します。データ不在でも空配列 + 終了コード <code>0</code> です。</p>
