@@ -13,6 +13,7 @@
 | [`alpha-forge data list`](#alpha-forge-data-list) | 保存済みのヒストリカルデータ一覧を表示する |
 | [`alpha-forge data trend`](#alpha-forge-data-trend) | 保存済みデータから市場トレンドを判定する |
 | [`alpha-forge data update`](#alpha-forge-data-update) | 保存済みの全ヒストリカルデータを最新状態まで一括で差分更新する |
+| [`alpha-forge data fx-convert`](#alpha-forge-data-fx-convert) | 保存済みの指数を別通貨建てに直して別名で保存する |
 
 ---
 
@@ -275,6 +276,61 @@ alpha-forge data update [--json]
 |----------|------|------|
 | `[Skip] <SYM> (<interval>): 有効な最終取得日がありません。` | メタデータ破損や空ファイル | `alpha-forge data fetch <SYM> --force` で再取得 |
 | `- エラーが発生しました: <details>` | プロバイダー側のエラー | エラー内容に応じて対処 |
+
+---
+
+## alpha-forge data fx-convert
+
+保存済みの指数に為替（FRED の系列）を掛けて、別の通貨建ての系列として別名で保存します。保存した系列は `backtest run` / `backtest dca` / `backtest withdraw` がそのまま読みます。
+
+### 構文
+
+```bash
+alpha-forge data fx-convert SYMBOL --fx KEY --save-as NAME [--hedge --rate-quote KEY --rate-base KEY] [--start YYYY-MM-DD] [--end YYYY-MM-DD] [--json]
+```
+
+### 引数とオプション
+
+| 名前 | 種別 | デフォルト | 説明 |
+|------|------|----------|------|
+| `SYMBOL` | 引数（必須） | - | 換算する保存済みの指数（日足） |
+| `--fx` | オプション（必須） | - | 為替の FRED キー（例: `FRED:DEXJPUS`） |
+| `--save-as` | オプション（必須） | - | 保存する名前。元の記号と別にする（例: `^GSPC.JPY`）。`/`・`\`・`=` は使えず、末尾が `_X` / `_F` も不可。保存先に実データ（合成でない系列）があると上書きせず exit 1（合成済みの系列は上書きして作り直せる） |
+| `--hedge` | フラグ | false | 最初の日の為替で固定し、毎月の金利差で組み替えたものとして数える |
+| `--rate-quote` | オプション | - | 指数の通貨の金利（年率％・月次）の FRED キー。`--hedge` と一緒に使う |
+| `--rate-base` | オプション | - | 換算先の通貨の金利（年率％・月次）の FRED キー。`--hedge` と一緒に使う |
+| `--start` / `--end` | オプション | - | 換算する期間（`YYYY-MM-DD`） |
+| `--json` | フラグ | false | 結果を JSON で標準出力する |
+
+換算の決まり:
+
+- 換算後の値 = 指数の値 × その日の為替（始値・高値・安値・終値のすべてに同じ値を掛ける。`Volume` は変えない）
+- 為替が欠けた日は、その日以前で最後の値を使う。その日数は `filled_days` に出る（行数の 2% を超えると stderr に警告）
+- 為替が指数の最初の日より前・最後の日より後を覆わない場合はエラー
+- 合成した系列の `attrs` に `synthesized=True` と `synthesized_from` が入る
+
+`--hedge` は金利差だけで再現した近似です。組み替えの手数料・先物と金利差のずれは入りません。月の途中の値動きにもヘッジ額が完全に追随するとみなし、比は各月の最後の取引日に前の月の金利で掛けます。金利の系列は月次に限ります（同じ月に観測が2つ以上あるとエラー）。
+
+合成系列は `data update` の対象に入り取得エラーの行になります。更新せず `data fx-convert` で作り直してください。
+
+### サンプル
+
+```bash
+alpha-forge data fx-convert "^GSPC" --fx FRED:DEXJPUS --save-as "^GSPC.JPY" --start 1971-01-01
+alpha-forge backtest dca "^GSPC.JPY" --months 1 --rolling-years 10
+```
+
+`--json` のキーは [JSON 出力リファレンス](../ai-agents/json-output-reference.md#data-fx-convert-json) を参照してください。
+
+**Exit code**: `0`=成功、`1`=元の日足や FRED の系列が未保存・保存先に実データがある、`2`=引数エラー（`--save-as` の不正・`--hedge` と金利キーの組み合わせ違い・為替や金利が期間を覆わない等）。
+
+### 主なエラー
+
+| メッセージ | 原因 | 対処 |
+|----------|------|------|
+| `<SYMBOL> の日足が保存されていません。` | 元の日足が未取得 | `alpha-forge data fetch <SYMBOL>` で取得 |
+| `<SAVE_AS> に実データ（合成でない系列）が保存されているため、上書きしないで止めました。` | 保存先が実データ | 別の名前を `--save-as` に指定 |
+| `<KEY> が保存されていません。` | FRED の系列が未取得 | `alpha-forge data alt fetch <KEY> --start YYYY-MM-DD --end YYYY-MM-DD` で取得 |
 
 ---
 

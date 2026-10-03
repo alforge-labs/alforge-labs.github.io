@@ -170,6 +170,26 @@ Validation errors (`--guard` with `--mode percent`, an invalid `--guard` format,
 
 ---
 
+## `data fx-convert --json`
+
+Converts a stored index into another currency and saves it under a new name. A raw object without an envelope. The warning for FX forward-filled on more than 2% of rows goes to stderr, so stdout stays pure JSON. See [data fx-convert in the CLI reference](../cli-reference/data.md#alpha-forge-data-fx-convert) for the command itself.
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `symbol` / `save_as` | string | Source symbol and the saved name |
+| `interval` | string | Always `"1d"` |
+| `fx` | string | FRED key of the FX rate |
+| `hedge` | bool | Whether `--hedge` was set |
+| `rate_quote` / `rate_base` | string \| null | FRED keys of the rates (`null` without `--hedge`) |
+| `start` / `end` | string | First and last day of the saved series (`YYYY-MM-DD`) |
+| `rows` | int | Number of saved rows |
+| `filled_days` | int | Days on which FX was forward-filled |
+| `path` | string | Where the series was saved |
+
+Validation errors (invalid `--save-as`, wrong `--hedge` / rate-key combination, an empty `--start` / `--end` slice, FX or rates not covering the period, etc.) exit with code `2`; a missing source daily series or FRED series exits with code `1`.
+
+---
+
 ## List envelope
 
 List / scan commands return `{"<plural>": [...], "count": n}`. Even when empty, an empty array + exit code `0`.

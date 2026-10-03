@@ -170,6 +170,26 @@ envelope なしの生オブジェクト。
 
 ---
 
+## `data fx-convert --json`
+
+保存済みの指数を別通貨建てに直して別名で保存します。envelope なしの生オブジェクトです。為替を埋めた日が行数の 2% を超えた警告は stderr に出るため、stdout は純 JSON のままです。コマンドの説明は [CLI リファレンスの data fx-convert](../cli-reference/data.md#alpha-forge-data-fx-convert) を参照してください。
+
+| フィールド | 型 | 意味 |
+|-----------|-----|------|
+| `symbol` / `save_as` | string | 元の記号・保存した名前 |
+| `interval` | string | 常に `"1d"` |
+| `fx` | string | 為替の FRED キー |
+| `hedge` | bool | `--hedge` を付けたか |
+| `rate_quote` / `rate_base` | string \| null | 金利の FRED キー（`--hedge` なしのとき `null`） |
+| `start` / `end` | string | 保存した系列の最初と最後の日（`YYYY-MM-DD`） |
+| `rows` | int | 保存した行数 |
+| `filled_days` | int | 為替を前の日の値で埋めた日数 |
+| `path` | string | 保存先のパス |
+
+引数の検証エラー（`--save-as` の不正・`--hedge` と金利キーの組み合わせ違い・`--start` / `--end` で切った結果が空・為替や金利が期間を覆わない等）は終了コード `2`、元の日足や FRED の系列が未保存の場合は終了コード `1` です。
+
+---
+
 ## 一覧系の envelope
 
 一覧・スキャン系は `{"<複数形>": [...], "count": n}` を返します。データ不在でも空配列 + 終了コード `0` です。
