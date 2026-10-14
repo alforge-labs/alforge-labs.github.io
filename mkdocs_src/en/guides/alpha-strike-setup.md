@@ -341,6 +341,18 @@ MOOMOO_TRADE_ENV=SIMULATE
 # Note: since v1.3.0 the watchdog runs in its own process (systemd timer
 #   alpha-strike-watchdog.timer), hourly. It keeps working even if the main
 #   event loop is frozen by a blocking OpenD call or the process dies.
+# Order-outage watchdog (default ON, v1.4.0+). Detects the state where signals
+# arrive but no order is placed (signals arrive every day, yet there are zero orders)
+# and notifies via ntfy. It catches failures the signal-outage watchdog cannot.
+# Since v1.4.0, alpha-strike-watchdog runs two checks: signal outage and order outage.
+# No new systemd unit / timer is added; the existing alpha-strike-watchdog.timer
+# runs both checks.
+# Grace period before a signal with no trace of an order is treated as abnormal:
+# ORDER_WATCHDOG_GRACE_MINUTES=30 (calendar minutes); minimum interval between
+# re-notifications: ORDER_WATCHDOG_RENOTIFY_HOURS=24.
+# Set ORDER_WATCHDOG_ENABLED=0 only to disable.
+# Timeout in seconds for the OpenD connection-wait query (default 10.0, v1.4.0+).
+# Set only to tune: MOOMOO_CONNECT_TIMEOUT_SECONDS=10.0
 
 # OANDA (optional)
 # OANDA_API_KEY=<your-token>

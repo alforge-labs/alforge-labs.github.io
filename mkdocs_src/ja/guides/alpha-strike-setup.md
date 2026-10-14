@@ -346,6 +346,16 @@ MOOMOO_TRADE_ENV=SIMULATE
 # ※ v1.3.0 以降、途絶監視は alpha-strike 本体とは別プロセス（systemd timer
 #   alpha-strike-watchdog.timer）で毎時実行される。本体のイベントループが OpenD の
 #   同期呼び出しで凍結しても、プロセスが落ちても監視は動き続ける。
+# 発注途絶の監視（既定 ON、v1.4.0+）。シグナルは届いているのに発注まで到達していない
+# 状態（シグナルは毎日届くが発注がゼロ）を検知して ntfy で通知する。シグナル途絶の
+# 監視では検知できない故障を拾う。v1.4.0 以降 alpha-strike-watchdog は
+# シグナル途絶・発注途絶の 2 本のチェックを実行する。systemd unit / timer は増えず、
+# 既存の alpha-strike-watchdog.timer がそのまま 2 本を回す。
+# 発注の痕跡が無いシグナルを異常と判定するまでの猶予は ORDER_WATCHDOG_GRACE_MINUTES=30
+# （暦分）、再通知の最小間隔は ORDER_WATCHDOG_RENOTIFY_HOURS=24。
+# 無効化する場合のみ設定: ORDER_WATCHDOG_ENABLED=0
+# OpenD 接続待ちクエリのタイムアウト秒（既定 10.0、v1.4.0+）。調整する場合のみ設定:
+# MOOMOO_CONNECT_TIMEOUT_SECONDS=10.0
 
 # OANDA を使う場合のみ
 # OANDA_API_KEY=<your-token>
