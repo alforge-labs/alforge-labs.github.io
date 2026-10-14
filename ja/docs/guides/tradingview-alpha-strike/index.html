@@ -3876,6 +3876,14 @@ crypto order を送ると moomoo SDK が <code>the type of environment param is 
 <td>通常の発注フローを実行（履歴 evict 済み）</td>
 </tr>
 <tr>
+<td><code>signal_id</code> 指定あり + 前回が発注失敗（503 / 502 / 500）で TTL 内に再到達</td>
+<td>通常の発注フローを実行（注文を出せなかった失敗では履歴を破棄するため、再送で発注をやり直せる）</td>
+</tr>
+<tr>
+<td><code>signal_id</code> 指定あり + 前回は broker が受理し、その後の記録処理で 502 になって TTL 内に再到達</td>
+<td>broker 呼び出しスキップ、200 duplicate（注文は届いているため、再送で二重発注しない）</td>
+</tr>
+<tr>
 <td><code>signal_id</code> 未指定</td>
 <td>idempotency 検証スキップ（後方互換、毎回 broker に流れる）</td>
 </tr>

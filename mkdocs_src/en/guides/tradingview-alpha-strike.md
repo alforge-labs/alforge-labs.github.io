@@ -236,6 +236,8 @@ TradingView webhooks can arrive **multiple times for the same signal** due to ne
 | `signal_id` set, repeated within TTL with **the same broker/ticker/action** | Broker call skipped, 200 `{"status":"success", "message":"duplicate signal_id — already processed"}` |
 | `signal_id` set, arriving within TTL with **a different ticker or action** | Treated as a distinct signal; normal order flow |
 | `signal_id` set, repeated after TTL | Normal order flow (history was evicted) |
+| `signal_id` set, repeated within TTL after the previous attempt failed (503 / 502 / 500) | Normal order flow (history is discarded when no order could be placed, so a resend retries the order) |
+| `signal_id` set, repeated within TTL after the broker accepted the order but post-order recording returned 502 | Broker call skipped, 200 duplicate (the order already reached the broker, so a resend does not double-order) |
 | `signal_id` omitted | Idempotency check skipped (legacy compatibility, broker is called every time) |
 
 ### Environment variable

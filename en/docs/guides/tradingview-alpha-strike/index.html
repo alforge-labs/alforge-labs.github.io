@@ -3867,6 +3867,14 @@ raises a <code>ValueError</code> with this message:</p>
 <td>Normal order flow (history was evicted)</td>
 </tr>
 <tr>
+<td><code>signal_id</code> set, repeated within TTL after the previous attempt failed (503 / 502 / 500)</td>
+<td>Normal order flow (history is discarded when no order could be placed, so a resend retries the order)</td>
+</tr>
+<tr>
+<td><code>signal_id</code> set, repeated within TTL after the broker accepted the order but post-order recording returned 502</td>
+<td>Broker call skipped, 200 duplicate (the order already reached the broker, so a resend does not double-order)</td>
+</tr>
+<tr>
 <td><code>signal_id</code> omitted</td>
 <td>Idempotency check skipped (legacy compatibility, broker is called every time)</td>
 </tr>
