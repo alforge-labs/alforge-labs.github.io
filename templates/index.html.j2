@@ -273,6 +273,17 @@
     }
     .btn-secondary:hover { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
 
+    /* Product Hunt バッジ (2026-07-28 ローンチ)。PH 提供の 250x54 SVG をそのまま置く。
+       "FIND US ON Product Hunt" 型で、**右端に upvote 数が描画される**。数が少ない
+       うちは弱い社会的証明になるため、掲載可否は数を見て判断すること。
+       Top of the day/week/month を取れれば social proof バッジに差し替え可能
+       (PH 側で unlock されるまでは選択できない)。 */
+    .hero-ph-badge {
+      margin-top: 1.5rem; display: inline-block; line-height: 0;
+      animation: fadeUp 0.7s var(--ease) 0.35s both;
+    }
+    .hero-ph-badge img { max-width: 100%; height: auto; }
+
     .hero-stats {
       margin-top: 5rem;
       /* gap 3rem だと 3 stat + 長め lbl で折り返し余裕が 10px 未満になる（en で実害）ため縮小 */
